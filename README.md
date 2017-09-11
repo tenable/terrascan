@@ -1,6 +1,6 @@
 terrascan
 ==========
-A collection of security and best practice test for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
+A collection of security and best practice tests for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
 
 Encryption
 ----------
