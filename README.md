@@ -4,13 +4,11 @@ A collection of security and best practice tests for static code analysis of (te
 
 Encryption
 ----------
-- Verifies server side encription, KMS, and certificates are configured as applicable on the following resources:
+- Verifies server side encription, KMS, and SSL certificates are configured as applicable on the following resources:
     - [x] alb_listener
     - [x] ami
     - [x] ami_copy
-    - [] api_gateway_base_path_mapping
-    - [] api_gateway_client_certificate
-    - [] api_gateway_domain_name
+    - [x] api_gateway_domain_name
     - [] api_gateway_stage
     - [] aws_instance
     - [] cloudfront_distribution
@@ -30,7 +28,6 @@ Encryption
     - [] emr_security_configuration
     - [] iam_openid_connect_provider
     - [] iam_server_certificate
-    - [] index
     - [] iot_certificate
     - [] kinesis_firehose_delivery_stream
     - [] lambda_function

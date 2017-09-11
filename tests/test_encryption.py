@@ -101,6 +101,29 @@ class TestAMICopy(unittest.TestCase):
             'aws_ami_copy').should_have_properties(['kms_key_id'])
 
 
+class TestAPIGatewayDomainName(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_ami_copy_kms(self):
+        # Assert that certificate settings have been configured
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_api_gateway_domain_name').should_have_properties(
+            [
+                'certificate_name',
+                'certificate_body',
+                'certificate_chain',
+                'certificate_private_key'
+            ])
+
+
 class TestCloudTrail(unittest.TestCase):
 
     def setUp(self):
