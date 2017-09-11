@@ -8,10 +8,19 @@ variable "encryption" {
 }
 
 resource "aws_alb_listener" "front_end" {
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  port            = "443"
+  protocol        = "HTTPS"
+  ssl_policy      = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+}
+
+resource "aws_ami" "example" {
+  ebs_block_device {
+    encrypted = "${var.encryption}"
+
+    # Comment the line below to fail KMS test
+    kms_key_id = "1234"
+  }
 }
 
 resource "aws_cloudtrail" "foo" {
