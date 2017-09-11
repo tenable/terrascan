@@ -4,50 +4,50 @@ A collection of security and best practice test for static code analysis of (ter
 
 Encryption
 ----------
-Verifies server side encription, KMS, and certificates are configured as applicable on the following resources:
-    - alb_listener
-    - ami
-    - ami_copy
-    - api_gateway_base_path_mapping
-    - api_gateway_client_certificate
-    - api_gateway_domain_name
-    - api_gateway_stage
-    - aws_instance
-    - cloudfront_distribution
-    - cloudtrail
-    - codebuild_project
-    - codepipeline
-    - db_instance
-    - db_snapshot
-    - dms_certificate
-    - dms_endpoint
-    - dms_replication_instance
-    - ebs_snapshot
-    - ebs_volume
-    - efs_file_system
-    - elastic_transcoder_pipeline
-    - elb
-    - emr_security_configuration
-    - iam_openid_connect_provider
-    - iam_server_certificate
-    - index
-    - iot_certificate
-    - kinesis_firehose_delivery_stream
-    - lambda_function
-    - lb_ssl_negotiation_policy
-    - load_balancer_backend_server_policy
-    - load_balancer_listener_policy
-    - load_balancer_policy
-    - opsworks_application
-    - proxy_protocol_policy
-    - rds_cluster
-    - rds_cluster_instance
-    - redshift_cluster
-    - redshift_parameter_group
-    - s3_bucket_object
-    - ses_receipt_rule
-    - sqs_queue
-    - ssm_parameter
+- Verifies server side encription, KMS, and certificates are configured as applicable on the following resources:
+    - [x] alb_listener
+    - [] ami
+    - [] ami_copy
+    - [] api_gateway_base_path_mapping
+    - [] api_gateway_client_certificate
+    - [] api_gateway_domain_name
+    - [] api_gateway_stage
+    - [] aws_instance
+    - [] cloudfront_distribution
+    - [x] cloudtrail
+    - [x] codebuild_project
+    - [x] codepipeline
+    - [] db_instance
+    - [] db_snapshot
+    - [] dms_certificate
+    - [] dms_endpoint
+    - [] dms_replication_instance
+    - [] ebs_snapshot
+    - [x] ebs_volume
+    - [] efs_file_system
+    - [] elastic_transcoder_pipeline
+    - [] elb
+    - [] emr_security_configuration
+    - [] iam_openid_connect_provider
+    - [] iam_server_certificate
+    - [] index
+    - [] iot_certificate
+    - [] kinesis_firehose_delivery_stream
+    - [] lambda_function
+    - [] lb_ssl_negotiation_policy
+    - [] load_balancer_backend_server_policy
+    - [] load_balancer_listener_policy
+    - [] load_balancer_policy
+    - [] opsworks_application
+    - [] proxy_protocol_policy
+    - [] rds_cluster
+    - [] rds_cluster_instance
+    - [] redshift_cluster
+    - [] redshift_parameter_group
+    - [] s3_bucket_object
+    - [] ses_receipt_rule
+    - [] sqs_queue
+    - [] ssm_parameter
 
 Identity and access management
 ------------------------------
