@@ -68,12 +68,37 @@ class TestAMI(unittest.TestCase):
 
     def test_ami_ebs_block_device_kms(self):
         # Assert that all resources of type 'ebs_block_device' that are
-        # inside a 'aws_ami' are encrypted
+        # inside a 'aws_ami' have a KMS key
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_ami').property(
             'ebs_block_device').should_have_properties(['kms_key_id'])
+
+
+class TestAMICopy(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_ami_copy(self):
+        # Assert that all resources of type 'aws_ami_copy' are encrypted
+        # Fail tests if the property does not exist
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_ami_copy').property('encrypted').should_equal(True)
+
+    def test_aws_ami_copy_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_ami_copy').should_have_properties(['kms_key_id'])
 
 
 class TestCloudTrail(unittest.TestCase):

@@ -23,6 +23,12 @@ resource "aws_ami" "example" {
   }
 }
 
+resource "aws_ami_copy" "example" {
+  # Comment the line below to fail KMS test
+  kms_key_id = "1234"
+  encrypted  = "${var.encryption}"
+}
+
 resource "aws_cloudtrail" "foo" {
   # Comment the line below to fail KMS test
   kms_key_id = "1234"

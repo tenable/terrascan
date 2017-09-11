@@ -7,7 +7,7 @@ Encryption
 - Verifies server side encription, KMS, and certificates are configured as applicable on the following resources:
     - [x] alb_listener
     - [x] ami
-    - [] ami_copy
+    - [x] ami_copy
     - [] api_gateway_base_path_mapping
     - [] api_gateway_client_certificate
     - [] api_gateway_domain_name
