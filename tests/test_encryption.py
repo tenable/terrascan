@@ -143,6 +143,43 @@ class TestEC2Instance(unittest.TestCase):
             'ebs_block_device').property('encrypted').should_equal(True)
 
 
+class TestCloudfrontDistribution(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_origin_protocol_policy(self):
+        # Assert that origin receives https only traffic
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_cloudfront_distribution').property(
+            'origin').property(
+            'custom_origin_config').property(
+            'origin_protocol_policy').should_equal("https-only")
+
+    def test_default_cache_behavior_viewer_protocol_policy(self):
+        # Assert that all resources of type 'ebs_block_device' that are
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_cloudfront_distribution').property(
+            'default_cache_behavior').property(
+            'viewer_protocol_policy').should_not_equal("allow-all")
+
+    def test_cache_behavior_viewer_protocol_policy(self):
+        # Assert that all resources of type 'ebs_block_device' that are
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_cloudfront_distribution').property(
+            'cache_behavior').property(
+            'viewer_protocol_policy').should_not_equal("allow-all")
+
+
 class TestCloudTrail(unittest.TestCase):
 
     def setUp(self):

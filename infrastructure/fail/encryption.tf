@@ -41,6 +41,22 @@ resource "aws_instance" "foo" {
   }
 }
 
+resource "aws_cloudfront_distribution" "distribution" {
+  origin {
+    custom_origin_config {
+      origin_protocol_policy = "http-only"
+    }
+  }
+
+  default_cache_behavior {
+    viewer_protocol_policy = "allow-all"
+  }
+
+  cache_behavior {
+    viewer_protocol_policy = "allow-all"
+  }
+}
+
 resource "aws_cloudtrail" "foo" {
   # Comment the line below to fail KMS test  # kms_key_id = "1234"
 }
