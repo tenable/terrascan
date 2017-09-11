@@ -9,8 +9,7 @@ Encryption
     - [x] ami
     - [x] ami_copy
     - [x] api_gateway_domain_name
-    - [] api_gateway_stage
-    - [] aws_instance
+    - [x] aws_instance
     - [] cloudfront_distribution
     - [x] cloudtrail
     - [x] codebuild_project

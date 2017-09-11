@@ -34,6 +34,13 @@ resource "aws_api_gateway_domain_name" "example" {
   # Comment the lines below to fail certificate test  # certificate_name        = "example-api"  # certificate_body        = "${file("${path.module}/example.com/example.crt")}"  # certificate_chain       = "${file("${path.module}/example.com/ca.crt")}"  # certificate_private_key = "${file("${path.module}/example.com/example.key")}"
 }
 
+resource "aws_instance" "foo" {
+  # This would fail the test
+  ebs_block_device {
+    encrypted = "${var.encryption}"
+  }
+}
+
 resource "aws_cloudtrail" "foo" {
   # Comment the line below to fail KMS test  # kms_key_id = "1234"
 }
@@ -44,13 +51,6 @@ resource "aws_codebuild_project" "foo" {
 
 resource "aws_codepipeline" "foo" {
   # Comment the line below to fail KMS test  # encryption_key = "1234"
-}
-
-resource "aws_instance" "foo" {
-  # This would fail the test
-  ebs_block_device {
-    encrypted = "${var.encryption}"
-  }
 }
 
 resource "aws_ebs_volume" "foo" {
