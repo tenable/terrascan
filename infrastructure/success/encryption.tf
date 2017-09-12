@@ -81,6 +81,12 @@ resource "aws_db_instance" "default" {
   storage_encrypted = "${var.encryption}"
 }
 
+resource "aws_dms_endpoint" "test" {
+  certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+  kms_key_arn     = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  ssl_mode        = "verify-full"
+}
+
 resource "aws_ebs_volume" "foo" {
   # Comment the line below to fail KMS test
   kms_key_id = "1234"

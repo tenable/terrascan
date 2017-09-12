@@ -256,6 +256,44 @@ class TestDBInstance(unittest.TestCase):
             'aws_db_instance').should_have_properties(['kms_key_id'])
 
 
+class TestDMSEndpoint(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_dms_endpoint_ssl_mode(self):
+        # Assert that SSL is verified
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_dms_endpoint').property(
+            'ssl_mode').should_equal('verify-full')
+
+    def test_aws_dms_endpoint_kms(self):
+        # Assert that a KMS key and an SSL cert has been provided
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_dms_endpoint').should_have_properties(
+            [
+                'kms_key_arn'
+            ])
+
+    def test_aws_dms_endpoint_certificate(self):
+        # Assert that a KMS key and an SSL cert has been provided
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_dms_endpoint').should_have_properties(
+            [
+                'certificate_arn'
+            ])
+
+
 class TestEBS(unittest.TestCase):
 
     def setUp(self):
