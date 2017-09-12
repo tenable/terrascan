@@ -16,7 +16,7 @@ Encryption
     - [x] codepipeline
     - [x] db_instance
     - [x] dms_endpoint
-    - [ ] dms_replication_instance
+    - [x] dms_replication_instance
     - [ ] ebs_snapshot
     - [x] ebs_volume
     - [ ] efs_file_system

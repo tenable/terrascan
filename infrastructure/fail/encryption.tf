@@ -81,6 +81,10 @@ resource "aws_dms_endpoint" "test" {
   ssl_mode = "none"
 }
 
+resource "aws_dms_replication_instance" "test" {
+  # kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+}
+
 resource "aws_ebs_volume" "foo" {
   # Comment the line below to fail KMS test
   # kms_key_id = "1234"

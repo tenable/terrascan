@@ -289,6 +289,24 @@ class TestDMSEndpoint(unittest.TestCase):
             ])
 
 
+class TestDMSReplicationInstance(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_dms_replication_instance_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_dms_replication_instance').should_have_properties(
+            ['kms_key_arn'])
+
+
 class TestEBS(unittest.TestCase):
 
     def setUp(self):
