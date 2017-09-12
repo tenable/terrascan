@@ -96,3 +96,9 @@ resource "aws_ebs_volume" "foo" {
   kms_key_id = "1234"
   encrypted  = "${var.encryption}"
 }
+
+resource "aws_efs_file_system" "foo" {
+  # Comment the line below to fail KMS test
+  kms_key_id = "1234"
+  encrypted  = "${var.encryption}"
+}

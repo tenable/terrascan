@@ -18,7 +18,7 @@ Encryption
     - [x] dms_endpoint
     - [x] dms_replication_instance
     - [x] ebs_volume
-    - [ ] efs_file_system
+    - [x] efs_file_system
     - [ ] elastic_transcoder_pipeline
     - [ ] elb
     - [ ] emr_security_configuration
