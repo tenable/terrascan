@@ -15,8 +15,6 @@ Encryption
     - [x] codebuild_project
     - [x] codepipeline
     - [x] db_instance
-    - [ ] db_snapshot
-    - [ ] dms_certificate
     - [ ] dms_endpoint
     - [ ] dms_replication_instance
     - [ ] ebs_snapshot

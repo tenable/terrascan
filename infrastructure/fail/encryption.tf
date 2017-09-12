@@ -57,12 +57,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 }
 
-resource "aws_db_instance" "default" {
-  # Comment the line below to fail KMS test
-  # kms_key_id = "1234"
-  storage_encrypted = "${var.encryption}"
-}
-
 resource "aws_cloudtrail" "foo" {
   # Comment the line below to fail KMS test  # kms_key_id = "1234"
 }
@@ -73,6 +67,12 @@ resource "aws_codebuild_project" "foo" {
 
 resource "aws_codepipeline" "foo" {
   # Comment the line below to fail KMS test  # encryption_key = "1234"
+}
+
+resource "aws_db_instance" "default" {
+  # Comment the line below to fail KMS test
+  # kms_key_id = "1234"
+  storage_encrypted = "${var.encryption}"
 }
 
 resource "aws_ebs_volume" "foo" {
