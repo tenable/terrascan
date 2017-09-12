@@ -355,5 +355,23 @@ class TestEFSFileSystem(unittest.TestCase):
             'aws_efs_file_system').should_have_properties(['kms_key_id'])
 
 
+class TestElastictranscoderPipeline(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_elastictranscoder_pipeline_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_elastictranscoder_pipeline').should_have_properties(
+            ['aws_kms_key_arn'])
+
+
 if __name__ == '__main__':
     unittest.main()

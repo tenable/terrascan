@@ -19,7 +19,7 @@ Encryption
     - [x] dms_replication_instance
     - [x] ebs_volume
     - [x] efs_file_system
-    - [ ] elastic_transcoder_pipeline
+    - [x] elastictranscoder_pipeline
     - [ ] elb
     - [ ] emr_security_configuration
     - [ ] iam_openid_connect_provider

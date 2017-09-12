@@ -101,3 +101,7 @@ resource "aws_efs_file_system" "foo" {
   kms_key_id = "${var.kms_key_arn}"
   encrypted  = "${var.encryption}"
 }
+
+resource "aws_elastictranscoder_pipeline" "bar" {
+  aws_kms_key_arn = "${var.kms_key_arn}"
+}
