@@ -7,30 +7,36 @@ variable "encryption" {
   default     = "true"
 }
 
+variable "kms_key_arn" {
+  description = "Dummy KMS key ARN"
+  default     = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+}
+
+variable "certificate_arn" {
+  description = "Dummy certificate ARN"
+  default     = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+}
+
 resource "aws_alb_listener" "front_end" {
   port            = "443"
   protocol        = "HTTPS"
   ssl_policy      = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  certificate_arn = "${var.certificate_arn}"
 }
 
 resource "aws_ami" "example" {
   ebs_block_device {
-    encrypted = "${var.encryption}"
-
-    # Comment the line below to fail KMS test
-    kms_key_id = "1234"
+    encrypted  = "${var.encryption}"
+    kms_key_id = "${var.kms_key_arn}"
   }
 }
 
 resource "aws_ami_copy" "example" {
-  # Comment the line below to fail KMS test
-  kms_key_id = "1234"
+  kms_key_id = "${var.kms_key_arn}"
   encrypted  = "${var.encryption}"
 }
 
 resource "aws_api_gateway_domain_name" "example" {
-  # Comment the lines below to fail certificate test
   certificate_name        = "example-api"
   certificate_body        = "${file("${path.module}/example.com/example.crt")}"
   certificate_chain       = "${file("${path.module}/example.com/ca.crt")}"
@@ -38,7 +44,6 @@ resource "aws_api_gateway_domain_name" "example" {
 }
 
 resource "aws_instance" "foo" {
-  # This would fail the test
   ebs_block_device {
     encrypted = "${var.encryption}"
   }
@@ -47,58 +52,52 @@ resource "aws_instance" "foo" {
 resource "aws_cloudfront_distribution" "distribution" {
   origin {
     custom_origin_config {
-      origin_protocol_policy = "https-only" #http-only, https-only, or match-viewer.
+      origin_protocol_policy = "https-only"
     }
   }
 
   default_cache_behavior {
-    viewer_protocol_policy = "redirect-to-https" # allow-all, https-only, or redirect-to-https.
+    viewer_protocol_policy = "redirect-to-https"
   }
 
   cache_behavior {
-    viewer_protocol_policy = "redirect-to-https" # allow-all, https-only, or redirect-to-https.
+    viewer_protocol_policy = "redirect-to-https"
   }
 }
 
 resource "aws_cloudtrail" "foo" {
-  # Comment the line below to fail KMS test
-  kms_key_id = "1234"
+  kms_key_id = "${var.kms_key_arn}"
 }
 
 resource "aws_codebuild_project" "foo" {
-  # Comment the line below to fail KMS test
-  encryption_key = "1234"
+  encryption_key = "${var.kms_key_arn}"
 }
 
 resource "aws_codepipeline" "foo" {
-  # Comment the line below to fail KMS test
-  encryption_key = "1234"
+  encryption_key = "${var.kms_key_arn}"
 }
 
 resource "aws_db_instance" "default" {
-  # Comment the line below to fail KMS test
-  kms_key_id        = "1234"
+  kms_key_id        = "${var.kms_key_arn}"
   storage_encrypted = "${var.encryption}"
 }
 
 resource "aws_dms_endpoint" "test" {
-  certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
-  kms_key_arn     = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  certificate_arn = "${var.certificate_arn}"
+  kms_key_arn     = "${var.kms_key_arn}"
   ssl_mode        = "verify-full"
 }
 
 resource "aws_dms_replication_instance" "test" {
-  kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  kms_key_arn = "${var.kms_key_arn}"
 }
 
 resource "aws_ebs_volume" "foo" {
-  # Comment the line below to fail KMS test
-  kms_key_id = "1234"
+  kms_key_id = "${var.kms_key_arn}"
   encrypted  = "${var.encryption}"
 }
 
 resource "aws_efs_file_system" "foo" {
-  # Comment the line below to fail KMS test
-  kms_key_id = "1234"
+  kms_key_id = "${var.kms_key_arn}"
   encrypted  = "${var.encryption}"
 }
