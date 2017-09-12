@@ -14,7 +14,7 @@ Encryption
     - [x] cloudtrail
     - [x] codebuild_project
     - [x] codepipeline
-    - [ ] db_instance
+    - [x] db_instance
     - [ ] db_snapshot
     - [ ] dms_certificate
     - [ ] dms_endpoint
