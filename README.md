@@ -20,7 +20,7 @@ Encryption
     - [x] ebs_volume
     - [x] efs_file_system
     - [x] elastictranscoder_pipeline
-    - [ ] elb
+    - [x] elb
     - [ ] emr_security_configuration
     - [ ] iam_openid_connect_provider
     - [ ] iam_server_certificate

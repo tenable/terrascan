@@ -373,5 +373,43 @@ class TestElastictranscoderPipeline(unittest.TestCase):
             ['aws_kms_key_arn'])
 
 
+class TestELB(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_elb_listener_port_80(self):
+        # Assert ELB listener port is not 80 (http)
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_elb').property(
+            'listener').property('lb_port').should_not_equal(80)
+
+    def test_aws_elb_listener_port_21(self):
+        # Assert ELB listener port is not 21 ftp
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_elb').property(
+            'listener').property('lb_port').should_not_equal(21)
+
+    def test_aws_elb_listener_port_23(self):
+        # Assert ELB listener port is not 23 telnet
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_elb').property(
+            'listener').property('lb_port').should_not_equal(23)
+
+    def test_aws_elb_listener_port_5900(self):
+        # Assert ELB listener port is not 5900 VNC
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_elb').property(
+            'listener').property('lb_port').should_not_equal(5900)
+
+
 if __name__ == '__main__':
     unittest.main()

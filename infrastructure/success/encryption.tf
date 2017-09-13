@@ -105,3 +105,11 @@ resource "aws_efs_file_system" "foo" {
 resource "aws_elastictranscoder_pipeline" "bar" {
   aws_kms_key_arn = "${var.kms_key_arn}"
 }
+
+resource "aws_elb" "foo" {
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    ssl_certificate_id = "${var.certificate_arn}"
+  }
+}

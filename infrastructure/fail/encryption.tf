@@ -100,3 +100,31 @@ resource "aws_efs_file_system" "foo" {
 resource "aws_elastictranscoder_pipeline" "bar" {
   # aws_kms_key_arn = "${var.kms_key_arn}"
 }
+
+resource "aws_elb" "foo" {
+  listener {
+    lb_port     = 80
+    lb_protocol = "http"
+  }
+}
+
+resource "aws_elb" "bar" {
+  listener {
+    lb_port     = 21
+    lb_protocol = "tcp"
+  }
+}
+
+resource "aws_elb" "baz" {
+  listener {
+    lb_port     = 23
+    lb_protocol = "tcp"
+  }
+}
+
+resource "aws_elb" "foobar" {
+  listener {
+    lb_port     = 5900
+    lb_protocol = "tcp"
+  }
+}
