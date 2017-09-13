@@ -138,3 +138,7 @@ resource "aws_kinesis_firehose_delivery_stream" "foo" {
     # kms_key_arn = "${var.kms_key_arn}"
   }
 }
+
+resource "aws_lambda_function" "foo" {
+  # kms_key_arn = "${var.kms_key_arn}"
+}
