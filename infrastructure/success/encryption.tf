@@ -113,3 +113,13 @@ resource "aws_elb" "foo" {
     ssl_certificate_id = "${var.certificate_arn}"
   }
 }
+
+resource "aws_kinesis_firehose_delivery_stream" "foo" {
+  s3_configuration {
+    kms_key_arn = "${var.kms_key_arn}"
+  }
+
+  extended_s3_configuration {
+    kms_key_arn = "${var.kms_key_arn}"
+  }
+}

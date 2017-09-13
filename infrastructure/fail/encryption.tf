@@ -128,3 +128,13 @@ resource "aws_elb" "foobar" {
     lb_protocol = "tcp"
   }
 }
+
+resource "aws_kinesis_firehose_delivery_stream" "foo" {
+  s3_configuration {
+    # kms_key_arn = "${var.kms_key_arn}"
+  }
+
+  extended_s3_configuration {
+    # kms_key_arn = "${var.kms_key_arn}"
+  }
+}

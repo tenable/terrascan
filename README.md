@@ -21,11 +21,7 @@ Encryption
     - [x] efs_file_system
     - [x] elastictranscoder_pipeline
     - [x] elb
-    - [ ] emr_security_configuration
-    - [ ] iam_openid_connect_provider
-    - [ ] iam_server_certificate
-    - [ ] iot_certificate
-    - [ ] kinesis_firehose_delivery_stream
+    - [x] kinesis_firehose_delivery_stream
     - [ ] lambda_function
     - [ ] lb_ssl_negotiation_policy
     - [ ] load_balancer_backend_server_policy
