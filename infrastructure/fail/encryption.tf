@@ -142,3 +142,7 @@ resource "aws_kinesis_firehose_delivery_stream" "foo" {
 resource "aws_lambda_function" "foo" {
   # kms_key_arn = "${var.kms_key_arn}"
 }
+
+resource "aws_opsworks_application" "foo-app" {
+  enable_ssl = false
+}

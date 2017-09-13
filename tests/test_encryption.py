@@ -454,5 +454,23 @@ class TestLambdaFunction(unittest.TestCase):
             ['kms_key_arn'])
 
 
+class TestOpsworksApplication(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_opsworks_application_encryption(self):
+        # Assert ami 'ebs_block_device' blocks are encrypted
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_opsworks_application').property(
+            'enable_ssl').should_equal(True)
+
+
 if __name__ == '__main__':
     unittest.main()

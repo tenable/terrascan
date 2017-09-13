@@ -22,12 +22,12 @@ Encryption
     - [x] elastictranscoder_pipeline
     - [x] elb
     - [x] kinesis_firehose_delivery_stream
-    - [ ] lambda_function
+    - [x] lambda_function
     - [ ] lb_ssl_negotiation_policy
     - [ ] load_balancer_backend_server_policy
     - [ ] load_balancer_listener_policy
     - [ ] load_balancer_policy
-    - [ ] opsworks_application
+    - [x] opsworks_application
     - [ ] proxy_protocol_policy
     - [ ] rds_cluster
     - [ ] rds_cluster_instance
