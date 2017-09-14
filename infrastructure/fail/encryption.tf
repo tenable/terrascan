@@ -146,3 +146,9 @@ resource "aws_lambda_function" "foo" {
 resource "aws_opsworks_application" "foo-app" {
   enable_ssl = false
 }
+
+resource "aws_rds_cluster" "default" {
+  storage_encrypted = false
+
+  # kms_key_id        = "${var.kms_key_arn}"
+}

@@ -28,7 +28,6 @@ Encryption
     - [ ] load_balancer_listener_policy
     - [ ] load_balancer_policy
     - [x] opsworks_application
-    - [ ] proxy_protocol_policy
     - [ ] rds_cluster
     - [ ] rds_cluster_instance
     - [ ] redshift_cluster

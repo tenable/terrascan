@@ -136,3 +136,8 @@ resource "aws_opsworks_application" "foo-app" {
     certificate = "${file("./foobar.crt")}"
   }
 }
+
+resource "aws_rds_cluster" "default" {
+  storage_encrypted = true
+  kms_key_id        = "${var.kms_key_arn}"
+}
