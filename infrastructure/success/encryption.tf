@@ -138,6 +138,11 @@ resource "aws_opsworks_application" "foo-app" {
 }
 
 resource "aws_rds_cluster" "default" {
-  storage_encrypted = true
+  storage_encrypted = "${var.encryption}"
   kms_key_id        = "${var.kms_key_arn}"
+}
+
+resource "aws_redshift_cluster" "default" {
+  encrypted  = "${var.encryption}"
+  kms_key_id = "${var.kms_key_arn}"
 }

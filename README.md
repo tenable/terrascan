@@ -28,8 +28,7 @@ Encryption
     - [ ] load_balancer_listener_policy
     - [ ] load_balancer_policy
     - [x] opsworks_application
-    - [ ] rds_cluster
-    - [ ] rds_cluster_instance
+    - [x] rds_cluster
     - [ ] redshift_cluster
     - [ ] redshift_parameter_group
     - [ ] s3_bucket_object
