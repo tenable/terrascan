@@ -3,7 +3,7 @@ terrascan
 A collection of security and best practice tests for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
 
 Terraform resource | Encryption
-------------------- ------------
+------------------ | ------------
 alb_listener | [x]
 ami | [x]
 ami_copy | [x]
