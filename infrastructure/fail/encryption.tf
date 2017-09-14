@@ -158,3 +158,9 @@ resource "aws_redshift_cluster" "default" {
 
   # kms_key_id = "${var.kms_key_arn}"
 }
+
+resource "aws_s3_bucket_object" "examplebucket_object" {
+  server_side_encryption = "AES256"
+
+  # kms_key_id             = "${var.kms_key_arn}"
+}

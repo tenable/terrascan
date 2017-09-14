@@ -464,7 +464,7 @@ class TestOpsworksApplication(unittest.TestCase):
         self.v = terraform_validate.Validator(self.path)
 
     def test_aws_opsworks_application_encryption(self):
-        # Assert ami 'ebs_block_device' blocks are encrypted
+        # Assert resource is encrypted
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
@@ -482,7 +482,7 @@ class TestRDSCluster(unittest.TestCase):
         self.v = terraform_validate.Validator(self.path)
 
     def test_aws_rds_cluster_encryption(self):
-        # Assert ami 'ebs_block_device' blocks are encrypted
+        # Assert resource is encrypted
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
@@ -490,7 +490,7 @@ class TestRDSCluster(unittest.TestCase):
             'storage_encrypted').should_equal(True)
 
     def test_aws_rds_cluster_kms(self):
-        # Assert ami 'ebs_block_device' blocks are encrypted
+        # Assert resource has a KMS with CMKs
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
@@ -508,7 +508,7 @@ class TestRedshiftCluster(unittest.TestCase):
         self.v = terraform_validate.Validator(self.path)
 
     def test_aws_redshift_cluster_encryption(self):
-        # Assert ami 'ebs_block_device' blocks are encrypted
+        # Assert resource is encrypted
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
@@ -516,11 +516,37 @@ class TestRedshiftCluster(unittest.TestCase):
             'encrypted').should_equal(True)
 
     def test_aws_redshift_cluster_kms(self):
-        # Assert ami 'ebs_block_device' blocks are encrypted
+        # Assert resource has a KMS with CMKs
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_redshift_cluster').should_have_properties(
+            ['kms_key_id'])
+
+
+class TestS3BucketObject(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_redshift_cluster_encryption(self):
+        # Assert resource is encrypted with KMS
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_s3_bucket_object').property(
+            'server_side_encryption').should_equal("aws:kms")
+
+    def test_aws_redshift_cluster_kms(self):
+        # Assert resource has a KMS with CMKs
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_s3_bucket_object').should_have_properties(
             ['kms_key_id'])
 
 

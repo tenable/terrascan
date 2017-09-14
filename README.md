@@ -23,18 +23,20 @@ Encryption
     - [x] elb
     - [x] kinesis_firehose_delivery_stream
     - [x] lambda_function
+    - [x] opsworks_application
+    - [x] rds_cluster
+    - [x] redshift_cluster
+    - [x] s3_bucket_object
+    - [ ] ses_receipt_rule
+    - [ ] sqs_queue
+    - [ ] ssm_parameter
+
+To do:
     - [ ] lb_ssl_negotiation_policy
     - [ ] load_balancer_backend_server_policy
     - [ ] load_balancer_listener_policy
     - [ ] load_balancer_policy
-    - [x] opsworks_application
-    - [x] rds_cluster
-    - [ ] redshift_cluster
     - [ ] redshift_parameter_group
-    - [ ] s3_bucket_object
-    - [ ] ses_receipt_rule
-    - [ ] sqs_queue
-    - [ ] ssm_parameter
 
 Identity and access management
 ------------------------------

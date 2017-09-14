@@ -1,5 +1,5 @@
 # Location of failing tests
-# TERRAFORM_LOCATION = "../infrastructure/fail"
+TERRAFORM_LOCATION = "../infrastructure/fail"
 
 # Location of successful tests
-TERRAFORM_LOCATION = "../infrastructure/success"
+# TERRAFORM_LOCATION = "../infrastructure/success"
