@@ -156,3 +156,8 @@ resource "aws_sqs_queue" "terraform_queue" {
   kms_master_key_id                 = "alias/aws/sqs"
   kms_data_key_reuse_period_seconds = 300
 }
+
+resource "aws_ssm_parameter" "secret" {
+  type   = "SecureString"
+  key_id = "${var.kms_key_arn}"
+}

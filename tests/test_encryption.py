@@ -568,5 +568,31 @@ class TestSqsQueue(unittest.TestCase):
             ['kms_master_key_id', 'kms_data_key_reuse_period_seconds'])
 
 
+class TestSsmParameter(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_redshift_cluster_encryption(self):
+        # Assert resource is encrypted with KMS
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_ssm_parameter').property(
+            'type').should_equal("SecureString")
+
+    def test_aws_redshift_cluster_kms(self):
+        # Assert resource has a KMS with CMK
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_ssm_parameter').should_have_properties(
+            ['key_id'])
+
+
 if __name__ == '__main__':
     unittest.main()

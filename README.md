@@ -28,7 +28,7 @@ Encryption
     - [x] redshift_cluster
     - [x] s3_bucket_object
     - [x] sqs_queue
-    - [ ] ssm_parameter
+    - [x] ssm_parameter
 
 To do:
     - [ ] lb_ssl_negotiation_policy
