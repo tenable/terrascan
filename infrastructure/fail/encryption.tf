@@ -164,3 +164,7 @@ resource "aws_s3_bucket_object" "examplebucket_object" {
 
   # kms_key_id             = "${var.kms_key_arn}"
 }
+
+resource "aws_sqs_queue" "terraform_queue" {
+  # kms_master_key_id                 = "alias/aws/sqs"  # kms_data_key_reuse_period_seconds = 300
+}

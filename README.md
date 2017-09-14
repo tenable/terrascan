@@ -27,8 +27,7 @@ Encryption
     - [x] rds_cluster
     - [x] redshift_cluster
     - [x] s3_bucket_object
-    - [ ] ses_receipt_rule
-    - [ ] sqs_queue
+    - [x] sqs_queue
     - [ ] ssm_parameter
 
 To do:
@@ -37,6 +36,7 @@ To do:
     - [ ] load_balancer_listener_policy
     - [ ] load_balancer_policy
     - [ ] redshift_parameter_group
+    - [ ] ses_receipt_rule
 
 Identity and access management
 ------------------------------

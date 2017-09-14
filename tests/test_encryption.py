@@ -550,5 +550,23 @@ class TestS3BucketObject(unittest.TestCase):
             ['kms_key_id'])
 
 
+class TestSqsQueue(unittest.TestCase):
+
+    def setUp(self):
+        # Tell the module where to find your terraform configuration folder
+        self.path = os.path.join(
+            os.path.dirname(
+                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+        self.v = terraform_validate.Validator(self.path)
+
+    def test_aws_redshift_cluster_kms(self):
+        # Assert resource has a KMS with CMK
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_sqs_queue').should_have_properties(
+            ['kms_master_key_id', 'kms_data_key_reuse_period_seconds'])
+
+
 if __name__ == '__main__':
     unittest.main()
