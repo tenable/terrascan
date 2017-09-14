@@ -2,74 +2,58 @@ terrascan
 ==========
 A collection of security and best practice tests for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
 
-Terraform resource | Encryption
------------------- | ------------
-alb_listener | :heavy_check_mark:
-ami | :heavy_check_mark:
-ami_copy | :heavy_check_mark:
-api_gateway_domain_name | :heavy_check_mark:
-aws_instance | :heavy_check_mark:
-cloudfront_distribution | :heavy_check_mark:
-cloudtrail | :heavy_check_mark:
-codebuild_project | :heavy_check_mark:
-codepipeline | :heavy_check_mark:
-db_instance | :heavy_check_mark:
-dms_endpoint | :heavy_check_mark:
-dms_replication_instance | :heavy_check_mark:
-ebs_volume | :heavy_check_mark:
-efs_file_system | :heavy_check_mark:
-elastictranscoder_pipeline | :heavy_check_mark:
-elb | :heavy_check_mark:
-kinesis_firehose_delivery_stream | :heavy_check_mark:
-lambda_function | :heavy_check_mark:
-lb_ssl_negotiation_policy | :heavy_minus_sign:
-load_balancer_backend_server_policy | :heavy_minus_sign:
-load_balancer_listener_policy | :heavy_minus_sign:
-load_balancer_policy | :heavy_minus_sign:
-opsworks_application | :heavy_check_mark:
-rds_cluster | :heavy_check_mark:
-redshift_cluster | :heavy_check_mark:
-redshift_parameter_group | :heavy_minus_sign:
-s3_bucket_object | :heavy_check_mark:
-ses_receipt_rule | :heavy_minus_sign:
-sqs_queue | :heavy_check_mark:
-ssm_parameter | :heavy_check_mark:
+Resourced based tests
+----------------------
+These tests are performed on terraform resources where applicable:
+- **Encryption**
+    - Server Side Encription (SSE) enabled
+    - Use of AWS Key Management Service (KMS) with Customer Managed Keys (CMK)
+    - Use of SSL/TLS and proper configuration
+- **Security Groups**
+    - Ingress rule not open to 0.0.0.0/0 on port other than 443 or 22
+    - Ingress rules on non-standard ports outside of RFC1918 IP space
+- **Logging & Monitoring**
+    - Access logs enabled to resources that support it
+- **Public Exposure**
+    - Services with public exposure other than ELBs or Gateways (NAT, VGW, IGW)
 
-Encryption
-----------
-- Verifies server side encription, KMS, and SSL certificates are configured as applicable on the following resources:
-    - [x] alb_listener
-    - [x] ami
-    - [x] ami_copy
-    - [x] api_gateway_domain_name
-    - [x] aws_instance
-    - [x] cloudfront_distribution
-    - [x] cloudtrail
-    - [x] codebuild_project
-    - [x] codepipeline
-    - [x] db_instance
-    - [x] dms_endpoint
-    - [x] dms_replication_instance
-    - [x] ebs_volume
-    - [x] efs_file_system
-    - [x] elastictranscoder_pipeline
-    - [x] elb
-    - [x] kinesis_firehose_delivery_stream
-    - [x] lambda_function
-    - [x] opsworks_application
-    - [x] rds_cluster
-    - [x] redshift_cluster
-    - [x] s3_bucket_object
-    - [x] sqs_queue
-    - [x] ssm_parameter
-
-To do:
-    - [ ] lb_ssl_negotiation_policy
-    - [ ] load_balancer_backend_server_policy
-    - [ ] load_balancer_listener_policy
-    - [ ] load_balancer_policy
-    - [ ] redshift_parameter_group
-    - [ ] ses_receipt_rule
+Terraform resource | Encryption | Security Groups
+------------------ | ---------- | ---------------
+alb_listener | :heavy_check_mark: |
+ami | :heavy_check_mark: |
+ami_copy | :heavy_check_mark: |
+api_gateway_domain_name | :heavy_check_mark: |
+aws_db_security_group | | :heavy_minus_sign:
+aws_instance | :heavy_check_mark: |
+aws_redshift_security_group | | :heavy_minus_sign:
+aws_security_group | | :heavy_minus_sign:
+aws_security_group_rule | | :heavy_minus_sign:
+cloudfront_distribution | :heavy_check_mark: |
+cloudtrail | :heavy_check_mark: |
+codebuild_project | :heavy_check_mark: |
+codepipeline | :heavy_check_mark: |
+db_instance | :heavy_check_mark: |
+dms_endpoint | :heavy_check_mark: |
+dms_replication_instance | :heavy_check_mark: |
+ebs_volume | :heavy_check_mark: |
+efs_file_system | :heavy_check_mark: |
+elasticache_security_group | | :heavy_minus_sign:
+elastictranscoder_pipeline | :heavy_check_mark: |
+elb | :heavy_check_mark: |
+kinesis_firehose_delivery_stream | :heavy_check_mark: |
+lambda_function | :heavy_check_mark: |
+lb_ssl_negotiation_policy | :heavy_minus_sign: |
+load_balancer_backend_server_policy | :heavy_minus_sign: |
+load_balancer_listener_policy | :heavy_minus_sign: |
+load_balancer_policy | :heavy_minus_sign: |
+opsworks_application | :heavy_check_mark: |
+rds_cluster | :heavy_check_mark: |
+redshift_cluster | :heavy_check_mark: |
+redshift_parameter_group | :heavy_minus_sign: |
+s3_bucket_object | :heavy_check_mark: |
+ses_receipt_rule | :heavy_minus_sign: |
+sqs_queue | :heavy_check_mark: |
+ssm_parameter | :heavy_check_mark: |
 
 Identity and access management
 ------------------------------
@@ -111,24 +95,6 @@ Verifies that:
 - AWS Managed policies can't be scanned
 - No creation of IAM API keys
 
-
-Security Groups
----------------
-Checks security groups rules for overly permissive configuration and bad practices.
-Verifies that:
-- Security group ingress rules are not:
-     - Open to 0.0.0.0/0 on ports other than 443 or 22
-     - Contain IP addresses outside of RFC1918 IP space
-
-
-Logging and monitoring
-----------------------
-Checks if access logs and monitoring are enabled/configured
-Verifies that:
-- Access logs are enabled on the following resources:
-    - CloudFront
-    - ELB/ALB/NLB
-    - S3
 
 Public exposure
 ---------------
