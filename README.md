@@ -4,36 +4,36 @@ A collection of security and best practice tests for static code analysis of (te
 
 Terraform resource | Encryption
 ------------------ | ------------
-alb_listener | [x]
-ami | [x]
-ami_copy | [x]
-api_gateway_domain_name | [x]
-aws_instance | [x]
-cloudfront_distribution | [x]
-cloudtrail | [x]
-codebuild_project | [x]
-codepipeline | [x]
-db_instance | [x]
-dms_endpoint | [x]
-dms_replication_instance | [x]
-ebs_volume | [x]
-efs_file_system | [x]
-elastictranscoder_pipeline | [x]
-elb | [x]
-kinesis_firehose_delivery_stream | [x]
-lambda_function | [x]
-lb_ssl_negotiation_policy | [ ]
-load_balancer_backend_server_policy | [ ]
-load_balancer_listener_policy | [ ]
-load_balancer_policy | [ ]
-opsworks_application | [x]
-rds_cluster | [x]
-redshift_cluster | [x]
-redshift_parameter_group | [ ]
-s3_bucket_object | [x]
-ses_receipt_rule | [ ]
-sqs_queue | [x]
-ssm_parameter | [x]
+alb_listener | :heavy_check_mark:
+ami | :heavy_check_mark:
+ami_copy | :heavy_check_mark:
+api_gateway_domain_name | :heavy_check_mark:
+aws_instance | :heavy_check_mark:
+cloudfront_distribution | :heavy_check_mark:
+cloudtrail | :heavy_check_mark:
+codebuild_project | :heavy_check_mark:
+codepipeline | :heavy_check_mark:
+db_instance | :heavy_check_mark:
+dms_endpoint | :heavy_check_mark:
+dms_replication_instance | :heavy_check_mark:
+ebs_volume | :heavy_check_mark:
+efs_file_system | :heavy_check_mark:
+elastictranscoder_pipeline | :heavy_check_mark:
+elb | :heavy_check_mark:
+kinesis_firehose_delivery_stream | :heavy_check_mark:
+lambda_function | :heavy_check_mark:
+lb_ssl_negotiation_policy | :heavy_minus_sign:
+load_balancer_backend_server_policy | :heavy_minus_sign:
+load_balancer_listener_policy | :heavy_minus_sign:
+load_balancer_policy | :heavy_minus_sign:
+opsworks_application | :heavy_check_mark:
+rds_cluster | :heavy_check_mark:
+redshift_cluster | :heavy_check_mark:
+redshift_parameter_group | :heavy_minus_sign:
+s3_bucket_object | :heavy_check_mark:
+ses_receipt_rule | :heavy_minus_sign:
+sqs_queue | :heavy_check_mark:
+ssm_parameter | :heavy_check_mark:
 
 Encryption
 ----------
