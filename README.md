@@ -23,9 +23,9 @@ alb_listener | :heavy_check_mark: |
 ami | :heavy_check_mark: |
 ami_copy | :heavy_check_mark: |
 api_gateway_domain_name | :heavy_check_mark: |
-aws_db_security_group | | :heavy_minus_sign:
+aws_db_security_group | | :heavy_check_mark:
 aws_instance | :heavy_check_mark: |
-aws_redshift_security_group | | :heavy_minus_sign:
+aws_redshift_security_group | | :heavy_check_mark:
 aws_security_group | | :heavy_minus_sign:
 aws_security_group_rule | | :heavy_minus_sign:
 cloudfront_distribution | :heavy_check_mark: |
@@ -37,7 +37,7 @@ dms_endpoint | :heavy_check_mark: |
 dms_replication_instance | :heavy_check_mark: |
 ebs_volume | :heavy_check_mark: |
 efs_file_system | :heavy_check_mark: |
-elasticache_security_group | | :heavy_minus_sign:
+elasticache_security_group | | :heavy_check_mark:
 elastictranscoder_pipeline | :heavy_check_mark: |
 elb | :heavy_check_mark: |
 kinesis_firehose_delivery_stream | :heavy_check_mark: |

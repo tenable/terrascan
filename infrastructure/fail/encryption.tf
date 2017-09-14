@@ -174,3 +174,9 @@ resource "aws_ssm_parameter" "secret" {
 
   # key_id = "${var.kms_key_arn}"
 }
+
+resource "aws_elasticache_security_group" "bar" {}
+
+resource "aws_db_security_group" "default" {}
+
+resource "aws_redshift_security_group" "default" {}
