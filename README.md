@@ -2,6 +2,39 @@ terrascan
 ==========
 A collection of security and best practice tests for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
 
+Terraform resource | Encryption
+------------------- ------------
+alb_listener | [x]
+ami | [x]
+ami_copy | [x]
+api_gateway_domain_name | [x]
+aws_instance | [x]
+cloudfront_distribution | [x]
+cloudtrail | [x]
+codebuild_project | [x]
+codepipeline | [x]
+db_instance | [x]
+dms_endpoint | [x]
+dms_replication_instance | [x]
+ebs_volume | [x]
+efs_file_system | [x]
+elastictranscoder_pipeline | [x]
+elb | [x]
+kinesis_firehose_delivery_stream | [x]
+lambda_function | [x]
+lb_ssl_negotiation_policy | [ ]
+load_balancer_backend_server_policy | [ ]
+load_balancer_listener_policy | [ ]
+load_balancer_policy | [ ]
+opsworks_application | [x]
+rds_cluster | [x]
+redshift_cluster | [x]
+redshift_parameter_group | [ ]
+s3_bucket_object | [x]
+ses_receipt_rule | [ ]
+sqs_queue | [x]
+ssm_parameter | [x]
+
 Encryption
 ----------
 - Verifies server side encription, KMS, and SSL certificates are configured as applicable on the following resources:
