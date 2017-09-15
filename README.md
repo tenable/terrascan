@@ -1,4 +1,4 @@
-terrascan
+Terrascan
 ==========
 A collection of security and best practice tests for static code analysis of (terraform)[https://www.terraform.io] templates using (terraform-validate)[https://github.com/elmundio87/terraform_validate].
 
@@ -16,6 +16,11 @@ These tests are performed on terraform resources where applicable:
     - Services with public exposure other than Gateways (NAT, VGW, IGW)
 - **Logging & Monitoring**
     - Access logs enabled to resources that support it
+
+Legend:
+ - :heavy_minus_sign: - test needs to be implemented
+ - :heavy_check_mark: - test implemented
+ - blank - N/A
 
 Terraform resource | Encryption | Security Groups | Public Exposure |
 ------------------ | ---------- | --------------- | --------------- |
