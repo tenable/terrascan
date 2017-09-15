@@ -36,7 +36,7 @@ aws_codepipeline | :heavy_check_mark: | | |
 aws_db_instance | :heavy_check_mark: | | :heavy_check_mark: |
 aws_db_security_group | | :heavy_check_mark: | |
 aws_dms_endpoint | :heavy_check_mark: | | |
-aws_dms_replication_instance | :heavy_check_mark: | | :heavy_minus_sign: |
+aws_dms_replication_instance | :heavy_check_mark: | | :heavy_check_mark: |
 aws_ebs_volume | :heavy_check_mark: | | |
 aws_efs_file_system | :heavy_check_mark: | | |
 aws_elasticache_security_group | | :heavy_check_mark: |

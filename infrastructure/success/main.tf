@@ -90,6 +90,7 @@ resource "aws_dms_endpoint" "test" {
 
 resource "aws_dms_replication_instance" "test" {
   kms_key_arn = "${var.kms_key_arn}"
+  publicly_accessible = false
 }
 
 resource "aws_ebs_volume" "foo" {

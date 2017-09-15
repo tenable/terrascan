@@ -82,7 +82,8 @@ resource "aws_dms_endpoint" "test" {
 }
 
 resource "aws_dms_replication_instance" "test" {
-  # kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  # kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/12345 78-1234-1234-1234-123456789012"
+  publicly_accessible = true
 }
 
 resource "aws_ebs_volume" "foo" {
