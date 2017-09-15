@@ -77,3 +77,11 @@ aws_spot_instance_request | | | :heavy_minus_sign: |
 aws_sqs_queue | :heavy_check_mark: | | :heavy_minus_sign: |
 aws_ssm_maintenance_window_task | | | | :heavy_minus_sign: |
 aws_ssm_parameter | :heavy_check_mark: | | |
+
+Installing
+----------
+Lorem ipsum
+
+Running the tests
+-----------------
+Lorem ipsum
