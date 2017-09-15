@@ -103,6 +103,8 @@ resource "aws_elastictranscoder_pipeline" "bar" {
 }
 
 resource "aws_elb" "foo" {
+  internal = false
+
   listener {
     lb_port     = 80
     lb_protocol = "http"

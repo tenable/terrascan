@@ -89,7 +89,7 @@ resource "aws_dms_endpoint" "test" {
 }
 
 resource "aws_dms_replication_instance" "test" {
-  kms_key_arn = "${var.kms_key_arn}"
+  kms_key_arn         = "${var.kms_key_arn}"
   publicly_accessible = false
 }
 
@@ -108,6 +108,8 @@ resource "aws_elastictranscoder_pipeline" "bar" {
 }
 
 resource "aws_elb" "foo" {
+  internal = true
+
   listener {
     lb_port            = 443
     lb_protocol        = "https"

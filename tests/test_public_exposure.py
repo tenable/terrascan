@@ -30,6 +30,11 @@ class TestPublicExposure(unittest.TestCase):
             'aws_dms_replication_instance').property(
             'publicly_accessible').should_not_equal(True)
 
+    def test_aws_elb_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_elb').property('internal').should_not_equal(False)
+
 
 if __name__ == '__main__':
     unittest.main()
