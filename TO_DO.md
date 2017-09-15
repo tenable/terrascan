@@ -53,3 +53,8 @@ Verifies that:
 - Only approved AMIs are provisioned
 - No S3 bucket names larger than 63 characters
 - There are no hardcoded credentials in terraform templates
+
+Logging & Monitoring
+-------------------------
+- Check for enhanced monitoring on the resources that support it
+
