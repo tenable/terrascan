@@ -24,7 +24,7 @@ Legend:
 
 Terraform resource | Encryption | Security Groups | Public Exposure | Logging & Monitoring |
 ------------------ | ---------- | --------------- | --------------- | -------------------- |
-aws_alb | | | :heavy_minus_sign: | :heavy_minus_sign: |
+aws_alb | | | :heavy_check_mark: | :heavy_minus_sign: |
 aws_alb_listener | :heavy_check_mark: | | |
 aws_ami | :heavy_check_mark: | | :heavy_minus_sign: |
 aws_ami_copy | :heavy_check_mark: | | |
