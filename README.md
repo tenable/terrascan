@@ -22,15 +22,15 @@ Legend:
  - :heavy_check_mark: - test implemented
  - blank - N/A
 
-Terraform resource | Encryption | Security Groups | Public Exposure |
------------------- | ---------- | --------------- | --------------- |
-aws_alb | | | :heavy_minus_sign: |
+Terraform resource | Encryption | Security Groups | Public Exposure | Logging & Monitoring |
+------------------ | ---------- | --------------- | --------------- | -------------------- |
+aws_alb | | | :heavy_minus_sign: | :heavy_minus_sign: |
 aws_alb_listener | :heavy_check_mark: | | |
 aws_ami | :heavy_check_mark: | | :heavy_minus_sign: |
 aws_ami_copy | :heavy_check_mark: | | |
 aws_api_gateway_domain_name | :heavy_check_mark: | | |
-aws_cloudfront_distribution | :heavy_check_mark: | | |
-aws_cloudtrail | :heavy_check_mark: | | |
+aws_cloudfront_distribution | :heavy_check_mark: | | | :heavy_minus_sign: |
+aws_cloudtrail | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_codebuild_project | :heavy_check_mark: | | |
 aws_codepipeline | :heavy_check_mark: | | |
 aws_db_instance | :heavy_check_mark: | | :heavy_minus_sign: |
@@ -41,10 +41,10 @@ aws_ebs_volume | :heavy_check_mark: | | |
 aws_efs_file_system | :heavy_check_mark: | | |
 aws_elasticache_security_group | | :heavy_check_mark: |
 aws_elastictranscoder_pipeline | :heavy_check_mark: | | |
-aws_elb | :heavy_check_mark: | | :heavy_minus_sign: |
-aws_emr_cluster | | | :heavy_minus_sign: |
+aws_elb | :heavy_check_mark: | | :heavy_minus_sign: | :heavy_minus_sign: |
+aws_emr_cluster | | | :heavy_minus_sign: | :heavy_minus_sign: |
 aws_instance | :heavy_check_mark: | | :heavy_minus_sign: |
-aws_kinesis_firehose_delivery_stream | :heavy_check_mark: | | |
+aws_kinesis_firehose_delivery_stream | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_lambda_function | :heavy_check_mark: | | |
 aws_launch_configuration | | | :heavy_minus_sign: |
 aws_lb_ssl_negotiation_policy | :heavy_minus_sign: | | |
@@ -65,14 +65,15 @@ aws_opsworks_rails_app_layer | | | :heavy_minus_sign: |
 aws_opsworks_static_web_layer | | | :heavy_minus_sign: |
 aws_rds_cluster | :heavy_check_mark: | | |
 aws_rds_cluster_instance | | | :heavy_minus_sign: |
-aws_redshift_cluster | :heavy_check_mark: | | :heavy_minus_sign: |
-aws_redshift_parameter_group | :heavy_minus_sign: | | |
+aws_redshift_cluster | :heavy_check_mark: | | :heavy_minus_sign: | :heavy_minus_sign: |
+aws_redshift_parameter_group | :heavy_minus_sign: | | | :heavy_minus_sign: |
 aws_redshift_security_group | | :heavy_check_mark: | |
-aws_s3_bucket | | | :heavy_minus_sign: |
+aws_s3_bucket | | | :heavy_minus_sign: | :heavy_minus_sign: |
 aws_s3_bucket_object | :heavy_check_mark: | | |
 aws_security_group | | :heavy_check_mark: |
 aws_security_group_rule | | :heavy_check_mark: | |
 aws_ses_receipt_rule | :heavy_minus_sign: | | |
 aws_spot_instance_request | | | :heavy_minus_sign: |
 aws_sqs_queue | :heavy_check_mark: | | :heavy_minus_sign: |
+aws_ssm_maintenance_window_task | | | | :heavy_minus_sign: |
 aws_ssm_parameter | :heavy_check_mark: | | |
