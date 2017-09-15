@@ -35,7 +35,8 @@ resource "aws_api_gateway_domain_name" "example" {
 }
 
 resource "aws_instance" "foo" {
-  # This would fail the test
+  associate_public_ip_address = true
+
   ebs_block_device {
     encrypted = "${var.encryption}"
   }

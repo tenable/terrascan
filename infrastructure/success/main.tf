@@ -44,6 +44,8 @@ resource "aws_api_gateway_domain_name" "example" {
 }
 
 resource "aws_instance" "foo" {
+  associate_public_ip_address = false
+
   ebs_block_device {
     encrypted = "${var.encryption}"
   }

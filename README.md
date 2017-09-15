@@ -42,8 +42,8 @@ aws_efs_file_system | :heavy_check_mark: | | |
 aws_elasticache_security_group | | :heavy_check_mark: |
 aws_elastictranscoder_pipeline | :heavy_check_mark: | | |
 aws_elb | :heavy_check_mark: | | :heavy_check_mark: | :heavy_minus_sign: |
-aws_emr_cluster | | | :heavy_minus_sign: | :heavy_minus_sign: |
-aws_instance | :heavy_check_mark: | | :heavy_minus_sign: |
+aws_emr_cluster | | | | :heavy_minus_sign: |
+aws_instance | :heavy_check_mark: | | :heavy_check_mark: |
 aws_kinesis_firehose_delivery_stream | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_lambda_function | :heavy_check_mark: | | |
 aws_launch_configuration | | | :heavy_minus_sign: |

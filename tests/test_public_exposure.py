@@ -35,6 +35,12 @@ class TestPublicExposure(unittest.TestCase):
         self.v.resources(
             'aws_elb').property('internal').should_not_equal(False)
 
+    def test_aws_instance_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_instance').property(
+            'associate_public_ip_address').should_not_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()
