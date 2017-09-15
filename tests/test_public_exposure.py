@@ -18,6 +18,12 @@ class TestPublicExposure(unittest.TestCase):
         self.v.resources(
             'aws_alb').property('internal').should_not_equal(False)
 
+    def test_aws_db_instance_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_db_instance').property(
+            'publicly_accessible').should_not_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()

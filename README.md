@@ -26,14 +26,14 @@ Terraform resource | Encryption | Security Groups | Public Exposure | Logging & 
 ------------------ | ---------- | --------------- | --------------- | -------------------- |
 aws_alb | | | :heavy_check_mark: | :heavy_minus_sign: |
 aws_alb_listener | :heavy_check_mark: | | |
-aws_ami | :heavy_check_mark: | | :heavy_minus_sign: |
+aws_ami | :heavy_check_mark: | | |
 aws_ami_copy | :heavy_check_mark: | | |
 aws_api_gateway_domain_name | :heavy_check_mark: | | |
 aws_cloudfront_distribution | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_cloudtrail | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_codebuild_project | :heavy_check_mark: | | |
 aws_codepipeline | :heavy_check_mark: | | |
-aws_db_instance | :heavy_check_mark: | | :heavy_minus_sign: |
+aws_db_instance | :heavy_check_mark: | | :heavy_check_mark: |
 aws_db_security_group | | :heavy_check_mark: | |
 aws_dms_endpoint | :heavy_check_mark: | | |
 aws_dms_replication_instance | :heavy_check_mark: | | :heavy_minus_sign: |

@@ -201,3 +201,7 @@ resource "aws_alb" "test" {
     prefix = "test-alb"
   }
 }
+
+resource "aws_db_instance" "default" {
+  publicly_accessible = false
+}

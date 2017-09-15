@@ -215,3 +215,7 @@ resource "aws_security_group" "allow_all" {
 resource "aws_alb" "test" {
   internal = false
 }
+
+resource "aws_db_instance" "default" {
+  publicly_accessible = true
+}
