@@ -10,8 +10,8 @@ These tests are performed on terraform resources where applicable:
     - Use of AWS Key Management Service (KMS) with Customer Managed Keys (CMK)
     - Use of SSL/TLS and proper configuration
 - **Security Groups**
-    - Ingress rule not open to 0.0.0.0/0 on port other than 443 or 22
-    - Ingress rules on non-standard ports outside of RFC1918 IP space
+    - Provisioning SGs in EC2-classic
+    - Ingress open to 0.0.0.0/0
 - **Logging & Monitoring**
     - Access logs enabled to resources that support it
 - **Public Exposure**
@@ -26,8 +26,8 @@ api_gateway_domain_name | :heavy_check_mark: |
 aws_db_security_group | | :heavy_check_mark:
 aws_instance | :heavy_check_mark: |
 aws_redshift_security_group | | :heavy_check_mark:
-aws_security_group | | :heavy_minus_sign:
-aws_security_group_rule | | :heavy_minus_sign:
+aws_security_group | | :heavy_check_mark:
+aws_security_group_rule | | :heavy_check_mark:
 cloudfront_distribution | :heavy_check_mark: |
 cloudtrail | :heavy_check_mark: |
 codebuild_project | :heavy_check_mark: |

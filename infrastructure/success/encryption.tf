@@ -161,3 +161,34 @@ resource "aws_ssm_parameter" "secret" {
   type   = "SecureString"
   key_id = "${var.kms_key_arn}"
 }
+
+resource "aws_security_group_rule" "allow_all" {
+  type            = "ingress"
+  from_port       = 0
+  to_port         = 65535
+  protocol        = "tcp"
+  cidr_blocks     = ["192.168.1.1/32"]
+  prefix_list_ids = ["pl-12c4e678"]
+
+  security_group_id = "sg-123456"
+}
+
+resource "aws_security_group" "allow_all" {
+  name        = "allow_all"
+  description = "Allow all inbound traffic"
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["192.168.1.1/32"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    prefix_list_ids = ["pl-12c4e678"]
+  }
+}
