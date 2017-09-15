@@ -41,6 +41,12 @@ class TestPublicExposure(unittest.TestCase):
             'aws_instance').property(
             'associate_public_ip_address').should_not_equal(True)
 
+    def test_aws_launch_configuration_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_launch_configuration').property(
+            'associate_public_ip_address').should_not_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()

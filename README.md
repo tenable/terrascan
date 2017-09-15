@@ -46,7 +46,7 @@ aws_emr_cluster | | | | :heavy_minus_sign: |
 aws_instance | :heavy_check_mark: | | :heavy_check_mark: |
 aws_kinesis_firehose_delivery_stream | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_lambda_function | :heavy_check_mark: | | |
-aws_launch_configuration | | | :heavy_minus_sign: |
+aws_launch_configuration | | | :heavy_check_mark: |
 aws_lb_ssl_negotiation_policy | :heavy_minus_sign: | | |
 aws_load_balancer_backend_server_policy | :heavy_minus_sign: | | |
 aws_load_balancer_listener_policy | :heavy_minus_sign: | | |

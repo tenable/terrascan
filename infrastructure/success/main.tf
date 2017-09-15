@@ -210,3 +210,7 @@ resource "aws_alb" "test" {
 resource "aws_db_instance" "default" {
   publicly_accessible = false
 }
+
+resource "aws_launch_configuration" "as_conf" {
+  associate_public_ip_address = false
+}
