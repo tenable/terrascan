@@ -65,7 +65,7 @@ aws_opsworks_rails_app_layer | | | :heavy_minus_sign: |
 aws_opsworks_static_web_layer | | | :heavy_minus_sign: |
 aws_rds_cluster | :heavy_check_mark: | | |
 aws_rds_cluster_instance | | | :heavy_check_mark: |
-aws_redshift_cluster | :heavy_check_mark: | | :heavy_check_mark: | :heavy_minus_sign: |
+aws_redshift_cluster | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 aws_redshift_parameter_group | :heavy_minus_sign: | | | :heavy_minus_sign: |
 aws_redshift_security_group | | :heavy_check_mark: | |
 aws_s3_bucket | | | :heavy_check_mark: | :heavy_minus_sign: |
