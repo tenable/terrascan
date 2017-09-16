@@ -227,3 +227,7 @@ resource "aws_db_instance" "default" {
 resource "aws_launch_configuration" "as_conf" {
   associate_public_ip_address = true
 }
+
+resource "aws_rds_cluster_instance" "cluster_instances" {
+  publicly_accessible = true
+}

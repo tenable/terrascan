@@ -47,6 +47,12 @@ class TestPublicExposure(unittest.TestCase):
             'aws_launch_configuration').property(
             'associate_public_ip_address').should_not_equal(True)
 
+    def test_aws_rds_cluster_instance_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_rds_cluster_instance').property(
+            'publicly_accessible').should_not_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()
