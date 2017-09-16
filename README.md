@@ -29,7 +29,7 @@ aws_alb_listener | :heavy_check_mark: | | |
 aws_ami | :heavy_check_mark: | | |
 aws_ami_copy | :heavy_check_mark: | | |
 aws_api_gateway_domain_name | :heavy_check_mark: | | |
-aws_cloudfront_distribution | :heavy_check_mark: | | | :heavy_minus_sign: |
+aws_cloudfront_distribution | :heavy_check_mark: | | | :heavy_check_mark: |
 aws_cloudtrail | :heavy_check_mark: | | | :heavy_minus_sign: |
 aws_codebuild_project | :heavy_check_mark: | | |
 aws_codepipeline | :heavy_check_mark: | | |
