@@ -4,7 +4,7 @@ import terraform_validate
 from . import settings
 
 
-class TestAlbListener(unittest.TestCase):
+class TestEncryption(unittest.TestCase):
 
     def setUp(self):
         # Tell the module where to find your terraform configuration folder
@@ -47,16 +47,6 @@ class TestAlbListener(unittest.TestCase):
         self.v.resources(
             'aws_alb_listener').should_have_properties(['certificate_arn'])
 
-
-class TestAMI(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_ami_ebs_block_device_encryption(self):
         # Assert ami 'ebs_block_device' blocks are encrypted
         self.v.error_if_property_missing()
@@ -73,16 +63,6 @@ class TestAMI(unittest.TestCase):
             'aws_ami').property(
             'ebs_block_device').should_have_properties(['kms_key_id'])
 
-
-class TestAMICopy(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_ami_copy_encryption(self):
         # Assert resources are encrypted
         self.v.error_if_property_missing()
@@ -97,16 +77,6 @@ class TestAMICopy(unittest.TestCase):
         self.v.resources(
             'aws_ami_copy').should_have_properties(['kms_key_id'])
 
-
-class TestAPIGatewayDomainName(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_api_gateway_domain_name_certificate(self):
         # Assert that certificate settings have been configured
         self.v.error_if_property_missing()
@@ -120,16 +90,6 @@ class TestAPIGatewayDomainName(unittest.TestCase):
                 'certificate_private_key'
             ])
 
-
-class TestEC2Instance(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_instance_ebs_block_device_encrypted(self):
         # Assert ec2 instance 'ebs_block_device' is encrypted
         self.v.error_if_property_missing()
@@ -137,16 +97,6 @@ class TestEC2Instance(unittest.TestCase):
         self.v.resources(
             'aws_instance').property(
             'ebs_block_device').property('encrypted').should_equal(True)
-
-
-class TestCloudfrontDistribution(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_cloudfront_distribution_origin_protocol_policy(self):
         # Assert that origin receives https only traffic
@@ -175,32 +125,12 @@ class TestCloudfrontDistribution(unittest.TestCase):
             'cache_behavior').property(
             'viewer_protocol_policy').should_not_equal("allow-all")
 
-
-class TestCloudTrail(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_cloudtrail_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_cloudtrail').should_have_properties(['kms_key_id'])
-
-
-class TestCodeBuild(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_codebuild_project_kms(self):
         # Assert that a KMS key has been provided
@@ -209,32 +139,12 @@ class TestCodeBuild(unittest.TestCase):
         self.v.resources(
             'aws_codebuild_project').should_have_properties(['encryption_key'])
 
-
-class TestCodePipeline(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_codepipeline_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_codepipeline').should_have_properties(['encryption_key'])
-
-
-class TestDBInstance(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_db_instance_encrypted(self):
         # Assert that DB is encrypted
@@ -249,16 +159,6 @@ class TestDBInstance(unittest.TestCase):
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_db_instance').should_have_properties(['kms_key_id'])
-
-
-class TestDMSEndpoint(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_dms_endpoint_ssl_mode(self):
         # Assert that SSL is verified
@@ -288,16 +188,6 @@ class TestDMSEndpoint(unittest.TestCase):
                 'certificate_arn'
             ])
 
-
-class TestDMSReplicationInstance(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_dms_replication_instance_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
@@ -305,16 +195,6 @@ class TestDMSReplicationInstance(unittest.TestCase):
         self.v.resources(
             'aws_dms_replication_instance').should_have_properties(
             ['kms_key_arn'])
-
-
-class TestEBS(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_ebs_volume_encryption(self):
         # Assert that all resources of type 'aws_ebs_volume' are encrypted
@@ -330,16 +210,6 @@ class TestEBS(unittest.TestCase):
         self.v.resources(
             'aws_ebs_volume').should_have_properties(['kms_key_id'])
 
-
-class TestEFSFileSystem(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_efs_file_system_encryption(self):
         # Assert that all resources of type 'aws_efs_file_system' are encrypted
         self.v.error_if_property_missing()
@@ -354,16 +224,6 @@ class TestEFSFileSystem(unittest.TestCase):
         self.v.resources(
             'aws_efs_file_system').should_have_properties(['kms_key_id'])
 
-
-class TestElastictranscoderPipeline(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_elastictranscoder_pipeline_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
@@ -371,16 +231,6 @@ class TestElastictranscoderPipeline(unittest.TestCase):
         self.v.resources(
             'aws_elastictranscoder_pipeline').should_have_properties(
             ['aws_kms_key_arn'])
-
-
-class TestELB(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_elb_listener_port_80(self):
         # Assert ELB listener port is not 80 (http)
@@ -410,16 +260,6 @@ class TestELB(unittest.TestCase):
             'aws_elb').property(
             'listener').property('lb_port').should_not_equal(5900)
 
-
-class TestKinesisFirehoseDeliveryStream(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_kinesis_firehose_delivery_stream_s3_kms(self):
         # Assert ELB listener port is not 80 (http)
         self.v.enable_variable_expansion()
@@ -435,16 +275,6 @@ class TestKinesisFirehoseDeliveryStream(unittest.TestCase):
             'extended_s3_configuration').should_have_properties(
             ['kms_key_arn'])
 
-
-class TestLambdaFunction(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_lambda_function_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
@@ -453,16 +283,6 @@ class TestLambdaFunction(unittest.TestCase):
             'aws_lambda_function').should_have_properties(
             ['kms_key_arn'])
 
-
-class TestOpsworksApplication(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_opsworks_application_encryption(self):
         # Assert resource is encrypted
         self.v.error_if_property_missing()
@@ -470,16 +290,6 @@ class TestOpsworksApplication(unittest.TestCase):
         self.v.resources(
             'aws_opsworks_application').property(
             'enable_ssl').should_equal(True)
-
-
-class TestRDSCluster(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_rds_cluster_encryption(self):
         # Assert resource is encrypted
@@ -497,16 +307,6 @@ class TestRDSCluster(unittest.TestCase):
             'aws_rds_cluster').should_have_properties(
             ['kms_key_id'])
 
-
-class TestRedshiftCluster(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_redshift_cluster_encryption(self):
         # Assert resource is encrypted
         self.v.error_if_property_missing()
@@ -522,16 +322,6 @@ class TestRedshiftCluster(unittest.TestCase):
         self.v.resources(
             'aws_redshift_cluster').should_have_properties(
             ['kms_key_id'])
-
-
-class TestS3BucketObject(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_s3_bucket_object_encryption(self):
         # Assert resource is encrypted with KMS
@@ -549,16 +339,6 @@ class TestS3BucketObject(unittest.TestCase):
             'aws_s3_bucket_object').should_have_properties(
             ['kms_key_id'])
 
-
-class TestSqsQueue(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
-
     def test_aws_sqs_queue_kms(self):
         # Assert resource has a KMS with CMK
         self.v.error_if_property_missing()
@@ -566,16 +346,6 @@ class TestSqsQueue(unittest.TestCase):
         self.v.resources(
             'aws_sqs_queue').should_have_properties(
             ['kms_master_key_id', 'kms_data_key_reuse_period_seconds'])
-
-
-class TestSsmParameter(unittest.TestCase):
-
-    def setUp(self):
-        # Tell the module where to find your terraform configuration folder
-        self.path = os.path.join(
-            os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
-        self.v = terraform_validate.Validator(self.path)
 
     def test_aws_ssm_parameter_encryption(self):
         # Assert resource is encrypted with KMS
