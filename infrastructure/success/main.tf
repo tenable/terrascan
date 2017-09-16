@@ -80,8 +80,9 @@ resource "aws_codepipeline" "foo" {
 }
 
 resource "aws_db_instance" "default" {
-  kms_key_id        = "${var.kms_key_arn}"
-  storage_encrypted = "${var.encryption}"
+  kms_key_id          = "${var.kms_key_arn}"
+  storage_encrypted   = "${var.encryption}"
+  publicly_accessible = false
 }
 
 resource "aws_dms_endpoint" "test" {
@@ -206,10 +207,6 @@ resource "aws_alb" "test" {
     bucket = "${aws_s3_bucket.alb_logs.bucket}"
     prefix = "test-alb"
   }
-}
-
-resource "aws_db_instance" "default" {
-  publicly_accessible = false
 }
 
 resource "aws_launch_configuration" "as_conf" {
