@@ -181,7 +181,7 @@ resource "aws_redshift_cluster" "default" {
   encrypted           = "${var.encryption}"
   kms_key_id          = "${var.kms_key_arn}"
   publicly_accessible = false
-  enable_logging = true
+  enable_logging      = true
 }
 
 resource "aws_s3_bucket_object" "examplebucket_object" {
@@ -249,6 +249,11 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
 
 resource "aws_s3_bucket" "b" {
   acl = "private"
+
+  logging {
+    target_bucket = "${aws_s3_bucket.log_bucket.id}"
+    target_prefix = "log/"
+  }
 }
 
 resource "aws_emr_cluster" "emr-test-cluster" {

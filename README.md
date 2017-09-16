@@ -68,7 +68,7 @@ aws_rds_cluster_instance | | | :heavy_check_mark: |
 aws_redshift_cluster | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 aws_redshift_parameter_group | :heavy_minus_sign: | | | :heavy_minus_sign: |
 aws_redshift_security_group | | :heavy_check_mark: | |
-aws_s3_bucket | | | :heavy_check_mark: | :heavy_minus_sign: |
+aws_s3_bucket | | | :heavy_check_mark: | :heavy_check_mark: |
 aws_s3_bucket_object | :heavy_check_mark: | | |
 aws_security_group | | :heavy_check_mark: |
 aws_security_group_rule | | :heavy_check_mark: | |

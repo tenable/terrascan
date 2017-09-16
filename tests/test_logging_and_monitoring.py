@@ -80,6 +80,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_redshift_cluster').property(
             'enable_logging').should_not_equal(False)
 
+    def test_aws_s3_bucket_logging(self):
+        self.v.resources(
+            'aws_s3_bucket').should_have_properties(
+            ['logging'])
+
 
 if __name__ == '__main__':
     unittest.main()
