@@ -74,7 +74,8 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 resource "aws_cloudtrail" "foo" {
-  kms_key_id = "${var.kms_key_arn}"
+  kms_key_id     = "${var.kms_key_arn}"
+  enable_logging = true
 }
 
 resource "aws_codebuild_project" "foo" {

@@ -22,6 +22,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_cloudfront_distribution').should_have_properties(
             ['logging_config'])
 
+    def test_aws_cloudtrail_logging(self):
+        self.v.resources(
+            'aws_cloudtrail').property(
+            'enable_logging').should_not_equal(False)
+
 
 if __name__ == '__main__':
     unittest.main()
