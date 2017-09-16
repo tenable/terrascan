@@ -219,3 +219,7 @@ resource "aws_launch_configuration" "as_conf" {
 resource "aws_rds_cluster_instance" "cluster_instances" {
   publicly_accessible = false
 }
+
+resource "aws_s3_bucket" "b" {
+  acl = "private"
+}
