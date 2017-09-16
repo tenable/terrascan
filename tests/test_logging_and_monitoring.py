@@ -37,6 +37,42 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_emr_cluster').should_have_properties(
             ['log_uri'])
 
+    def test_aws_kinesis_firehose_delivery_stream__s3_config_logging(self):
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            's3_configuration').should_have_properties(
+            ['cloudwatch_logging_options'])
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            's3_configuration').property(
+            'cloudwatch_logging_options').property(
+            'enabled').should_equal(True)
+
+    def test_aws_kinesis_firehose_delivery_stream_redshift_conf_logging(self):
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            'redshift_configuration').should_have_properties(
+            ['cloudwatch_logging_options'])
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            'redshift_configuration').property(
+            'cloudwatch_logging_options').property(
+            'enabled').should_equal(True)
+
+    def test_aws_kinesis_firehose_delivery_stream__es_config_logging(self):
+        self.v.enable_variable_expansion()
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            'elasticsearch_configuration').should_have_properties(
+            ['cloudwatch_logging_options'])
+        self.v.resources(
+            'aws_kinesis_firehose_delivery_stream').property(
+            'elasticsearch_configuration').property(
+            'cloudwatch_logging_options').property(
+            'enabled').should_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()

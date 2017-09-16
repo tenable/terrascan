@@ -142,6 +142,14 @@ resource "aws_kinesis_firehose_delivery_stream" "foo" {
   extended_s3_configuration {
     # kms_key_arn = "${var.kms_key_arn}"
   }
+
+  redshift_configuration {
+    cloudwatch_logging_options {
+      enabled = false
+    }
+  }
+
+  elasticsearch_configuration {}
 }
 
 resource "aws_lambda_function" "foo" {
