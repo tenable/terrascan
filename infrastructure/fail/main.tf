@@ -261,3 +261,7 @@ resource "aws_s3_bucket" "public_read_write" {
 resource "aws_s3_bucket" "authenticated_read" {
   acl = "authenticated-read"
 }
+
+resource "aws_emr_cluster" "emr-test-cluster" {
+  # log_uri = "s3bucket/test"
+}

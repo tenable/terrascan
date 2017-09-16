@@ -32,6 +32,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_elb').should_have_properties(
             ['access_logs'])
 
+    def test_aws_emr_cluster_logging(self):
+        self.v.resources(
+            'aws_emr_cluster').should_have_properties(
+            ['log_uri'])
+
 
 if __name__ == '__main__':
     unittest.main()

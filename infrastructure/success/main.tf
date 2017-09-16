@@ -233,3 +233,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
 resource "aws_s3_bucket" "b" {
   acl = "private"
 }
+
+resource "aws_emr_cluster" "emr-test-cluster" {
+  log_uri = "s3bucket/test"
+}
