@@ -125,6 +125,12 @@ resource "aws_elb" "foo" {
     lb_protocol        = "https"
     ssl_certificate_id = "${var.certificate_arn}"
   }
+
+  access_logs {
+    bucket        = "foo"
+    bucket_prefix = "bar"
+    interval      = 60
+  }
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "foo" {

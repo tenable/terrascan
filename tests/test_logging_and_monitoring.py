@@ -27,6 +27,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_cloudtrail').property(
             'enable_logging').should_not_equal(False)
 
+    def test_aws_elb_logging(self):
+        self.v.resources(
+            'aws_elb').should_have_properties(
+            ['access_logs'])
+
 
 if __name__ == '__main__':
     unittest.main()
