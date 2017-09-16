@@ -148,8 +148,9 @@ resource "aws_rds_cluster" "default" {
 }
 
 resource "aws_redshift_cluster" "default" {
-  encrypted  = "${var.encryption}"
-  kms_key_id = "${var.kms_key_arn}"
+  encrypted           = "${var.encryption}"
+  kms_key_id          = "${var.kms_key_arn}"
+  publicly_accessible = false
 }
 
 resource "aws_s3_bucket_object" "examplebucket_object" {

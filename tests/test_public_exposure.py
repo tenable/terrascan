@@ -53,6 +53,12 @@ class TestPublicExposure(unittest.TestCase):
             'aws_rds_cluster_instance').property(
             'publicly_accessible').should_not_equal(True)
 
+    def test_aws_redshift_cluster_public(self):
+        # Assert public ALB
+        self.v.resources(
+            'aws_redshift_cluster').property(
+            'publicly_accessible').should_not_equal(True)
+
 
 if __name__ == '__main__':
     unittest.main()
