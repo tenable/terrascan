@@ -89,7 +89,7 @@ pip install -r requirements.txt
 
 Running the tests
 -----------------
-After installing you need to configure the `TERRAFORM_LOCATION` variable in (tests/settings.py)[tests/settings.py] to point to the location of your terraform templates.
+After installing you need to configure the `TERRAFORM_LOCATION` variable in [tests/settings.py](tests/settings.py) to point to the location of your terraform templates.
 
 You can run all the tests with this command:
 `python3 -m unittest`
