@@ -17,6 +17,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
         self.v.resources(
             'aws_alb').should_have_properties(['access_logs'])
 
+    def test_aws_cloudfront_distribution_logging(self):
+        self.v.resources(
+            'aws_cloudfront_distribution').should_have_properties(
+            ['logging_config'])
+
 
 if __name__ == '__main__':
     unittest.main()

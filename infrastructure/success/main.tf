@@ -65,6 +65,12 @@ resource "aws_cloudfront_distribution" "distribution" {
   cache_behavior {
     viewer_protocol_policy = "redirect-to-https"
   }
+
+  logging_config {
+    include_cookies = false
+    bucket          = "mylogs.s3.amazonaws.com"
+    prefix          = "myprefix"
+  }
 }
 
 resource "aws_cloudtrail" "foo" {
