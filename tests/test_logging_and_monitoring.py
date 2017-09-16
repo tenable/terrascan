@@ -85,6 +85,11 @@ class TestLoggingAndMonitoring(unittest.TestCase):
             'aws_s3_bucket').should_have_properties(
             ['logging'])
 
+    def test_aws_ssm_maintenance_window_task_logging(self):
+        self.v.resources(
+            'aws_ssm_maintenance_window_task').should_have_properties(
+            ['logging_info'])
+
 
 if __name__ == '__main__':
     unittest.main()

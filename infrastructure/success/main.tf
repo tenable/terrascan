@@ -259,3 +259,10 @@ resource "aws_s3_bucket" "b" {
 resource "aws_emr_cluster" "emr-test-cluster" {
   log_uri = "s3bucket/test"
 }
+
+resource "aws_ssm_maintenance_window_task" "task" {
+  logging_info {
+    s3_bucket_name = "${aws_s3_bucket.log_bucket.id}"
+    s3_region      = "us-east-1"
+  }
+}

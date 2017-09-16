@@ -74,7 +74,7 @@ aws_security_group | | :heavy_check_mark: |
 aws_security_group_rule | | :heavy_check_mark: | |
 aws_ses_receipt_rule | :heavy_minus_sign: | | |
 aws_sqs_queue | :heavy_check_mark: | | |
-aws_ssm_maintenance_window_task | | | | :heavy_minus_sign: |
+aws_ssm_maintenance_window_task | | | | :heavy_check_mark: |
 aws_ssm_parameter | :heavy_check_mark: | | |
 
 Installing

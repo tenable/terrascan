@@ -273,3 +273,5 @@ resource "aws_s3_bucket" "authenticated_read" {
 resource "aws_emr_cluster" "emr-test-cluster" {
   # log_uri = "s3bucket/test"
 }
+
+resource "aws_ssm_maintenance_window_task" "task" {}
