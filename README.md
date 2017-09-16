@@ -79,8 +79,24 @@ aws_ssm_parameter | :heavy_check_mark: | | |
 
 Installing
 ----------
-Lorem ipsum
+Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
+
+```bash
+git clone https://github.com/therasec/terrascan.git
+cd terrascan
+pip install -r requirements.txt
+```
 
 Running the tests
 -----------------
-Lorem ipsum
+After installing you need to configure the `TERRAFORM_LOCATION` variable in [tests/settings.py] to point to the location of your terraform templates.
+
+You can run all the tests with this command:
+`python3 -m unittest`
+
+Alternatively, specific tests can be executed by passing the location of the test file as follows:
+`python3 -m unittest tests.test_logging_and_monitoring.TestLoggingAndMonitoring`
+
+
+
+
