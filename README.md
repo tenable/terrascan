@@ -82,7 +82,7 @@ Installing
 Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
 
 ```bash
-git clone https://github.com/therasec/terrascan.git
+git clone https://github.com/cesar-rodriguez/terrascan.git
 cd terrascan
 pip install -r requirements.txt
 ```
