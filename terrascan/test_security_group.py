@@ -1,16 +1,19 @@
 import unittest
 import os
 import terraform_validate
-from . import settings
 
 
 class TestSecurityGroups(unittest.TestCase):
+
+    # Set this before running the Test Case
+    TERRAFORM_LOCATION = ''
 
     def setUp(self):
         # Tell the module where to find your terraform configuration folder
         self.path = os.path.join(
             os.path.dirname(
-                os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+                # os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
+                os.path.realpath(__file__)), self.TERRAFORM_LOCATION)
         self.v = terraform_validate.Validator(self.path)
 
     def test_aws_db_security_group_used(self):

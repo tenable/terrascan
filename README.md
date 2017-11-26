@@ -89,14 +89,11 @@ pip install -r requirements.txt
 
 Running the tests
 -----------------
-After installing you need to configure the `TERRAFORM_LOCATION` variable in [terrascan/settings.py](terrascan/settings.py) to point to the location of your terraform templates.
+To run execute cli.py as follows replacing with the location of your terraform templates:
+`python terrascan/cli.py --location ../infrastructure/success --tests all`
 
-You can run all the tests with this command:
-`python -m unittest`
+To run a specific test run the following command replacing encryption with the name of the test to run:
+`python terrascan.py --location ../infrastructure/success --tests encryption`
 
-Alternatively, specific tests can be executed by passing the location of the test file as follows:
-`python -m unittest terrascan.test_logging_and_monitoring.TestLoggingAndMonitoring`
-
-
-
-
+To learn more about the options to the cli execute the following:
+`python terrascan.py -h`
