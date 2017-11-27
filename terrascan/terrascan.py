@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Console script for terrascan."""
 
 import argparse
 import unittest
@@ -46,8 +48,8 @@ def run_test(args):
 
 def main(args=None):
     """
-    Parses user input to determine location of terraform templates and
-    which tests to execute
+    Terrascan console script. Parses user input to determine location of
+    terraform templates and which tests to execute
     """
     parser = argparse.ArgumentParser()
 
