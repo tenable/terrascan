@@ -1,5 +1,5 @@
 =========
-terrascan
+Terrascan
 =========
 
 
@@ -18,8 +18,10 @@ terrascan
      :alt: Updates
 
 
-A collection of security and best practice tests for static code analysis of [terraform](https://www.terraform.io) templates using [terraform-validate](https://github.com/elmundio87/terraform_validate).
+A collection of security and best practice tests for static code analysis of terraform_ templates using terraform_validate_.
 
+.. _terraform: https://www.terraform.io
+.. _terraform_validate: https://github.com/elmundio87/terraform_validate
 
 * Free software: GNU General Public License v3
 * Documentation: https://terrascan.readthedocs.io.
