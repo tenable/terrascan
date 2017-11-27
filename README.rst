@@ -72,8 +72,12 @@ Legend:
  - :heavy_check_mark: - test implemented
  - blank - N/A
 
-Terraform resource | Encryption | Security Groups | Public Exposure | Logging & Monitoring |
------------------- | ---------- | --------------- | --------------- | -------------------- |
+=================== ========== =============== ================== ====================
+Terraform resources Encryption Security Groups Public exposure    Logging & Monitoring
+=================== ========== =============== ================== ====================
+aws_alb                                        :heavy_check_mark: :heavy_check_mark:
+=================== ========== =============== ================== ====================
+
 aws_alb | | | :heavy_check_mark: | :heavy_check_mark: |
 aws_alb_listener | :heavy_check_mark: | | |
 aws_ami | :heavy_check_mark: | | |
