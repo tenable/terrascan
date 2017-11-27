@@ -24,8 +24,9 @@ A collection of security and best practice tests for static code analysis of ter
 .. _terraform: https://www.terraform.io
 .. _terraform_validate: https://github.com/elmundio87/terraform_validate
 
-* Free software: GNU General Public License v3
+* GitHub Repo: https://github.com/cesar-rodriguez/terrascan
 * Documentation: https://terrascan.readthedocs.io.
+* Free software: GNU General Public License v3
 
 --------
 Features
