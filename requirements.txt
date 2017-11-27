@@ -1,3 +1,3 @@
-ply==3.9
+ply==3.10
 pyhcl==0.3.8
 terraform-validate==2.4.0
