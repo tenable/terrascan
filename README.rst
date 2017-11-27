@@ -71,7 +71,7 @@ To run a specific test run the following command replacing encryption with the n
 To learn more about the options to the cli execute the following:
 .. code-block:: bash
 
-    python terrascan.py -h``
+    python terrascan.py -h
 
 --------------
 Feature Status
