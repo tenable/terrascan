@@ -364,7 +364,3 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_ssm_parameter').should_have_properties(
             ['key_id'])
-
-
-if __name__ == '__main__':
-    unittest.main()

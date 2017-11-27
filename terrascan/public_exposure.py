@@ -79,7 +79,3 @@ class TestPublicExposure(unittest.TestCase):
         self.v.resources(
             'aws_s3_bucket').should_not_have_properties(
             ['website'])
-
-
-if __name__ == '__main__':
-    unittest.main()

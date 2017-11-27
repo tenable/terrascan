@@ -91,7 +91,3 @@ class TestLoggingAndMonitoring(unittest.TestCase):
         self.v.resources(
             'aws_ssm_maintenance_window_task').should_have_properties(
             ['logging_info'])
-
-
-if __name__ == '__main__':
-    unittest.main()

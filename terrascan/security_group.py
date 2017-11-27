@@ -46,7 +46,3 @@ class TestSecurityGroups(unittest.TestCase):
             'aws_security_group').property(
             'ingress').property(
             'cidr_blocks').list_should_not_contain('0.0.0.0/0')
-
-
-if __name__ == '__main__':
-    unittest.main()

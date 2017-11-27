@@ -3,10 +3,10 @@
 import argparse
 import unittest
 import sys
-from test_security_group import TestSecurityGroups
-from test_encryption import TestEncryption
-from test_logging_and_monitoring import TestLoggingAndMonitoring
-from test_public_exposure import TestPublicExposure
+from security_group import TestSecurityGroups
+from encryption import TestEncryption
+from logging_and_monitoring import TestLoggingAndMonitoring
+from public_exposure import TestPublicExposure
 
 
 test_to_class = {
