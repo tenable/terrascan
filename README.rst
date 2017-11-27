@@ -68,15 +68,15 @@ To learn more about the options to the cli execute the following:
 Feature Status
 --------------
 Legend:
- - `:heavy_minus_sign:` = test needs to be implemented
- - `:heavy_check_mark:` = test implemented
- - blank - N/A
+ `:heavy_minus_sign:` = test needs to be implemented
+ `:heavy_check_mark:` = test implemented
+ blank - N/A
 
-+-------------------+------------+-----------------+----------------------+----------------------+
-Terraform resources | Encryption | Security Groups | Public exposure      | Logging & Monitoring |
-+===================+============+=================+======================+======================+
-| aws_alb           |            |                 | `:heavy_check_mark:` | :heavy_check_mark:   |
-+-------------------+------------+-----------------+----------------------+----------------------+
++---------------------+------------+-----------------+----------------------+----------------------+
+| Terraform resources | Encryption | Security Groups | Public exposure      | Logging & Monitoring |
++=====================+============+=================+======================+======================+
+| aws_alb             |            |                 | `:heavy_check_mark:` | :heavy_check_mark:   |
++---------------------+------------+-----------------+----------------------+----------------------+
 
 aws_alb | | | :heavy_check_mark: | :heavy_check_mark: |
 aws_alb_listener | :heavy_check_mark: | | |
