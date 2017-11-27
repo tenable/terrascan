@@ -105,6 +105,15 @@ Legend:
 +------------------------------+----------------------+----------------------+----------------------+----------------------+
 
 
+================================  ======================  ======================  ======================  ======================
+ Terraform resources               Encryption              Security Groups         Public exposure         Logging & Monitoring
+================================  ======================  ======================  ======================  ======================
+ aws_efs_file_system               `:heavy_check_mark:`
+ aws_elasticache_security_group                            `:heavy_check_mark:`
+================================  ======================  ======================  ======================  ======================
+
+
+
 | aws_efs_file_system | `:heavy_check_mark:` | | |
 | aws_elasticache_security_group | | `:heavy_check_mark:` |
 | aws_elastictranscoder_pipeline | `:heavy_check_mark:` | | |
