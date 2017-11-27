@@ -48,31 +48,32 @@ Installing
 ----------
 Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
 
-```bash
-git clone https://github.com/cesar-rodriguez/terrascan.git
-cd terrascan
-pip install -r requirements.txt
-```
+.. code-block:: bash
+
+    git clone https://github.com/cesar-rodriguez/terrascan.git
+    cd terrascan
+    pip install -r requirements.txt
+
 
 -----------------
 Running the tests
 -----------------
 To run execute cli.py as follows replacing with the location of your terraform templates:
-`python terrascan/cli.py --location ../infrastructure/success --tests all`
+``python terrascan/cli.py --location ../infrastructure/success --tests all``
 
 To run a specific test run the following command replacing encryption with the name of the test to run:
-`python terrascan.py --location ../infrastructure/success --tests encryption`
+``python terrascan.py --location ../infrastructure/success --tests encryption``
 
 To learn more about the options to the cli execute the following:
-`python terrascan.py -h`
+``python terrascan.py -h``
 
 --------------
 Feature Status
 --------------
-|Legend:
-| `:heavy_minus_sign:` = test needs to be implemented
-| `:heavy_check_mark:` = test implemented
-| **blank** - N/A
+Legend:
+    - `:heavy_minus_sign:` = test needs to be implemented
+    - `:heavy_check_mark:` = test implemented
+    - **blank** - N/A
 
 ========================================  ======================  ======================  ======================  ======================
  Terraform resources                       Encryption              Security Groups         Public exposure         Logging & Monitoring
