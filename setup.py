@@ -12,15 +12,21 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    # TODO: put package requirements here
+    'ply==3.10',
+    'pyhcl==0.3.9',
+    'terraform-validate==2.5.0',
 ]
 
 setup_requirements = [
-    # TODO(cesar-rodriguez): put setup requirements (distutils extensions, etc.) here
+    'ply==3.10',
+    'pyhcl==0.3.9',
+    'terraform-validate==2.5.0',
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'ply==3.10',
+    'pyhcl==0.3.9',
+    'terraform-validate==2.5.0',
 ]
 
 setup(
@@ -31,7 +37,12 @@ setup(
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
-    packages=find_packages(include=['terrascan']),
+    packages=find_packages(where='.'),
+    entry_points={
+        'console_scripts': [
+            'terrascan = terrascan.__main__:main',
+        ]
+    },
     include_package_data=True,
     install_requires=requirements,
     license="GNU General Public License v3",
