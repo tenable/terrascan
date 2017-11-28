@@ -72,7 +72,7 @@ def create_parser():
 (e.g. encryption,security_group) Valid values include:encription,
 logging_and_monitoring, public_exposure, security_group''',
         nargs=1,
-        default='all'
+        default=['all']
     )
     parser.set_defaults(func=run_test)
 
