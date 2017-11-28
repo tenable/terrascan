@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Tests for public exposure configuration in terraform templates"""
+
 import unittest
 import os
 import terraform_validate
