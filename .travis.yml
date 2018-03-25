@@ -7,6 +7,7 @@ script: tox
 # Install Dependencies
 install:
   - pip install -r requirements_dev.txt
+  - pip install -r requirements.txt
   - pip install -U tox-travis
 # Run Tests
 script:
