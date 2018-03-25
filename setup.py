@@ -11,32 +11,21 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
+
 requirements = [
-    'ply==3.10',
-    'pyhcl==0.3.9',
-    'terraform-validate==2.5.0',
-]
-
-setup_requirements = [
-    'ply==3.10',
-    'pyhcl==0.3.9',
-    'terraform-validate==2.5.0',
-]
-
-test_requirements = [
-    'ply==3.10',
-    'pyhcl==0.3.9',
     'terraform-validate==2.5.0',
 ]
 
 setup(
     name='terrascan',
     version='0.1.0',
-    description="Security and best practices tests for terraform",
+    description="Best practices tests for terraform",
     long_description=readme + '\n\n' + history,
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
+    download_url='https://github.com/cesar-rodriguez/terrascan' +
+    '/archive/v0.1.0.tar.gz',
     packages=find_packages(where='.'),
     entry_points={
         'console_scripts': [
@@ -57,6 +46,6 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     test_suite='tests',
-    tests_require=test_requirements,
-    setup_requires=setup_requirements,
+    tests_require=requirements,
+    setup_requires=requirements,
 )

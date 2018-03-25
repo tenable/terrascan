@@ -1,12 +1,14 @@
 language: python
 sudo: false
 python:
+- 3.4
 - 3.6
 - 3.5
 script: tox
 # Install Dependencies
 install:
   - pip install -r requirements_dev.txt
+  - pip install -r requirements.txt
   - pip install -U tox-travis
 # Run Tests
 script:
