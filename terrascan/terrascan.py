@@ -69,7 +69,7 @@ def create_parser():
         '-t',
         '--tests',
         help='''Comma separated list of test to run or "all" for all tests
-(e.g. encryption,security_group) Valid values include:encription,
+(e.g. encryption,security_group) Valid values include:encryption,
 logging_and_monitoring, public_exposure, security_group''',
         nargs=1,
         default=['all']

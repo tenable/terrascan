@@ -34,7 +34,7 @@ Features
 Terrascan will perform tests on your terraform templates to ensure:
 
 - **Encryption**
-    - Server Side Encription (SSE) enabled
+    - Server Side Encryption (SSE) enabled
     - Use of AWS Key Management Service (KMS) with Customer Managed Keys (CMK)
     - Use of SSL/TLS and proper configuration
 - **Security Groups**
