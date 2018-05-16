@@ -1,1 +1,1 @@
-terraform-validate==2.6.0
+terraform-validate==2.8.0
