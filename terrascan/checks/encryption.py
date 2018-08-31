@@ -25,7 +25,22 @@ class TestEncryption(unittest.TestCase):
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
-            'aws_alb_listener').property('port').should_equal('443')
+                         'aws_alb_listener',
+                        ).property('port').should_equal('443')
+
+    def test_gcp_ssl_policy(self):
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+                        'google_compute_ssl_policy',
+                       ).property('min_tls_version').should_equal('1.2')
+
+    def test_gcp_disk_encryption(self):
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+                         'google_compute_disk',
+                        ).should_have_properties(['disk_encryption_key'])
 
     def test_aws_alb_listener_protocol(self):
         # Assert that protocol is not http
@@ -362,7 +377,7 @@ class TestEncryption(unittest.TestCase):
             'aws_ssm_parameter').property(
             'type').should_equal('SecureString')
 
-    def test_aws_instance(self):
+    def test_zach_instance(self):
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources('aws_instance').resource_list
@@ -374,3 +389,6 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_ssm_parameter').should_have_properties(
             ['key_id'])
+        return dir(self.v.resources(
+            'aws_ssm_parameter').should_have_properties(
+            ['key_id']))
