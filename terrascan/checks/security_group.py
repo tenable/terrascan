@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Tests for security group configuration in terraform templates"""
-
-import unittest
 import os
+import unittest
+
 import terraform_validate
 
 
@@ -19,6 +19,15 @@ class TestSecurityGroups(unittest.TestCase):
                 # os.path.realpath(__file__)), settings.TERRAFORM_LOCATION)
                 os.path.realpath(__file__)), self.TERRAFORM_LOCATION)
         self.v = terraform_validate.Validator(self.path)
+
+    def test_gcp_firewall_rules(self):
+        self.v.enable_variable_expansion()
+        self.v.error_if_property_missing()
+        self.v.resources(
+                         'google_compute_firewall',
+                        ).property(
+                                   'destination_ranges',
+                                  ).list_should_not_contain('0.0.0.0/0')
 
     def test_aws_db_security_group_used(self):
         # This SG type exists outside of VPC (e.g. ec2 classic)
