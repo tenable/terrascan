@@ -377,11 +377,6 @@ class TestEncryption(unittest.TestCase):
             'aws_ssm_parameter').property(
             'type').should_equal('SecureString')
 
-    def test_zach_instance(self):
-        self.v.error_if_property_missing()
-        self.v.enable_variable_expansion()
-        self.v.resources('aws_instance').resource_list
-
     def test_aws_ssm_parameter_kms(self):
         # Assert resource has a KMS with CMK
         self.v.error_if_property_missing()
