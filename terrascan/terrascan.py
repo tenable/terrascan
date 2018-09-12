@@ -7,10 +7,10 @@ import unittest
 import sys
 from os import path
 
-from terrascan.checks.security_group import TestSecurityGroups
-from terrascan.checks.encryption import TestEncryption
-from terrascan.checks.logging_and_monitoring import TestLoggingAndMonitoring
-from terrascan.checks.public_exposure import TestPublicExposure
+from .checks.security_group import TestSecurityGroups
+from .checks.encryption import TestEncryption
+from .checks.logging_and_monitoring import TestLoggingAndMonitoring
+from .checks.public_exposure import TestPublicExposure
 
 
 test_to_class = {
