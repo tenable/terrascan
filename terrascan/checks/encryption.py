@@ -2,8 +2,9 @@
 
 """Tests for encryption configuration in terraform templates"""
 
-import unittest
 import os
+import unittest
+
 import terraform_validate
 
 
@@ -24,7 +25,22 @@ class TestEncryption(unittest.TestCase):
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources(
-            'aws_alb_listener').property('port').should_equal('443')
+                         'aws_alb_listener',
+                        ).property('port').should_equal('443')
+
+    def test_gcp_ssl_policy(self):
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+                        'google_compute_ssl_policy',
+                       ).property('min_tls_version').should_equal('1.2')
+
+    def test_gcp_disk_encryption(self):
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources(
+                         'google_compute_disk',
+                        ).should_have_properties(['disk_encryption_key'])
 
     def test_aws_alb_listener_protocol(self):
         # Assert that protocol is not http
@@ -93,7 +109,7 @@ class TestEncryption(unittest.TestCase):
                 'certificate_name',
                 'certificate_body',
                 'certificate_chain',
-                'certificate_private_key'
+                'certificate_private_key',
             ])
 
     def test_aws_instance_ebs_block_device_encrypted(self):
@@ -112,7 +128,7 @@ class TestEncryption(unittest.TestCase):
             'aws_cloudfront_distribution').property(
             'origin').property(
             'custom_origin_config').property(
-            'origin_protocol_policy').should_equal("https-only")
+            'origin_protocol_policy').should_equal('https-only')
 
     def test_aws_cloudfront_distribution_def_cache_viewer_prot_policy(self):
         # Assert that cache protocol doesn't allow all
@@ -121,7 +137,7 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_cloudfront_distribution').property(
             'default_cache_behavior').property(
-            'viewer_protocol_policy').should_not_equal("allow-all")
+            'viewer_protocol_policy').should_not_equal('allow-all')
 
     def test_aws_cloudfront_distribution_cache_beh_viewer_proto_policy(self):
         # Assert that cache protocol doesn't allow all
@@ -129,7 +145,7 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_cloudfront_distribution').property(
             'cache_behavior').property(
-            'viewer_protocol_policy').should_not_equal("allow-all")
+            'viewer_protocol_policy').should_not_equal('allow-all')
 
     def test_aws_cloudtrail_kms(self):
         # Assert that a KMS key has been provided
@@ -181,7 +197,7 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_dms_endpoint').should_have_properties(
             [
-                'kms_key_arn'
+                'kms_key_arn',
             ])
 
     def test_aws_dms_endpoint_certificate(self):
@@ -191,7 +207,7 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_dms_endpoint').should_have_properties(
             [
-                'certificate_arn'
+                'certificate_arn',
             ])
 
     def test_aws_dms_replication_instance_kms(self):
@@ -335,7 +351,7 @@ class TestEncryption(unittest.TestCase):
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_s3_bucket_object').property(
-            'server_side_encryption').should_equal("aws:kms")
+            'server_side_encryption').should_equal('aws:kms')
 
     def test_aws_s3_bucket_object_kms(self):
         # Assert resource has a KMS with CMKs
@@ -359,7 +375,7 @@ class TestEncryption(unittest.TestCase):
         self.v.enable_variable_expansion()
         self.v.resources(
             'aws_ssm_parameter').property(
-            'type').should_equal("SecureString")
+            'type').should_equal('SecureString')
 
     def test_aws_ssm_parameter_kms(self):
         # Assert resource has a KMS with CMK
@@ -368,3 +384,6 @@ class TestEncryption(unittest.TestCase):
         self.v.resources(
             'aws_ssm_parameter').should_have_properties(
             ['key_id'])
+        return dir(self.v.resources(
+            'aws_ssm_parameter').should_have_properties(
+            ['key_id']))
