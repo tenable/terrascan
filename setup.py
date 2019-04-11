@@ -13,12 +13,12 @@ with open('HISTORY.rst') as history_file:
 
 
 requirements = [
-    'terraform-validate==2.5.0',
+    'terraform-validate-sf==3.0.0',
 ]
 
 setup(
-    name='terrascan',
-    version='0.1.0',
+    name='terrascan-sf',
+    version='2.0.0',
     description="Best practices tests for terraform",
     long_description=readme + '\n\n' + history,
     author="Cesar Rodriguez",

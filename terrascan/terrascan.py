@@ -1,93 +1,855 @@
 # -*- coding: utf-8 -*-
+"""
+    terrascan: A collection of security and best practice tests for static code analysis of terraform templates using terraform_validate.
 
-"""Console script for terrascan."""
+    Copyright (C) 2017  Cesar Rodriguez
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
 
 import argparse
 import unittest
+import os
 import sys
-from os import path
+import json
+import time
+import terraform_validate
+import logging
 
-from .checks.security_group import TestSecurityGroups
-from .checks.encryption import TestEncryption
-from .checks.logging_and_monitoring import TestLoggingAndMonitoring
-from .checks.public_exposure import TestPublicExposure
-
-
-test_to_class = {
-    'encryption': TestEncryption,
-    'logging_and_monitoring': TestLoggingAndMonitoring,
-    'public_exposure': TestPublicExposure,
-    'security_group': TestSecurityGroups
+jsonOutput = {
+    "failures": [],
+    "errors": []
 }
 
 
-def run_test(args):
-    """
-    Executes template checks based on cli options
-    """
-    # Gets absolute location path
-    location = path.abspath(args.location[0])
-    if not path.exists(location):
-        raise Exception("The specified location doesn't exists")
+###############################################################################################################################################################################
+# Rules:  these are the rules used to verify that the terraform files are set up correctly.
+#
+# available methods for resources:
+#   property(property_name): returns a list of the requested property_name; if self.v.error_if_property_missing() is called before the rule, will fail if property is missing.
+#   with_property(property_name, regex_value): returns a list of the requested property_name with the requested regex_value.
+#   should_not_exist(): fails if the resource doesn't exist.
+#   should_have_properties(properties_list): fails if any of the properties in the given properties_list doesn't exist.
+#   should_not_have_properties(properties_list): fails if any of the properties in the given properties_list exists.
+#   find_property(property_name_regex): returns a list of the requested property_name_regex.
+# available methods for properties:
+#   property(property_name):  returns a list of the requested property_name; if self.v.error_if_property_missing() is called before the rule, will fail if property is missing.
+#   should_equal(expected_value): fails if property value doesn't equal given expected_value.
+#   should_equal_case_insensitive(expected_value): fails if property value doesn't equal given expected_value ignoring case.
+#   should_not_equal(expected_value): fails if property value equals given expected_value.
+#   should_not_equal_case_insensitive(expected_value): fails if property value equals given expected_value ignoring case.
+#   list_should_contain(values_list): fails if the value of the property doesn't contain any of the values in values_list.
+#   list_should_not_contain(values_list): fails if the value of the property contains any of the values in values_list.
+#   should_have_properties(properties_list): fails if a property doesn't contain any of the properties in properties_list.
+#   should_not_have_properties(properties_list): fails if a property contains any of the properties in properties_list.
+#   find_property(property_name_regex): returns a list of the requested property_name_regex.
+#   should_match_regex(property_value_regex): fails if the value of the property doesn't match the given property_value_regex.
+#   should_contain_valid_json(): fails if the value of the property doesn't contain valid json.
+###############################################################################################################################################################################
+class Rules(unittest.TestCase):
 
-    # Generating list of tests to run
-    if args.tests[0] == 'all':
-        tests_to_run = [
-            'encryption',
-            'logging_and_monitoring',
-            'public_exposure',
-            'security_group']
+    def setUp(self):
+        self.v = terraform_validate.Validator()
+        self.v.preprocessor = self.preprocessor
+
+    #################################################################################################
+    # State Farm rules; examples of good and bad (marked with ***error***) are given before each rule
+    #################################################################################################
+
+    #################################################################################################
+    # This resource block creates an S3 bucket with encryption.
+    # resource "aws_s3_bucket" "encryptedBucket" {
+    #   bucket = "good-bucket-name"
+    #   server_side_encryption_configuration {
+    #     rule {
+    #       apply_server_side_encryption_by_default {
+    #         kms_master_key_id = "${data.aws_kms_key.bucket.arn}"
+    #         sse_algorithm = "aws:kms"
+    #       }
+    #     }
+    #   }
+    # }
+    #
+    # This resource block creates an S3 bucket with no encryption.  ***error***
+    # resource "aws_s3_bucket" "noEncryption" {
+    #   bucket = "bad-bucket-name"
+    # }
+    def test_aws_s3_bucket_server_side_encryption_configuration(self):
+        # verify that server side encryption is turned on for s3 buckets
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            # to change severity, override it here (default is high)
+            validator.severity = "high"
+            validator.resources('aws_s3_bucket').should_have_properties(['server_side_encryption_configuration'])
+
+    #################################################################################################
+    # This resource block creates a dynamodb table with no encryption.  ***error***
+    # resource "aws_dynamodb_table" "noEncryption" {
+    #   name = "${local.env}"
+    # }
+    #
+    # This resource block creates a dynamodb table with no encryption.  ***error***
+    # resource "aws_dynamodb_table" "encryptionEnabledFalse" {
+    #   name = "${local.env}"
+    #   server_side_encryption {
+    #     enabled = false
+    #   }
+    # }
+    #
+    # This resource block creates a dynamodb table with encryption.
+    # resource "aws_dynamodb_table" "encryptionEnabledTrue" {
+    #   name = "${local.env}"
+    #   server_side_encryption {
+    #     enabled = true
+    #   }
+    # }
+    def test_aws_dynamodb_table_encryption(self):
+        # verify that encryption is turned on for dynamodb tables
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dynamodb_table').property('server_side_encryption').property('enabled').should_equal(True)
+
+    #################################################################################################
+    # This resource block creates an ebs volue with no encryption.  ***error***
+    # resource "aws_ebs_volume" "noEncryption" {
+    #   availability_zone = "us-east-1a"
+    #   size = 10
+    #   type = "gp2"
+    #   tags {
+    #     Name = "Encryption Test"
+    #   }
+    #   kms_key_id = "${data.aws_kms_key.volume.arn}"
+    # }
+    #
+    # This resource block creates an ebs volue with no encryption.  ***error***
+    # resource "aws_ebs_volume" "encryptionEnabledFalse" {
+    #   availability_zone = "us-east-1a"
+    #   size = 10
+    #   type = "gp2"
+    #   tags {
+    #     Name = "Encryption Test"
+    #   }
+    #   encrypted = false
+    #   kms_key_id = "${data.aws_kms_key.volume.arn}"
+    # }
+    #
+    # resource "aws_ebs_volume" "encryptionEnabledTrue" {
+    #   availability_zone = "us-east-1a"
+    #   size = 10
+    #   type = "gp2"
+    #   tags {
+    #     Name = "Encryption Test"
+    #   }
+    #   # The attributes below mark the volume for encryption.
+    #   encrypted = true
+    #   kms_key_id = "${data.aws_kms_key.volume.arn}"
+    # }
+    def test_aws_ebs_volume_encryption(self):
+        # verify that all resources of type 'aws_ebs_volume' are encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ebs_volume').property('encrypted').should_equal(True)
+
+    #################################################################################################
+    # This resource block creates a kms key without key rotation.  ***error***
+    # resource "aws_kms_key" "no_enable_key_rotation" {
+    #   description             = "KMS key 1"
+    #   deletion_window_in_days = 10
+    # }
+    #
+    # This resource block creates a kms key without key rotation.  ***error***
+    # resource "aws_kms_key" "enable_key_rotation_false" {
+    #   description             = "KMS key 1"
+    #   deletion_window_in_days = 10
+    #   enable_key_rotation     = false
+    # }
+    #
+    # This resource block creates a kms key with key rotation.
+    # resource "aws_kms_key" "enable_key_rotation_true" {
+    #   description             = "KMS key 1"
+    #   deletion_window_in_days = 10
+    #   enable_key_rotation     = true
+    # }
+    def test_aws_kms_key_rotation(self):
+        # verify that all aws_kms_key resources have key rotation enabled
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kms_key').property('enable_key_rotation').should_equal(True)
+
+    #################################################################################################
+    # This resource block creates an iam user login profile.  ***error***
+    # resource "aws_iam_user_login_profile" "badExample" {
+    #   user    = "some_user_name"
+    #   pgp_key = "keybase:some_person_that_exists"
+    # }
+    def test_aws_iam_user_login_profile(self):
+        # resource aws_iam_user_login_profile should not exist
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_iam_user_login_profile').should_not_exist()
+
+    #################################################################################################
+    # This resource block creates a security group rule.  ***error***
+    # resource "aws_security_group_rule" "badExample" {
+    #   type              = "ingress"
+    #   from_port         = 0
+    #   to_port           = 65535
+    #   protocol          = "tcp"
+    #   cidr_blocks       = ["0.0.0.0/0"]
+    #   self              = true
+    #   security_group_id = "${aws_security_group.emr-master.id}"
+    # }
+    def test_aws_security_group_rule_open(self):
+        # verify that security group rule ingress is not open to 0.0.0.0/0
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_security_group_rule').with_property('type', 'ingress').property('cidr_blocks').list_should_not_contain('0.0.0.0/0')
+
+    #################################################################################################
+    # This resource block creates a security group.  ***error***
+    # resource "aws_security_group" "badExample" {
+    #   name        = "generic-emr-master"
+    #   description = "Manage traffic for EMR masters"
+    #   vpc_id      = "${local.emr_vpc_id}"
+    #   ingress {
+    #     from_port = 443
+    #     to_port = 443
+    #     protocol = "tcp"
+    #     cidr_blocks = ["0.0.0.0/0"]
+    #   }
+    # }
+    def test_aws_security_group_inline_rule_open(self):
+        # verify that security group ingress is not open to 0.0.0.0/0
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_security_group').property('ingress').property('cidr_blocks').list_should_not_contain('0.0.0.0/0')
+
+    #################################################################################################
+    # public exposure - these were part of the original terrascan
+    #################################################################################################
+
+    def test_aws_alb_public(self):
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb').property('internal').should_not_equal(False)
+
+    def test_aws_db_instance_public(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_db_instance').property('publicly_accessible').should_not_equal(True)
+
+    def test_aws_dms_replication_instance_public(self):
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dms_replication_instance').property('publicly_accessible').should_not_equal(True)
+
+    def test_aws_elb_public(self):
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').property('internal').should_not_equal(False)
+
+    def test_aws_instance_public(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_instance').property('associate_public_ip_address').should_not_equal(True)
+
+    def test_aws_launch_configuration_public(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_launch_configuration').property('associate_public_ip_address').should_not_equal(True)
+
+    def test_aws_rds_cluster_instance_public(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_rds_cluster_instance').property('publicly_accessible').should_not_equal(True)
+
+    def test_aws_redshift_cluster_public(self):
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_redshift_cluster').property('publicly_accessible').should_not_equal(True)
+
+    def test_aws_s3_bucket_public(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_s3_bucket').property('acl').should_not_equal('public-read')
+            validator.resources('aws_s3_bucket').property('acl').should_not_equal('public-read-write')
+            validator.resources('aws_s3_bucket').property('acl').should_not_equal('authenticated-read')
+            validator.resources('aws_s3_bucket').should_not_have_properties(['website'])
+
+    #################################################################################################
+    # other terrascan original rules - currently not used (remove X to enable)
+    #################################################################################################
+    # encryption
+    #################################################################################################
+
+    def Xtest_aws_alb_listener_port(self):
+        # Assert that listener port is 443
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb_listener').property('port').should_equal('443')
+
+    def Xtest_aws_alb_listener_protocol(self):
+        # Assert that protocol is not http
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb_listener').property('protocol').should_not_equal_case_insensitive('http')
+
+    def Xtest_aws_alb_listener_ssl_policy(self):
+        # Assert that old ssl policies are not used
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb_listener').property('ssl_policy').should_not_equal('ELBSecurityPolicy-2015-05')
+            validator.resources('aws_alb_listener').property('ssl_policy').should_not_equal('ELBSecurityPolicy-TLS-1-0-2015-04')
+
+    def Xtest_aws_alb_listener_certificate(self):
+        # Assert that certificate_arn is set
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb_listener').should_have_properties(['certificate_arn'])
+
+    def Xtest_aws_ami_ebs_block_device_encryption(self):
+        # Assert ami 'ebs_block_device' blocks are encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ami').property('ebs_block_device').property('encrypted').should_equal(True)
+
+    def Xtest_aws_ami_ebs_block_device_kms(self):
+        # Assert ami 'ebs_block_device' blocks has KMS
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ami').property('ebs_block_device').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_ami_copy_encryption(self):
+        # Assert resources are encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ami_copy').property('encrypted').should_equal(True)
+
+    def Xtest_aws_ami_copy_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ami_copy').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_api_gateway_domain_name_certificate(self):
+        # Assert that certificate settings have been configured
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_api_gateway_domain_name').should_have_properties(
+                [
+                    'certificate_name',
+                    'certificate_body',
+                    'certificate_chain',
+                    'certificate_private_key'
+                ])
+
+    def Xtest_aws_instance_ebs_block_device_encrypted(self):
+        # Assert ec2 instance 'ebs_block_device' is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_instance').property('ebs_block_device').property('encrypted').should_equal(True)
+
+    def Xtest_aws_cloudfront_distribution_origin_protocol_policy(self):
+        # Assert that origin receives https only traffic
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudfront_distribution').property('origin').property('custom_origin_config').property('origin_protocol_policy').should_equal("https-only")
+
+    def Xtest_aws_cloudfront_distribution_def_cache_viewer_prot_policy(self):
+        # Assert that cache protocol doesn't allow all
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudfront_distribution').property('default_cache_behavior').property('viewer_protocol_policy').should_not_equal("allow-all")
+
+    def Xtest_aws_cloudfront_distribution_cache_beh_viewer_proto_policy(self):
+        # Assert that cache protocol doesn't allow all
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudfront_distribution').property('cache_behavior').property('viewer_protocol_policy').should_not_equal("allow-all")
+
+    def Xtest_aws_cloudtrail_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudtrail').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_codebuild_project_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_codebuild_project').should_have_properties(['encryption_key'])
+
+    def Xtest_aws_codepipeline_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_codepipeline').should_have_properties(['encryption_key'])
+
+    def Xtest_aws_db_instance_encrypted(self):
+        # Assert that DB is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_db_instance').property('storage_encrypted').should_equal(True)
+
+    def Xtest_aws_db_instance_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_db_instance').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_dms_endpoint_ssl_mode(self):
+        # Assert that SSL is verified
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dms_endpoint').property('ssl_mode').should_equal('verify-full')
+
+    def Xtest_aws_dms_endpoint_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dms_endpoint').should_have_properties(
+                [
+                    'kms_key_arn'
+                ])
+
+    def Xtest_aws_dms_endpoint_certificate(self):
+        # Assert that SSL cert has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dms_endpoint').should_have_properties(
+                [
+                    'certificate_arn'
+                ])
+
+    def Xtest_aws_dms_replication_instance_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_dms_replication_instance').should_have_properties(['kms_key_arn'])
+
+    def Xtest_aws_ebs_volume_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ebs_volume').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_efs_file_system_encryption(self):
+        # Assert that all resources of type 'aws_efs_file_system' are encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_efs_file_system').property('encrypted').should_equal(True)
+
+    def Xtest_aws_efs_file_system_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_efs_file_system').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_elastictranscoder_pipeline_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elastictranscoder_pipeline').should_have_properties(['aws_kms_key_arn'])
+
+    def Xtest_aws_elb_listener_port_80(self):
+        # Assert ELB listener port is not 80 (http)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').property('listener').property('lb_port').should_not_equal(80)
+
+    def Xtest_aws_elb_listener_port_21(self):
+        # Assert ELB listener port is not 21 ftp
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').property('listener').property('lb_port').should_not_equal(21)
+
+    def Xtest_aws_elb_listener_port_23(self):
+        # Assert ELB listener port is not 23 telnet
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').property('listener').property('lb_port').should_not_equal(23)
+
+    def Xtest_aws_elb_listener_port_5900(self):
+        # Assert ELB listener port is not 5900 VNC
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').property('listener').property('lb_port').should_not_equal(5900)
+
+    def Xtest_aws_kinesis_firehose_delivery_stream_s3_kms(self):
+        # Assert ELB listener port is not 80 (http)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('s3_configuration').should_have_properties(['kms_key_arn'])
+
+    def Xtest_aws_kinesis_firehose_delivery_stream_extended_s3_kms(self):
+        # Assert ELB listener port is not 80 (http)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('extended_s3_configuration').should_have_properties(['kms_key_arn'])
+
+    def Xtest_aws_lambda_function_kms(self):
+        # Assert that a KMS key has been provided
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_lambda_function').should_have_properties(['kms_key_arn'])
+
+    def Xtest_aws_opsworks_application_encryption(self):
+        # Assert resource is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_opsworks_application').property('enable_ssl').should_equal(True)
+
+    def Xtest_aws_rds_cluster_encryption(self):
+        # Assert resource is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_rds_cluster').property('storage_encrypted').should_equal(True)
+
+    def Xtest_aws_rds_cluster_kms(self):
+        # Assert resource has a KMS with CMKs
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_rds_cluster').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_redshift_cluster_encryption(self):
+        # Assert resource is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_redshift_cluster').property('encrypted').should_equal(True)
+
+    def Xtest_aws_redshift_cluster_kms(self):
+        # Assert resource has a KMS with CMKs
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_redshift_cluster').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_s3_bucket_object_encryption(self):
+        # Assert resource is encrypted with KMS
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_s3_bucket').property('server_side_encryption').should_equal("aws:kms")
+
+    def Xtest_aws_s3_bucket_object_kms(self):
+        # Assert resource has a KMS with CMKs
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_s3_bucket_object').should_have_properties(['kms_key_id'])
+
+    def Xtest_aws_sqs_queue_kms(self):
+        # Assert resource has a KMS with CMK
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_sqs_queue').should_have_properties(['kms_master_key_id', 'kms_data_key_reuse_period_seconds'])
+
+    def Xtest_aws_ssm_parameter_encryption(self):
+        # Assert resource is encrypted with KMS
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ssm_parameter').property('type').should_equal("SecureString")
+
+    def Xtest_aws_ssm_parameter_kms(self):
+        # Assert resource has a KMS with CMK
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ssm_parameter').should_have_properties(['key_id'])
+
+    #################################################################################################
+    # logging and monitoring
+    #################################################################################################
+
+    def Xtest_aws_alb_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_alb').should_have_properties(['access_logs'])
+
+    def Xtest_aws_cloudfront_distribution_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudfront_distribution').should_have_properties(['logging_config'])
+
+    def Xtest_aws_cloudtrail_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_cloudtrail').property('enable_logging').should_not_equal(False)
+
+    def Xtest_aws_elb_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elb').should_have_properties(['access_logs'])
+
+    def Xtest_aws_emr_cluster_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_emr_cluster').should_have_properties(['log_uri'])
+
+    def Xtest_aws_kinesis_firehose_delivery_stream__s3_config_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('s3_configuration').should_have_properties(['cloudwatch_logging_options'])
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('s3_configuration').property('cloudwatch_logging_options').property('enabled').should_equal(True)
+
+    def Xtest_aws_kinesis_firehose_delivery_stream_redshift_conf_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('redshift_configuration').should_have_properties(['cloudwatch_logging_options'])
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('redshift_configuration').property('cloudwatch_logging_options').property('enabled').should_equal(True)
+
+    def Xtest_aws_kinesis_firehose_delivery_stream__es_config_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('elasticsearch_configuration').should_have_properties(['cloudwatch_logging_options'])
+            validator.resources('aws_kinesis_firehose_delivery_stream').property('elasticsearch_configuration').property('cloudwatch_logging_options').property('enabled').should_equal(True)
+
+    def Xtest_aws_redshift_cluster_logging(self):
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_redshift_cluster').property('enable_logging').should_not_equal(False)
+
+    def Xtest_aws_s3_bucket_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_s3_bucket').should_have_properties(['logging'])
+
+    def Xtest_aws_ssm_maintenance_window_task_logging(self):
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_ssm_maintenance_window_task').should_have_properties(['logging_info'])
+
+    #################################################################################################
+    # security group
+    #################################################################################################
+
+    def Xtest_aws_db_security_group_used(self):
+        # This security group type exists outside of VPC (e.g. ec2 classic)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_db_security_group').should_not_exist()
+
+    def Xtest_aws_redshift_security_group_used(self):
+        # This security group type exists outside of VPC (e.g. ec2 classic)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_redshift_security_group').should_not_exist()
+
+    def Xtest_aws_elasticache_security_group_used(self):
+        # This security group type exists outside of VPC (e.g. ec2 classic)
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_elasticache_security_group').should_not_exist()
+
+
+#################################################################################################
+# run the tests
+#################################################################################################
+def terrascan(args):
+    start = time.time()
+
+    if not args.warranty and not args.gpl:
+        print("terrascan  Copyright (C) 2017  Cesar Rodriguez\n")
+        print("This program comes with ABSOLUTELY NO WARRANTY; for details use -w or --warranty.")
+        print("This is free software, and you are welcome to redistribute it under certain conditions; for details use -g or --gpl.\n")
+
+    if args.warranty:
+        print("This program is distributed in the hope that it will be useful,")
+        print("but WITHOUT ANY WARRANTY; without even the implied warranty of")
+        print("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the")
+        print("GNU General Public License for more details.")
+    if args.gpl:
+        print("This program is free software: you can redistribute it and/or modify")
+        print("it under the terms of the GNU General Public License as published by")
+        print("the Free Software Foundation, either version 3 of the License, or")
+        print("(at your option) any later version.  see <http://www.gnu.org/licenses/>")
+
+    if args.warranty or args.gpl:
+        sys.exit(0)
+
+    terraformLocation = args.location[0]
+    variablesJsonFilename = args.vars[0]
+    outputJsonFileName = args.results[0]
+    if args.config:
+        config = args.config[0]
     else:
-        tests_to_run = args.tests[0].split(',')
+        config = None
 
-    # Executing tests
-    exit_status = True
-    for test_type in tests_to_run:
-        print('\n\nRunning {} Tests'.format(test_type))
-        test = test_to_class[test_type]
-        test.TERRAFORM_LOCATION = location
-        runner = unittest.TextTestRunner()
-        itersuite = unittest.TestLoader().loadTestsFromTestCase(test)
-        result = runner.run(itersuite)
-        exit_status = exit_status and not result.wasSuccessful()
-    sys.exit(exit_status)
+    if terraformLocation.endswith(os.path.sep):
+        terraformLocation = terraformLocation[0:len(terraformLocation)-1]
+    if terraformLocation == ".":
+        terraformLocation = os.getcwd()
+
+    # set logging based on logging.config if present (default is error)
+    if config == "none":
+        logging.basicConfig(level=logging.CRITICAL)
+    elif config == "warning":
+        logging.basicConfig(level=logging.WARNING)
+    elif config == "info":
+        logging.basicConfig(level=logging.INFO)
+    elif config == "debug":
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        config = "error"
+        logging.basicConfig(level=logging.ERROR)
+
+    print("Logging level set to " + config + ".")
+
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), terraformLocation)
+    Rules.preprocessor = terraform_validate.PreProcessor(jsonOutput)
+    Rules.preprocessor.process(path, variablesJsonFilename)
+
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(Rules)
+    runner.run(itersuite)
+
+    with open(outputJsonFileName, 'w') as jsonOutFile:
+        json.dump(jsonOutput, jsonOutFile)
+
+    print("\nProcessed " + str(len(Rules.preprocessor.fileNames)) + " files in " + terraformLocation + "\n")
+    for fileName in Rules.preprocessor.fileNames:
+        logging.debug("  Processed " + fileName)
+    print("")
+
+    end = time.time()
+    elapsedTime = end - start
+    print("Results (took %.2f seconds):" % elapsedTime)
+    print("\nFailures: (" + str(len(jsonOutput["failures"])) + ")")
+    for failure in jsonOutput["failures"]:
+        m, f = getMF(failure)
+        print("[" + failure["severity"] + "] " + failure["message"] + m + f)
+    print("\nErrors: (" + str(len(jsonOutput["errors"])) + ")")
+    for error in jsonOutput["errors"]:
+        m, f = getMF(error)
+        print("[" + error["severity"] + "] " + error["message"] + m + f)
+
+    if len(jsonOutput["failures"]) + len(jsonOutput["errors"]) == 0:
+        rc = 0
+    else:
+        rc = 4
+    sys.exit(rc)
 
 
+# Returns command line parser for terrascan
 def create_parser():
-    """
-    Returns command line parser for terrascan
-    """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="A collection of security and best practice tests for static code analysis of terraform templates using terraform_validate.")
+
+    # only required if optional parameters not present
+    req = '-w' not in sys.argv and '--warranty' not in sys.argv and '-g' not in sys.argv and '--gpl' not in sys.argv
 
     parser.add_argument(
         '-l',
         '--location',
-        help='Location of terraform templates to scan',
-        nargs=1
+        help='location of terraform templates to scan',
+        nargs=1,
+        required=req
     )
     parser.add_argument(
-        '-t',
-        '--tests',
-        help='''Comma separated list of test to run or "all" for all tests
-(e.g. encryption,security_group) Valid values include:encryption,
-logging_and_monitoring, public_exposure, security_group''',
+        '-v',
+        '--vars',
+        help='variables json fully qualified file name',
         nargs=1,
-        default=['all']
+        required=req
     )
-    parser.set_defaults(func=run_test)
+    parser.add_argument(
+        '-r',
+        '--results',
+        help='output results fully qualified file name',
+        nargs=1,
+        required=req
+    )
+    parser.add_argument(
+        '-w',
+        '--warranty',
+        help='displays the warranty',
+        nargs='?',
+        const=True, default=False
+    )
+    parser.add_argument(
+        '-g',
+        '--gpl',
+        help='displays license information',
+        nargs='?',
+        const=True, default=False
+    )
+    parser.add_argument(
+        '-c',
+        '--config',
+        help='logging configuration:  error, warning, info, debug, or none; default is error',
+        nargs=1
+    )
+    parser.set_defaults(func=terrascan)
 
     return parser
 
 
-def main(args=None):
-    """
-    Terrascan console script. Parses user input to determine location of
-    terraform templates and which tests to execute
-    """
-    parser = create_parser()
-    args = parser.parse_args(args)
-    try:
-        args.func(args)
-    except Exception:
-        print("ERROR: The specified location doesn't exists")
-        sys.exit(1)
+def getMF(json):
+    if json["moduleName"] == "---":
+        m = ""
+    else:
+        m = " in module " + json["moduleName"]
+    if json["fileName"] == "---":
+        f = ""
+    else:
+        if m == "":
+            f = " in file " + json["fileName"]
+        else:
+            f = ", file " + json["fileName"]
+    return m, f
+
+
+parser = create_parser()
+args = parser.parse_args()
+args.func(args)

@@ -29,6 +29,48 @@ A collection of security and best practice tests for static code analysis of ter
 * Free software: GNU General Public License v3
 
 --------
+Updates in this fork
+--------
+- **Requires my fork of terraform_validate**
+    - Will not run with original terraform_validate
+- **Returns 0 if no failures or errors; 4 otherwise**
+	- helps with use in a delivery pipeline
+- **Parameters**
+	-h, --help            show this help message and exit
+	-l LOCATION, --location LOCATION
+	                      location of terraform templates to scan
+	-v VARS, --vars VARS  variables json fully qualified file name
+	-r RESULTS, --results RESULTS
+	                      output results fully qualified file name
+	-w [WARRANTY], --warranty [WARRANTY]
+	                      displays the warranty
+	-g [GPL], --gpl [GPL]
+	                      displays license information
+	-c CONFIG, --config CONFIG
+	                      logging configuration: error, warning, info, debug, or
+	                      none; default is error
+- **Example output**
+::
+	Logging level set to error.
+	.........
+	----------------------------------------------------------------------
+	Ran 16 tests in 0.004s
+
+	OK
+
+	Processed 19 files in C:\DEV\terraforms\all\test-communications-rq93_codechanges
+
+
+	Results (took 0.49 seconds):
+
+	Failures: (3)
+	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module test-communications-rq93_codechanges, file C:\DEV\terraforms\team-roles\iam-user.tf
+	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module team-roles, file C:\DEV\terraforms\team-roles\iam-user.tf
+	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module docmgmt, file C:\DEV\terraforms\team-roles\iam-user.tf
+
+	Errors: (0)
+
+--------
 Features
 --------
 Terrascan will perform tests on your terraform templates to ensure:
@@ -50,23 +92,19 @@ Installing
 ----------
 Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
 
-    $ pip install terrascan
+    $ pip install terrascan-sf
 
 
 -----------------
 Running the tests
 -----------------
-To run execute terrascan.py as follows replacing with the location of your terraform templates:
+To run, execute terrascan.py as follows replacing with the location of your terraform templates:
 
-    $ terrascan --location tests/infrastructure/success --tests all
-
-To run a specific test run the following command replacing encryption with the name of the test to run:
-
-    $ terrascan --location tests/infrastructure/success --tests encryption
+    $ python terrascan.py --location tests/infrastructure/success --vars tests/infrastructure/vars.json --results tests/infrastructure/success/results.json
 
 To learn more about the options to the cli execute the following:
 
-    $ terrascan -h
+    $ python terrascan.py -h
 
 --------------
 Feature Status
