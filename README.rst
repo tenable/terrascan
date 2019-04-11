@@ -130,6 +130,7 @@ Legend:
  aws_db_security_group                                             `:heavy_check_mark:`
  aws_dms_endpoint                          `:heavy_check_mark:`
  aws_dms_replication_instance              `:heavy_check_mark:`                            `:heavy_check_mark:`
+ aws_dynamodb_table                        `:heavy_check_mark:`                            
  aws_ebs_volume                            `:heavy_check_mark:`
  aws_efs_file_system                       `:heavy_check_mark:`
  aws_elasticache_security_group                                    `:heavy_check_mark:`
@@ -163,10 +164,10 @@ Legend:
  aws_redshift_cluster                      `:heavy_check_mark:`                            `:heavy_check_mark:`    `:heavy_check_mark:`
  aws_redshift_parameter_group              `:heavy_minus_sign:`                                                    `:heavy_minus_sign:`
  aws_redshift_security_group                                        `:heavy_check_mark:`
- aws_s3_bucket                                                                             `:heavy_check_mark:`    `:heavy_check_mark:`
+ aws_s3_bucket                             `:heavy_check_mark:`                            `:heavy_check_mark:`    `:heavy_check_mark:`
  aws_s3_bucket_object                      `:heavy_check_mark:`
- aws_security_group                                                 `:heavy_check_mark:`
- aws_security_group_rule                                            `:heavy_check_mark:`
+ aws_security_group                                                 `:heavy_check_mark:`   `:heavy_check_mark:`
+ aws_security_group_rule                                            `:heavy_check_mark:`   `:heavy_check_mark:`
  aws_ses_receipt_rule                      `:heavy_minus_sign:`
  aws_sqs_queue                             `:heavy_check_mark:`
  aws_ssm_maintenance_window_task                                                                                   `:heavy_check_mark:`
