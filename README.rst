@@ -1,14 +1,14 @@
-.. highlight:: shell
 =========
 Terrascan
 =========
 
-
 .. image:: https://img.shields.io/pypi/v/terrascan.svg
         :target: https://pypi.python.org/pypi/terrascan
+        :alt: pypi
 
 .. image:: https://img.shields.io/travis/cesar-rodriguez/terrascan.svg
         :target: https://travis-ci.org/cesar-rodriguez/terrascan
+        :alt: build
 
 .. image:: https://readthedocs.org/projects/terrascan/badge/?version=latest
         :target: https://terrascan.readthedocs.io/en/latest/?badge=latest
@@ -28,14 +28,15 @@ A collection of security and best practice tests for static code analysis of ter
 * Documentation: https://terrascan.readthedocs.io.
 * Free software: GNU General Public License v3
 
---------
+--------------------
 Updates in this fork
---------
+--------------------
 - **Requires my fork of terraform_validate**
     - Will not run with original terraform_validate
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
-- **Parameters**
+- **Parameters**::
+
 	-h, --help            show this help message and exit
 	-l LOCATION, --location LOCATION
 	                      location of terraform templates to scan
@@ -49,24 +50,23 @@ Updates in this fork
 	-c CONFIG, --config CONFIG
 	                      logging configuration: error, warning, info, debug, or
 	                      none; default is error
-- **Example output**
-::
+- **Example output**::
+
 	Logging level set to error.
-	.........
+	................
 	----------------------------------------------------------------------
-	Ran 16 tests in 0.004s
+	Ran 16 tests in 0.015s
 
 	OK
 
-	Processed 19 files in C:\DEV\terraforms\all\test-communications-rq93_codechanges
+	Processed 19 files in C:\DEV\terraforms\backends\10-network-analytics
 
 
-	Results (took 0.49 seconds):
+	Results (took 1.08 seconds):
 
-	Failures: (3)
-	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module test-communications-rq93_codechanges, file C:\DEV\terraforms\team-roles\iam-user.tf
-	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module team-roles, file C:\DEV\terraforms\team-roles\iam-user.tf
-	[high] [aws_iam_user_policy_attachment] should not exist. Found in resource named docmgmt-user-policy-attach in module docmgmt, file C:\DEV\terraforms\team-roles\iam-user.tf
+	Failures: (2)
+	[high] [aws_dynamodb_table.encryption.server_side_encryption.enabled] should be 'True'. Is: 'False' in module 10-network-analytics, file C:\DEV\terraforms\backends\10-network-analytics\main.tf
+	[high] [aws_s3_bucket.noEncryption] should have property: 'server_side_encryption_configuration' in module 10-network-analytics, file C:\DEV\terraforms\backends\10-network-analytics\main.tf
 
 	Errors: (0)
 
@@ -92,7 +92,7 @@ Installing
 ----------
 Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
 
-    $ pip install terrascan-sf
+    $ pip install terrascan
 
 
 -----------------
