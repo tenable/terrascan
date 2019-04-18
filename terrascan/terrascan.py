@@ -247,7 +247,7 @@ class Rules(unittest.TestCase):
         self.v.error_if_property_missing()
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb').property('internal').should_not_equal(False)
+            validator.resources(['aws_lb', 'aws_alb']).property('internal').should_not_equal(False)
 
     def test_aws_db_instance_public(self):
         validator_generator = self.v.get_terraform_files()
@@ -306,29 +306,29 @@ class Rules(unittest.TestCase):
         self.v.error_if_property_missing()
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb_listener').property('port').should_equal('443')
+            validator.resources(['aws_lb_listener', 'aws_alb_listener']).property('port').should_equal('443')
 
     def test_aws_alb_listener_protocol(self):
         # Assert that protocol is not http
         self.v.error_if_property_missing()
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb_listener').property('protocol').should_not_equal_case_insensitive('http')
+            validator.resources(['aws_lb_listener', 'aws_alb_listener']).property('protocol').should_not_equal_case_insensitive('http')
 
     def test_aws_alb_listener_ssl_policy(self):
         # Assert that old ssl policies are not used
         self.v.error_if_property_missing()
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb_listener').property('ssl_policy').should_not_equal('ELBSecurityPolicy-2015-05')
-            validator.resources('aws_alb_listener').property('ssl_policy').should_not_equal('ELBSecurityPolicy-TLS-1-0-2015-04')
+            validator.resources(['aws_lb_listener', 'aws_alb_listener']).property('ssl_policy').should_not_equal('ELBSecurityPolicy-2015-05')
+            validator.resources(['aws_lb_listener', 'aws_alb_listener']).property('ssl_policy').should_not_equal('ELBSecurityPolicy-TLS-1-0-2015-04')
 
     def test_aws_alb_listener_certificate(self):
         # Assert that certificate_arn is set
         self.v.error_if_property_missing()
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb_listener').should_have_properties(['certificate_arn'])
+            validator.resources(['aws_lb_listener', 'aws_alb_listener']).should_have_properties(['certificate_arn'])
 
     def test_aws_ami_ebs_block_device_encryption(self):
         # Assert ami 'ebs_block_device' blocks are encrypted
@@ -615,7 +615,7 @@ class Rules(unittest.TestCase):
     def test_aws_alb_logging(self):
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
-            validator.resources('aws_alb').should_have_properties(['access_logs'])
+            validator.resources(['aws_lb', 'aws_alb']).should_have_properties(['access_logs'])
 
     def test_aws_cloudfront_distribution_logging(self):
         validator_generator = self.v.get_terraform_files()
