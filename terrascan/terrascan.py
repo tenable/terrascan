@@ -240,6 +240,57 @@ class Rules(unittest.TestCase):
             validator.resources('aws_security_group').property('ingress').property('cidr_blocks').list_should_not_contain('0.0.0.0/0')
 
     #################################################################################################
+    # This resource block creates an aws_db_instance.
+    # resource "aws_db_instance" "default" {
+    #   allocated_storage    = 20
+    #   engine               = "mysql"
+    #   instance_class       = "db.t2.micro"
+    #   name                 = "mydb"
+    #   username             = "foo"
+    #   password             = "foobarbaz"
+    #   storage_encrypted    = "true"
+    # }
+    #
+    # This resource block creates an aws_db_instance.  ***error***
+    # resource "aws_db_instance" "default" {
+    #   allocated_storage    = 20
+    #   engine               = "mysql"
+    #   instance_class       = "db.t2.micro"
+    #   name                 = "mydb"
+    #   username             = "foo"
+    #   password             = "foobarbaz"
+    #   storage_encrypted    = "false"
+    # }
+    def test_aws_db_instance_encrypted(self):
+        # Assert that DB is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_db_instance').property('storage_encrypted').should_equal(True)
+
+    #################################################################################################
+    # This resource block creates an aws_rds_cluster.
+    # resource "aws_rds_cluster" "default" {
+    #   database_name           = "mydb"
+    #   master_username         = "foo"
+    #   master_password         = "bar"
+    #   storage_encrypted       = "true"
+    # }
+    #
+    # This resource block creates an aws_rds_cluster.  ***error***
+    # resource "aws_rds_cluster" "default" {
+    #   database_name           = "mydb"
+    #   master_username         = "foo"
+    #   master_password         = "bar"
+    # }
+    def test_aws_rds_cluster_encryption(self):
+        # Assert resource is encrypted
+        self.v.error_if_property_missing()
+        validator_generator = self.v.get_terraform_files()
+        for validator in validator_generator:
+            validator.resources('aws_rds_cluster').property('storage_encrypted').should_equal(True)
+
+    #################################################################################################
     # public exposure - these were part of the original terrascan
     #################################################################################################
 
@@ -419,13 +470,6 @@ class Rules(unittest.TestCase):
         for validator in validator_generator:
             validator.resources('aws_codepipeline').should_have_properties(['encryption_key'])
 
-    def test_aws_db_instance_encrypted(self):
-        # Assert that DB is encrypted
-        self.v.error_if_property_missing()
-        validator_generator = self.v.get_terraform_files()
-        for validator in validator_generator:
-            validator.resources('aws_db_instance').property('storage_encrypted').should_equal(True)
-
     def test_aws_db_instance_kms(self):
         # Assert that a KMS key has been provided
         self.v.error_if_property_missing()
@@ -544,13 +588,6 @@ class Rules(unittest.TestCase):
         validator_generator = self.v.get_terraform_files()
         for validator in validator_generator:
             validator.resources('aws_opsworks_application').property('enable_ssl').should_equal(True)
-
-    def test_aws_rds_cluster_encryption(self):
-        # Assert resource is encrypted
-        self.v.error_if_property_missing()
-        validator_generator = self.v.get_terraform_files()
-        for validator in validator_generator:
-            validator.resources('aws_rds_cluster').property('storage_encrypted').should_equal(True)
 
     def test_aws_rds_cluster_kms(self):
         # Assert resource has a KMS with CMKs
