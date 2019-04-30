@@ -17,7 +17,7 @@ requirements = [
 ]
 
 setup(
-    name='terrascan-sf',
+    name='terrascan',
     version='2.0.3',
     description="Best practices tests for terraform",
     long_description=readme + '\n\n' + history,

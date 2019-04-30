@@ -31,7 +31,7 @@ A collection of security and best practice tests for static code analysis of ter
 --------------------
 Updates in this fork
 --------------------
-- **Requires my fork of terraform_validate**
+- **Requires my fork of terraform_validate (terraform-validate-sf until pull request accepted)**
     - Will not run with original terraform_validate
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
@@ -100,11 +100,11 @@ Running the tests
 -----------------
 To run, execute terrascan.py as follows replacing with the location of your terraform templates:
 
-    $ python terrascan.py --location tests/infrastructure/success --vars tests/infrastructure/vars.json --results tests/infrastructure/success/results.json
+    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json --results tests/infrastructure/success/results.json
 
 To learn more about the options to the cli execute the following:
 
-    $ python terrascan.py -h
+    $ terrascan -h
 
 --------------
 Feature Status
