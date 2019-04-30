@@ -31,7 +31,7 @@ A collection of security and best practice tests for static code analysis of ter
 --------------------
 Updates in this fork
 --------------------
-- **Requires my fork of terraform_validate (terraform-validate-sf until pull request accepted)**
+- **Requires my fork of terraform_validate (terraform_validate-sf until pull request accepted)**
     - Will not run with original terraform_validate
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
