@@ -31,8 +31,8 @@ A collection of security and best practice tests for static code analysis of ter
 --------------------
 Updates in this fork
 --------------------
-- **Requires my fork of terraform_validate (terraform_validate-sf until pull request accepted)**
-    - Will not run with original terraform_validate
+- **Requires my fork of terraform_validate and pyhcl until pull request accepted**
+    - Will not run with original terraform_validate or pyhcl
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
 - **Parameters**::
@@ -40,7 +40,8 @@ Updates in this fork
 	-h, --help            show this help message and exit
 	-l LOCATION, --location LOCATION
 	                      location of terraform templates to scan
-	-v VARS, --vars VARS  variables json fully qualified file name
+	-v [VARS [VARS ...]], --vars [VARS [VARS ...]]
+	                      variables json or .tf fully qualified file name
 	-r RESULTS, --results RESULTS
 	                      output results fully qualified file name
 	-w [WARRANTY], --warranty [WARRANTY]
@@ -100,7 +101,7 @@ Running the tests
 -----------------
 To run, execute terrascan.py as follows replacing with the location of your terraform templates:
 
-    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json --results tests/infrastructure/success/results.json
+    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json
 
 To learn more about the options to the cli execute the following:
 

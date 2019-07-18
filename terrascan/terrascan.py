@@ -22,6 +22,7 @@ import argparse
 import unittest
 import os
 import sys
+import subprocess
 import json
 import time
 import terraform_validate
@@ -737,6 +738,20 @@ class Rules(unittest.TestCase):
 def terrascan(args):
     start = time.time()
 
+    try:
+        result = subprocess.run(['pip', 'show', 'terrascan-sf'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout = result.stdout.decode("utf-8")
+        versionStr = "Version: "
+        startIndex = stdout.find(versionStr)
+    except:
+        startIndex = -1
+    if startIndex == -1:
+        version = "?"
+    else:
+        startIndex += len(versionStr)
+        endIndex = stdout.find("\r", startIndex)
+        version = stdout[startIndex:endIndex]
+		
     if not args.warranty and not args.gpl:
         print("terrascan  Copyright (C) 2017  Cesar Rodriguez\n")
         print("This program comes with ABSOLUTELY NO WARRANTY; for details use -w or --warranty.")
@@ -757,9 +772,15 @@ def terrascan(args):
         sys.exit(0)
 
     terraformLocation = args.location[0]
-    variablesJsonFilename = args.vars[0]
-    outputJsonFileName = args.results[0]
-    if args.config:
+    if args.vars:
+        variablesJsonFilename = args.vars
+    else:
+        variablesJsonFilename = None
+    if args.results:
+        outputJsonFileName = args.results[0]
+    else:
+        outputJsonFileName = None
+	if args.config:
         config = args.config[0]
     else:
         config = None
@@ -782,7 +803,8 @@ def terrascan(args):
         config = "error"
         logging.basicConfig(level=logging.ERROR)
 
-    print("Logging level set to " + config + ".")
+    print("terrascan version {0}".format(version))
+    print("Logging level set to {0}.".format(config))
 
     path = os.path.join(os.path.dirname(os.path.realpath(__file__)), terraformLocation)
     Rules.preprocessor = terraform_validate.PreProcessor(jsonOutput)
@@ -792,9 +814,10 @@ def terrascan(args):
     itersuite = unittest.TestLoader().loadTestsFromTestCase(Rules)
     runner.run(itersuite)
 
-    with open(outputJsonFileName, 'w') as jsonOutFile:
-        json.dump(jsonOutput, jsonOutFile)
-
+    if outputJsonFileName:
+        with open(outputJsonFileName, 'w') as jsonOutFile:
+            json.dump(jsonOutput, jsonOutFile)
+			
     print("\nProcessed " + str(len(Rules.preprocessor.fileNames)) + " files in " + terraformLocation + "\n")
     for fileName in Rules.preprocessor.fileNames:
         logging.debug("  Processed " + fileName)
@@ -836,16 +859,14 @@ def create_parser():
     parser.add_argument(
         '-v',
         '--vars',
-        help='variables json fully qualified file name',
-        nargs=1,
-        required=req
-    )
+        help='variables json or .tf fully qualified file name',
+        nargs='*',
+	)
     parser.add_argument(
         '-r',
         '--results',
         help='output results fully qualified file name',
         nargs=1,
-        required=req
     )
     parser.add_argument(
         '-w',
