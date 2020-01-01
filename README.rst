@@ -1,4 +1,3 @@
-.. highlight:: shell
 =========
 Terrascan
 =========
