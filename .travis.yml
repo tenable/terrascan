@@ -1,9 +1,9 @@
 language: python
 sudo: false
 python:
-- 3.4
 - 3.6
-- 3.5
+- 3.7
+- 3.8
 script: tox
 # Install Dependencies
 install:
