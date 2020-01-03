@@ -35,15 +35,25 @@ Updates in this fork
     - Will not run with original terraform_validate or pyhcl
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
+- **terrascan topology:**
+	- terrascan calls terraform_validate which calls pyhcl.
+	- all three are open source but have been heavily modified.
+	- pyhcl is the lowest level and is used to read and parse the terraform files into python dictionaries.  It needed to be modified to work with terraform 0.12.
+	- terraform_validate provides methods to enable validation of rules.  It processes the dictionaries loaded by pyhcl to resolve terraform modules and replace terraform variables with values.
+	- terrascan is where all of the rules are defined.  Normally, this is the only file that should need to be updated.
 - **Parameters**::
 
 	-h, --help            show this help message and exit
 	-l LOCATION, --location LOCATION
 	                      location of terraform templates to scan
 	-v [VARS [VARS ...]], --vars [VARS [VARS ...]]
-	                      variables json or .tf fully qualified file name
+	                      variables json or .tf file name
+	-o OVERRIDES, --overrides OVERRIDES
+	                      override rules file name
 	-r RESULTS, --results RESULTS
-	                      output results fully qualified file name
+	                      output results file name
+	-d [DISPLAYRULES], --displayRules [DISPLAYRULES]
+	                      display the rules used
 	-w [WARRANTY], --warranty [WARRANTY]
 	                      displays the warranty
 	-g [GPL], --gpl [GPL]
@@ -51,6 +61,29 @@ Updates in this fork
 	-c CONFIG, --config CONFIG
 	                      logging configuration: error, warning, info, debug, or
 	                      none; default is error
+- **Override file example**
+
+1. The first attribute is the name of the rule to be overridden.
+2. The second attribute is the name of the resource to be overridden.
+3. The third atttribute is the RR or RAR number that waives the failure.  This is required for high severity rules; can be an empty string for medium and low severity rules.
+
+.. code:: json
+
+	{
+		"overrides": [
+			[
+				"aws_s3_bucket_server_side_encryption_configuration",
+				"noEncryptionWaived",
+				"RR-1234"
+			],
+			[
+				"aws_rds_cluster_encryption",
+				"rds_cluster_bad",
+				"RAR-98765"
+			]
+		]
+	}
+
 - **Example output**::
 
 	Logging level set to error.
