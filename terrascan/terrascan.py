@@ -20,24 +20,19 @@ test_to_class = {
 }
 
 
-def run_test(args):
+def run_test(location, tests):
     """
     Executes template checks based on cli options
     """
-    # Gets absolute location path
-    location = path.abspath(args.location[0])
-    if not path.exists(location):
-        raise Exception("The specified location doesn't exists")
-
     # Generating list of tests to run
-    if args.tests[0] == 'all':
+    if tests == 'all':
         tests_to_run = [
             'encryption',
             'logging_and_monitoring',
             'public_exposure',
             'security_group']
     else:
-        tests_to_run = args.tests[0].split(',')
+        tests_to_run = tests.split(',')
 
     # Executing tests
     exit_status = True
@@ -49,7 +44,7 @@ def run_test(args):
         itersuite = unittest.TestLoader().loadTestsFromTestCase(test)
         result = runner.run(itersuite)
         exit_status = exit_status and not result.wasSuccessful()
-    exit(exit_status)
+    return exit_status
 
 
 def create_parser():
@@ -85,8 +80,13 @@ def main(args=None):
     """
     parser = create_parser()
     args = parser.parse_args(args)
-    try:
-        args.func(args)
-    except Exception:
+    
+    tests = args.tests[0]
+    location = path.abspath(args.location[0])
+    
+    if not path.exists(location):
         print("ERROR: The specified location doesn't exists")
         exit(1)
+        
+    exit(run_test(location, tests))
+    
