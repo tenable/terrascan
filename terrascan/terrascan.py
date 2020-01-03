@@ -4,7 +4,6 @@
 
 import argparse
 import unittest
-import sys
 from os import path
 
 from .checks.security_group import TestSecurityGroups
@@ -50,7 +49,7 @@ def run_test(args):
         itersuite = unittest.TestLoader().loadTestsFromTestCase(test)
         result = runner.run(itersuite)
         exit_status = exit_status and not result.wasSuccessful()
-    sys.exit(exit_status)
+    exit(exit_status)
 
 
 def create_parser():
@@ -90,4 +89,4 @@ def main(args=None):
         args.func(args)
     except Exception:
         print("ERROR: The specified location doesn't exists")
-        sys.exit(1)
+        exit(1)
