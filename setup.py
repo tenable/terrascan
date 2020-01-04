@@ -25,8 +25,7 @@ setup(
     packages=find_packages(where='.'),
     entry_points={
         'console_scripts': [
-            'terrascan = terrascan.terrascan:main',
-            'terrascan-pre-commit = terrascan.terrascan_pre_commit_wrapper:main'
+            'terrascan = terrascan.terrascan:main'
         ]
     },
     include_package_data=True,
