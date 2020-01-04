@@ -44,7 +44,10 @@ def run_test(location, tests):
         itersuite = unittest.TestLoader().loadTestsFromTestCase(test)
         result = runner.run(itersuite)
         exit_status = exit_status and not result.wasSuccessful()
-    return exit_status
+    if exit_status:
+        return 0
+    else:
+        return 1
 
 
 def create_parser():
