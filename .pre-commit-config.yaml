@@ -1,0 +1,11 @@
+ repos:
+ - repo: local
+   hooks:
+   - id: terrascan
+     name: terrascan
+     entry: terrascan
+     language: python
+     types: [terraform]
+     pass_filenames: false
+     args: [-l=tests/infrastructure/success/]
+     verbose: true
