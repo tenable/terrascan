@@ -43,7 +43,7 @@ def run_test(location, tests):
         runner = unittest.TextTestRunner()
         itersuite = unittest.TestLoader().loadTestsFromTestCase(test)
         result = runner.run(itersuite)
-        exit_status = exit_status and not result.wasSuccessful()
+        exit_status = exit_status and result.wasSuccessful()
     if exit_status:
         return 0
     else:
