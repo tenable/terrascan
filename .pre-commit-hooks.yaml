@@ -1,0 +1,6 @@
+-   id: terrascan
+    name: terrascan
+    description: Executes terrascan on the current directory
+    entry: terrascan-pre-commit
+    language: python
+    types: [terraform]

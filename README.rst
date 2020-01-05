@@ -67,6 +67,15 @@ To learn more about the options to the cli execute the following:
 
     $ terrascan -h
 
+--------------------
+Using as pre-commit
+--------------------
+Terrascan can be used on pre-commit hooks to prevent accidental introduction of security weaknesses into your repository. 
+This requires having pre-commit_ installed. An example configuration is provided in the comments of the here_ file in this repository.
+
+.. _pre-commit: https://pre-commit.com/
+.. _here: .pre-commit-config.yaml
+
 --------------
 Feature Status
 --------------
