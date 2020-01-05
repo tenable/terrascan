@@ -2,7 +2,7 @@
 History
 =======
 
-0.1.2 (unreleased)
+0.1.2 (2020-01-05)
 ------------------
 
 * Adds ability to setup terrascan as a pre-commit hook
