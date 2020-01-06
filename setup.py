@@ -8,10 +8,6 @@ from setuptools import setup, find_packages
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
-
 requirements = [
     'terraform-validate==3.1.16',
 ]
@@ -20,12 +16,12 @@ setup(
     name='terrascan',
     version='2.1.7',
     description="Best practices tests for terraform",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
     download_url='https://github.com/cesar-rodriguez/terrascan' +
-    '/archive/v0.1.0.tar.gz',
+    '/archive/v0.1.1.tar.gz',
     packages=find_packages(where='.'),
     entry_points={
         'console_scripts': [
@@ -42,8 +38,9 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     test_suite='tests',
     tests_require=requirements,

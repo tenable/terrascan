@@ -6,3 +6,9 @@ History
 ------------------
 
 * First release on PyPI.
+
+0.1.1 (2020-01-01)
+------------------
+
+* Updates dependent packages to latest versions
+* Migrates CI to GitHub Actions from travis
