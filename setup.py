@@ -19,7 +19,7 @@ setup(
     name='terrascan',
     version='0.1.2',
     description="Best practices tests for terraform",
-    long_description=f'{readme}\n\n{history}',
+    long_description=readme,
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
