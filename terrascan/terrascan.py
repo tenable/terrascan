@@ -26,7 +26,7 @@ import sys
 import subprocess
 import json
 import time
-import terraform_validate
+from terrascan.embedded import terraform_validate
 import logging
 
 jsonOutput = {

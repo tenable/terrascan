@@ -17,14 +17,14 @@ requirements = [
 
 setup(
     name='terrascan',
-    version='0.1.2',
+    version='0.2.0',
     description="Best practices tests for terraform",
     long_description=readme,
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
     download_url='https://github.com/cesar-rodriguez/terrascan' +
-    '/archive/v0.1.2.tar.gz',
+    '/archive/v0.2.0.tar.gz',
     packages=find_packages(where='.'),
     entry_points={
         'console_scripts': [
@@ -45,9 +45,6 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     test_suite='tests',
-    dependency_links=[
-        "git+git://github.com/cesar-rodriguez/terraform_validate.git@master#egg=terraform-validate"
-    ],
     tests_require=requirements,
     setup_requires=requirements,
     install_requires=requirements,
