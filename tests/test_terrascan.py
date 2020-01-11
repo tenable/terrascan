@@ -24,3 +24,14 @@ def test_success():
             'tests/infrastructure/success',
         ])
     assert pytest_wrapped_e.value.code == 0
+    
+def test_fail():
+    """
+    Test successful terraform templates
+    """
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        terrascan.main([
+            '-l',
+            'tests/infrastructure/fail',
+        ])
+    assert pytest_wrapped_e.value.code == 4
