@@ -3,36 +3,13 @@
 
 """Tests for `terrascan` package."""
 
-
-from unittest import TestCase
+import pytest
 from terrascan import terrascan
 
 
-class CliTestCase(TestCase):
-
-    def test_with_empty_args(self):
-        """
-        User passes no args, should fail with SystemExit
-        """
-        with self.assertRaises(SystemExit):
-            terrascan.main(['-h'])
-
-    def test_success(self):
-        """
-        Test successful terraform templates
-        """
-        with self.assertRaises(SystemExit):
-            terrascan.main([
-                '-l',
-                'tests/infrastructure/success',
-            ])
-
-    def test_fail(self):
-        """
-        Test successful terraform templates
-        """
-        with self.assertRaises(SystemExit):
-            terrascan.main([
-                '-l',
-                'tests/infrastructure/fail',
-            ])
+def test_with_empty_args():
+    """
+    User passes no args, should fail with SystemExit
+    """
+    with pytest.raises(SystemExit):
+        terrascan.main(['-h'])
