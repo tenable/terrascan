@@ -913,6 +913,7 @@ def terrascan(args):
     
     # process the arguments
     if args.warranty or args.gpl:
+        print("terrascan  Copyright (C) 2020  Cesar Rodriguez\n")
         if args.warranty:
             print("This program is distributed in the hope that it will be useful,")
             print("but WITHOUT ANY WARRANTY; without even the implied warranty of")
@@ -925,10 +926,6 @@ def terrascan(args):
             print("(at your option) any later version.  see <http://www.gnu.org/licenses/>")
 
         sys.exit(0)
-
-    print("terrascan  Copyright (C) 2017  Cesar Rodriguez\n")
-    print("This program comes with ABSOLUTELY NO WARRANTY; for details use -w or --warranty.")
-    print("This is free software, and you are welcome to redistribute it under certain conditions; for details use -g or --gpl.\n")
 
     terraformLocation = args.location[0]
     if not os.path.isabs(terraformLocation):
@@ -953,7 +950,7 @@ def terrascan(args):
             overrides = overrides["overrides"]
             # validate overrides
             for override in overrides:
-                if len(override) < 2 or len(override) > 3 or len(override) == 3 and not re.match("RR-\d{1,10}$|RAR-\d{1,10}$", override[2]):
+                if len(override) < 2 or len(override) > 3 or len(override) == 3 and not re.match(r"RR-\d{1,10}$|RAR-\d{1,10}$", override[2]):
                     print("***Invalid entry in overrides file:  " + override)
                     print("Needs to be in the following format:  rule_name:resource_name or rule_name:resource_name:RR-xxx or rule_name:resource_name:RAR-xxx where xxx is 1-10 digits")
                     sys.exit(99)
@@ -1118,7 +1115,20 @@ def getMF(json):
             f = ", file " + json["fileName"]
     return m, f
 
-
-parser = create_parser()
-args = parser.parse_args()
-args.func(args)
+def main(args=None):
+    """
+    Terrascan console script. Parses user input to determine location of
+    terraform templates and which tests to execute
+    """
+    parser = create_parser()
+    args = parser.parse_args(args)
+    
+    #tests = args.tests[0]
+    #location = path.abspath(args.location[0])
+    
+    #if not path.exists(location):
+        #print("ERROR: The specified location doesn't exists")
+        #exit(1)
+        
+    #exit(run_test(location, tests))
+    terrascan(args)
