@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'terraform-validate==2.5.0',
+    'terraform-validate==3.1.16',
 ]
 
 setup(

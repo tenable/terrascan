@@ -2,12 +2,13 @@
 Terrascan
 =========
 
-
 .. image:: https://img.shields.io/pypi/v/terrascan.svg
         :target: https://pypi.python.org/pypi/terrascan
+        :alt: pypi
 
 .. image:: https://img.shields.io/travis/cesar-rodriguez/terrascan.svg
         :target: https://travis-ci.org/cesar-rodriguez/terrascan
+        :alt: build
 
 .. image:: https://readthedocs.org/projects/terrascan/badge/?version=latest
         :target: https://terrascan.readthedocs.io/en/latest/?badge=latest
@@ -26,6 +27,82 @@ A collection of security and best practice tests for static code analysis of ter
 * GitHub Repo: https://github.com/cesar-rodriguez/terrascan
 * Documentation: https://terrascan.readthedocs.io.
 * Free software: GNU General Public License v3
+
+--------------------
+Updates in this fork
+--------------------
+- **Requires my fork of terraform_validate and pyhcl until pull request accepted**
+    - Will not run with original terraform_validate or pyhcl
+- **Returns 0 if no failures or errors; 4 otherwise**
+	- helps with use in a delivery pipeline
+- **terrascan topology:**
+	- terrascan calls terraform_validate which calls pyhcl.
+	- all three are open source but have been heavily modified.
+	- pyhcl is the lowest level and is used to read and parse the terraform files into python dictionaries.  It needed to be modified to work with terraform 0.12.
+	- terraform_validate provides methods to enable validation of rules.  It processes the dictionaries loaded by pyhcl to resolve terraform modules and replace terraform variables with values.
+	- terrascan is where all of the rules are defined.  Normally, this is the only file that should need to be updated.
+- **Parameters**::
+
+	-h, --help            show this help message and exit
+	-l LOCATION, --location LOCATION
+	                      location of terraform templates to scan
+	-v [VARS [VARS ...]], --vars [VARS [VARS ...]]
+	                      variables json or .tf file name
+	-o OVERRIDES, --overrides OVERRIDES
+	                      override rules file name
+	-r RESULTS, --results RESULTS
+	                      output results file name
+	-d [DISPLAYRULES], --displayRules [DISPLAYRULES]
+	                      display the rules used
+	-w [WARRANTY], --warranty [WARRANTY]
+	                      displays the warranty
+	-g [GPL], --gpl [GPL]
+	                      displays license information
+	-c CONFIG, --config CONFIG
+	                      logging configuration: error, warning, info, debug, or
+	                      none; default is error
+- **Override file example**
+
+1. The first attribute is the name of the rule to be overridden.
+2. The second attribute is the name of the resource to be overridden.
+3. The third atttribute is the RR or RAR number that waives the failure.  This is required for high severity rules; can be an empty string for medium and low severity rules.
+
+.. code:: json
+
+	{
+		"overrides": [
+			[
+				"aws_s3_bucket_server_side_encryption_configuration",
+				"noEncryptionWaived",
+				"RR-1234"
+			],
+			[
+				"aws_rds_cluster_encryption",
+				"rds_cluster_bad",
+				"RAR-98765"
+			]
+		]
+	}
+
+- **Example output**::
+
+	Logging level set to error.
+	................
+	----------------------------------------------------------------------
+	Ran 16 tests in 0.015s
+
+	OK
+
+	Processed 19 files in C:\DEV\terraforms\backends\10-network-analytics
+
+
+	Results (took 1.08 seconds):
+
+	Failures: (2)
+	[high] [aws_dynamodb_table.encryption.server_side_encryption.enabled] should be 'True'. Is: 'False' in module 10-network-analytics, file C:\DEV\terraforms\backends\10-network-analytics\main.tf
+	[high] [aws_s3_bucket.noEncryption] should have property: 'server_side_encryption_configuration' in module 10-network-analytics, file C:\DEV\terraforms\backends\10-network-analytics\main.tf
+
+	Errors: (0)
 
 --------
 Features
@@ -55,13 +132,9 @@ Terrascan uses Python and depends on terraform-validate and pyhcl. After install
 -----------------
 Running the tests
 -----------------
-To run execute terrascan.py as follows replacing with the location of your terraform templates:
+To run, execute terrascan.py as follows replacing with the location of your terraform templates:
 
-    $ terrascan --location tests/infrastructure/success --tests all
-
-To run a specific test run the following command replacing encryption with the name of the test to run:
-
-    $ terrascan --location tests/infrastructure/success --tests encryption
+    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json
 
 To learn more about the options to the cli execute the following:
 
@@ -100,6 +173,7 @@ Legend:
  aws_db_security_group                                             `:heavy_check_mark:`
  aws_dms_endpoint                          `:heavy_check_mark:`
  aws_dms_replication_instance              `:heavy_check_mark:`                            `:heavy_check_mark:`
+ aws_dynamodb_table                        `:heavy_check_mark:`                            
  aws_ebs_volume                            `:heavy_check_mark:`
  aws_efs_file_system                       `:heavy_check_mark:`
  aws_elasticache_security_group                                    `:heavy_check_mark:`
@@ -133,10 +207,10 @@ Legend:
  aws_redshift_cluster                      `:heavy_check_mark:`                            `:heavy_check_mark:`    `:heavy_check_mark:`
  aws_redshift_parameter_group              `:heavy_minus_sign:`                                                    `:heavy_minus_sign:`
  aws_redshift_security_group                                        `:heavy_check_mark:`
- aws_s3_bucket                                                                             `:heavy_check_mark:`    `:heavy_check_mark:`
+ aws_s3_bucket                             `:heavy_check_mark:`                            `:heavy_check_mark:`    `:heavy_check_mark:`
  aws_s3_bucket_object                      `:heavy_check_mark:`
- aws_security_group                                                 `:heavy_check_mark:`
- aws_security_group_rule                                            `:heavy_check_mark:`
+ aws_security_group                                                 `:heavy_check_mark:`   `:heavy_check_mark:`
+ aws_security_group_rule                                            `:heavy_check_mark:`   `:heavy_check_mark:`
  aws_ses_receipt_rule                      `:heavy_minus_sign:`
  aws_sqs_queue                             `:heavy_check_mark:`
  aws_ssm_maintenance_window_task                                                                                   `:heavy_check_mark:`
