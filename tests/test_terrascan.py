@@ -13,3 +13,14 @@ def test_with_empty_args():
     """
     with pytest.raises(SystemExit):
         terrascan.main(['-h'])
+
+def test_success():
+    """
+    Test successful terraform templates
+    """
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        terrascan.main([
+            '-l',
+            'tests/infrastructure/success',
+        ])
+    assert pytest_wrapped_e.value.code == 0
