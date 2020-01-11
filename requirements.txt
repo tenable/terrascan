@@ -1,1 +1,2 @@
-terraform-validate==3.1.16
+git+git://github.com/cesar-rodriguez/terraform_validate.git@master#egg=terraform-validate
+pyhcl==0.4.0

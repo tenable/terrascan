@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'terraform-validate==3.1.16',
+    'pyhcl==0.4.0',
 ]
 
 setup(
@@ -32,7 +32,6 @@ setup(
         ]
     },
     include_package_data=True,
-    install_requires=requirements,
     license="GNU General Public License v3",
     zip_safe=False,
     keywords='terrascan',
@@ -46,6 +45,10 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     test_suite='tests',
+    dependency_links=[
+        "git+git://github.com/cesar-rodriguez/terraform_validate.git@master#egg=terraform-validate"
+    ],
     tests_require=requirements,
     setup_requires=requirements,
+    install_requires=requirements,
 )
