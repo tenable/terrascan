@@ -725,15 +725,6 @@ class Rules(unittest.TestCase):
         for validator in validator_generator:
             validator.resources('aws_redshift_cluster').should_have_properties(['kms_key_id'])
 
-    def test_aws_s3_bucket_object_encryption(self):
-        ruleName = sys._getframe().f_code.co_name[5:]
-        self.rules.append(ruleName)
-        # Assert resource is encrypted with KMS
-        self.v.error_if_property_missing()
-        validator_generator = self.v.get_terraform_files(self.isRuleOverridden(ruleName))
-        for validator in validator_generator:
-            validator.resources('aws_s3_bucket').property('server_side_encryption').should_equal("aws:kms")
-
     def test_aws_s3_bucket_object_kms(self):
         ruleName = sys._getframe().f_code.co_name[5:]
         self.rules.append(ruleName)
