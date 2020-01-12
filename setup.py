@@ -5,8 +5,36 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
+readme = '''=========
+Terrascan
+=========
+
+.. image:: https://img.shields.io/pypi/v/terrascan.svg
+        :target: https://pypi.python.org/pypi/terrascan
+        :alt: pypi
+
+.. image:: https://img.shields.io/travis/cesar-rodriguez/terrascan.svg
+        :target: https://travis-ci.org/cesar-rodriguez/terrascan
+        :alt: build
+
+.. image:: https://readthedocs.org/projects/terrascan/badge/?version=latest
+        :target: https://terrascan.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/cesar-rodriguez/terrascan/shield.svg
+     :target: https://pyup.io/repos/github/cesar-rodriguez/terrascan/
+     :alt: Updates
+
+
+A collection of security and best practice tests for static code analysis of terraform_ templates using terraform_validate_.
+
+.. _terraform: https://www.terraform.io
+.. _terraform_validate: https://github.com/elmundio87/terraform_validate
+
+* GitHub Repo: https://github.com/cesar-rodriguez/terrascan
+* Documentation: https://terrascan.readthedocs.io.
+* Free software: GNU General Public License v3
+'''
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
