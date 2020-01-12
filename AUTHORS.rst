@@ -5,9 +5,12 @@ Credits
 Development Lead
 ----------------
 
-* Cesar Rodriguez <therasec@gmail.com>
+* [Cesar Rodriguez](https://github.com/cesar-rodriguez) <cesar@cloudsecuritymusings.com>
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* [sbalbach](https://github.com/sbalbach)
+* [Zach Zeid](https://github.com/zachzeid)
+* [Logan Rakai](https://github.com/lrakai)
+* [Guy Kisel](https://github.com/guykisel)
