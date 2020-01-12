@@ -28,19 +28,42 @@ A collection of security and best practice tests for static code analysis of ter
 * Documentation: https://terrascan.readthedocs.io.
 * Free software: GNU General Public License v3
 
---------------------
-Updates in this fork
---------------------
-- **Requires my fork of terraform_validate and pyhcl until pull request accepted**
-    - Will not run with original terraform_validate or pyhcl
+--------
+Features
+--------
+Terrascan will perform tests on your terraform templates to ensure:
+
+- **Encryption**
+    - Server Side Encryption (SSE) enabled
+    - Use of AWS Key Management Service (KMS) with Customer Managed Keys (CMK)
+    - Use of SSL/TLS and proper configuration
+- **Security Groups**
+    - Provisioning SGs in EC2-classic
+    - Ingress open to 0.0.0.0/0
+- **Public Exposure**
+    - Services with public exposure other than Gateways (NAT, VGW, IGW)
+- **Logging & Monitoring**
+    - Access logs enabled to resources that support it
+
+----------
+Installing
+----------
+Terrascan uses Python and depends on pyhcl and terraform-validate (a fork has 
+been included as part of terrascan that supports terraform 0.12+). 
+After installing python in your system you can follow these steps:
+
+    $ pip install terrascan
+
+-----------------
+Running the tests
+-----------------
+To run, execute terrascan.py as follows replacing with the location of your terraform templates:
+
+    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json
+
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
-- **terrascan topology:**
-	- terrascan calls terraform_validate which calls pyhcl.
-	- all three are open source but have been heavily modified.
-	- pyhcl is the lowest level and is used to read and parse the terraform files into python dictionaries.  It needed to be modified to work with terraform 0.12.
-	- terraform_validate provides methods to enable validation of rules.  It processes the dictionaries loaded by pyhcl to resolve terraform modules and replace terraform variables with values.
-	- terrascan is where all of the rules are defined.  Normally, this is the only file that should need to be updated.
+	
 - **Parameters**::
 
 	-h, --help            show this help message and exit
@@ -65,7 +88,8 @@ Updates in this fork
 
 1. The first attribute is the name of the rule to be overridden.
 2. The second attribute is the name of the resource to be overridden.
-3. The third atttribute is the RR or RAR number that waives the failure.  This is required for high severity rules; can be an empty string for medium and low severity rules.
+3. The third atttribute is the RR or RAR number that waives the failure.  
+This is required for high severity rules; can be an empty string for medium and low severity rules.
 
 .. code:: json
 
@@ -103,42 +127,6 @@ Updates in this fork
 	[high] [aws_s3_bucket.noEncryption] should have property: 'server_side_encryption_configuration' in module 10-network-analytics, file C:\DEV\terraforms\backends\10-network-analytics\main.tf
 
 	Errors: (0)
-
---------
-Features
---------
-Terrascan will perform tests on your terraform templates to ensure:
-
-- **Encryption**
-    - Server Side Encryption (SSE) enabled
-    - Use of AWS Key Management Service (KMS) with Customer Managed Keys (CMK)
-    - Use of SSL/TLS and proper configuration
-- **Security Groups**
-    - Provisioning SGs in EC2-classic
-    - Ingress open to 0.0.0.0/0
-- **Public Exposure**
-    - Services with public exposure other than Gateways (NAT, VGW, IGW)
-- **Logging & Monitoring**
-    - Access logs enabled to resources that support it
-
-----------
-Installing
-----------
-Terrascan uses Python and depends on terraform-validate and pyhcl. After installing python in your system you can follow these steps:
-
-    $ pip install terrascan
-
-
------------------
-Running the tests
------------------
-To run, execute terrascan.py as follows replacing with the location of your terraform templates:
-
-    $ terrascan --location tests/infrastructure/success --vars tests/infrastructure/vars.json
-
-To learn more about the options to the cli execute the following:
-
-    $ terrascan -h
 
 --------------------
 Using as pre-commit
