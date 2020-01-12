@@ -1,1 +1,1 @@
-terraform-validate==2.8.0
+pyhcl==0.4.0

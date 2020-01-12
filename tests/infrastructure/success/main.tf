@@ -189,6 +189,22 @@ resource "aws_s3_bucket_object" "examplebucket_object" {
   kms_key_id             = "${var.kms_key_arn}"
 }
 
+resource "aws_s3_bucket" "encryptedBucket" {
+  bucket = "good-bucket-name"
+  logging {
+    target_bucket = "${aws_s3_bucket.log_bucket.id}"
+    target_prefix = "log/"
+  }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = "${data.aws_kms_key.bucket.arn}"
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+}
+
 resource "aws_sqs_queue" "terraform_queue" {
   kms_master_key_id                 = "alias/aws/sqs"
   kms_data_key_reuse_period_seconds = 300
@@ -245,15 +261,6 @@ resource "aws_launch_configuration" "as_conf" {
 
 resource "aws_rds_cluster_instance" "cluster_instances" {
   publicly_accessible = false
-}
-
-resource "aws_s3_bucket" "b" {
-  acl = "private"
-
-  logging {
-    target_bucket = "${aws_s3_bucket.log_bucket.id}"
-    target_prefix = "log/"
-  }
 }
 
 resource "aws_emr_cluster" "emr-test-cluster" {

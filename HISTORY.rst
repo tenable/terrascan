@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.0 (Unreleased)
+-------------------
+* Adds support for terraform 0.12+
+
 0.1.2 (2020-01-05)
 ------------------
 
