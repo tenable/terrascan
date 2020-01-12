@@ -4,13 +4,12 @@ Credits
 
 Development Lead
 ----------------
-
-* [Cesar Rodriguez](https://github.com/cesar-rodriguez) <cesar@cloudsecuritymusings.com>
+* `Cesar Rodriguez <https://www.cloudsecuritymusings.com>`_ - cesar@cloudsecuritymusings.com
 
 Contributors
 ------------
 
-* [sbalbach](https://github.com/sbalbach)
-* [Zach Zeid](https://github.com/zachzeid)
-* [Logan Rakai](https://github.com/lrakai)
-* [Guy Kisel](https://github.com/guykisel)
+* `sbalbach <https://github.com/sbalbach>`_
+* `Zach Zeid <https://github.com/zachzeid>`_
+* `Logan Rakai <https://github.com/lrakai>`_
+* `Guy Kisel <https://github.com/guykisel>`_
