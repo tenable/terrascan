@@ -2,6 +2,10 @@
 History
 =======
 
+Unreleased
+-----------
+* Update pytest from 5.3.2 to 5.3.3
+
 0.2.0 (2020-01-11)
 -------------------
 * Adds support for terraform 0.12+
