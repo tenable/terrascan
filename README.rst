@@ -26,6 +26,7 @@ A collection of security and best practice tests for static code analysis of ter
 
 * GitHub Repo: https://github.com/cesar-rodriguez/terrascan
 * Documentation: https://terrascan.readthedocs.io.
+* Tutorial: https://www.cloudsecuritymusings.com/blog/using-terrascan-for-static-code-analysis-of-your-infrastructure-code-part-1
 * Free software: GNU General Public License v3
 
 --------
