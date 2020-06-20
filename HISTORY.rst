@@ -2,9 +2,9 @@
 History
 =======
 
-Unreleased
+0.2.1
 -----------
-* Update pytest from 5.3.2 to 5.3.3
+* Bugfix: The pyhcl hard dependency in the requirements.txt file caused issues if a higher version was installed. This was fixed by using the ">=" operator.
 
 0.2.0 (2020-01-11)
 -------------------
