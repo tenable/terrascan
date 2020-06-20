@@ -2,7 +2,7 @@
 """
     terrascan: A collection of security and best practice tests for static code analysis of terraform templates using terraform_validate.
 
-    Copyright (C) 2017  Cesar Rodriguez
+    Copyright (C) 2020 Accurics, Inc.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ jsonOutput = {
 #   should_contain_valid_json(): fails if the value of the property doesn't contain valid json.
 ###############################################################################################################################################################################
 class Rules(unittest.TestCase):
-    
+
     rules = []
 
     def setUp(self):
@@ -901,10 +901,10 @@ def terrascan(args):
         startIndex += len(versionStr)
         endIndex = stdout.find("\r", startIndex)
         version = stdout[startIndex:endIndex]
-    
+
     # process the arguments
     if args.warranty or args.gpl:
-        print("terrascan  Copyright (C) 2020  Cesar Rodriguez\n")
+        print("terrascan  Copyright (C) 2020 Accurics, Inc.\n")
         if args.warranty:
             print("This program is distributed in the hope that it will be useful,")
             print("but WITHOUT ANY WARRANTY; without even the implied warranty of")
@@ -962,7 +962,7 @@ def terrascan(args):
         config = args.config[0]
     else:
         config = None
-        
+
     # set logging based on logging.config if present (default is error)
     if config == "none":
         logging.basicConfig(level=logging.CRITICAL)
@@ -1113,13 +1113,13 @@ def main(args=None):
     """
     parser = create_parser()
     args = parser.parse_args(args)
-    
+
     #tests = args.tests[0]
     #location = path.abspath(args.location[0])
-    
+
     #if not path.exists(location):
         #print("ERROR: The specified location doesn't exists")
         #exit(1)
-        
+
     #exit(run_test(location, tests))
     terrascan(args)
