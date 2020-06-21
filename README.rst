@@ -1,7 +1,3 @@
-=========
-Terrascan
-=========
-
 .. image:: https://img.shields.io/pypi/v/terrascan.svg
         :target: https://pypi.python.org/pypi/terrascan
         :alt: pypi
@@ -25,6 +21,10 @@ Terrascan
 .. image:: https://img.shields.io/badge/dynamic/json.svg?label=downloads&url=https%3A%2F%2Fpypistats.org%2Fapi%2Fpackages%2Fterrascan%2Frecent&query=data.last_month&colorB=brightgreen&suffix=%2FMonth
      :target: https://pypistats.org/packages/terrascan
      :alt: downloads
+
+=========
+Terrascan
+=========
 
 A collection of security and best practice tests for static code analysis of terraform_ code.
 
