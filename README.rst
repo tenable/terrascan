@@ -35,6 +35,13 @@ A collection of security and best practice tests for static code analysis of ter
 * Tutorial: https://www.cloudsecuritymusings.com/blog/using-terrascan-for-static-code-analysis-of-your-infrastructure-code-part-1
 * Free software: GNU General Public License v3
 
+---------------
+About Accurics
+---------------
+Accurics enables organizations to protect their cloud native infrastructure in hybrid and multi-cloud environments. It seamlessly scans infrastructure as code for misconfigurations, monitors provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
+
+Learn more at https://www.accurics.com
+
 --------
 Features
 --------
