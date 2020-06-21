@@ -1,33 +1,46 @@
-=========
-Terrascan
-=========
-
 .. image:: https://img.shields.io/pypi/v/terrascan.svg
         :target: https://pypi.python.org/pypi/terrascan
         :alt: pypi
 
-.. image:: https://img.shields.io/travis/cesar-rodriguez/terrascan.svg
-        :target: https://travis-ci.org/cesar-rodriguez/terrascan
+.. image:: https://img.shields.io/github/workflow/status/accurics/terrascan/Python%20package
+        :target: https://github.com/accurics/terrascan/actions
         :alt: build
 
 .. image:: https://readthedocs.org/projects/terrascan/badge/?version=latest
         :target: https://terrascan.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+        :alt: docs
 
-.. image:: https://pyup.io/repos/github/cesar-rodriguez/terrascan/shield.svg
-     :target: https://pyup.io/repos/github/cesar-rodriguez/terrascan/
-     :alt: Updates
+.. image:: https://pyup.io/repos/github/accurics/terrascan/shield.svg
+     :target: https://pyup.io/repos/github/accurics/terrascan/
+     :alt: updates
 
+.. image:: https://img.shields.io/pypi/pyversions/terrascan.svg
+     :target: https://pypi.python.org/pypi/terrascan
+     :alt: python versions
 
-A collection of security and best practice tests for static code analysis of terraform_ templates using terraform_validate_.
+.. image:: https://img.shields.io/badge/dynamic/json.svg?label=downloads&url=https%3A%2F%2Fpypistats.org%2Fapi%2Fpackages%2Fterrascan%2Frecent&query=data.last_month&colorB=brightgreen&suffix=%2FMonth
+     :target: https://pypistats.org/packages/terrascan
+     :alt: downloads
+
+=========
+Terrascan
+=========
+
+A collection of security and best practice tests for static code analysis of terraform_ code.
 
 .. _terraform: https://www.terraform.io
-.. _terraform_validate: https://github.com/elmundio87/terraform_validate
 
-* GitHub Repo: https://github.com/cesar-rodriguez/terrascan
+* GitHub Repo: https://github.com/accurics/terrascan
 * Documentation: https://terrascan.readthedocs.io.
 * Tutorial: https://www.cloudsecuritymusings.com/blog/using-terrascan-for-static-code-analysis-of-your-infrastructure-code-part-1
 * Free software: GNU General Public License v3
+
+---------------
+About Accurics
+---------------
+Accurics enables organizations to protect their cloud native infrastructure in hybrid and multi-cloud environments. It seamlessly scans infrastructure as code for misconfigurations, monitors provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
+
+Learn more at https://www.accurics.com
 
 --------
 Features
@@ -49,8 +62,8 @@ Terrascan will perform tests on your terraform templates to ensure:
 ----------
 Installing
 ----------
-Terrascan uses Python and depends on pyhcl and terraform-validate (a fork has 
-been included as part of terrascan that supports terraform 0.12+). 
+Terrascan uses Python and depends on pyhcl and terraform-validate (a fork has
+been included as part of terrascan that supports terraform 0.12+).
 After installing python in your system you can follow these steps:
 
     $ pip install terrascan
@@ -64,7 +77,7 @@ To run, execute terrascan.py as follows replacing with the location of your terr
 
 - **Returns 0 if no failures or errors; 4 otherwise**
 	- helps with use in a delivery pipeline
-	
+
 - **Parameters**::
 
 	-h, --help            show this help message and exit
@@ -89,7 +102,7 @@ To run, execute terrascan.py as follows replacing with the location of your terr
 
 1. The first attribute is the name of the rule to be overridden.
 2. The second attribute is the name of the resource to be overridden.
-3. The third atttribute is the RR or RAR number that waives the failure.  
+3. The third atttribute is the RR or RAR number that waives the failure.
 This is required for high severity rules; can be an empty string for medium and low severity rules.
 
 .. code:: json
@@ -132,7 +145,7 @@ This is required for high severity rules; can be an empty string for medium and 
 --------------------
 Using as pre-commit
 --------------------
-Terrascan can be used on pre-commit hooks to prevent accidental introduction of security weaknesses into your repository. 
+Terrascan can be used on pre-commit hooks to prevent accidental introduction of security weaknesses into your repository.
 This requires having pre-commit_ installed. An example configuration is provided in the comments of the here_ file in this repository.
 
 .. _pre-commit: https://pre-commit.com/
@@ -162,7 +175,7 @@ Legend:
  aws_db_security_group                                             `:heavy_check_mark:`
  aws_dms_endpoint                          `:heavy_check_mark:`
  aws_dms_replication_instance              `:heavy_check_mark:`                            `:heavy_check_mark:`
- aws_dynamodb_table                        `:heavy_check_mark:`                            
+ aws_dynamodb_table                        `:heavy_check_mark:`
  aws_ebs_volume                            `:heavy_check_mark:`
  aws_efs_file_system                       `:heavy_check_mark:`
  aws_elasticache_security_group                                    `:heavy_check_mark:`
