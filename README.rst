@@ -14,8 +14,8 @@ Terrascan
         :target: https://terrascan.readthedocs.io/en/latest/?badge=latest
         :alt: docs
 
-.. image:: https://pyup.io/repos/github/cesar-rodriguez/terrascan/shield.svg
-     :target: https://pyup.io/repos/github/cesar-rodriguez/terrascan/
+.. image:: https://pyup.io/repos/github/accurics/terrascan/shield.svg
+     :target: https://pyup.io/repos/github/accurics/terrascan/
      :alt: updates
 
 .. image:: https://img.shields.io/pypi/pyversions/terrascan.svg
