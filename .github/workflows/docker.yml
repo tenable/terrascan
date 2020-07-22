@@ -5,7 +5,6 @@ on:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
-      - docker # FIXME: remove
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -30,8 +29,7 @@ jobs:
           docker-compose --file docker-compose.test.yml build
           docker-compose --file docker-compose.test.yml run sut
 
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
+  # Push image to Docker Hub.
   push:
     # Ensure test job passes before pushing image.
     needs: test
@@ -46,12 +44,11 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u therasec --password-stdin
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
 
       - name: Push image
         run: |
-          # FIXME IMAGE_ID=${{ github.repository }}/$IMAGE_NAME
-          IMAGE_ID=therasec/$IMAGE_NAME
+          IMAGE_ID=accurics/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -63,8 +60,7 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
           # Use Docker `latest` tag convention
-          # FIXME [ "$VERSION" == "master" ] && VERSION=latest
-          [ "$VERSION" == "docker" ] && VERSION=latest
+          [ "$VERSION" == "master" ] && VERSION=latest
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
