@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.2
+-----------
+* Adds Docker image and pipeline to push to DockerHub
+
 0.2.1
 -----------
 * Bugfix: The pyhcl hard dependency in the requirements.txt file caused issues if a higher version was installed. This was fixed by using the ">=" operator.

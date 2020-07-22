@@ -4,18 +4,17 @@
 
     Copyright (C) 2020 Accurics, Inc.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import argparse
@@ -903,21 +902,6 @@ def terrascan(args):
         version = stdout[startIndex:endIndex]
 
     # process the arguments
-    if args.warranty or args.gpl:
-        print("terrascan  Copyright (C) 2020 Accurics, Inc.\n")
-        if args.warranty:
-            print("This program is distributed in the hope that it will be useful,")
-            print("but WITHOUT ANY WARRANTY; without even the implied warranty of")
-            print("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the")
-            print("GNU General Public License for more details.")
-        else:
-            print("This program is free software: you can redistribute it and/or modify")
-            print("it under the terms of the GNU General Public License as published by")
-            print("the Free Software Foundation, either version 3 of the License, or")
-            print("(at your option) any later version.  see <http://www.gnu.org/licenses/>")
-
-        sys.exit(0)
-
     terraformLocation = args.location[0]
     if not os.path.isabs(terraformLocation):
         terraformLocation = os.path.join(os.sep, os.path.abspath("."),  terraformLocation)
@@ -1034,15 +1018,12 @@ def terrascan(args):
 def create_parser():
     parser = argparse.ArgumentParser(description="A collection of security and best practice tests for static code analysis of terraform templates using terraform_validate.")
 
-    # only required if optional parameters not present
-    req = '-w' not in sys.argv and '--warranty' not in sys.argv and '-g' not in sys.argv and '--gpl' not in sys.argv
-
     parser.add_argument(
         '-l',
         '--location',
         help='location of terraform templates to scan',
         nargs=1,
-        required=req
+        required=True
     )
     parser.add_argument(
         '-v',
@@ -1065,20 +1046,6 @@ def create_parser():
         '-d',
         '--displayRules',
         help='display the rules used',
-        nargs='?',
-        const=True, default=False
-    )
-    parser.add_argument(
-        '-w',
-        '--warranty',
-        help='displays the warranty',
-        nargs='?',
-        const=True, default=False
-    )
-    parser.add_argument(
-        '-g',
-        '--gpl',
-        help='displays license information',
         nargs='?',
         const=True, default=False
     )
