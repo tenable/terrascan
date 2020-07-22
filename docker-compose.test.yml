@@ -1,0 +1,4 @@
+sut:
+  build: .
+  command: ./docker_test.sh
+  entrypoint: /docker_test.sh
