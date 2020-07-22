@@ -33,7 +33,6 @@ A collection of security and best practice tests for static code analysis of ter
 * GitHub Repo: https://github.com/accurics/terrascan
 * Documentation: https://terrascan.readthedocs.io.
 * Tutorial: https://www.cloudsecuritymusings.com/blog/using-terrascan-for-static-code-analysis-of-your-infrastructure-code-part-1
-* Free software: GNU General Public License v3
 
 ---------------
 About Accurics
@@ -68,6 +67,12 @@ After installing python in your system you can follow these steps:
 
     $ pip install terrascan
 
+
+Terrascan is also available as a Docker image and can be used as follows
+
+	$ docker run accurics/terrascan
+
+
 -----------------
 Running the tests
 -----------------
@@ -91,10 +96,6 @@ To run, execute terrascan.py as follows replacing with the location of your terr
 	                      output results file name
 	-d [DISPLAYRULES], --displayRules [DISPLAYRULES]
 	                      display the rules used
-	-w [WARRANTY], --warranty [WARRANTY]
-	                      displays the warranty
-	-g [GPL], --gpl [GPL]
-	                      displays license information
 	-c CONFIG, --config CONFIG
 	                      logging configuration: error, warning, info, debug, or
 	                      none; default is error
