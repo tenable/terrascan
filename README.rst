@@ -103,7 +103,7 @@ To run, execute terrascan.py as follows replacing with the location of your terr
 
 1. The first attribute is the name of the rule to be overridden.
 2. The second attribute is the name of the resource to be overridden.
-3. The third atttribute is the RR or RAR number that waives the failure.
+3. The third attribute is the RR or RAR number that waives the failure.
 This is required for high severity rules; can be an empty string for medium and low severity rules.
 
 .. code:: json
