@@ -3,23 +3,29 @@ package runtime
 import (
 	"fmt"
 	"log"
+	"os"
+
+	"github.com/accurics/terrascan/pkg/utils"
 
 	CloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
 	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // Executor object
 type Executor struct {
 	filePath   string
+	dirPath    string
 	cloudType  string
 	iacType    string
 	iacVersion string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath string) *Executor {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath string) *Executor {
 	return &Executor{
 		filePath:   filePath,
+		dirPath:    dirPath,
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
@@ -31,9 +37,38 @@ func (r *Executor) ValidateInputs() error {
 
 	// terrascan can accept either a file or a directory, both inputs cannot
 	// be processed together
+	if r.filePath != "" && r.dirPath != "" {
+		errMsg := fmt.Sprintf("cannot accept both '-f %s' and '-d %s' options together", r.filePath, r.dirPath)
+		log.Printf(errMsg)
+		return fmt.Errorf(errMsg)
+	}
 
-	// if file path, check if file exists
-	// if directory, check if directory exists
+	if r.dirPath != "" {
+		// if directory, check if directory exists
+		absDirPath, err := utils.GetAbsPath(r.dirPath)
+		if err != nil {
+			return err
+		}
+
+		if _, err := os.Stat(absDirPath); err != nil {
+			errMsg := fmt.Sprintf("directory '%s' does not exist", absDirPath)
+			log.Printf(errMsg)
+			return fmt.Errorf(errMsg)
+		}
+	} else {
+
+		// if file path, check if file exists
+		absFilePath, err := utils.GetAbsPath(r.filePath)
+		if err != nil {
+			return err
+		}
+
+		if _, err := os.Stat(absFilePath); err != nil {
+			errMsg := fmt.Sprintf("file '%s' does not exist", absFilePath)
+			log.Printf(errMsg)
+			return fmt.Errorf(errMsg)
+		}
+	}
 
 	// check if Iac type is supported
 	if !IacProvider.IsIacSupported(r.iacType, r.iacVersion) {
@@ -71,13 +106,17 @@ func (r *Executor) Process() error {
 		return fmt.Errorf(errMsg)
 	}
 
-	// create config from IaC
-	_, err = iacProvider.LoadIacFile(r.filePath)
-	if err != nil {
-		errMsg := fmt.Sprintf("failed to load iac file '%s'. error: '%s'", err)
-		log.Printf(errMsg)
-		return fmt.Errorf(errMsg)
+	var iacOut output.AllResourceConfigs
+	if r.dirPath != "" {
+		iacOut, err = iacProvider.LoadIacDir(r.dirPath)
+	} else {
+		// create config from IaC
+		iacOut, err = iacProvider.LoadIacFile(r.filePath)
 	}
+	if err != nil {
+		return err
+	}
+	utils.PrintJSON(iacOut)
 
 	// create new CloudProvider
 	cloudProvider, err := CloudProvider.NewCloudProvider(r.cloudType)

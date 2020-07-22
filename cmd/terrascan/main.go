@@ -14,6 +14,7 @@ func main() {
 		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
 		cloudType   = flag.String("cloud", "", "cloud provider (supported values: aws)")
 		iacFilePath = flag.String("f", "", "IaC file path")
+		iacDirPath  = flag.String("d", "", "IaC directory path")
 	)
 	flag.Parse()
 
@@ -21,6 +22,6 @@ func main() {
 	if *server {
 		httpServer.Start()
 	} else {
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath)
 	}
 }
