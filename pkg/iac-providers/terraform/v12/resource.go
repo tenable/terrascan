@@ -33,6 +33,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 
 	// create a resource config
 	resourceConfig = output.ResourceConfig{
+		ID:     fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
 		Name:   managedResource.Name,
 		Type:   managedResource.Type,
 		Source: managedResource.DeclRange.Filename,
@@ -40,6 +41,6 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	}
 
 	// successful
-	zap.S().Debugf("successfully created resource config for resource '%s', file: '%s'", resourceConfig.Name, resourceConfig.Source)
+	zap.S().Debugf("created resource config for resource '%s', file: '%s'", resourceConfig.Name, resourceConfig.Source)
 	return resourceConfig, nil
 }

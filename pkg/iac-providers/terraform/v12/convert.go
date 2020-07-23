@@ -1,7 +1,7 @@
 package tfv12
 
 /*
-	Following code has been borrowed from:
+	Following code has been borrowed and modifed from:
 	https://github.com/tmccombs/hcl2json/blob/5c1402dc2b410e362afee45a3cf15dcb08bc1f2c/convert.go
 */
 
@@ -45,9 +45,17 @@ func (c *converter) convertBody(body *hclsyntax.Body) (jsonObj, error) {
 	}
 
 	for _, block := range body.Blocks {
-		err = c.convertBlock(block, out)
+		blockOut := make(jsonObj)
+		err = c.convertBlock(block, blockOut)
 		if err != nil {
 			return nil, err
+		}
+		if _, present := out[block.Type]; !present {
+			out[block.Type] = []jsonObj{blockOut}
+		} else {
+			list := out[block.Type].([]jsonObj)
+			list = append(list, blockOut)
+			out[block.Type] = list
 		}
 	}
 
