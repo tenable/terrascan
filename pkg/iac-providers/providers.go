@@ -2,8 +2,9 @@ package iacProvider
 
 import (
 	"fmt"
-	"log"
 	"reflect"
+
+	"go.uber.org/zap"
 )
 
 // NewIacProvider returns a new IacProvider
@@ -12,9 +13,8 @@ func NewIacProvider(iacType, iacVersion string) (iacProvider IacProvider, err er
 	// get IacProvider from supportedIacProviders
 	iacProviderObject, supported := supportedIacProviders[supportedIacType(iacType)][supportedIacVersion(iacVersion)]
 	if !supported {
-		errMsg := fmt.Sprintf("IaC type:'%s', version: '%s' not supported", iacType, iacVersion)
-		log.Printf(errMsg)
-		return iacProvider, fmt.Errorf("errMsg")
+		zap.S().Errorf("IaC type:'%s', version: '%s' not supported", iacType, iacVersion)
+		return iacProvider, fmt.Errorf("iac not supported")
 	}
 
 	return reflect.New(iacProviderObject).Interface().(IacProvider), nil

@@ -1,16 +1,17 @@
 package httpServer
 
 import (
-	"log"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 func Start() {
 
-	log.Printf("terrascan server listening at port 9010")
+	zap.S().Info("terrascan server listening at port 9010")
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	log.Fatal(http.ListenAndServe(":9010", nil))
+	zap.S().Fatal(http.ListenAndServe(":9010", nil))
 }

@@ -2,10 +2,10 @@ package tfv12
 
 import (
 	"fmt"
-	"log"
 
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
+	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -25,13 +25,16 @@ func (*TfV12) LoadIacFile(filePath string) (allResourcesConfig output.AllResourc
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
-		log.Printf("failed to load config file '%s'. error:\n%v\n", diags)
+		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", diags)
 		return allResourcesConfig, fmt.Errorf("failed to load config file")
 	}
 	if hclFile == nil && diags.HasErrors() {
-		log.Printf("error occured while loading config file. error:\n%v\n", diags)
+		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
 		return allResourcesConfig, fmt.Errorf("failed to load config file")
 	}
+
+	// initialize normalized output
+	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	// traverse through all current's resources
 	for _, managedResource := range hclFile.ManagedResources {
@@ -43,7 +46,14 @@ func (*TfV12) LoadIacFile(filePath string) (allResourcesConfig output.AllResourc
 		}
 
 		// append resource config to list of all resources
-		allResourcesConfig = append(allResourcesConfig, resourceConfig)
+		// allResourcesConfig = append(allResourcesConfig, resourceConfig)
+
+		// append to normalized output
+		if _, present := allResourcesConfig[resourceConfig.Type]; !present {
+			allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
+		} else {
+			allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
+		}
 	}
 
 	// successful

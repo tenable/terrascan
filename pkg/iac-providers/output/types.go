@@ -10,4 +10,4 @@ type ResourceConfig struct {
 }
 
 // AllResourceConfigs is a list/slice of resource configs present in IaC
-type AllResourceConfigs []ResourceConfig
+type AllResourceConfigs map[string][]ResourceConfig

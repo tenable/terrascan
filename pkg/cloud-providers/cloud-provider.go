@@ -2,8 +2,9 @@ package cloudProvider
 
 import (
 	"fmt"
-	"log"
 	"reflect"
+
+	"go.uber.org/zap"
 )
 
 // NewCloudProvider returns a new CloudProvider
@@ -12,9 +13,8 @@ func NewCloudProvider(cloudType string) (cloudProvider CloudProvider, err error)
 	// get CloudProvider from supportedCloudProviders
 	cloudProviderObject, supported := supportedCloudProviders[supportedCloudType(cloudType)]
 	if !supported {
-		errMsg := fmt.Sprintf("cloud type '%s' not supported", cloudType)
-		log.Printf(errMsg)
-		return cloudProvider, fmt.Errorf("errMsg")
+		zap.S().Errorf("cloud type '%s' not supported", cloudType)
+		return cloudProvider, fmt.Errorf("cloud type not supported")
 	}
 
 	return reflect.New(cloudProviderObject).Interface().(CloudProvider), nil

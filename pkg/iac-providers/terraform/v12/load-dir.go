@@ -2,7 +2,6 @@ package tfv12
 
 import (
 	"fmt"
-	"log"
 	"path/filepath"
 	"strings"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
+	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -31,15 +31,14 @@ func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceC
 
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !parser.IsConfigDir(absRootDir) {
-		errMsg := fmt.Sprintf("directory '%s' has no terraform config files")
-		log.Printf(errMsg)
-		return allResourcesConfig, fmt.Errorf(errMsg)
+		zap.S().Errorf("directory '%s' has no terraform config files", absRootDir)
+		return allResourcesConfig, fmt.Errorf("directory has no terraform files")
 	}
 
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
-		log.Printf("failed to load terraform config dir '%s'. error:\n%+v\n", rootDir, diags)
+		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", rootDir, diags)
 		return allResourcesConfig, fmt.Errorf("failed to load terraform allResourcesConfig dir")
 	}
 
@@ -71,7 +70,7 @@ func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceC
 		},
 	))
 	if diags.HasErrors() {
-		log.Printf("failed to build unified config. errors:\n%+v\n", diags)
+		zap.S().Errorf("failed to build unified config. errors:\n%+v\n", diags)
 		return allResourcesConfig, fmt.Errorf("failed to build terraform allResourcesConfig")
 	}
 
@@ -88,7 +87,11 @@ func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceC
 	// queue of for BFS, add root module config to it
 	configsQ := []*hclConfigs.Config{unified.Root}
 
+	// initialize normalized output
+	allResourcesConfig = make(map[string][]output.ResourceConfig)
+
 	// using BFS traverse through all modules in the unified config tree
+	zap.S().Debug("traversing through all modules in config tree")
 	for len(configsQ) > 0 {
 
 		// pop first element from the queue
@@ -105,7 +108,14 @@ func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceC
 			}
 
 			// append resource config to list of all resources
-			allResourcesConfig = append(allResourcesConfig, resourceConfig)
+			// allResourcesConfig = append(allResourcesConfig, resourceConfig)
+
+			// append to normalized output
+			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
+				allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
+			} else {
+				allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
+			}
 		}
 
 		// add all current's children to the queue
