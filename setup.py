@@ -45,14 +45,14 @@ requirements = [
 
 setup(
     name='terrascan',
-    version='0.2.2',
+    version='0.2.3',
     description="Best practices tests for terraform",
     long_description=readme,
     author="Cesar Rodriguez",
     author_email='therasec@gmail.com',
     url='https://github.com/cesar-rodriguez/terrascan',
     download_url='https://github.com/cesar-rodriguez/terrascan' +
-    '/archive/v0.2.2.tar.gz',
+    '/archive/v0.2.3.tar.gz',
     packages=find_packages(where='.'),
     entry_points={
         'console_scripts': [
