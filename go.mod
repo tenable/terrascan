@@ -9,4 +9,6 @@ require (
 	github.com/spf13/afero v1.3.2
 	github.com/zclconf/go-cty v1.2.1
 	go.uber.org/zap v1.9.1
+	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/tools v0.0.0-20200723000907-a7c6fd066f6d // indirect
 )
