@@ -888,7 +888,7 @@ def terrascan(args):
     start = time.time()
 
     try:
-        result = subprocess.run(['pip', 'show', 'terrascan-sf'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(['pip', 'show', 'terrascan'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout = result.stdout.decode("utf-8")
         versionStr = "Version: "
         startIndex = stdout.find(versionStr)
