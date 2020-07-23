@@ -1,4 +1,4 @@
-package iacProvider
+package iacprovider
 
 import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"

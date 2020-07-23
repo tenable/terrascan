@@ -93,8 +93,8 @@ func (r *Executor) ValidateInputs() error {
 	return nil
 }
 
-// Process validates the inputs, processes the IaC, creates json output
-func (r *Executor) Process() error {
+// Execute validates the inputs, processes the IaC, creates json output
+func (r *Executor) Execute() error {
 
 	// validate inputs
 	if err := r.ValidateInputs(); err != nil {
@@ -125,7 +125,7 @@ func (r *Executor) Process() error {
 		zap.S().Errorf("failed to create a new CloudProvider for cloudType '%s'. error: '%s'", r.cloudType, err)
 		return err
 	}
-	normalized, err := cloudProvider.CreateNormalizedJson(iacOut)
+	normalized, err := cloudProvider.CreateNormalizedJSON(iacOut)
 	if err != nil {
 		return err
 	}

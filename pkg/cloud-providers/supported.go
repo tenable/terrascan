@@ -1,4 +1,4 @@
-package cloudProvider
+package cloudprovider
 
 import (
 	"reflect"

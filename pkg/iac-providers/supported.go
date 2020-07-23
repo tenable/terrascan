@@ -1,4 +1,4 @@
-package iacProvider
+package iacprovider
 
 import (
 	"reflect"

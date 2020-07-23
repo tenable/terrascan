@@ -1,4 +1,4 @@
-package cloudProvider
+package cloudprovider
 
 import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -7,5 +7,5 @@ import (
 // CloudProvider defines the interface which every cloud provider needs to implement
 // to claim support in terrascan
 type CloudProvider interface {
-	CreateNormalizedJson(output.AllResourceConfigs) (interface{}, error)
+	CreateNormalizedJSON(output.AllResourceConfigs) (interface{}, error)
 }

@@ -25,6 +25,7 @@ func getLoggerLevel(lvl string) zapcore.Level {
 	return zapcore.InfoLevel
 }
 
+// Init initializes global custom zap logger
 func Init(encoding, level string) {
 
 	encodingLevel := zapcore.LowercaseColorLevelEncoder

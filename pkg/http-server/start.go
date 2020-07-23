@@ -1,4 +1,4 @@
-package httpServer
+package httpserver
 
 import (
 	"net/http"
@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// Start starts the terrascan http server
 func Start() {
 
 	zap.S().Info("terrascan server listening at port 9010")
