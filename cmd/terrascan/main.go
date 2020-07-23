@@ -27,7 +27,7 @@ func main() {
 
 	// if server mode set, run terrascan as a server, else run it as CLI
 	if *server {
-		logger.Init("json", *logLevel)
+		logger.Init(*logType, *logLevel)
 		httpServer.Start()
 	} else {
 		logger.Init(*logType, *logLevel)
