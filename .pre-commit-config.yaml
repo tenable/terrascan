@@ -14,7 +14,7 @@
         verbose: true
 # Here's an example on how to setup terrascan as a pre-commit
 #-   repo: https://github.com/cesar-rodriguez/terrascan
-#    rev: v0.1.2
+#    rev: v0.2.3
 #    hooks:
 #    -   id: terrascan
 #        pass_filenames: false
