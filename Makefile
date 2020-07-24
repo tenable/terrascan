@@ -1,7 +1,7 @@
 GITCOMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -v -ldflags "-w -s"
 
-BUILD_DIR = build
+BUILD_DIR = bin
 BINARY_NAME = terrascan
 
 
@@ -22,7 +22,7 @@ clean:
 
 
 # run all validation tests
-validate: gofmt govet golint
+validate: gofmt govet golint gomodverify
 
 
 # gofmt validation
@@ -39,3 +39,8 @@ golint:
 # govet validation
 govet:
 	./scripts/validate-govet.sh
+
+
+# go mod validation
+gomodverify:
+	go mod verify
