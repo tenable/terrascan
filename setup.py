@@ -26,14 +26,13 @@ Terrascan
      :alt: Updates
 
 
-A collection of security and best practice tests for static code analysis of terraform_ templates using terraform_validate_.
+A linter for security best practices testing of Terraform_ templates.
 
-.. _terraform: https://www.terraform.io
-.. _terraform_validate: https://github.com/elmundio87/terraform_validate
+.. _Terraform: https://www.terraform.io
 
 * GitHub Repo: https://github.com/cesar-rodriguez/terrascan
 * Documentation: https://terrascan.readthedocs.io.
-* Free software: GNU General Public License v3
+* Free software: Apache-2.0
 '''
 
 with open('HISTORY.rst') as history_file:
@@ -44,14 +43,14 @@ requirements = [
 ]
 
 setup(
-    name='terrascan',
+    name='Terrascan',
     version='0.2.3',
-    description="Best practices tests for terraform",
+    description="Security best practice static code analysis for terraform",
     long_description=readme,
-    author="Cesar Rodriguez",
-    author_email='therasec@gmail.com',
-    url='https://github.com/cesar-rodriguez/terrascan',
-    download_url='https://github.com/cesar-rodriguez/terrascan' +
+    author="Accurics",
+    author_email='support@accurics.com',
+    url='https://github.com/accurics/terrascan',
+    download_url='https://github.com/accurics/terrascan' +
     '/archive/v0.2.3.tar.gz',
     packages=find_packages(where='.'),
     entry_points={
@@ -60,13 +59,13 @@ setup(
         ]
     },
     include_package_data=True,
-    license="GNU General Public License v3",
+    license="Apache-2.0",
     zip_safe=False,
     keywords='terrascan',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
