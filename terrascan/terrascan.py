@@ -903,7 +903,7 @@ def terrascan(args):
     version = get_version()
 
     # process the arguments
-    if args.version is not None:
+    if args.version:
         print(f'Terrascan v{version}')
         sys.exit(0)
 
