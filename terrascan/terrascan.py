@@ -882,27 +882,31 @@ class Rules(unittest.TestCase):
         return False
 
 
+def get_version():
+    '''
+    Returns the currently installed version of Terrascan
+    '''
+    try:
+        result = subprocess.run(['pip', 'show', 'terrascan'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout = result.stdout.decode("utf-8")
+        version = stdout.split('Version: ')[1].split('\n')[0]
+    except:
+        version = "?"
+    return version
+
+
 #################################################################################################
 # run the tests
 #################################################################################################
 def terrascan(args):
     start = time.time()
-
-    try:
-        result = subprocess.run(['pip', 'show', 'terrascan'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout = result.stdout.decode("utf-8")
-        versionStr = "Version: "
-        startIndex = stdout.find(versionStr)
-    except:
-        startIndex = -1
-    if startIndex == -1:
-        version = "?"
-    else:
-        startIndex += len(versionStr)
-        endIndex = stdout.find("\r", startIndex)
-        version = stdout[startIndex:endIndex]
+    version = get_version()
 
     # process the arguments
+    if args.version is not None:
+        print(f'Terrascan v{version}')
+        sys.exit(0)
+
     if args.location is None and args.files is None:
         print('ERROR: Using one of -l or -f flags is required.')
         sys.exit(1)
@@ -1079,7 +1083,13 @@ def create_parser():
         '-c',
         '--config',
         help='logging configuration:  error, warning, info, debug, or none; default is error',
-        nargs=1,    )
+        nargs=1,
+    )
+    parser.add_argument(
+        '--version',
+        help='get version of Terrascan',
+        action='store_true'
+    )
     parser.set_defaults(func=terrascan)
 
     return parser
