@@ -25,6 +25,7 @@ import sys
 import subprocess
 import json
 import time
+from shutil import copy2, rmtree
 from terrascan.embedded import terraform_validate
 import logging
 
@@ -902,9 +903,26 @@ def terrascan(args):
         version = stdout[startIndex:endIndex]
 
     # process the arguments
-    terraformLocation = args.location[0]
-    if not os.path.isabs(terraformLocation):
-        terraformLocation = os.path.join(os.sep, os.path.abspath("."),  terraformLocation)
+    if args.location is None and args.files is None:
+        print('ERROR: Using one of -l or -f flags is required.')
+        sys.exit(1)
+
+    if args.location is not None and args.files is not None:
+        print("ERROR: The -l or -f flags can't be use at the same time.")
+        sys.exit(1)
+
+    if args.location is not None:
+        terraformLocation = args.location[0]
+        if not os.path.isabs(terraformLocation):
+            terraformLocation = os.path.join(os.sep, os.path.abspath("."), terraformLocation)
+
+    if args.files is not None:
+        terraformLocation = os.path.join(os.sep, os.path.abspath("."), '.terrascan')
+        if not os.path.exists(terraformLocation):
+            os.makedirs(terraformLocation)
+        for file in args.files:
+            copy2(file, terraformLocation)
+
     if args.vars:
         variablesJsonFilename = []
         for fileName in args.vars:
@@ -1011,6 +1029,9 @@ def terrascan(args):
         for rule in Rules.rules:
             print(rule)
 
+    if args.files is not None:
+        rmtree(terraformLocation)
+
     sys.exit(rc)
 
 
@@ -1022,8 +1043,13 @@ def create_parser():
         '-l',
         '--location',
         help='location of terraform templates to scan',
-        nargs=1,
-        required=True
+        nargs=1
+    )
+    parser.add_argument(
+        '-f',
+        '--files',
+        help='terraform hcl files to scan',
+        nargs='*'
     )
     parser.add_argument(
         '-v',
