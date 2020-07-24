@@ -28,7 +28,6 @@ validate: gofmt govet golint gomodverify
 # gofmt validation
 gofmt:
 	./scripts/validate-gofmt.sh
-	./scripts/fix-gofmt.sh
 
 
 # golint validation
