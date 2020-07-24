@@ -18,6 +18,8 @@ func GetAbsPath(path string) (string, error) {
 		homeDir := os.Getenv("HOME")
 		if len(path) > 1 {
 			path = filepath.Join(homeDir, path[1:])
+		} else {
+			return homeDir, nil
 		}
 	}
 

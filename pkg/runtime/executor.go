@@ -129,7 +129,7 @@ func (r *Executor) Execute() error {
 	if err != nil {
 		return err
 	}
-	utils.PrintJSON(normalized)
+	utils.PrintJSON(normalized, os.Stdout)
 
 	// write output
 
