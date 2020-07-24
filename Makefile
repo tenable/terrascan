@@ -43,3 +43,8 @@ govet:
 # go mod validation
 gomodverify:
 	go mod verify
+
+
+# run unit tests
+unit-tests:
+	./scripts/generate-coverage.sh

@@ -26,3 +26,6 @@ jobs:
     - name: Build Terrascan
       run: |
         make build
+    - name: Run unit tests
+      run: |
+        make unit-tests
