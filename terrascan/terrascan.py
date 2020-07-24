@@ -25,6 +25,7 @@ import sys
 import subprocess
 import json
 import time
+from shutil import copy2, rmtree
 from terrascan.embedded import terraform_validate
 import logging
 
@@ -881,30 +882,51 @@ class Rules(unittest.TestCase):
         return False
 
 
+def get_version():
+    '''
+    Returns the currently installed version of Terrascan
+    '''
+    try:
+        result = subprocess.run(['pip', 'show', 'terrascan'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout = result.stdout.decode("utf-8")
+        version = stdout.split('Version: ')[1].split('\n')[0]
+    except:
+        version = "?"
+    return version
+
+
 #################################################################################################
 # run the tests
 #################################################################################################
 def terrascan(args):
     start = time.time()
-
-    try:
-        result = subprocess.run(['pip', 'show', 'terrascan-sf'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout = result.stdout.decode("utf-8")
-        versionStr = "Version: "
-        startIndex = stdout.find(versionStr)
-    except:
-        startIndex = -1
-    if startIndex == -1:
-        version = "?"
-    else:
-        startIndex += len(versionStr)
-        endIndex = stdout.find("\r", startIndex)
-        version = stdout[startIndex:endIndex]
+    version = get_version()
 
     # process the arguments
-    terraformLocation = args.location[0]
-    if not os.path.isabs(terraformLocation):
-        terraformLocation = os.path.join(os.sep, os.path.abspath("."),  terraformLocation)
+    if args.version:
+        print(f'Terrascan v{version}')
+        sys.exit(0)
+
+    if args.location is None and args.files is None:
+        print('ERROR: Using one of -l or -f flags is required.')
+        sys.exit(1)
+
+    if args.location is not None and args.files is not None:
+        print("ERROR: The -l or -f flags can't be use at the same time.")
+        sys.exit(1)
+
+    if args.location is not None:
+        terraformLocation = args.location[0]
+        if not os.path.isabs(terraformLocation):
+            terraformLocation = os.path.join(os.sep, os.path.abspath("."), terraformLocation)
+
+    if args.files is not None:
+        terraformLocation = os.path.join(os.sep, os.path.abspath("."), '.terrascan')
+        if not os.path.exists(terraformLocation):
+            os.makedirs(terraformLocation)
+        for file in args.files:
+            copy2(file, terraformLocation)
+
     if args.vars:
         variablesJsonFilename = []
         for fileName in args.vars:
@@ -1011,6 +1033,9 @@ def terrascan(args):
         for rule in Rules.rules:
             print(rule)
 
+    if args.files is not None:
+        rmtree(terraformLocation)
+
     sys.exit(rc)
 
 
@@ -1022,8 +1047,13 @@ def create_parser():
         '-l',
         '--location',
         help='location of terraform templates to scan',
-        nargs=1,
-        required=True
+        nargs=1
+    )
+    parser.add_argument(
+        '-f',
+        '--files',
+        help='terraform hcl files to scan',
+        nargs='*'
     )
     parser.add_argument(
         '-v',
@@ -1053,7 +1083,13 @@ def create_parser():
         '-c',
         '--config',
         help='logging configuration:  error, warning, info, debug, or none; default is error',
-        nargs=1,    )
+        nargs=1,
+    )
+    parser.add_argument(
+        '--version',
+        help='get version of Terrascan',
+        action='store_true'
+    )
     parser.set_defaults(func=terrascan)
 
     return parser
