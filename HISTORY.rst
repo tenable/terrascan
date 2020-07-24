@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.3
+-----------
+* Introduces the '-f' flag for passing a list of ".tf" files for linting and the '--version' flag.
+
 0.2.2
 -----------
 * Adds Docker image and pipeline to push to DockerHub
