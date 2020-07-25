@@ -7,6 +7,10 @@ import (
 	"go.uber.org/zap"
 )
 
+var (
+	errIacNotSupported = fmt.Errorf("iac not supported")
+)
+
 // NewIacProvider returns a new IacProvider
 func NewIacProvider(iacType, iacVersion string) (iacProvider IacProvider, err error) {
 
@@ -14,7 +18,7 @@ func NewIacProvider(iacType, iacVersion string) (iacProvider IacProvider, err er
 	iacProviderObject, supported := supportedIacProviders[supportedIacType(iacType)][supportedIacVersion(iacVersion)]
 	if !supported {
 		zap.S().Errorf("IaC type:'%s', version: '%s' not supported", iacType, iacVersion)
-		return iacProvider, fmt.Errorf("iac not supported")
+		return iacProvider, errIacNotSupported
 	}
 
 	return reflect.New(iacProviderObject).Interface().(IacProvider), nil
