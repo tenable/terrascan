@@ -2,9 +2,24 @@ package utils
 
 import (
 	"bytes"
+	"io/ioutil"
 	"strings"
 	"testing"
 )
+
+const (
+	validJSONFile = "./testdata/valid.json"
+)
+
+var (
+	validJSON      []byte
+	validJSONInput = map[string]int{"apple": 5, "lettuce": 7}
+)
+
+func init() {
+	validJSON, _ = ioutil.ReadFile(validJSONFile)
+
+}
 
 func TestPrintJSON(t *testing.T) {
 
@@ -18,14 +33,19 @@ func TestPrintJSON(t *testing.T) {
 			input: make(map[string]interface{}),
 			want:  "{}",
 		},
+		{
+			name:  "valid JSON",
+			input: validJSONInput,
+			want:  string(validJSON),
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			got := &bytes.Buffer{}
 			PrintJSON(tt.input, got)
-			if strings.TrimSpace(got.String()) != tt.want {
-				t.Errorf("got: '%v', want: '%v'", got, tt.want)
+			if strings.TrimSpace(got.String()) != strings.TrimSpace(tt.want) {
+				t.Errorf("got:\n'%v'\n, want:\n'%v'\n", got, tt.want)
 			}
 		})
 	}
