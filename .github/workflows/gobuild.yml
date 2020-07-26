@@ -29,3 +29,5 @@ jobs:
     - name: Run unit tests
       run: |
         make unit-tests
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
