@@ -18,14 +18,6 @@ import (
 
 type jsonObj map[string]interface{}
 
-// Convert an hcl File to a json serializable object
-// This assumes that the body is a hclsyntax.Body
-func convertFile(file *hcl.File) (jsonObj, error) {
-	c := converter{bytes: file.Bytes}
-	body := file.Body.(*hclsyntax.Body)
-	return c.convertBody(body)
-}
-
 type converter struct {
 	bytes []byte
 }
@@ -76,7 +68,7 @@ func (c *converter) convertBlock(block *hclsyntax.Block, out jsonObj) error {
 			out, ok = inner.(jsonObj)
 			if !ok {
 				// TODO: better diagnostics
-				return fmt.Errorf("Unable to conver Block to JSON: %v.%v", block.Type, strings.Join(block.Labels, "."))
+				return fmt.Errorf("unable to convert Block to JSON: %v.%v", block.Type, strings.Join(block.Labels, "."))
 			}
 		} else {
 			obj := make(jsonObj)
@@ -199,7 +191,7 @@ func (c *converter) convertTemplateConditional(expr *hclsyntax.ConditionalExpr) 
 		return "", nil
 	}
 	builder.WriteString(trueResult)
-	falseResult, err := c.convertStringPart(expr.FalseResult)
+	falseResult, _ := c.convertStringPart(expr.FalseResult)
 	if len(falseResult) > 0 {
 		builder.WriteString("%{else}")
 		builder.WriteString(falseResult)
