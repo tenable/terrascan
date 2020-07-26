@@ -8,17 +8,14 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
+)
+
+var (
+	errFailedLoadConfigFile = fmt.Errorf("failed to load config file")
 )
 
 // LoadIacFile parses the given terraform file from the given file path
-func (*TfV12) LoadIacFile(filePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-
-	// get absolute path
-	absFilePath, err := utils.GetAbsPath(filePath)
-	if err != nil {
-		return allResourcesConfig, err
-	}
+func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
@@ -26,11 +23,11 @@ func (*TfV12) LoadIacFile(filePath string) (allResourcesConfig output.AllResourc
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
 		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", diags)
-		return allResourcesConfig, fmt.Errorf("failed to load config file")
+		return allResourcesConfig, errFailedLoadConfigFile
 	}
 	if hclFile == nil && diags.HasErrors() {
 		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
-		return allResourcesConfig, fmt.Errorf("failed to load config file")
+		return allResourcesConfig, errFailedLoadConfigFile
 	}
 
 	// initialize normalized output

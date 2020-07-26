@@ -12,19 +12,16 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
+)
+
+var (
+	errDirEmptyTFConfig = fmt.Errorf("directory has no terraform files")
 )
 
 // LoadIacDir starts traversing from the given rootDir and traverses through
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
-func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
-
-	// get absolute path
-	absRootDir, err := utils.GetAbsPath(rootDir)
-	if err != nil {
-		return allResourcesConfig, err
-	}
+func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	// create a new config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
@@ -32,13 +29,13 @@ func (*TfV12) LoadIacDir(rootDir string) (allResourcesConfig output.AllResourceC
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !parser.IsConfigDir(absRootDir) {
 		zap.S().Errorf("directory '%s' has no terraform config files", absRootDir)
-		return allResourcesConfig, fmt.Errorf("directory has no terraform files")
+		return allResourcesConfig, errDirEmptyTFConfig
 	}
 
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
-		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", rootDir, diags)
+		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
 		return allResourcesConfig, fmt.Errorf("failed to load terraform allResourcesConfig dir")
 	}
 
