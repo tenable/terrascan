@@ -28,15 +28,26 @@ func getLoggerLevel(lvl string) zapcore.Level {
 // Init initializes global custom zap logger
 func Init(encoding, level string) {
 
+	// select encoding level
 	encodingLevel := zapcore.LowercaseColorLevelEncoder
 	if encoding == "json" {
 		encodingLevel = zapcore.LowercaseLevelEncoder
 	}
 
+	// get logger
+	logger := GetLogger(level, encoding, encodingLevel)
+
+	// initialize global logger
+	zap.ReplaceGlobals(logger)
+}
+
+// GetLogger creates a customer zap logger
+func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)) *zap.Logger {
+
 	// build zap config
 	zapConfig := zap.Config{
 		Encoding:    encoding,
-		Level:       zap.NewAtomicLevelAt(getLoggerLevel(level)),
+		Level:       zap.NewAtomicLevelAt(getLoggerLevel(logLevel)),
 		OutputPaths: []string{"stdout"},
 		EncoderConfig: zapcore.EncoderConfig{
 			LevelKey:     "level",
@@ -48,8 +59,9 @@ func Init(encoding, level string) {
 			EncodeCaller: zapcore.ShortCallerEncoder,
 		},
 	}
+
+	// create zap logger
 	logger, _ := zapConfig.Build()
 
-	// initialize global logger
-	zap.ReplaceGlobals(logger)
+	return logger
 }
