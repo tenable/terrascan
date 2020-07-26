@@ -8,7 +8,10 @@ import (
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath string) {
 
 	// create a new runtime executor for processing IaC
-	executor := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
+	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
 		iacDirPath)
+	if err != nil {
+		return
+	}
 	executor.Execute()
 }
