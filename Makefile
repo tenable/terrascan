@@ -6,8 +6,23 @@ BINARY_NAME = terrascan
 
 
 # default
-default: build
+default: help
 
+
+# help
+help:
+	@echo "usage: make [command]\ncommands:"
+	@echo "build\n\tbuild terrascan binary"
+	@echo "cicd\n\tsimulate CI/CD pipeline locally"
+	@echo "clean\n\tclean up build"
+	@echo "gofmt\n\tvalidate gofmt"
+	@echo "golint\n\tvalidate golint"
+	@echo "gomodverify\n\tverify go modules"
+	@echo "govet\n\tvalidate govet"
+	@echo "staticcheck\n\trun static code analysis"
+	@echo "test\n\texecute unit and integration tests"
+	@echo "unit-tests\n\texecute unit tests"
+	@echo "validate\n\trun all validations"
 
 # build terrascan binary
 build: clean
@@ -21,8 +36,16 @@ clean:
 	@rm -rf $(BUILD_DIR)
 
 
+# run all cicd steps
+cicd: validate build test
+
+
+# run all unit and integration tests
+test: unit-tests
+
+
 # run all validation tests
-validate: gofmt govet golint gomodverify
+validate: gofmt govet golint gomodverify staticcheck
 
 
 # gofmt validation
@@ -43,6 +66,11 @@ govet:
 # go mod validation
 gomodverify:
 	go mod verify
+
+
+# static code analysis
+staticcheck:
+	./scripts/staticcheck.sh
 
 
 # run unit tests
