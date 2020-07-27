@@ -45,7 +45,7 @@ test: unit-tests
 
 
 # run all validation tests
-validate: gofmt govet golint gomodverify
+validate: gofmt govet golint gomodverify staticcheck
 
 
 # gofmt validation
