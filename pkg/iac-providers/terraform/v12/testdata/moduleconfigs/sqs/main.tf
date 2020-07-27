@@ -1,7 +1,3 @@
-resource "aws_sqs_queue" "sqsSseDisabled" {
-  name = "terraform-example-queue"
-}
-
 resource "aws_sqs_queue" "sqsQueueExposed" {
   name                              = "terraform-example-queue"
   kms_master_key_id                 = "alias/aws/sqs"

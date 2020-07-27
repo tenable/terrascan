@@ -56,6 +56,13 @@ func TestLoadIacDir(t *testing.T) {
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
+		{
+			name:        "module directory",
+			tfConfigDir: "./testdata/moduleconfigs",
+			tfJSONFile:  "./testdata/tfjson/moduleconfigs.json",
+			tfv12:       TfV12{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {
