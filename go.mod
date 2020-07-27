@@ -11,4 +11,5 @@ require (
 	go.uber.org/zap v1.9.1
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/tools v0.0.0-20200723000907-a7c6fd066f6d // indirect
+	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
 )
