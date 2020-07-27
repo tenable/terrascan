@@ -1,7 +1,7 @@
 GITCOMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -v -ldflags "-w -s"
 
-BUILD_DIR = bin
+BUILD_DIR = ./bin
 BINARY_NAME = terrascan
 
 
@@ -13,7 +13,7 @@ default: build
 build: clean
 	@mkdir -p $(BUILD_DIR) > /dev/null
 	go build ${BUILD_FLAGS} -o ${BUILD_DIR}/${BINARY_NAME} cmd/terrascan/main.go
-	@echo "terrascan binary created in ${BUILD_DIR} directory"
+	@echo "binary created at ${BUILD_DIR}/${BINARY_NAME}"
 
 
 # clean build 
