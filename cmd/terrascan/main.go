@@ -23,7 +23,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
-	"github.com/accurics/terrascan/pkg/logger"
+	"github.com/accurics/terrascan/pkg/logging"
 )
 
 func main() {
@@ -43,10 +43,10 @@ func main() {
 
 	// if server mode set, run terrascan as a server, else run it as CLI
 	if *server {
-		logger.Init(*logType, *logLevel)
+		logging.Init(*logType, *logLevel)
 		httpServer.Start()
 	} else {
-		logger.Init(*logType, *logLevel)
+		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
 		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath)
 	}

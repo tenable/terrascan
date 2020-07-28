@@ -14,12 +14,14 @@
     limitations under the License.
 */
 
-package logger
+package logging
 
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
+
+var globalLogger *zap.SugaredLogger
 
 // levelMap maps human readable log level to zapcore.Level
 var levelMap = map[string]zapcore.Level{
@@ -53,6 +55,9 @@ func Init(encoding, level string) {
 	// get logger
 	logger := GetLogger(level, encoding, encodingLevel)
 
+	// set global Logger as well
+	globalLogger = logger.Sugar()
+
 	// initialize global logger
 	zap.ReplaceGlobals(logger)
 }
@@ -80,4 +85,9 @@ func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapc
 	logger, _ := zapConfig.Build()
 
 	return logger
+}
+
+// GetDefaultLogger returns the globalLogger
+func GetDefaultLogger() *zap.SugaredLogger {
+	return globalLogger
 }

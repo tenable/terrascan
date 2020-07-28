@@ -17,18 +17,70 @@
 package httpserver
 
 import (
+	"context"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
-	"go.uber.org/zap"
+	"github.com/accurics/terrascan/pkg/logging"
+	"github.com/gorilla/mux"
 )
 
-// Start starts the terrascan http server
+// Start initializes api routes and starts http server
 func Start() {
+	// create a new API gateway
+	g := NewAPIGateway()
 
-	zap.S().Info("terrascan server listening at port 9010")
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
+	// get all routes
+	routes := g.Routes()
 
-	zap.S().Fatal(http.ListenAndServe(":9010", nil))
+	// register routes and start the http server
+	g.start(routes)
+}
+
+// start http server
+func (g *APIGateway) start(routes []*Route) {
+
+	var (
+		err    error
+		logger = logging.GetDefaultLogger() // new logger
+		router = mux.NewRouter()            // new router
+	)
+
+	logger.Info("registering routes...")
+
+	// register all routes
+	for _, v := range routes {
+		logger.Info("Route ", v.verb, " - ", v.path)
+		router.Methods(v.verb).Path(v.path).HandlerFunc(v.fn)
+	}
+
+	// start http server
+	server := &http.Server{
+		Addr:    ":" + GatewayDefaultPort,
+		Handler: router,
+	}
+
+	go func() {
+		err = server.ListenAndServe()
+		if err != nil && err != http.ErrServerClosed {
+			logger.Fatal(err)
+		}
+	}()
+	logger.Infof("http server listening at port %v", GatewayDefaultPort)
+
+	// Wait for interrupt signal to gracefully shutdown the server
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	// try to stop the server gracefully with default 5 second timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	err = server.Shutdown(ctx)
+	if err != nil {
+		logger.Fatalf("server failed to exit gracefully. error: '%v'", err)
+	}
+	logger.Info("server exiting gracefully")
 }
