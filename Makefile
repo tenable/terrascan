@@ -27,6 +27,7 @@ help:
 # build terrascan binary
 build: clean
 	@mkdir -p $(BUILD_DIR) > /dev/null
+	@export GO111MODULE=on
 	go build ${BUILD_FLAGS} -o ${BUILD_DIR}/${BINARY_NAME} cmd/terrascan/main.go
 	@echo "binary created at ${BUILD_DIR}/${BINARY_NAME}"
 
