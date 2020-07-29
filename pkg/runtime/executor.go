@@ -22,20 +22,18 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 
-	cloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // Executor object
 type Executor struct {
-	filePath      string
-	dirPath       string
-	cloudType     string
-	iacType       string
-	iacVersion    string
-	iacProvider   iacProvider.IacProvider
-	cloudProvider cloudProvider.CloudProvider
+	filePath    string
+	dirPath     string
+	cloudType   string
+	iacType     string
+	iacVersion  string
+	iacProvider iacProvider.IacProvider
 }
 
 // NewExecutor creates a runtime object
@@ -72,13 +70,6 @@ func (e *Executor) Init() error {
 		return err
 	}
 
-	// create new CloudProvider
-	e.cloudProvider, err = cloudProvider.NewCloudProvider(e.cloudType)
-	if err != nil {
-		zap.S().Errorf("failed to create a new CloudProvider for cloudType '%s'. error: '%s'", e.cloudType, err)
-		return err
-	}
-
 	return nil
 }
 
@@ -87,21 +78,15 @@ func (e *Executor) Execute() error {
 
 	// load iac config
 	var (
-		iacOut output.AllResourceConfigs
-		err    error
+		normalized output.AllResourceConfigs
+		err        error
 	)
 	if e.dirPath != "" {
-		iacOut, err = e.iacProvider.LoadIacDir(e.dirPath)
+		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
 		// create config from IaC
-		iacOut, err = e.iacProvider.LoadIacFile(e.filePath)
+		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
-	if err != nil {
-		return err
-	}
-
-	// create normalized json
-	normalized, err := e.cloudProvider.CreateNormalizedJSON(iacOut)
 	if err != nil {
 		return err
 	}

@@ -21,17 +21,14 @@ import (
 	"reflect"
 	"testing"
 
-	cloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
-	awsProvider "github.com/accurics/terrascan/pkg/cloud-providers/aws"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 )
 
 var (
-	errMockLoadIacDir           = fmt.Errorf("mock LoadIacDir")
-	errMockLoadIacFile          = fmt.Errorf("mock LoadIacFile")
-	errMockCreateNormalizedJSON = fmt.Errorf("mock CreateNormalizedJSON")
+	errMockLoadIacDir  = fmt.Errorf("mock LoadIacDir")
+	errMockLoadIacFile = fmt.Errorf("mock LoadIacFile")
 )
 
 // MockIacProvider mocks IacProvider interface
@@ -48,15 +45,6 @@ func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, er
 	return m.output, m.err
 }
 
-// MockCloudProvider mocks CloudProvider interface
-type MockCloudProvider struct {
-	err error
-}
-
-func (m MockCloudProvider) CreateNormalizedJSON(data output.AllResourceConfigs) (mockInterface interface{}, err error) {
-	return data, m.err
-}
-
 func TestExecute(t *testing.T) {
 
 	table := []struct {
@@ -65,7 +53,7 @@ func TestExecute(t *testing.T) {
 		wantErr  error
 	}{
 		{
-			name: "test LoadIacDir",
+			name: "test LoadIacDir error",
 			executor: Executor{
 				dirPath:     "./testdata/testdir",
 				iacProvider: MockIacProvider{err: errMockLoadIacDir},
@@ -73,7 +61,15 @@ func TestExecute(t *testing.T) {
 			wantErr: errMockLoadIacDir,
 		},
 		{
-			name: "test LoadIacFile",
+			name: "test LoadIacDir no error",
+			executor: Executor{
+				dirPath:     "./testdata/testdir",
+				iacProvider: MockIacProvider{err: nil},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "test LoadIacFile error",
 			executor: Executor{
 				filePath:    "./testdata/testfile",
 				iacProvider: MockIacProvider{err: errMockLoadIacFile},
@@ -81,20 +77,10 @@ func TestExecute(t *testing.T) {
 			wantErr: errMockLoadIacFile,
 		},
 		{
-			name: "test CreateNormalizedJSON error",
+			name: "test LoadIacFile no error",
 			executor: Executor{
-				filePath:      "./testdata/testfile",
-				iacProvider:   MockIacProvider{err: nil},
-				cloudProvider: MockCloudProvider{err: errMockCreateNormalizedJSON},
-			},
-			wantErr: errMockCreateNormalizedJSON,
-		},
-		{
-			name: "test CreateNormalizedJSON",
-			executor: Executor{
-				filePath:      "./testdata/testfile",
-				iacProvider:   MockIacProvider{err: nil},
-				cloudProvider: MockCloudProvider{err: nil},
+				filePath:    "./testdata/testfile",
+				iacProvider: MockIacProvider{err: nil},
 			},
 			wantErr: nil,
 		},
@@ -113,11 +99,10 @@ func TestExecute(t *testing.T) {
 func TestInit(t *testing.T) {
 
 	table := []struct {
-		name              string
-		executor          Executor
-		wantErr           error
-		wantIacProvider   iacProvider.IacProvider
-		wantCloudProvider cloudProvider.CloudProvider
+		name            string
+		executor        Executor
+		wantErr         error
+		wantIacProvider iacProvider.IacProvider
 	}{
 		{
 			name: "valid filePath",
@@ -128,9 +113,8 @@ func TestInit(t *testing.T) {
 				iacType:    "terraform",
 				iacVersion: "v12",
 			},
-			wantErr:           nil,
-			wantIacProvider:   &tfv12.TfV12{},
-			wantCloudProvider: &awsProvider.AWSProvider{},
+			wantErr:         nil,
+			wantIacProvider: &tfv12.TfV12{},
 		},
 	}
 
@@ -141,9 +125,6 @@ func TestInit(t *testing.T) {
 		}
 		if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
 			t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
-		}
-		if !reflect.DeepEqual(tt.executor.cloudProvider, tt.wantCloudProvider) {
-			t.Errorf("got: '%v', want: '%v'", tt.executor.cloudProvider, tt.wantCloudProvider)
 		}
 	}
 }

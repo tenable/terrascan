@@ -81,17 +81,6 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: errDirNotExists,
 		},
 		{
-			name: "invalid cloud",
-			executor: Executor{
-				filePath:   "",
-				dirPath:    "./testdata/testdir",
-				cloudType:  "nothere",
-				iacType:    "terraform",
-				iacVersion: "v12",
-			},
-			wantErr: errCloudNotSupported,
-		},
-		{
 			name: "invalid iac type",
 			executor: Executor{
 				filePath:   "",
