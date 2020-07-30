@@ -17,7 +17,10 @@
 package cli
 
 import (
+	"os"
+
 	"github.com/accurics/terrascan/pkg/runtime"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 // Run executes terrascan in CLI mode
@@ -29,5 +32,9 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath string) {
 	if err != nil {
 		return
 	}
-	executor.Execute()
+	normalized, err := executor.Execute()
+	if err != nil {
+		return
+	}
+	utils.PrintJSON(normalized, os.Stdout)
 }

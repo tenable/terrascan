@@ -30,7 +30,8 @@ type Route struct {
 // Routes returns a slice of routes of API endpoints registered with http server
 func (g *APIGateway) Routes() []*Route {
 	return []*Route{
-		{verb: "GET", path: path("health", APIVersion), fn: g.Health},
+		{verb: "GET", path: "/health", fn: g.Health},
+		{verb: "POST", path: path("{iac}/{iacVersion}/{cloud}/local/file/scan", APIVersion), fn: g.scanFile},
 	}
 }
 

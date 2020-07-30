@@ -17,13 +17,9 @@
 package runtime
 
 import (
-	"os"
-
-	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // Executor object
@@ -74,13 +70,8 @@ func (e *Executor) Init() error {
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() error {
+func (e *Executor) Execute() (normalized interface{}, err error) {
 
-	// load iac config
-	var (
-		normalized output.AllResourceConfigs
-		err        error
-	)
 	if e.dirPath != "" {
 		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
@@ -88,12 +79,11 @@ func (e *Executor) Execute() error {
 		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
 	if err != nil {
-		return err
+		return normalized, err
 	}
-	utils.PrintJSON(normalized, os.Stdout)
 
 	// write output
 
 	// successful
-	return nil
+	return normalized, nil
 }

@@ -47,6 +47,7 @@ func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, er
 
 func TestExecute(t *testing.T) {
 
+	// TODO: add tests to validate output of Execute()
 	table := []struct {
 		name     string
 		executor Executor
@@ -88,7 +89,7 @@ func TestExecute(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			gotErr := tt.executor.Execute()
+			_, gotErr := tt.executor.Execute()
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
