@@ -10,11 +10,13 @@ default: help
 
 # help
 help:
+	# please keep the commands in lexicographical order
 	@echo "usage: make [command]\ncommands:"
 	@echo "build\n\tbuild terrascan binary"
 	@echo "cicd\n\tsimulate CI/CD pipeline locally"
 	@echo "clean\n\tclean up build"
 	@echo "docker-build\n\tbuild terrascan docker image"
+	@echo "docker-push\n\tpush terrascan docker image"
 	@echo "gofmt\n\tvalidate gofmt"
 	@echo "golint\n\tvalidate golint"
 	@echo "gomodverify\n\tverify go modules"
@@ -82,3 +84,8 @@ unit-tests:
 # build terrascan docker image
 docker-build:
 	./scripts/docker-build.sh
+
+
+# push terrascan docker image
+docker-push:
+	./scripts/docker-push.sh
