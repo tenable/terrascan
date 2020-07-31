@@ -8,9 +8,8 @@ BINARY_NAME = terrascan
 default: help
 
 
-# help
+# please keep the commands in lexicographical order
 help:
-	# please keep the commands in lexicographical order
 	@echo "usage: make [command]\ncommands:"
 	@echo "build\n\tbuild terrascan binary"
 	@echo "cicd\n\tsimulate CI/CD pipeline locally"
