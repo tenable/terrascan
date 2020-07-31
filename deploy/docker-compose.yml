@@ -1,0 +1,6 @@
+version: "3"
+services:
+  terrascan:
+    image: accurics/terrascan:${TAG:-latest}
+    ports:
+      - 9010:9010
