@@ -1,9 +1,8 @@
-GITCOMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
+GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -v -ldflags "-w -s"
 
 BUILD_DIR = ./bin
 BINARY_NAME = terrascan
-
 
 # default
 default: help
@@ -15,6 +14,7 @@ help:
 	@echo "build\n\tbuild terrascan binary"
 	@echo "cicd\n\tsimulate CI/CD pipeline locally"
 	@echo "clean\n\tclean up build"
+	@echo "docker-build\n\tbuild terrascan docker image"
 	@echo "gofmt\n\tvalidate gofmt"
 	@echo "golint\n\tvalidate golint"
 	@echo "gomodverify\n\tverify go modules"
@@ -38,7 +38,7 @@ clean:
 
 
 # run all cicd steps
-cicd: validate build test
+cicd: validate build test docker-build
 
 
 # run all unit and integration tests
@@ -77,3 +77,8 @@ staticcheck:
 # run unit tests
 unit-tests:
 	./scripts/generate-coverage.sh
+
+
+# build terrascan docker image
+docker-build:
+	./scripts/docker-build.sh
