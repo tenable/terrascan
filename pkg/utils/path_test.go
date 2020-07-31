@@ -42,6 +42,12 @@ func TestGetAbsPath(t *testing.T) {
 			wantErr: nil,
 		},
 		{
+			name:    "dir in HOME dir",
+			path:    "~/somedir",
+			want:    os.Getenv("HOME") + "/somedir",
+			wantErr: nil,
+		},
+		{
 			name:    "testdata dir",
 			path:    "./testdata",
 			want:    os.Getenv("PWD") + "/testdata",
