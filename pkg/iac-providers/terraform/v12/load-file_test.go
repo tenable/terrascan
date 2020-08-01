@@ -39,13 +39,19 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv12:    TfV12{},
-			wantErr:  errFailedLoadConfigFile,
+			wantErr:  errLoadConfigFile,
 		},
 		{
 			name:     "empty config",
 			filePath: "./testdata/testfile",
 			tfv12:    TfV12{},
 			wantErr:  nil,
+		},
+		{
+			name:     "invalid config",
+			filePath: "./testdata/empty.tf",
+			tfv12:    TfV12{},
+			wantErr:  errLoadConfigFile,
 		},
 	}
 
