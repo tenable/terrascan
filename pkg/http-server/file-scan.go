@@ -29,7 +29,7 @@ import (
 )
 
 // scanFile accepts uploaded file and runs scan on it
-func (g *APIGateway) scanFile(w http.ResponseWriter, r *http.Request) {
+func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	// new logger
 	logger := logging.GetDefaultLogger()

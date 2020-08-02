@@ -16,11 +16,10 @@
 
 package httpserver
 
-// APIGateway implements all the API endpoints, APIGateway should store all the
-// metadata info which may be required by all the API handlers
-type APIGateway struct{}
+// APIServer struct for http api server
+type APIServer struct{}
 
-// NewAPIGateway returns a new APIGateway{}
-func NewAPIGateway() *APIGateway {
-	return &APIGateway{}
+// NewAPIServer returns a new APIServer{}
+func NewAPIServer() *APIServer {
+	return &APIServer{}
 }

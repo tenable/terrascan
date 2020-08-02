@@ -21,6 +21,6 @@ import (
 )
 
 // Health returns the health of the http server
-func (g *APIGateway) Health(w http.ResponseWriter, r *http.Request) {
+func (g *APIHandler) Health(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }

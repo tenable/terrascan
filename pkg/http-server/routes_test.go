@@ -7,8 +7,8 @@ import (
 func TestRoutes(t *testing.T) {
 	t.Run("health route check", func(t *testing.T) {
 		var (
-			g      = NewAPIGateway()
-			got    = g.Routes()
+			server = NewAPIServer()
+			got    = server.Routes()
 			passed = false
 		)
 
@@ -41,7 +41,7 @@ func TestPath(t *testing.T) {
 	}
 
 	for _, tt := range table {
-		got := path(tt.route, tt.version)
+		got := versionedPath(tt.route)
 		if got != tt.want {
 			t.Errorf("got: '%v', want: '%v'", got, tt.want)
 		}

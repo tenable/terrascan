@@ -16,28 +16,10 @@
 
 package httpserver
 
-import (
-	"net/http"
-)
+// APIHandler struct for http api server
+type APIHandler struct{}
 
-// Route is a specification and  handler for a REST endpoint.
-type Route struct {
-	verb string
-	path string
-	fn   func(http.ResponseWriter, *http.Request)
-}
-
-// Routes returns a slice of routes of API endpoints to be registered with
-// http server
-func (g *APIServer) Routes() []*Route {
-	h := NewAPIHandler()
-	routes := []*Route{
-		{verb: "GET", path: "/health", fn: h.Health},
-		{verb: "POST", path: versionedPath("{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},
-	}
-	return routes
-}
-
-func versionedPath(route string) string {
-	return "/" + APIVersion + "/" + route
+// NewAPIHandler returns a new APIHandler{}
+func NewAPIHandler() *APIHandler {
+	return &APIHandler{}
 }
