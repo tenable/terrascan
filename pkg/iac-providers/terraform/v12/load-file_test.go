@@ -78,6 +78,13 @@ func TestLoadIacFile(t *testing.T) {
 			tfv12:        TfV12{},
 			wantErr:      nil,
 		},
+		{
+			name:         "config1",
+			tfConfigFile: "./testdata/dummyconfig/dummyconfig.tf",
+			tfJSONFile:   "./testdata/tfjson/dummyconfig.json",
+			tfv12:        TfV12{},
+			wantErr:      nil,
+		},
 	}
 
 	for _, tt := range table2 {
