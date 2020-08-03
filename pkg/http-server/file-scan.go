@@ -23,16 +23,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/accurics/terrascan/pkg/logging"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 )
 
 // scanFile accepts uploaded file and runs scan on it
 func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
-
-	// new logger
-	logger := logging.GetDefaultLogger()
 
 	// get url params
 	params := mux.Vars(r)
@@ -42,8 +39,6 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		cloudType  = params["cloud"]
 	)
 
-	logger.Infof("url params: '%+v'", params)
-
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
 	r.ParseMultipartForm(10 << 20)
 
@@ -52,28 +47,34 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// the Header and the size of the file
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		logger.Errorf("failed to retreive uploaded file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to retreive uploaded file. error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
 	}
 	defer file.Close()
 
-	logger.Debugf("uploaded file: %+v", handler.Filename)
-	logger.Debugf("file size: %+v", handler.Size)
-	logger.Debugf("MIME header: %+v", handler.Header)
+	zap.S().Debugf("uploaded file: %+v", handler.Filename)
+	zap.S().Debugf("file size: %+v", handler.Size)
+	zap.S().Debugf("MIME header: %+v", handler.Header)
 
 	// Create a temporary file within temp directory
 	tempFile, err := ioutil.TempFile("", "terrascan-*.tf")
 	if err != nil {
-		logger.Errorf("failed to create temp file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to create temp file. error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
 	}
 	defer os.Remove(tempFile.Name())
-	logger.Debugf("create temp config file at '%s'", tempFile.Name())
+	zap.S().Debugf("create temp config file at '%s'", tempFile.Name())
 
 	// read all of the contents of uploaded file
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		logger.Errorf("failed to read uploaded file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to read uploaded file. error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
 	}
 
@@ -84,20 +85,26 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
 		tempFile.Name(), "")
 	if err != nil {
+		zap.S().Error(err)
+		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	normalized, err := executor.Execute()
 	if err != nil {
-		logger.Errorf("failed to scan uploaded file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
 	}
 
 	j, err := json.MarshalIndent(normalized, "", "  ")
 	if err != nil {
-		logger.Errorf("failed to create JSON. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to create JSON. error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
 	}
 
 	// return that we have successfully uploaded our file!
-	fmt.Fprint(w, string(j))
+	apiResponse(w, string(j), http.StatusOK)
 }
