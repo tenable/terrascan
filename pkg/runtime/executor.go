@@ -17,9 +17,8 @@
 package runtime
 
 import (
-	"os"
+	policy "github.com/accurics/terrascan/pkg/policy/opa"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 
 	cloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
@@ -105,9 +104,21 @@ func (e *Executor) Execute() error {
 	if err != nil {
 		return err
 	}
-	utils.PrintJSON(normalized, os.Stdout)
+	//utils.PrintJSON(normalized, os.Stdout)
 
 	// write output
+
+	// Create a new policy engine based on IaC type
+	if e.iacType == "terraform" {
+		engine := policy.OpaEngine{}
+
+		err := engine.Initialize("/Users/wsana/go/src/accurics/terrascan/pkg/policies/accurics/v1/opa")
+		if err != nil {
+			return err
+		}
+
+		engine.Evaluate(&normalized)
+	}
 
 	// successful
 	return nil
