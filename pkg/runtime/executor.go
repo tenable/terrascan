@@ -21,6 +21,7 @@ import (
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/notifications"
+	policy "github.com/accurics/terrascan/pkg/policy/opa"
 )
 
 // Executor object
@@ -94,7 +95,17 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 		return normalized, err
 	}
 
-	// evaluate policies
+	// Create a new policy engine based on IaC type
+	if e.iacType == "terraform" {
+		engine := policy.OpaEngine{}
+
+		err := engine.Initialize("/Users/wsana/go/src/accurics/terrascan/pkg/policies/accurics/v1/opa")
+		if err != nil {
+			return err
+		}
+
+		engine.Evaluate(&normalized)
+	}
 
 	// send notifications, if configured
 	if err = e.SendNotifications(normalized); err != nil {
