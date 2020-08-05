@@ -14,10 +14,15 @@
     limitations under the License.
 */
 
-package webhook
+package runtime
 
-// Webhook implements the Notifier interface
-type Webhook struct {
-	URL   string
-	Token string
+// SendNotifications sends notifications via all the configured notifiers
+func (e *Executor) SendNotifications(data interface{}) {
+	// send notifications using configured notifiers
+	for _, notifier := range e.notifiers {
+		err := notifier.SendNotification(data)
+		if err != nil {
+			continue
+		}
+	}
 }

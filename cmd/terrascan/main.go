@@ -45,6 +45,9 @@ func main() {
 		// logging flags
 		logLevel = flag.String("log-level", "info", "logging level (debug, info, warn, error, panic, fatal)")
 		logType  = flag.String("log-type", "console", "log type (json, console)")
+
+		// config file
+		configFile = flag.String("config", "", "config file path")
 	)
 	flag.Parse()
 
@@ -61,6 +64,6 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile)
 	}
 }

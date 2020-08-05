@@ -2,21 +2,20 @@ package httputils
 
 import (
 	"bytes"
-	"encoding/json"
-	"log"
+	"fmt"
 	"net/http"
 
 	"github.com/hashicorp/go-retryablehttp"
 	"go.uber.org/zap"
 )
 
-const (
+var (
 	errNewRequest = fmt.Errorf("failed to create http request")
 	errDoRequest  = fmt.Errorf("failed to make http request")
 )
 
 // default global http client
-var client *http.Client = &http.Client{}
+var client *http.Client
 
 // init creates a http client which retries on errors like connection timeouts,
 // server too slow respond etc.
@@ -38,12 +37,12 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 		return resp, errNewRequest
 	}
 	req.Header.Set("Content-Type", "application/json")
-	if token != nil {
+	if token != "" {
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer: '%s'", token))
 	}
 
 	// make request
-	resp, err := client.Do(req)
+	resp, err = client.Do(req)
 	if err != nil {
 		zap.S().Errorf("failed to make http request; method: '%v', url: '%v'")
 		return resp, errDoRequest
@@ -53,6 +52,6 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 }
 
 // SendPOSTRequest sends a http POST request
-func SendPOSTRequest(url, token string) (*http.Response, error) {
-	return SendRequest("POST", url, token)
+func SendPOSTRequest(url, token string, data []byte) (*http.Response, error) {
+	return SendRequest("POST", url, token, data)
 }

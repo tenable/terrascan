@@ -32,17 +32,18 @@ type Executor struct {
 	iacVersion  string
 	configFile  string
 	iacProvider iacProvider.IacProvider
-	notifiers   notifications.Notifier
+	notifiers   []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
+		configFile: configFile,
 	}
 
 	// initialized executor
@@ -70,7 +71,7 @@ func (e *Executor) Init() error {
 	}
 
 	// create new notifiers
-	e.notifiers, err = notifications.NewNotifier("webhook")
+	e.notifiers, err = notifications.NewNotifiers(e.configFile)
 	if err != nil {
 		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
 		return err
@@ -96,7 +97,7 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 	// evaluate policies
 
 	// send notifications, if configured
-	e.notifiers.SendNotification()
+	e.SendNotifications(normalized)
 
 	// successful
 	return normalized, nil
