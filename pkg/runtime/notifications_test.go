@@ -14,7 +14,7 @@ type MockNotifier struct {
 }
 
 var (
-	mockNotifierErr = fmt.Errorf("mock notification error")
+	errMockNotifier = fmt.Errorf("mock notification error")
 )
 
 func (m MockNotifier) Init(config interface{}) error {
@@ -42,9 +42,9 @@ func TestSendNotifications(t *testing.T) {
 		{
 			name: "no notifier error",
 			executor: Executor{
-				notifiers: []notifications.Notifier{&MockNotifier{err: mockNotifierErr}},
+				notifiers: []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
 			},
-			wantErr: mockNotifierErr,
+			wantErr: errMockNotifier,
 		},
 	}
 

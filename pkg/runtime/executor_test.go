@@ -99,9 +99,9 @@ func TestExecute(t *testing.T) {
 			name: "test SendNofitications no error",
 			executor: Executor{
 				iacProvider: MockIacProvider{err: nil},
-				notifiers:   []notifications.Notifier{&MockNotifier{err: mockNotifierErr}},
+				notifiers:   []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
 			},
-			wantErr: mockNotifierErr,
+			wantErr: errMockNotifier,
 		},
 	}
 
