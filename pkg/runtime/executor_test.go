@@ -24,6 +24,8 @@ import (
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
+	"github.com/accurics/terrascan/pkg/notifications"
+	"github.com/accurics/terrascan/pkg/notifications/webhook"
 )
 
 var (
@@ -85,6 +87,22 @@ func TestExecute(t *testing.T) {
 			},
 			wantErr: nil,
 		},
+		{
+			name: "test SendNofitications no error",
+			executor: Executor{
+				iacProvider: MockIacProvider{err: nil},
+				notifiers:   []notifications.Notifier{&MockNotifier{err: nil}},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "test SendNofitications no error",
+			executor: Executor{
+				iacProvider: MockIacProvider{err: nil},
+				notifiers:   []notifications.Notifier{&MockNotifier{err: mockNotifierErr}},
+			},
+			wantErr: mockNotifierErr,
+		},
 	}
 
 	for _, tt := range table {
@@ -104,6 +122,7 @@ func TestInit(t *testing.T) {
 		executor        Executor
 		wantErr         error
 		wantIacProvider iacProvider.IacProvider
+		wantNotifiers   []notifications.Notifier
 	}{
 		{
 			name: "valid filePath",
@@ -116,16 +135,51 @@ func TestInit(t *testing.T) {
 			},
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{},
+		},
+		{
+			name: "valid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "./testdata/webhook.toml",
+			},
+			wantErr:         nil,
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
+			name: "config not present",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "./testdata/does-not-exist",
+			},
+			wantErr:         fmt.Errorf("config file not present"),
+			wantIacProvider: &tfv12.TfV12{},
 		},
 	}
 
 	for _, tt := range table {
-		gotErr := tt.executor.Init()
-		if !reflect.DeepEqual(gotErr, tt.wantErr) {
-			t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
-		}
-		if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
-			t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
-		}
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := tt.executor.Init()
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+			if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
+				t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
+			}
+			for i, notifier := range tt.executor.notifiers {
+				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
+					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+				}
+			}
+		})
 	}
 }

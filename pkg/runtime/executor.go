@@ -97,7 +97,9 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 	// evaluate policies
 
 	// send notifications, if configured
-	e.SendNotifications(normalized)
+	if err = e.SendNotifications(normalized); err != nil {
+		return normalized, err
+	}
 
 	// successful
 	return normalized, nil
