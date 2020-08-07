@@ -9,6 +9,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.3.0
 	github.com/hashicorp/terraform v0.12.28
 	github.com/pelletier/go-toml v1.8.0
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.3.2
 	github.com/zclconf/go-cty v1.2.1
 	go.uber.org/zap v1.9.1

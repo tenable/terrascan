@@ -152,6 +152,20 @@ func TestInit(t *testing.T) {
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
+			name: "invalid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "testdata/invalid-notifier.toml",
+			},
+			wantErr:         fmt.Errorf("notifier not supported"),
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
 			name: "config not present",
 			executor: Executor{
 				filePath:   "./testdata/testfile",

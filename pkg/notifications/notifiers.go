@@ -21,6 +21,7 @@ import (
 	"os"
 	"reflect"
 
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
 )
@@ -87,24 +88,34 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 	notifierTypes := keyTomlConfig.Keys()
 
 	// create notifiers
+	var allErrs error
 	for _, nType := range notifierTypes {
+
+		if !IsNotifierSupported(nType) {
+			zap.S().Errorf("notifier type '%s' not supported", nType)
+			allErrs = utils.WrapError(errNotifierNotSupported, allErrs)
+			continue
+		}
 
 		// check if toml config present for notifier type
 		nTypeConfig := keyTomlConfig.Get(nType)
-		if nTypeConfig == nil {
+		if nTypeConfig.(*toml.Tree).String() == "" {
 			zap.S().Errorf("notifier '%v' config not present", nType)
-			return notifiers, errTomlKeyNotPresent
+			allErrs = utils.WrapError(errTomlKeyNotPresent, allErrs)
+			continue
 		}
 
 		// create a new notifier
 		n, err := NewNotifier(nType)
 		if err != nil {
+			allErrs = utils.WrapError(err, allErrs)
 			continue
 		}
 
 		// populate data
 		err = n.Init(nTypeConfig)
 		if err != nil {
+			allErrs = utils.WrapError(err, allErrs)
 			continue
 		}
 
@@ -113,7 +124,7 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 	}
 
 	// return list of notifiers
-	return notifiers, nil
+	return notifiers, allErrs
 }
 
 // IsNotifierSupported returns true/false depending on whether the notifier
