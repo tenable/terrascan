@@ -2,6 +2,7 @@
 ![CI](https://github.com/accurics/terrascan/workflows/Go%20Terrascan%20build/badge.svg)
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
+[![Documentation](https://readthedocs.org/projects/terrascan/badge/?version=latest)](https://terrascan.readthedocs.io/en/latest/?badge=latest)
 [![downloads](https://img.shields.io/github/downloads/accurics/terrascan/total)](https://github.com/accurics/terrascan/releases)
 
 
