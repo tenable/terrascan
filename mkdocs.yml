@@ -17,8 +17,6 @@ theme:
   custom_dir: docs/overrides
   palette:
     primary: green
-  features:
-    - tabs
   language: en
 
 # Extensions
