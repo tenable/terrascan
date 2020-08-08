@@ -42,6 +42,6 @@ nav:
   - Architecture: architecture.md
   - Provider Reference: providers.md
   - Policies: policies.md
-  - Educational Resources: learning.md
   - Changelog: changelog.md
+  - Educational Resources: learning.md
   - About: about.md
