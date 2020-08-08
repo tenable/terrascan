@@ -1,7 +1,12 @@
 site_name: Terrascan documentation
 nav:
-    - Home: index.md
-    - About: about.md
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Architecture: architecture.md
+  - Provider Reference: providers.md
+  - Policies: policies.md
+  - Educational Resources: learning.md
+  - About: about.md
 theme:
   name: material
   favicon: img/Terrascan_STACK_Logo_F2F2F2.svg
