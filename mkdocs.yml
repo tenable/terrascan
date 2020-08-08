@@ -1,0 +1,12 @@
+site_name: Terrascan documentation
+nav:
+    - Home: index.md
+    - About: about.md
+theme:
+  name: material
+  favicon: img/Terrascan_STACK_Logo_F2F2F2.svg
+  logo: img/Terrascan_STACK_Logo_F2F2F2.svg
+  repo_url: https://github.com/accurics/terrascan/
+  palette:
+    primary: green
+
