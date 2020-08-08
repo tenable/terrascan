@@ -27,3 +27,5 @@ docs/_build/
 
 # Go binar
 /bin
+
+.DS_Store
