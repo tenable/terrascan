@@ -1,0 +1,47 @@
+# Project Info
+site_name: Terrascan documentation
+site_description: >-
+  Terrascan documentation. Learn more about how to use Terrascan to scan infrastructure as code.
+copyright:  >-
+  &copy; 2020 Accurics, Inc. All rights reserved. Terrascan and Terrascan logo are US trademarks of Accurics Inc. All other registered trademarks are the properties of their respective owners.
+
+# Repository
+repo_name: accurics/terrascan
+repo_url: https://github.com/accurics/terrascan/
+
+# Configuration
+theme:
+  name: material
+  favicon: img/Terrascan_STACK_Logo_F2F2F2.svg
+  logo: img/Terrascan_STACK_Logo_F2F2F2.svg
+  custom_dir: docs/overrides
+  palette:
+    primary: green
+  language: en
+
+# Extensions
+markdown_extensions:
+  - markdown_include.include
+
+# Social Icons
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/AccuricsSec
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/accurics
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/orgs/accuricsorg
+    - icon: fontawesome/brands/github
+      link: https://github.com/accurics
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Architecture: architecture.md
+  - Provider Reference: providers.md
+  - Policies: policies.md
+  - Changelog: changelog.md
+  - Educational Resources: learning.md
+  - About: about.md
