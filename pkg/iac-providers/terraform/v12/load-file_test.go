@@ -79,7 +79,7 @@ func TestLoadIacFile(t *testing.T) {
 			wantErr:      nil,
 		},
 		{
-			name:         "config1",
+			name:         "dummyconfig",
 			tfConfigFile: "./testdata/dummyconfig/dummyconfig.tf",
 			tfJSONFile:   "./testdata/tfjson/dummyconfig.json",
 			tfv12:        TfV12{},

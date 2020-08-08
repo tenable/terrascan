@@ -11,26 +11,22 @@
         "key_name": "${aws_key_pair.ec2key_playground.key_name}",
         "provisioner": [
           {
-            "provisioner": {
-              "remote-exec": {
-                "connection": [
-                  {
-                    "connection": {
-                      "host": "${self.public_ip}",
-                      "private_key": "${file(var.privateKey)}",
-                      "type": "ssh",
-                      "user": "ubuntu"
-                    }
-                  }
-                ],
-                "inline": [
-                  "sudo apt-get -y update",
-                  "sudo apt-get -y install nginx",
-                  "sudo touch /var/www/html/index.html",
-                  "echo HelloWorld | sudo tee -a /var/www/html/index.html",
-                  "sudo service nginx start"
-                ]
-              }
+            "remote-exec": {
+              "connection": [
+                {
+                  "host": "${self.public_ip}",
+                  "private_key": "${file(var.privateKey)}",
+                  "type": "ssh",
+                  "user": "ubuntu"
+                }
+              ],
+              "inline": [
+                "sudo apt-get -y update",
+                "sudo apt-get -y install nginx",
+                "sudo touch /var/www/html/index.html",
+                "echo HelloWorld | sudo tee -a /var/www/html/index.html",
+                "sudo service nginx start"
+              ]
             }
           }
         ],
@@ -79,10 +75,8 @@
       "config": {
         "route": [
           {
-            "route": {
-              "cidr_block": "0.0.0.0/0",
-              "gateway_id": "${aws_internet_gateway.igw_playground.id}"
-            }
+            "cidr_block": "0.0.0.0/0",
+            "gateway_id": "${aws_internet_gateway.igw_playground.id}"
           }
         ],
         "tags": {
@@ -113,36 +107,30 @@
       "config": {
         "egress": [
           {
-            "egress": {
-              "cidr_blocks": [
-                "0.0.0.0/0"
-              ],
-              "from_port": 0,
-              "protocol": "-1",
-              "to_port": 0
-            }
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 0,
+            "protocol": "-1",
+            "to_port": 0
           }
         ],
         "ingress": [
           {
-            "ingress": {
-              "cidr_blocks": [
-                "0.0.0.0/0"
-              ],
-              "from_port": 22,
-              "protocol": "tcp",
-              "to_port": 22
-            }
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 22,
+            "protocol": "tcp",
+            "to_port": 22
           },
           {
-            "ingress": {
-              "cidr_blocks": [
-                "0.0.0.0/0"
-              ],
-              "from_port": 80,
-              "protocol": "tcp",
-              "to_port": 80
-            }
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 80,
+            "protocol": "tcp",
+            "to_port": 80
           }
         ],
         "name": "sg",

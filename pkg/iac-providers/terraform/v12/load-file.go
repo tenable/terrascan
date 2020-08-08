@@ -38,7 +38,7 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
-		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", diags)
+		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
 		return allResourcesConfig, errLoadConfigFile
 	}
 	if hclFile == nil && diags.HasErrors() {
