@@ -19,7 +19,7 @@ package policy
 type Manager interface {
 	Import() error
 	Export() error
-	Validate() error
+	CreateManager() error
 }
 
 type Engine interface {

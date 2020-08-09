@@ -1,0 +1,15 @@
+{
+    "ruleName": "allUsersReadAccess",
+    "file": "s3AclGrants.rego",
+    "ruleTemplate": "allUsersReadAccess",
+    "ruleTemplateArgs": {
+        "access": "public-read",
+        "name": "allUsersReadAccess",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion",
+    "ruleReferenceId": "AWS.S3Bucket.IAM.High.0377",
+    "category": "IAM",
+    "version": 2
+}

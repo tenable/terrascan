@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package policy
+package opa
 
 import (
 	"bytes"
@@ -26,8 +26,9 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"text/template"
+
+	"github.com/accurics/terrascan/pkg/utils"
 
 	"github.com/open-policy-agent/opa/ast"
 
@@ -36,70 +37,99 @@ import (
 	"github.com/open-policy-agent/opa/rego"
 )
 
-type AccuricsRegoMetadata struct {
-	Name             string                 `json:"ruleName"`
-	DisplayName      string                 `json:"ruleDisplayName"`
-	Category         string                 `json:"category"`
-	ImpactedRes      []string               `json:"impactedRes"`
-	PolicyRelevance  string                 `json:"policyRelevance"`
-	Remediation      string                 `json:"remediation"`
-	Row              int                    `json:"row"`
-	Rule             string                 `json:"rule"`
-	RuleTemplate     string                 `json:"ruleTemplate"`
-	RuleTemplateArgs map[string]interface{} `json:"ruleArgument"`
-	RuleReferenceID  string                 `json:"ruleReferenceId"`
-	Severity         string                 `json:"severity"`
-	Vulnerability    string                 `json:"vulnerability"`
-}
-
-type RegoData struct {
-	Name             string                 `json:"ruleName"`
-	DisplayName      string                 `json:"ruleDisplayName"`
-	Category         string                 `json:"category"`
-	Remediation      string                 `json:"remediation"`
-	Rule             string                 `json:"rule"`
-	RuleTemplate     string                 `json:"ruleTemplate"`
-	RuleTemplateArgs map[string]interface{} `json:"ruleArgument"`
-	RuleReferenceID  string                 `json:"ruleReferenceId"`
-	Severity         string                 `json:"severity"`
-	Vulnerability    string                 `json:"vulnerability"`
-	RawRego          *[]byte
-	PreparedQuery    *rego.PreparedEvalQuery
+type Violation struct {
+	Name        string
+	Description string
+	LineNumber  int
+	Category    string
+	Data        interface{}
+	RuleData    interface{}
 }
 
 type ResultData struct {
+	EngineType string
+	Provider   string
+	Violations []*Violation
+}
+
+type RegoMetadata struct {
+	RuleName         string                 `json:"ruleName"`
+	File             string                 `json:"file"`
+	RuleTemplate     string                 `json:"ruleTemplate"`
+	RuleTemplateArgs map[string]interface{} `json:"ruleTemplateArgs"`
+	Severity         string                 `json:"severity"`
+	Description      string                 `json:"description"`
+	RuleReferenceID  string                 `json:"ruleReferenceId"`
+	Category         string                 `json:"category"`
+	Version          int                    `json:"version"`
+}
+
+type RegoData struct {
+	Metadata      RegoMetadata
+	RawRego       []byte
+	PreparedQuery *rego.PreparedEvalQuery
+}
+
+type EngineStats struct {
+	ruleCount         int
+	regoFileCount     int
+	metadataFileCount int
+	metadataCount     int
 }
 
 type OpaEngine struct {
 	Context     context.Context
 	RegoFileMap map[string][]byte
 	RegoDataMap map[string]*RegoData
+	stats       EngineStats
 }
 
-func filterFileListBySuffix(allFileList *[]string, filter string) *[]string {
-	fileList := make([]string, 0)
-
-	for i := range *allFileList {
-		if strings.HasSuffix((*allFileList)[i], filter) {
-			fileList = append(fileList, (*allFileList)[i])
+func (o *OpaEngine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
+	// Load metadata file if it exists
+	metadata, err := ioutil.ReadFile(metaFilename)
+	if err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			zap.S().Warn("failed to load rego metadata", zap.String("file", metaFilename))
 		}
+		return nil, err
 	}
-	return &fileList
+
+	// Read metadata into struct
+	regoMetadata := RegoMetadata{}
+	if err = json.Unmarshal(metadata, &regoMetadata); err != nil {
+		zap.S().Warn("failed to unmarshal rego metadata", zap.String("file", metaFilename))
+		return nil, err
+	}
+	return &regoMetadata, err
+}
+
+func (o *OpaEngine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*RegoData, regoFileMap *map[string][]byte) error {
+	for i := range regoDataList {
+		regoPath := filepath.Join(currentDir, regoDataList[i].Metadata.File)
+		rawRegoData, err := ioutil.ReadFile(regoPath)
+		if err != nil {
+			zap.S().Warn("failed to load rego file", zap.String("file", regoPath))
+			continue
+		}
+
+		// Load the raw rego into the map
+		_, ok := (*regoFileMap)[regoPath]
+		if ok {
+			// Already loaded this file, so continue
+			continue
+		}
+
+		(*regoFileMap)[regoPath] = rawRegoData
+	}
+	return nil
 }
 
 func (o *OpaEngine) LoadRegoFiles(policyPath string) error {
-	ruleCount := 0
-	regoFileCount := 0
-	metadataCount := 0
-
 	// Walk the file path and find all directories
-	dirList := make([]string, 0)
-	err := filepath.Walk(policyPath, func(filePath string, fileInfo os.FileInfo, err error) error {
-		if fileInfo != nil && fileInfo.IsDir() {
-			dirList = append(dirList, filePath)
-		}
+	dirList, err := utils.FindAllDirectories(policyPath)
+	if err != nil {
 		return err
-	})
+	}
 
 	if len(dirList) == 0 {
 		return fmt.Errorf("no directories found for path %s", policyPath)
@@ -109,80 +139,63 @@ func (o *OpaEngine) LoadRegoFiles(policyPath string) error {
 	o.RegoDataMap = make(map[string]*RegoData)
 
 	// Load rego data files from each dir
+	// First, we read the metadata file, which contains info about the associated rego rule. The .rego file data is
+	// stored in a map in its raw format.
 	sort.Strings(dirList)
 	for i := range dirList {
-		metaFilename := filepath.Join(dirList[i], RegoMetadataFile)
-		var metadata []byte
-		metadata, err = ioutil.ReadFile(metaFilename)
-		if err != nil {
-			if !errors.Is(err, os.ErrNotExist) {
-				zap.S().Warn("failed to load rego metadata", zap.String("file", metaFilename))
-			}
-			continue
-		}
-
-		// Read metadata into struct
-		regoMetadata := make([]*RegoData, 0)
-		if err = json.Unmarshal(metadata, &regoMetadata); err != nil {
-			zap.S().Warn("failed to unmarshal rego metadata", zap.String("file", metaFilename))
-			continue
-		}
-
-		metadataCount++
-
-		// Find all .rego files within the directory
+		// Find all files in the current dir
 		fileInfo, err := ioutil.ReadDir(dirList[i])
 		if err != nil {
-			zap.S().Error("error while finding rego files", zap.String("dir", dirList[i]))
+			if !errors.Is(err, os.ErrNotExist) {
+				zap.S().Error("error while searching for files", zap.String("dir", dirList[i]))
+			}
 			continue
 		}
 
-		files := make([]string, 0)
-		for j := range fileInfo {
-			files = append(files, fileInfo[j].Name())
+		// Load the rego metadata first (*.json)
+		metadataFiles := utils.FilterFileInfoBySuffix(&fileInfo, RegoMetadataFileSuffix)
+		if metadataFiles == nil {
+			return fmt.Errorf("no metadata files were found")
 		}
 
-		// Load rego data for all rego files
-		regoFileList := filterFileListBySuffix(&files, RegoFileSuffix)
-		regoFileCount += len(*regoFileList)
-		for j := range *regoFileList {
-			regoFilename := (*regoFileList)[j]
-			regoFullPath := filepath.Join(dirList[i], regoFilename)
-			var rawRegoData []byte
-			rawRegoData, err = ioutil.ReadFile(regoFullPath)
+		var regoDataList []*RegoData
+		for j := range *metadataFiles {
+			filePath := filepath.Join(dirList[i], (*metadataFiles)[j])
+
+			var regoMetadata *RegoMetadata
+			regoMetadata, err = o.LoadRegoMetadata(filePath)
 			if err != nil {
-				zap.S().Warn("failed to load rego file", zap.String("file", regoFilename))
 				continue
 			}
 
-			_, ok := o.RegoFileMap[regoFullPath]
-			if ok {
-				// Already loaded this file, so continue
-				continue
+			regoData := RegoData{
+				Metadata: *regoMetadata,
 			}
 
-			// Set raw rego data
-			o.RegoFileMap[regoFullPath] = rawRegoData
+			regoDataList = append(regoDataList, &regoData)
+			o.stats.metadataFileCount++
 		}
 
-		for j := range regoMetadata {
-			//key := filepath.Join(dirList[i], regoMetadata[j].Rule)
-			//regoData := o.RegoFileMap[key]
-			metadataCount++
-			// Apply templates if available
-			var buf bytes.Buffer
-			t := template.New("opa")
-			t.Parse(string(o.RegoFileMap[filepath.Join(dirList[i], regoMetadata[j].RuleTemplate+".rego")]))
-			t.Execute(&buf, regoMetadata[j].RuleTemplateArgs)
+		// Read in raw rego data from associated rego files
+		if err = o.loadRawRegoFilesIntoMap(dirList[i], regoDataList, &o.RegoFileMap); err != nil {
+			continue
+		}
 
-			templateData := buf.Bytes()
-			regoMetadata[j].RawRego = &templateData
-			o.RegoDataMap[regoMetadata[j].Name] = regoMetadata[j]
+		for j := range regoDataList {
+			o.stats.metadataCount++
+			// Apply templates if available
+			var templateData bytes.Buffer
+			t := template.New("opa")
+			t.Parse(string(o.RegoFileMap[filepath.Join(dirList[i], regoDataList[j].Metadata.RuleTemplate+".rego")]))
+			t.Execute(&templateData, regoDataList[j].Metadata.RuleTemplateArgs)
+
+			regoDataList[j].RawRego = templateData.Bytes()
+			o.RegoDataMap[regoDataList[j].Metadata.RuleName] = regoDataList[j]
 		}
 	}
 
-	ruleCount = len(o.RegoDataMap)
-	zap.S().Infof("Loaded %d Rego rules from %d rego files (%d metadata files).", ruleCount, regoFileCount, metadataCount)
+	o.stats.ruleCount = len(o.RegoDataMap)
+	zap.S().Infof("Loaded %d Rego rules from %d rego files (%d metadata files).", o.stats.ruleCount, o.stats.regoFileCount, o.stats.metadataCount)
 
 	return err
 }
@@ -190,11 +203,11 @@ func (o *OpaEngine) LoadRegoFiles(policyPath string) error {
 func (o *OpaEngine) CompileRegoFiles() error {
 	for k := range o.RegoDataMap {
 		compiler, err := ast.CompileModules(map[string]string{
-			o.RegoDataMap[k].Rule: string(*(o.RegoDataMap[k].RawRego)),
+			o.RegoDataMap[k].Metadata.RuleName: string(o.RegoDataMap[k].RawRego),
 		})
 
 		r := rego.New(
-			rego.Query(RuleQueryBase+"."+o.RegoDataMap[k].Name),
+			rego.Query(RuleQueryBase+"."+o.RegoDataMap[k].Metadata.RuleName),
 			rego.Compiler(compiler),
 		)
 
@@ -261,15 +274,20 @@ func (o *OpaEngine) Evaluate(inputData *interface{}) error {
 		if len(rs) > 0 {
 			results := rs[0].Expressions[0].Value.([]interface{})
 			if len(results) > 0 {
-				r := o.RegoDataMap[k]
-				fmt.Printf("\n[%s] [%s] %s\n    %s\n", r.Severity, r.RuleReferenceID, r.DisplayName, r.Vulnerability)
+				r := o.RegoDataMap[k].Metadata
+				fmt.Printf("\nResource(s): %v\n[%s] [%s] %s\n    %s\n", results, r.Severity, r.RuleReferenceID, r.RuleName, r.Description)
+				continue
 			}
 			//			fmt.Printf("   [%s] %v\n", k, results)
 		} else {
 			//			fmt.Printf("No Result [%s] \n", k)
 		}
+
 		// Store results
 	}
+
+	b, _ := json.MarshalIndent(inputData, "", "  ")
+	//fmt.Printf("InputData:\n%v\n", string(b))
 
 	return nil
 }

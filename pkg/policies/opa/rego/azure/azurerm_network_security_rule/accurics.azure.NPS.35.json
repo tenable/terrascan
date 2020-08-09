@@ -1,0 +1,19 @@
+{
+    "ruleName": "reme_networkPort9090ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "ruleTemplate": "networkPortExposedPublic",
+    "ruleTemplateArgs": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort9090ExposedPublicWide",
+        "numberOfHosts": 27,
+        "portNumber": 9090,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "CiscoSecure, WebSM (TCP:9090) is exposed to the wide public internet",
+    "ruleReferenceId": "accurics.azure.NPS.35",
+    "category": "Network Ports Security",
+    "version": 2
+}

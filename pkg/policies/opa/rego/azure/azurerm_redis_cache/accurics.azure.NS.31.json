@@ -1,0 +1,15 @@
+{
+    "ruleName": "reme_publiclyAccessible",
+    "file": "publiclyAccessible.rego",
+    "ruleTemplate": "publiclyAccessible",
+    "ruleTemplateArgs": {
+        "isEntire": false,
+        "name": "publiclyAccessible",
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources",
+    "ruleReferenceId": "accurics.azure.NS.31",
+    "category": "Network Security",
+    "version": 2
+}

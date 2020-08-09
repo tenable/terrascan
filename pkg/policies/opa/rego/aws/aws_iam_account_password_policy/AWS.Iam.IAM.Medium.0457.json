@@ -1,0 +1,15 @@
+{
+    "ruleName": "passwordRequireUpperCase",
+    "file": "passwordPolicyRequirement.rego",
+    "ruleTemplate": "passwordRequireUpperCase",
+    "ruleTemplateArgs": {
+        "name": "passwordRequireUpperCase",
+        "prefix": "",
+        "required_parameter": "require_uppercase_characters"
+    },
+    "severity": "MEDIUM",
+    "description": "Upper case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
+    "ruleReferenceId": "AWS.Iam.IAM.Medium.0457",
+    "category": "IAM",
+    "version": 2
+}

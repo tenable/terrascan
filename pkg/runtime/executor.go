@@ -21,26 +21,30 @@ import (
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/notifications"
-	policy "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/accurics/terrascan/pkg/policy"
+	opa "github.com/accurics/terrascan/pkg/policy/opa"
 )
 
 // Executor object
 type Executor struct {
-	filePath    string
-	dirPath     string
-	cloudType   string
-	iacType     string
-	iacVersion  string
-	configFile  string
-	iacProvider iacProvider.IacProvider
-	notifiers   []notifications.Notifier
+	filePath     string
+	dirPath      string
+	policyPath   string
+	cloudType    string
+	iacType      string
+	iacVersion   string
+	configFile   string
+	iacProvider  iacProvider.IacProvider
+	notifiers    []notifications.Notifier
+	policyEngine []policy.Engine
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
+		policyPath: policyPath,
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
@@ -95,11 +99,12 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 		return normalized, err
 	}
 
-	// Create a new policy engine based on IaC type
+	// create a new policy engine based on IaC type
 	if e.iacType == "terraform" {
-		engine := policy.OpaEngine{}
+		var engine policy.Engine
+		engine = &opa.OpaEngine{}
 
-		err := engine.Initialize("/Users/wsana/go/src/accurics/terrascan/pkg/policies/accurics/v1/opa")
+		err = engine.Initialize(e.policyPath)
 		if err != nil {
 			return err
 		}

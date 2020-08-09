@@ -1,0 +1,13 @@
+{
+    "ruleName": "reme_logConnections",
+    "file": "logConnections.rego",
+    "ruleTemplate": "logConnections",
+    "ruleTemplateArgs": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server",
+    "ruleReferenceId": "accurics.azure.LOG.152",
+    "category": "Logging",
+    "version": 2
+}

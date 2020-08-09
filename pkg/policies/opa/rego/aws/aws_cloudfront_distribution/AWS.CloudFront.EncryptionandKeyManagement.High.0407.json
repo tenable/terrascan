@@ -1,0 +1,13 @@
+{
+    "ruleName": "cloudfrontNoHTTPSTraffic",
+    "file": "cloudfrontNoHTTPSTraffic.rego",
+    "ruleTemplate": "cloudfrontNoHTTPSTraffic",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Use encrypted connection between CloudFront and origin server",
+    "ruleReferenceId": "AWS.CloudFront.EncryptionandKeyManagement.High.0407",
+    "category": "Encryption and Key Management",
+    "version": 2
+}
