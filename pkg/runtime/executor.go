@@ -37,7 +37,7 @@ type Executor struct {
 	iacVersion    string
 	iacProvider   iacProvider.IacProvider
 	cloudProvider cloudProvider.CloudProvider
-	policyEngine  []policy.Engine
+	//	policyEngine  []policy.Engine
 	//	policyEngine
 }
 
@@ -112,8 +112,7 @@ func (e *Executor) Execute() error {
 
 	// create a new policy engine based on IaC type
 	if e.iacType == "terraform" {
-		var engine policy.Engine
-		engine = &opa.Engine{}
+		var engine policy.Engine = &opa.Engine{}
 
 		err = engine.Initialize(e.policyPath)
 		if err != nil {

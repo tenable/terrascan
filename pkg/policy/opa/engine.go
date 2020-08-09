@@ -223,6 +223,9 @@ func (e *Engine) CompileRegoFiles() error {
 		compiler, err := ast.CompileModules(map[string]string{
 			e.RegoDataMap[k].Metadata.RuleName: string(e.RegoDataMap[k].RawRego),
 		})
+		if err != nil {
+			return err
+		}
 
 		r := rego.New(
 			rego.Query(RuleQueryBase+"."+e.RegoDataMap[k].Metadata.RuleName),
@@ -300,9 +303,6 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 				fmt.Printf("\nResource(s): %v\n[%s] [%s] %s\n    %s\n", results, r.Severity, r.RuleReferenceID, r.RuleName, r.Description)
 				continue
 			}
-			//			fmt.Printf("   [%s] %v\n", k, results)
-		} else {
-			//			fmt.Printf("No Result [%s] \n", k)
 		}
 
 		// Store results
