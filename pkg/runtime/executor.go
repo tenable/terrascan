@@ -27,16 +27,15 @@ import (
 
 // Executor object
 type Executor struct {
-	filePath     string
-	dirPath      string
-	policyPath   string
-	cloudType    string
-	iacType      string
-	iacVersion   string
-	configFile   string
-	iacProvider  iacProvider.IacProvider
-	notifiers    []notifications.Notifier
-	policyEngine []policy.Engine
+	filePath    string
+	dirPath     string
+	policyPath  string
+	cloudType   string
+	iacType     string
+	iacVersion  string
+	configFile  string
+	iacProvider iacProvider.IacProvider
+	notifiers   []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
@@ -101,8 +100,7 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 
 	// create a new policy engine based on IaC type
 	if e.iacType == "terraform" {
-		var engine policy.Engine
-		engine = &opa.Engine{}
+		var engine policy.Engine = &opa.Engine{}
 
 		err = engine.Initialize(e.policyPath)
 		if err != nil {
