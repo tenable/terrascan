@@ -45,3 +45,7 @@ nav:
   - Changelog: changelog.md
   - Educational Resources: learning.md
   - About: about.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
