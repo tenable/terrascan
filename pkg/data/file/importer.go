@@ -1,6 +1,7 @@
 package file
 
-type FileInfo struct {
+// Info File info
+type Info struct {
 	Path       string
 	Hash       string
 	HashType   string
@@ -12,8 +13,8 @@ type Group struct {
 	Name             string
 	IsReadOnly       bool
 	VerifySignatures bool
-	Directories      []*FileInfo
-	Files            []*FileInfo
+	Directories      []*Info
+	Files            []*Info
 }
 
 // Metadata File metadata
