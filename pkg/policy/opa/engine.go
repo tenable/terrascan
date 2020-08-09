@@ -37,6 +37,7 @@ import (
 	"github.com/open-policy-agent/opa/rego"
 )
 
+// Violation Contains data for each violation
 type Violation struct {
 	Name        string
 	Description string
@@ -46,12 +47,14 @@ type Violation struct {
 	RuleData    interface{}
 }
 
+// ResultData Contains full report data
 type ResultData struct {
 	EngineType string
 	Provider   string
 	Violations []*Violation
 }
 
+// RegoMetadata The rego metadata struct which is read and saved from disk
 type RegoMetadata struct {
 	RuleName         string                 `json:"ruleName"`
 	File             string                 `json:"file"`
@@ -64,12 +67,14 @@ type RegoMetadata struct {
 	Version          int                    `json:"version"`
 }
 
+// RegoData Stores all information needed to evaluate and report on a rego rule
 type RegoData struct {
 	Metadata      RegoMetadata
 	RawRego       []byte
 	PreparedQuery *rego.PreparedEvalQuery
 }
 
+// EngineStats Contains misc stats
 type EngineStats struct {
 	ruleCount         int
 	regoFileCount     int
@@ -77,6 +82,7 @@ type EngineStats struct {
 	metadataCount     int
 }
 
+// Engine Implements the policy engine interface
 type Engine struct {
 	Context     context.Context
 	RegoFileMap map[string][]byte
@@ -84,6 +90,7 @@ type Engine struct {
 	stats       EngineStats
 }
 
+// LoadRegoMetadata Loads rego metadata from a given file
 func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	// Load metadata file if it exists
 	metadata, err := ioutil.ReadFile(metaFilename)
@@ -103,6 +110,7 @@ func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	return &regoMetadata, err
 }
 
+// loadRawRegoFilesIntoMap imports raw rego files into a map
 func (e *Engine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*RegoData, regoFileMap *map[string][]byte) error {
 	for i := range regoDataList {
 		regoPath := filepath.Join(currentDir, regoDataList[i].Metadata.File)
@@ -124,6 +132,7 @@ func (e *Engine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*Rego
 	return nil
 }
 
+// LoadRegoFiles Loads all related rego files from the given policy path into memory
 func (e *Engine) LoadRegoFiles(policyPath string) error {
 	// Walk the file path and find all directories
 	dirList, err := utils.FindAllDirectories(policyPath)
@@ -144,7 +153,8 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 	sort.Strings(dirList)
 	for i := range dirList {
 		// Find all files in the current dir
-		fileInfo, err := ioutil.ReadDir(dirList[i])
+		var fileInfo []os.FileInfo
+		fileInfo, err = ioutil.ReadDir(dirList[i])
 		if err != nil {
 			if !errors.Is(err, os.ErrNotExist) {
 				zap.S().Error("error while searching for files", zap.String("dir", dirList[i]))
@@ -207,6 +217,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 	return err
 }
 
+// CompileRegoFiles Compiles rego files for faster evaluation
 func (e *Engine) CompileRegoFiles() error {
 	for k := range e.RegoDataMap {
 		compiler, err := ast.CompileModules(map[string]string{
@@ -247,18 +258,22 @@ func (e *Engine) Initialize(policyPath string) error {
 	return nil
 }
 
+// Configure Configures the OPA engine
 func (e *Engine) Configure() error {
 	return nil
 }
 
+// GetResults Fetches results from OPA engine policy evaluation
 func (e *Engine) GetResults() error {
 	return nil
 }
 
+// Release Performs any tasks required to free resources
 func (e *Engine) Release() error {
 	return nil
 }
 
+// Evaluate Executes compiled OPA queries against the input JSON data
 func (e *Engine) Evaluate(inputData *interface{}) error {
 
 	sortedKeys := make([]string, len(e.RegoDataMap))
