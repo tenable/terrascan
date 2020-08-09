@@ -113,7 +113,7 @@ func (e *Executor) Execute() error {
 	// create a new policy engine based on IaC type
 	if e.iacType == "terraform" {
 		var engine policy.Engine
-		engine = &opa.OpaEngine{}
+		engine = &opa.Engine{}
 
 		err = engine.Initialize(e.policyPath)
 		if err != nil {
