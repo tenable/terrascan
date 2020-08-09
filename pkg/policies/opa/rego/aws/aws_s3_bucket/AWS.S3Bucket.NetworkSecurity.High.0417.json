@@ -1,0 +1,13 @@
+{
+    "ruleName": "s3BucketNoWebsiteIndexDoc",
+    "file": "s3BucketNoWebsiteIndexDoc.rego",
+    "ruleTemplate": "s3BucketNoWebsiteIndexDoc",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that there are not any static websites being hosted on buckets you aren't aware of",
+    "ruleReferenceId": "AWS.S3Bucket.NetworkSecurity.High.0417",
+    "category": "Network Security",
+    "version": 2
+}

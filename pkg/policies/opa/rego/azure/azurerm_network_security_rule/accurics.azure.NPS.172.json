@@ -1,0 +1,19 @@
+{
+    "ruleName": "reme_networkPort22ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "ruleTemplate": "networkPortExposedPublic",
+    "ruleTemplateArgs": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort22ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 22,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "SSH (TCP:22) is exposed to the entire public internet",
+    "ruleReferenceId": "accurics.azure.NPS.172",
+    "category": "Network Ports Security",
+    "version": 2
+}

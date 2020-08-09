@@ -1,0 +1,13 @@
+{
+    "ruleName": "cloudfrontNoSecureCiphers",
+    "file": "cloudfrontNoSecureCiphers.rego",
+    "ruleTemplate": "cloudfrontNoSecureCiphers",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Secure ciphers are not used in CloudFront distribution",
+    "ruleReferenceId": "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

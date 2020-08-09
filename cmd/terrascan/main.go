@@ -34,6 +34,7 @@ func main() {
 		cloudType   = flag.String("cloud", "", "cloud provider (supported values: aws)")
 		iacFilePath = flag.String("f", "", "IaC file path")
 		iacDirPath  = flag.String("d", "", "IaC directory path")
+		policyPath  = flag.String("p", "", "Policy directory path")
 
 		// logging flags
 		logLevel = flag.String("log-level", "info", "logging level (debug, info, warn, error, panic, fatal)")
@@ -48,6 +49,6 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *policyPath)
 	}
 }

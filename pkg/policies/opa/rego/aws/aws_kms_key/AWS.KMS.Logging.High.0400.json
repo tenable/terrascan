@@ -1,0 +1,13 @@
+{
+    "ruleName": "kmsKeyRotationDisabled",
+    "file": "kmsKeyRotationDisabled.rego",
+    "ruleTemplate": "kmsKeyRotationDisabled",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure rotation for customer created CMKs is enabled",
+    "ruleReferenceId": "AWS.KMS.Logging.High.0400",
+    "category": "Logging",
+    "version": 2
+}

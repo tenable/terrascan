@@ -1,0 +1,13 @@
+{
+    "ruleName": "reme_sslEnforceDisabled",
+    "file": "sslEnforceDisabled.rego",
+    "ruleTemplate": "sslEnforceDisabled",
+    "ruleTemplateArgs": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server",
+    "ruleReferenceId": "accurics.azure.EKM.1",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

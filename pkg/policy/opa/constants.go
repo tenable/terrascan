@@ -1,7 +1,7 @@
-package policy
+package opa
 
 const (
-	RegoMetadataFile = "rule.json"
-	RegoFileSuffix   = ".rego"
-	RuleQueryBase    = "data.accurics"
+	RegoMetadataFileSuffix = ".json"
+	RegoFileSuffix         = ".rego"
+	RuleQueryBase          = "data.accurics"
 )
