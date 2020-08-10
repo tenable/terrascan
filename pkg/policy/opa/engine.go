@@ -37,59 +37,6 @@ import (
 	"github.com/open-policy-agent/opa/rego"
 )
 
-// Violation Contains data for each violation
-type Violation struct {
-	Name        string
-	Description string
-	LineNumber  int
-	Category    string
-	Data        interface{}
-	RuleData    interface{}
-}
-
-// ResultData Contains full report data
-type ResultData struct {
-	EngineType string
-	Provider   string
-	Violations []*Violation
-}
-
-// RegoMetadata The rego metadata struct which is read and saved from disk
-type RegoMetadata struct {
-	RuleName         string                 `json:"ruleName"`
-	File             string                 `json:"file"`
-	RuleTemplate     string                 `json:"ruleTemplate"`
-	RuleTemplateArgs map[string]interface{} `json:"ruleTemplateArgs"`
-	Severity         string                 `json:"severity"`
-	Description      string                 `json:"description"`
-	RuleReferenceID  string                 `json:"ruleReferenceId"`
-	Category         string                 `json:"category"`
-	Version          int                    `json:"version"`
-}
-
-// RegoData Stores all information needed to evaluate and report on a rego rule
-type RegoData struct {
-	Metadata      RegoMetadata
-	RawRego       []byte
-	PreparedQuery *rego.PreparedEvalQuery
-}
-
-// EngineStats Contains misc stats
-type EngineStats struct {
-	ruleCount         int
-	regoFileCount     int
-	metadataFileCount int
-	metadataCount     int
-}
-
-// Engine Implements the policy engine interface
-type Engine struct {
-	Context     context.Context
-	RegoFileMap map[string][]byte
-	RegoDataMap map[string]*RegoData
-	stats       EngineStats
-}
-
 // LoadRegoMetadata Loads rego metadata from a given file
 func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	// Load metadata file if it exists
@@ -212,7 +159,8 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 	}
 
 	e.stats.ruleCount = len(e.RegoDataMap)
-	zap.S().Infof("loaded %d Rego rules from %d rego files (%d metadata files).", e.stats.ruleCount, e.stats.regoFileCount, e.stats.metadataCount)
+	e.stats.regoFileCount = len(e.RegoFileMap)
+	zap.S().Infof("loaded %d Rego rules from %d rego files (%d metadata files).", e.stats.ruleCount, e.stats.regoFileCount, e.stats.metadataFileCount)
 
 	return err
 }

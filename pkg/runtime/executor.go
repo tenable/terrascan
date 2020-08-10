@@ -110,18 +110,6 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 		engine.Evaluate(&normalized)
 	}
 
-	// create a new policy engine based on IaC type
-	if e.iacType == "terraform" {
-		var engine policy.Engine = &opa.Engine{}
-
-		err = engine.Initialize(e.policyPath)
-		if err != nil {
-			return normalized, err
-		}
-
-		engine.Evaluate(&normalized)
-	}
-
 	// send notifications, if configured
 	if err = e.SendNotifications(normalized); err != nil {
 		return normalized, err
