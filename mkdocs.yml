@@ -19,10 +19,6 @@ theme:
     primary: green
   language: en
 
-# Extensions
-markdown_extensions:
-  - markdown_include.include
-
 # Social Icons
 extra:
   social:
@@ -43,10 +39,11 @@ nav:
   - Provider Reference: providers.md
   - Policies: policies.md
   - Educational Resources: learning.md
-  - Developing: developing.md
+  - Contributing: Contributing.md
   - Changelog: changelog.md
   - About: about.md
 
 markdown_extensions:
+  - markdown_include.include
   - toc:
       permalink: true
