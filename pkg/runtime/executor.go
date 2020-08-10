@@ -104,7 +104,7 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 
 		err = engine.Initialize(e.policyPath)
 		if err != nil {
-			return err
+			return normalized, err
 		}
 
 		engine.Evaluate(&normalized)

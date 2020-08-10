@@ -58,7 +58,7 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 
 	// empty config file path
 	if configFile == "" {
-		zap.S().Infof("no config file specified")
+		zap.S().Debug("no config file specified")
 		return notifiers, nil
 	}
 
