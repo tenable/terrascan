@@ -6,7 +6,8 @@
 [![downloads](https://img.shields.io/github/downloads/accurics/terrascan/total)](https://github.com/accurics/terrascan/releases)
 
 
-Terrascan is a static code analyzer and linter for security weanesses in Infrastructure as Code (IaC).
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+
 
 * GitHub Repo: https://github.com/accurics/terrascan
 * Documentation: https://docs.accurics.com
