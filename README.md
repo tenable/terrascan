@@ -6,7 +6,8 @@
 [![downloads](https://img.shields.io/github/downloads/accurics/terrascan/total)](https://github.com/accurics/terrascan/releases)
 
 
-Terrascan is a static code analyzer and linter for security weanesses in Infrastructure as Code (IaC).
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+
 
 * GitHub Repo: https://github.com/accurics/terrascan
 * Documentation: https://docs.accurics.com
@@ -84,7 +85,7 @@ Usage of ./bin/terrascan:
 To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and how to write your own policies.
 
 ## Developing Terrascan
-To learn more about developing and contributing to Terrascan refer to our (contributing guide)[CONTRIBUTING.md].
+To learn more about developing and contributing to Terrascan refer to our [contributing guide](CONTRIBUTING.md).
 
 
 To learn more about compiling Terraform and contributing suggested changes, please refer to the contributing guide.

@@ -1,7 +1,7 @@
 # Project Info
 site_name: Terrascan documentation
 site_description: >-
-  Terrascan documentation. Learn more about how to use Terrascan to scan infrastructure as code.
+  Detect compliance and security violations across Infrastructure as Code to mitigate risk before deploying cloud native infrastructure.
 copyright:  >-
   &copy; 2020 Accurics, Inc. All rights reserved. Terrascan and Terrascan logo are US trademarks of Accurics Inc. All other registered trademarks are the properties of their respective owners.
 
@@ -18,10 +18,6 @@ theme:
   palette:
     primary: green
   language: en
-
-# Extensions
-markdown_extensions:
-  - markdown_include.include
 
 # Social Icons
 extra:
@@ -42,6 +38,12 @@ nav:
   - Architecture: architecture.md
   - Provider Reference: providers.md
   - Policies: policies.md
-  - Changelog: changelog.md
   - Educational Resources: learning.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
   - About: about.md
+
+markdown_extensions:
+  - markdown_include.include
+  - toc:
+      permalink: true
