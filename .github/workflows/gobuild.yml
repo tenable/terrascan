@@ -1,4 +1,4 @@
-name: Go Terrascan build
+name: build
 on:
   push:
   pull_request:
