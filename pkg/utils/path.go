@@ -40,3 +40,27 @@ func GetAbsPath(path string) (string, error) {
 	path, _ = filepath.Abs(path)
 	return path, nil
 }
+
+// FindAllDirectories Walks the file path and returns a list of all directories within
+func FindAllDirectories(basePath string) ([]string, error) {
+	dirList := make([]string, 0)
+	err := filepath.Walk(basePath, func(filePath string, fileInfo os.FileInfo, err error) error {
+		if fileInfo != nil && fileInfo.IsDir() {
+			dirList = append(dirList, filePath)
+		}
+		return err
+	})
+	return dirList, err
+}
+
+// FilterFileInfoBySuffix Given a list of files, returns a subset of files containing a suffix which matches the input filter
+func FilterFileInfoBySuffix(allFileList *[]os.FileInfo, filter string) *[]string {
+	fileList := make([]string, 0)
+
+	for i := range *allFileList {
+		if strings.HasSuffix((*allFileList)[i].Name(), filter) {
+			fileList = append(fileList, (*allFileList)[i].Name())
+		}
+	}
+	return &fileList
+}

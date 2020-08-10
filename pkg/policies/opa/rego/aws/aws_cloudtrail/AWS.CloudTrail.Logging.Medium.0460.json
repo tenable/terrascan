@@ -1,0 +1,13 @@
+{
+    "ruleName": "cloudTrailMultiRegionNotCreated",
+    "file": "cloudTrailMultiRegionNotCreated.rego",
+    "ruleTemplate": "cloudTrailMultiRegionNotCreated",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Cloud Trail Multi Region not enabled",
+    "ruleReferenceId": "AWS.CloudTrail.Logging.Medium.0460",
+    "category": "Logging",
+    "version": 2
+}

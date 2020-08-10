@@ -1,0 +1,13 @@
+{
+    "ruleName": "unrestrictedIngressAccess",
+    "file": "unrestrictedIngressAccess.rego",
+    "ruleTemplate": "unrestrictedIngressAccess",
+    "ruleTemplateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": " It is recommended that no security group allows unrestricted ingress access",
+    "ruleReferenceId": "AWS.SecurityGroup.NetworkSecurity.High.0094",
+    "category": "Network Ports Security",
+    "version": 2
+}

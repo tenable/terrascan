@@ -21,12 +21,15 @@ import (
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/notifications"
+	"github.com/accurics/terrascan/pkg/policy"
+	opa "github.com/accurics/terrascan/pkg/policy/opa"
 )
 
 // Executor object
 type Executor struct {
 	filePath    string
 	dirPath     string
+	policyPath  string
 	cloudType   string
 	iacType     string
 	iacVersion  string
@@ -36,10 +39,11 @@ type Executor struct {
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
+		policyPath: policyPath,
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
@@ -94,7 +98,17 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 		return normalized, err
 	}
 
-	// evaluate policies
+	// create a new policy engine based on IaC type
+	if e.iacType == "terraform" {
+		var engine policy.Engine = &opa.Engine{}
+
+		err = engine.Initialize(e.policyPath)
+		if err != nil {
+			return normalized, err
+		}
+
+		engine.Evaluate(&normalized)
+	}
 
 	// send notifications, if configured
 	if err = e.SendNotifications(normalized); err != nil {

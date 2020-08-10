@@ -38,6 +38,7 @@ func main() {
 		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
 		iacFilePath = flag.String("f", "", "IaC file path")
 		iacDirPath  = flag.String("d", "", "IaC directory path")
+		policyPath  = flag.String("p", "", "Policy directory path")
 
 		// cloud flags
 		cloudType = flag.String("cloud", "", "cloud provider (supported values: aws)")
@@ -64,6 +65,6 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath)
 	}
 }
