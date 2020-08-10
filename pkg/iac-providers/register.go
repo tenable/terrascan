@@ -14,30 +14,27 @@
     limitations under the License.
 */
 
-package cloudprovider
+package iacprovider
 
 import (
 	"reflect"
-
-	awsProvider "github.com/accurics/terrascan/pkg/cloud-providers/aws"
-)
-
-// SupportedCloudType data type for supported IaC provider
-type supportedCloudType string
-
-// supported IaC providers
-const (
-	aws supportedCloudType = "aws"
 )
 
 // map of supported IaC providers
-var supportedCloudProviders map[supportedCloudType]reflect.Type
+var supportedIacProviders = make(map[supportedIacType](map[supportedIacVersion]reflect.Type))
 
-// initializes a map of supported IaC providers
-func init() {
+// RegisterIacProvider registers an IaC provider for terrascan
+// if the Iac provider does not have a version, it can be kept empty
+func RegisterIacProvider(iacType supportedIacType, iacVersion supportedIacVersion, iacProvider reflect.Type) {
 
-	supportedCloudProviders = make(map[supportedCloudType]reflect.Type)
+	if iacVersion == "" {
+		iacVersion = defaultIacVersion
+	}
 
-	// aws support
-	supportedCloudProviders[aws] = reflect.TypeOf(awsProvider.AWSProvider{})
+	// version support
+	supportedTerraformVersions := make(map[supportedIacVersion]reflect.Type)
+	supportedTerraformVersions[iacVersion] = iacProvider
+
+	// type support
+	supportedIacProviders[iacType] = supportedTerraformVersions
 }

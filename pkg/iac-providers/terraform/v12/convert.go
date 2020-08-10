@@ -58,11 +58,12 @@ func (c *converter) convertBody(body *hclsyntax.Body) (jsonObj, error) {
 		if err != nil {
 			return nil, err
 		}
+		blockConfig := blockOut[block.Type].(jsonObj)
 		if _, present := out[block.Type]; !present {
-			out[block.Type] = []jsonObj{blockOut}
+			out[block.Type] = []jsonObj{blockConfig}
 		} else {
 			list := out[block.Type].([]jsonObj)
-			list = append(list, blockOut)
+			list = append(list, blockConfig)
 			out[block.Type] = list
 		}
 	}

@@ -27,20 +27,36 @@ import (
 )
 
 func main() {
+
+	// command line flags
 	var (
-		server      = flag.Bool("server", false, "run terrascan in server mode")
+		// server mode
+		server = flag.Bool("server", false, "run terrascan in server mode")
+
+		// IaC flags
 		iacType     = flag.String("iac", "", "IaC provider (supported values: terraform)")
 		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
-		cloudType   = flag.String("cloud", "", "cloud provider (supported values: aws)")
 		iacFilePath = flag.String("f", "", "IaC file path")
 		iacDirPath  = flag.String("d", "", "IaC directory path")
 		policyPath  = flag.String("p", "", "Policy directory path")
 
+		// cloud flags
+		cloudType = flag.String("cloud", "", "cloud provider (supported values: aws)")
+
 		// logging flags
 		logLevel = flag.String("log-level", "info", "logging level (debug, info, warn, error, panic, fatal)")
 		logType  = flag.String("log-type", "console", "log type (json, console)")
+
+		// config file
+		configFile = flag.String("config", "", "config file path")
 	)
 	flag.Parse()
+
+	// if no flags are passed, print usage
+	if flag.NFlag() < 1 {
+		flag.Usage()
+		return
+	}
 
 	// if server mode set, run terrascan as a server, else run it as CLI
 	if *server {
@@ -49,6 +65,6 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *policyPath)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath)
 	}
 }

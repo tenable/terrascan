@@ -1,0 +1,6 @@
+# terrascan configuration file
+
+# notifications configuration
+[notifications]
+    [notifications.invalid]
+    url = "https://httpbin.org/post"

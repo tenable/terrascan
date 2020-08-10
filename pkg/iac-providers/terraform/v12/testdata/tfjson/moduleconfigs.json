@@ -8,147 +8,119 @@
       "config": {
         "default_cache_behavior": [
           {
-            "default_cache_behavior": {
-              "allowed_methods": [
-                "DELETE",
-                "GET",
-                "HEAD",
-                "OPTIONS",
-                "PATCH",
-                "POST",
-                "PUT"
-              ],
-              "cached_methods": [
-                "GET",
-                "HEAD"
-              ],
-              "forwarded_values": [
-                {
-                  "forwarded_values": {
-                    "cookies": [
-                      {
-                        "cookies": {
-                          "forward": "none"
-                        }
-                      }
-                    ],
-                    "query_string": false
+            "allowed_methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD"
+            ],
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
                   }
-                }
-              ],
-              "target_origin_id": "local.s3_origin_id",
-              "viewer_protocol_policy": "https-only"
-            }
+                ],
+                "query_string": false
+              }
+            ],
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "https-only"
           }
         ],
         "enabled": true,
         "ordered_cache_behavior": [
           {
-            "ordered_cache_behavior": {
-              "allowed_methods": [
-                "GET",
-                "HEAD",
-                "OPTIONS"
-              ],
-              "cached_methods": [
-                "GET",
-                "HEAD",
-                "OPTIONS"
-              ],
-              "compress": true,
-              "forwarded_values": [
-                {
-                  "forwarded_values": {
-                    "cookies": [
-                      {
-                        "cookies": {
-                          "forward": "none"
-                        }
-                      }
-                    ],
-                    "headers": [
-                      "Origin"
-                    ],
-                    "query_string": false
+            "allowed_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "compress": true,
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
                   }
-                }
-              ],
-              "path_pattern": "/content/immutable/*",
-              "target_origin_id": "local.s3_origin_id",
-              "viewer_protocol_policy": "allow-all"
-            }
+                ],
+                "headers": [
+                  "Origin"
+                ],
+                "query_string": false
+              }
+            ],
+            "path_pattern": "/content/immutable/*",
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "allow-all"
           },
           {
-            "ordered_cache_behavior": {
-              "allowed_methods": [
-                "GET",
-                "HEAD",
-                "OPTIONS"
-              ],
-              "cached_methods": [
-                "GET",
-                "HEAD"
-              ],
-              "forwarded_values": [
-                {
-                  "forwarded_values": {
-                    "cookies": [
-                      {
-                        "cookies": {
-                          "forward": "none"
-                        }
-                      }
-                    ],
-                    "query_string": false
+            "allowed_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD"
+            ],
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
                   }
-                }
-              ],
-              "path_pattern": "/content/*",
-              "target_origin_id": "local.s3_origin_id",
-              "viewer_protocol_policy": "allow-all"
-            }
+                ],
+                "query_string": false
+              }
+            ],
+            "path_pattern": "/content/*",
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "allow-all"
           }
         ],
         "origin": [
           {
-            "origin": {
-              "domain_name": "aws_s3_bucket.b.bucket_regional_domain_name",
-              "origin_id": "local.s3_origin_id",
-              "s3_origin_config": [
-                {
-                  "s3_origin_config": {
-                    "origin_access_identity": "origin-access-identity/cloudfront/ABCDEFG1234567"
-                  }
-                }
-              ]
-            }
+            "domain_name": "aws_s3_bucket.b.bucket_regional_domain_name",
+            "origin_id": "local.s3_origin_id",
+            "s3_origin_config": [
+              {
+                "origin_access_identity": "origin-access-identity/cloudfront/ABCDEFG1234567"
+              }
+            ]
           }
         ],
         "restrictions": [
           {
-            "restrictions": {
-              "geo_restriction": [
-                {
-                  "geo_restriction": {
-                    "locations": [
-                      "US",
-                      "CA",
-                      "GB",
-                      "DE"
-                    ],
-                    "restriction_type": "whitelist"
-                  }
-                }
-              ]
-            }
+            "geo_restriction": [
+              {
+                "locations": [
+                  "US",
+                  "CA",
+                  "GB",
+                  "DE"
+                ],
+                "restriction_type": "whitelist"
+              }
+            ]
           }
         ],
         "viewer_certificate": [
           {
-            "viewer_certificate": {
-              "cloudfront_default_certificate": true,
-              "minimum_protocol_version": "TLSv1"
-            }
+            "cloudfront_default_certificate": true,
+            "minimum_protocol_version": "TLSv1"
           }
         ]
       }
@@ -283,10 +255,8 @@
         "load_balancer_name": "some-name",
         "policy_attribute": [
           {
-            "policy_attribute": {
-              "name": "ECDHE-RSA-RC4-SHA",
-              "value": "true"
-            }
+            "name": "ECDHE-RSA-RC4-SHA",
+            "value": "true"
           }
         ],
         "policy_name": "wu-tang-ssl",
@@ -320,28 +290,24 @@
         "description": "Used in the terraform",
         "egress": [
           {
-            "egress": {
-              "cidr_blocks": [
-                "0.0.0.0/0",
-                "192.164.0.0/24"
-              ],
-              "from_port": 0,
-              "protocol": "-1",
-              "to_port": 0
-            }
+            "cidr_blocks": [
+              "0.0.0.0/0",
+              "192.164.0.0/24"
+            ],
+            "from_port": 0,
+            "protocol": "-1",
+            "to_port": 0
           }
         ],
         "ingress": [
           {
-            "ingress": {
-              "cidr_blocks": [
-                "0.0.0.0/0",
-                "19.16.0.0/24"
-              ],
-              "from_port": 22,
-              "protocol": "tcp",
-              "to_port": 22
-            }
+            "cidr_blocks": [
+              "0.0.0.0/0",
+              "19.16.0.0/24"
+            ],
+            "from_port": 22,
+            "protocol": "tcp",
+            "to_port": 22
           }
         ],
         "name": "acme_web",

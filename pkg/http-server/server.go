@@ -14,13 +14,12 @@
     limitations under the License.
 */
 
-package awsprovider
+package httpserver
 
-import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-)
+// APIServer struct for http api server
+type APIServer struct{}
 
-// CreateNormalizedJSON creates a normalized json for the given input
-func (a *AWSProvider) CreateNormalizedJSON(allResourcesConfig output.AllResourceConfigs) (interface{}, error) {
-	return allResourcesConfig, nil
+// NewAPIServer returns a new APIServer{}
+func NewAPIServer() *APIServer {
+	return &APIServer{}
 }

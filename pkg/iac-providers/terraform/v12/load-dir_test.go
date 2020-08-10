@@ -39,13 +39,25 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid dirPath",
 			dirPath: "not-there",
 			tfv12:   TfV12{},
-			wantErr: errDirEmptyTFConfig,
+			wantErr: errEmptyTFConfigDir,
 		},
 		{
 			name:    "empty config",
 			dirPath: "./testdata/testfile",
 			tfv12:   TfV12{},
-			wantErr: errDirEmptyTFConfig,
+			wantErr: errEmptyTFConfigDir,
+		},
+		{
+			name:    "incorrect module structure",
+			dirPath: "./testdata/invalid-moduleconfigs",
+			tfv12:   TfV12{},
+			wantErr: errBuildTFConfigDir,
+		},
+		{
+			name:    "load invalid config dir",
+			dirPath: "./testdata",
+			tfv12:   TfV12{},
+			wantErr: errLoadConfigDir,
 		},
 	}
 

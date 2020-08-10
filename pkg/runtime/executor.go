@@ -17,32 +17,29 @@
 package runtime
 
 import (
-	"github.com/accurics/terrascan/pkg/policy"
-	opa "github.com/accurics/terrascan/pkg/policy/opa"
-
 	"go.uber.org/zap"
 
-	cloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/notifications"
+	"github.com/accurics/terrascan/pkg/policy"
+	opa "github.com/accurics/terrascan/pkg/policy/opa"
 )
 
 // Executor object
 type Executor struct {
-	filePath      string
-	dirPath       string
-	policyPath    string
-	cloudType     string
-	iacType       string
-	iacVersion    string
-	iacProvider   iacProvider.IacProvider
-	cloudProvider cloudProvider.CloudProvider
-	//	policyEngine  []policy.Engine
-	//	policyEngine
+	filePath    string
+	dirPath     string
+	policyPath  string
+	cloudType   string
+	iacType     string
+	iacVersion  string
+	configFile  string
+	iacProvider iacProvider.IacProvider
+	notifiers   []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, policyPath string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -50,6 +47,7 @@ func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, policyPath s
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
+		configFile: configFile,
 	}
 
 	// initialized executor
@@ -76,38 +74,28 @@ func (e *Executor) Init() error {
 		return err
 	}
 
-	// create new CloudProvider
-	e.cloudProvider, err = cloudProvider.NewCloudProvider(e.cloudType)
+	// create new notifiers
+	e.notifiers, err = notifications.NewNotifiers(e.configFile)
 	if err != nil {
-		zap.S().Errorf("failed to create a new CloudProvider for cloudType '%s'. error: '%s'", e.cloudType, err)
+		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
 		return err
 	}
 
+	zap.S().Debug("initialized executor")
 	return nil
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() error {
+func (e *Executor) Execute() (normalized interface{}, err error) {
 
-	// load iac config
-	var (
-		iacOut output.AllResourceConfigs
-		err    error
-	)
+	// create normalized output from Iac
 	if e.dirPath != "" {
-		iacOut, err = e.iacProvider.LoadIacDir(e.dirPath)
+		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
-		// create config from IaC
-		iacOut, err = e.iacProvider.LoadIacFile(e.filePath)
+		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
 	if err != nil {
-		return err
-	}
-
-	// create normalized json
-	normalized, err := e.cloudProvider.CreateNormalizedJSON(iacOut)
-	if err != nil {
-		return err
+		return normalized, err
 	}
 
 	// create a new policy engine based on IaC type
@@ -116,12 +104,29 @@ func (e *Executor) Execute() error {
 
 		err = engine.Initialize(e.policyPath)
 		if err != nil {
-			return err
+			return normalized, err
 		}
 
 		engine.Evaluate(&normalized)
 	}
 
+	// create a new policy engine based on IaC type
+	if e.iacType == "terraform" {
+		var engine policy.Engine = &opa.Engine{}
+
+		err = engine.Initialize(e.policyPath)
+		if err != nil {
+			return normalized, err
+		}
+
+		engine.Evaluate(&normalized)
+	}
+
+	// send notifications, if configured
+	if err = e.SendNotifications(normalized); err != nil {
+		return normalized, err
+	}
+
 	// successful
-	return nil
+	return normalized, nil
 }

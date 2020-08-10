@@ -27,13 +27,17 @@ type Route struct {
 	fn   func(http.ResponseWriter, *http.Request)
 }
 
-// Routes returns a slice of routes of API endpoints registered with http server
-func (g *APIGateway) Routes() []*Route {
-	return []*Route{
-		{verb: "GET", path: path("health", APIVersion), fn: g.Health},
+// Routes returns a slice of routes of API endpoints to be registered with
+// http server
+func (g *APIServer) Routes() []*Route {
+	h := NewAPIHandler()
+	routes := []*Route{
+		{verb: "GET", path: "/health", fn: h.Health},
+		{verb: "POST", path: versionedPath("{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},
 	}
+	return routes
 }
 
-func path(route, version string) string {
-	return "/" + version + "/" + route
+func versionedPath(route string) string {
+	return "/" + APIVersion + "/" + route
 }

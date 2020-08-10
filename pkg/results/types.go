@@ -14,13 +14,21 @@
     limitations under the License.
 */
 
-package httpserver
+package results
 
-// APIGateway implements all the API endpoints, APIGateway should store all the
-// metadata info which may be required by all the API handlers
-type APIGateway struct{}
+// Violation Contains data for each violation
+type Violation struct {
+	Name        string
+	Description string
+	RuleID      string
+	Category    string
+	RuleData    interface{}
+	InputFile   string
+	InputData   interface{}
+	LineNumber  int
+}
 
-// NewAPIGateway returns a new APIGateway{}
-func NewAPIGateway() *APIGateway {
-	return &APIGateway{}
+// ViolationStore Storage area for violation data
+type ViolationStore struct {
+	violations []*Violation
 }

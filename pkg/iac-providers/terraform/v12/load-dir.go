@@ -31,7 +31,9 @@ import (
 )
 
 var (
-	errDirEmptyTFConfig = fmt.Errorf("directory has no terraform files")
+	errEmptyTFConfigDir = fmt.Errorf("directory has no terraform files")
+	errLoadConfigDir    = fmt.Errorf("failed to load terraform allResourcesConfig dir")
+	errBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
 // LoadIacDir starts traversing from the given rootDir and traverses through
@@ -45,14 +47,14 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !parser.IsConfigDir(absRootDir) {
 		zap.S().Errorf("directory '%s' has no terraform config files", absRootDir)
-		return allResourcesConfig, errDirEmptyTFConfig
+		return allResourcesConfig, errEmptyTFConfigDir
 	}
 
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
 		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
-		return allResourcesConfig, fmt.Errorf("failed to load terraform allResourcesConfig dir")
+		return allResourcesConfig, errLoadConfigDir
 	}
 
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
@@ -84,7 +86,7 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 	))
 	if diags.HasErrors() {
 		zap.S().Errorf("failed to build unified config. errors:\n%+v\n", diags)
-		return allResourcesConfig, fmt.Errorf("failed to build terraform allResourcesConfig")
+		return allResourcesConfig, errBuildTFConfigDir
 	}
 
 	/*

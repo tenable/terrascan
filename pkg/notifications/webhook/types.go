@@ -14,7 +14,10 @@
     limitations under the License.
 */
 
-package awsprovider
+package webhook
 
-// AWSProvider implements cloud provider interface
-type AWSProvider struct{}
+// Webhook implements the Notifier interface
+type Webhook struct {
+	URL   string
+	Token string
+}

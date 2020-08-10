@@ -21,17 +21,16 @@ import (
 	"reflect"
 	"testing"
 
-	cloudProvider "github.com/accurics/terrascan/pkg/cloud-providers"
-	awsProvider "github.com/accurics/terrascan/pkg/cloud-providers/aws"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
+	"github.com/accurics/terrascan/pkg/notifications"
+	"github.com/accurics/terrascan/pkg/notifications/webhook"
 )
 
 var (
-	errMockLoadIacDir           = fmt.Errorf("mock LoadIacDir")
-	errMockLoadIacFile          = fmt.Errorf("mock LoadIacFile")
-	errMockCreateNormalizedJSON = fmt.Errorf("mock CreateNormalizedJSON")
+	errMockLoadIacDir  = fmt.Errorf("mock LoadIacDir")
+	errMockLoadIacFile = fmt.Errorf("mock LoadIacFile")
 )
 
 // MockIacProvider mocks IacProvider interface
@@ -48,24 +47,16 @@ func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, er
 	return m.output, m.err
 }
 
-// MockCloudProvider mocks CloudProvider interface
-type MockCloudProvider struct {
-	err error
-}
-
-func (m MockCloudProvider) CreateNormalizedJSON(data output.AllResourceConfigs) (mockInterface interface{}, err error) {
-	return data, m.err
-}
-
 func TestExecute(t *testing.T) {
 
+	// TODO: add tests to validate output of Execute()
 	table := []struct {
 		name     string
 		executor Executor
 		wantErr  error
 	}{
 		{
-			name: "test LoadIacDir",
+			name: "test LoadIacDir error",
 			executor: Executor{
 				dirPath:     "./testdata/testdir",
 				iacProvider: MockIacProvider{err: errMockLoadIacDir},
@@ -73,7 +64,15 @@ func TestExecute(t *testing.T) {
 			wantErr: errMockLoadIacDir,
 		},
 		{
-			name: "test LoadIacFile",
+			name: "test LoadIacDir no error",
+			executor: Executor{
+				dirPath:     "./testdata/testdir",
+				iacProvider: MockIacProvider{err: nil},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "test LoadIacFile error",
 			executor: Executor{
 				filePath:    "./testdata/testfile",
 				iacProvider: MockIacProvider{err: errMockLoadIacFile},
@@ -81,28 +80,34 @@ func TestExecute(t *testing.T) {
 			wantErr: errMockLoadIacFile,
 		},
 		{
-			name: "test CreateNormalizedJSON error",
+			name: "test LoadIacFile no error",
 			executor: Executor{
-				filePath:      "./testdata/testfile",
-				iacProvider:   MockIacProvider{err: nil},
-				cloudProvider: MockCloudProvider{err: errMockCreateNormalizedJSON},
-			},
-			wantErr: errMockCreateNormalizedJSON,
-		},
-		{
-			name: "test CreateNormalizedJSON",
-			executor: Executor{
-				filePath:      "./testdata/testfile",
-				iacProvider:   MockIacProvider{err: nil},
-				cloudProvider: MockCloudProvider{err: nil},
+				filePath:    "./testdata/testfile",
+				iacProvider: MockIacProvider{err: nil},
 			},
 			wantErr: nil,
+		},
+		{
+			name: "test SendNofitications no error",
+			executor: Executor{
+				iacProvider: MockIacProvider{err: nil},
+				notifiers:   []notifications.Notifier{&MockNotifier{err: nil}},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "test SendNofitications no error",
+			executor: Executor{
+				iacProvider: MockIacProvider{err: nil},
+				notifiers:   []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
+			},
+			wantErr: errMockNotifier,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			gotErr := tt.executor.Execute()
+			_, gotErr := tt.executor.Execute()
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -113,11 +118,11 @@ func TestExecute(t *testing.T) {
 func TestInit(t *testing.T) {
 
 	table := []struct {
-		name              string
-		executor          Executor
-		wantErr           error
-		wantIacProvider   iacProvider.IacProvider
-		wantCloudProvider cloudProvider.CloudProvider
+		name            string
+		executor        Executor
+		wantErr         error
+		wantIacProvider iacProvider.IacProvider
+		wantNotifiers   []notifications.Notifier
 	}{
 		{
 			name: "valid filePath",
@@ -128,22 +133,67 @@ func TestInit(t *testing.T) {
 				iacType:    "terraform",
 				iacVersion: "v12",
 			},
-			wantErr:           nil,
-			wantIacProvider:   &tfv12.TfV12{},
-			wantCloudProvider: &awsProvider.AWSProvider{},
+			wantErr:         nil,
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{},
+		},
+		{
+			name: "valid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "./testdata/webhook.toml",
+			},
+			wantErr:         nil,
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
+			name: "invalid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "testdata/invalid-notifier.toml",
+			},
+			wantErr:         fmt.Errorf("notifier not supported"),
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
+			name: "config not present",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "./testdata/does-not-exist",
+			},
+			wantErr:         fmt.Errorf("config file not present"),
+			wantIacProvider: &tfv12.TfV12{},
 		},
 	}
 
 	for _, tt := range table {
-		gotErr := tt.executor.Init()
-		if !reflect.DeepEqual(gotErr, tt.wantErr) {
-			t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
-		}
-		if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
-			t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
-		}
-		if !reflect.DeepEqual(tt.executor.cloudProvider, tt.wantCloudProvider) {
-			t.Errorf("got: '%v', want: '%v'", tt.executor.cloudProvider, tt.wantCloudProvider)
-		}
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := tt.executor.Init()
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+			if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
+				t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
+			}
+			for i, notifier := range tt.executor.notifiers {
+				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
+					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+				}
+			}
+		})
 	}
 }

@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	errFailedLoadConfigFile = fmt.Errorf("failed to load config file")
+	errLoadConfigFile = fmt.Errorf("failed to load config file")
 )
 
 // LoadIacFile parses the given terraform file from the given file path
@@ -38,12 +38,12 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
-		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", diags)
-		return allResourcesConfig, errFailedLoadConfigFile
+		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
+		return allResourcesConfig, errLoadConfigFile
 	}
 	if hclFile == nil && diags.HasErrors() {
 		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
-		return allResourcesConfig, errFailedLoadConfigFile
+		return allResourcesConfig, errLoadConfigFile
 	}
 
 	// initialize normalized output

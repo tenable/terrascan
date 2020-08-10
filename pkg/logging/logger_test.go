@@ -17,6 +17,7 @@
 package logging
 
 import (
+	"reflect"
 	"testing"
 
 	"go.uber.org/zap/zapcore"
@@ -86,4 +87,23 @@ func TestGetLogger(t *testing.T) {
 			t.Errorf("unexpected error")
 		}
 	}
+}
+
+func TestGetDefaultLogger(t *testing.T) {
+	t.Run("json encoding", func(t *testing.T) {
+		Init("json", "info")
+		got := GetDefaultLogger()
+		want := globalLogger
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got: '%v', want: '%v'", got, want)
+		}
+	})
+	t.Run("console encoding", func(t *testing.T) {
+		Init("console", "info")
+		got := GetDefaultLogger()
+		want := globalLogger
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got: '%v', want: '%v'", got, want)
+		}
+	})
 }

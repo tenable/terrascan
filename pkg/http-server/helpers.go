@@ -14,14 +14,23 @@
     limitations under the License.
 */
 
-package cloudprovider
+package httpserver
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"fmt"
+	"net/http"
 )
 
-// CloudProvider defines the interface which every cloud provider needs to implement
-// to claim support in terrascan
-type CloudProvider interface {
-	CreateNormalizedJSON(output.AllResourceConfigs) (interface{}, error)
+// apiResponse creates an API response
+func apiResponse(w http.ResponseWriter, msg string, statusCode int) {
+	w.WriteHeader(statusCode)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, msg)
+}
+
+// apiErrorResponse creates an API error response
+func apiErrorResponse(w http.ResponseWriter, errMsg string, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	http.Error(w, errMsg, statusCode)
 }

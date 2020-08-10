@@ -29,18 +29,18 @@ import (
 
 // Start initializes api routes and starts http server
 func Start() {
-	// create a new API gateway
-	g := NewAPIGateway()
+	// create a new API server
+	server := NewAPIServer()
 
 	// get all routes
-	routes := g.Routes()
+	routes := server.Routes()
 
 	// register routes and start the http server
-	g.start(routes)
+	server.start(routes)
 }
 
 // start http server
-func (g *APIGateway) start(routes []*Route) {
+func (g *APIServer) start(routes []*Route) {
 
 	var (
 		err    error
