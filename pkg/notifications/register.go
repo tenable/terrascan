@@ -14,27 +14,16 @@
     limitations under the License.
 */
 
-package cli
+package notifications
 
 import (
-	//  "os"
-
-	"github.com/accurics/terrascan/pkg/runtime"
-	// "github.com/accurics/terrascan/pkg/utils"
+	"reflect"
 )
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile string) {
+// map of supported notifier types
+var supportedNotifiers = make(map[supportedNotifierType]reflect.Type)
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile)
-	if err != nil {
-		return
-	}
-	_, err = executor.Execute()
-	if err != nil {
-		return
-	}
-	// utils.PrintJSON(normalized, os.Stdout)
+// RegisterNotifier registers an notifier provider for terrascan
+func RegisterNotifier(notifierType supportedNotifierType, notifierProvider reflect.Type) {
+	supportedNotifiers[notifierType] = notifierProvider
 }

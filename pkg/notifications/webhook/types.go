@@ -14,27 +14,10 @@
     limitations under the License.
 */
 
-package cli
+package webhook
 
-import (
-	//  "os"
-
-	"github.com/accurics/terrascan/pkg/runtime"
-	// "github.com/accurics/terrascan/pkg/utils"
-)
-
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile string) {
-
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile)
-	if err != nil {
-		return
-	}
-	_, err = executor.Execute()
-	if err != nil {
-		return
-	}
-	// utils.PrintJSON(normalized, os.Stdout)
+// Webhook implements the Notifier interface
+type Webhook struct {
+	URL   string
+	Token string
 }

@@ -14,27 +14,25 @@
     limitations under the License.
 */
 
-package cli
+package utils
 
 import (
-	//  "os"
-
-	"github.com/accurics/terrascan/pkg/runtime"
-	// "github.com/accurics/terrascan/pkg/utils"
+	"github.com/pkg/errors"
 )
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile string) {
+// WrapError wraps given err with allErrs and returns a unified error
+func WrapError(err, allErrs error) error {
+	// if allErrs is empty, return err
+	if allErrs == nil {
+		return err
+	}
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile)
-	if err != nil {
-		return
+	// if err empty return allErrs
+	if err == nil {
+		return allErrs
 	}
-	_, err = executor.Execute()
-	if err != nil {
-		return
-	}
-	// utils.PrintJSON(normalized, os.Stdout)
+
+	// wrap err with allErrs
+	allErrs = errors.Wrap(err, allErrs.Error())
+	return allErrs
 }

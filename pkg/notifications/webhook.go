@@ -14,27 +14,22 @@
     limitations under the License.
 */
 
-package cli
+package notifications
 
 import (
-	//  "os"
+	"reflect"
 
-	"github.com/accurics/terrascan/pkg/runtime"
-	// "github.com/accurics/terrascan/pkg/utils"
+	webhookNotifier "github.com/accurics/terrascan/pkg/notifications/webhook"
 )
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile string) {
+// terraform specific constants
+const (
+	terraform supportedNotifierType = "webhook"
+)
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile)
-	if err != nil {
-		return
-	}
-	_, err = executor.Execute()
-	if err != nil {
-		return
-	}
-	// utils.PrintJSON(normalized, os.Stdout)
+// register terraform as an IaC provider with terrascan
+func init() {
+
+	// register iac provider
+	RegisterNotifier(terraform, reflect.TypeOf(webhookNotifier.Webhook{}))
 }

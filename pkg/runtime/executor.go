@@ -20,6 +20,7 @@ import (
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/notifications"
 )
 
 // Executor object
@@ -29,17 +30,20 @@ type Executor struct {
 	cloudType   string
 	iacType     string
 	iacVersion  string
+	configFile  string
 	iacProvider iacProvider.IacProvider
+	notifiers   []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
+		configFile: configFile,
 	}
 
 	// initialized executor
@@ -66,23 +70,36 @@ func (e *Executor) Init() error {
 		return err
 	}
 
+	// create new notifiers
+	e.notifiers, err = notifications.NewNotifiers(e.configFile)
+	if err != nil {
+		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
+		return err
+	}
+
+	zap.S().Debug("initialized executor")
 	return nil
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
 func (e *Executor) Execute() (normalized interface{}, err error) {
 
+	// create normalized output from Iac
 	if e.dirPath != "" {
 		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
-		// create config from IaC
 		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
 	if err != nil {
 		return normalized, err
 	}
 
-	// write output
+	// evaluate policies
+
+	// send notifications, if configured
+	if err = e.SendNotifications(normalized); err != nil {
+		return normalized, err
+	}
 
 	// successful
 	return normalized, nil
