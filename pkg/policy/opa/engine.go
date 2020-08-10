@@ -43,7 +43,7 @@ func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	metadata, err := ioutil.ReadFile(metaFilename)
 	if err != nil {
 		if !errors.Is(err, os.ErrNotExist) {
-			zap.S().Warn("failed to load rego metadata", zap.String("file", metaFilename))
+			zap.S().Error("failed to load rego metadata", zap.String("file", metaFilename))
 		}
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	// Read metadata into struct
 	regoMetadata := RegoMetadata{}
 	if err = json.Unmarshal(metadata, &regoMetadata); err != nil {
-		zap.S().Warn("failed to unmarshal rego metadata", zap.String("file", metaFilename))
+		zap.S().Error("failed to unmarshal rego metadata", zap.String("file", metaFilename))
 		return nil, err
 	}
 	return &regoMetadata, err
@@ -63,7 +63,7 @@ func (e *Engine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*Rego
 		regoPath := filepath.Join(currentDir, regoDataList[i].Metadata.File)
 		rawRegoData, err := ioutil.ReadFile(regoPath)
 		if err != nil {
-			zap.S().Warn("failed to load rego file", zap.String("file", regoPath))
+			zap.S().Debug("failed to load rego file", zap.String("file", regoPath))
 			continue
 		}
 
@@ -104,7 +104,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 		fileInfo, err = ioutil.ReadDir(dirList[i])
 		if err != nil {
 			if !errors.Is(err, os.ErrNotExist) {
-				zap.S().Error("error while searching for files", zap.String("dir", dirList[i]))
+				zap.S().Debug("error while searching for files", zap.String("dir", dirList[i]))
 			}
 			continue
 		}
@@ -112,7 +112,8 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 		// Load the rego metadata first (*.json)
 		metadataFiles := utils.FilterFileInfoBySuffix(&fileInfo, RegoMetadataFileSuffix)
 		if metadataFiles == nil {
-			return fmt.Errorf("no metadata files were found")
+			zap.S().Debug("no metadata files were found", zap.String("dir", dirList[i]))
+			continue
 		}
 
 		var regoDataList []*RegoData
@@ -122,6 +123,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			var regoMetadata *RegoMetadata
 			regoMetadata, err = e.LoadRegoMetadata(filePath)
 			if err != nil {
+				zap.S().Debug("error loading rego metadata", zap.String("file", filePath))
 				continue
 			}
 
@@ -135,21 +137,26 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 
 		// Read in raw rego data from associated rego files
 		if err = e.loadRawRegoFilesIntoMap(dirList[i], regoDataList, &e.RegoFileMap); err != nil {
+			zap.S().Debug("error loading raw rego data", zap.String("dir", dirList[i]))
 			continue
 		}
 
 		for j := range regoDataList {
 			e.stats.metadataCount++
+
+			// Check if the template file exists
+			templateFile := filepath.Join(dirList[i], regoDataList[j].Metadata.File)
+
 			// Apply templates if available
 			var templateData bytes.Buffer
 			t := template.New("opa")
-			_, err = t.Parse(string(e.RegoFileMap[filepath.Join(dirList[i], regoDataList[j].Metadata.RuleTemplate+".rego")]))
+			_, err = t.Parse(string(e.RegoFileMap[templateFile]))
 			if err != nil {
-				zap.S().Warn("unable to parse template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
+				zap.S().Debug("unable to parse template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
 				continue
 			}
 			if err = t.Execute(&templateData, regoDataList[j].Metadata.RuleTemplateArgs); err != nil {
-				zap.S().Warn("unable to execute template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
+				zap.S().Debug("unable to execute template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
 				continue
 			}
 
@@ -160,7 +167,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 
 	e.stats.ruleCount = len(e.RegoDataMap)
 	e.stats.regoFileCount = len(e.RegoFileMap)
-	zap.S().Infof("loaded %d Rego rules from %d rego files (%d metadata files).", e.stats.ruleCount, e.stats.regoFileCount, e.stats.metadataFileCount)
+	zap.S().Debugf("loaded %d Rego rules from %d rego files (%d metadata files).", e.stats.ruleCount, e.stats.regoFileCount, e.stats.metadataFileCount)
 
 	return err
 }
@@ -172,6 +179,8 @@ func (e *Engine) CompileRegoFiles() error {
 			e.RegoDataMap[k].Metadata.RuleName: string(e.RegoDataMap[k].RawRego),
 		})
 		if err != nil {
+			zap.S().Error("error compiling rego files", zap.String("rule", e.RegoDataMap[k].Metadata.RuleName),
+				zap.String("raw rego", string(e.RegoDataMap[k].RawRego)), zap.Error(err))
 			return err
 		}
 
@@ -183,6 +192,8 @@ func (e *Engine) CompileRegoFiles() error {
 		// Create a prepared query that can be evaluated.
 		query, err := r.PrepareForEval(e.Context)
 		if err != nil {
+			zap.S().Error("error creating prepared query", zap.String("rule", e.RegoDataMap[k].Metadata.RuleName),
+				zap.String("raw rego", string(e.RegoDataMap[k].RawRego)), zap.Error(err))
 			return err
 		}
 
@@ -198,11 +209,13 @@ func (e *Engine) Initialize(policyPath string) error {
 	e.Context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
+		zap.S().Error("error loading rego files", zap.String("policy path", policyPath))
 		return err
 	}
 
 	err := e.CompileRegoFiles()
 	if err != nil {
+		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath))
 		return err
 	}
 
@@ -240,7 +253,7 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 		rs, err := e.RegoDataMap[k].PreparedQuery.Eval(e.Context, rego.EvalInput(inputData))
 		//		rs, err := r.Eval(o.Context)
 		if err != nil {
-			zap.S().Warn("failed to run prepared query", zap.String("rule", "'"+k+"'"), zap.Any("input", inputData))
+			zap.S().Warn("failed to run prepared query", zap.String("rule", "'"+k+"'"))
 			continue
 		}
 
@@ -248,19 +261,13 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 			results := rs[0].Expressions[0].Value.([]interface{})
 			if len(results) > 0 {
 				r := e.RegoDataMap[k].Metadata
-				fmt.Printf("\nResource(s): %v\n[%s] [%s] %s\n    %s\n", results, r.Severity, r.RuleReferenceID, r.RuleName, r.Description)
+				fmt.Printf("[%s] [%s] [%s] %s: %s\n", r.Severity, r.RuleReferenceID, r.Category, r.RuleName, r.Description)
 				continue
 			}
 		}
 
 		// Store results
 	}
-
-	_, err := json.MarshalIndent(inputData, "", "  ")
-	if err != nil {
-		return err
-	}
-	//fmt.Printf("InputData:\n%v\n", string(b))
 
 	return nil
 }
