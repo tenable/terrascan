@@ -27,15 +27,16 @@ import (
 
 // Executor object
 type Executor struct {
-	filePath    string
-	dirPath     string
-	policyPath  string
-	cloudType   string
-	iacType     string
-	iacVersion  string
-	configFile  string
-	iacProvider iacProvider.IacProvider
-	notifiers   []notifications.Notifier
+	filePath     string
+	dirPath      string
+	policyPath   string
+	cloudType    string
+	iacType      string
+	iacVersion   string
+	configFile   string
+	iacProvider  iacProvider.IacProvider
+	policyEngine policy.Engine
+	notifiers    []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
@@ -50,7 +51,7 @@ func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, 
 		configFile: configFile,
 	}
 
-	// initialized executor
+	// initialize executor
 	if err = e.Init(); err != nil {
 		return e, err
 	}
@@ -81,49 +82,41 @@ func (e *Executor) Init() error {
 		return err
 	}
 
+	// create a new policy engine based on IaC type
+	e.policyEngine, err = opa.NewEngine(e.policyPath)
+	if err != nil {
+		zap.S().Errorf("failed to create policy engine. error: '%s'", err)
+		return err
+	}
+
 	zap.S().Debug("initialized executor")
 	return nil
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() (normalized interface{}, err error) {
+func (e *Executor) Execute() (results interface{}, err error) {
 
-	// create normalized output from Iac
+	// create results output from Iac
 	if e.dirPath != "" {
-		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
+		results, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
-		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
+		results, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
 	if err != nil {
-		return normalized, err
+		return results, err
 	}
 
-	// create a new policy engine based on IaC type
-	var engine policy.Engine
-
-	if e.iacType == "terraform" {
-		engine = &opa.Engine{}
+	// evaluate policies
+	results, err = e.policyEngine.Evaluate(&results)
+	if err != nil {
+		return results, err
 	}
-
-	if err = engine.Initialize(e.policyPath); err != nil {
-		return normalized, err
-	}
-
-	if err = engine.Evaluate(&normalized); err != nil {
-		return normalized, err
-	}
-
-	//	var reporter publish.Reporter = console.Reporter
-	///	if err = reporter.ImportData()
-	//	if err = reporter.Publish() {
-	//
-	//    }
 
 	// send notifications, if configured
-	if err = e.SendNotifications(normalized); err != nil {
-		return normalized, err
+	if err = e.SendNotifications(results); err != nil {
+		return results, err
 	}
 
 	// successful
-	return normalized, nil
+	return results, nil
 }

@@ -16,6 +16,10 @@
 
 package policy
 
+import (
+	"github.com/accurics/terrascan/pkg/results"
+)
+
 // Manager Policy Manager interface
 type Manager interface {
 	Import() error
@@ -25,9 +29,9 @@ type Manager interface {
 
 // Engine Policy Engine interface
 type Engine interface {
-	Initialize(policyPath string) error
+	Init(string) error
 	Configure() error
-	Evaluate(inputData *interface{}) error
+	Evaluate(*interface{}) ([]*results.Violation, error)
 	GetResults() error
 	Release() error
 }

@@ -36,6 +36,26 @@ import (
 	"go.uber.org/zap"
 )
 
+var (
+	errInitFailed = fmt.Errorf("failed to initialize OPA policy engine")
+)
+
+// NewEngine returns a new OPA policy engine
+func NewEngine(policyPath string) (*Engine, error) {
+
+	// opa engine struct
+	engine := &Engine{}
+
+	// initialize the engine
+	if err := engine.Init(policyPath); err != nil {
+		zap.S().Error("failed to initialize OPA policy engine")
+		return engine, errInitFailed
+	}
+
+	// successful
+	return engine, nil
+}
+
 // LoadRegoMetadata Loads rego metadata from a given file
 func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	// Load metadata file if it exists
@@ -202,9 +222,9 @@ func (e *Engine) CompileRegoFiles() error {
 	return nil
 }
 
-// Initialize Initializes the Opa engine
+// Init initializes the Opa engine
 // Handles loading all rules, filtering, compiling, and preparing for evaluation
-func (e *Engine) Initialize(policyPath string) error {
+func (e *Engine) Init(policyPath string) error {
 	e.Context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
@@ -217,6 +237,9 @@ func (e *Engine) Initialize(policyPath string) error {
 		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath))
 		return err
 	}
+
+	// initialize ViolationStore
+	e.ViolationStore = results.NewViolationStore()
 
 	return nil
 }
@@ -237,7 +260,7 @@ func (e *Engine) Release() error {
 }
 
 // Evaluate Executes compiled OPA queries against the input JSON data
-func (e *Engine) Evaluate(inputData *interface{}) error {
+func (e *Engine) Evaluate(inputData *interface{}) ([]*results.Violation, error) {
 
 	sortedKeys := make([]string, len(e.RegoDataMap))
 	x := 0
@@ -262,8 +285,8 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 				// @TODO: Take line number + file info and add to violation
 				regoData := e.RegoDataMap[k]
 				// @TODO: Remove this print, should be done by whomever consumes the results below
-				fmt.Printf("[%s] [%s] [%s] %s: %s\n", regoData.Metadata.Severity, regoData.Metadata.RuleReferenceID,
-					regoData.Metadata.Category, regoData.Metadata.RuleName, regoData.Metadata.Description)
+				// fmt.Printf("[%s] [%s] [%s] %s: %s\n", regoData.Metadata.Severity, regoData.Metadata.RuleReferenceID,
+				//	regoData.Metadata.Category, regoData.Metadata.RuleName, regoData.Metadata.Description)
 				violation := results.Violation{
 					Name:        regoData.Metadata.RuleName,
 					Description: regoData.Metadata.Description,
@@ -281,5 +304,5 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 		}
 	}
 
-	return nil
+	return e.ViolationStore.GetResults(), nil
 }
