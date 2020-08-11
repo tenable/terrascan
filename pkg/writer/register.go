@@ -14,29 +14,17 @@
     limitations under the License.
 */
 
-package cli
+package writer
 
-import (
-	"os"
+import "io"
 
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/writer"
-)
+// supportedFormat data type for supported formats
+type supportedFormat string
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, policyPath string) {
+// writerMap stores mapping of supported writer formats with respective functions
+var writerMap = make(map[supportedFormat](func(interface{}, io.Writer) error))
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile, policyPath)
-	if err != nil {
-		return
-	}
-
-	// executor output
-	violations, err := executor.Execute()
-	if err != nil {
-		return
-	}
-	writer.Write("xml", violations, os.Stdout)
+// RegisterWriter registers a writer for terrascan
+func RegisterWriter(format supportedFormat, writerFunc func(interface{}, io.Writer) error) {
+	writerMap[format] = writerFunc
 }

@@ -14,29 +14,26 @@
     limitations under the License.
 */
 
-package cli
+package writer
 
 import (
-	"os"
+	"io"
 
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/writer"
+	"gopkg.in/yaml.v2"
 )
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, policyPath string) {
+const (
+	yamlFormat supportedFormat = "yaml"
+)
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile, policyPath)
-	if err != nil {
-		return
-	}
+func init() {
+	RegisterWriter(yamlFormat, YAMLWriter)
+}
 
-	// executor output
-	violations, err := executor.Execute()
-	if err != nil {
-		return
-	}
-	writer.Write("xml", violations, os.Stdout)
+// YAMLWriter prints data in YAML format
+func YAMLWriter(data interface{}, writer io.Writer) error {
+	j, _ := yaml.Marshal(data)
+	writer.Write(j)
+	writer.Write([]byte{'\n'})
+	return nil
 }
