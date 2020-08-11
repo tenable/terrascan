@@ -18,14 +18,14 @@ package results
 
 // Violation Contains data for each violation
 type Violation struct {
-	Name        string
-	Description string
-	RuleID      string
-	Category    string
-	RuleData    interface{}
-	InputFile   string
-	InputData   interface{}
-	LineNumber  int
+	Name        string      `json:"name" yaml:"name" xml:"name,attr"`
+	Description string      `json:"description" yaml:"description" xml:"description, attr"`
+	RuleID      string      `json:"rule" yaml:"rule" xml:"rule,attr"`
+	Category    string      `json:"category" yaml:"category" xml:"category,attr"`
+	RuleData    interface{} `json:"-" yaml:"-" xml:"-"`
+	InputFile   string      `json:"-", yaml:"-", xml:"-"`
+	InputData   interface{} `json:"input_data" yaml:"input_data" xml:"input_data,attr"`
+	LineNumber  int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
 // ViolationStore Storage area for violation data

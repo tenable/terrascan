@@ -14,29 +14,25 @@
     limitations under the License.
 */
 
-package cli
+package writer
 
 import (
-	"os"
-
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/writer"
+	"encoding/json"
+	"io"
 )
 
-// Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, policyPath string) {
+const (
+	jsonFormat supportedFormat = "json"
+)
 
-	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile, policyPath)
-	if err != nil {
-		return
-	}
+func init() {
+	RegisterWriter(jsonFormat, JSONWriter)
+}
 
-	// executor output
-	violations, err := executor.Execute()
-	if err != nil {
-		return
-	}
-	writer.Write("xml", violations, os.Stdout)
+// JSONWriter prints data in JSON format
+func JSONWriter(data interface{}, writer io.Writer) error {
+	j, _ := json.MarshalIndent(data, "", "  ")
+	writer.Write(j)
+	writer.Write([]byte{'\n'})
+	return nil
 }
