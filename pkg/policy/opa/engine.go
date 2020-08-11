@@ -28,13 +28,12 @@ import (
 	"sort"
 	"text/template"
 
+	"github.com/accurics/terrascan/pkg/results"
+
 	"github.com/accurics/terrascan/pkg/utils"
-
 	"github.com/open-policy-agent/opa/ast"
-
-	"go.uber.org/zap"
-
 	"github.com/open-policy-agent/opa/rego"
+	"go.uber.org/zap"
 )
 
 // LoadRegoMetadata Loads rego metadata from a given file
@@ -258,15 +257,28 @@ func (e *Engine) Evaluate(inputData *interface{}) error {
 		}
 
 		if len(rs) > 0 {
-			results := rs[0].Expressions[0].Value.([]interface{})
-			if len(results) > 0 {
-				r := e.RegoDataMap[k].Metadata
-				fmt.Printf("[%s] [%s] [%s] %s: %s\n", r.Severity, r.RuleReferenceID, r.Category, r.RuleName, r.Description)
+			res := rs[0].Expressions[0].Value.([]interface{})
+			if len(res) > 0 {
+				// @TODO: Take line number + file info and add to violation
+				regoData := e.RegoDataMap[k]
+				// @TODO: Remove this print, should be done by whomever consumes the results below
+				fmt.Printf("[%s] [%s] [%s] %s: %s\n", regoData.Metadata.Severity, regoData.Metadata.RuleReferenceID,
+					regoData.Metadata.Category, regoData.Metadata.RuleName, regoData.Metadata.Description)
+				violation := results.Violation{
+					Name:        regoData.Metadata.RuleName,
+					Description: regoData.Metadata.Description,
+					RuleID:      regoData.Metadata.RuleReferenceID,
+					Category:    regoData.Metadata.Category,
+					RuleData:    regoData.RawRego,
+					InputFile:   "",
+					InputData:   res,
+					LineNumber:  0,
+				}
+
+				e.ViolationStore.AddResult(&violation)
 				continue
 			}
 		}
-
-		// Store results
 	}
 
 	return nil

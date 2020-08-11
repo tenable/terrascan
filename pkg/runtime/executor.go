@@ -99,16 +99,25 @@ func (e *Executor) Execute() (normalized interface{}, err error) {
 	}
 
 	// create a new policy engine based on IaC type
+	var engine policy.Engine
+
 	if e.iacType == "terraform" {
-		var engine policy.Engine = &opa.Engine{}
-
-		err = engine.Initialize(e.policyPath)
-		if err != nil {
-			return normalized, err
-		}
-
-		engine.Evaluate(&normalized)
+		engine = &opa.Engine{}
 	}
+
+	if err = engine.Initialize(e.policyPath); err != nil {
+		return normalized, err
+	}
+
+	if err = engine.Evaluate(&normalized); err != nil {
+		return normalized, err
+	}
+
+	//	var reporter publish.Reporter = console.Reporter
+	///	if err = reporter.ImportData()
+	//	if err = reporter.Publish() {
+	//
+	//    }
 
 	// send notifications, if configured
 	if err = e.SendNotifications(normalized); err != nil {

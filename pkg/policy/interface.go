@@ -31,3 +31,7 @@ type Engine interface {
 	GetResults() error
 	Release() error
 }
+
+// EngineFactory creates policy engine instances based on iac/cloud type
+type EngineFactory struct {
+}
