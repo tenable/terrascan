@@ -57,6 +57,6 @@ type Engine struct {
 	Context        context.Context
 	RegoFileMap    map[string][]byte
 	RegoDataMap    map[string]*RegoData
-	ViolationStore *results.Store
+	ViolationStore *results.ViolationStore
 	stats          EngineStats
 }
