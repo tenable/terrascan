@@ -16,6 +16,13 @@
 
 package results
 
+// NewViolationStore returns a new violation store
+func NewViolationStore() *ViolationStore {
+	return &ViolationStore{
+		violations: []*Violation{},
+	}
+}
+
 // AddResult Adds individual violations into the violation store
 func (s *ViolationStore) AddResult(violation *Violation) {
 	s.violations = append(s.violations, violation)
