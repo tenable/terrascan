@@ -300,16 +300,16 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 
 				severity := regoData.Metadata.Severity
 				if strings.ToLower(severity) == "high" {
-					e.Results.ViolationStore.HighCount++
+					e.Results.ViolationStore.Count.HighCount++
 				} else if strings.ToLower(severity) == "medium" {
-					e.Results.ViolationStore.MediumCount++
+					e.Results.ViolationStore.Count.MediumCount++
 				} else if strings.ToLower(severity) == "low" {
-					e.Results.ViolationStore.LowCount++
+					e.Results.ViolationStore.Count.LowCount++
 				} else {
 					zap.S().Warn("invalid severity found in rule definition",
 						zap.String("rule id", violation.RuleID), zap.String("severity", severity))
 				}
-				e.Results.ViolationStore.TotalCount++
+				e.Results.ViolationStore.Count.TotalCount++
 				e.Results.ViolationStore.AddResult(&violation)
 				continue
 			}
