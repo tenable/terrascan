@@ -17,25 +17,24 @@
 package writer
 
 import (
-	"fmt"
+	"encoding/xml"
 	"io"
 
 	"github.com/accurics/terrascan/pkg/policy"
-	"go.uber.org/zap"
 )
 
-var (
-	errNotSupported = fmt.Errorf("output format not supported")
+const (
+	xmlFormat supportedFormat = "xml"
 )
 
-// Write method writes in the given format using the respective writer func
-func Write(format string, data policy.EngineOutput, writer io.Writer) error {
+func init() {
+	RegisterWriter(xmlFormat, XMLWriter)
+}
 
-	writerFunc, present := writerMap[supportedFormat(format)]
-	if !present {
-		zap.S().Error("output format '%s' not supported", format)
-		return errNotSupported
-	}
-
-	return writerFunc(data, writer)
+// XMLWriter prints data in XML format
+func XMLWriter(data policy.EngineOutput, writer io.Writer) error {
+	j, _ := xml.MarshalIndent(data, "", "  ")
+	writer.Write(j)
+	writer.Write([]byte{'\n'})
+	return nil
 }

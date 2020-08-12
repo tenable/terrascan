@@ -19,6 +19,8 @@ package writer
 import (
 	"encoding/json"
 	"io"
+
+	"github.com/accurics/terrascan/pkg/policy"
 )
 
 const (
@@ -30,7 +32,7 @@ func init() {
 }
 
 // JSONWriter prints data in JSON format
-func JSONWriter(data interface{}, writer io.Writer) error {
+func JSONWriter(data policy.EngineOutput, writer io.Writer) error {
 	j, _ := json.MarshalIndent(data, "", "  ")
 	writer.Write(j)
 	writer.Write([]byte{'\n'})
