@@ -28,9 +28,9 @@ var (
 )
 
 // Write method writes in the given format using the respective writer func
-func Write(format supportedFormat, data interface{}, writer io.Writer) error {
+func Write(format string, data interface{}, writer io.Writer) error {
 
-	writerFunc, present := writerMap[format]
+	writerFunc, present := writerMap[supportedFormat(format)]
 	if !present {
 		zap.S().Error("output format '%s' not supported", format)
 		return errNotSupported
