@@ -14,29 +14,25 @@
     limitations under the License.
 */
 
-package policy
+package writer
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
+	"encoding/json"
+	"io"
 )
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
+const (
+	jsonFormat supportedFormat = "json"
+)
+
+func init() {
+	RegisterWriter(jsonFormat, JSONWriter)
 }
 
-// Engine Policy Engine interface
-type Engine interface {
-	Init(string) error
-	Configure() error
-	Evaluate(output.AllResourceConfigs) ([]*results.Violation, error)
-	GetResults() error
-	Release() error
-}
-
-// EngineFactory creates policy engine instances based on iac/cloud type
-type EngineFactory struct {
+// JSONWriter prints data in JSON format
+func JSONWriter(data interface{}, writer io.Writer) error {
+	j, _ := json.MarshalIndent(data, "", "  ")
+	writer.Write(j)
+	writer.Write([]byte{'\n'})
+	return nil
 }

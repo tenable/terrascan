@@ -17,7 +17,9 @@
 package utils
 
 import (
+	"fmt"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -62,6 +64,47 @@ func TestGetAbsPath(t *testing.T) {
 				t.Errorf("unexpected error; got: '%v', want: '%v'", err, tt.wantErr)
 			}
 			if got != tt.want {
+				t.Errorf("got: '%v', want: '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFindAllDirectories(t *testing.T) {
+
+	table := []struct {
+		name     string
+		basePath string
+		want     []string
+		wantErr  error
+	}{
+		{
+			name:     "happy path",
+			basePath: "./testdata",
+			want:     []string{"./testdata", "testdata/emptydir", "testdata/testdir1", "testdata/testdir2"},
+			wantErr:  nil,
+		},
+		{
+			name:     "empty dir",
+			basePath: "./testdata/emptydir",
+			want:     []string{"./testdata/emptydir"},
+			wantErr:  nil,
+		},
+		{
+			name:     "invalid dir",
+			basePath: "./testdata/nothere",
+			want:     []string{},
+			wantErr:  fmt.Errorf("lstat ./testdata/nothere: no such file or directory"),
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			got, gotErr := FindAllDirectories(tt.basePath)
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("gotErr: '%+v', wantErr: '%+v'", gotErr, tt.wantErr)
+			}
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("got: '%v', want: '%v'", got, tt.want)
 			}
 		})

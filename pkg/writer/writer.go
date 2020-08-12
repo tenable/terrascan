@@ -14,29 +14,27 @@
     limitations under the License.
 */
 
-package policy
+package writer
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
+	"fmt"
+	"io"
+
+	"go.uber.org/zap"
 )
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
-}
+var (
+	errNotSupported = fmt.Errorf("output format not supported")
+)
 
-// Engine Policy Engine interface
-type Engine interface {
-	Init(string) error
-	Configure() error
-	Evaluate(output.AllResourceConfigs) ([]*results.Violation, error)
-	GetResults() error
-	Release() error
-}
+// Write method writes in the given format using the respective writer func
+func Write(format supportedFormat, data interface{}, writer io.Writer) error {
 
-// EngineFactory creates policy engine instances based on iac/cloud type
-type EngineFactory struct {
+	writerFunc, present := writerMap[format]
+	if !present {
+		zap.S().Error("output format '%s' not supported", format)
+		return errNotSupported
+	}
+
+	return writerFunc(data, writer)
 }

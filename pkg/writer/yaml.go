@@ -14,29 +14,26 @@
     limitations under the License.
 */
 
-package policy
+package writer
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
+	"io"
+
+	"gopkg.in/yaml.v2"
 )
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
+const (
+	yamlFormat supportedFormat = "yaml"
+)
+
+func init() {
+	RegisterWriter(yamlFormat, YAMLWriter)
 }
 
-// Engine Policy Engine interface
-type Engine interface {
-	Init(string) error
-	Configure() error
-	Evaluate(output.AllResourceConfigs) ([]*results.Violation, error)
-	GetResults() error
-	Release() error
-}
-
-// EngineFactory creates policy engine instances based on iac/cloud type
-type EngineFactory struct {
+// YAMLWriter prints data in YAML format
+func YAMLWriter(data interface{}, writer io.Writer) error {
+	j, _ := yaml.Marshal(data)
+	writer.Write(j)
+	writer.Write([]byte{'\n'})
+	return nil
 }

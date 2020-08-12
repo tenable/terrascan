@@ -14,29 +14,17 @@
     limitations under the License.
 */
 
-package policy
+package writer
 
-import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-)
+import "io"
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
-}
+// supportedFormat data type for supported formats
+type supportedFormat string
 
-// Engine Policy Engine interface
-type Engine interface {
-	Init(string) error
-	Configure() error
-	Evaluate(output.AllResourceConfigs) ([]*results.Violation, error)
-	GetResults() error
-	Release() error
-}
+// writerMap stores mapping of supported writer formats with respective functions
+var writerMap = make(map[supportedFormat](func(interface{}, io.Writer) error))
 
-// EngineFactory creates policy engine instances based on iac/cloud type
-type EngineFactory struct {
+// RegisterWriter registers a writer for terrascan
+func RegisterWriter(format supportedFormat, writerFunc func(interface{}, io.Writer) error) {
+	writerMap[format] = writerFunc
 }
