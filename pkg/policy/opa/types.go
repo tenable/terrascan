@@ -19,7 +19,7 @@ package opa
 import (
 	"context"
 
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/policy"
 
 	"github.com/open-policy-agent/opa/rego"
 )
@@ -54,9 +54,9 @@ type EngineStats struct {
 
 // Engine Implements the policy engine interface
 type Engine struct {
-	Context        context.Context
-	RegoFileMap    map[string][]byte
-	RegoDataMap    map[string]*RegoData
-	ViolationStore *results.ViolationStore
-	stats          EngineStats
+	Context     context.Context
+	RegoFileMap map[string][]byte
+	RegoDataMap map[string]*RegoData
+	Results     policy.EngineOutput
+	stats       EngineStats
 }

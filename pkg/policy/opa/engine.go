@@ -26,9 +26,11 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"text/template"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/policy"
+
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/open-policy-agent/opa/ast"
@@ -239,7 +241,7 @@ func (e *Engine) Init(policyPath string) error {
 	}
 
 	// initialize ViolationStore
-	e.ViolationStore = results.NewViolationStore()
+	e.Results.ViolationStore = results.NewViolationStore()
 
 	return nil
 }
@@ -260,7 +262,7 @@ func (e *Engine) Release() error {
 }
 
 // Evaluate Executes compiled OPA queries against the input JSON data
-func (e *Engine) Evaluate(inputData output.AllResourceConfigs) ([]*results.Violation, error) {
+func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, error) {
 
 	sortedKeys := make([]string, len(e.RegoDataMap))
 	x := 0
@@ -272,7 +274,7 @@ func (e *Engine) Evaluate(inputData output.AllResourceConfigs) ([]*results.Viola
 
 	for _, k := range sortedKeys {
 		// Execute the prepared query.
-		rs, err := e.RegoDataMap[k].PreparedQuery.Eval(e.Context, rego.EvalInput(inputData))
+		rs, err := e.RegoDataMap[k].PreparedQuery.Eval(e.Context, rego.EvalInput(engineInput.InputData))
 		//		rs, err := r.Eval(o.Context)
 		if err != nil {
 			zap.S().Warn("failed to run prepared query", zap.String("rule", "'"+k+"'"))
@@ -284,13 +286,11 @@ func (e *Engine) Evaluate(inputData output.AllResourceConfigs) ([]*results.Viola
 			if len(res) > 0 {
 				// @TODO: Take line number + file info and add to violation
 				regoData := e.RegoDataMap[k]
-				// @TODO: Remove this print, should be done by whomever consumes the results below
-				// fmt.Printf("[%s] [%s] [%s] %s: %s\n", regoData.Metadata.Severity, regoData.Metadata.RuleReferenceID,
-				//	regoData.Metadata.Category, regoData.Metadata.RuleName, regoData.Metadata.Description)
 				violation := results.Violation{
 					Name:        regoData.Metadata.RuleName,
 					Description: regoData.Metadata.Description,
 					RuleID:      regoData.Metadata.RuleReferenceID,
+					Severity:    regoData.Metadata.Severity,
 					Category:    regoData.Metadata.Category,
 					RuleData:    regoData.RawRego,
 					InputFile:   "",
@@ -298,11 +298,23 @@ func (e *Engine) Evaluate(inputData output.AllResourceConfigs) ([]*results.Viola
 					LineNumber:  0,
 				}
 
-				e.ViolationStore.AddResult(&violation)
+				severity := regoData.Metadata.Severity
+				if strings.ToLower(severity) == "high" {
+					e.Results.ViolationStore.HighCount++
+				} else if strings.ToLower(severity) == "medium" {
+					e.Results.ViolationStore.MediumCount++
+				} else if strings.ToLower(severity) == "low" {
+					e.Results.ViolationStore.LowCount++
+				} else {
+					zap.S().Warn("invalid severity found in rule definition",
+						zap.String("rule id", violation.RuleID), zap.String("severity", severity))
+				}
+				e.Results.ViolationStore.TotalCount++
+				e.Results.ViolationStore.AddResult(&violation)
 				continue
 			}
 		}
 	}
 
-	return e.ViolationStore.GetResults(), nil
+	return e.Results, nil
 }

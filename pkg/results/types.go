@@ -19,16 +19,26 @@ package results
 // Violation Contains data for each violation
 type Violation struct {
 	Name        string      `json:"name" yaml:"name" xml:"name,attr"`
-	Description string      `json:"description" yaml:"description" xml:"description, attr"`
+	Description string      `json:"description" yaml:"description" xml:"description,attr"`
 	RuleID      string      `json:"rule" yaml:"rule" xml:"rule,attr"`
+	Severity    string      `json:"severity" yaml:"severity" xml:"severity,attr"`
 	Category    string      `json:"category" yaml:"category" xml:"category,attr"`
 	RuleData    interface{} `json:"-" yaml:"-" xml:"-"`
-	InputFile   string      `json:"-", yaml:"-", xml:"-"`
+	InputFile   string      `json:"-" yaml:"-" xml:"-"`
 	InputData   interface{} `json:"input_data" yaml:"input_data" xml:"input_data,attr"`
 	LineNumber  int         `json:"line" yaml:"line" xml:"line,attr"`
+}
+
+// ViolationStats Contains stats related to the violation data
+type ViolationStats struct {
+	LowCount    int
+	MediumCount int
+	HighCount   int
+	TotalCount  int
 }
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
 	violations []*Violation
+	ViolationStats
 }

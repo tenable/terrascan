@@ -24,7 +24,6 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/accurics/terrascan/pkg/results"
 )
 
 // Executor object
@@ -96,7 +95,7 @@ func (e *Executor) Init() error {
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() (results []*results.Violation, err error) {
+func (e *Executor) Execute() (results policy.EngineOutput, err error) {
 
 	// create results output from Iac
 	var normalized output.AllResourceConfigs
@@ -110,7 +109,7 @@ func (e *Executor) Execute() (results []*results.Violation, err error) {
 	}
 
 	// evaluate policies
-	results, err = e.policyEngine.Evaluate(normalized)
+	results, err = e.policyEngine.Evaluate(policy.EngineInput{InputData: &normalized})
 	if err != nil {
 		return results, err
 	}
