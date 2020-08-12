@@ -12,5 +12,5 @@ type EngineInput struct {
 
 // EngineOutput Contains data output from the engine
 type EngineOutput struct {
-	ViolationStore *results.ViolationStore
+	*results.ViolationStore
 }

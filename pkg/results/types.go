@@ -25,20 +25,20 @@ type Violation struct {
 	Category    string      `json:"category" yaml:"category" xml:"category,attr"`
 	RuleData    interface{} `json:"-" yaml:"-" xml:"-"`
 	InputFile   string      `json:"-" yaml:"-" xml:"-"`
-	InputData   interface{} `json:"input_data" yaml:"input_data" xml:"input_data,attr"`
+	InputData   interface{} `json:"-" yaml:"-" xml:"-"`
 	LineNumber  int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
 // ViolationStats Contains stats related to the violation data
 type ViolationStats struct {
-	LowCount    int
-	MediumCount int
-	HighCount   int
-	TotalCount  int
+	LowCount    int `json:"low"`
+	MediumCount int `json:"medium"`
+	HighCount   int `json:"high"`
+	TotalCount  int `json:"total"`
 }
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	violations []*Violation
-	ViolationStats
+	Violations []*Violation   `json:"violations"`
+	Count      ViolationStats `json:"count"`
 }
