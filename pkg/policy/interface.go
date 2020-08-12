@@ -16,11 +16,6 @@
 
 package policy
 
-import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-)
-
 // Manager Policy Manager interface
 type Manager interface {
 	Import() error
@@ -32,7 +27,7 @@ type Manager interface {
 type Engine interface {
 	Init(string) error
 	Configure() error
-	Evaluate(output.AllResourceConfigs) ([]*results.Violation, error)
+	Evaluate(EngineInput) (EngineOutput, error)
 	GetResults() error
 	Release() error
 }
