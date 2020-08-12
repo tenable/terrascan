@@ -44,6 +44,9 @@ nav:
   - About: about.md
 
 markdown_extensions:
-  - markdown_include.include
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
   - toc:
       permalink: true
