@@ -18,39 +18,118 @@ package main
 
 import (
 	"flag"
-
-	"go.uber.org/zap"
+	"fmt"
 
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/accurics/terrascan/pkg/logging"
+	"go.uber.org/zap"
 )
+
+const (
+	// CmdArgServer server command
+	CmdArgServer = "server"
+	// CmdArgIacType iac command
+	CmdArgIacType = "iac"
+	// CmdArgIacVersion iac-version command
+	CmdArgIacVersion = "iac-version"
+	// CmdArgFilePath file path command
+	CmdArgFilePath = "f"
+	// CmdArgDirPath dir path command
+	CmdArgDirPath = "d"
+	// CmdArgPolicyPath policy path command
+	CmdArgPolicyPath = "p"
+	// CmdArgCloudType cloud type command
+	CmdArgCloudType = "cloud"
+	// CmdArgLogLevel log-level command
+	CmdArgLogLevel = "log-level"
+	// CmdArgLogType log-type command
+	CmdArgLogType = "log-type"
+	// CmdArgConfigFile config command
+	CmdArgConfigFile = "config"
+	// SectionConfig config section
+	SectionConfig = "Config"
+	// SectionMode mode section
+	SectionMode = "Mode"
+	// SectionIac iac section
+	SectionIac = "IaC"
+	// SectionCloud cloud section
+	SectionCloud = "Cloud"
+	// SectionLogging logging section
+	SectionLogging = "Logging"
+)
+
+// UsageSections Usage sections
+var UsageSections = []string{SectionConfig, SectionIac, SectionCloud, SectionLogging, SectionMode}
+
+// UsageSectionMap Sets the section and print order for each command line arg
+var UsageSectionMap = map[string][]string{
+	SectionMode:    {CmdArgServer},
+	SectionIac:     {CmdArgIacType, CmdArgIacVersion, CmdArgFilePath, CmdArgDirPath, CmdArgPolicyPath},
+	SectionCloud:   {CmdArgCloudType},
+	SectionLogging: {CmdArgLogLevel, CmdArgLogType, CmdArgConfigFile},
+}
+
+// Usage This overrides the default flags usage information
+var Usage = func() {
+	fmt.Printf(`
+Terrascan
+
+Scan IaC for security violations
+
+Commands
+`)
+
+	flagMap := make(map[string]*flag.Flag)
+	flag.VisitAll(func(f *flag.Flag) {
+		flagMap[f.Name] = f
+	})
+
+	for i := range UsageSections {
+		fmt.Printf("\n%s\n", UsageSections[i])
+		for _, arg := range UsageSectionMap[UsageSections[i]] {
+			fmt.Printf("    -%-20s %s\n", flagMap[arg].Name, flagMap[arg].Usage)
+		}
+	}
+
+	fmt.Printf(`
+Examples:
+
+Scan all files in a directory:
+    ./terrascan -cloud aws -iac terraform -iac-version v12 -d /home/user/iac_folder
+
+`)
+
+}
 
 func main() {
 
 	// command line flags
 	var (
 		// server mode
-		server = flag.Bool("server", false, "run terrascan in server mode")
+		server = flag.Bool("server", false, "Run Terrascan in server mode")
 
 		// IaC flags
 		iacType     = flag.String("iac", "", "IaC provider (supported values: terraform)")
-		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
+		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for Terraform)")
 		iacFilePath = flag.String("f", "", "IaC file path")
 		iacDirPath  = flag.String("d", "", "IaC directory path")
 		policyPath  = flag.String("p", "", "Policy directory path")
 
 		// cloud flags
-		cloudType = flag.String("cloud", "", "cloud provider (supported values: aws)")
+		cloudType = flag.String("cloud", "", "Cloud provider (supported values: aws)")
 
 		// logging flags
-		logLevel = flag.String("log-level", "info", "logging level (debug, info, warn, error, panic, fatal)")
-		logType  = flag.String("log-type", "console", "log type (json, console)")
+		logLevel = flag.String("log-level", "info", "Logging level (debug, info, warn, error, panic, fatal)")
+		logType  = flag.String("log-type", "console", "Logging type (json, console)")
 
 		// config file
-		configFile = flag.String("config", "", "config file path")
+		configFile = flag.String("config", "", "Configuration file path")
 	)
 	flag.Parse()
+
+	// override usage
+	flag.Usage = Usage
 
 	// if no flags are passed, print usage
 	if flag.NFlag() < 1 {
