@@ -28,8 +28,8 @@ import (
 	"sort"
 	"text/template"
 
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/results"
-
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/open-policy-agent/opa/ast"
 	"github.com/open-policy-agent/opa/rego"
@@ -260,7 +260,7 @@ func (e *Engine) Release() error {
 }
 
 // Evaluate Executes compiled OPA queries against the input JSON data
-func (e *Engine) Evaluate(inputData *interface{}) ([]*results.Violation, error) {
+func (e *Engine) Evaluate(inputData output.AllResourceConfigs) ([]*results.Violation, error) {
 
 	sortedKeys := make([]string, len(e.RegoDataMap))
 	x := 0

@@ -20,9 +20,11 @@ import (
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/accurics/terrascan/pkg/results"
 )
 
 // Executor object
@@ -94,20 +96,21 @@ func (e *Executor) Init() error {
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() (results interface{}, err error) {
+func (e *Executor) Execute() (results []*results.Violation, err error) {
 
 	// create results output from Iac
+	var normalized output.AllResourceConfigs
 	if e.dirPath != "" {
-		results, err = e.iacProvider.LoadIacDir(e.dirPath)
+		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	} else {
-		results, err = e.iacProvider.LoadIacFile(e.filePath)
+		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
 	}
 	if err != nil {
 		return results, err
 	}
 
 	// evaluate policies
-	results, err = e.policyEngine.Evaluate(&results)
+	results, err = e.policyEngine.Evaluate(normalized)
 	if err != nil {
 		return results, err
 	}

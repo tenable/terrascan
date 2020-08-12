@@ -38,5 +38,5 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, po
 	if err != nil {
 		return
 	}
-	writer.Write("xml", violations, os.Stdout)
+	writer.Write("yaml", violations, os.Stdout)
 }
