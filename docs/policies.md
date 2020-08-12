@@ -1,6 +1,6 @@
 # Policies
 
-Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). With each rego policy a JSON "rule" file is included which defines metadata for the policy.
+Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). With each rego policy a JSON "rule" file is included which defines metadata for the policy. Policies included within Terrascan are stored in the [pkg/policies/opa/rego](https://github.com/accurics/terrascan/tree/master/pkg/policies/opa/rego) directory.
 
 ## Rule JSON file
 
@@ -23,5 +23,18 @@ Here's an example of the contents of a rule file:
     "version" : "1"
 }
 ```
+
+| Key                 | Value                                         |
+| ------------------- | --------------------------------------------- |
+| ruleName            | Short name for the rule                       |
+| rule                | File name of the rego policy                  |
+| ruleTemplate        | FIXME                                         |
+| ruleArgument        | FIXME                                         |
+| ruleArgument.prefix | FIXME                                         |
+| severity            | Likelihood x impact of issue                  |
+| description         | Description of the issue found with this rule |
+| ruleReferenceId     | Unique ID of the rule in the format `<cloud-provider>.<resource-type>.<rule-category>.<next-available-rule-number>` |
+| category            | Descriptive category for this rule    |
+| version             | Version number for the rule/rego      |
 
 ## AWS
