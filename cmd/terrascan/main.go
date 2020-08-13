@@ -19,6 +19,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
 
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
@@ -41,33 +44,38 @@ const (
 	CmdArgPolicyPath = "p"
 	// CmdArgCloudType cloud type command
 	CmdArgCloudType = "cloud"
+	// CmdArgVersion version command
+	CmdArgVersion = "version"
 	// CmdArgLogLevel log-level command
 	CmdArgLogLevel = "log-level"
 	// CmdArgLogType log-type command
 	CmdArgLogType = "log-type"
 	// CmdArgConfigFile config command
 	CmdArgConfigFile = "config"
-	// SectionConfig config section
-	SectionConfig = "Config"
 	// SectionMode mode section
 	SectionMode = "Mode"
 	// SectionIac iac section
-	SectionIac = "IaC"
+	SectionIac = "IaC (Infrastructure as Code)"
 	// SectionCloud cloud section
 	SectionCloud = "Cloud"
 	// SectionLogging logging section
 	SectionLogging = "Logging"
+	// SectionMisc miscellaneous commands
+	SectionMisc = "Miscellaneous"
+	// Terrascan data directory
+	TerrascanDataDir = ".terrascan"
 )
 
 // UsageSections Usage sections
-var UsageSections = []string{SectionConfig, SectionIac, SectionCloud, SectionLogging, SectionMode}
+var UsageSections = []string{SectionIac, SectionCloud, SectionMode, SectionLogging, SectionMisc}
 
 // UsageSectionMap Sets the section and print order for each command line arg
 var UsageSectionMap = map[string][]string{
-	SectionMode:    {CmdArgServer},
-	SectionIac:     {CmdArgIacType, CmdArgIacVersion, CmdArgFilePath, CmdArgDirPath, CmdArgPolicyPath},
+	SectionIac:     {CmdArgDirPath, CmdArgFilePath, CmdArgIacType, CmdArgIacVersion, CmdArgPolicyPath},
 	SectionCloud:   {CmdArgCloudType},
-	SectionLogging: {CmdArgLogLevel, CmdArgLogType, CmdArgConfigFile},
+	SectionLogging: {CmdArgLogLevel, CmdArgLogType},
+	SectionMode:    {CmdArgServer},
+	SectionMisc:    {CmdArgConfigFile, CmdArgVersion},
 }
 
 // Usage This overrides the default flags usage information
@@ -75,7 +83,7 @@ var Usage = func() {
 	fmt.Printf(`
 Terrascan
 
-Scan IaC for security violations
+Scan IaC files for security violations
 
 Commands
 `)
@@ -93,43 +101,58 @@ Commands
 	}
 
 	fmt.Printf(`
-Examples:
+Examples
 
-Scan all files in a directory:
-    ./terrascan -cloud aws -iac terraform -iac-version v12 -d /home/user/iac_folder
+    Scan Terraform v12 IaC files for the AWS provider under directory /home/user/iac_folder
+        terrascan -cloud aws -d /home/user/iac_folder
 
+    Scan Terraform v12 IaC files for the GCP provider under directory /home/user/iac_folder using custom policies under /home/user/policies
+        terrascan -cloud gcp -d /home/user/iac_folder -p /home/user/policies
+
+    Launch the API server
+        terrascan -server
 `)
 
 }
 
 func main() {
 
+	// get home directory for the default policy path
+	homeDir, err := homedir.Dir()
+	if err != nil {
+		zap.S().Error("error obtaining home directory", zap.Error(err))
+		return
+	}
+	homePolicyPath := filepath.Join(homeDir, TerrascanDataDir, "policies")
 	// command line flags
 	var (
 		// server mode
 		server = flag.Bool("server", false, "Run Terrascan in server mode")
 
 		// IaC flags
-		iacType     = flag.String("iac", "", "IaC provider (supported values: terraform)")
-		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for Terraform)")
+		iacType     = flag.String("iac", "terraform", "IaC provider (supported values: terraform, default: terraform)")
+		iacVersion  = flag.String("iac-version", "v12", "IaC version (supported values: 'v12' for Terraform, default: v12)")
 		iacFilePath = flag.String("f", "", "IaC file path")
-		iacDirPath  = flag.String("d", "", "IaC directory path")
-		policyPath  = flag.String("p", "", "Policy directory path")
+		iacDirPath  = flag.String("d", "./", "IaC directory path (default: current working directory)")
+		policyPath  = flag.String("p", homePolicyPath, "Policy directory path")
 
 		// cloud flags
-		cloudType = flag.String("cloud", "", "Cloud provider (supported values: aws)")
+		cloudType = flag.String("cloud", "", "Cloud provider (supported values: aws, azure, gcp)")
 
 		// logging flags
-		logLevel = flag.String("log-level", "info", "Logging level (debug, info, warn, error, panic, fatal)")
-		logType  = flag.String("log-type", "console", "Logging type (json, console)")
+		logLevel = flag.String("log-level", "info", "Logging level (supported values: debug, info, warn, error, panic, fatal)")
+		logType  = flag.String("log-type", "console", "Logging type (supported values: json, yaml, console, default: console)")
 
 		// config file
 		configFile = flag.String("config", "", "Configuration file path")
-	)
-	flag.Parse()
 
+		// misc
+		version = flag.String("version", "", "Print the Terrascan version")
+	)
 	// override usage
 	flag.Usage = Usage
+
+	flag.Parse()
 
 	// if no flags are passed, print usage
 	if flag.NFlag() < 1 {
@@ -144,6 +167,6 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath)
+		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath, *version)
 	}
 }

@@ -34,12 +34,13 @@ type Executor struct {
 	iacType     string
 	iacVersion  string
 	configFile  string
+	version     string
 	iacProvider iacProvider.IacProvider
 	notifiers   []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath, version string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -48,6 +49,7 @@ func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, 
 		iacType:    iacType,
 		iacVersion: iacVersion,
 		configFile: configFile,
+		version:    version,
 	}
 
 	// initialized executor
