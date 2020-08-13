@@ -21,6 +21,7 @@ import (
 	"io"
 
 	"github.com/accurics/terrascan/pkg/policy"
+	"go.uber.org/zap"
 )
 
 const (
@@ -33,7 +34,11 @@ func init() {
 
 // XMLWriter prints data in XML format
 func XMLWriter(data policy.EngineOutput, writer io.Writer) error {
-	j, _ := xml.MarshalIndent(data, "", "  ")
+	j, err := xml.MarshalIndent(data, "", "  ")
+	if err != nil {
+		zap.S().Errorf("failed to write XML output. error: '%v'", err)
+		return err
+	}
 	writer.Write(j)
 	writer.Write([]byte{'\n'})
 	return nil
