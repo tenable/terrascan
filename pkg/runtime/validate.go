@@ -27,51 +27,47 @@ import (
 )
 
 var (
-	errEmptyIacPath     = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errIncorrectIacPath = fmt.Errorf("cannot accept both '-f' and '-d' options together")
-	errDirNotExists     = fmt.Errorf("directory does not exist")
-	errFileNotExists    = fmt.Errorf("file does not exist")
-	errIacNotSupported  = fmt.Errorf("iac type or version not supported")
+	errEmptyIacPath    = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists    = fmt.Errorf("directory does not exist")
+	errFileNotExists   = fmt.Errorf("file does not exist")
+	errIacNotSupported = fmt.Errorf("iac type or version not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
 func (e *Executor) ValidateInputs() error {
+
+	var err error
 
 	// terrascan can accept either a file or a directory
 	if e.filePath == "" && e.dirPath == "" {
 		zap.S().Errorf("no IaC path specified; use '-f' for file or '-d' for directory")
 		return errEmptyIacPath
 	}
-	if e.filePath != "" && e.dirPath != "" {
-		zap.S().Errorf("cannot accept both '-f %s' and '-d %s' options together", e.filePath, e.dirPath)
-		return errIncorrectIacPath
-	}
 
-	if e.dirPath != "" {
-		// if directory, check if directory exists
-		absDirPath, err := utils.GetAbsPath(e.dirPath)
-		if err != nil {
-			return err
-		}
-
-		if _, err := os.Stat(absDirPath); err != nil {
-			zap.S().Errorf("directory '%s' does not exist", absDirPath)
-			return errDirNotExists
-		}
-		zap.S().Debugf("directory '%s' exists", absDirPath)
-	} else {
-
+	if e.filePath != "" {
 		// if file path, check if file exists
-		absFilePath, err := utils.GetAbsPath(e.filePath)
+		e.filePath, err = utils.GetAbsPath(e.filePath)
 		if err != nil {
 			return err
 		}
 
-		if _, err := os.Stat(absFilePath); err != nil {
-			zap.S().Errorf("file '%s' does not exist", absFilePath)
+		if _, err := os.Stat(e.filePath); err != nil {
+			zap.S().Errorf("file '%s' does not exist", e.filePath)
 			return errFileNotExists
 		}
-		zap.S().Debugf("file '%s' exists", absFilePath)
+		zap.S().Debugf("file '%s' exists", e.filePath)
+	} else {
+		// if directory, check if directory exists
+		e.dirPath, err = utils.GetAbsPath(e.dirPath)
+		if err != nil {
+			return err
+		}
+
+		if _, err := os.Stat(e.dirPath); err != nil {
+			zap.S().Errorf("directory '%s' does not exist", e.dirPath)
+			return errDirNotExists
+		}
+		zap.S().Debugf("directory '%s' exists", e.dirPath)
 	}
 
 	// check if Iac type is supported

@@ -59,14 +59,6 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: errEmptyIacPath,
 		},
 		{
-			name: "incorrect iac path",
-			executor: Executor{
-				filePath: "./testdata/testfile",
-				dirPath:  "./testdata/testdir",
-			},
-			wantErr: errIncorrectIacPath,
-		},
-		{
 			name: "filepath does not exist",
 			executor: Executor{
 				filePath: "./testdata/notthere",

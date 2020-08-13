@@ -18,23 +18,23 @@ package opa
 
 import (
 	"context"
+	"time"
 
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/policy"
 
 	"github.com/open-policy-agent/opa/rego"
 )
 
 // RegoMetadata The rego metadata struct which is read and saved from disk
 type RegoMetadata struct {
-	RuleName         string                 `json:"ruleName"`
-	File             string                 `json:"file"`
-	RuleTemplate     string                 `json:"ruleTemplate"`
-	RuleTemplateArgs map[string]interface{} `json:"ruleTemplateArgs"`
-	Severity         string                 `json:"severity"`
-	Description      string                 `json:"description"`
-	RuleReferenceID  string                 `json:"ruleReferenceId"`
-	Category         string                 `json:"category"`
-	Version          int                    `json:"version"`
+	Name         string                 `json:"name"`
+	File         string                 `json:"file"`
+	TemplateArgs map[string]interface{} `json:"templateArgs"`
+	Severity     string                 `json:"severity"`
+	Description  string                 `json:"description"`
+	ReferenceID  string                 `json:"referenceId"`
+	Category     string                 `json:"category"`
+	Version      int                    `json:"version"`
 }
 
 // RegoData Stores all information needed to evaluate and report on a rego rule
@@ -50,13 +50,14 @@ type EngineStats struct {
 	regoFileCount     int
 	metadataFileCount int
 	metadataCount     int
+	runTime           time.Duration
 }
 
 // Engine Implements the policy engine interface
 type Engine struct {
-	Context        context.Context
-	RegoFileMap    map[string][]byte
-	RegoDataMap    map[string]*RegoData
-	ViolationStore *results.Store
-	stats          EngineStats
+	results     policy.EngineOutput
+	context     context.Context
+	regoFileMap map[string][]byte
+	regoDataMap map[string]*RegoData
+	stats       EngineStats
 }

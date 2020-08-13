@@ -102,7 +102,7 @@ func TestUpload(t *testing.T) {
 			})
 			res := httptest.NewRecorder()
 			// new api handler
-			h := NewAPIHandler()
+			h := &APIHandler{test: true}
 			h.scanFile(res, req)
 
 			if res.Code != tt.wantStatus {

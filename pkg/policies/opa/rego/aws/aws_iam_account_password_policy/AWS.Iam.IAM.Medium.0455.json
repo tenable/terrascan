@@ -1,15 +1,14 @@
 {
-    "ruleName": "passwordRequireNumber",
+    "name": "passwordRequireNumber",
     "file": "passwordPolicyRequirement.rego",
-    "ruleTemplate": "passwordRequireNumber",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "name": "passwordRequireNumber",
         "prefix": "",
         "required_parameter": "require_numbers"
     },
     "severity": "MEDIUM",
     "description": "Number not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
-    "ruleReferenceId": "AWS.Iam.IAM.Medium.0455",
+    "referenceId": "AWS.Iam.IAM.Medium.0455",
     "category": "IAM",
     "version": 2
 }

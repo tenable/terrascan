@@ -53,6 +53,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 		Name:   managedResource.Name,
 		Type:   managedResource.Type,
 		Source: managedResource.DeclRange.Filename,
+		Line:   managedResource.DeclRange.Start.Line,
 		Config: goOut,
 	}
 

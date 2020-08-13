@@ -1,13 +1,12 @@
 {
-    "ruleName": "rootUserNotContainMfaTypeHardware",
+    "name": "rootUserNotContainMfaTypeHardware",
     "file": "rootUserNotContainMfaTypeHardware.rego",
-    "ruleTemplate": "rootUserNotContainMfaTypeHardware",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": "Ensure Hardware MFA device is enabled for the \"root\" account",
-    "ruleReferenceId": "AWS.IamUser.IAM.High.0387",
+    "referenceId": "AWS.IamUser.IAM.High.0387",
     "category": "Identity and Access Management",
-    "version": 0
+    "version": 1
 }

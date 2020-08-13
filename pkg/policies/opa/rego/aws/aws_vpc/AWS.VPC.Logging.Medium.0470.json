@@ -1,13 +1,12 @@
 {
-    "ruleName": "vpcFlowLogsNotEnabled",
+    "name": "vpcFlowLogsNotEnabled",
     "file": "vpcFlowLogsNotEnabled.rego",
-    "ruleTemplate": "vpcFlowLogsNotEnabled",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure VPC flow logging is enabled in all VPCs",
-    "ruleReferenceId": "AWS.VPC.Logging.Medium.0470",
+    "referenceId": "AWS.VPC.Logging.Medium.0470",
     "category": "Logging",
     "version": 2
 }
