@@ -37,7 +37,7 @@ func main() {
 		iacType     = flag.String("iac", "", "IaC provider (supported values: terraform)")
 		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
 		iacFilePath = flag.String("f", "", "IaC file path")
-		iacDirPath  = flag.String("d", "", "IaC directory path")
+		iacDirPath  = flag.String("d", ".", "IaC directory path")
 		policyPath  = flag.String("p", "", "Policy directory path")
 
 		// cloud flags
