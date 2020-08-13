@@ -1,13 +1,12 @@
 {
-    "ruleName": "hardCodedKey",
+    "name": "hardCodedKey",
     "file": "hardCodedKey.rego",
-    "ruleTemplate": "hardCodedKey",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": "Avoid using base64 encoded private keys as part of config",
-    "ruleReferenceId": "AWS.LaunchConfiguration.DataSecurity.High.0102",
+    "referenceId": "AWS.LaunchConfiguration.DataSecurity.High.0102",
     "category": "Data Security",
     "version": 1
 }
