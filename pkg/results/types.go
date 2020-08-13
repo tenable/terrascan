@@ -23,11 +23,12 @@ type Violation struct {
 	RuleID       string      `json:"rule" yaml:"rule" xml:"rule,attr"`
 	Severity     string      `json:"severity" yaml:"severity" xml:"severity,attr"`
 	Category     string      `json:"category" yaml:"category" xml:"category,attr"`
+	RuleFile     string      `json:"ruleFile" yaml:"ruleFile" xml:"ruleFile,attr"`
 	RuleData     interface{} `json:"-" yaml:"-" xml:"-"`
 	ResourceName string      `json:"resourceName" yaml:"resourceName" xml:"resourceName,attr"`
 	ResourceType string      `json:"resourceType" yaml:"resourceType" xml:"resourceType,attr"`
-	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
-	File         string      `json:"-" yaml:"-" xml:"-"`
+	ResourceData interface{} `json:"resourceData" yaml:"resourceData" xml:"resourceData,attr"`
+	File         string      `json:"file" yaml:"file" xml:"file,attr"`
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
