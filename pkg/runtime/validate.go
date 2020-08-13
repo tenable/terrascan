@@ -44,25 +44,8 @@ func (e *Executor) ValidateInputs() error {
 		zap.S().Errorf("no IaC path specified; use '-f' for file or '-d' for directory")
 		return errEmptyIacPath
 	}
-	if e.filePath != "" && e.dirPath != "" {
-		zap.S().Errorf("cannot accept both '-f %s' and '-d %s' options together", e.filePath, e.dirPath)
-		return errIncorrectIacPath
-	}
 
-	if e.dirPath != "" {
-		// if directory, check if directory exists
-		e.dirPath, err = utils.GetAbsPath(e.dirPath)
-		if err != nil {
-			return err
-		}
-
-		if _, err := os.Stat(e.dirPath); err != nil {
-			zap.S().Errorf("directory '%s' does not exist", e.dirPath)
-			return errDirNotExists
-		}
-		zap.S().Debugf("directory '%s' exists", e.dirPath)
-	} else {
-
+	if e.filePath != "" {
 		// if file path, check if file exists
 		e.filePath, err = utils.GetAbsPath(e.filePath)
 		if err != nil {
@@ -74,6 +57,18 @@ func (e *Executor) ValidateInputs() error {
 			return errFileNotExists
 		}
 		zap.S().Debugf("file '%s' exists", e.filePath)
+	} else {
+		// if directory, check if directory exists
+		e.dirPath, err = utils.GetAbsPath(e.dirPath)
+		if err != nil {
+			return err
+		}
+
+		if _, err := os.Stat(e.dirPath); err != nil {
+			zap.S().Errorf("directory '%s' does not exist", e.dirPath)
+			return errDirNotExists
+		}
+		zap.S().Debugf("directory '%s' exists", e.dirPath)
 	}
 
 	// check if Iac type is supported

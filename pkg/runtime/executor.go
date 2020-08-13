@@ -99,10 +99,10 @@ func (e *Executor) Execute() (results policy.EngineOutput, err error) {
 
 	// create results output from Iac
 	var normalized output.AllResourceConfigs
-	if e.dirPath != "" {
-		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
-	} else {
+	if e.filePath != "" {
 		normalized, err = e.iacProvider.LoadIacFile(e.filePath)
+	} else {
+		normalized, err = e.iacProvider.LoadIacDir(e.dirPath)
 	}
 	if err != nil {
 		return results, err
