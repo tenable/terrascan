@@ -18,12 +18,12 @@ package tfv12
 
 import (
 	"fmt"
+	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
-
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 var (
@@ -58,8 +58,8 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}
 
-		// append resource config to list of all resources
-		// allResourcesConfig = append(allResourcesConfig, resourceConfig)
+		// extract file name from path
+		resourceConfig.Source = getFileName(resourceConfig.Source)
 
 		// append to normalized output
 		if _, present := allResourcesConfig[resourceConfig.Type]; !present {
@@ -71,4 +71,10 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 
 	// successful
 	return allResourcesConfig, nil
+}
+
+// getFileName return file name from the given file path
+func getFileName(path string) string {
+	_, file := filepath.Split(path)
+	return file
 }
