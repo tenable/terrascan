@@ -1,0 +1,12 @@
+{
+    "name": "cloudfrontNoHTTPSTraffic",
+    "file": "cloudfrontNoHTTPSTraffic.rego",
+    "templateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Use encrypted connection between CloudFront and origin server",
+    "referenceId": "AWS.CloudFront.EncryptionandKeyManagement.High.0407",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

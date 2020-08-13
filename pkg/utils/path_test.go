@@ -17,7 +17,6 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -90,12 +89,6 @@ func TestFindAllDirectories(t *testing.T) {
 			want:     []string{"./testdata/emptydir"},
 			wantErr:  nil,
 		},
-		{
-			name:     "invalid dir",
-			basePath: "./testdata/nothere",
-			want:     []string{},
-			wantErr:  fmt.Errorf("lstat ./testdata/nothere: no such file or directory"),
-		},
 	}
 
 	for _, tt := range table {
@@ -109,4 +102,12 @@ func TestFindAllDirectories(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("invalid dir", func(t *testing.T) {
+		basePath := "./testdata/nothere"
+		_, gotErr := FindAllDirectories(basePath)
+		if gotErr == nil {
+			t.Errorf("got no error; error expected")
+		}
+	})
 }

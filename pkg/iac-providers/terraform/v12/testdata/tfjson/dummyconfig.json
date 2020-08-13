@@ -3,7 +3,8 @@
     {
       "id": "terraform_remote_state.remote",
       "name": "remote",
-      "source": "./testdata/dummyconfig/dummyconfig.tf",
+      "source": "dummyconfig.tf",
+      "line": 41,
       "type": "terraform_remote_state",
       "config": {
         "backend": "s3",
@@ -20,7 +21,8 @@
     {
       "id": "type1.resource1",
       "name": "resource1",
-      "source": "./testdata/dummyconfig/dummyconfig.tf",
+      "source": "dummyconfig.tf",
+      "line": 1,
       "type": "type1",
       "config": {
         "arr": [
@@ -44,7 +46,8 @@
     {
       "id": "type2.resource2",
       "name": "resource2",
-      "source": "./testdata/dummyconfig/dummyconfig.tf",
+      "source": "dummyconfig.tf",
+      "line": 13,
       "type": "type2",
       "config": {
         "other": {
@@ -64,7 +67,8 @@
     {
       "id": "type3.resource3",
       "name": "resource3",
-      "source": "./testdata/dummyconfig/dummyconfig.tf",
+      "source": "dummyconfig.tf",
+      "line": 26,
       "type": "type3",
       "config": {
         "cond": "${test3 \u003e 2 ? 1: 0}",

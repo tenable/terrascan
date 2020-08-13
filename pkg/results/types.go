@@ -18,30 +18,30 @@ package results
 
 // Violation Contains data for each violation
 type Violation struct {
-	RuleName     string      `json:"ruleName" yaml:"ruleName" xml:"ruleName,attr"`
+	RuleName     string      `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
 	Description  string      `json:"description" yaml:"description" xml:"description,attr"`
 	RuleID       string      `json:"rule" yaml:"rule" xml:"rule,attr"`
 	Severity     string      `json:"severity" yaml:"severity" xml:"severity,attr"`
 	Category     string      `json:"category" yaml:"category" xml:"category,attr"`
-	RuleFile     string      `json:"ruleFile" yaml:"ruleFile" xml:"ruleFile,attr"`
+	RuleFile     string      `json:"rule_file" yaml:"rule_file" xml:"rule_file,attr"`
 	RuleData     interface{} `json:"-" yaml:"-" xml:"-"`
-	ResourceName string      `json:"resourceName" yaml:"resourceName" xml:"resourceName,attr"`
-	ResourceType string      `json:"resourceType" yaml:"resourceType" xml:"resourceType,attr"`
-	ResourceData interface{} `json:"resourceData" yaml:"resourceData" xml:"resourceData,attr"`
+	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
+	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
+	ResourceData interface{} `json:"resource_data" yaml:"resource_data" xml:"resource_data,attr"`
 	File         string      `json:"file" yaml:"file" xml:"file,attr"`
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
 // ViolationStats Contains stats related to the violation data
 type ViolationStats struct {
-	LowCount    int `json:"low"`
-	MediumCount int `json:"medium"`
-	HighCount   int `json:"high"`
-	TotalCount  int `json:"total"`
+	LowCount    int `json:"low" yaml:"low" xml:"low,attr"`
+	MediumCount int `json:"medium" yaml:"medium" xml:"medium,attr"`
+	HighCount   int `json:"high" yaml:"high" xml:"high,attr"`
+	TotalCount  int `json:"total" yaml:"total" xml:"total,attr"`
 }
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations []*Violation   `json:"violations"`
-	Count      ViolationStats `json:"count"`
+	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations,attr"`
+	Count      ViolationStats `json:"count" yaml:"count" xml:"count,attr"`
 }
