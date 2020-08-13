@@ -16,18 +16,11 @@
 
 package policy
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
-}
-
 // Engine Policy Engine interface
 type Engine interface {
-	Initialize(policyPath string) error
+	Init(string) error
 	Configure() error
-	Evaluate(inputData *interface{}) error
-	GetResults() error
+	Evaluate(EngineInput) (EngineOutput, error)
+	GetResults() EngineOutput
 	Release() error
 }

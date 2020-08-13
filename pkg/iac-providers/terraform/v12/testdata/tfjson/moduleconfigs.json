@@ -3,7 +3,8 @@
     {
       "id": "aws_cloudfront_distribution.s3-distribution-TLS-v1",
       "name": "s3-distribution-TLS-v1",
-      "source": "testdata/moduleconfigs/cloudfront/main.tf",
+      "source": "cloudfront/main.tf",
+      "line": 6,
       "type": "aws_cloudfront_distribution",
       "config": {
         "default_cache_behavior": [
@@ -130,7 +131,8 @@
     {
       "id": "aws_cloudtrail.missing-multi-region",
       "name": "missing-multi-region",
-      "source": "testdata/moduleconfigs/cloudtrail/main.tf",
+      "source": "cloudtrail/main.tf",
+      "line": 1,
       "type": "aws_cloudtrail",
       "config": {
         "include_global_service_events": false,
@@ -144,7 +146,8 @@
     {
       "id": "aws_ecs_task_definition.instanceNotInVpc",
       "name": "instanceNotInVpc",
-      "source": "testdata/moduleconfigs/ecs/main.tf",
+      "source": "ecs/main.tf",
+      "line": 1,
       "type": "aws_ecs_task_definition",
       "config": {
         "container_definitions": "${file(\"ecs/service.json\")}",
@@ -157,7 +160,8 @@
     {
       "id": "aws_efs_file_system.efsNotEncrypted",
       "name": "efsNotEncrypted",
-      "source": "testdata/moduleconfigs/efs/main.tf",
+      "source": "efs/main.tf",
+      "line": 1,
       "type": "aws_efs_file_system",
       "config": {
         "creation_token": "my-product",
@@ -171,7 +175,8 @@
     {
       "id": "aws_elasticache_cluster.noMemcachedInElastiCache",
       "name": "noMemcachedInElastiCache",
-      "source": "testdata/moduleconfigs/elasticcache/main.tf",
+      "source": "elasticcache/main.tf",
+      "line": 1,
       "type": "aws_elasticache_cluster",
       "config": {
         "cluster_id": "cluster-example",
@@ -187,7 +192,8 @@
     {
       "id": "aws_guardduty_detector.gaurdDutyDisabled",
       "name": "gaurdDutyDisabled",
-      "source": "testdata/moduleconfigs/guardduty/main.tf",
+      "source": "guardduty/main.tf",
+      "line": 1,
       "type": "aws_guardduty_detector",
       "config": {
         "enable": false
@@ -198,7 +204,8 @@
     {
       "id": "aws_iam_access_key.noAccessKeyForRootAccount",
       "name": "noAccessKeyForRootAccount",
-      "source": "testdata/moduleconfigs/iam/main.tf",
+      "source": "iam/main.tf",
+      "line": 1,
       "type": "aws_iam_access_key",
       "config": {
         "pgp_key": "keybase:some_person_that_exists",
@@ -211,7 +218,8 @@
     {
       "id": "aws_kinesis_stream.kinesisEncryptedWithKms",
       "name": "kinesisEncryptedWithKms",
-      "source": "testdata/moduleconfigs/kinesis/main.tf",
+      "source": "kinesis/main.tf",
+      "line": 1,
       "type": "aws_kinesis_stream",
       "config": {
         "encryption_type": "KMS",
@@ -233,7 +241,8 @@
     {
       "id": "aws_kms_key.kmsKeyDisabled",
       "name": "kmsKeyDisabled",
-      "source": "testdata/moduleconfigs/cloudfront/sub-cloudfront/main.tf",
+      "source": "cloudfront/sub-cloudfront/main.tf",
+      "line": 1,
       "type": "aws_kms_key",
       "config": {
         "description": "KMS key 2",
@@ -249,7 +258,8 @@
     {
       "id": "aws_load_balancer_policy.elbWeakCipher",
       "name": "elbWeakCipher",
-      "source": "testdata/moduleconfigs/elb/main.tf",
+      "source": "elb/main.tf",
+      "line": 1,
       "type": "aws_load_balancer_policy",
       "config": {
         "load_balancer_name": "some-name",
@@ -268,7 +278,8 @@
     {
       "id": "aws_s3_bucket.noS3BucketSseRules",
       "name": "noS3BucketSseRules",
-      "source": "testdata/moduleconfigs/s3/main.tf",
+      "source": "s3/main.tf",
+      "line": 1,
       "type": "aws_s3_bucket",
       "config": {
         "acl": "private",
@@ -284,7 +295,8 @@
     {
       "id": "aws_security_group.acme_web",
       "name": "acme_web",
-      "source": "testdata/moduleconfigs/sg/main.tf",
+      "source": "sg/main.tf",
+      "line": 1,
       "type": "aws_security_group",
       "config": {
         "description": "Used in the terraform",
@@ -322,7 +334,8 @@
     {
       "id": "aws_sqs_queue.sqsQueueExposed",
       "name": "sqsQueueExposed",
-      "source": "testdata/moduleconfigs/sqs/main.tf",
+      "source": "sqs/main.tf",
+      "line": 1,
       "type": "aws_sqs_queue",
       "config": {
         "kms_data_key_reuse_period_seconds": 300,

@@ -26,11 +26,13 @@ import (
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
+	"github.com/accurics/terrascan/pkg/policy"
 )
 
 var (
-	errMockLoadIacDir  = fmt.Errorf("mock LoadIacDir")
-	errMockLoadIacFile = fmt.Errorf("mock LoadIacFile")
+	errMockLoadIacDir   = fmt.Errorf("mock LoadIacDir")
+	errMockLoadIacFile  = fmt.Errorf("mock LoadIacFile")
+	errMockPolicyEngine = fmt.Errorf("mock PolicyEngine")
 )
 
 // MockIacProvider mocks IacProvider interface
@@ -45,6 +47,31 @@ func (m MockIacProvider) LoadIacDir(dir string) (output.AllResourceConfigs, erro
 
 func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, error) {
 	return m.output, m.err
+}
+
+// mock policy engine
+type MockPolicyEngine struct {
+	err error
+}
+
+func (m MockPolicyEngine) Init(input string) error {
+	return m.err
+}
+
+func (m MockPolicyEngine) Configure() error {
+	return m.err
+}
+
+func (m MockPolicyEngine) Evaluate(input policy.EngineInput) (out policy.EngineOutput, err error) {
+	return out, m.err
+}
+
+func (m MockPolicyEngine) GetResults() (out policy.EngineOutput) {
+	return out
+}
+
+func (m MockPolicyEngine) Release() error {
+	return m.err
 }
 
 func TestExecute(t *testing.T) {
@@ -66,8 +93,9 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacDir no error",
 			executor: Executor{
-				dirPath:     "./testdata/testdir",
-				iacProvider: MockIacProvider{err: nil},
+				dirPath:      "./testdata/testdir",
+				iacProvider:  MockIacProvider{err: nil},
+				policyEngine: MockPolicyEngine{err: nil},
 			},
 			wantErr: nil,
 		},
@@ -82,26 +110,47 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacFile no error",
 			executor: Executor{
-				filePath:    "./testdata/testfile",
-				iacProvider: MockIacProvider{err: nil},
+				filePath:     "./testdata/testfile",
+				iacProvider:  MockIacProvider{err: nil},
+				policyEngine: MockPolicyEngine{err: nil},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "test SendNofitications no error",
 			executor: Executor{
-				iacProvider: MockIacProvider{err: nil},
-				notifiers:   []notifications.Notifier{&MockNotifier{err: nil}},
+				iacProvider:  MockIacProvider{err: nil},
+				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
+				policyEngine: MockPolicyEngine{err: nil},
 			},
 			wantErr: nil,
 		},
 		{
-			name: "test SendNofitications no error",
+			name: "test SendNofitications mock error",
 			executor: Executor{
-				iacProvider: MockIacProvider{err: nil},
-				notifiers:   []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
+				iacProvider:  MockIacProvider{err: nil},
+				notifiers:    []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
+				policyEngine: MockPolicyEngine{err: nil},
 			},
 			wantErr: errMockNotifier,
+		},
+		{
+			name: "test policy enginer no error",
+			executor: Executor{
+				iacProvider:  MockIacProvider{err: nil},
+				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
+				policyEngine: MockPolicyEngine{err: nil},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "test policy engine error",
+			executor: Executor{
+				iacProvider:  MockIacProvider{err: nil},
+				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
+				policyEngine: MockPolicyEngine{err: errMockPolicyEngine},
+			},
+			wantErr: errMockPolicyEngine,
 		},
 	}
 
@@ -132,6 +181,7 @@ func TestInit(t *testing.T) {
 				cloudType:  "aws",
 				iacType:    "terraform",
 				iacVersion: "v12",
+				policyPath: "./testdata/testpolicies",
 			},
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
@@ -146,6 +196,7 @@ func TestInit(t *testing.T) {
 				iacType:    "terraform",
 				iacVersion: "v12",
 				configFile: "./testdata/webhook.toml",
+				policyPath: "./testdata/testpolicies",
 			},
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
@@ -177,6 +228,21 @@ func TestInit(t *testing.T) {
 			},
 			wantErr:         fmt.Errorf("config file not present"),
 			wantIacProvider: &tfv12.TfV12{},
+		},
+		{
+			name: "invalid policy path",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  "aws",
+				iacType:    "terraform",
+				iacVersion: "v12",
+				configFile: "./testdata/webhook.toml",
+				policyPath: "./testdata/notthere",
+			},
+			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
+			wantIacProvider: &tfv12.TfV12{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 	}
 

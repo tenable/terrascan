@@ -82,8 +82,14 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	tempFile.Write(fileBytes)
 
 	// create a new runtime executor for scanning the uploaded file
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		tempFile.Name(), "", "", "", "")
+	var executor *runtime.Executor
+	if g.test {
+		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
+			tempFile.Name(), "", "", "./testdata/testpolicies", "", "")
+	} else {
+		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
+			tempFile.Name(), "", "", "", "", "")
+	}
 	if err != nil {
 		zap.S().Error(err)
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)

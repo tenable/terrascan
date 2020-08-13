@@ -18,6 +18,7 @@ package utils
 
 import (
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -66,4 +67,47 @@ func TestGetAbsPath(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestFindAllDirectories(t *testing.T) {
+
+	table := []struct {
+		name     string
+		basePath string
+		want     []string
+		wantErr  error
+	}{
+		{
+			name:     "happy path",
+			basePath: "./testdata",
+			want:     []string{"./testdata", "testdata/emptydir", "testdata/testdir1", "testdata/testdir2"},
+			wantErr:  nil,
+		},
+		{
+			name:     "empty dir",
+			basePath: "./testdata/emptydir",
+			want:     []string{"./testdata/emptydir"},
+			wantErr:  nil,
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			got, gotErr := FindAllDirectories(tt.basePath)
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("gotErr: '%+v', wantErr: '%+v'", gotErr, tt.wantErr)
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("got: '%v', want: '%v'", got, tt.want)
+			}
+		})
+	}
+
+	t.Run("invalid dir", func(t *testing.T) {
+		basePath := "./testdata/nothere"
+		_, gotErr := FindAllDirectories(basePath)
+		if gotErr == nil {
+			t.Errorf("got no error; error expected")
+		}
+	})
 }

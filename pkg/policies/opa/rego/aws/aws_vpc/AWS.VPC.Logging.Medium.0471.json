@@ -1,13 +1,12 @@
 {
-    "ruleName": "defaultVpcExist",
+    "name": "defaultVpcExist",
     "file": "defaultVpcExist.rego",
-    "ruleTemplate": "defaultVpcExist",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Avoid creating resources in default VPC",
-    "ruleReferenceId": "AWS.VPC.Logging.Medium.0471",
+    "referenceId": "AWS.VPC.Logging.Medium.0471",
     "category": "Logging",
     "version": 1
 }

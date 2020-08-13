@@ -1,8 +1,7 @@
 {
-    "ruleName": "passwordRequireMinLength",
+    "name": "passwordRequireMinLength",
     "file": "passwordMinLength.rego",
-    "ruleTemplate": "passwordRequireMinLength",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "name": "passwordRequireMinLength",
         "parameter": "minimum_password_length",
         "prefix": "",
@@ -10,7 +9,7 @@
     },
     "severity": "MEDIUM",
     "description": "Setting a lengthy password increases account resiliency against brute force login attempts",
-    "ruleReferenceId": "AWS.Iam.IAM.Medium.0495",
+    "referenceId": "AWS.Iam.IAM.Medium.0495",
     "category": "IAM",
     "version": 2
 }
