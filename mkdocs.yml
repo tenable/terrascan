@@ -18,6 +18,8 @@ theme:
   palette:
     primary: green
   language: en
+  font:
+    text: Montserrat
 
 # Social Icons
 extra:
