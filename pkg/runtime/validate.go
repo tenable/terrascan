@@ -27,11 +27,10 @@ import (
 )
 
 var (
-	errEmptyIacPath     = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errIncorrectIacPath = fmt.Errorf("cannot accept both '-f' and '-d' options together")
-	errDirNotExists     = fmt.Errorf("directory does not exist")
-	errFileNotExists    = fmt.Errorf("file does not exist")
-	errIacNotSupported  = fmt.Errorf("iac type or version not supported")
+	errEmptyIacPath    = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists    = fmt.Errorf("directory does not exist")
+	errFileNotExists   = fmt.Errorf("file does not exist")
+	errIacNotSupported = fmt.Errorf("iac type or version not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
