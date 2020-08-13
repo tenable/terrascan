@@ -34,14 +34,14 @@ type Violation struct {
 
 // ViolationStats Contains stats related to the violation data
 type ViolationStats struct {
-	LowCount    int `json:"low"`
-	MediumCount int `json:"medium"`
-	HighCount   int `json:"high"`
-	TotalCount  int `json:"total"`
+	LowCount    int `json:"low" yaml:"low" xml:"low,attr"`
+	MediumCount int `json:"medium" yaml:"medium" xml:"medium,attr"`
+	HighCount   int `json:"high" yaml:"high" xml:"high,attr"`
+	TotalCount  int `json:"total" yaml:"total" xml:"total,attr"`
 }
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations []*Violation   `json:"violations"`
-	Count      ViolationStats `json:"count"`
+	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations,attr"`
+	Count      ViolationStats `json:"count" yaml:"count" xml:"count,attr"`
 }
