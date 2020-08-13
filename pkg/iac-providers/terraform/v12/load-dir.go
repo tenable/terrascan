@@ -145,7 +145,8 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 
 // trimFilePath returns relative file path wrt to the base path
 func trimFilePath(fullPath, basePath string) string {
-	basePath = strings.TrimSuffix(basePath, "/")
+	basePath = strings.Trim(basePath, ".")
+	basePath = strings.Trim(basePath, "/")
 	splits := bytes.Split([]byte(fullPath), []byte(basePath))
 	return strings.TrimPrefix(string(splits[1]), "/")
 }
