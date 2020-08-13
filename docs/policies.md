@@ -28,9 +28,9 @@ Here's an example of the contents of a rule file:
 | ------------------- | --------------------------------------------- |
 | ruleName            | Short name for the rule                       |
 | rule                | File name of the rego policy                  |
-| ruleTemplate        | FIXME                                         |
-| ruleArgument        | FIXME                                         |
-| ruleArgument.prefix | FIXME                                         |
+| ruleTemplate        | Rego policy template Used for the rule        |
+| ruleArgument        | Argument passed to the template               |
+| ruleArgument.prefix | Used for making rego policies unique          |
 | severity            | Likelihood x impact of issue                  |
 | description         | Description of the issue found with this rule |
 | ruleReferenceId     | Unique ID of the rule in the format `<cloud-provider>.<resource-type>.<rule-category>.<next-available-rule-number>` |
