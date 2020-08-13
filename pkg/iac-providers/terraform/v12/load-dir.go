@@ -17,17 +17,17 @@
 package tfv12
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
 
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
-
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 var (
@@ -122,8 +122,8 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 				return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 			}
 
-			// append resource config to list of all resources
-			// allResourcesConfig = append(allResourcesConfig, resourceConfig)
+			// trimFilePath
+			resourceConfig.Source = trimFilePath(resourceConfig.Source, absRootDir)
 
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
@@ -141,4 +141,11 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 
 	// successful
 	return allResourcesConfig, nil
+}
+
+// trimFilePath returns relative file path wrt to the base path
+func trimFilePath(fullPath, basePath string) string {
+	basePath = strings.TrimSuffix(basePath, "/")
+	splits := bytes.Split([]byte(fullPath), []byte(basePath))
+	return strings.TrimPrefix(string(splits[1]), "/")
 }
