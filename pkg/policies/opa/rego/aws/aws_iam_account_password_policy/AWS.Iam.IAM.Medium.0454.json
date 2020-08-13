@@ -1,15 +1,14 @@
 {
-    "ruleName": "passwordRequireLowerCase",
+    "name": "passwordRequireLowerCase",
     "file": "passwordPolicyRequirement.rego",
-    "ruleTemplate": "passwordRequireLowerCase",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "name": "passwordRequireLowerCase",
         "prefix": "",
         "required_parameter": "require_lowercase_characters"
     },
     "severity": "MEDIUM",
     "description": "Lower case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
-    "ruleReferenceId": "AWS.Iam.IAM.Medium.0454",
+    "referenceId": "AWS.Iam.IAM.Medium.0454",
     "category": "IAM",
     "version": 2
 }

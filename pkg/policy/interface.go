@@ -16,22 +16,11 @@
 
 package policy
 
-// Manager Policy Manager interface
-type Manager interface {
-	Import() error
-	Export() error
-	CreateManager() error
-}
-
 // Engine Policy Engine interface
 type Engine interface {
 	Init(string) error
 	Configure() error
 	Evaluate(EngineInput) (EngineOutput, error)
-	GetResults() error
+	GetResults() EngineOutput
 	Release() error
-}
-
-// EngineFactory creates policy engine instances based on iac/cloud type
-type EngineFactory struct {
 }

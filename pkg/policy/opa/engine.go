@@ -28,6 +28,9 @@ import (
 	"sort"
 	"strings"
 	"text/template"
+	"time"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 
 	"github.com/accurics/terrascan/pkg/policy"
 
@@ -112,8 +115,8 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 		return fmt.Errorf("no directories found for path %s", policyPath)
 	}
 
-	e.RegoFileMap = make(map[string][]byte)
-	e.RegoDataMap = make(map[string]*RegoData)
+	e.regoFileMap = make(map[string][]byte)
+	e.regoDataMap = make(map[string]*RegoData)
 
 	// Load rego data files from each dir
 	// First, we read the metadata file, which contains info about the associated rego rule. The .rego file data is
@@ -157,7 +160,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 		}
 
 		// Read in raw rego data from associated rego files
-		if err = e.loadRawRegoFilesIntoMap(dirList[i], regoDataList, &e.RegoFileMap); err != nil {
+		if err = e.loadRawRegoFilesIntoMap(dirList[i], regoDataList, &e.regoFileMap); err != nil {
 			zap.S().Debug("error loading raw rego data", zap.String("dir", dirList[i]))
 			continue
 		}
@@ -171,23 +174,23 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			// Apply templates if available
 			var templateData bytes.Buffer
 			t := template.New("opa")
-			_, err = t.Parse(string(e.RegoFileMap[templateFile]))
+			_, err = t.Parse(string(e.regoFileMap[templateFile]))
 			if err != nil {
-				zap.S().Debug("unable to parse template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
+				zap.S().Debug("unable to parse template", zap.String("template", regoDataList[j].Metadata.File))
 				continue
 			}
-			if err = t.Execute(&templateData, regoDataList[j].Metadata.RuleTemplateArgs); err != nil {
-				zap.S().Debug("unable to execute template", zap.String("template", regoDataList[j].Metadata.RuleTemplate))
+			if err = t.Execute(&templateData, regoDataList[j].Metadata.TemplateArgs); err != nil {
+				zap.S().Debug("unable to execute template", zap.String("template", regoDataList[j].Metadata.File))
 				continue
 			}
 
 			regoDataList[j].RawRego = templateData.Bytes()
-			e.RegoDataMap[regoDataList[j].Metadata.RuleName] = regoDataList[j]
+			e.regoDataMap[regoDataList[j].Metadata.Name] = regoDataList[j]
 		}
 	}
 
-	e.stats.ruleCount = len(e.RegoDataMap)
-	e.stats.regoFileCount = len(e.RegoFileMap)
+	e.stats.ruleCount = len(e.regoDataMap)
+	e.stats.regoFileCount = len(e.regoFileMap)
 	zap.S().Debugf("loaded %d Rego rules from %d rego files (%d metadata files).", e.stats.ruleCount, e.stats.regoFileCount, e.stats.metadataFileCount)
 
 	return err
@@ -195,30 +198,30 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 
 // CompileRegoFiles Compiles rego files for faster evaluation
 func (e *Engine) CompileRegoFiles() error {
-	for k := range e.RegoDataMap {
+	for k := range e.regoDataMap {
 		compiler, err := ast.CompileModules(map[string]string{
-			e.RegoDataMap[k].Metadata.RuleName: string(e.RegoDataMap[k].RawRego),
+			e.regoDataMap[k].Metadata.Name: string(e.regoDataMap[k].RawRego),
 		})
 		if err != nil {
-			zap.S().Error("error compiling rego files", zap.String("rule", e.RegoDataMap[k].Metadata.RuleName),
-				zap.String("raw rego", string(e.RegoDataMap[k].RawRego)), zap.Error(err))
+			zap.S().Error("error compiling rego files", zap.String("rule", e.regoDataMap[k].Metadata.Name),
+				zap.String("raw rego", string(e.regoDataMap[k].RawRego)), zap.Error(err))
 			return err
 		}
 
 		r := rego.New(
-			rego.Query(RuleQueryBase+"."+e.RegoDataMap[k].Metadata.RuleName),
+			rego.Query(RuleQueryBase+"."+e.regoDataMap[k].Metadata.Name),
 			rego.Compiler(compiler),
 		)
 
 		// Create a prepared query that can be evaluated.
-		query, err := r.PrepareForEval(e.Context)
+		query, err := r.PrepareForEval(e.context)
 		if err != nil {
-			zap.S().Error("error creating prepared query", zap.String("rule", e.RegoDataMap[k].Metadata.RuleName),
-				zap.String("raw rego", string(e.RegoDataMap[k].RawRego)), zap.Error(err))
+			zap.S().Error("error creating prepared query", zap.String("rule", e.regoDataMap[k].Metadata.Name),
+				zap.String("raw rego", string(e.regoDataMap[k].RawRego)), zap.Error(err))
 			return err
 		}
 
-		e.RegoDataMap[k].PreparedQuery = &query
+		e.regoDataMap[k].PreparedQuery = &query
 	}
 
 	return nil
@@ -227,7 +230,7 @@ func (e *Engine) CompileRegoFiles() error {
 // Init initializes the Opa engine
 // Handles loading all rules, filtering, compiling, and preparing for evaluation
 func (e *Engine) Init(policyPath string) error {
-	e.Context = context.Background()
+	e.context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
 		zap.S().Error("error loading rego files", zap.String("policy path", policyPath))
@@ -241,7 +244,7 @@ func (e *Engine) Init(policyPath string) error {
 	}
 
 	// initialize ViolationStore
-	e.Results.ViolationStore = results.NewViolationStore()
+	e.results.ViolationStore = results.NewViolationStore()
 
 	return nil
 }
@@ -252,8 +255,8 @@ func (e *Engine) Configure() error {
 }
 
 // GetResults Fetches results from OPA engine policy evaluation
-func (e *Engine) GetResults() error {
-	return nil
+func (e *Engine) GetResults() policy.EngineOutput {
+	return e.results
 }
 
 // Release Performs any tasks required to free resources
@@ -261,60 +264,106 @@ func (e *Engine) Release() error {
 	return nil
 }
 
+// reportViolation Add a violation for a given resource
+func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceConfig) {
+	violation := results.Violation{
+		RuleName:     regoData.Metadata.Name,
+		Description:  regoData.Metadata.Description,
+		RuleID:       regoData.Metadata.ReferenceID,
+		Severity:     regoData.Metadata.Severity,
+		Category:     regoData.Metadata.Category,
+		RuleData:     regoData.RawRego,
+		ResourceName: resource.Name,
+		ResourceType: resource.Type,
+		ResourceData: resource.Config,
+		File:         resource.Source,
+		LineNumber:   resource.Line,
+	}
+
+	severity := regoData.Metadata.Severity
+	if strings.ToLower(severity) == "high" {
+		e.results.ViolationStore.Count.HighCount++
+	} else if strings.ToLower(severity) == "medium" {
+		e.results.ViolationStore.Count.MediumCount++
+	} else if strings.ToLower(severity) == "low" {
+		e.results.ViolationStore.Count.LowCount++
+	} else {
+		zap.S().Warn("invalid severity found in rule definition",
+			zap.String("rule id", violation.RuleID), zap.String("severity", severity))
+	}
+	e.results.ViolationStore.Count.TotalCount++
+
+	e.results.ViolationStore.AddResult(&violation)
+}
+
 // Evaluate Executes compiled OPA queries against the input JSON data
 func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, error) {
+	// Keep track of how long it takes to evaluate the policies
+	start := time.Now()
 
-	sortedKeys := make([]string, len(e.RegoDataMap))
-	x := 0
-	for k := range e.RegoDataMap {
-		sortedKeys[x] = k
-		x++
-	}
-	sort.Strings(sortedKeys)
-
-	for _, k := range sortedKeys {
+	// Evaluate the policy against each resource type
+	for k := range e.regoDataMap {
 		// Execute the prepared query.
-		rs, err := e.RegoDataMap[k].PreparedQuery.Eval(e.Context, rego.EvalInput(engineInput.InputData))
-		//		rs, err := r.Eval(o.Context)
+		rs, err := e.regoDataMap[k].PreparedQuery.Eval(e.context, rego.EvalInput(engineInput.InputData))
 		if err != nil {
 			zap.S().Warn("failed to run prepared query", zap.String("rule", "'"+k+"'"))
 			continue
 		}
 
-		if len(rs) > 0 {
-			res := rs[0].Expressions[0].Value.([]interface{})
-			if len(res) > 0 {
-				// @TODO: Take line number + file info and add to violation
-				regoData := e.RegoDataMap[k]
-				violation := results.Violation{
-					Name:        regoData.Metadata.RuleName,
-					Description: regoData.Metadata.Description,
-					RuleID:      regoData.Metadata.RuleReferenceID,
-					Severity:    regoData.Metadata.Severity,
-					Category:    regoData.Metadata.Category,
-					RuleData:    regoData.RawRego,
-					InputFile:   "",
-					InputData:   res,
-					LineNumber:  0,
+		if len(rs) == 0 || len(rs[0].Expressions) == 0 {
+			continue
+		}
+
+		resourceViolations := rs[0].Expressions[0].Value.([]interface{})
+		if len(resourceViolations) == 0 {
+			continue
+		}
+
+		// Report a violation for each resource returned by the policy evaluation
+		for i := range resourceViolations {
+			var resourceID string
+
+			// The return values come in two categories--either a map[string]interface{} type, where the "Id" key
+			// contains the resource ID, or a string type which is the resource ID. This resource ID is where a
+			// violation was found
+			switch res := resourceViolations[i].(type) {
+			case map[string]interface{}:
+				_, ok := res["Id"]
+				if !ok {
+					zap.S().Warn("no Id key found in resource map", zap.Any("resource", res))
+					continue
 				}
 
-				severity := regoData.Metadata.Severity
-				if strings.ToLower(severity) == "high" {
-					e.Results.ViolationStore.Count.HighCount++
-				} else if strings.ToLower(severity) == "medium" {
-					e.Results.ViolationStore.Count.MediumCount++
-				} else if strings.ToLower(severity) == "low" {
-					e.Results.ViolationStore.Count.LowCount++
-				} else {
-					zap.S().Warn("invalid severity found in rule definition",
-						zap.String("rule id", violation.RuleID), zap.String("severity", severity))
+				_, ok = res["Id"].(string)
+				if !ok {
+					zap.S().Warn("id key was invalid", zap.Any("resource", res))
+					continue
 				}
-				e.Results.ViolationStore.Count.TotalCount++
-				e.Results.ViolationStore.AddResult(&violation)
+				resourceID = res["Id"].(string)
+			case string:
+				resourceID = res
+			default:
+				zap.S().Warn("resource ID format was invalid", zap.Any("resource", res))
 				continue
 			}
+
+			// Locate the resource details within the input map
+			var resource *output.ResourceConfig
+			resource, err = utils.FindResourceByID(resourceID, engineInput.InputData)
+			if err != nil {
+				zap.S().Error(err)
+				continue
+			}
+			if resource == nil {
+				zap.S().Warn("resource was not found", zap.String("resource id", resourceID))
+				continue
+			}
+
+			// Report the violation
+			e.reportViolation(e.regoDataMap[k], resource)
 		}
 	}
 
-	return e.Results, nil
+	e.stats.runTime = time.Since(start)
+	return e.results, nil
 }

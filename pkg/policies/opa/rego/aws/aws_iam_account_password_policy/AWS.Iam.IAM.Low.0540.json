@@ -1,14 +1,13 @@
 {
-    "ruleName": "passwordRotateEvery90Days",
+    "name": "passwordRotateEvery90Days",
     "file": "passwordRotateEvery90Days.rego",
-    "ruleTemplate": "passwordRotateEvery90Days",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "name": "passwordRotateEvery90Days",
         "prefix": ""
     },
     "severity": "LOW",
     "description": "Reducing the password lifetime increases account resiliency against brute force login attempts",
-    "ruleReferenceId": "AWS.Iam.IAM.Low.0540",
+    "referenceId": "AWS.Iam.IAM.Low.0540",
     "category": "IAM",
     "version": 2
 }
