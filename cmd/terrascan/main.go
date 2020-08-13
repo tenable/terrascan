@@ -62,17 +62,17 @@ const (
 	SectionLogging = "Logging"
 	// SectionMisc miscellaneous commands
 	SectionMisc = "Miscellaneous"
-	// Terrascan data directory
+	// TerrascanDataDir Terrascan data directory
 	TerrascanDataDir = ".terrascan"
 )
 
 // UsageSections Usage sections
-var UsageSections = []string{SectionIac, SectionCloud, SectionMode, SectionLogging, SectionMisc}
+var UsageSections = []string{SectionCloud, SectionIac, SectionMode, SectionLogging, SectionMisc}
 
 // UsageSectionMap Sets the section and print order for each command line arg
 var UsageSectionMap = map[string][]string{
-	SectionIac:     {CmdArgDirPath, CmdArgFilePath, CmdArgIacType, CmdArgIacVersion, CmdArgPolicyPath},
 	SectionCloud:   {CmdArgCloudType},
+	SectionIac:     {CmdArgDirPath, CmdArgFilePath, CmdArgIacType, CmdArgIacVersion, CmdArgPolicyPath},
 	SectionLogging: {CmdArgLogLevel, CmdArgLogType},
 	SectionMode:    {CmdArgServer},
 	SectionMisc:    {CmdArgConfigFile, CmdArgVersion},
@@ -85,7 +85,11 @@ Terrascan
 
 Scan IaC files for security violations
 
-Commands
+Usage
+
+    terrascan -cloud [aws|azure|gcp] [options...]
+
+Options
 `)
 
 	flagMap := make(map[string]*flag.Flag)
@@ -137,7 +141,7 @@ func main() {
 		policyPath  = flag.String("p", homePolicyPath, "Policy directory path")
 
 		// cloud flags
-		cloudType = flag.String("cloud", "", "Cloud provider (supported values: aws, azure, gcp)")
+		cloudType = flag.String("cloud", "", "Required. Cloud provider (supported values: aws, azure, gcp)")
 
 		// logging flags
 		logLevel = flag.String("log-level", "info", "Logging level (supported values: debug, info, warn, error, panic, fatal)")
