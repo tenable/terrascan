@@ -18,11 +18,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/accurics/terrascan/pkg/logging"
+	"github.com/accurics/terrascan/pkg/version"
 	"go.uber.org/zap"
 )
 
@@ -52,12 +54,21 @@ func main() {
 
 		// output type
 		output = flag.String("output", "yaml", "output format (json, yaml)")
+
+		//version
+		ver = flag.Bool("version", false, "terrascan version")
 	)
 	flag.Parse()
 
 	// if no flags are passed, print usage
 	if flag.NFlag() < 1 {
 		flag.Usage()
+		return
+	}
+
+	// print version
+	if *ver {
+		fmt.Println(version.Get())
 		return
 	}
 
