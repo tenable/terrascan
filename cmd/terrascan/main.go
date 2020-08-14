@@ -19,11 +19,11 @@ package main
 import (
 	"flag"
 
-	"go.uber.org/zap"
-
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
+	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/accurics/terrascan/pkg/logging"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -61,12 +61,19 @@ func main() {
 		return
 	}
 
+	// initialize logger
+	logging.Init(*logType, *logLevel)
+
+	// initialize terrascan
+	if err := initialize.Run(); err != nil {
+		zap.S().Error("failed to initialize terrascan")
+		return
+	}
+
 	// if server mode set, run terrascan as a server, else run it as CLI
 	if *server {
-		logging.Init(*logType, *logLevel)
 		httpServer.Start()
 	} else {
-		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
 		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath, *output)
 	}

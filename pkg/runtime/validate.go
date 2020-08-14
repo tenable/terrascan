@@ -20,17 +20,18 @@ import (
 	"fmt"
 	"os"
 
+	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
-
-	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 )
 
 var (
-	errEmptyIacPath    = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errDirNotExists    = fmt.Errorf("directory does not exist")
-	errFileNotExists   = fmt.Errorf("file does not exist")
-	errIacNotSupported = fmt.Errorf("iac type or version not supported")
+	errEmptyIacPath      = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists      = fmt.Errorf("directory does not exist")
+	errFileNotExists     = fmt.Errorf("file does not exist")
+	errIacNotSupported   = fmt.Errorf("iac type or version not supported")
+	errCloudNotSupported = fmt.Errorf("cloud type not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
@@ -77,7 +78,14 @@ func (e *Executor) ValidateInputs() error {
 	}
 	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 
-	// check if policy type is supported
+	// check if cloud type is supported
+	if !policy.IsCloudProviderSupported(e.cloudType) {
+		zap.S().Errorf("cloud type '%s' not supported", e.cloudType)
+		return errCloudNotSupported
+	}
+	if e.policyPath == "" {
+		e.policyPath = policy.GetDefaultPolicyPath(e.cloudType)
+	}
 
 	// successful
 	zap.S().Debug("input validation successful")
