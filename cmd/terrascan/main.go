@@ -18,11 +18,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/accurics/terrascan/pkg/cli"
 	httpServer "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/accurics/terrascan/pkg/logging"
+	"github.com/accurics/terrascan/pkg/version"
 	"go.uber.org/zap"
 )
 
@@ -35,13 +37,13 @@ func main() {
 
 		// IaC flags
 		iacType     = flag.String("iac", "", "IaC provider (supported values: terraform)")
-		iacVersion  = flag.String("iac-version", "default", "IaC version (supported values: 'v12' for terraform)")
+		iacVersion  = flag.String("iac-version", "v12", "IaC version (supported values: 'v12' for terraform)")
 		iacFilePath = flag.String("f", "", "IaC file path")
 		iacDirPath  = flag.String("d", ".", "IaC directory path")
 		policyPath  = flag.String("p", "", "Policy directory path")
 
 		// cloud flags
-		cloudType = flag.String("cloud", "", "cloud provider (supported values: aws)")
+		cloudType = flag.String("cloud", "", "cloud provider (supported values: aws, azure)")
 
 		// logging flags
 		logLevel = flag.String("log-level", "info", "logging level (debug, info, warn, error, panic, fatal)")
@@ -51,13 +53,22 @@ func main() {
 		configFile = flag.String("config", "", "config file path")
 
 		// output type
-		output = flag.String("output", "yaml", "output format (json, xml, yaml)")
+		output = flag.String("output", "yaml", "output format (json, yaml)")
+
+		//version
+		ver = flag.Bool("version", false, "terrascan version")
 	)
 	flag.Parse()
 
 	// if no flags are passed, print usage
 	if flag.NFlag() < 1 {
 		flag.Usage()
+		return
+	}
+
+	// print version
+	if *ver {
+		fmt.Println(version.Get())
 		return
 	}
 
