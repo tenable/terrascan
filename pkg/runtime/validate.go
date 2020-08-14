@@ -21,7 +21,7 @@ import (
 	"os"
 
 	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/initialize"
+	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
@@ -79,12 +79,12 @@ func (e *Executor) ValidateInputs() error {
 	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 
 	// check if cloud type is supported
-	if !initialize.IsCloudSupported(e.cloudType) {
+	if !policy.IsCloudProviderSupported(e.cloudType) {
 		zap.S().Errorf("cloud type '%s' not supported", e.cloudType)
 		return errCloudNotSupported
 	}
 	if e.policyPath == "" {
-		e.policyPath = initialize.GetPolicyPath(e.cloudType)
+		e.policyPath = policy.GetDefaultPolicyPath(e.cloudType)
 	}
 
 	// successful

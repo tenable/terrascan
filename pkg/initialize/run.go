@@ -20,45 +20,19 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
 	"gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/config"
+	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
-const (
-	repoURL = "https://github.com/accurics/terrascan.git"
-	branch  = "terrascan-v1.0"
-)
-
 var (
-	basePath       = os.Getenv("HOME") + "/.terrascan"
-	basePolicyPath = basePath + "/pkg/policies/opa/rego"
-
-	// AWSDefaultPolicyPath default policy path for aws
-	AWSDefaultPolicyPath = basePolicyPath + "/aws"
-
-	// AzureDefaultPolicyPath  default policy path for azure
-	AzureDefaultPolicyPath = basePolicyPath + "/azure"
+	basePath       = config.GetPolicyRepoPath()
+	basePolicyPath = config.GetPolicyBasePath()
+	repoURL        = config.GetPolicyRepoURL()
+	branch         = config.GetPolicyBranch()
 )
-
-var policyPathMap = make(map[string]string)
-
-func init() {
-	policyPathMap["aws"] = AWSDefaultPolicyPath
-	policyPathMap["azure"] = AzureDefaultPolicyPath
-}
-
-// IsCloudSupported checks if cloud provider is present in policyPathMap
-func IsCloudSupported(cloud string) bool {
-	_, supported := policyPathMap[cloud]
-	return supported
-}
-
-// GetPolicyPath returns the policy path for a cloud provider
-func GetPolicyPath(cloud string) string {
-	return policyPathMap[cloud]
-}
 
 // Run initializes terrascan if not done already
 func Run() error {
@@ -98,7 +72,7 @@ func DownloadPolicies() error {
 
 	// fetch references
 	err = r.Fetch(&git.FetchOptions{
-		RefSpecs: []config.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
+		RefSpecs: []gitConfig.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
 	})
 	if err != nil {
 		zap.S().Errorf("failed to fetch references from repo. error: '%v'", err)
