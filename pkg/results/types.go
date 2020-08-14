@@ -43,5 +43,5 @@ type ViolationStats struct {
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
 	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations,attr"`
-	Count      ViolationStats `json:"count" yaml:"count" xml:"count,attr"`
+	Stats      ViolationStats `json:"stats" yaml:"stats" xml:"stats,attr"`
 }

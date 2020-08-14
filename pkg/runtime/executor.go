@@ -35,6 +35,7 @@ type Executor struct {
 	iacType      string
 	iacVersion   string
 	configFile   string
+	output       string
 	version      string
 	iacProvider  iacProvider.IacProvider
 	policyEngine policy.Engine
@@ -42,16 +43,17 @@ type Executor struct {
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath, version string) (e *Executor, err error) {
+func NewExecutor(args []string) (e *Executor, err error) {
 	e = &Executor{
-		filePath:   filePath,
-		dirPath:    dirPath,
-		policyPath: policyPath,
-		cloudType:  cloudType,
-		iacType:    iacType,
-		iacVersion: iacVersion,
-		configFile: configFile,
-		version:    version,
+		filePath:   args[3],
+		dirPath:    args[4],
+		policyPath: args[6],
+		cloudType:  args[2],
+		iacType:    args[0],
+		iacVersion: args[1],
+		configFile: args[5],
+		output:     args[6],
+		version:    args[7],
 	}
 
 	// initialize executor

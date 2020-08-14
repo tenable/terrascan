@@ -283,16 +283,16 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 
 	severity := regoData.Metadata.Severity
 	if strings.ToLower(severity) == "high" {
-		e.results.ViolationStore.Count.HighCount++
+		e.results.ViolationStore.Stats.HighCount++
 	} else if strings.ToLower(severity) == "medium" {
-		e.results.ViolationStore.Count.MediumCount++
+		e.results.ViolationStore.Stats.MediumCount++
 	} else if strings.ToLower(severity) == "low" {
-		e.results.ViolationStore.Count.LowCount++
+		e.results.ViolationStore.Stats.LowCount++
 	} else {
 		zap.S().Warn("invalid severity found in rule definition",
 			zap.String("rule id", violation.RuleID), zap.String("severity", severity))
 	}
-	e.results.ViolationStore.Count.TotalCount++
+	e.results.ViolationStore.Stats.TotalCount++
 
 	e.results.ViolationStore.AddResult(&violation)
 }

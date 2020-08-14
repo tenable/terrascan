@@ -154,7 +154,7 @@ func main() {
 		version = flag.String("version", "", "Print the Terrascan version")
 
 		// output type
-    output = flag.String("output", "yaml", "Output format (supported values: json, xml, yaml, console)")
+		output = flag.String("output", "yaml", "Output format (supported values: json, xml, yaml, console)")
 	)
 	// override usage
 	flag.Usage = Usage
@@ -174,6 +174,9 @@ func main() {
 	} else {
 		logging.Init(*logType, *logLevel)
 		zap.S().Debug("running terrascan in cli mode")
-		cli.Run(*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath, *output, *version)
+
+		cli.Run([]string{
+			*iacType, *iacVersion, *cloudType, *iacFilePath, *iacDirPath, *configFile, *policyPath, *output, *version,
+		})
 	}
 }

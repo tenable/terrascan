@@ -24,11 +24,10 @@ import (
 )
 
 // Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, policyPath, format, version string) {
+func Run(args []string) {
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile, policyPath, version)
+	executor, err := runtime.NewExecutor(args)
 	if err != nil {
 		return
 	}
@@ -38,5 +37,5 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile, po
 	if err != nil {
 		return
 	}
-	writer.Write(format, violations, os.Stdout)
+	writer.Write(args[7], violations, os.Stdout)
 }
