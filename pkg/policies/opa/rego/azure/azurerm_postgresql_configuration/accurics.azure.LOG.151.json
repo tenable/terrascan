@@ -1,13 +1,12 @@
 {
-    "ruleName": "reme_connectionThrottling",
+    "name": "reme_connectionThrottling",
     "file": "connectionThrottling.rego",
-    "ruleTemplate": "connectionThrottling",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": "reme_"
     },
     "severity": "MEDIUM",
     "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
-    "ruleReferenceId": "accurics.azure.LOG.151",
+    "referenceId": "accurics.azure.LOG.151",
     "category": "Logging",
     "version": 2
 }

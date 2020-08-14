@@ -1,15 +1,14 @@
 {
-    "ruleName": "reme_entirelyAccessible",
+    "name": "reme_entirelyAccessible",
     "file": "publiclyAccessible.rego",
-    "ruleTemplate": "publiclyAccessible",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "isEntire": true,
         "name": "entirelyAccessible",
         "prefix": "reme_"
     },
     "severity": "HIGH",
     "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet",
-    "ruleReferenceId": "accurics.azure.NS.30",
+    "referenceId": "accurics.azure.NS.30",
     "category": "Network Security",
     "version": 2
 }
