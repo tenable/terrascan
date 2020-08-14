@@ -1,0 +1,10 @@
+{
+    "name": "athenaQueryEncryption",
+    "file": "athenaQueryEncryption.rego",
+    "templateArgs": null,
+    "severity": "MEDIUM",
+    "description": "Enable Encryption for AWS Athena Query Results",
+    "referenceId": "AWS.Athena.Medium.0592",
+    "category": " ",
+    "version": 1
+}

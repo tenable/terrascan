@@ -1,6 +1,6 @@
 {
-    "name": "kmsKeyRotationDisabled",
-    "file": "kmsKeyRotationDisabled.rego",
+    "name": "kmsKeyNoDeletionWindow",
+    "file": "kmsKeyNoDeletionWindow.rego",
     "templateArgs": {
         "prefix": ""
     },

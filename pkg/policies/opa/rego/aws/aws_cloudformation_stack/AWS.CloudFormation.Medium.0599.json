@@ -1,0 +1,13 @@
+{
+    "name": "awsCloudFormationInUse",
+    "file": "awsCloudFormationInUse.rego",
+    "templateArgs": {
+        "name": "awsCloudFormationInUse",
+        "property": "template_url"
+    },
+    "severity": "MEDIUM",
+    "description": "AWS CloudFormation Not In Use",
+    "referenceId": "AWS.CloudFormation.Medium.0599",
+    "category": " ",
+    "version": 1
+}
