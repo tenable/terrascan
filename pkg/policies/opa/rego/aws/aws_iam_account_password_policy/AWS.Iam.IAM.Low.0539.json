@@ -1,0 +1,15 @@
+{
+    "name": "passwordResuseNotAllowed",
+    "file": "passwordResuseNotAllowed.rego",
+    "templateArgs": {
+        "name": "passwordResuseNotAllowed",
+        "parameter": "password_reuse_prevention",
+        "prefix": "",
+        "value": 0
+    },
+    "severity": "LOW",
+    "description": "It is recommended that the password policy prevent the reuse of passwords.Preventing password reuse increases account resiliency against brute force login attempts",
+    "referenceId": "AWS.Iam.IAM.Low.0539",
+    "category": "IAM",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "rootUserNotContainMfaTypeHardware",
+    "file": "rootUserNotContainMfaTypeHardware.rego",
+    "templateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Hardware MFA device is enabled for the \"root\" account",
+    "referenceId": "AWS.IamUser.IAM.High.0387",
+    "category": "Identity and Access Management",
+    "version": 1
+}

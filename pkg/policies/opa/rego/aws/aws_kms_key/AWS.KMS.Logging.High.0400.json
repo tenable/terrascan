@@ -1,0 +1,12 @@
+{
+    "name": "kmsKeyNoDeletionWindow",
+    "file": "kmsKeyNoDeletionWindow.rego",
+    "templateArgs": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure rotation for customer created CMKs is enabled",
+    "referenceId": "AWS.KMS.Logging.High.0400",
+    "category": "Logging",
+    "version": 2
+}

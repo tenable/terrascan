@@ -1,0 +1,10 @@
+{
+    "name": "podSecurityPolicyEnabled",
+    "file": "podSecurityPolicyEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure PodSecurityPolicy controller is enabled on the Kubernetes Engine Clusters.",
+    "referenceId": "accurics.gcp.OPS.116",
+    "category": "Operational Efficiency",
+    "version": 1
+}

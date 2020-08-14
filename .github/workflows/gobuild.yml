@@ -1,0 +1,55 @@
+name: build
+on:
+  push:
+  pull_request:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+      GOPATH: /home/runner/work/terrascan
+      GOBIN: /home/runner/work/terrascan/bin
+    steps:
+    - name: Checkout Terrascan
+      uses: actions/checkout@v1
+
+    - name: Setup Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.14
+
+    - name: Install golint
+      run: go get -u golang.org/x/lint/golint
+
+    - name: Go validations
+      run: make validate
+
+    - name: Build Terrascan
+      run: make build
+
+    - name: Run unit tests
+      run: make unit-tests
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+
+  # push image to Docker Hub
+  push:
+    # Ensure "validate" job passes before pushing image.
+    needs: validate
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Checkout Terrascan
+      uses: actions/checkout@v1
+
+    - name: Build Terrascan docker image
+      run: make docker-build
+
+    - name: Login to docker hub
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
+
+    - name: Push Terrascan docker image
+      run: make docker-push

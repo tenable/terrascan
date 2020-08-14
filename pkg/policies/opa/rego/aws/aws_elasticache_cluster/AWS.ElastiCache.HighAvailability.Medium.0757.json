@@ -1,0 +1,10 @@
+{
+    "name": "elastiCacheMultiAZ",
+    "file": "elastiCacheMultiAZ.rego",
+    "templateArgs": null,
+    "severity": "MEDIUM",
+    "description": "AWS ElastiCache Multi-AZ",
+    "referenceId": "AWS.ElastiCache.HighAvailability.Medium.0757",
+    "category": "High Availability",
+    "version": 1
+}

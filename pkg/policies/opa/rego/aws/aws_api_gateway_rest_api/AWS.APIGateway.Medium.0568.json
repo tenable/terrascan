@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayContentEncoding",
+    "file": "apiGatewayContentEncoding.rego",
+    "templateArgs": null,
+    "severity": "MEDIUM",
+    "description": "Enable Content Encoding",
+    "referenceId": "AWS.APIGateway.Medium.0568",
+    "category": " ",
+    "version": 1
+}

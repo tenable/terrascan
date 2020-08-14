@@ -1,0 +1,81 @@
+{
+  "terraform_remote_state": [
+    {
+      "id": "terraform_remote_state.remote",
+      "name": "remote",
+      "source": "dummyconfig.tf",
+      "line": 41,
+      "type": "terraform_remote_state",
+      "config": {
+        "backend": "s3",
+        "config": {
+          "bucket": "mybucket",
+          "key": "mykey",
+          "profile": "${var.profile}",
+          "region": "${var.region}"
+        }
+      }
+    }
+  ],
+  "type1": [
+    {
+      "id": "type1.resource1",
+      "name": "resource1",
+      "source": "dummyconfig.tf",
+      "line": 1,
+      "type": "type1",
+      "config": {
+        "arr": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "hyphen-test": 3,
+        "quoted": "\"quoted\"",
+        "squoted": "'quoted'",
+        "temp": "${1 + 2} %{if local.test2 \u003c 3}\"4\n\"%{endif}",
+        "temp2": "hi there",
+        "test1": "hello",
+        "test2": 5,
+        "test3": "${1 + 2}"
+      }
+    }
+  ],
+  "type2": [
+    {
+      "id": "type2.resource2",
+      "name": "resource2",
+      "source": "dummyconfig.tf",
+      "line": 13,
+      "type": "type2",
+      "config": {
+        "other": {
+          "${local.test3}": 4,
+          "3": 1,
+          "a.b.c": "True",
+          "a.b.c[\"hi\"][3].*": 3,
+          "local.test1": 89,
+          "loop": "This has a for loop: %{for x in local.arr}x,%{endfor}",
+          "num": "${local.test2 + 5}",
+          "thing": "${[for x in local.arr: x * 2]}"
+        }
+      }
+    }
+  ],
+  "type3": [
+    {
+      "id": "type3.resource3",
+      "name": "resource3",
+      "source": "dummyconfig.tf",
+      "line": 26,
+      "type": "type3",
+      "config": {
+        "cond": "${test3 \u003e 2 ? 1: 0}",
+        "heredoc": "This is a heredoc template.\nIt references ${local.other.3}\n",
+        "heredoc2": "\t\tAnother heredoc, that\n\t\tdoesn't remove indentation\n\t\t${local.other.3}\n\t\t%{if true ? false : true}\"gotcha\"\\n%{else}4%{endif}\n",
+        "simple": "${4 - 2}"
+      }
+    }
+  ]
+}

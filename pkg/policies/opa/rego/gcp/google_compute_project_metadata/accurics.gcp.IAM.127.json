@@ -1,0 +1,10 @@
+{
+    "name": "checkOSLoginEnabled",
+    "file": "checkOSLoginEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure oslogin is enabled for a Project",
+    "referenceId": "accurics.gcp.IAM.127",
+    "category": "Access Control",
+    "version": 1
+}

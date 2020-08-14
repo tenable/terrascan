@@ -1,0 +1,10 @@
+{
+    "name": "checkIpForward",
+    "file": "checkIpForward.rego",
+    "templateArgs": null,
+    "severity": "MEDIUM",
+    "description": "Ensure IP forwarding is not enabled on Instances.",
+    "referenceId": "accurics.gcp.NS.130",
+    "category": "Network Security",
+    "version": 1
+}

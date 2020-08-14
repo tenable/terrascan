@@ -1,0 +1,10 @@
+{
+    "name": "checkAuditLoggingConfig",
+    "file": "checkAuditLoggingConfig.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure that Cloud Audit Logging is configured properly across all services and all users from a project.",
+    "referenceId": "accurics.gcp.LOG.010",
+    "category": "Logging",
+    "version": 1
+}

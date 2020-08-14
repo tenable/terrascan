@@ -1,0 +1,348 @@
+{
+  "aws_cloudfront_distribution": [
+    {
+      "id": "aws_cloudfront_distribution.s3-distribution-TLS-v1",
+      "name": "s3-distribution-TLS-v1",
+      "source": "cloudfront/main.tf",
+      "line": 6,
+      "type": "aws_cloudfront_distribution",
+      "config": {
+        "default_cache_behavior": [
+          {
+            "allowed_methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD"
+            ],
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
+                  }
+                ],
+                "query_string": false
+              }
+            ],
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "https-only"
+          }
+        ],
+        "enabled": true,
+        "ordered_cache_behavior": [
+          {
+            "allowed_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "compress": true,
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
+                  }
+                ],
+                "headers": [
+                  "Origin"
+                ],
+                "query_string": false
+              }
+            ],
+            "path_pattern": "/content/immutable/*",
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "allow-all"
+          },
+          {
+            "allowed_methods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "cached_methods": [
+              "GET",
+              "HEAD"
+            ],
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": "none"
+                  }
+                ],
+                "query_string": false
+              }
+            ],
+            "path_pattern": "/content/*",
+            "target_origin_id": "local.s3_origin_id",
+            "viewer_protocol_policy": "allow-all"
+          }
+        ],
+        "origin": [
+          {
+            "domain_name": "aws_s3_bucket.b.bucket_regional_domain_name",
+            "origin_id": "local.s3_origin_id",
+            "s3_origin_config": [
+              {
+                "origin_access_identity": "origin-access-identity/cloudfront/ABCDEFG1234567"
+              }
+            ]
+          }
+        ],
+        "restrictions": [
+          {
+            "geo_restriction": [
+              {
+                "locations": [
+                  "US",
+                  "CA",
+                  "GB",
+                  "DE"
+                ],
+                "restriction_type": "whitelist"
+              }
+            ]
+          }
+        ],
+        "viewer_certificate": [
+          {
+            "cloudfront_default_certificate": true,
+            "minimum_protocol_version": "TLSv1"
+          }
+        ]
+      }
+    }
+  ],
+  "aws_cloudtrail": [
+    {
+      "id": "aws_cloudtrail.missing-multi-region",
+      "name": "missing-multi-region",
+      "source": "cloudtrail/main.tf",
+      "line": 1,
+      "type": "aws_cloudtrail",
+      "config": {
+        "include_global_service_events": false,
+        "name": "tf-trail-foobar",
+        "s3_bucket_name": "some-s3-bucket",
+        "s3_key_prefix": "prefix"
+      }
+    }
+  ],
+  "aws_ecs_task_definition": [
+    {
+      "id": "aws_ecs_task_definition.instanceNotInVpc",
+      "name": "instanceNotInVpc",
+      "source": "ecs/main.tf",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${file(\"ecs/service.json\")}",
+        "family": "service",
+        "network_mode": "bridge"
+      }
+    }
+  ],
+  "aws_efs_file_system": [
+    {
+      "id": "aws_efs_file_system.efsNotEncrypted",
+      "name": "efsNotEncrypted",
+      "source": "efs/main.tf",
+      "line": 1,
+      "type": "aws_efs_file_system",
+      "config": {
+        "creation_token": "my-product",
+        "tags": {
+          "Name": "not-encrypted"
+        }
+      }
+    }
+  ],
+  "aws_elasticache_cluster": [
+    {
+      "id": "aws_elasticache_cluster.noMemcachedInElastiCache",
+      "name": "noMemcachedInElastiCache",
+      "source": "elasticcache/main.tf",
+      "line": 1,
+      "type": "aws_elasticache_cluster",
+      "config": {
+        "cluster_id": "cluster-example",
+        "engine": "memcached",
+        "node_type": "cache.m4.large",
+        "num_cache_nodes": 2,
+        "parameter_group_name": "default.memcached1.4",
+        "port": 11211
+      }
+    }
+  ],
+  "aws_guardduty_detector": [
+    {
+      "id": "aws_guardduty_detector.gaurdDutyDisabled",
+      "name": "gaurdDutyDisabled",
+      "source": "guardduty/main.tf",
+      "line": 1,
+      "type": "aws_guardduty_detector",
+      "config": {
+        "enable": false
+      }
+    }
+  ],
+  "aws_iam_access_key": [
+    {
+      "id": "aws_iam_access_key.noAccessKeyForRootAccount",
+      "name": "noAccessKeyForRootAccount",
+      "source": "iam/main.tf",
+      "line": 1,
+      "type": "aws_iam_access_key",
+      "config": {
+        "pgp_key": "keybase:some_person_that_exists",
+        "status": "Inactive",
+        "user": "root"
+      }
+    }
+  ],
+  "aws_kinesis_stream": [
+    {
+      "id": "aws_kinesis_stream.kinesisEncryptedWithKms",
+      "name": "kinesisEncryptedWithKms",
+      "source": "kinesis/main.tf",
+      "line": 1,
+      "type": "aws_kinesis_stream",
+      "config": {
+        "encryption_type": "KMS",
+        "kms_key_id": "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab",
+        "name": "kinesisEncryptedWithKms",
+        "retention_period": 48,
+        "shard_count": 1,
+        "shard_level_metrics": [
+          "IncomingBytes",
+          "OutgoingBytes"
+        ],
+        "tags": {
+          "Environment": "kinesisEncryptedWithKms"
+        }
+      }
+    }
+  ],
+  "aws_kms_key": [
+    {
+      "id": "aws_kms_key.kmsKeyDisabled",
+      "name": "kmsKeyDisabled",
+      "source": "cloudfront/sub-cloudfront/main.tf",
+      "line": 1,
+      "type": "aws_kms_key",
+      "config": {
+        "description": "KMS key 2",
+        "is_enabled": false,
+        "tags": {
+          "Name": "kmsKeyDisabled",
+          "Setup": "self-healing"
+        }
+      }
+    }
+  ],
+  "aws_load_balancer_policy": [
+    {
+      "id": "aws_load_balancer_policy.elbWeakCipher",
+      "name": "elbWeakCipher",
+      "source": "elb/main.tf",
+      "line": 1,
+      "type": "aws_load_balancer_policy",
+      "config": {
+        "load_balancer_name": "some-name",
+        "policy_attribute": [
+          {
+            "name": "ECDHE-RSA-RC4-SHA",
+            "value": "true"
+          }
+        ],
+        "policy_name": "wu-tang-ssl",
+        "policy_type_name": "SSLNegotiationPolicyType"
+      }
+    }
+  ],
+  "aws_s3_bucket": [
+    {
+      "id": "aws_s3_bucket.noS3BucketSseRules",
+      "name": "noS3BucketSseRules",
+      "source": "s3/main.tf",
+      "line": 1,
+      "type": "aws_s3_bucket",
+      "config": {
+        "acl": "private",
+        "bucket": "mybucket",
+        "tags": {
+          "Environment": "Dev",
+          "Name": "nos3BucketSseRules"
+        }
+      }
+    }
+  ],
+  "aws_security_group": [
+    {
+      "id": "aws_security_group.acme_web",
+      "name": "acme_web",
+      "source": "sg/main.tf",
+      "line": 1,
+      "type": "aws_security_group",
+      "config": {
+        "description": "Used in the terraform",
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+              "192.164.0.0/24"
+            ],
+            "from_port": 0,
+            "protocol": "-1",
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+              "19.16.0.0/24"
+            ],
+            "from_port": 22,
+            "protocol": "tcp",
+            "to_port": 22
+          }
+        ],
+        "name": "acme_web",
+        "tags": {
+          "Name": "acme_web"
+        },
+        "vpc_id": "some_dummy_vpc"
+      }
+    }
+  ],
+  "aws_sqs_queue": [
+    {
+      "id": "aws_sqs_queue.sqsQueueExposed",
+      "name": "sqsQueueExposed",
+      "source": "sqs/main.tf",
+      "line": 1,
+      "type": "aws_sqs_queue",
+      "config": {
+        "kms_data_key_reuse_period_seconds": 300,
+        "kms_master_key_id": "alias/aws/sqs",
+        "name": "terraform-example-queue",
+        "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Sid\":\"Queue1_AnonymousAccess_AllActions_WhitelistIP\",\n    \"Effect\": \"Allow\",\n    \"Principal\": \"*\",\n    \"Action\": \"sqs:*\",\n    \"Resource\": \"arn:aws:sqs:*:111122223333:queue1\"\n  }] \n}\n"
+      }
+    }
+  ]
+}

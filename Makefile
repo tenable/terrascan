@@ -1,87 +1,90 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
-.DEFAULT_GOAL := help
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-try:
-	from urllib import pathname2url
-except:
-	from urllib.request import pathname2url
+GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
+BUILD_FLAGS := -v -ldflags "-w -s"
 
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
+BUILD_DIR = ./bin
+BINARY_NAME = terrascan
 
-define PRINT_HELP_PYSCRIPT
-import re, sys
+# default
+default: help
 
-for line in sys.stdin:
-	match = re.match(r'^([a-zA-Z_-]+):.*?## (.*)$$', line)
-	if match:
-		target, help = match.groups()
-		print("%-20s %s" % (target, help))
-endef
-export PRINT_HELP_PYSCRIPT
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+# please keep the commands in lexicographical order
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@echo "usage: make [command]\ncommands:"
+	@echo "build\n\tbuild terrascan binary"
+	@echo "cicd\n\tsimulate CI/CD pipeline locally"
+	@echo "clean\n\tclean up build"
+	@echo "docker-build\n\tbuild terrascan docker image"
+	@echo "docker-push\n\tpush terrascan docker image"
+	@echo "gofmt\n\tvalidate gofmt"
+	@echo "golint\n\tvalidate golint"
+	@echo "gomodverify\n\tverify go modules"
+	@echo "govet\n\tvalidate govet"
+	@echo "staticcheck\n\trun static code analysis"
+	@echo "test\n\texecute unit and integration tests"
+	@echo "unit-tests\n\texecute unit tests"
+	@echo "validate\n\trun all validations"
 
-clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
+# build terrascan binary
+build: clean
+	@mkdir -p $(BUILD_DIR) > /dev/null
+	@export GO111MODULE=on
+	go build ${BUILD_FLAGS} -o ${BUILD_DIR}/${BINARY_NAME} cmd/terrascan/main.go
+	@echo "binary created at ${BUILD_DIR}/${BINARY_NAME}"
 
 
-clean-build: ## remove build artifacts
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+# clean build 
+clean:
+	@rm -rf $(BUILD_DIR)
 
-clean-pyc: ## remove Python file artifacts
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
 
-clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
-	rm -f .coverage
-	rm -fr htmlcov/
+# run all cicd steps
+cicd: validate build test docker-build
 
-lint: ## check style with flake8
-	flake8 terrascan tests
 
-test: ## run tests quickly with the default Python
-	
-		python setup.py test
+# run all unit and integration tests
+test: unit-tests
 
-test-all: ## run tests on every Python version with tox
-	tox
 
-coverage: ## check code coverage quickly with the default Python
-	coverage run --source terrascan setup.py test
-	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
+# run all validation tests
+validate: gofmt govet golint gomodverify staticcheck
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/terrascan.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ terrascan
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
 
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+# gofmt validation
+gofmt:
+	./scripts/validate-gofmt.sh
 
-release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
 
-dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
-	ls -l dist
+# golint validation
+golint:
+	./scripts/validate-golint.sh
 
-install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+
+# govet validation
+govet:
+	./scripts/validate-govet.sh
+
+
+# go mod validation
+gomodverify:
+	go mod verify
+
+
+# static code analysis
+staticcheck:
+	./scripts/staticcheck.sh
+
+
+# run unit tests
+unit-tests:
+	./scripts/generate-coverage.sh
+
+
+# build terrascan docker image
+docker-build:
+	./scripts/docker-build.sh
+
+
+# push terrascan docker image
+docker-push:
+	./scripts/docker-push.sh

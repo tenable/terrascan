@@ -1,6 +1,0 @@
--   id: terrascan
-    name: terrascan
-    description: Executes terrascan on the current directory
-    entry: terrascan
-    language: python
-    types: [terraform]

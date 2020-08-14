@@ -1,0 +1,10 @@
+{
+    "name": "stackDriverMonitoringEnabled",
+    "file": "stackDriverMonitoringEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure Stackdriver Logging is enabled on Kubernetes Engine Clusters.",
+    "referenceId": "accurics.gcp.MON.143",
+    "category": "Monitoring",
+    "version": 1
+}

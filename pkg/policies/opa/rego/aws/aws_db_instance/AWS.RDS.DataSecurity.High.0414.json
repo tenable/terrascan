@@ -1,0 +1,10 @@
+{
+    "name": "rdsHasStorageEncrypted",
+    "file": "rdsHasStorageEncrypted.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure that your RDS database instances have automated backups enabled for point-in-time recovery. To back up your database instances, AWS RDS take automatically a full daily snapshot of your data (with transactions logs) during the specified backup window and keeps the backups for a limited period of time (known as retention period) defined by the instance owner.",
+    "referenceId": "AWS.RDS.DataSecurity.High.0414",
+    "category": "Data Security",
+    "version": 1
+}

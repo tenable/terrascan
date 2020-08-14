@@ -1,0 +1,184 @@
+{
+  "aws_instance": [
+    {
+      "id": "aws_instance.instance_playground",
+      "name": "instance_playground",
+      "source": "config1.tf",
+      "line": 78,
+      "type": "aws_instance",
+      "config": {
+        "ami": "${lookup(var.aws_amis, var.aws_region)}",
+        "instance_type": "${var.instance_type}",
+        "key_name": "${aws_key_pair.ec2key_playground.key_name}",
+        "provisioner": [
+          {
+            "remote-exec": {
+              "connection": [
+                {
+                  "host": "${self.public_ip}",
+                  "private_key": "${file(var.privateKey)}",
+                  "type": "ssh",
+                  "user": "ubuntu"
+                }
+              ],
+              "inline": [
+                "sudo apt-get -y update",
+                "sudo apt-get -y install nginx",
+                "sudo touch /var/www/html/index.html",
+                "echo HelloWorld | sudo tee -a /var/www/html/index.html",
+                "sudo service nginx start"
+              ]
+            }
+          }
+        ],
+        "subnet_id": "${aws_subnet.subnet_public_playground.id}",
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        },
+        "vpc_security_group_ids": [
+          "${aws_security_group.sg_playground.id}"
+        ]
+      }
+    }
+  ],
+  "aws_internet_gateway": [
+    {
+      "id": "aws_internet_gateway.igw_playground",
+      "name": "igw_playground",
+      "source": "config1.tf",
+      "line": 15,
+      "type": "aws_internet_gateway",
+      "config": {
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        },
+        "vpc_id": "${aws_vpc.vpc_playground.id}"
+      }
+    }
+  ],
+  "aws_key_pair": [
+    {
+      "id": "aws_key_pair.ec2key_playground",
+      "name": "ec2key_playground",
+      "source": "config1.tf",
+      "line": 73,
+      "type": "aws_key_pair",
+      "config": {
+        "key_name": "testKey",
+        "public_key": "${file(var.public_key_path)}"
+      }
+    }
+  ],
+  "aws_route_table": [
+    {
+      "id": "aws_route_table.rtb_public_playground",
+      "name": "rtb_public_playground",
+      "source": "config1.tf",
+      "line": 31,
+      "type": "aws_route_table",
+      "config": {
+        "route": [
+          {
+            "cidr_block": "0.0.0.0/0",
+            "gateway_id": "${aws_internet_gateway.igw_playground.id}"
+          }
+        ],
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        },
+        "vpc_id": "${aws_vpc.vpc_playground.id}"
+      }
+    }
+  ],
+  "aws_route_table_association": [
+    {
+      "id": "aws_route_table_association.rta_subnet_public_playground",
+      "name": "rta_subnet_public_playground",
+      "source": "config1.tf",
+      "line": 42,
+      "type": "aws_route_table_association",
+      "config": {
+        "route_table_id": "${aws_route_table.rtb_public_playground.id}",
+        "subnet_id": "${aws_subnet.subnet_public_playground.id}"
+      }
+    }
+  ],
+  "aws_security_group": [
+    {
+      "id": "aws_security_group.sg_playground",
+      "name": "sg_playground",
+      "source": "config1.tf",
+      "line": 47,
+      "type": "aws_security_group",
+      "config": {
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 0,
+            "protocol": "-1",
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 22,
+            "protocol": "tcp",
+            "to_port": 22
+          },
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "from_port": 80,
+            "protocol": "tcp",
+            "to_port": 80
+          }
+        ],
+        "name": "sg",
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        },
+        "vpc_id": "${aws_vpc.vpc_playground.id}"
+      }
+    }
+  ],
+  "aws_subnet": [
+    {
+      "id": "aws_subnet.subnet_public_playground",
+      "name": "subnet_public_playground",
+      "source": "config1.tf",
+      "line": 22,
+      "type": "aws_subnet",
+      "config": {
+        "cidr_block": "${var.cidr_subnet}",
+        "map_public_ip_on_launch": "true",
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        },
+        "vpc_id": "${aws_vpc.vpc_playground.id}"
+      }
+    }
+  ],
+  "aws_vpc": [
+    {
+      "id": "aws_vpc.vpc_playground",
+      "name": "vpc_playground",
+      "source": "config1.tf",
+      "line": 6,
+      "type": "aws_vpc",
+      "config": {
+        "cidr_block": "${var.cidr_vpc}",
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true,
+        "tags": {
+          "Environment": "${var.environment_tag}"
+        }
+      }
+    }
+  ]
+}
