@@ -1,0 +1,10 @@
+{
+    "name": "privateClusterEnabled",
+    "file": "privateClusterEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure Kubernetes Cluster is created with Private cluster enabled.",
+    "referenceId": "accurics.gcp.NS.117",
+    "category": "Network Security",
+    "version": 1
+}

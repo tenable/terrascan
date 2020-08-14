@@ -1,0 +1,12 @@
+{
+    "name": "reme_vmAttachedToNetwork",
+    "file": "vmAttachedToNetwork.rego",
+    "templateArgs": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that at least one Network Security Group is attached to all VMs and subnets that are public",
+    "referenceId": "accurics.azure.NS.18",
+    "category": "Network Security",
+    "version": 1
+}
