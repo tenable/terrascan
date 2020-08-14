@@ -1,13 +1,12 @@
 {
-    "ruleName": "reme_checkDataDisksEncrypted",
+    "name": "reme_checkDataDisksEncrypted",
     "file": "checkDataDisksEncrypted.rego",
-    "ruleTemplate": "checkDataDisksEncrypted",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "prefix": "reme_"
     },
     "severity": "MEDIUM",
     "description": "Ensure that 'OS disk' are encrypted",
-    "ruleReferenceId": "accurics.azure.EKM.156",
+    "referenceId": "accurics.azure.EKM.156",
     "category": "Encryption and Key Management",
     "version": 2
 }

@@ -1,15 +1,14 @@
 {
-    "ruleName": "reme_sqlIngressAccess",
+    "name": "reme_sqlIngressAccess",
     "file": "checkPublicAccessNotAllow.rego",
-    "ruleTemplate": "checkPublicAccessNotAllow",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "isEntire": false,
         "name": "sqlIngressAccess",
         "prefix": "reme_"
     },
     "severity": "HIGH",
     "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
-    "ruleReferenceId": "accurics.azure.NS.21",
+    "referenceId": "accurics.azure.NS.21",
     "category": "Network Security",
     "version": 2
 }

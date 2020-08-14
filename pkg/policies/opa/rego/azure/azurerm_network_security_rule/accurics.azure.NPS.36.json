@@ -1,8 +1,7 @@
 {
-    "ruleName": "reme_networkPort3389ExposedPublicWide",
+    "name": "reme_networkPort3389ExposedPublicWide",
     "file": "networkPortExposedPublic.rego",
-    "ruleTemplate": "networkPortExposedPublic",
-    "ruleTemplateArgs": {
+    "templateArgs": {
         "endLimit": 1,
         "evalHosts": false,
         "name": "networkPort3389ExposedPublicWide",
@@ -13,7 +12,7 @@
     },
     "severity": "HIGH",
     "description": "Remote Desktop (TCP:3389) is exposed to the wide public internet",
-    "ruleReferenceId": "accurics.azure.NPS.36",
+    "referenceId": "accurics.azure.NPS.36",
     "category": "Network Ports Security",
     "version": 2
 }
