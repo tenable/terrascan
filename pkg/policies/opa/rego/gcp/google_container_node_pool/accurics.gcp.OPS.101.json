@@ -1,0 +1,10 @@
+{
+    "name": "autoNodeUpgradeEnabled",
+    "file": "autoNodeUpgradeEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters.",
+    "referenceId": "accurics.gcp.OPS.101",
+    "category": "Operational Efficiency",
+    "version": 1
+}

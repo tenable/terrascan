@@ -1,0 +1,10 @@
+{
+    "name": "projectWideSshKeysUsed",
+    "file": "projectWideSshKeysUsed.rego",
+    "templateArgs": null,
+    "severity": "MEDIUM",
+    "description": "Ensure 'Block Project-wide SSH keys' is enabled for VM instances.",
+    "referenceId": "accurics.gcp.NS.126",
+    "category": "Network Security",
+    "version": 1
+}

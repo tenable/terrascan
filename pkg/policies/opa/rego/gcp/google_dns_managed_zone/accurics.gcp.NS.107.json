@@ -1,0 +1,10 @@
+{
+    "name": "dnsStateIsNotOn",
+    "file": "dnsStateIsNotOn.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure that DNSSEC is enabled for Cloud DNS.",
+    "referenceId": "accurics.gcp.NS.107",
+    "category": "Network Security",
+    "version": 1
+}

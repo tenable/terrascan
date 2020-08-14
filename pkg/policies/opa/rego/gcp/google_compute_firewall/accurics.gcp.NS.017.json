@@ -1,0 +1,13 @@
+{
+    "name": "port22Open",
+    "file": "portIsOpen.rego",
+    "templateArgs": {
+        "name": "port22Open",
+        "port_number": "22"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that SSH access is restricted from the internet",
+    "referenceId": "accurics.gcp.NS.017",
+    "category": "Network Security",
+    "version": 1
+}

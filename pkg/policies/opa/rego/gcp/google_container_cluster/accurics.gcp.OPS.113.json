@@ -1,0 +1,10 @@
+{
+    "name": "clusterLabelsEnabled",
+    "file": "clusterLabelsEnabled.rego",
+    "templateArgs": null,
+    "severity": "HIGH",
+    "description": "Ensure Kubernetes Clusters are configured with Labels.",
+    "referenceId": "accurics.gcp.OPS.113",
+    "category": "Operational Efficiency",
+    "version": 1
+}
