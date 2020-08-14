@@ -21,6 +21,10 @@ theme:
   font:
     text: Montserrat
 
+# Custom CSS
+extra_css:
+  - stylesheets/extra.css
+
 # Social Icons
 extra:
   social:
