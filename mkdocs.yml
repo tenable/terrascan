@@ -12,12 +12,16 @@ repo_url: https://github.com/accurics/terrascan/
 # Configuration
 theme:
   name: material
-  favicon: img/Terrascan_STACK_Logo_F2F2F2.svg
-  logo: img/Terrascan_STACK_Logo_F2F2F2.svg
+  favicon: img/favicon.ico
+  logo: img/terrascan-icon-white.png
   custom_dir: docs/overrides
   palette:
     primary: green
   language: en
+
+# Custom CSS
+extra_css:
+  - stylesheets/extra.css
 
 # Social Icons
 extra:
@@ -44,6 +48,9 @@ nav:
   - About: about.md
 
 markdown_extensions:
-  - markdown_include.include
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
   - toc:
       permalink: true

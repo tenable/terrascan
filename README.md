@@ -19,7 +19,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 * Support for AWS, Azure, and GCP
 
 ## Installing
-Terrascan's binary for your architecture can be found on the releases page. Here's an example of how to install it:
+Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
 ```
 $ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_darwin_amd64.zip --output terrascan_darwin_amd64.zip
@@ -37,21 +37,16 @@ Terrascan can be installed using Homebrew on macOS:
 brew install terrascan
 ```
 
-### Chocolatey
-Terrascan can be installed on Windows using Chocolatey:
-
-```
-choco install terrascan
-```
-
 ### Docker
 Terrascan is also available as a Docker image and can be used as follows
 
-	$ docker run accurics/terrascan
+```
+$ docker run accurics/terrascan
+```
 
 ## Getting started
 
-To scan your code for security weaknesses you can run the following
+To scan your code for security issues you can run the following
 
 ```
 $ terrascan --iac terraform --iac-version v12 --cloud aws -d pkg/iac-providers/terraform/v12/testdata/moduleconfigs
@@ -60,24 +55,38 @@ $ terrascan --iac terraform --iac-version v12 --cloud aws -d pkg/iac-providers/t
 The following flags are available:
 
 ```
-$ terrascan --help
-Usage of ./bin/terrascan:
-  -cloud string
-        cloud provider (supported values: aws)
-  -d string
-        IaC directory path
-  -f string
-        IaC file path
-  -iac string
-        IaC provider (supported values: terraform)
-  -iac-version string
-        IaC version (supported values: 'v12' for terraform) (default "default")
-  -log-level string
-        logging level (debug, info, warn, error, panic, fatal) (default "info")
-  -log-type string
-        log type (json, console) (default "console")
-  -server
-        run terrascan in server mode
+$ terrascan -h
+
+Terrascan
+
+Scan IaC files for security violations
+
+Usage
+
+    terrascan -cloud [aws|azure|gcp] [options...]
+
+Options
+
+Cloud
+    -cloud                Required. Cloud provider (supported values: aws, azure, gcp)
+
+IaC (Infrastructure as Code)
+    -d                    IaC directory path (default: current working directory)
+    -f                    IaC file path
+    -iac                  IaC provider (supported values: terraform, default: terraform)
+    -iac-version          IaC version (supported values: 'v12' for Terraform, default: v12)
+    -p                    Policy directory path
+
+Mode
+    -server               Run Terrascan in server mode
+
+Logging
+    -log-level            Logging level (supported values: debug, info, warn, error, panic, fatal)
+    -log-type             Logging type (supported values: json, yaml, console, default: console)
+
+Miscellaneous
+    -config               Configuration file path
+    -version              Print the Terrascan version
 ```
 
 ## Documentation
