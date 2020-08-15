@@ -16,6 +16,7 @@ help:
 	@echo "clean\n\tclean up build"
 	@echo "docker-build\n\tbuild terrascan docker image"
 	@echo "docker-push\n\tpush terrascan docker image"
+	@echo "docker-push-latest\n\tpush terrascan docker image with latest tag"
 	@echo "gofmt\n\tvalidate gofmt"
 	@echo "golint\n\tvalidate golint"
 	@echo "gomodverify\n\tverify go modules"
@@ -88,3 +89,8 @@ docker-build:
 # push terrascan docker image
 docker-push:
 	./scripts/docker-push.sh
+
+
+# push latest terrascan docker image
+docker-push-latest:
+	./scripts/docker-push-latest.sh
