@@ -59,3 +59,8 @@ markdown_extensions:
 google_analytics:
   - UA-XXXXXXXX-X
   - auto
+
+# Plugins
+plugins:
+  - diagrams
+  - search
