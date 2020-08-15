@@ -34,12 +34,11 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "terrascan",
-	Short: "Terrascan is an IaC (Infrastructure-as-Code) file scanner",
+	Short: "Detect compliance and security violations across Infrastructure as Code.",
 	Long: `Terrascan
 
-An advanced IaC (Infrastructure-as-Code) file scanner written in Go.
-Secure your cloud deployments at design time.
-For more information, please visit https://www.accurics.com
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+For more information, please visit https://docs.accurics.com
 `,
 	Version: version.Get(),
 }
