@@ -1,10 +1,10 @@
 {
     "name": "noGmailAccount",
     "file": "noGmailAccount.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that corporate login credentials are used instead of Gmail accounts.",
-    "referenceId": "accurics.gcp.IAM.002",
+    "reference_id": "accurics.gcp.IAM.150",
     "category": "Identity and Access Management",
     "version": 1
 }

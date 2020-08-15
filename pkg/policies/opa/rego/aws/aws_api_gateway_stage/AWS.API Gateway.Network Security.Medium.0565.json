@@ -1,10 +1,10 @@
 {
     "name": "apiGatewaySslCertificate",
     "file": "apiGatewaySslCertificate.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable SSL Client Certificate",
-    "referenceId": "AWS.API Gateway.Network Security.Medium.0565",
+    "reference_id": "AWS.API Gateway.Network Security.Medium.0565",
     "category": "Network Security",
     "version": 1
 }

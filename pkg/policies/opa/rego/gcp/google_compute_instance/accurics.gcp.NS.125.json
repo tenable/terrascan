@@ -1,10 +1,10 @@
 {
     "name": "checkVM_NoFullCloudAccess",
     "file": "checkVM_NoFullCloudAccess.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "HIGH",
     "description": "Instances may have been configured to use the default service account with full access to all Cloud APIs",
-    "referenceId": "accurics.gcp.NS.125",
+    "reference_id": "accurics.gcp.NS.125",
     "category": "Access Control",
     "version": 1
 }

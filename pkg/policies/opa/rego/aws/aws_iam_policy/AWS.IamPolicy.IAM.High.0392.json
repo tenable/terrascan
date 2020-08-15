@@ -1,12 +1,12 @@
 {
     "name": "reme_iamPolicyWithFullAdminControl",
     "file": "iamPolicyWithFullAdminControl.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": "reme_"
     },
     "severity": "HIGH",
     "description": "It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges.",
-    "referenceId": "AWS.IamPolicy.IAM.High.0392",
+    "reference_id": "AWS.IamPolicy.IAM.High.0392",
     "category": "Identity and Access Management",
     "version": 2
 }

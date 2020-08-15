@@ -1,10 +1,10 @@
 {
     "name": "awsLambdaRole",
     "file": "awsLambdaRole.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Lambda Functions with Admin Privileges",
-    "referenceId": "AWS.ElasticSearch.IAM.Medium.0878",
+    "reference_id": "AWS.ElasticSearch.IAM.Medium.0878",
     "category": "Identity and Access Management",
     "version": 1
 }

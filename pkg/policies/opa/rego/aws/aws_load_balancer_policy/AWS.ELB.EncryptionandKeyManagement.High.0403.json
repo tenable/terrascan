@@ -1,7 +1,7 @@
 {
     "name": "elbWeakCipher",
     "file": "elbWeakCipher.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": "",
         "weak_ciphers": [
             "DHE-DSS-AES128-SHA",
@@ -77,7 +77,7 @@
     },
     "severity": "HIGH",
     "description": "Remove insecure ciphers for your ELB Predefined or Custom Security Policy, to reduce the risk of the SSL connection between the client and the load balancer being exploited.",
-    "referenceId": "AWS.ELB.EncryptionandKeyManagement.High.0403",
+    "reference_id": "AWS.ELB.EncryptionandKeyManagement.High.0403",
     "category": "Encryption and Key Management",
     "version": 2
 }
