@@ -28,6 +28,27 @@ func RegisterCommand(baseCommand *cobra.Command, command *cobra.Command) {
 	baseCommand.AddCommand(command)
 }
 
+func subCommands() (commandNames []string) {
+	for _, command := range rootCmd.Commands() {
+		commandNames = append(commandNames, append(command.Aliases, command.Name())...)
+	}
+	return
+}
+
+// setDefaultCommand sets `scan` as default command if no other command is specified
+func setDefaultCommandIfNonePresent() {
+	if len(os.Args) > 1 {
+		potentialCommand := os.Args[1]
+		for _, command := range subCommands() {
+			if command == potentialCommand {
+				return
+			}
+		}
+		os.Args = append([]string{os.Args[0], "scan"}, os.Args[1:]...)
+	}
+
+}
+
 // Execute the entrypoint called by main
 func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogLevel, "log-level", "l", "info", "log level (debug, info, warn, error, panic, fatal)")
@@ -35,6 +56,7 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output-type", "o", "yaml", "output type (json, yaml, xml)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 
+	setDefaultCommandIfNonePresent()
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
