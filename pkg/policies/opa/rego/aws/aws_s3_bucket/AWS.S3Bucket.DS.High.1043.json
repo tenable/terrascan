@@ -1,12 +1,12 @@
 {
     "name": "s3EnforceUserACL",
     "file": "s3EnforceUserACL.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": "S3 bucket Access is allowed to all AWS Account Users.",
-    "referenceId": "AWS.S3Bucket.DS.High.1043",
+    "reference_id": "AWS.S3Bucket.DS.High.1043",
     "category": "S3",
     "version": 2
 }

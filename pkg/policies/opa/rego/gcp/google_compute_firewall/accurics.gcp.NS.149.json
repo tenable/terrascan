@@ -1,0 +1,13 @@
+{
+    "name": "port3389Open",
+    "file": "portIsOpen.rego",
+    "template_args": {
+        "name": "port3389Open",
+        "port_number": "3389"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that SSH access is restricted from the internet",
+    "reference_id": "accurics.gcp.NS.149",
+    "category": "Network Security",
+    "version": 1
+}

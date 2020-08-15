@@ -1,10 +1,10 @@
 {
     "name": "awsConfigEncryptedVol",
     "file": "awsConfigEncryptedVol.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "AWS Config Rule for Web-Tier Encrypted Volumes",
-    "referenceId": "AWS.Config.Encryption\u0026KeyManagement.Medium.0660",
+    "reference_id": "AWS.Config.Encryption\u0026KeyManagement.Medium.0660",
     "category": "Encryption \u0026 Key Management",
     "version": 1
 }

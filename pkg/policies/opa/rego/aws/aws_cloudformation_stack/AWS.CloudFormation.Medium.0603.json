@@ -1,13 +1,13 @@
 {
     "name": "cloudFormationStackNotifs",
     "file": "cloudFormationStackNotifs.rego",
-    "templateArgs": {
+    "template_args": {
         "name": "cloudFormationStackNotifs",
         "property": "notification_arns"
     },
     "severity": "MEDIUM",
     "description": "Enable AWS CloudFormation Stack Notifications",
-    "referenceId": "AWS.CloudFormation.Medium.0603",
+    "reference_id": "AWS.CloudFormation.Medium.0603",
     "category": " ",
     "version": 1
 }

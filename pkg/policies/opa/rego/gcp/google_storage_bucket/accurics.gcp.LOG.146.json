@@ -1,0 +1,10 @@
+{
+    "name": "checkVersioningEnabled",
+    "file": "checkStorageBucketConfig.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that object versioning is enabled on log-buckets.",
+    "reference_id": "accurics.gcp.LOG.146",
+    "category": "Logging",
+    "version": 1
+}

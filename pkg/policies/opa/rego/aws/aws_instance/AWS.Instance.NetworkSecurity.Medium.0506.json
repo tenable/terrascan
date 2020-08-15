@@ -1,12 +1,12 @@
 {
     "name": "instanceWithNoVpc",
     "file": "instanceWithNoVpc.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Instance should be configured in vpc. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations.",
-    "referenceId": "AWS.Instance.NetworkSecurity.Medium.0506",
+    "reference_id": "AWS.Instance.NetworkSecurity.Medium.0506",
     "category": "Network Security",
     "version": 2
 }

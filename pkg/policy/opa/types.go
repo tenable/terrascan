@@ -29,10 +29,10 @@ import (
 type RegoMetadata struct {
 	Name         string                 `json:"name"`
 	File         string                 `json:"file"`
-	TemplateArgs map[string]interface{} `json:"templateArgs"`
+	TemplateArgs map[string]interface{} `json:"template_args"`
 	Severity     string                 `json:"severity"`
 	Description  string                 `json:"description"`
-	ReferenceID  string                 `json:"referenceId"`
+	ReferenceID  string                 `json:"reference_id"`
 	Category     string                 `json:"category"`
 	Version      int                    `json:"version"`
 }

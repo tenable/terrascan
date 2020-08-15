@@ -1,0 +1,10 @@
+{
+    "name": "checkLoggingEnabled",
+    "file": "checkStorageBucketConfig.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that logging is enabled for Cloud storage buckets.",
+    "reference_id": "accurics.gcp.LOG.147",
+    "category": "Logging",
+    "version": 1
+}

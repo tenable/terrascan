@@ -1,7 +1,7 @@
 {
     "name": "reme_networkPort3389ExposedPublicEntire",
     "file": "networkPortExposedPublic.rego",
-    "templateArgs": {
+    "template_args": {
         "endLimit": 0,
         "evalHosts": true,
         "name": "networkPort3389ExposedPublicEntire",
@@ -12,7 +12,7 @@
     },
     "severity": "HIGH",
     "description": "Remote Desktop (TCP:3389) is exposed to the entire public internet",
-    "referenceId": "accurics.azure.NPS.171",
+    "reference_id": "accurics.azure.NPS.171",
     "category": "Network Ports Security",
     "version": 2
 }

@@ -1,12 +1,12 @@
 {
     "name": "unrestrictedIngressAccess",
     "file": "unrestrictedIngressAccess.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": " It is recommended that no security group allows unrestricted ingress access",
-    "referenceId": "AWS.SecurityGroup.NetworkSecurity.High.0094",
+    "reference_id": "AWS.SecurityGroup.NetworkSecurity.High.0094",
     "category": "Network Ports Security",
     "version": 2
 }

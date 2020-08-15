@@ -1,12 +1,12 @@
 {
     "name": "redshiftPublicAccess",
     "file": "redshiftPublicAccess.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": "Ensure Redshift clusters are not publicly accessible to minimise security risks.",
-    "referenceId": "AWS.Redshift.NetworkSecurity.HIGH.0564",
+    "reference_id": "AWS.Redshift.NetworkSecurity.HIGH.0564",
     "category": "Network Security",
     "version": 2
 }

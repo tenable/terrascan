@@ -1,10 +1,10 @@
 {
     "name": "sqlServerAuditingEnabled",
     "file": "sqlServerAuditingEnabled.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that 'Auditing' is set to 'On' for SQL servers",
-    "referenceId": "accurics.azure.MON.354",
+    "reference_id": "accurics.azure.MON.354",
     "category": "Monitoring",
     "version": 1
 }

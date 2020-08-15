@@ -1,10 +1,10 @@
 {
     "name": "elastiSearchNoKms",
     "file": "elastiSearchNoKms.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "ElasticSearch Domain Encrypted with KMS CMKs",
-    "referenceId": "AWS.ElasticSearch.Encryption\u0026KeyManagement.Medium.0768",
+    "reference_id": "AWS.ElasticSearch.Encryption\u0026KeyManagement.Medium.0768",
     "category": "Encryption \u0026 Key Management",
     "version": 1
 }
