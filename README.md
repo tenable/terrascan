@@ -30,13 +30,6 @@ $ install terrascan /usr/local/bin
 $ terrascan --help
 ```
 
-### Homebrew
-Terrascan can be installed using Homebrew on macOS:
-
-```
-brew install terrascan
-```
-
 ### Docker
 Terrascan is also available as a Docker image and can be used as follows
 
@@ -44,54 +37,54 @@ Terrascan is also available as a Docker image and can be used as follows
 $ docker run accurics/terrascan
 ```
 
+### Homebrew
+Terrascan can be installed using Homebrew on macOS:
+
+```
+brew install terrascan
+```
+
 ## Getting started
 
 To scan your code for security issues you can run the following
 
 ```
-$ terrascan --iac terraform --iac-version v12 --cloud aws -d pkg/iac-providers/terraform/v12/testdata/moduleconfigs
+$ terrascan scan -t aws
 ```
 
-The following flags are available:
+The following commands are available:
 
 ```
-$ terrascan -h
-
+$ terrascan
 Terrascan
 
-Scan IaC files for security violations
+An advanced IaC (Infrastructure-as-Code) file scanner written in Go.
+Secure your cloud deployments at design time.
+For more information, please visit https://www.accurics.com
 
-Usage
+Usage:
+  terrascan [command]
 
-    terrascan -cloud [aws|azure|gcp] [options...]
+Available Commands:
+  help        Help about any command
+  init        Initialize Terrascan
+  scan        Scan IaC (Infrastructure-as-Code) files for vulnerabilities.
+  server      Run Terrascan as an API server
 
-Options
+Flags:
+  -c, --config-path string   config file path
+  -h, --help                 help for terrascan
+  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
+  -x, --log-type string      log output type (console, json) (default "console")
+  -o, --output-type string   output type (json, yaml, xml) (default "yaml")
+  -v, --version              version for terrascan
 
-Cloud
-    -cloud                Required. Cloud provider (supported values: aws, azure, gcp)
-
-IaC (Infrastructure as Code)
-    -d                    IaC directory path (default: current working directory)
-    -f                    IaC file path
-    -iac                  IaC provider (supported values: terraform, default: terraform)
-    -iac-version          IaC version (supported values: 'v12' for Terraform, default: v12)
-    -p                    Policy directory path
-
-Mode
-    -server               Run Terrascan in server mode
-
-Logging
-    -log-level            Logging level (supported values: debug, info, warn, error, panic, fatal)
-    -log-type             Logging type (supported values: json, yaml, console, default: console)
-
-Miscellaneous
-    -config               Configuration file path
-    -version              Print the Terrascan version
+Use "terrascan [command] --help" for more information about a command.
 ```
 
 ## Documentation
 
-To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and how to write your own policies.
+To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and a deep dive into policies.
 
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to our [contributing guide](CONTRIBUTING.md).
