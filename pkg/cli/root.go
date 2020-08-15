@@ -17,6 +17,7 @@
 package cli
 
 import (
+	"github.com/accurics/terrascan/pkg/version"
 	"github.com/spf13/cobra"
 )
 
@@ -40,5 +41,5 @@ An advanced IaC (Infrastructure-as-Code) file scanner written in Go.
 Secure your cloud deployments at design time.
 For more information, please visit https://www.accurics.com
 `,
-	Version: "1.0.0", //version.Get(), // @TODO: Move to a separate file
+	Version: version.Get(),
 }
