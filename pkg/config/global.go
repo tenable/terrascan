@@ -22,7 +22,7 @@ import (
 
 const (
 	policyRepoURL = "https://github.com/accurics/terrascan.git"
-	policyBranch  = "terrascan-v1.0"
+	policyBranch  = "master"
 )
 
 var (
