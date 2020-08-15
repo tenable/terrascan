@@ -21,6 +21,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var serverCmd = &cobra.Command{
+	Use:   "server",
+	Short: "Run Terrascan as an API server",
+	Long: `Terrascan
+
+Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Code) files and returns the scan results.
+`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		initial(cmd, args)
+	},
+	Run: server,
+}
+
 func server(cmd *cobra.Command, args []string) {
 	httpserver.Start()
+}
+
+func init() {
+	RegisterCommand(rootCmd, serverCmd)
 }
