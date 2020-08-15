@@ -1,10 +1,10 @@
 {
     "name": "elastiSearchEncryptAtRest",
     "file": "elastiSearchEncryptAtRest.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS ElasticSearch Encryption At Rest",
-    "referenceId": "AWS.ElasticSearch.Encryption\u0026KeyManagement.Medium.0778",
+    "reference_id": "AWS.ElasticSearch.Encryption\u0026KeyManagement.Medium.0778",
     "category": "Encryption \u0026 Key Management",
     "version": 1
 }

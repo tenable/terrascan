@@ -1,13 +1,13 @@
 {
     "name": "cloudFormationStackPolicy",
     "file": "cloudFormationStackPolicy.rego",
-    "templateArgs": {
+    "template_args": {
         "name": "cloudFormationStackPolicy",
         "property": "policy_url"
     },
     "severity": "MEDIUM",
     "description": "AWS CloudFormation Stack Policy",
-    "referenceId": "AWS.CloudFormation.Medium.0604",
+    "reference_id": "AWS.CloudFormation.Medium.0604",
     "category": " ",
     "version": 1
 }

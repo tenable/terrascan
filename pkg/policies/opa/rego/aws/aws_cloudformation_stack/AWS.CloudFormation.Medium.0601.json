@@ -1,10 +1,10 @@
 {
     "name": "cloudFormationStackDrift",
     "file": "cloudFormationStackDrift.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "AWS CloudFormation Has Been Drifted.",
-    "referenceId": "AWS.CloudFormation.Medium.0601",
+    "reference_id": "AWS.CloudFormation.Medium.0601",
     "category": " ",
     "version": 1
 }

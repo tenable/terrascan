@@ -1,10 +1,10 @@
 {
     "name": "apiGatewaySettingMetrics",
     "file": "apiGatewaySettingMetrics.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable Detailed CloudWatch Metrics for APIs",
-    "referenceId": "AWS.API Gateway.Logging.Medium.0569",
+    "reference_id": "AWS.API Gateway.Logging.Medium.0569",
     "category": "Logging",
     "version": 2
 }

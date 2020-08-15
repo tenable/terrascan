@@ -1,10 +1,10 @@
 {
     "name": "checkRotation90Days",
     "file": "checkRotation90Days.rego",
-    "templateArgs": null,
+    "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Encryption keys are rotated within a period of 90 days.",
-    "referenceId": "accurics.gcp.EKM.139",
+    "reference_id": "accurics.gcp.EKM.139",
     "category": "Encryption \u0026 Key Management",
     "version": 1
 }

@@ -1,7 +1,7 @@
 {
     "name": "passwordRequireMinLength14",
     "file": "passwordMinLength.rego",
-    "templateArgs": {
+    "template_args": {
         "name": "passwordRequireMinLength14",
         "parameter": "minimum_password_length",
         "prefix": "",
@@ -9,7 +9,7 @@
     },
     "severity": "MEDIUM",
     "description": "Setting a lengthy password increases account resiliency against brute force login attempts",
-    "referenceId": "AWS.Iam.IAM.Medium.0458",
+    "reference_id": "AWS.Iam.IAM.Medium.0458",
     "category": "IAM",
     "version": 2
 }

@@ -1,12 +1,12 @@
 {
     "name": "lambdaXRayTracingDisabled",
     "file": "lambdaXRayTracingDisabled.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "LOW",
     "description": "Lambda tracing is not enabled.",
-    "referenceId": "AWS.VPC.Logging.Medium.0470",
+    "reference_id": "AWS.VPC.Logging.Medium.0470",
     "category": "Logging",
     "version": 2
 }

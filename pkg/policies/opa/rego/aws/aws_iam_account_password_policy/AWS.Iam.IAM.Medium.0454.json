@@ -1,14 +1,14 @@
 {
     "name": "passwordRequireLowerCase",
     "file": "passwordPolicyRequirement.rego",
-    "templateArgs": {
+    "template_args": {
         "name": "passwordRequireLowerCase",
         "prefix": "",
         "required_parameter": "require_lowercase_characters"
     },
     "severity": "MEDIUM",
     "description": "Lower case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
-    "referenceId": "AWS.Iam.IAM.Medium.0454",
+    "reference_id": "AWS.Iam.IAM.Medium.0454",
     "category": "IAM",
     "version": 2
 }

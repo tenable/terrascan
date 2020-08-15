@@ -1,12 +1,12 @@
 {
     "name": "rdsAutoMinorVersionUpgradeEnabled",
     "file": "rdsAutoMinorVersionUpgradeEnabled.rego",
-    "templateArgs": {
+    "template_args": {
         "prefix": ""
     },
     "severity": "HIGH",
     "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
-    "referenceId": "AWS.RDS.DS.High.1041",
+    "reference_id": "AWS.RDS.DS.High.1041",
     "category": "Data Security",
     "version": 2
 }
