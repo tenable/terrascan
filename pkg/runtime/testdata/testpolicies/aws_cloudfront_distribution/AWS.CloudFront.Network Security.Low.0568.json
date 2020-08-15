@@ -1,0 +1,12 @@
+{
+    "name": "cloudfrontNoGeoRestriction",
+    "file": "cloudfrontNoGeoRestriction.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content.",
+    "reference_id": "AWS.CloudFront.Network Security.Low.0568",
+    "category": "Network Security",
+    "version": 2
+}
