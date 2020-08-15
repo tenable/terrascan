@@ -37,6 +37,8 @@ var (
 // Run initializes terrascan if not done already
 func Run() error {
 
+	zap.S().Debug("initializing terrascan")
+
 	// check if policy paths exist
 	if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
 		return nil
@@ -48,6 +50,7 @@ func Run() error {
 		return err
 	}
 
+	zap.S().Debug("intialized successfully")
 	return nil
 }
 
