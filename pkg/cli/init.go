@@ -23,6 +23,16 @@ import (
 	"go.uber.org/zap"
 )
 
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "Initialize Terrascan",
+	Long: `Terrascan
+
+Initializes Terrascan and clones policies from the Terrascan GitHub repository.
+`,
+	Run: initial,
+}
+
 func initial(cmd *cobra.Command, args []string) {
 
 	// initialize logger
@@ -33,4 +43,8 @@ func initial(cmd *cobra.Command, args []string) {
 		zap.S().Error("failed to initialize terrascan")
 		return
 	}
+}
+
+func init() {
+	RegisterCommand(rootCmd, initCmd)
 }
