@@ -47,6 +47,7 @@ nav:
   - Changelog: changelog.md
   - About: about.md
 
+# Extensions
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.inlinehilite
@@ -54,3 +55,7 @@ markdown_extensions:
   - pymdownx.snippets
   - toc:
       permalink: true
+
+google_analytics:
+  - UA-XXXXXXXX-X
+  - auto
