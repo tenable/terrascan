@@ -38,10 +38,10 @@ var (
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
-	Short: "Scan IaC (Infrastructure-as-Code) files for vulnerabilities.",
+	Short: "Detect compliance and security violations across Infrastructure as Code.",
 	Long: `Terrascan
 
-Scan IaC (Infrastructure-as-Code) files for vulnerabilities.
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		initial(cmd, args)
@@ -60,7 +60,7 @@ func init() {
 	scanCmd.Flags().StringVarP(&IacVersion, "iac-version", "", "v12", "iac version (v12)")
 	scanCmd.Flags().StringVarP(&IacFilePath, "iac-file", "f", "", "path to a single IaC file")
 	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
-	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "", "", "policy path directory")
+	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "p", "", "policy path directory")
 	scanCmd.MarkFlagRequired("policy-type")
 	RegisterCommand(rootCmd, scanCmd)
 }
