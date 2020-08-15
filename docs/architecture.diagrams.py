@@ -18,20 +18,18 @@ with Diagram("Terrascan architecture", show=False):
         ]
 
     with Cluster("IaC Providers"):
-        iac = [
-            iac.Terraform("Terraform"),
-            iac.Ansible("Ansible"),
-            iac.Awx("Awx")
-        ]
+        tf = iac.Terraform("Terraform")
+        ansible = iac.Ansible("Ansible")
+        iac.Awx("Awx")
 
 
     with Cluster("Policy Engine"):
-        runtime = [
+        policy = [
             ECS("AWS"),
             VM("Azure"),
             GCE("GCP")
         ]
 
-    cli >> runtime >> iac >> policy
-    server >> runtime >> iac >> policy
+    server >> runtime >> tf >> policy
+    cli >> runtime >> ansible >> policy
 
