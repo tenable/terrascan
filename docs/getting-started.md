@@ -15,6 +15,16 @@ $ install terrascan /usr/local/bin
 $ terrascan
 ```
 
+If you have go installed, Terrascan can be installed with `go get`
+```
+$ export GO111MODULE=on
+$ go get -u github.com/accurics/terrascan/cmd/terrascan
+  go: downloading github.com/accurics/terrascan v1.0.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.0.0
+  ...
+$ terrascan
+```
+
 ### Using Docker
 Terrascan is available as a Docker image and can used as follows:
 

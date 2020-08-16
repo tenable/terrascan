@@ -24,11 +24,21 @@ Terrascan's binary for your architecture can be found on the [releases](https://
 ```
 $ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_1.0.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
-x CHANGELOG.md
-x LICENSE
-x README.md
+  x CHANGELOG.md
+  x LICENSE
+  x README.md
 x terrascan
 $ install terrascan /usr/local/bin
+$ terrascan
+```
+
+If you have go installed, Terrascan can be installed with `go get`
+```
+$ export GO111MODULE=on
+$ go get -u github.com/accurics/terrascan/cmd/terrascan
+  go: downloading github.com/accurics/terrascan v1.0.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.0.0
+  ...
 $ terrascan
 ```
 
@@ -88,14 +98,10 @@ Use "terrascan [command] --help" for more information about a command.
 ```
 
 ## Documentation
-
 To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and a deep dive into policies.
 
 ## Developing Terrascan
-To learn more about developing and contributing to Terrascan refer to our [contributing guide](CONTRIBUTING.md).
-
-
-To learn more about compiling Terrascan and contributing suggested changes, please refer to the contributing guide.
+To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
 
 ## License
 
