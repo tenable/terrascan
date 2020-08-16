@@ -58,9 +58,7 @@
 ### azurerm_redis_cache
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates.
-
-Note this feature is only available to Premium tier Redis Caches. | accurics.azure.NS.13 |
+| Network Security | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates. Note this feature is only available to Premium tier Redis Caches. | accurics.azure.NS.13 |
 | Encryption and Key Management | azure | MEDIUM | Ensure that the Redis Cache accepts only SSL connections | accurics.azure.EKM.23 |
 | Network Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources | accurics.azure.NS.31 |
 | Network Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet | accurics.azure.NS.30 |
