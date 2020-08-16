@@ -17,7 +17,6 @@
 package cli
 
 import (
-	"github.com/accurics/terrascan/pkg/version"
 	"github.com/spf13/cobra"
 )
 
@@ -40,5 +39,4 @@ var rootCmd = &cobra.Command{
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 For more information, please visit https://docs.accurics.com
 `,
-	Version: version.Get(),
 }
