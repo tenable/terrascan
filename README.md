@@ -22,12 +22,14 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
 ```
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_darwin_amd64.zip --output terrascan_darwin_amd64.zip
-$ unzip terrascan_darwin_amd64.zip
-Archive:  terrascan_darwin_amd64.zip
-  inflating: terrascan
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_1.0.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ tar -xvf terrascan.tar.gz
+x CHANGELOG.md
+x LICENSE
+x README.md
+x terrascan
 $ install terrascan /usr/local/bin
-$ terrascan --help
+$ terrascan
 ```
 
 ### Docker
