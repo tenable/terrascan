@@ -2,6 +2,7 @@
 
 ## 1.0.0 (UNRELEASED)
 Major updates to Terrascan and the underlying architecture including:
+
 * Pluggable architecture written in Golang. We updated the architecture to be easier to extend Terrascan with additional IaC languages and support policies for different cloud providers and cloud native tooling.
 * Server mode. This allows Terrascan to be executed as a server and use it's API to perform static code analysis
 * Notifications hooks. Will be able to integrate for notifications to external systems (e.g. email, slack, etc.)
