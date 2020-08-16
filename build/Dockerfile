@@ -28,9 +28,9 @@ RUN addgroup --gid 101 terrascan && \
 USER terrascan
 
 # copy terrascan binary from build
-COPY --from=builder /go/bin/terrascan /go/bin/terrascan 
+COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
 EXPOSE 9010
 
-ENTRYPOINT ["/go/bin/terrascan", "--server"]
+ENTRYPOINT ["/go/bin/terrascan", "server"]
 CMD ["--log-type", "json"]
