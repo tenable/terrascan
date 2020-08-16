@@ -41,7 +41,7 @@ nav:
   - Getting Started: getting-started.md
   - Architecture: architecture.md
   - Policies: policies.md
-  - Educational Resources: learning.md
+  # - Educational Resources: learning.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - About: about.md
