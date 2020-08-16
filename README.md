@@ -37,13 +37,6 @@ Terrascan is also available as a Docker image and can be used as follows
 $ docker run accurics/terrascan
 ```
 
-### Homebrew
-Terrascan can be installed using Homebrew on macOS:
-
-```
-brew install terrascan
-```
-
 ## Getting started
 
 To scan your code for security issues you can run the following

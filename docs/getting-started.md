@@ -20,13 +20,6 @@ Terrascan is available as a Docker image and can used as follows:
 $ docker run accurics/terrascan
 ```
 
-### Installing on macOS
-For Mac users, Terrascan can be installed using Homebrew:
-
-``` Bash
-brew install terrascan
-```
-
 ### Building Terrascan
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
 
