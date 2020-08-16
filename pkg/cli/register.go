@@ -17,6 +17,7 @@
 package cli
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -55,6 +56,20 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "yaml", "output type (json, yaml, xml)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
+
+	// parse the flags but hack around to avoid exiting with error code 2 on help
+	// override usage so that flag.Parse uses root command's usage instead of default one when invoked with -h
+	flag.Usage = func() {
+		_ = rootCmd.Help()
+	}
+
+	flag.CommandLine.Init(os.Args[0], flag.ContinueOnError)
+	args := os.Args[1:]
+	if err := flag.CommandLine.Parse(args); err != nil {
+		if err == flag.ErrHelp {
+			os.Exit(0)
+		}
+	}
 
 	setDefaultCommandIfNonePresent()
 	if err := rootCmd.Execute(); err != nil {
