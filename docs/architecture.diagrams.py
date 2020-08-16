@@ -17,8 +17,8 @@ with Diagram("Terrascan architecture", show=False):
 
     with Cluster("Runtime"):
         ECS("Input Validate")
-        ECS("Process")
         output = ECS("Output")
+        ECS("Process")
 
     with Cluster("IaC Providers"):
         tf = iac.Terraform("Terraform")
@@ -28,12 +28,12 @@ with Diagram("Terrascan architecture", show=False):
 
     with Cluster("Policy Engine"):
         policy = [
-            ECS("AWS"),
             VM("Azure"),
-            GCE("GCP")
+            GCE("GCP"),
+            ECS("AWS")
         ]
 
     server >> output >> tf >> policy >> notifier
     cli >> output >> ansible >> policy >> writer
-    cft >> policy
+    output >> cft >> policy
 
