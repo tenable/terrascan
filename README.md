@@ -37,6 +37,16 @@ Terrascan is also available as a Docker image and can be used as follows
 $ docker run accurics/terrascan
 ```
 
+### Building Terrascan
+Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
+
+``` Bash
+$ git clone git@github.com:accurics/terrascan.git
+$ cd terrascan
+$ make build
+$ ./bin/terrascan
+```
+
 ## Getting started
 
 To scan your code for security issues you can run the following
@@ -83,7 +93,7 @@ To learn more about Terrascan check out the documentation https://docs.accurics.
 To learn more about developing and contributing to Terrascan refer to our [contributing guide](CONTRIBUTING.md).
 
 
-To learn more about compiling Terraform and contributing suggested changes, please refer to the contributing guide.
+To learn more about compiling Terrascan and contributing suggested changes, please refer to the contributing guide.
 
 ## License
 
