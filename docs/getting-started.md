@@ -13,18 +13,18 @@ $ install terrascan /usr/local/bin
 $ terrascan --help
 ```
 
+### Using Docker
+Terrascan is available as a Docker image and can used as follows:
+
+``` Bash linenums="1"
+$ docker run accurics/terrascan
+```
+
 ### Installing on macOS
 For Mac users, Terrascan can be installed using Homebrew:
 
 ``` Bash linenums="1"
 brew install terrascan
-```
-
-### Using Docker
-Terrascan is also available as a Docker image and can used as follows:
-
-``` Bash linenums="1"
-$ docker run accurics/terrascan
 ```
 
 ### Building Terrascan
@@ -42,7 +42,7 @@ $ ./bin/terrascan
 By typing `terrascan` without flags or other arguments, you can display the usage information.
 
 ``` Bash linenums="1"
-$ terrascan -h
+$ terrascan
 
 Terrascan
 
