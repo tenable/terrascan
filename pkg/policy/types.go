@@ -1,6 +1,8 @@
 package policy
 
 import (
+	"encoding/xml"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/results"
 )
@@ -12,5 +14,6 @@ type EngineInput struct {
 
 // EngineOutput Contains data output from the engine
 type EngineOutput struct {
-	*results.ViolationStore `json:"results" yaml:"results" xml:"results,attr"`
+	XMLName                 xml.Name `json:"-" yaml:"-" xml:"results"`
+	*results.ViolationStore `json:"results" yaml:"results" xml:"results"`
 }
