@@ -1,6 +1,6 @@
 # About Terrascan
 
-Terrascan is a static code analyzer for infrastructure as code. Originally developed in 2017, Terrascan has evolved from a Python application specifically focused on scanning of security issues for Terraform into a Golang applicaiton with pluggable support for multiple IaC tools and technologies. The project is maintained by [Accurics](https://www.accurics.com)
+Terrascan is a static code analyzer for infrastructure as code. Originally developed in 2017, Terrascan has evolved from a Python application specifically focused on scanning of security issues for Terraform into a Golang application with pluggable support for multiple IaC tools and technologies. The project is maintained by [Accurics](https://www.accurics.com)
 
 ## About Accurics
 
