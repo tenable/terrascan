@@ -53,7 +53,7 @@ jobs:
 
     - name: Push Terrascan docker image
       run: make docker-push
-    
+
     - name: Push Terrascan latest docker image
-      if: ${{ github.ref == 'ref/head/master' }}
+      if: ${{ github.ref == 'refs/heads/master' }}
       run: make docker-push-latest
