@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort445ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort445ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 445,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "Microsoft-DS (TCP:445) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.205",
+    "category": "Network Ports Security",
+    "version": 2
+}

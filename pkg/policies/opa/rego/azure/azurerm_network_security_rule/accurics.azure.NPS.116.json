@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort5500ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort5500ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 5500,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "VNC Listener (TCP:5500) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.116",
+    "category": "Network Ports Security",
+    "version": 2
+}

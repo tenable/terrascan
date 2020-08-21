@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort161ExposedPublicWideUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort161ExposedPublicWideUdp",
+        "numberOfHosts": 24,
+        "portNumber": 161,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "SNMP (UDP:161) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.104",
+    "category": "Network Ports Security",
+    "version": 2
+}

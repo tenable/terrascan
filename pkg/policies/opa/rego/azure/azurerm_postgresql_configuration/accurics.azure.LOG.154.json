@@ -1,0 +1,12 @@
+{
+    "name": "reme_logDuration",
+    "file": "logDuration.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_duration' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.154",
+    "category": "Logging",
+    "version": 2
+}

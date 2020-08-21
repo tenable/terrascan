@@ -1,0 +1,12 @@
+{
+    "name": "reme_logRetention",
+    "file": "logRetention.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.155",
+    "category": "Logging",
+    "version": 2
+}

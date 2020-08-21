@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort23ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort23ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 23,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "Telnet (TCP:23) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.249",
+    "category": "Network Ports Security",
+    "version": 2
+}

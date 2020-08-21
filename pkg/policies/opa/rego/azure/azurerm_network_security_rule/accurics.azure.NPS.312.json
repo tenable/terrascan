@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort4506ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort4506ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 4506,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "SaltStack Master (TCP:4506) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.312",
+    "category": "Network Ports Security",
+    "version": 2
+}

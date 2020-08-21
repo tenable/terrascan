@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort9000ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort9000ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 9000,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "Hadoop Name Node (TCP:9000) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.46",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort53ExposedPublicWideUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort53ExposedPublicWideUdp",
+        "numberOfHosts": 24,
+        "portNumber": 53,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "DNS (UDP:53) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.44",
+    "category": "Network Ports Security",
+    "version": 2
+}

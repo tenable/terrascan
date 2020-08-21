@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort139ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort139ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 139,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "NetBIOS Session Service (TCP:139) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.84",
+    "category": "Network Ports Security",
+    "version": 2
+}

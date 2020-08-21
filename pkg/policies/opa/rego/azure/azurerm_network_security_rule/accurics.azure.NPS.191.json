@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort1434ExposedPublicSmallUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort1434ExposedPublicSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 1434,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "MEDIUM",
+    "description": "MSSQL Browser (UDP:1434) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.191",
+    "category": "Network Ports Security",
+    "version": 2
+}

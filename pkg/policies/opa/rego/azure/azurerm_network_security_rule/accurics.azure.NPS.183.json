@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort8000ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort8000ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 8000,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": " Known internal web port (TCP:8000) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.183",
+    "category": "Network Ports Security",
+    "version": 2
+}

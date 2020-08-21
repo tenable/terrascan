@@ -1,0 +1,15 @@
+{
+    "name": "port80OpenToInternet",
+    "file": "portOpenToInternet.rego",
+    "template_args": {
+        "from_port": 80,
+        "name": "port80OpenToInternet",
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "HIGH",
+    "description": "http port open to internet",
+    "reference_id": "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,15 @@
+{
+    "name": "port135AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port135AlbNetworkPortSecurityPublicScope",
+        "portNumber": 135,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'MSSQL Debugger' (TCP:135) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0236",
+    "category": "Network Ports Security",
+    "version": 2
+}

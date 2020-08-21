@@ -1,0 +1,15 @@
+{
+    "name": "port139AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port139AlbNetworkPortSecurityPublicScope",
+        "portNumber": 139,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'NetBIOS Session Service' (TCP:139) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0260",
+    "category": "Network Ports Security",
+    "version": 2
+}

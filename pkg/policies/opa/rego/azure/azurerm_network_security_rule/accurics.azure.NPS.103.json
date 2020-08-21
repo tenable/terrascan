@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort25ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort25ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 25,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "SMTP (TCP:25) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.103",
+    "category": "Network Ports Security",
+    "version": 2
+}

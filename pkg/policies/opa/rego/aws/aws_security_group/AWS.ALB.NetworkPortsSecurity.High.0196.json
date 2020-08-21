@@ -1,0 +1,16 @@
+{
+    "name": "port4505AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port4505AlbNetworkPortSecurityPublicScope",
+        "numberOfHosts": -1,
+        "portNumber": 4505,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'SaltStack Master' (TCP:4505) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0196",
+    "category": "Network Ports Security",
+    "version": 2
+}

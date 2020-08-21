@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort4506ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort4506ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 4506,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "SaltStack Master (TCP:4506) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.112",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort110ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort110ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 110,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "POP3 (TCP:110) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.227",
+    "category": "Network Ports Security",
+    "version": 2
+}

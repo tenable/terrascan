@@ -1,6 +1,6 @@
 {
     "name": "awsCloudFormationInUse",
-    "file": "awsCloudFormationInUse.rego",
+    "file": "cloudFormationNullCheck.rego",
     "template_args": {
         "name": "awsCloudFormationInUse",
         "property": "template_url"

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort27018ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort27018ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 27018,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "Mongo Web Portal (TCP:27018) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.292",
+    "category": "Network Ports Security",
+    "version": 2
+}

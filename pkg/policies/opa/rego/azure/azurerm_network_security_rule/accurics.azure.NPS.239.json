@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort161ExposedPublicSmallUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort161ExposedPublicSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 161,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "MEDIUM",
+    "description": "SNMP (UDP:161) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.239",
+    "category": "Network Ports Security",
+    "version": 2
+}

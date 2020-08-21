@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort8140ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort8140ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 8140,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "Puppet Master (TCP:8140) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.306",
+    "category": "Network Ports Security",
+    "version": 2
+}

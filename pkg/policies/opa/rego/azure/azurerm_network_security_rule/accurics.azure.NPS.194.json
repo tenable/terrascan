@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort135ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort135ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 135,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "MSSQL Debugger (TCP:135) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.194",
+    "category": "Network Ports Security",
+    "version": 2
+}

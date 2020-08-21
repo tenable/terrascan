@@ -1,0 +1,15 @@
+{
+    "name": "port2484AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port2484AlbNetworkPortSecurityPublicScope",
+        "portNumber": 2484,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Oracle DB SSL' (TCP:2484) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0264",
+    "category": "Network Ports Security",
+    "version": 2
+}

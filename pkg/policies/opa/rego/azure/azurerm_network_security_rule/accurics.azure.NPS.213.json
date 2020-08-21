@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort137ExposedPublicSmallUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort137ExposedPublicSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 137,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "MEDIUM",
+    "description": "NetBIOS Name Service (UDP:137) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.213",
+    "category": "Network Ports Security",
+    "version": 2
+}

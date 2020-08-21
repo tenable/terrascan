@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort137ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort137ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 137,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "NetBIOS Name Service (TCP:137) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.77",
+    "category": "Network Ports Security",
+    "version": 2
+}

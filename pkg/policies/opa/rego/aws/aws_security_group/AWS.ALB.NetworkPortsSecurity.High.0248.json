@@ -1,0 +1,15 @@
+{
+    "name": "port27018AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port27018AlbNetworkPortSecurityPublicScope",
+        "portNumber": 27018,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Mongo Web Portal' (TCP:27018) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0248",
+    "category": "Network Ports Security",
+    "version": 2
+}
