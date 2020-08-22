@@ -40,4 +40,8 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 		return
 	}
 	writer.Write(format, violations, os.Stdout)
+
+	if violations.ViolationStore.Count.TotalCount != 0 {
+		os.Exit(3)
+	}
 }
