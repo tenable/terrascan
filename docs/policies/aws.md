@@ -24,12 +24,6 @@
 | Logging | VPC | MEDIUM | Ensure VPC flow logging is enabled in all VPCs | AWS.VPC.Logging.Medium.0470 |
 
 
-### aws_ec2
-| Category | Resource | Severity | Description | Reference ID |
-| -------- | -------- | -------- | ----------- | ------------ |
-| Encryption & KeyManagement | EC2 | MEDIUM | Enable AWS AMI Encryption | AWS.EC2.Encryption&KeyManagement.Medium.0688 |
-
-
 ### aws_iam_account_password_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -41,6 +35,13 @@
 | IAM | Iam | MEDIUM | Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0456 |
 | IAM | Iam | MEDIUM | Upper case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0457 |
 | IAM | Iam | LOW | Reducing the password lifetime increases account resiliency against brute force login attempts | AWS.Iam.IAM.Low.0540 |
+
+
+### aws_mq_broker
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Network Security | ElasticSearch | MEDIUM | Publicly Accessible MQ Brokers | AWS.ElasticSearch.NetworkSecurity.Medium.0887 |
+| Logging | ElasticSearch | MEDIUM | Enable AWS MQ Log Exports | AWS.ElasticSearch.Logging.Medium.0885 |
 
 
 ### aws_db_instance
@@ -57,6 +58,7 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Encryption and Key Management | EcsCluster | HIGH | Ensure that AWS EBS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS EBS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
+| Encryption and Key Management | EBS | HIGH | Enable AWS EBS Snapshot Encryption | AWS.EBS.EKM.Medium.0682 |
 
 
 ### aws_api_gateway_rest_api
@@ -107,7 +109,7 @@
 ### aws_config
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption & Key Management | Config | MEDIUM | AWS Config Rule for Web-Tier Encrypted Volumes | AWS.Config.Encryption&KeyManagement.Medium.0660 |
+| Encryption & Key Management | Config | MEDIUM | Ensure AWS Config Rule is enabled for Encrypted Volumes | AWS.Config.Encryption&KeyManagement.Medium.0660 |
 
 
 ### aws_cloudformation_stack
@@ -117,7 +119,6 @@
 |   | CloudFormation | MEDIUM | AWS CloudFormation Stack Policy | AWS.CloudFormation.Medium.0604 |
 |   | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Termination Protection | AWS.CloudFormation.Medium.0605 |
 |   | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Notifications | AWS.CloudFormation.Medium.0603 |
-|   | CloudFormation | MEDIUM | AWS CloudFormation Has Been Drifted. | AWS.CloudFormation.Medium.0601 |
 
 
 ### aws_iam_user_policy
@@ -163,13 +164,6 @@
 | Logging | CloudFront | MEDIUM | Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN). | AWS.CloudFront.Logging.Medium.0567 |
 
 
-### aws_mq
-| Category | Resource | Severity | Description | Reference ID |
-| -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | ElasticSearch | MEDIUM | Publicly Accessible MQ Brokers | AWS.ElasticSearch.NetworkSecurity.Medium.0887 |
-| Logging | ElasticSearch | MEDIUM | Enable AWS MQ Log Exports | AWS.ElasticSearch.Logging.Medium.0885 |
-
-
 ### aws_cloudwatch
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -202,9 +196,9 @@
 ### aws_elasticsearch_domain
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
+| Encryption and Key Management | ElasticSearch | MEDIUM | Enable AWS ElasticSearch Encryption At Rest | AWS.ElasticSearch.EKM.Medium.0778 |
+| Encryption and Key Management | ElasticSearch | MEDIUM | ElasticSearch Domain Encrypted with KMS CMKs | AWS.ElasticSearch.EKM.Medium.0768 |
 | Logging | Elasticsearch | MEDIUM | Ensure that your AWS Elasticsearch clusters have enabled the support for publishing slow logs to AWS CloudWatch Logs. This feature enables you to publish slow logs from the indexing and search operations performed on your ES clusters and gain full insight into the performance of these operations. | AWS.Elasticsearch.Logging.Medium.0573 |
-| Encryption & Key Management | ElasticSearch | MEDIUM | ElasticSearch Domain Encrypted with KMS CMKs | AWS.ElasticSearch.Encryption&KeyManagement.Medium.0768 |
-| Encryption & Key Management | ElasticSearch | MEDIUM | Enable AWS ElasticSearch Encryption At Rest | AWS.ElasticSearch.Encryption&KeyManagement.Medium.0778 |
 
 
 ### aws_iam_user_login_profile
@@ -309,6 +303,12 @@
 | Identity and Access Management | IamPolicy | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.IamPolicy.IAM.High.0373 |
 
 
+### aws_ami
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Encryption & KeyManagement | EC2 | MEDIUM | Enable AWS AMI Encryption | AWS.EC2.Encryption&KeyManagement.Medium.0688 |
+
+
 ### aws_elasticache_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -327,12 +327,6 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Encryption and Key Management | RDS | HIGH | Encrypt Amazon RDS instances and snapshots at rest, by enabling the encryption option for your Amazon RDS DB instance | AWS.RDS.EncryptionandKeyManagement.High.0414 |
-
-
-### aws_lambda
-| Category | Resource | Severity | Description | Reference ID |
-| -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | ElasticSearch | MEDIUM | Lambda Functions with Admin Privileges | AWS.ElasticSearch.IAM.Medium.0878 |
 
 
 ### aws_cloudtrail
@@ -359,12 +353,52 @@
 ### aws_security_group
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
+| Network Ports Security | ALB | MEDIUM | 'MSSQL Debugger' (TCP:135) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0236 |
+| Network Ports Security | ALB | MEDIUM | 'Cassandra OpsCenter agent port' (TCP:61621) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0220 |
+| Network Ports Security | SecurityGroup | HIGH | remote desktop port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0562 |
+| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (TCP:11214) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0240 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Datagram Service' (TCP:138) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0256 |
+| Network Ports Security | ALB | MEDIUM | 'SNMP' (UDP:161) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0276 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Session Service' (TCP:139) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0260 |
+| Network Ports Security | ALB | MEDIUM | 'LDAP SSL ' (TCP:636) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0230 |
+| Network Ports Security | ALB | MEDIUM | 'Known internal web port' (TCP:8000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0226 |
+| Network Ports Security | ALB | MEDIUM | 'Postgres SQL' (UDP:5432) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0270 |
+| Network Ports Security | SecurityGroup | HIGH | It is recommended that no security group allows unrestricted ingress access | AWS.SecurityGroup.NPS.High.1045 |
+| Network Ports Security | ALB | MEDIUM | 'Oracle DB SSL' (UDP:2484) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0266 |
+| Network Ports Security | SecurityGroup | HIGH | A VPC comes with a default security group whose initial settings deny all inbound traffic, allow all outbound traffic, and allow all traffic between instances assigned to the security group. If you don't specify a security group when you launch an instance, the instance is automatically assigned to this default security group. Security groups provide stateful filtering of ingress/egress network traffic to AWS resources. It is recommended that the default security group restrict all traffic. Configuring the default security group to restrict all traffic will encourage least privilege security group development and mindful placement of AWS resource into security groups which will in-turn reduce the exposure of those resources. | AWS.SecurityGroup.NetworkSecurity.High.0097 |
+| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (UDP:11215) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0246 |
+| Network Ports Security | ALB | MEDIUM | 'SaltStack Master' (TCP:4505) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0196 |
+| Network Ports Security | ALB | MEDIUM | 'MySQL' (TCP:3306) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0250 |
+| Network Ports Security | ALB | MEDIUM | 'Known internal web port' (TCP:8080) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0228 |
 | Network Ports Security | SecurityGroup | HIGH |  It is recommended that no security group allows unrestricted ingress access | AWS.SecurityGroup.NetworkSecurity.High.0094 |
+| Network Ports Security | ALB | MEDIUM | 'Hadoop Name Node' (TCP:9000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0224 |
+| Network Ports Security | SecurityGroup | HIGH | Unknown Port is exposed to the entire internet | AWS.SecurityGroup.NPS.High.1046 |
+| Network Ports Security | ALB | MEDIUM | 'MSSQL Admin' (TCP:1434) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0232 |
+| Network Ports Security | ALB | MEDIUM | 'Mongo Web Portal' (TCP:27018) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0248 |
+| Network Ports Security | ALB | MEDIUM | 'Oracle DB SSL' (TCP:2484) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0264 |
+| Network Ports Security | ALB | MEDIUM | 'Prevalent known internal port' (TCP:3000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0272 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Name Service' (TCP:137) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0252 |
+| Network Ports Security | ALB | HIGH | 'SSH' (TCP:22) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0194 |
+| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (UDP:11214) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0244 |
+| Network Ports Security | ALB | MEDIUM | 'Postgres SQL' (TCP:5432) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0268 |
+| Network Ports Security | ALB | MEDIUM | 'Cassandra' (TCP:7001) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0222 |
+| Network Ports Security | ALB | MEDIUM | 'MSSQL Browser Service' (UDP:1434) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0234 |
+| Network Ports Security | ALB | MEDIUM | 'CIFS / SMB' (TCP:3020) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0218 |
+| Network Ports Security | ALB | MEDIUM | 'SQL Server Analysis Services' (TCP:2383) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0280 |
+| Network Ports Security | ALB | MEDIUM | 'MSSQL Server' (TCP:1433) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0238 |
+| Network Ports Security | SecurityGroup | HIGH | ssh port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0560 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Name Service' (UDP:137) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0254 |
+| Network Ports Security | SecurityGroup | HIGH | http port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0561 |
+| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (TCP:11215) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0242 |
+| Network Ports Security | ALB | MEDIUM | 'SQL Server Analysis Service browser' (TCP:2382) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0278 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Datagram Service' (UDP:138) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0258 |
+| Network Ports Security | ALB | MEDIUM | 'NetBIOS Session Service' (UDP:139) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0262 |
+| Network Ports Security | ALB | MEDIUM | 'Puppet Master' (TCP:8140) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0274 |
 
 
 ### aws_ecs_service
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Data Security | ECS | HIGH | Identify any exposed Amazon ECR image repositories available within your AWS account and update their permissions in order to protect against unauthorized access. Amazon Elastic Container Registry (ECR) is a managed Docker registry service that makes it easy for DevOps teams to store, manage and deploy Docker container images. An ECR repository is a collection of Docker images available on AWS cloud. | AWS.ECS.High.0436 |
+| Identity and Access Management | ECS | HIGH | Ensure there are no ECS services Admin roles | AWS.ECS.High.0436 |
 
 
