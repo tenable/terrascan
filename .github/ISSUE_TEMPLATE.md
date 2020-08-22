@@ -1,5 +1,4 @@
 * terrascan version:
-* Python version:
 * Operating System:
 
 ### Description
