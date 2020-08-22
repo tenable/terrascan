@@ -119,6 +119,8 @@ Global Flags:
 
 By default Terrascan will output YAML. This can be changed to JSON or XML by using the `-o` flag.
 
+Terrascan will exit 3 if any issues are found.
+
 ### Server mode
 Server mode will execute Terrascan's API server. This is useful when using Terrascan to enforce policies in a centralized way. By default the server will be started listening in port 9010 and supports the following routes:
 

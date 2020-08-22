@@ -66,6 +66,7 @@ To scan your code for security issues you can run the following
 ```
 $ terrascan scan -t aws
 ```
+Terrascan will exit 3 if any issues are found.
 
 The following commands are available:
 
