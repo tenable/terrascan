@@ -1,0 +1,15 @@
+{
+    "name": "port138UdpAlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port138UdpAlbNetworkPortSecurityPublicScope",
+        "portNumber": 138,
+        "prefix": "",
+        "protocol": "udp"
+    },
+    "severity": "MEDIUM",
+    "description": "'NetBIOS Datagram Service' (UDP:138) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0258",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,15 @@
+{
+    "name": "port9000AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port9000AlbNetworkPortSecurityPublicScope",
+        "portNumber": 9000,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Hadoop Name Node' (TCP:9000) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0224",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,8 +1,8 @@
 package accurics
 
-gkeBasicAuthDisabled[api.id]{
+gkeBasicAuthDisabled[api.id] {
     api := input.google_container_cluster[_]
-    data := api.config.master_auth[_]
-    not data.username == null
-    not data.password == null
+    auth := api.config.master_auth[_]
+    auth.username != null
+    auth.password != null
 }

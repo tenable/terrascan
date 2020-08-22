@@ -1,11 +1,9 @@
 package accurics
 
-unrestrictedRdpAccess[api.id]
-{
+unrestrictedRdpAccess[api.id] {
      api := input.google_compute_firewall[_]
-     data := api.config
-     data.direction == "INGRESS"
-     fire_rule := data.allow[_]
+     api.config.direction == "INGRESS"
+     fire_rule := api.config.allow[_]
      fire_rule.protocol == "tcp"
      fire_rule.ports[_] == "3389"
 }

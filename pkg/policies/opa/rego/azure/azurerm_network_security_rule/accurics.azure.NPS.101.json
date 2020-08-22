@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort8140ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort8140ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 8140,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "Puppet Master (TCP:8140) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.101",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,10 @@
+{
+    "name": "elastiSearchEncryptAtRest",
+    "file": "elastiSearchEncryptAtRest.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable AWS ElasticSearch Encryption At Rest",
+    "reference_id": "AWS.ElasticSearch.EKM.Medium.0778",
+    "category": "Encryption and Key Management",
+    "version": 1
+}

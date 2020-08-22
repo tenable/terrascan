@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort4505ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort4505ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 4505,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "SaltStack Master (TCP:4505) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.246",
+    "category": "Network Ports Security",
+    "version": 2
+}

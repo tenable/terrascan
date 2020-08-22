@@ -1,0 +1,15 @@
+{
+    "name": "port137UdpAlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port137UdpAlbNetworkPortSecurityPublicScope",
+        "portNumber": 137,
+        "prefix": "",
+        "protocol": "udp"
+    },
+    "severity": "MEDIUM",
+    "description": "'NetBIOS Name Service' (UDP:137) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0254",
+    "category": "Network Ports Security",
+    "version": 2
+}

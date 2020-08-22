@@ -1,6 +1,6 @@
 {
     "name": "cloudFormationStackNotifs",
-    "file": "cloudFormationStackNotifs.rego",
+    "file": "cloudFormationNullCheck.rego",
     "template_args": {
         "name": "cloudFormationStackNotifs",
         "property": "notification_arns"

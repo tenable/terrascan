@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort9000ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort9000ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 9000,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "Hadoop Name Node (TCP:9000) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.279",
+    "category": "Network Ports Security",
+    "version": 2
+}

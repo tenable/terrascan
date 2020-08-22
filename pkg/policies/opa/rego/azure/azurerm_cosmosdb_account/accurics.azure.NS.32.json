@@ -1,0 +1,12 @@
+{
+    "name": "reme_ipRangeFilterMissing",
+    "file": "ipRangeFilterMissing.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure to filter source Ips for Cosmos DB Account",
+    "reference_id": "accurics.azure.NS.32",
+    "category": "Network Security",
+    "version": 2
+}

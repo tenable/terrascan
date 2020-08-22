@@ -1,0 +1,10 @@
+{
+    "name": "defStorageAccessDisabled",
+    "file": "defStorageAccessDisabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure default network access rule for Storage Accounts is set to deny.",
+    "reference_id": "accurics.azure.NS.370",
+    "category": "Network Security",
+    "version": 1
+}

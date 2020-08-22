@@ -1,0 +1,12 @@
+{
+    "name": "reme_connectionThrottling",
+    "file": "connectionThrottling.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.151",
+    "category": "Logging",
+    "version": 2
+}

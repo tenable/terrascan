@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort5432ExposedPrivateSmallUdp",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort5432ExposedPrivateSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 5432,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "LOW",
+    "description": "PostgreSQL (UDP:5432) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.304",
+    "category": "Network Ports Security",
+    "version": 2
+}

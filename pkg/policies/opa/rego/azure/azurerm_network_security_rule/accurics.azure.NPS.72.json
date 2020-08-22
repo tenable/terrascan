@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort27018ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort27018ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 27018,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "Mongo Web Portal (TCP:27018) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.72",
+    "category": "Network Ports Security",
+    "version": 2
+}

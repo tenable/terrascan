@@ -1,0 +1,12 @@
+{
+    "name": "reme_logConnections",
+    "file": "logConnections.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.152",
+    "category": "Logging",
+    "version": 2
+}

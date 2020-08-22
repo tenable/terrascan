@@ -5,8 +5,7 @@ apiGatewayName[api.id] {
     not checkExists(api.config.stage_name)
 }
 
-checkExists(val) = true
-{
+checkExists(val) = true {
     cloud := input.aws_cloudwatch_log_group[_]
     val == cloud.name
 }

@@ -1,6 +1,6 @@
 {
     "name": "cloudFormationStackPolicy",
-    "file": "cloudFormationStackPolicy.rego",
+    "file": "cloudFormationNullCheck.rego",
     "template_args": {
         "name": "cloudFormationStackPolicy",
         "property": "policy_url"

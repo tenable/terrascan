@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort636ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort636ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 636,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "LDAP SSL (TCP:636) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.187",
+    "category": "Network Ports Security",
+    "version": 2
+}

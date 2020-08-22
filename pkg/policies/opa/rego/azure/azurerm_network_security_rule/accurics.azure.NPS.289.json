@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort11214ExposedPrivateSmallUdp",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort11214ExposedPrivateSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 11214,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "LOW",
+    "description": "Memcached SSL (UDP:11214) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.289",
+    "category": "Network Ports Security",
+    "version": 2
+}

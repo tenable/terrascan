@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort11215ExposedPublicWide",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort11215ExposedPublicWide",
+        "numberOfHosts": 24,
+        "portNumber": 11215,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "Memcached SSL (TCP:11215) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.64",
+    "category": "Network Ports Security",
+    "version": 2
+}

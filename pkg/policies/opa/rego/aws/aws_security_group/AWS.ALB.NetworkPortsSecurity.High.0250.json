@@ -1,0 +1,15 @@
+{
+    "name": "port3306AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port3306AlbNetworkPortSecurityPublicScope",
+        "portNumber": 3306,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'MySQL' (TCP:3306) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0250",
+    "category": "Network Ports Security",
+    "version": 2
+}

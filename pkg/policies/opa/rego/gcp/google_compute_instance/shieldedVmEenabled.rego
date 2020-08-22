@@ -1,22 +1,18 @@
 package accurics
 
-shieldedVmEenabled[api.id]
-{
+shieldedVmEenabled[api.id] {
      api := input.google_compute_instance[_]
-     count(api.config.shielded_instance_config) == 0
-     
+     api.config.shielded_instance_config == []
 }
 
-shieldedVmEenabled[api.id]
-{
+shieldedVmEenabled[api.id] {
      api := input.google_compute_instance[_]
-     data := api.config.shielded_instance_config[_]
-     not data.enable_integrity_monitoring == true
+     insConfig := api.config.shielded_instance_config[_]
+     insConfig.enable_integrity_monitoring != true
 }
 
-shieldedVmEenabled[api.id]
-{
+shieldedVmEenabled[api.id] {
      api := input.google_compute_instance[_]
-     data := api.config.shielded_instance_config[_]
-     not data.enable_vtpm == true
+     insConfig := api.config.shielded_instance_config[_]
+     insConfig.enable_vtpm != true
 }

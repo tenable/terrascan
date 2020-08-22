@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort3000ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort3000ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 3000,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "Prevalent known internal port (TCP:3000) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.305",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort138ExposedPrivateSmallUdp",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort138ExposedPrivateSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 138,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "LOW",
+    "description": "NetBIOS Datagram Service (UDP:138) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.297",
+    "category": "Network Ports Security",
+    "version": 2
+}

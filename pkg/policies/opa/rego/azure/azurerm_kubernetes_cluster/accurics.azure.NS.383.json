@@ -1,6 +1,6 @@
 {
-    "name": "KubeDashboardDisabled",
-    "file": "KubeDashboardDisabled.rego",
+    "name": "kubeDashboardDisabled",
+    "file": "kubeDashboardDisabled.rego",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Kube Dashboard is disabled",

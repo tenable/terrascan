@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort3306ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort3306ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 3306,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "MySQL (TCP:3306) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.293",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort2382ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort2382ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 2382,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "SQL Server Analysis (TCP:2382) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.242",
+    "category": "Network Ports Security",
+    "version": 2
+}

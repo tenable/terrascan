@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort139ExposedPrivateWideUdp",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort139ExposedPrivateWideUdp",
+        "numberOfHosts": 24,
+        "portNumber": 139,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "MEDIUM",
+    "description": "NetBIOS Session Service (UDP:139) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.222",
+    "category": "Network Ports Security",
+    "version": 2
+}

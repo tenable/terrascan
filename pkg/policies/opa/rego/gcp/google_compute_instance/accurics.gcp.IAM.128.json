@@ -1,0 +1,13 @@
+{
+    "name": "osLoginEnabled",
+    "file": "metadataDisabled.rego",
+    "template_args": {
+        "metaKey": "enable-oslogin",
+        "name": "osLoginEnabled"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that no instance in the project overrides the project setting for enabling OSLogin",
+    "reference_id": "accurics.gcp.IAM.128",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}

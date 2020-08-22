@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort2484ExposedPrivateSmallUdp",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort2484ExposedPrivateSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 2484,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "LOW",
+    "description": "Oracle DB SSL (UDP:2484) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.301",
+    "category": "Network Ports Security",
+    "version": 2
+}

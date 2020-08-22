@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort2484ExposedPublicWideUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort2484ExposedPublicWideUdp",
+        "numberOfHosts": 24,
+        "portNumber": 2484,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "Oracle DB SSL (UDP:2484) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.90",
+    "category": "Network Ports Security",
+    "version": 2
+}

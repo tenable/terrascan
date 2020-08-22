@@ -1,0 +1,15 @@
+{
+    "name": "port636AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port636AlbNetworkPortSecurityPublicScope",
+        "portNumber": 636,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'LDAP SSL ' (TCP:636) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0230",
+    "category": "Network Ports Security",
+    "version": 2
+}

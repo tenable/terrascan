@@ -1,0 +1,15 @@
+{
+    "name": "port1433AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port1433AlbNetworkPortSecurityPublicScope",
+        "portNumber": 1433,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'MSSQL Server' (TCP:1433) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0238",
+    "category": "Network Ports Security",
+    "version": 2
+}

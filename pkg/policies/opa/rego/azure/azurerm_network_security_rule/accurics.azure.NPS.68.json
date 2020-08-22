@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort11215ExposedPublicWideUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort11215ExposedPublicWideUdp",
+        "numberOfHosts": 24,
+        "portNumber": 11215,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "Memcached SSL (UDP:11215) is exposed to wide Public network",
+    "reference_id": "accurics.azure.NPS.68",
+    "category": "Network Ports Security",
+    "version": 2
+}

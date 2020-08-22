@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort138ExposedPublicSmall",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort138ExposedPublicSmall",
+        "numberOfHosts": 29,
+        "portNumber": 138,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "NetBIOS Datagram Service (TCP:138) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.215",
+    "category": "Network Ports Security",
+    "version": 2
+}

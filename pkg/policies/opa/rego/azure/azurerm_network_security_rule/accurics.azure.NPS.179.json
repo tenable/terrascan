@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort53ExposedPublicSmallUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": false,
+        "name": "networkPort53ExposedPublicSmallUdp",
+        "numberOfHosts": 29,
+        "portNumber": 53,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "MEDIUM",
+    "description": "DNS (UDP:53) is exposed to small Public network",
+    "reference_id": "accurics.azure.NPS.179",
+    "category": "Network Ports Security",
+    "version": 2
+}

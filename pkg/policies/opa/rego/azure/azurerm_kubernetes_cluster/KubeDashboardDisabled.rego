@@ -1,8 +1,8 @@
 package accurics
 
-KubeDashboardDisabled[api.id]{
+kubeDashboardDisabled[api.id] {
     api := input.azurerm_kubernetes_cluster[_]
-    var := api.config.addon_profile[_]
-    data := var.kube_dashboard[_]
-    not data.enabled == false
+    profile := api.config.addon_profile[_]
+    dashboard := profile.kube_dashboard[_]
+    dashboard.enabled == true
 }

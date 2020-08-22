@@ -1,0 +1,15 @@
+{
+    "name": "port61621AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port61621AlbNetworkPortSecurityPublicScope",
+        "portNumber": 61621,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Cassandra OpsCenter agent port' (TCP:61621) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0220",
+    "category": "Network Ports Security",
+    "version": 2
+}

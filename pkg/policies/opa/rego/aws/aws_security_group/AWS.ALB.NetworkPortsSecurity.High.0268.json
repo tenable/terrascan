@@ -1,0 +1,15 @@
+{
+    "name": "port5432AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port5432AlbNetworkPortSecurityPublicScope",
+        "portNumber": 5432,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Postgres SQL' (TCP:5432) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0268",
+    "category": "Network Ports Security",
+    "version": 2
+}

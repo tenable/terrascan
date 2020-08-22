@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort7001ExposedPrivateSmall",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 24,
+        "evalHosts": true,
+        "name": "networkPort7001ExposedPrivateSmall",
+        "numberOfHosts": 29,
+        "portNumber": 7001,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "LOW",
+    "description": "Cassandra (TCP:7001) is exposed to small Private network",
+    "reference_id": "accurics.azure.NPS.276",
+    "category": "Network Ports Security",
+    "version": 2
+}

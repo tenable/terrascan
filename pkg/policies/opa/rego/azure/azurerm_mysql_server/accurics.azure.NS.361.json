@@ -1,0 +1,10 @@
+{
+    "name": "sslConnectionEnabled",
+    "file": "sslConnectionEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server.",
+    "reference_id": "accurics.azure.NS.361",
+    "category": "Network Security",
+    "version": 1
+}

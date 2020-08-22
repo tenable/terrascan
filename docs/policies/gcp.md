@@ -49,9 +49,12 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Network Security | gcp | MEDIUM | Ensure IP forwarding is not enabled on Instances. | accurics.gcp.NS.130 |
+| Network Security | gcp | MEDIUM | Ensure 'Block Project-wide SSH keys' is enabled for VM instances. | accurics.gcp.NS.126 |
 | Encryption & Key Management | gcp | MEDIUM | Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) . | accurics.gcp.EKM.132 |
 | Identity & Access Management | gcp | MEDIUM | Instances may have been configured to use the default service account with full access to all Cloud APIs | accurics.gcp.IAM.124 |
+| Network Security | gcp | MEDIUM | Ensure 'Enable connecting to serial ports' is not enabled for VM instances. | accurics.gcp.NS.129 |
 | Network Security  | gcp | MEDIUM | Ensure Compute instances are launched with Shielded VM enabled. | accurics.gcp.NS.133 |
+| Identity & Access Management | gcp | MEDIUM | Ensure that no instance in the project overrides the project setting for enabling OSLogin | accurics.gcp.IAM.128 |
 | Access Control | gcp | HIGH | Instances may have been configured to use the default service account with full access to all Cloud APIs | accurics.gcp.NS.125 |
 
 

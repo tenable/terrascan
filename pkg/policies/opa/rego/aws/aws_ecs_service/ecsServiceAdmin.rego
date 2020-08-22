@@ -1,6 +1,6 @@
 package accurics
 
-ecsServiceAdmin[data.id] {
-    data := input.aws_ecs_service[_]
-    contains(data.config.iam_role, "admin")
+ecsServiceAdmin[ecs.id] {
+    ecs := input.aws_ecs_service[_]
+    contains(ecs.config.iam_role, "admin")
 }
