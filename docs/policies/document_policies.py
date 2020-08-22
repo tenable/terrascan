@@ -17,7 +17,7 @@ def dir_size(dir):
                                 category = policy['category']
                                 resource = filename.split('.')[1]
                                 severity = policy['severity']
-                                description = policy['description']
+                                description = policy['description'].replace('\n','')
                                 reference_id = policy['reference_id']
                                 f.write(f"| {category} | {resource} | {severity} | {description} | {reference_id} |\n")
                 f.write("\n\n")
