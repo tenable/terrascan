@@ -27,7 +27,7 @@ $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
   x README.md
-x terrascan
+  x terrascan
 $ install terrascan /usr/local/bin
 $ terrascan
 ```
