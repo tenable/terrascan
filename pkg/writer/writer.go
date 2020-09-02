@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/accurics/terrascan/pkg/policy"
 	"go.uber.org/zap"
 )
 
@@ -29,7 +28,7 @@ var (
 )
 
 // Write method writes in the given format using the respective writer func
-func Write(format string, data policy.EngineOutput, writer io.Writer) error {
+func Write(format string, data interface{}, writer io.Writer) error {
 
 	writerFunc, present := writerMap[supportedFormat(format)]
 	if !present {
