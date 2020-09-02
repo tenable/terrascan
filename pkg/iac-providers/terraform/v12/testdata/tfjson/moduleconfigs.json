@@ -175,7 +175,7 @@
     {
       "id": "aws_elasticache_cluster.noMemcachedInElastiCache",
       "name": "noMemcachedInElastiCache",
-      "source": "elasticcache/main.tf",
+      "source": "../relative-moduleconfigs/elasticcache/main.tf",
       "line": 1,
       "type": "aws_elasticache_cluster",
       "config": {

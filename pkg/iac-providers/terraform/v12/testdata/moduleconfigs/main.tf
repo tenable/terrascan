@@ -47,5 +47,5 @@ module "sqs" {
 }
 
 module "elasticcache" {
-  source = "./elasticcache"
+  source = "../relative-moduleconfigs/elasticcache"
 }
