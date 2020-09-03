@@ -122,8 +122,8 @@ By default Terrascan will output YAML. This can be changed to JSON or XML by usi
 
 Terrascan will exit 3 if any issues are found.
 
-##### CLI Output formats
-##### Violations
+### CLI Output formats
+#### Violations
 Terrascan's default output is a list of violations present in the scanned IaC.
 ``` Bash
 $ terrascan scan -t aws
