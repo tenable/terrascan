@@ -102,6 +102,7 @@ Usage:
   terrascan scan [flags]
 
 Flags:
+      --config-only          will output resource config (should only be used for debugging purposes)
   -h, --help                 help for scan
   -d, --iac-dir string       path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string      path to a single IaC file
@@ -120,6 +121,54 @@ Global Flags:
 By default Terrascan will output YAML. This can be changed to JSON or XML by using the `-o` flag.
 
 Terrascan will exit 3 if any issues are found.
+
+### CLI Output types
+#### Violations
+Terrascan's default output is a list of violations present in the scanned IaC.
+``` Bash
+$ terrascan scan -t aws
+results:
+  violations:
+  - rule_name: scanOnPushDisabled
+    description: Unscanned images may contain vulnerabilities
+    rule_id: AWS.ECR.DataSecurity.High.0578
+    severity: MEDIUM
+    category: Data Security
+    resource_name: scanOnPushDisabled
+    resource_type: aws_ecr_repository
+    file: ecr.tf
+    line: 1
+  count:
+    low: 0
+    medium: 1
+    high: 0
+    total: 1
+```
+##### Resource Config
+Terrascan while scanning the IaC, loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, it possible to print this resource configs list as an output by providing the `--config-only` flag to the `terrascan scan` command. 
+``` Bash
+$  terrascan scan -t aws --config-only
+aws_ecr_repository:
+- id: aws_ecr_repository.scanOnPushDisabled
+  name: scanOnPushDisabled
+  source: ecr.tf
+  line: 1
+  type: aws_ecr_repository
+  config:
+    image_scanning_configuration:
+    - scan_on_push:
+        value: {}
+    image_tag_mutability: MUTABLE
+    name: test
+- id: aws_ecr_repository.scanOnPushNoSet
+  name: scanOnPushNoSet
+  source: ecr.tf
+  line: 10
+  type: aws_ecr_repository
+  config:
+    image_tag_mutability: MUTABLE
+    name: test
+```
 
 ### Server mode
 Server mode will execute Terrascan's API server. This is useful when using Terrascan to enforce policies in a centralized way. By default the server will be started listening in port 9010 and supports the following routes:
