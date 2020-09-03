@@ -17,9 +17,15 @@
 package utils
 
 import (
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
+
+	"go.uber.org/zap"
 )
 
 // GetAbsPath returns absolute path from passed file path resolving even ~ to user home dir and any other such symbols that are only
@@ -54,13 +60,52 @@ func FindAllDirectories(basePath string) ([]string, error) {
 }
 
 // FilterFileInfoBySuffix Given a list of files, returns a subset of files containing a suffix which matches the input filter
-func FilterFileInfoBySuffix(allFileList *[]os.FileInfo, filter string) *[]string {
-	fileList := make([]string, 0)
+func FilterFileInfoBySuffix(allFileList *[]os.FileInfo, filter []string) []*string {
+	fileList := make([]*string, 0)
 
 	for i := range *allFileList {
-		if strings.HasSuffix((*allFileList)[i].Name(), filter) {
-			fileList = append(fileList, (*allFileList)[i].Name())
+		for j := range filter {
+			if strings.HasSuffix((*allFileList)[i].Name(), filter[j]) {
+				filename := (*allFileList)[i].Name()
+				fileList = append(fileList, &filename)
+			}
 		}
 	}
-	return &fileList
+	return fileList
+}
+
+// FindFilesBySuffix finds all files within a given directory that have the specified suffixes
+// Returns a map with keys as directories and values as a list of files
+func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string, error) {
+	retMap := make(map[string][]*string)
+
+	// Walk the file path and find all directories
+	dirList, err := FindAllDirectories(basePath)
+	if err != nil {
+		return retMap, err
+	}
+
+	if len(dirList) == 0 {
+		return retMap, fmt.Errorf("no directories found for path %s", basePath)
+	}
+
+	sort.Strings(dirList)
+	for i := range dirList {
+		// Find all files in the current dir
+		var fileInfo []os.FileInfo
+		fileInfo, err = ioutil.ReadDir(dirList[i])
+		if err != nil {
+			if !errors.Is(err, os.ErrNotExist) {
+				zap.S().Debug("error while searching for files", zap.String("dir", dirList[i]))
+			}
+			continue
+		}
+
+		fileList := FilterFileInfoBySuffix(&fileInfo, suffixes)
+		if len(fileList) > 0 {
+			retMap[dirList[i]] = fileList
+		}
+	}
+
+	return retMap, nil
 }

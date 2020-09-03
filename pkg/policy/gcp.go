@@ -17,10 +17,12 @@
 package policy
 
 const (
-	gcp supportedCloudType = "gcp"
+	gcp                  supportedCloudType  = "gcp"
+	defaultGCPIacType    supportedIacType    = "terraform"
+	defaultGCPIacVersion supportedIacVersion = "v12"
 )
 
 func init() {
 	// Register gcp as a cloud provider with terrascan
-	RegisterCloudProvider(gcp)
+	RegisterCloudProvider(gcp, defaultGCPIacType, defaultGCPIacVersion)
 }

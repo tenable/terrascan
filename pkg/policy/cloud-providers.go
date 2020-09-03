@@ -23,17 +23,31 @@ import (
 // supportedCloudType data type for supported cloud types in terrascan
 type supportedCloudType string
 
+// supportedIacType data type for supported iac types
+type supportedIacType string
+
+// supportedIacVersion data type for supported iac versions
+type supportedIacVersion string
+
 // supportedCloudProvider map of supported cloud provider and its default policy path
 var supportedCloudProvider = make(map[supportedCloudType]string)
+
+// defaultIacType map of default IaC type for a given policy/cloud provider
+var defaultIacType = make(map[supportedCloudType]supportedIacType)
+
+// defaultIacVersion map of default IaC version for a given policy/cloud provider
+var defaultIacVersion = make(map[supportedCloudType]supportedIacVersion)
 
 var (
 	basePolicyPath = config.GetPolicyBasePath()
 )
 
 // RegisterCloudProvider registers a cloud provider with terrascan
-func RegisterCloudProvider(cloudType supportedCloudType) {
+func RegisterCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion) {
 	policyPath := basePolicyPath + "/" + string(cloudType)
 	supportedCloudProvider[cloudType] = policyPath
+	defaultIacType[cloudType] = iacTypeDefault
+	defaultIacVersion[cloudType] = iacVersionDefault
 }
 
 // IsCloudProviderSupported returns whether a cloud provider is supported in terrascan
@@ -45,4 +59,14 @@ func IsCloudProviderSupported(cloudType string) bool {
 // GetDefaultPolicyPath returns the path to default policies for a given cloud provider
 func GetDefaultPolicyPath(cloudType string) string {
 	return supportedCloudProvider[supportedCloudType(cloudType)]
+}
+
+// GetDefaultIacType returns the default IaC type for the given cloudType
+func GetDefaultIacType(cloudType string) string {
+	return string(defaultIacType[supportedCloudType(cloudType)])
+}
+
+// GetDefaultIacVersion returns the default IaC version for the given cloudType
+func GetDefaultIacVersion(cloudType string) string {
+	return string(defaultIacVersion[supportedCloudType(cloudType)])
 }

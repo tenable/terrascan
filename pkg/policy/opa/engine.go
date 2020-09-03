@@ -134,15 +134,15 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 		}
 
 		// Load the rego metadata first (*.json)
-		metadataFiles := utils.FilterFileInfoBySuffix(&fileInfo, RegoMetadataFileSuffix)
-		if metadataFiles == nil {
+		metadataFiles := utils.FilterFileInfoBySuffix(&fileInfo, []string{RegoMetadataFileSuffix})
+		if len(metadataFiles) == 0 {
 			zap.S().Debug("no metadata files were found", zap.String("dir", dirList[i]))
 			continue
 		}
 
 		var regoDataList []*RegoData
-		for j := range *metadataFiles {
-			filePath := filepath.Join(dirList[i], (*metadataFiles)[j])
+		for j := range metadataFiles {
+			filePath := filepath.Join(dirList[i], *metadataFiles[j])
 
 			var regoMetadata *RegoMetadata
 			regoMetadata, err = e.LoadRegoMetadata(filePath)
@@ -307,7 +307,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 		// Execute the prepared query.
 		rs, err := e.regoDataMap[k].PreparedQuery.Eval(e.context, rego.EvalInput(engineInput.InputData))
 		if err != nil {
-			zap.S().Warn("failed to run prepared query", zap.String("rule", "'"+k+"'"))
+			zap.S().Warn("failed to run prepared query", zap.Error(err), zap.String("rule", "'"+k+"'"))
 			continue
 		}
 

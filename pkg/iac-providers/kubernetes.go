@@ -14,12 +14,22 @@
     limitations under the License.
 */
 
-package version
+package iacprovider
 
-// Terrascan The Terrascan version
-const Terrascan = "v1.0.1"
+import (
+	"reflect"
 
-// Get returns the terrascan version
-func Get() string {
-	return Terrascan
+	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
+)
+
+// terraform specific constants
+const (
+	kubernetes   supportedIacType    = "k8s"
+	kubernetesV1 supportedIacVersion = "v1"
+)
+
+// register kubernetes as an IaC provider with terrascan
+func init() {
+	// register iac provider
+	RegisterIacProvider(kubernetes, kubernetesV1, reflect.TypeOf(k8sv1.K8sV1{}))
 }

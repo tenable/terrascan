@@ -21,6 +21,7 @@ require (
 	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	k8s.io/apimachinery v0.18.8 // indirect
 	k8s.io/client-go v11.0.0+incompatible
 )

@@ -17,10 +17,12 @@
 package policy
 
 const (
-	azure supportedCloudType = "azure"
+	azure                  supportedCloudType  = "azure"
+	defaultAzureIacType    supportedIacType    = "terraform"
+	defaultAzureIacVersion supportedIacVersion = "v12"
 )
 
 func init() {
 	// Register azure as a cloud provider with terrascan
-	RegisterCloudProvider(azure)
+	RegisterCloudProvider(azure, defaultAzureIacType, defaultAzureIacVersion)
 }

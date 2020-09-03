@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-package version
+package policy
 
-// Terrascan The Terrascan version
-const Terrascan = "v1.0.1"
+const (
+	kubernetes                  supportedCloudType  = "k8s"
+	defaultKubernetesIacType    supportedIacType    = "k8s"
+	defaultKubernetesIacVersion supportedIacVersion = "v1"
+)
 
-// Get returns the terrascan version
-func Get() string {
-	return Terrascan
+func init() {
+	// Register kubernetes as a provider with terrascan
+	RegisterCloudProvider(kubernetes, defaultKubernetesIacType, defaultKubernetesIacVersion)
 }

@@ -55,9 +55,9 @@ func scan(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	scanCmd.Flags().StringVarP(&PolicyType, "policy-type", "t", "", "<required> policy type (aws, azure, gcp)")
-	scanCmd.Flags().StringVarP(&IacType, "iac-type", "i", "terraform", "iac type (terraform)")
-	scanCmd.Flags().StringVarP(&IacVersion, "iac-version", "", "v12", "iac version (v12)")
+	scanCmd.Flags().StringVarP(&PolicyType, "policy-type", "t", "", "<required> policy type (aws, azure, gcp, k8s)")
+	scanCmd.Flags().StringVarP(&IacType, "iac-type", "i", "", "iac type (terraform, k8s)")
+	scanCmd.Flags().StringVarP(&IacVersion, "iac-version", "", "", "iac version terraform:(v12) k8s:(v1)")
 	scanCmd.Flags().StringVarP(&IacFilePath, "iac-file", "f", "", "path to a single IaC file")
 	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
 	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "p", "", "policy path directory")
