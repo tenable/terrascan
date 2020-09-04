@@ -1,7 +1,7 @@
 # Terrascan
 
 [![GitHub release](https://img.shields.io/github/release/accurics/terrascan)](https://github.com/accurics/terrascan/releases/latest)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache 2-blue.svg)](https://github.com/accurics/terrascan/blob/master/LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache+2-blue)](https://github.com/accurics/terrascan/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/accurics/terrascan/pulls)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 
