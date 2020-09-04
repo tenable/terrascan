@@ -18,7 +18,7 @@ package policy
 
 const (
 	aws                  supportedCloudType  = "aws"
-	defaultAWSIacType    supportedIacType    = "aws"
+	defaultAWSIacType    supportedIacType    = "terraform"
 	defaultAWSIacVersion supportedIacVersion = "v12"
 )
 

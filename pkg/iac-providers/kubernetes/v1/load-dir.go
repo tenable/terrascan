@@ -29,9 +29,9 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 		return allResourcesConfig, err
 	}
 
-	for _, files := range fileMap {
+	for fileDir, files := range fileMap {
 		for i := range files {
-			file := filepath.Join(absRootDir, *files[i])
+			file := filepath.Join(fileDir, *files[i])
 
 			var configData output.AllResourceConfigs
 			if configData, err = k.LoadIacFile(file); err != nil {

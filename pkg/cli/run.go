@@ -17,6 +17,7 @@
 package cli
 
 import (
+	"flag"
 	"os"
 
 	"github.com/accurics/terrascan/pkg/runtime"
@@ -41,7 +42,7 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 	}
 	writer.Write(format, violations, os.Stdout)
 
-	if violations.ViolationStore.Count.TotalCount != 0 {
+	if violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
 		os.Exit(3)
 	}
 }

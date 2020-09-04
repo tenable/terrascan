@@ -17,82 +17,95 @@
 package k8sv1
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	yamltojson "github.com/ghodss/yaml"
+	"gopkg.in/yaml.v3"
 )
 
 var (
-	errBadResourceType      = fmt.Errorf("bad resource type")
-	errKeyDoesNotExist      = fmt.Errorf("key does not exist")
-	errMetadataDoesNotExist = fmt.Errorf("metadata does not exist")
-	errMetadataNameField    = fmt.Errorf("unable to parse the metadata name field")
-	errInvalidNamespaceType = fmt.Errorf("invalid namespace type")
+	errUnsupportedDoc = fmt.Errorf("unsupported document type")
+	errNoKind         = fmt.Errorf("kind does not exist")
 )
 
+// k8sMetadata is used to pull the name and namespace types for a given resource
+type k8sMetadata struct {
+	Name      string `yaml:"name" json:"name"`
+	Namespace string `yaml:"namespace" json:"namespace"`
+}
+
+// k8sResource is a generic struct to handle all k8s resource types
+type k8sResource struct {
+	APIVersion string      `yaml:"apiVersion" json:"apiVersion"`
+	Kind       string      `yaml:"kind" json:"kind"`
+	Metadata   k8sMetadata `yaml:"metadata" json:"metadata"`
+}
+
+// extractResource takes the incoming document and extracts the resource using a go struct
+// returns the resource data and raw json byte output ready for normalization
+func (k *K8sV1) extractResource(doc *utils.IacDocument) (*k8sResource, *[]byte, error) {
+	var resource k8sResource
+	switch doc.Type {
+	case utils.YAMLDoc:
+		data, err := yamltojson.YAMLToJSON(doc.Data)
+		if err != nil {
+			return nil, nil, err
+		}
+		err = yaml.Unmarshal(data, &resource)
+		if err != nil {
+			return nil, nil, err
+		}
+		return &resource, &data, nil
+	case utils.JSONDoc:
+		err := json.Unmarshal(doc.Data, &resource)
+		if err != nil {
+			return nil, nil, err
+		}
+		return &resource, &doc.Data, nil
+	default:
+		return nil, nil, errUnsupportedDoc
+	}
+}
+
+// normalize takes the input document and normalizes it
 func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error) {
 
-	// if the document is yaml, convert it to json first
-	var data *map[string]interface{}
-	if doc.Type == utils.YAMLDoc {
-		var err error
-		data, err = utils.YAMLtoJSON(doc.Data)
-		if err != nil {
-			return nil, err
-		}
+	resource, jsonData, err := k.extractResource(doc)
+	if err != nil {
+		return nil, err
 	}
 
-	// resource type
-	_, ok := (*data)["kind"]
-	if !ok {
-		return nil, errBadResourceType
-	}
-
-	var resourceType string
-	resourceType, ok = (*data)["kind"].(string)
-	if !ok {
-		return nil, errBadResourceType
-	}
-
-	metadataVal, ok := (*data)["metadata"]
-	if !ok {
-		return nil, errKeyDoesNotExist
-	}
-
-	var metadata map[string]interface{}
-	metadata, ok = metadataVal.(map[string]interface{})
-	if !ok {
-		return nil, errMetadataDoesNotExist
-	}
-
-	namespace := "default"
-	var resourceName string
-	if resourceType == "Namespace" || resourceType == "ClusterRole" {
-		resourceName, ok = metadata["name"].(string)
-		if !ok {
-			return nil, errMetadataNameField
-		}
-	} else {
-		// sets the namespace
-		// if no namespace is specified, the default namespace is used
-		var namespaceVal interface{}
-		if namespaceVal, ok = metadata["namespace"]; ok {
-			// set the namespace if available, otherwise use the default
-			namespace, _ = namespaceVal.(string)
+	var resourceConfig output.ResourceConfig
+	switch resource.Kind {
+	case "":
+		// error case
+		return nil, errNoKind
+	// non-namespaced resources
+	case "ClusterRole":
+		fallthrough
+	case "Namespace":
+		resourceConfig.ID = kubernetesTypeName + resource.Kind + "." + resource.Metadata.Name
+	default:
+		// namespaced-resources
+		namespace := resource.Metadata.Namespace
+		if namespace == "" {
+			namespace = "default"
 		}
 
-		// extract the resource name and set the resource id
-		resourceName, ok = metadata["name"].(string)
-		if !ok {
-			return nil, errInvalidNamespaceType
-		}
+		resourceConfig.ID = kubernetesTypeName + resource.Kind + "." + resource.Metadata.Name + "." + namespace
 	}
 
-	return &output.ResourceConfig{
-		Type:   kubernetesTypeName + resourceType,
-		ID:     kubernetesTypeName + resourceType + "." + resourceName + "." + namespace,
-		Name:   resourceName,
-		Config: data,
-	}, nil
+	configData := make(map[string]interface{})
+	if err = json.Unmarshal(*jsonData, &configData); err != nil {
+		return nil, err
+	}
+
+	resourceConfig.Type = kubernetesTypeName + resource.Kind
+	resourceConfig.Name = resource.Metadata.Name
+	resourceConfig.Config = configData
+
+	return &resourceConfig, nil
 }

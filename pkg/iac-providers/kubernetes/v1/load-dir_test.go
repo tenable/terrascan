@@ -58,7 +58,26 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath: "./testdata/yaml-with-multiple-documents",
 			k8sV1:   K8sV1{},
 			wantErr: nil,
-		}}
+		},
+		{
+			name:    "pod with the yml extension",
+			dirPath: "./testdata/yaml-extension2",
+			k8sV1:   K8sV1{},
+			wantErr: nil,
+		},
+		{
+			name:    "yaml with no kind",
+			dirPath: "./testdata/yaml-extension2",
+			k8sV1:   K8sV1{},
+			wantErr: nil,
+		},
+		{
+			name:    "pod with the json extension",
+			dirPath: "./testdata/json-extension",
+			k8sV1:   K8sV1{},
+			wantErr: nil,
+		},
+	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {

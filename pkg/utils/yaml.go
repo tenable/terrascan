@@ -3,15 +3,11 @@ package utils
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
-
-	"go.uber.org/zap"
 
 	"gopkg.in/yaml.v3"
 )
@@ -26,6 +22,7 @@ var (
 )
 
 // LoadYAML loads a YAML file. Can return one or more IaC Documents.
+// Besides reading in file data, its main purpose is to determine and store line number and filename metadata
 func LoadYAML(filePath string) ([]*IacDocument, error) {
 	iacDocumentList := make([]*IacDocument, 0)
 
@@ -63,7 +60,7 @@ func LoadYAML(filePath string) ([]*IacDocument, error) {
 		})
 
 		if err = scanner.Err(); err != nil {
-			log.Fatal(err)
+			return iacDocumentList, err
 		}
 	}
 
@@ -99,34 +96,4 @@ func LoadYAML(filePath string) ([]*IacDocument, error) {
 	}
 
 	return iacDocumentList, nil
-}
-
-// YAMLtoJSON converts YAML byte data to JSON bytes
-func YAMLtoJSON(data []byte) (*map[string]interface{}, error) {
-	// fetch the YAML data into an interface type
-	var dataMap interface{}
-	err := yaml.Unmarshal(data, &dataMap)
-	if err != nil {
-		zap.S().Warn("unable to unmarshal yaml data")
-		return nil, err
-	}
-
-	// convert map[interface]interface to map[string]interface throughout the YAML data
-	var dataBytes []byte
-	dataMap = InterfaceToMapStringInterface(dataMap)
-
-	// marshal to json to produce the json bytes
-	if dataBytes, err = json.Marshal(dataMap); err != nil {
-		zap.S().Warn("unable to marshal json during conversion")
-		return nil, err
-	}
-
-	// convert back to map[string]interface with the json data
-	configData := make(map[string]interface{})
-	if err = json.Unmarshal(dataBytes, &configData); err != nil {
-		zap.S().Warn("unable to unmarshal json during conversion")
-		return nil, err
-	}
-
-	return &configData, nil
 }
