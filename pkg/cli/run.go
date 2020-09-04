@@ -41,13 +41,13 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 		return
 	}
 
-  if configOnly {
+	if configOnly {
 		writer.Write(format, results.ResourceConfig, os.Stdout)
 	} else {
 		writer.Write(format, results.Violations, os.Stdout)
 	}
-  
-	if violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
+
+	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
 		os.Exit(3)
 	}
 }

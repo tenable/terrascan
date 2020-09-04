@@ -27,7 +27,7 @@ func (k *K8sV1) LoadIacFile(absRootPath string) (allResourcesConfig output.AllRe
 		return allResourcesConfig, err
 	}
 	if err != nil {
-		zap.S().Warn("failed to load file", zap.String("file", absRootPath))
+		zap.S().Info("failed to load file", zap.String("file", absRootPath))
 		return allResourcesConfig, err
 	}
 
@@ -35,7 +35,7 @@ func (k *K8sV1) LoadIacFile(absRootPath string) (allResourcesConfig output.AllRe
 		var config *output.ResourceConfig
 		config, err = k.normalize(doc)
 		if err != nil {
-			zap.S().Warn("unable to normalize data", zap.Error(err), zap.String("file", absRootPath))
+			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absRootPath))
 			continue
 		}
 

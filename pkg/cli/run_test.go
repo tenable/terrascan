@@ -29,6 +29,7 @@ func TestRun(t *testing.T) {
 		iacFilePath string
 		iacDirPath  string
 		configFile  string
+		configOnly  bool
 		want        string
 		wantErr     error
 	}{
@@ -50,7 +51,7 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, "", "")
+			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, "", "", tt.configOnly)
 		})
 	}
 }
