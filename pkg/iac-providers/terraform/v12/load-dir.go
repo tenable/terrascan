@@ -17,7 +17,6 @@
 package tfv12
 
 import (
-	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -69,13 +68,11 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 
 			// determine the absolute path from root module to the sub module
 			// using *configs.ModuleRequest.Path field
-			var (
-				pathArr      = strings.Split(req.Path.String(), ".")
-				pathToModule = absRootDir
-			)
-			for _, subPath := range pathArr {
-				pathToModule = filepath.Join(pathToModule, subPath)
-			}
+
+			pathArr := strings.Split(req.Path.String(), ".")
+			pathArr = pathArr[:len(pathArr)-1]
+
+			pathToModule := filepath.Join(absRootDir, filepath.Join(pathArr...), req.SourceAddr)
 
 			// load sub module directory
 			subMod, diags := parser.LoadConfigDir(pathToModule)
@@ -122,8 +119,10 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 				return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 			}
 
-			// trimFilePath
-			resourceConfig.Source = trimFilePath(resourceConfig.Source, absRootDir)
+			resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
+			if err != nil {
+				return allResourcesConfig, fmt.Errorf("failed to get resource: %s", err)
+			}
 
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
@@ -141,12 +140,4 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 
 	// successful
 	return allResourcesConfig, nil
-}
-
-// trimFilePath returns relative file path wrt to the base path
-func trimFilePath(fullPath, basePath string) string {
-	basePath = strings.Trim(basePath, ".")
-	basePath = strings.Trim(basePath, "/")
-	splits := bytes.Split([]byte(fullPath), []byte(basePath))
-	return strings.TrimPrefix(string(splits[1]), "/")
 }

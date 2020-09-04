@@ -26,7 +26,7 @@ import (
 
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
-	policyPath, format string) {
+	policyPath, format string, configOnly bool) {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
@@ -36,12 +36,17 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 	}
 
 	// executor output
-	violations, err := executor.Execute()
+	results, err := executor.Execute()
 	if err != nil {
 		return
 	}
-	writer.Write(format, violations, os.Stdout)
 
+  if configOnly {
+		writer.Write(format, results.ResourceConfig, os.Stdout)
+	} else {
+		writer.Write(format, results.Violations, os.Stdout)
+	}
+  
 	if violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
 		os.Exit(3)
 	}

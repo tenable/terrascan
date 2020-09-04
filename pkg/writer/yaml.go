@@ -19,7 +19,6 @@ package writer
 import (
 	"io"
 
-	"github.com/accurics/terrascan/pkg/policy"
 	"gopkg.in/yaml.v2"
 )
 
@@ -32,7 +31,7 @@ func init() {
 }
 
 // YAMLWriter prints data in YAML format
-func YAMLWriter(data policy.EngineOutput, writer io.Writer) error {
+func YAMLWriter(data interface{}, writer io.Writer) error {
 	j, _ := yaml.Marshal(data)
 	writer.Write(j)
 	writer.Write([]byte{'\n'})
