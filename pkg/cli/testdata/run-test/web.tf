@@ -4,7 +4,7 @@
 resource "aws_security_group" "acme_web" {
   name        = "acme_web"
   description = "Used in the terraform"
-  vpc_id      = "${aws_vpc.acme_root.id}"
+  vpc_id      = "aws_vpc.acme_root.id"
 
   tags = {
     Name = "acme_web"
@@ -55,18 +55,18 @@ resource "aws_instance" "acem_web" {
 
   # Lookup the correct AMI based on the region
   # we specified
-  ami = "${lookup(var.aws_amis, var.aws_region)}"
+  ami = "lookup(var.aws_amis, var.aws_region)"
 
   # The name of our SSH keypair we created above.
-  key_name = "${aws_key_pair.auth.id}"
+  key_name = "aws_key_pair.auth.id"
 
   # Our Security group to allow HTTP and SSH access
-  vpc_security_group_ids = ["${aws_security_group.acme_web.id}"]
+  vpc_security_group_ids = ["aws_security_group.acme_web.id"]
 
   # We're going to launch into the same subnet as our ELB. In a production
   # environment it's more common to have a separate private subnet for
   # backend instances.
-  subnet_id = "${aws_subnet.acme_web.id}"
+  subnet_id = "aws_subnet.acme_web.id"
 
   # We run a remote provisioner on the instance after creating it.
   # In this case, we just install nginx and start it. By default,
