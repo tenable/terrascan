@@ -69,7 +69,7 @@ func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapc
 	zapConfig := zap.Config{
 		Encoding:    encoding,
 		Level:       zap.NewAtomicLevelAt(getLoggerLevel(logLevel)),
-		OutputPaths: []string{"stdout"},
+		OutputPaths: []string{"stderr"},
 		EncoderConfig: zapcore.EncoderConfig{
 			LevelKey:     "level",
 			TimeKey:      "time",
