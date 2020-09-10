@@ -185,7 +185,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			}
 
 			regoDataList[j].RawRego = templateData.Bytes()
-			e.regoDataMap[regoDataList[j].Metadata.Name] = regoDataList[j]
+			e.regoDataMap[regoDataList[j].Metadata.ReferenceID] = regoDataList[j]
 		}
 	}
 
