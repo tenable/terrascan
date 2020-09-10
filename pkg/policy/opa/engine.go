@@ -53,7 +53,7 @@ func NewEngine(policyPath string) (*Engine, error) {
 
 	// initialize the engine
 	if err := engine.Init(policyPath); err != nil {
-		zap.S().Error("failed to initialize OPA policy engine")
+		zap.S().Error("failed to initialize OPA policy engine", zap.Error(err))
 		return engine, errInitFailed
 	}
 
@@ -67,7 +67,7 @@ func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	metadata, err := ioutil.ReadFile(metaFilename)
 	if err != nil {
 		if !errors.Is(err, os.ErrNotExist) {
-			zap.S().Error("failed to load rego metadata", zap.String("file", metaFilename))
+			zap.S().Error("failed to load rego metadata", zap.String("file", metaFilename), zap.Error(err))
 		}
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (e *Engine) LoadRegoMetadata(metaFilename string) (*RegoMetadata, error) {
 	// Read metadata into struct
 	regoMetadata := RegoMetadata{}
 	if err = json.Unmarshal(metadata, &regoMetadata); err != nil {
-		zap.S().Error("failed to unmarshal rego metadata", zap.String("file", metaFilename))
+		zap.S().Error("failed to unmarshal rego metadata", zap.String("file", metaFilename), zap.Error(err))
 		return nil, err
 	}
 	return &regoMetadata, err
@@ -87,7 +87,7 @@ func (e *Engine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*Rego
 		regoPath := filepath.Join(currentDir, regoDataList[i].Metadata.File)
 		rawRegoData, err := ioutil.ReadFile(regoPath)
 		if err != nil {
-			zap.S().Debug("failed to load rego file", zap.String("file", regoPath))
+			zap.S().Error("failed to load rego file", zap.String("file", regoPath), zap.Error(err))
 			continue
 		}
 
@@ -95,6 +95,7 @@ func (e *Engine) loadRawRegoFilesIntoMap(currentDir string, regoDataList []*Rego
 		_, ok := (*regoFileMap)[regoPath]
 		if ok {
 			// Already loaded this file, so continue
+			zap.S().Debug("skipping already loaded rego file", zap.String("file", regoPath))
 			continue
 		}
 
@@ -147,7 +148,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			var regoMetadata *RegoMetadata
 			regoMetadata, err = e.LoadRegoMetadata(filePath)
 			if err != nil {
-				zap.S().Debug("error loading rego metadata", zap.String("file", filePath))
+				zap.S().Error("error loading rego metadata", zap.String("file", filePath), zap.Error(err))
 				continue
 			}
 
@@ -161,7 +162,7 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 
 		// Read in raw rego data from associated rego files
 		if err = e.loadRawRegoFilesIntoMap(dirList[i], regoDataList, &e.regoFileMap); err != nil {
-			zap.S().Debug("error loading raw rego data", zap.String("dir", dirList[i]))
+			zap.S().Error("error loading raw rego data", zap.String("dir", dirList[i]), zap.Error(err))
 			continue
 		}
 
@@ -176,11 +177,11 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			t := template.New("opa")
 			_, err = t.Parse(string(e.regoFileMap[templateFile]))
 			if err != nil {
-				zap.S().Debug("unable to parse template", zap.String("template", regoDataList[j].Metadata.File))
+				zap.S().Error("unable to parse template", zap.String("template", regoDataList[j].Metadata.File), zap.Error(err))
 				continue
 			}
 			if err = t.Execute(&templateData, regoDataList[j].Metadata.TemplateArgs); err != nil {
-				zap.S().Debug("unable to execute template", zap.String("template", regoDataList[j].Metadata.File))
+				zap.S().Error("unable to execute template", zap.String("template", regoDataList[j].Metadata.File), zap.Error(err))
 				continue
 			}
 
@@ -233,13 +234,13 @@ func (e *Engine) Init(policyPath string) error {
 	e.context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
-		zap.S().Error("error loading rego files", zap.String("policy path", policyPath))
+		zap.S().Error("error loading rego files", zap.String("policy path", policyPath), zap.Error(err))
 		return err
 	}
 
 	err := e.CompileRegoFiles()
 	if err != nil {
-		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath))
+		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath), zap.Error(err))
 		return err
 	}
 
@@ -312,11 +313,13 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 		}
 
 		if len(rs) == 0 || len(rs[0].Expressions) == 0 {
+			zap.S().Debug("query executed but found no matches", zap.Error(err), zap.String("rule", "'"+k+"'"))
 			continue
 		}
 
 		resourceViolations := rs[0].Expressions[0].Value.([]interface{})
 		if len(resourceViolations) == 0 {
+			zap.S().Debug("query executed but found no violations", zap.Error(err), zap.String("rule", "'"+k+"'"))
 			continue
 		}
 
@@ -359,6 +362,8 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 				zap.S().Warn("resource was not found", zap.String("resource id", resourceID))
 				continue
 			}
+
+			zap.S().Debug("violation found for rule with rego", zap.String("rego", string("\n")+string(e.regoDataMap[k].RawRego)+string("\n")))
 
 			// Report the violation
 			e.reportViolation(e.regoDataMap[k], resource)

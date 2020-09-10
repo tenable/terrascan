@@ -23,7 +23,7 @@ func (k *K8sV1) LoadIacFile(absRootPath string) (allResourcesConfig output.AllRe
 	case JSONExtension:
 		iacDocuments, err = utils.LoadJSON(absRootPath)
 	default:
-		zap.S().Warn("unknown extension found", zap.String("extension", fileExt))
+		zap.S().Error("unknown extension found", zap.String("extension", fileExt))
 		return allResourcesConfig, err
 	}
 	if err != nil {

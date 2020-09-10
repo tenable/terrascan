@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 )
@@ -26,6 +28,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, K8sFileExtensions())
 	if err != nil {
+		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 

@@ -82,6 +82,7 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 	// Walk the file path and find all directories
 	dirList, err := FindAllDirectories(basePath)
 	if err != nil {
+		zap.S().Error("error encountered traversing directories", zap.String("base path", basePath), zap.Error(err))
 		return retMap, err
 	}
 
@@ -96,7 +97,7 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 		fileInfo, err = ioutil.ReadDir(dirList[i])
 		if err != nil {
 			if !errors.Is(err, os.ErrNotExist) {
-				zap.S().Debug("error while searching for files", zap.String("dir", dirList[i]))
+				zap.S().Debug("error while searching for files", zap.String("dir", dirList[i]), zap.Error(err))
 			}
 			continue
 		}
