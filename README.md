@@ -1,9 +1,12 @@
 # Terrascan
+
+[![GitHub release](https://img.shields.io/github/release/accurics/terrascan)](https://github.com/accurics/terrascan/releases/latest)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/accurics/terrascan/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/accurics/terrascan/pulls)
 ![CI](https://github.com/accurics/terrascan/workflows/build/badge.svg)
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
-[![downloads](https://img.shields.io/github/downloads/accurics/terrascan/total)](https://github.com/accurics/terrascan/releases)
 
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
@@ -21,7 +24,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 ## Installing
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
-```
+```sh
 $ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_1.0.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
@@ -42,17 +45,25 @@ $ go get -u github.com/accurics/terrascan/cmd/terrascan
 $ terrascan
 ```
 
+### Install via `brew`
+
+[Homebrew](https://brew.sh/) users can install by:
+
+```sh
+$ brew install terrascan
+```
+
 ### Docker
 Terrascan is also available as a Docker image and can be used as follows
 
-```
+```sh
 $ docker run accurics/terrascan
 ```
 
 ### Building Terrascan
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
 
-``` Bash
+```sh
 $ git clone git@github.com:accurics/terrascan.git
 $ cd terrascan
 $ make build
@@ -63,14 +74,14 @@ $ ./bin/terrascan
 
 To scan your code for security issues you can run the following
 
-```
+```sh
 $ terrascan scan -t aws
 ```
 Terrascan will exit 3 if any issues are found.
 
 The following commands are available:
 
-```
+```sh
 $ terrascan
 Terrascan
 
