@@ -23,8 +23,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/accurics/terrascan/pkg/policy"
-
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -82,15 +80,6 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	// write this byte array to our temporary file
 	tempFile.Write(fileBytes)
-
-	// set default iac type/version if not already set
-	if iacType == "" {
-		iacType = policy.GetDefaultIacType(cloudType)
-	}
-
-	if iacVersion == "" {
-		iacVersion = policy.GetDefaultIacVersion(cloudType)
-	}
 
 	// create a new runtime executor for scanning the uploaded file
 	var executor *runtime.Executor

@@ -35,6 +35,21 @@ func TestUpload(t *testing.T) {
 			wantStatus: http.StatusOK,
 		},
 		{
+			name:       "valid file scan default iac type",
+			path:       "./testdata/testconfig.tf",
+			param:      "file",
+			cloudType:  "aws",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid file scan default iac version",
+			path:       "./testdata/testconfig.tf",
+			param:      "file",
+			iacType:    "terraform",
+			cloudType:  "aws",
+			wantStatus: http.StatusOK,
+		},
+		{
 			name:       "invalid iacType",
 			path:       "./testdata/testconfig.tf",
 			param:      "file",

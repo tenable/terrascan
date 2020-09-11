@@ -23,6 +23,7 @@ import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
+	"github.com/iancoleman/strcase"
 	"gopkg.in/yaml.v3"
 )
 
@@ -70,6 +71,19 @@ func (k *K8sV1) extractResource(doc *utils.IacDocument) (*k8sResource, *[]byte, 
 	}
 }
 
+// getNormalizedName returns the normalized name
+// this matches the terraform-defined resource type when applicable
+func (k *K8sV1) getNormalizedName(kind string) string {
+	var name string
+	switch kind {
+	case "DaemonSet":
+		name = kubernetesTypeName + "_daemonset"
+	default:
+		name = kubernetesTypeName + "_" + strcase.ToSnake(kind)
+	}
+	return name
+}
+
 // normalize takes the input document and normalizes it
 func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error) {
 
@@ -79,6 +93,9 @@ func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	}
 
 	var resourceConfig output.ResourceConfig
+
+	resourceConfig.Type = k.getNormalizedName(resource.Kind)
+
 	switch resource.Kind {
 	case "":
 		// error case
@@ -87,7 +104,7 @@ func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	case "ClusterRole":
 		fallthrough
 	case "Namespace":
-		resourceConfig.ID = kubernetesTypeName + resource.Kind + "." + resource.Metadata.Name
+		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.Name
 	default:
 		// namespaced-resources
 		namespace := resource.Metadata.Namespace
@@ -95,7 +112,7 @@ func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 			namespace = "default"
 		}
 
-		resourceConfig.ID = kubernetesTypeName + resource.Kind + "." + resource.Metadata.Name + "." + namespace
+		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.Name + "." + namespace
 	}
 
 	configData := make(map[string]interface{})
@@ -103,7 +120,6 @@ func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 		return nil, err
 	}
 
-	resourceConfig.Type = kubernetesTypeName + resource.Kind
 	resourceConfig.Name = resource.Metadata.Name
 	resourceConfig.Config = configData
 

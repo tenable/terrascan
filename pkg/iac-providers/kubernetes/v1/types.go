@@ -32,7 +32,7 @@ const (
 	// UnknownExtension unknown
 	UnknownExtension = "unknown"
 
-	kubernetesTypeName = "k8s_"
+	kubernetesTypeName = "kubernetes"
 	defaultNamespace   = "default"
 )
 

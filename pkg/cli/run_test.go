@@ -30,6 +30,7 @@ func TestRun(t *testing.T) {
 		iacDirPath  string
 		configFile  string
 		configOnly  bool
+		stdOut      string
 		want        string
 		wantErr     error
 	}{
@@ -37,15 +38,23 @@ func TestRun(t *testing.T) {
 			name:       "normal terraform run",
 			cloudType:  "terraform",
 			iacDirPath: "testdata/run-test",
-			want:       "",
-			wantErr:    nil,
 		},
 		{
 			name:       "normal k8s run",
 			cloudType:  "k8s",
 			iacDirPath: "testdata/run-test",
-			want:       "",
-			wantErr:    nil,
+		},
+		{
+			name:        "config-only flag terraform",
+			cloudType:   "terraform",
+			iacFilePath: "testdata/run-test/config-only.tf",
+			configOnly:  true,
+		},
+		{
+			name:        "config-only flag k8s",
+			cloudType:   "k8s",
+			iacFilePath: "testdata/run-test/config-only.yaml",
+			configOnly:  true,
 		},
 	}
 
