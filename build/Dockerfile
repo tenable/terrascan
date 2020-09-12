@@ -32,5 +32,5 @@ COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
 EXPOSE 9010
 
-ENTRYPOINT ["/go/bin/terrascan", "server"]
-CMD ["--log-type", "json"]
+ENTRYPOINT ["/go/bin/terrascan"]
+CMD ["server", "--log-type", "json"]
