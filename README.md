@@ -7,6 +7,7 @@
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
+[![Blimp demo badge](https://kelda.io/demo-badge.svg?repo=https://github.com/accurics/terrascan.git)](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
 
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
@@ -61,6 +62,17 @@ $ cd terrascan
 $ make build
 $ ./bin/terrascan
 ```
+
+## Demoing
+If you want to play around with Terrascan without running it locally, you can
+[boot a personal demo copy
+](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+from your browser without downloading or setting up anything.
+
+Clicking the
+[link](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+boots this repo in the Blimp cloud, and creates a public URL for you to access
+it.
 
 ## Getting started
 
