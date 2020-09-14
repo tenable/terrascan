@@ -159,9 +159,10 @@ func (e *Engine) LoadRegoFiles(policyPath string) error {
 			}
 
 			// Check for default template variable values specified
-			if val, ok := regoMetadata.TemplateArgs["name"]; ok {
-				zap.S().Warn("reserved template name arg was specified", zap.String("name", regoMetadata.Name), zap.String("file", filePath), zap.String("template arg", val.(string)))
-			} else {
+			if _, ok := regoMetadata.TemplateArgs["name"]; !ok {
+				if regoMetadata.TemplateArgs == nil {
+					regoMetadata.TemplateArgs = make(map[string]interface{})
+				}
 				// Add reserved template variable values
 				regoMetadata.TemplateArgs["name"] = regoMetadata.Name
 			}
