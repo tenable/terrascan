@@ -1,0 +1,15 @@
+{
+    "name": "containerAllowPrivilegeEscalationIsTrue",
+    "file": "containerAllowPrivilegeEscalationIsTrue.rego",
+    "template_args": {
+        "is_init": true,
+        "prefix": "",
+        "resource_type": "kubernetes_replicaset",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of privileged containers",
+    "reference_id": "accurics.kubernetes.IAM.14",
+    "category": "Identity and Access Management",
+    "version": 1
+}
