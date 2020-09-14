@@ -1,7 +1,8 @@
 package accurics
 
-checkIpForward[api.id]
+{{.prefix}}{{.name}}{{.suffix}}[api.id]
 {
      api := input.google_compute_instance[_]
-     not api.config.can_ip_forward == true
+     api.config.can_ip_forward == true
 }
+
