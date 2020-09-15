@@ -71,7 +71,16 @@ func (e *Executor) ValidateInputs() error {
 		zap.S().Debugf("directory '%s' exists", e.dirPath)
 	}
 
-	// check if Iac type is supported
+	// set default iac type/version if not already set
+	if e.iacType == "" {
+		e.iacType = policy.GetDefaultIacType(e.cloudType)
+	}
+
+	if e.iacVersion == "" {
+		e.iacVersion = policy.GetDefaultIacVersion(e.cloudType)
+	}
+
+	// check if IaC type is supported
 	if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
 		zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
 		return errIacNotSupported

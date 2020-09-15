@@ -17,10 +17,12 @@
 package policy
 
 const (
-	aws supportedCloudType = "aws"
+	aws                  supportedCloudType  = "aws"
+	defaultAWSIacType    supportedIacType    = "terraform"
+	defaultAWSIacVersion supportedIacVersion = "v12"
 )
 
 func init() {
 	// Register aws as a cloud provider with terrascan
-	RegisterCloudProvider(aws)
+	RegisterCloudProvider(aws, defaultAWSIacType, defaultAWSIacVersion)
 }

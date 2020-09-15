@@ -29,7 +29,6 @@ var (
 
 // NewIacProvider returns a new IacProvider
 func NewIacProvider(iacType, iacVersion string) (iacProvider IacProvider, err error) {
-
 	// get IacProvider from supportedIacProviders
 	iacProviderObject, supported := supportedIacProviders[supportedIacType(iacType)][supportedIacVersion(iacVersion)]
 	if !supported {

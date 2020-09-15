@@ -1,0 +1,14 @@
+{
+    "name": "containerHostNetworkIsTrue",
+    "file": "containerHostNetworkIsTrue.rego",
+    "template_args": {
+        "prefix": "",
+        "resource_type": "kubernetes_pod_security_policy",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of containers wishing to share the host network namespace",
+    "reference_id": "accurics.kubernetes.IAM.33",
+    "category": "Identity and Access Management",
+    "version": 1
+}
