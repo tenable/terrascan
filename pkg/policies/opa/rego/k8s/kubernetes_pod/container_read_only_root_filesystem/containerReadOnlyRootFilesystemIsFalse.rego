@@ -3,25 +3,25 @@ package accurics
 {{- if eq .is_init true }}
 
 {{.prefix}}{{.name}}{{.suffix}}[api.id] {
-    {{- template "initContainers" .}}
-    initContainers.readOnlyRootFilesystem == false
+  {{- template "initContainersSecurityContext" .}}
+    initContainersSecurityContext.readOnlyRootFilesystem == false
 }
 
 {{.prefix}}{{.name}}{{.suffix}}[api.id] {
-    {{- template "initContainersTF" .}}
-    initContainersTF.read_only_root_filesystem == false
+    {{- template "initContainersSecurityContextTF" .}}
+    initContainersSecurityContextTF.read_only_root_filesystem == false
 }
 
 {{- else }}
 
 {{.prefix}}{{.name}}{{.suffix}}[api.id] {
-    {{- template "containers" .}}
-    containers.readOnlyRootFilesystem == false
+    {{- template "containersSecurityContext" .}}
+    containersSecurityContext.readOnlyRootFilesystem == false
 }
 
 {{.prefix}}{{.name}}{{.suffix}}[api.id] {
-    {{- template "containersTF" .}}
-    containersTF.read_only_root_filesystem == false
+    {{- template "containersSecurityContextTF" .}}
+    containersSecurityContextTF.read_only_root_filesystem == false
 }
 
 {{- end }}
