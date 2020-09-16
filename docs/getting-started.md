@@ -5,7 +5,7 @@ Terrascan is a static code analyzer for Infrastructure as Code tooling. It can e
 Terrascan's binary can be found on the package for each [release](https://github.com/accurics/terrascan/releases). Here's an example of how to install it:
 
 ``` Bash
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_1.0.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.1.0/terrascan_1.1.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
 x CHANGELOG.md
 x LICENSE
@@ -19,8 +19,8 @@ If you have go installed, Terrascan can be installed with `go get`
 ```
 $ export GO111MODULE=on
 $ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.0.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.0.0
+  go: downloading github.com/accurics/terrascan v1.1.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.1.0
   ...
 $ terrascan
 ```

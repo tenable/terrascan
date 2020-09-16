@@ -19,13 +19,13 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 ## Features
 * 500+ Policies for security best practices
 * Scanning of Terraform 12+ (HCL2)
-* Support for AWS, Azure, and GCP
+* Support for AWS, Azure, GCP, and Kubernetes
 
 ## Installing
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.0.0/terrascan_1.0.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.1.0/terrascan_1.1.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
@@ -39,8 +39,8 @@ If you have go installed, Terrascan can be installed with `go get`
 ```
 $ export GO111MODULE=on
 $ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.0.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.0.0
+  go: downloading github.com/accurics/terrascan v1.1.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.1.0
   ...
 $ terrascan
 ```
