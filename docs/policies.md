@@ -39,3 +39,5 @@ Here's an example of the contents of a rule file:
 --8<-- "docs/policies/azure.md"
 
 --8<-- "docs/policies/gcp.md"
+
+--8<-- "docs/policies/k8s.md"
