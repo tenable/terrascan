@@ -1,0 +1,16 @@
+{
+    "name": "containerUsesSecretsInEnvironmentVar",
+    "file": "containerUsesSecretsInEnvironmentVar.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerUsesSecretsInEnvironmentVar",
+        "prefix": "",
+        "resource_type": "kubernetes_daemonset",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Container uses secrets in environment variables",
+    "reference_id": "accurics.kubernetes.EKM.66",
+    "category": "Encryption and Key Management",
+    "version": 1
+}
