@@ -1,0 +1,16 @@
+{
+    "name": "containerHasAllowedCapabilities",
+    "file": "containerHasAllowedCapabilities.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerHasAllowedCapabilities",
+        "prefix": "",
+        "resource_type": "kubernetes_pod",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Pod has extra capabilities allowed",
+    "reference_id": "accurics.kubernetes.IAM.85",
+    "category": "Identity and Access Management",
+    "version": 1
+}

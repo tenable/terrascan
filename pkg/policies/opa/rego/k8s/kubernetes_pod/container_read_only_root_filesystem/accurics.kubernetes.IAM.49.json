@@ -1,0 +1,16 @@
+{
+    "name": "containerReadOnlyRootFilesystemIsFalse",
+    "file": "containerReadOnlyRootFilesystemIsFalse.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerReadOnlyRootFilesystemIsFalse",
+        "prefix": "",
+        "resource_type": "kubernetes_cron_job",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Container's root filesystem is not read-only",
+    "reference_id": "accurics.kubernetes.IAM.49",
+    "category": "Identity and Access Management",
+    "version": 1
+}

@@ -1,0 +1,16 @@
+{
+    "name": "defaultNamespaceUsed2",
+    "file": "defaultNamespaceUsed.rego",
+    "template_args": {
+        "generate_name": "generate_name",
+        "name": "defaultNamespaceUsed2",
+        "prefix": "",
+        "resource_type": "kubernetes_deployment",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "The default namespace should not be used",
+    "reference_id": "accurics.kubernetes.OPS.461",
+    "category": "Operational Efficiency",
+    "version": 1
+}

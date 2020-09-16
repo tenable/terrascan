@@ -1,0 +1,16 @@
+{
+    "name": "containerAllowPrivilegeEscalationIsTrue",
+    "file": "containerAllowPrivilegeEscalationIsTrue.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerAllowPrivilegeEscalationIsTrue",
+        "prefix": "",
+        "resource_type": "kubernetes_cron_job",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of privileged containers",
+    "reference_id": "accurics.kubernetes.IAM.9",
+    "category": "Identity and Access Management",
+    "version": 1
+}

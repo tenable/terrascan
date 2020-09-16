@@ -1,0 +1,15 @@
+{
+    "name": "containerHostIpcIsTrue",
+    "file": "containerHostIpcIsTrue.rego",
+    "template_args": {
+        "name": "containerHostIpcIsTrue",
+        "prefix": "",
+        "resource_type": "kubernetes_stateful_set",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of containers wishing to share the host IPC namespace",
+    "reference_id": "accurics.kubernetes.IAM.24",
+    "category": "Identity and Access Management",
+    "version": 1
+}

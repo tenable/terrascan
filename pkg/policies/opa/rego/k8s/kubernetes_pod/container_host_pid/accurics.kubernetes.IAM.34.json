@@ -1,0 +1,15 @@
+{
+    "name": "containerHostPidIsTrue",
+    "file": "containerHostPidIsTrue.rego",
+    "template_args": {
+        "name": "containerHostPidIsTrue",
+        "prefix": "",
+        "resource_type": "kubernetes_daemonset",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of containers wishing to share the host process ID namespace",
+    "reference_id": "accurics.kubernetes.IAM.34",
+    "category": "Identity and Access Management",
+    "version": 1
+}
