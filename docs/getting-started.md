@@ -106,10 +106,10 @@ Flags:
   -h, --help                 help for scan
   -d, --iac-dir string       path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string      path to a single IaC file
-  -i, --iac-type string      iac type (terraform) (default "terraform")
-      --iac-version string   iac version (v12) (default "v12")
+  -i, --iac-type string      iac type (terraform, k8s)
+      --iac-version string   iac version terraform:(v12) k8s:(v1)
   -p, --policy-path string   policy path directory
-  -t, --policy-type string   <required> policy type (aws, azure, gcp)
+  -t, --policy-type string   <required> policy type (aws, azure, gcp, k8s)
 
 Global Flags:
   -c, --config-path string   config file path
@@ -145,7 +145,7 @@ results:
     total: 1
 ```
 ##### Resource Config
-Terrascan while scanning the IaC, loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, it possible to print this resource configs list as an output by providing the `--config-only` flag to the `terrascan scan` command. 
+Terrascan while scanning the IaC, loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, it possible to print this resource configs list as an output by providing the `--config-only` flag to the `terrascan scan` command.
 ``` Bash
 $  terrascan scan -t aws --config-only
 aws_ecr_repository:
