@@ -109,7 +109,7 @@ Flags:
   -i, --iac-type string      iac type (terraform, k8s)
       --iac-version string   iac version terraform:(v12) k8s:(v1)
   -p, --policy-path string   policy path directory
-  -t, --policy-type string   <required> policy type (aws, azure, gcp, k8s)
+  -t, --policy-type string   <required> policy type (aws, azure, gcp, k8s, github)
 
 Global Flags:
   -c, --config-path string   config file path

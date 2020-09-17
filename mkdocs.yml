@@ -45,6 +45,7 @@ nav:
     - AWS: policies/aws.md
     - GCP: policies/gcp.md
     - Azure: policies/azure.md
+    - GitHub: policies/github.md
   # - Educational Resources: learning.md
   - Contributing: contributing.md
   - Changelog: changelog.md
