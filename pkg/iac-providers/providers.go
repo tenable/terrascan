@@ -50,3 +50,12 @@ func IsIacSupported(iacType, iacVersion string) bool {
 	}
 	return true
 }
+
+// SupportedIacProviders returns list of Iac Providers supported in terrascan
+func SupportedIacProviders() []string {
+	var iacTypes []string
+	for k, _ := range supportedIacProviders {
+		iacTypes = append(iacTypes, string(k))
+	}
+	return iacTypes
+}
