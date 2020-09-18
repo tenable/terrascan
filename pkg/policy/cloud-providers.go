@@ -17,6 +17,8 @@
 package policy
 
 import (
+	"sort"
+
 	"github.com/accurics/terrascan/pkg/config"
 )
 
@@ -77,5 +79,6 @@ func SupportedPolicyTypes() []string {
 	for k := range supportedCloudProvider {
 		policyTypes = append(policyTypes, string(k))
 	}
+	sort.Strings(policyTypes)
 	return policyTypes
 }
