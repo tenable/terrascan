@@ -19,6 +19,8 @@ package iacprovider
 import (
 	"fmt"
 	"reflect"
+	"sort"
+	"strings"
 
 	"go.uber.org/zap"
 )
@@ -49,4 +51,29 @@ func IsIacSupported(iacType, iacVersion string) bool {
 		return false
 	}
 	return true
+}
+
+// SupportedIacProviders returns list of Iac Providers supported in terrascan
+func SupportedIacProviders() []string {
+	var iacTypes []string
+	for k := range supportedIacProviders {
+		iacTypes = append(iacTypes, string(k))
+	}
+	sort.Strings(iacTypes)
+	return iacTypes
+}
+
+// SupportedIacVersions retuns a string of Iac providers and corresponding supported versions
+func SupportedIacVersions() []string {
+	var iacVersions []string
+	for iac, versions := range supportedIacProviders {
+		var versionSlice []string
+		for k := range versions {
+			versionSlice = append(versionSlice, string(k))
+		}
+		versionString := strings.Join(versionSlice, ", ")
+		iacVersions = append(iacVersions, fmt.Sprintf("%s: %s", string(iac), versionString))
+	}
+	sort.Strings(iacVersions)
+	return iacVersions
 }

@@ -17,6 +17,8 @@
 package policy
 
 import (
+	"sort"
+
 	"github.com/accurics/terrascan/pkg/config"
 )
 
@@ -69,4 +71,14 @@ func GetDefaultIacType(cloudType string) string {
 // GetDefaultIacVersion returns the default IaC version for the given cloudType
 func GetDefaultIacVersion(cloudType string) string {
 	return string(defaultIacVersion[supportedCloudType(cloudType)])
+}
+
+// SupportedPolicyTypes returns the list of policies supported in terrascan
+func SupportedPolicyTypes() []string {
+	var policyTypes []string
+	for k := range supportedCloudProvider {
+		policyTypes = append(policyTypes, string(k))
+	}
+	sort.Strings(policyTypes)
+	return policyTypes
 }
