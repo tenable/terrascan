@@ -74,7 +74,7 @@ func GetDefaultIacVersion(cloudType string) string {
 // SupportedPolicyTypes returns the list of policies supported in terrascan
 func SupportedPolicyTypes() []string {
 	var policyTypes []string
-	for k, _ := range supportedCloudProvider {
+	for k := range supportedCloudProvider {
 		policyTypes = append(policyTypes, string(k))
 	}
 	return policyTypes
