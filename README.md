@@ -63,7 +63,7 @@ $ make build
 $ ./bin/terrascan
 ```
 
-## Demoing
+### Demoing
 If you want to play around with Terrascan without running it locally, you can
 [boot a personal demo copy
 ](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
