@@ -29,7 +29,7 @@ import (
 var (
 	// PolicyPath Policy path directory
 	PolicyPath string
-	// PolicyType Cloud type (aws, azure, gcp)
+	// PolicyType Cloud type (aws, azure, gcp, github)
 	PolicyType string
 	// IacType IaC type (terraform)
 	IacType string

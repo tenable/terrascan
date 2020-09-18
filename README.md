@@ -20,7 +20,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 * 500+ Policies for security best practices
 * Scanning of Terraform 12+ (HCL2)
 * Scanning of Kubernetes YAML/JSON
-* Support for AWS, Azure, GCP, and Kubernetes
+* Support for AWS, Azure, GCP, Kubernetes and GitHub
 
 ## Installing
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:

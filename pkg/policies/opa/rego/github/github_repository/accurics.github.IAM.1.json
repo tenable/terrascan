@@ -1,0 +1,10 @@
+{
+    "name": "privateRepoEnabled",
+    "file": "privateRepoEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Repository is Not Private.",
+    "reference_id": "accurics.github.IAM.1",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}
