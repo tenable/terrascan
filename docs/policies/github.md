@@ -2,5 +2,5 @@
 ### github_repository
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity & Access Management | gcp | MEDIUM | Repository is Not Private. | accurics.gcp.IAM.145 |
+| Identity & Access Management | github | MEDIUM | Repository is Not Private. | accurics.github.IAM.1 |
 
