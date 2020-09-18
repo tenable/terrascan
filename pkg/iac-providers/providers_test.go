@@ -111,3 +111,16 @@ func TestIsIacSupported(t *testing.T) {
 		})
 	}
 }
+
+func TestSupportedIacProviders(t *testing.T) {
+	t.Run("supported iac providers", func(t *testing.T) {
+		var want []string
+		for k := range supportedIacProviders {
+			want = append(want, string(k))
+		}
+		got := SupportedIacProviders()
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got: '%v', want: '%v'", got, want)
+		}
+	})
+}
