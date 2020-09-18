@@ -69,10 +69,52 @@ If you want to play around with Terrascan without running it locally, you can
 ](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
 from your browser without downloading or setting up anything.
 
-Clicking the
-[link](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
-boots this repo in the Blimp cloud, and creates a public URL for you to access
-it.
+1. Click the [demo
+   link](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+   to boot this repo in the Blimp cloud.
+
+1. Once the sandbox is booted, get its public URL by clicking "Connect to your
+   sandbox".
+
+   The page will 404, but that's OK because we just need the domain name to
+   create our URL that we'll hit with `curl`.
+
+1. Run the following command in your terminal to scan a simple Terraform file.
+   Make sure to replace `<YOUR PUBLIC URL>` with the URL from the previous
+   step.
+
+   ```
+   curl -i -F "file=@-" https://<YOUR PUBLIC URL>/v1/terraform/v12/aws/local/file/scan << EOF
+   variable "my-variable" {
+     default = "default"
+     type    = string
+   }
+   EOF
+   ```
+
+   The full URL will look something like `https://a98c0197112b7a4a96b72ea21ac0802b.blimp.dev/v1/terraform/v12/aws/local/file/scan`.
+
+   The command will output something like this:
+   ```
+   {
+     "ResourceConfig": {},
+     "Violations": {
+       "results": {
+         "violations": [],
+         "count": {
+           "low": 0,
+           "medium": 0,
+           "high": 0,
+           "total": 0
+         }
+       }
+     }
+   }
+   ```
+
+See the [service mode
+docs](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started/#server-mode)
+for more information on how to use the server endpoints.
 
 ## Getting started
 
