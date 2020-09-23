@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
-[![Blimp demo badge](https://kelda.io/demo-badge.svg?repo=https://github.com/accurics/terrascan.git)](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+[![Blimp demo badge](https://blimpup.io/demo-badge.svg?repo=https://github.com/accurics/terrascan.git)](https://blimpup.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&port=terrascan:9010)
 
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
@@ -66,15 +66,14 @@ $ ./bin/terrascan
 ### Demoing
 If you want to play around with Terrascan without running it locally, you can
 [boot a personal demo copy
-](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+](https://blimpup.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&port=terrascan:9010)
 from your browser without downloading or setting up anything.
 
 1. Click the [demo
-   link](https://kelda.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&service=terrascan&port=9010)
+   link](https://blimpup.io/preview-env/?repo=https://github.com/accurics/terrascan.git&composeFiles=deploy/docker-compose.yml&port=terrascan:9010)
    to boot this repo in the Blimp cloud.
 
-1. Once the sandbox is booted, get its public URL by clicking "Connect to your
-   sandbox".
+1. Once the sandbox is booted, get its public URL by clicking "Connect" on the terrascan service on the left.
 
    The page will 404, but that's OK because we just need the domain name to
    create our URL that we'll hit with `curl`.
