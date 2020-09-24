@@ -57,6 +57,8 @@ func verifyLineWithStringIsColorized(s string, buf string, t *testing.T) {
     }
 }
 
+///////////  YAML
+
 func TestYAMLBogusSeverityIsNotColorized(t *testing.T) {
     re := regexp.MustCompile(`(?m)^(.*severity.*)$`)
     m := re.FindString(yamlData.String())
@@ -112,4 +114,63 @@ func TestYAMLCountMediumIsColorized(t *testing.T) {
 }
 func TestYAMLCountHighIsColorized(t *testing.T) {
     verifyLineWithStringIsColorized("high", yamlData.String(), t)
+}
+
+///////////  JSON
+
+func TestJSONBogusSeverityIsNotColorized(t *testing.T) {
+    re := regexp.MustCompile(`(?m)^(.*severity.*)$`)
+    m := re.FindString(jsonData.String())
+    if strings.Contains(m, ColorPrefix) {
+        t.Errorf("severity is colorized [%v]\n%s", m, jsonData.String())
+    }
+}
+
+func TestJSONRuleNameIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("rule_name", jsonData.String(), t)
+}
+func TestJSONDescriptionIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("description", jsonData.String(), t)
+}
+func TestJSONSeverityIsColorized(t *testing.T) {
+
+    res := buildStore()
+    yw := &strings.Builder{}
+    w := NewColorizedWriter(yw)
+
+    // HIGH, MEDIUM, LOW
+    testSeverity := func(sev string) {
+        res.Violations[0].Severity = sev
+        yw.Reset()
+        err := writer.Write("json", res, w)
+        if err != nil {
+            panic(err)
+        }
+        verifyLineWithStringIsColorized("severity", yw.String(), t)
+    }
+    testSeverity("HIGH")
+    testSeverity("MEDIUM")
+    testSeverity("LOW")
+}
+func TestJSONResourceNameIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("resource_name", jsonData.String(), t)
+}
+func TestJSONResourceTypeIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("resource_type", jsonData.String(), t)
+}
+func TestJSONFileIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("file", jsonData.String(), t)
+}
+
+func TestJSONCountIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("count", jsonData.String(), t)
+}
+func TestJSONCountLowIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("low", jsonData.String(), t)
+}
+func TestJSONCountMediumIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("medium", jsonData.String(), t)
+}
+func TestJSONCountHighIsColorized(t *testing.T) {
+    verifyLineWithStringIsColorized("high", jsonData.String(), t)
 }
