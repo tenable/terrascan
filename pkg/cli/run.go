@@ -19,14 +19,19 @@ package cli
 import (
 	"flag"
 	"os"
+    "io"
+    "strings"
+
+    "github.com/mattn/go-isatty"
 
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/writer"
+    "github.com/accurics/terrascan/pkg/termcolor"
 )
 
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
-	policyPath, format string, configOnly bool) {
+	policyPath, format string, configOnly bool, useColors string) {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
@@ -41,10 +46,37 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 		return
 	}
 
+    // Color codes will corrupt output, so suppress if not on terminal
+    switch strings.ToLower(useColors) {
+    case "auto":
+        if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+            useColors = "true"
+        } else {
+            useColors = "false"
+        }
+
+    case "true": // nothing to do
+    case "t": fallthrough
+    case "y": fallthrough
+    case "1": fallthrough
+    case "force":
+        useColors = "true"
+
+    default:
+        useColors = "false"
+    }
+
+    var outputWriter io.Writer
+    if useColors == "true" {
+        outputWriter = termcolor.NewColorizedWriter(os.Stdout)
+    } else {
+        outputWriter = os.Stdout
+    }
+
 	if configOnly {
-		writer.Write(format, results.ResourceConfig, os.Stdout)
+		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
-		writer.Write(format, results.Violations, os.Stdout)
+		writer.Write(format, results.Violations, outputWriter)
 	}
 
 	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
