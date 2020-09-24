@@ -41,6 +41,8 @@ var (
 	IacDirPath string
 	//ConfigOnly will output resource config (should only be used for debugging purposes)
 	ConfigOnly bool
+    // UseColors enables color output (t, f, auto)
+	UseColors string
 )
 
 var scanCmd = &cobra.Command{
@@ -58,7 +60,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 
 func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
-	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile, PolicyPath, OutputType, ConfigOnly)
+	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile, PolicyPath, OutputType, ConfigOnly, UseColors)
 }
 
 func init() {
@@ -69,6 +71,7 @@ func init() {
 	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
 	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "p", "", "policy path directory")
 	scanCmd.Flags().BoolVarP(&ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
+    scanCmd.Flags().StringVar(&UseColors, "use-colors", "auto", "color output (auto, t, f)")
 	scanCmd.MarkFlagRequired("policy-type")
 	RegisterCommand(rootCmd, scanCmd)
 }
