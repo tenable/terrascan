@@ -10,6 +10,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.3.0
 	github.com/hashicorp/terraform v0.12.28
 	github.com/iancoleman/strcase v0.1.1
+	github.com/mattn/go-isatty v0.0.5
 	github.com/open-policy-agent/opa v0.22.0
 	github.com/pelletier/go-toml v1.8.0
 	github.com/pkg/errors v0.9.1
