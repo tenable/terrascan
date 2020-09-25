@@ -17,6 +17,7 @@
 package cli
 
 import (
+    "os"
 	"fmt"
 	"strings"
 
@@ -24,6 +25,7 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+    "github.com/mattn/go-isatty"
 )
 
 var (
@@ -41,8 +43,9 @@ var (
 	IacDirPath string
 	//ConfigOnly will output resource config (should only be used for debugging purposes)
 	ConfigOnly bool
-    // UseColors enables color output (t, f, auto)
-	UseColors string
+    // UseColors indicates whether to use color output
+	UseColors bool
+    useColors string    // used for flag processing
 )
 
 var scanCmd = &cobra.Command{
@@ -53,6 +56,24 @@ var scanCmd = &cobra.Command{
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
+        switch strings.ToLower(useColors) {
+        case "auto":
+            if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+                UseColors = true
+            } else {
+                UseColors = false
+            }
+
+        case "true":  fallthrough
+        case "t":     fallthrough
+        case "y":     fallthrough
+        case "1":     fallthrough
+        case "force":
+            UseColors = true
+
+        default:
+            UseColors = false
+        }
 		initial(cmd, args)
 	},
 	Run: scan,
@@ -71,7 +92,8 @@ func init() {
 	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
 	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "p", "", "policy path directory")
 	scanCmd.Flags().BoolVarP(&ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
-    scanCmd.Flags().StringVar(&UseColors, "use-colors", "auto", "color output (auto, t, f)")
+    // flag passes a string, but we normalize to bool in PreRun
+    scanCmd.Flags().StringVar(&useColors, "use-colors", "auto", "color output (auto, t, f)")
 	scanCmd.MarkFlagRequired("policy-type")
 	RegisterCommand(rootCmd, scanCmd)
 }
