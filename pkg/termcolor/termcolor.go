@@ -4,7 +4,7 @@ import (
     "strconv"
     "math"
     "strings"
-    "fmt"
+    "go.uber.org/zap"
 )
 
 var (
@@ -74,7 +74,8 @@ func HexToRgb(hex string) (r,g,b uint8) {
         g = HexToUint8(hex[1:2] + hex[1:2])
         b = HexToUint8(hex[2:3] + hex[2:3])
     default:
-        panic(fmt.Sprintf("Unsupported color %s", hex))
+        zap.S().Errorf("Unsupported color %s", hex)
+        return uint8(255),uint8(255),uint8(255)
     }
     return
 }
@@ -100,7 +101,7 @@ func ExpandStyle(style string) string {
     case style == "Reverse":
         return Reverse
     default:
-        panic(fmt.Sprintf("Unhandled style [%s]", style))
+        zap.S().Warnf("Unhandled style [%s]", style)
     }
     return style
 }
@@ -134,8 +135,10 @@ func ExpandStyle(style string) string {
  *   ?Y=Fg#0f0|Bold?N=Fg#f00 uses a green foreground if the message
  *       matches "Y", or red if it matches "N"
 **/
-func Colorize(style, message string) string {
+func Colorize(st Style, message string) string {
     var sb strings.Builder
+
+    style := string(st)
 
     if len(message) == 0 {
         return message
@@ -154,8 +157,9 @@ func Colorize(style, message string) string {
          * that don't match.
         **/
         if strings.Contains(clause, "=") {
-            pattern := strings.TrimSpace(clause[:strings.Index(clause,"=")])
-            style = strings.TrimSpace(clause[len(pattern)+1:])
+            eq := strings.Index(clause,"=")
+            pattern := strings.TrimSpace(clause[:eq])
+            style = strings.TrimSpace(clause[eq+1:])
 
             if pattern != message {
                 style = ""

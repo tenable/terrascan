@@ -1,0 +1,52 @@
+[
+  {
+    "key-pattern":"description",
+    "value-pattern": ".*?",
+    "key-style": "",
+    "value-style": "Fg#0c0"
+  },
+  {
+    "key-pattern": "severity",
+    "value-style": "? HIGH = Fg#f00 ? MEDIUM = Fg#c84 ? LOW = Fg#cc0"
+  },
+  {
+    "key-pattern": "resource_name",
+    "value-style": "Fg#0ff | Bold"
+  },
+  {
+    "key-pattern": "resource_type",
+    "value-style": "Fg#0cc"
+  },
+  {
+    "key-pattern": "file",
+    "value-style": "Fg#fff | Bold"
+  },
+  {
+    "key-pattern": "low",
+    "value-pattern": "\\d+",
+    "key-style": "Fg#cc0",
+    "value-style": "Fg#cc0"
+  },
+  {
+    "key-pattern": "medium",
+    "value-pattern": "\\d+",
+    "key-style": "Fg#c84",
+    "value-style": "Fg#c84"
+  },
+  {
+    "key-pattern": "high",
+    "value-pattern": "\\d+",
+    "key-style": "Fg#f00",
+    "value-style": "Fg#f00"
+  },
+  {
+    "key-pattern": "count",
+    "value-pattern": "-",
+    "key-style": "Reverse"
+  },
+  {
+    "key-pattern": "rule_name",
+    "key-style": "Reverse",
+    "value-style": "Reverse"
+  }
+]
