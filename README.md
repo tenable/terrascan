@@ -111,7 +111,7 @@ from your browser without downloading or setting up anything.
    }
    ```
 
-See the [service mode
+See the [server mode
 docs](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started/#server-mode)
 for more information on how to use the server endpoints.
 
