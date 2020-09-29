@@ -18,10 +18,12 @@ package tfv12
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
@@ -56,6 +58,9 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 		return allResourcesConfig, errLoadConfigDir
 	}
 
+	// create InstalledCache to track already downloaded remote modules
+	var c InstalledCache = make(map[string]string)
+
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
 	// descendant modules from the root module and create a unified
 	// configuration of type *configs.Config
@@ -64,15 +69,26 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 	unified, diags := hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
 		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
 
-			// Note: currently only local paths are supported for Module Sources
+			// figure out path sub module directory, if it's remote then download it locally
+			var pathToModule string
+			if isLocalSourceAddr(req.SourceAddr) {
+				// determine the absolute path from root module to the sub module
+				// using *configs.ModuleRequest.Path field
+				pathArr := strings.Split(req.Path.String(), ".")
+				pathArr = pathArr[:len(pathArr)-1]
+				pathToModule = filepath.Join(absRootDir, filepath.Join(pathArr...), req.SourceAddr)
+				zap.S().Debugf("processing local module %q", req.SourceAddr)
+			} else {
+				// temp dir to download the remote repo
+				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+				defer os.RemoveAll(tempDir)
 
-			// determine the absolute path from root module to the sub module
-			// using *configs.ModuleRequest.Path field
-
-			pathArr := strings.Split(req.Path.String(), ".")
-			pathArr = pathArr[:len(pathArr)-1]
-
-			pathToModule := filepath.Join(absRootDir, filepath.Join(pathArr...), req.SourceAddr)
+				// Download remote module
+				pathToModule, err = c.DownloadModule(req.SourceAddr, tempDir)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				}
+			}
 
 			// load sub module directory
 			subMod, diags := parser.LoadConfigDir(pathToModule)

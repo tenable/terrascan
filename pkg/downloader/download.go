@@ -70,6 +70,35 @@ var (
 	ErrEmptyURLTypeDest = fmt.Errorf("empty remote url or type or desitnation dir path")
 )
 
+// GetURLWithType returns the download URL with it's respective type prefix
+func GetURLWithType(remoteURL, destPath string) (string, string, error) {
+
+	// get subDir, if present
+	repoURL, subDir := SplitAddrSubdir(remoteURL)
+	zap.S().Debugf("downloading %q to %q", repoURL, destPath)
+
+	// check if a detector is present for the given url with type
+	URLWithType, err := getter.Detect(repoURL, destPath, goGetterDetectors)
+	if err != nil {
+		zap.S().Errorf("failed to detect url with type for %q. error: '%v'", remoteURL, err)
+		return "", "", err
+	}
+	zap.S().Debugf("remote URL: %q; url with type: %q", remoteURL, URLWithType)
+
+	// get actual subDir path
+	URLWithType, realSubDir := SplitAddrSubdir(URLWithType)
+	if realSubDir != "" {
+		subDir = filepath.Join(realSubDir, subDir)
+	}
+
+	if URLWithType != repoURL {
+		zap.S().Debugf("detector rewrote %q to %q", repoURL, URLWithType)
+	}
+
+	// successful
+	return URLWithType, subDir, nil
+}
+
 // Download retrieves the remote repository referenced in the given remoteURL
 // into the destination path and then returns the full path to any subdir
 // indicated in the URL
@@ -84,26 +113,10 @@ func (d Downloader) Download(remoteURL, destPath string) (string, error) {
 		return "", ErrEmptyURLDest
 	}
 
-	// get subDir, if present
-	repoURL, subDir := SplitAddrSubdir(remoteURL)
-	zap.S().Debugf("downloading %q to %q", repoURL, destPath)
-
-	// check if a detector is present for the given url with type
-	URLWithType, err := getter.Detect(repoURL, destPath, goGetterDetectors)
+	// get repository url, subdir from given remote url
+	URLWithType, subDir, err := GetURLWithType(remoteURL, destPath)
 	if err != nil {
-		zap.S().Errorf("failed to detect url with type for %q. error: '%v'", remoteURL, err)
 		return "", err
-	}
-	zap.S().Debugf("remote URL: %q; url with type: %q", remoteURL, URLWithType)
-
-	// get actual subDir path
-	URLWithType, realSubDir := SplitAddrSubdir(URLWithType)
-	if realSubDir != "" {
-		subDir = filepath.Join(realSubDir, subDir)
-	}
-
-	if URLWithType != repoURL {
-		zap.S().Debugf("detector rewrote %q to %q", repoURL, URLWithType)
 	}
 
 	// downloading from remote addr
@@ -112,7 +125,7 @@ func (d Downloader) Download(remoteURL, destPath string) (string, error) {
 		Dst:           destPath,
 		Pwd:           destPath,
 		Mode:          getter.ClientModeDir,
-		Detectors:     goGetterNoDetectors, // we already did detection above
+		Detectors:     goGetterNoDetectors,
 		Decompressors: goGetterDecompressors,
 		Getters:       goGetterGetters,
 	}
@@ -168,6 +181,11 @@ func (d Downloader) DownloadWithType(remoteType, remoteURL, destPath string) (st
 
 	// Download
 	return d.Download(URLWithType, destPath)
+}
+
+// SubDirGlob returns the actual subdir with globbing processed
+func SubDirGlob(destPath, subDir string) (string, error) {
+	return getter.SubdirGlob(destPath, subDir)
 }
 
 // SplitAddrSubdir splits the given address (which is assumed to be a
