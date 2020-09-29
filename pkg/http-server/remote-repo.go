@@ -19,7 +19,6 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -33,8 +32,9 @@ import (
 
 // scanRemoteRepoReq contains request body for remote repository scanning
 type scanRemoteRepoReq struct {
-	remoteType string `json:"remote_type"`
-	remoteURL  string `json:"remote_url"`
+	RemoteType string `json:"remote_type"`
+	RemoteURL  string `json:"remote_url"`
+	ConfigOnly bool   `json:"config_only"`
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -52,9 +52,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 	// read request body
 	var s scanRemoteRepoReq
-	body, _ := ioutil.ReadAll(r.Body)
-	fmt.Printf("request body:\n%v\n", string(body))
-	err := json.Unmarshal(body, &s)
+	err := json.NewDecoder(r.Body).Decode(&s)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
@@ -67,7 +65,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 	// download remote repository
 	d := downloader.NewDownloader()
-	iacDirPath, err := d.DownloadWithType(s.remoteType, s.remoteURL, tempDir)
+	iacDirPath, err := d.DownloadWithType(s.RemoteType, s.RemoteURL, tempDir)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to download remote repo. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -90,7 +88,8 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	output, err := executor.Execute()
+	// evaluate policies IaC for violations
+	results, err := executor.Execute()
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -98,6 +97,15 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// if config only, return only config else return only violations
+	var output interface{}
+	if s.ConfigOnly {
+		output = results.ResourceConfig
+	} else {
+		output = results.Violations
+	}
+
+	// convert results into JSON
 	j, err := json.MarshalIndent(output, "", "  ")
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to create JSON. error: '%v'", err)
@@ -106,6 +114,6 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// return that we have successfully uploaded our file!
+	// return with results
 	apiResponse(w, string(j), http.StatusOK)
 }
