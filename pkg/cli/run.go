@@ -33,25 +33,24 @@ import (
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 	policyPath, format, remoteType, remoteURL string, configOnly, useColors bool) {
 
-	// validate remote repository options
-	toDownload, err := validateRemoteOpts(remoteType, remoteURL)
-	if err != nil {
-		os.Exit(5)
-	}
-
 	// download remote repository
 	var tempDir string
-	if toDownload {
-		// temp dir to download the remote repo
-		tempDir = filepath.Join(os.TempDir(), utils.GenRandomString(6))
-		defer os.RemoveAll(tempDir)
+	// temp dir to download the remote repo
+	tempDir = filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	defer os.RemoveAll(tempDir)
 
-		// download remote repository
-		iacDirPath, err = downloadRemoteRepo(remoteType, remoteURL, tempDir)
-		if err != nil {
-			os.RemoveAll(tempDir)
-			os.Exit(5)
-		}
+	// download remote repository
+	d := downloader.NewDownloader()
+	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
+	if err == downloader.ErrEmptyURLType {
+		// url and type empty, proceed with regular scanning
+		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
+	} else if err != nil {
+		// some error while downloading remote repository
+		return
+	} else {
+		// successfully downloaded remote repository
+		iacDirPath = path
 	}
 
 	// create a new runtime executor for processing IaC
