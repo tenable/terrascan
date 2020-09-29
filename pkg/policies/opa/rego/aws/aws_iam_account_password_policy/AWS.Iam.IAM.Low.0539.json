@@ -1,8 +1,8 @@
 {
-    "name": "passwordResuseNotAllowed",
-    "file": "passwordResuseNotAllowed.rego",
+    "name": "passwordReuseNotAllowed",
+    "file": "passwordReuseNotAllowed.rego",
     "template_args": {
-        "name": "passwordResuseNotAllowed",
+        "name": "passwordReuseNotAllowed",
         "parameter": "password_reuse_prevention",
         "prefix": "",
         "value": 0
