@@ -17,6 +17,7 @@
 package tfv12
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -93,4 +94,12 @@ func (g InstalledCache) DownloadModule(addr, destPath string) (string, error) {
 	// If we got this far then we have apparently succeeded in downloading
 	// the requested object!
 	return filepath.Clean(finalDir), nil
+}
+
+// CleanUp cleans up all the locally downloaded modules
+func (g InstalledCache) CleanUp() {
+	for url, path := range g {
+		zap.S().Debugf("deleting %q installed at %q", url, path)
+		os.RemoveAll(path)
+	}
 }

@@ -60,6 +60,7 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 
 	// create InstalledCache to track already downloaded remote modules
 	var c InstalledCache = make(map[string]string)
+	defer c.CleanUp()
 
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
 	// descendant modules from the root module and create a unified
@@ -81,7 +82,6 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 			} else {
 				// temp dir to download the remote repo
 				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
-				defer os.RemoveAll(tempDir)
 
 				// Download remote module
 				pathToModule, err = c.DownloadModule(req.SourceAddr, tempDir)
