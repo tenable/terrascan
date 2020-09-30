@@ -10,54 +10,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// list of supported detectors
-var goGetterDetectors = []getter.Detector{
-	new(getter.GitHubDetector),
-	new(getter.GitDetector),
-	new(getter.BitBucketDetector),
-	new(getter.GCSDetector),
-	new(getter.S3Detector),
-	new(getter.FileDetector),
-}
-
-// empty list of detectors
-var goGetterNoDetectors = []getter.Detector{}
-
-// list of supported decompressors
-var goGetterDecompressors = map[string]getter.Decompressor{
-	"bz2": new(getter.Bzip2Decompressor),
-	"gz":  new(getter.GzipDecompressor),
-	"xz":  new(getter.XzDecompressor),
-	"zip": new(getter.ZipDecompressor),
-
-	"tar.bz2":  new(getter.TarBzip2Decompressor),
-	"tar.tbz2": new(getter.TarBzip2Decompressor),
-
-	"tar.gz": new(getter.TarGzipDecompressor),
-	"tgz":    new(getter.TarGzipDecompressor),
-
-	"tar.xz": new(getter.TarXzDecompressor),
-	"txz":    new(getter.TarXzDecompressor),
-}
-
-// list of supported getters
-var goGetterGetters = map[string]getter.Getter{
-	"file":  new(getter.FileGetter),
-	"gcs":   new(getter.GCSGetter),
-	"git":   new(getter.GitGetter),
-	"hg":    new(getter.HgGetter),
-	"s3":    new(getter.S3Getter),
-	"http":  getterHTTPGetter,
-	"https": getterHTTPGetter,
-}
-
-var getterHTTPClient = cleanhttp.DefaultClient()
-
-var getterHTTPGetter = &getter.HttpGetter{
-	Client: getterHTTPClient,
-	Netrc:  true,
-}
-
 // NewDownloader returns a new downloader
 func NewDownloader() *Downloader {
 	return &Downloader{}
@@ -71,6 +23,7 @@ var (
 )
 
 // GetURLWithType returns the download URL with it's respective type prefix
+// along with subDir path, if present.
 func GetURLWithType(remoteURL, destPath string) (string, string, error) {
 
 	// get subDir, if present
@@ -188,34 +141,15 @@ func SubDirGlob(destPath, subDir string) (string, error) {
 	return getter.SubdirGlob(destPath, subDir)
 }
 
-// SplitAddrSubdir splits the given address (which is assumed to be a
-// registry address or go-getter-style address) into a package portion
+// SplitAddrSubdir splits the given address into a package portion
 // and a sub-directory portion.
 //
-// The package portion defines what should be downloaded and then the
+// The package portion defines the URL what should be downloaded and then the
 // sub-directory portion, if present, specifies a sub-directory within
-// the downloaded object (an archive, VCS repository, etc) that contains
-// the module's configuration files.
+// the downloaded object .
 //
 // The subDir portion will be returned as empty if no subdir separator
 // ("//") is present in the address.
 func SplitAddrSubdir(addr string) (repoURL, subDir string) {
 	return getter.SourceDirSubdir(addr)
-}
-
-var localSourcePrefixes = []string{
-	"./",
-	"../",
-	".\\",
-	"..\\",
-}
-
-// IsLocalPath returns true if the given "addr" is a local file path
-func IsLocalPath(addr string) bool {
-	for _, prefix := range localSourcePrefixes {
-		if strings.HasPrefix(addr, prefix) {
-			return true
-		}
-	}
-	return false
 }
