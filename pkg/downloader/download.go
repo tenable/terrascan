@@ -3,9 +3,7 @@ package downloader
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 
-	cleanhttp "github.com/hashicorp/go-cleanhttp"
 	getter "github.com/hashicorp/go-getter"
 	"go.uber.org/zap"
 )

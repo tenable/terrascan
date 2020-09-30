@@ -16,6 +16,11 @@
 
 package downloader
 
+import (
+	cleanhttp "github.com/hashicorp/go-cleanhttp"
+	getter "github.com/hashicorp/go-getter"
+)
+
 // Downloader helps in downloading different kinds of modules from
 // different types of sources
 type Downloader struct{}

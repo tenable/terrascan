@@ -18,7 +18,6 @@ package cli
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"path/filepath"
 
