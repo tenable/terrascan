@@ -18,6 +18,7 @@ package iacprovider
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
