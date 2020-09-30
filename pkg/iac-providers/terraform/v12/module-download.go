@@ -41,6 +41,23 @@ func isLocalSourceAddr(addr string) bool {
 	return false
 }
 
+// RemoteModuleInstaller helps in downloading remote modules, it also maintains a
+// cache of all the installed modules and their respective resolved addresses
+// (URL)
+type RemoteModuleInstaller struct {
+	cache      InstalledCache
+	downloader downloader.Downloader
+}
+
+// NewRemoteModuleInstaller returns a RemoteModuleInstaller initialized with a
+// new cache and downloader
+func NewRemoteModuleInstaller() *RemoteModuleInstaller {
+	return &RemoteModuleInstaller{
+		cache:      make(map[string]string),
+		downloader: downloader.NewDownloader(),
+	}
+}
+
 // InstalledCache remembers the final resolved addresses of all the sources
 // already downloaded.
 //
@@ -52,28 +69,27 @@ type InstalledCache map[string]string
 // DownloadModule retrieves the package referenced in the given address
 // into the installation path and then returns the full path to any subdir
 // indicated in the address.
-func (g InstalledCache) DownloadModule(addr, destPath string) (string, error) {
+func (r *RemoteModuleInstaller) DownloadModule(addr, destPath string) (string, error) {
 
-	// get url with type
-	URLWithType, subDir, err := downloader.GetURLWithType(addr, destPath)
+	// split url and subdir
+	URLWithType, subDir, err := r.downloader.GetURLSubDir(addr, destPath)
 	if err != nil {
 		return "", err
 	}
 
 	// check if the module has already been downloaded
-	if prevDir, exists := g[URLWithType]; exists {
+	if prevDir, exists := r.cache[URLWithType]; exists {
 		zap.S().Debugf("module %q already installed at %q", URLWithType, prevDir)
 		destPath = prevDir
 	} else {
-		d := downloader.NewDownloader()
-		destPath, err := d.Download(URLWithType, destPath)
+		destPath, err := r.downloader.Download(URLWithType, destPath)
 		if err != nil {
 			zap.S().Debugf("failed to download remote module. error: '%v'", err)
 			return "", err
 		}
 		// Remember where we installed this so we might reuse this directory
 		// on subsequent calls to avoid re-downloading.
-		g[URLWithType] = destPath
+		r.cache[URLWithType] = destPath
 	}
 
 	// Our subDir string can contain wildcards until this point, so that
@@ -82,7 +98,7 @@ func (g InstalledCache) DownloadModule(addr, destPath string) (string, error) {
 	// resolve that into a concrete path.
 	var finalDir string
 	if subDir != "" {
-		finalDir, err = downloader.SubDirGlob(destPath, subDir)
+		finalDir, err = r.downloader.SubDirGlob(destPath, subDir)
 		if err != nil {
 			return "", err
 		}
@@ -97,8 +113,8 @@ func (g InstalledCache) DownloadModule(addr, destPath string) (string, error) {
 }
 
 // CleanUp cleans up all the locally downloaded modules
-func (g InstalledCache) CleanUp() {
-	for url, path := range g {
+func (r *RemoteModuleInstaller) CleanUp() {
+	for url, path := range r.cache {
 		zap.S().Debugf("deleting %q installed at %q", url, path)
 		os.RemoveAll(path)
 	}
