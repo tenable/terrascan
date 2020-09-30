@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package downloader
 
 import (
@@ -8,11 +24,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// NewDownloader returns a new downloader
-func NewDownloader() *Downloader {
-	return &Downloader{}
-}
-
 // list of errors
 var (
 	ErrEmptyURLType     = fmt.Errorf("empty remote url and type")
@@ -20,9 +31,14 @@ var (
 	ErrEmptyURLTypeDest = fmt.Errorf("empty remote url or type or desitnation dir path")
 )
 
-// GetURLWithType returns the download URL with it's respective type prefix
+// NewGoGetter returns a new GoGetter struct
+func NewGoGetter() *GoGetter {
+	return &GoGetter{}
+}
+
+// GetURLSubDir returns the download URL with it's respective type prefix
 // along with subDir path, if present.
-func GetURLWithType(remoteURL, destPath string) (string, string, error) {
+func (g *GoGetter) GetURLSubDir(remoteURL, destPath string) (string, string, error) {
 
 	// get subDir, if present
 	repoURL, subDir := SplitAddrSubdir(remoteURL)
@@ -53,7 +69,7 @@ func GetURLWithType(remoteURL, destPath string) (string, string, error) {
 // Download retrieves the remote repository referenced in the given remoteURL
 // into the destination path and then returns the full path to any subdir
 // indicated in the URL
-func (d Downloader) Download(remoteURL, destPath string) (string, error) {
+func (g *GoGetter) Download(remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote url: %q, destination dir: %q",
 		remoteURL, destPath)
@@ -65,7 +81,7 @@ func (d Downloader) Download(remoteURL, destPath string) (string, error) {
 	}
 
 	// get repository url, subdir from given remote url
-	URLWithType, subDir, err := GetURLWithType(remoteURL, destPath)
+	URLWithType, subDir, err := g.GetURLSubDir(remoteURL, destPath)
 	if err != nil {
 		return "", err
 	}
@@ -111,7 +127,7 @@ func (d Downloader) Download(remoteURL, destPath string) (string, error) {
 //
 // DownloadWithType enforces download type on go-getter to get rid of any
 // ambiguities in remoteURL
-func (d Downloader) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
+func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote type: %q, remote URL: %q, destination dir: %q",
 		remoteType, remoteURL, destPath)
@@ -131,11 +147,11 @@ func (d Downloader) DownloadWithType(remoteType, remoteURL, destPath string) (st
 	URLWithType := fmt.Sprintf("%s::%s", remoteType, remoteURL)
 
 	// Download
-	return d.Download(URLWithType, destPath)
+	return g.Download(URLWithType, destPath)
 }
 
 // SubDirGlob returns the actual subdir with globbing processed
-func SubDirGlob(destPath, subDir string) (string, error) {
+func (g *GoGetter) SubDirGlob(destPath, subDir string) (string, error) {
 	return getter.SubdirGlob(destPath, subDir)
 }
 

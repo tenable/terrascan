@@ -21,9 +21,8 @@ import (
 	getter "github.com/hashicorp/go-getter"
 )
 
-// Downloader helps in downloading different kinds of modules from
-// different types of sources
-type Downloader struct{}
+// GoGetter implements the Downloader interface
+type GoGetter struct{}
 
 // list of supported detectors
 var goGetterDetectors = []getter.Detector{
