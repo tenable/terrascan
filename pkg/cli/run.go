@@ -35,6 +35,7 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 
 	// download remote repository
 	var tempDir string
+
 	// temp dir to download the remote repo
 	tempDir = filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
@@ -78,45 +79,4 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 		os.RemoveAll(tempDir)
 		os.Exit(3)
 	}
-}
-
-// validateRemoteOpts validate remote repository options
-func validateRemoteOpts(remoteType, remoteURL string) (bool, error) {
-
-	// 1. remoteType and remoteURL both are empty
-	if remoteType == "" && remoteURL == "" {
-		return false, nil
-	}
-
-	// 2. remoteType and remoteURL both are not empty
-	if remoteType != "" && remoteURL != "" {
-		zap.S().Debugf("remoteType: %q, remoteURL: %q", remoteType, remoteURL)
-		return true, nil
-	}
-
-	// 3. remoteType is empty and remoteURL is not
-	if remoteType != "" || remoteURL != "" {
-		zap.S().Errorf("remote type and remote url both options should be specified")
-		return false, fmt.Errorf("incorrect remote options")
-	}
-
-	return false, nil
-}
-
-// downloadRemoteRepo downloads the remote repo in the temp directory and
-// returns the path of the dir where the remote repository has been downloaded
-func downloadRemoteRepo(remoteType, remoteURL, destDir string) (string, error) {
-
-	// new downloader
-	d := downloader.NewDownloader()
-	url := fmt.Sprintf("%s::%s", remoteType, remoteURL)
-	path, err := d.Download(url, destDir)
-	if err != nil {
-		zap.S().Errorf("failed to download remote repo url: %q, type: %q. error: '%v'",
-			remoteURL, remoteType, err)
-		return "", err
-	}
-
-	// successful
-	return path, nil
 }
