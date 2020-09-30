@@ -18,6 +18,8 @@ package tfv12
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 	"reflect"
 	"testing"
 
@@ -235,4 +237,30 @@ func TestDownloadModule(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCleanUp(t *testing.T) {
+
+	t.Run("test cache clean up", func(t *testing.T) {
+
+		// create temp dir
+		tempDir, err := ioutil.TempDir("", "")
+		if err != nil {
+			t.Errorf("failed to create temp dir. error: '%v'", err)
+		}
+
+		// store temp dir into the installer cache
+		r := &RemoteModuleInstaller{
+			cache: map[string]string{"some-module": tempDir},
+		}
+
+		// run clean up, expect clean up to delete the temp dir
+		r.CleanUp()
+
+		// check if temp dir is deleted
+		_, err = os.Stat(tempDir)
+		if err == nil {
+			t.Errorf("clean up failed")
+		}
+	})
 }
