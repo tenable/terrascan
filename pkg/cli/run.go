@@ -32,11 +32,8 @@ import (
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 	policyPath, format, remoteType, remoteURL string, configOnly, useColors bool) {
 
-	// download remote repository
-	var tempDir string
-
 	// temp dir to download the remote repo
-	tempDir = filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository

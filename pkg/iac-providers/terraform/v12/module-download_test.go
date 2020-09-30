@@ -56,7 +56,7 @@ func (m *MockDownloader) SubDirGlob(destDir, subDir string) (string, error) {
 }
 
 // ---------------------- unit tests -------------------------------- //
-func TestisLocalSourceAddr(t *testing.T) {
+func TestIsLocalSourceAddr(t *testing.T) {
 
 	table := []struct {
 		name string
