@@ -35,6 +35,7 @@ type scanRemoteRepoReq struct {
 	RemoteType string `json:"remote_type"`
 	RemoteURL  string `json:"remote_url"`
 	ConfigOnly bool   `json:"config_only"`
+	d          downloader.Downloader
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -59,54 +60,16 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 	}
 	zap.S().Debugf("scanning remote repository request: %+v", s)
 
-	// temp destination directory to download remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
-	defer os.RemoveAll(tempDir)
-
-	// download remote repository
-	d := downloader.NewDownloader()
-	iacDirPath, err := d.DownloadWithType(s.RemoteType, s.RemoteURL, tempDir)
+	// scan remote repo
+	s.d = downloader.NewDownloader()
+	results, err := s.ScanRemoteRepo(iacType, iacVersion, cloudType)
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to download remote repo. error: '%v'", err)
-		zap.S().Error(errMsg)
-		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
-		return
-	}
-
-	// create a new runtime executor for scanning the remote repo
-	var executor *runtime.Executor
-	if g.test {
-		// executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-		//	tempFile.Name(), "", "", "./testdata/testpolicies")
-	} else {
-		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			"", iacDirPath, "", "")
-	}
-	if err != nil {
-		zap.S().Error(err)
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// evaluate policies IaC for violations
-	results, err := executor.Execute()
-	if err != nil {
-		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
-		zap.S().Error(errMsg)
-		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
-		return
-	}
-
-	// if config only, return only config else return only violations
-	var output interface{}
-	if s.ConfigOnly {
-		output = results.ResourceConfig
-	} else {
-		output = results.Violations
-	}
-
 	// convert results into JSON
-	j, err := json.MarshalIndent(output, "", "  ")
+	j, err := json.MarshalIndent(results, "", "  ")
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to create JSON. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -116,4 +79,53 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 	// return with results
 	apiResponse(w, string(j), http.StatusOK)
+}
+
+// ScanRemoteRepo is the actual method where a remote repo is downloaded and
+// scanned for violations
+func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion, cloudType string) (interface{}, error) {
+
+	// return params
+	var (
+		output interface{}
+		err    error
+	)
+
+	// temp destination directory to download remote repo
+	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	defer os.RemoveAll(tempDir)
+
+	// download remote repository
+	iacDirPath, err := s.d.DownloadWithType(s.RemoteType, s.RemoteURL, tempDir)
+	if err != nil {
+		errMsg := fmt.Sprintf("failed to download remote repo. error: '%v'", err)
+		zap.S().Error(errMsg)
+		return output, err
+	}
+
+	// create a new runtime executor for scanning the remote repo
+	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
+		"", iacDirPath, "", "")
+	if err != nil {
+		zap.S().Error(err)
+		return output, err
+	}
+
+	// evaluate policies IaC for violations
+	results, err := executor.Execute()
+	if err != nil {
+		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
+		zap.S().Error(errMsg)
+		return output, err
+	}
+
+	// if config only, return only config else return only violations
+	if s.ConfigOnly {
+		output = results.ResourceConfig
+	} else {
+		output = results.Violations
+	}
+
+	// succesful
+	return output, nil
 }
