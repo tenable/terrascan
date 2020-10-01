@@ -62,7 +62,13 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 	// scan remote repo
 	s.d = downloader.NewDownloader()
-	results, err := s.ScanRemoteRepo(iacType, iacVersion, cloudType)
+	var results interface{}
+	if g.test {
+		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, "./testdata/testpolicies")
+
+	} else {
+		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, "")
+	}
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
@@ -83,7 +89,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 // ScanRemoteRepo is the actual method where a remote repo is downloaded and
 // scanned for violations
-func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion, cloudType string) (interface{}, error) {
+func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion, cloudType, policyPath string) (interface{}, error) {
 
 	// return params
 	var (
@@ -105,7 +111,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion, cloudType string
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, "", "")
+		"", iacDirPath, "", policyPath)
 	if err != nil {
 		zap.S().Error(err)
 		return output, err

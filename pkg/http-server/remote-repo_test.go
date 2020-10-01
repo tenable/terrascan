@@ -69,7 +69,7 @@ func TestScanRemoteRepo(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			gotOutput, gotErr := tt.s.ScanRemoteRepo(tt.iacType, tt.iacVersion, tt.cloudType)
+			gotOutput, gotErr := tt.s.ScanRemoteRepo(tt.iacType, tt.iacVersion, tt.cloudType, "")
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
 			}
