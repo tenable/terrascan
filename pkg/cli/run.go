@@ -41,7 +41,7 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 		return
 	}
 
-    outputWriter := NewOutputWriter(useColors)
+	outputWriter := NewOutputWriter(useColors)
 
 	if configOnly {
 		writer.Write(format, results.ResourceConfig, outputWriter)

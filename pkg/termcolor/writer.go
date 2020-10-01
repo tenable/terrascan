@@ -1,31 +1,31 @@
 package termcolor
 
 import (
-    "io"
-    "fmt"
+	"fmt"
+	"io"
 )
 
 type ColorizedWriter struct {
-    writer io.Writer
+	writer io.Writer
 }
 
 func NewColorizedWriter(w io.Writer) ColorizedWriter {
-    return ColorizedWriter{w}
+	return ColorizedWriter{w}
 }
 
 func (me ColorizedWriter) Write(p []byte) (n int, err error) {
-    /* Before output is written, perform color substitutions */
-    for ptn,style := range GetColorPatterns() {
-        p = ptn.ReplaceAllFunc(p, func(matched []byte) []byte {
-            groups := ptn.FindStringSubmatch(string(matched))
-            return []byte(fmt.Sprintf( "%s%s%s%s%s",
-                    groups[1],
-                    Colorize(style.KeyStyle, string(groups[2])),
-                    groups[3],
-                    Colorize(style.ValueStyle, string(groups[4])),
-                    groups[5]  ))
-        });
-    }
+	/* Before output is written, perform color substitutions */
+	for ptn, style := range GetColorPatterns() {
+		p = ptn.ReplaceAllFunc(p, func(matched []byte) []byte {
+			groups := ptn.FindStringSubmatch(string(matched))
+			return []byte(fmt.Sprintf("%s%s%s%s%s",
+				groups[1],
+				Colorize(style.KeyStyle, string(groups[2])),
+				groups[3],
+				Colorize(style.ValueStyle, string(groups[4])),
+				groups[5]))
+		})
+	}
 
-    return me.writer.Write( p )
+	return me.writer.Write(p)
 }
