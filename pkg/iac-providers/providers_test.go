@@ -18,6 +18,7 @@ package iacprovider
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
@@ -118,6 +119,7 @@ func TestSupportedIacProviders(t *testing.T) {
 		for k := range supportedIacProviders {
 			want = append(want, string(k))
 		}
+		sort.Strings(want)
 		got := SupportedIacProviders()
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: '%v', want: '%v'", got, want)
