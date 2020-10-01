@@ -13,6 +13,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	someURL  = "some-url"
+	someType = "some-type"
+)
+
 func TestScanRemoteRepo(t *testing.T) {
 
 	var (
@@ -34,7 +39,7 @@ func TestScanRemoteRepo(t *testing.T) {
 			name: "remote url empty",
 			s: &scanRemoteRepoReq{
 				RemoteURL:  "",
-				RemoteType: "some-type",
+				RemoteType: someType,
 				d:          d,
 			},
 			wantOutput: noOutput,
@@ -43,7 +48,7 @@ func TestScanRemoteRepo(t *testing.T) {
 		{
 			name: "remote type empty",
 			s: &scanRemoteRepoReq{
-				RemoteURL:  "some-url",
+				RemoteURL:  someURL,
 				RemoteType: "",
 				d:          d,
 			},
@@ -100,7 +105,7 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			iacType:    "terraform",
 			iacVersion: "v12",
 			cloudType:  "aws",
-			remoteURL:  "some-url",
+			remoteURL:  someURL,
 			remoteType: "",
 			wantStatus: http.StatusBadRequest,
 		},
@@ -109,8 +114,8 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			iacType:    "terraform",
 			iacVersion: "v12",
 			cloudType:  "aws",
-			remoteURL:  "some-url",
-			remoteType: "some-type",
+			remoteURL:  someURL,
+			remoteType: someType,
 			wantStatus: http.StatusBadRequest,
 		},
 		{

@@ -22,6 +22,13 @@ import (
 	"testing"
 )
 
+var (
+	someDest   = "some-dest"
+	someType   = "some-type"
+	someSubdir = "some-subdir"
+	someURL    = "some-url"
+)
+
 func TestNewGoGetter(t *testing.T) {
 	t.Run("new GoGetter", func(t *testing.T) {
 		var (
@@ -47,7 +54,7 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "github url no subdir",
 			URL:        "github.com/accurics/terrascan",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "git::https://github.com/accurics/terrascan.git",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -55,31 +62,31 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "github url with subdir",
 			URL:        "github.com/accurics/terrascan//some-subdir",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "git::https://github.com/accurics/terrascan.git",
-			wantSubDir: "some-subdir",
+			wantSubDir: someSubdir,
 			wantErr:    nil,
 		},
 		{
 			name:       "github ssh url",
 			URL:        "git@github.com:accurics/terrascan.git//some-subdir",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "git::ssh://git@github.com/accurics/terrascan.git",
-			wantSubDir: "some-subdir",
+			wantSubDir: someSubdir,
 			wantErr:    nil,
 		},
 		{
 			name:       "github basic auth",
 			URL:        "git::ssh://username@example.com/storage.git//some-subdir",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "git::ssh://username@example.com/storage.git",
-			wantSubDir: "some-subdir",
+			wantSubDir: someSubdir,
 			wantErr:    nil,
 		},
 		{
 			name:       "github ref version",
 			URL:        "git::https://example.com/vpc.git?ref=v1.2.0",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "git::https://example.com/vpc.git?ref=v1.2.0",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -87,7 +94,7 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "http url",
 			URL:        "https://example.com/vpc-module.zip",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "https://example.com/vpc-module.zip",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -95,7 +102,7 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "http url with basic auth",
 			URL:        "https://Aladdin:OpenSesame@www.example.com/index.html",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "https://Aladdin:OpenSesame@www.example.com/index.html",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -103,7 +110,7 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "s3 url",
 			URL:        "s3::https://s3-eu-west-1.amazonaws.com/examplecorp-terraform-modules/vpc.zip",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "s3::https://s3-eu-west-1.amazonaws.com/examplecorp-terraform-modules/vpc.zip",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -111,7 +118,7 @@ func TestGetURLSubDir(t *testing.T) {
 		{
 			name:       "gcs url",
 			URL:        "gcs::https://www.googleapis.com/storage/v1/modules",
-			dest:       "some-dest",
+			dest:       someDest,
 			wantURL:    "gcs::https://www.googleapis.com/storage/v1/modules",
 			wantSubDir: "",
 			wantErr:    nil,
@@ -145,13 +152,13 @@ func TestDownload(t *testing.T) {
 		{
 			name:     "empty URL",
 			URL:      "",
-			dest:     "some-destination",
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
 			name:     "empty destination",
-			URL:      "some-url",
+			URL:      someURL,
 			dest:     "",
 			wantDest: "",
 			wantErr:  ErrEmptyURLDest,
@@ -159,7 +166,7 @@ func TestDownload(t *testing.T) {
 		{
 			name:     "invalid url",
 			URL:      "github.com/some-repo",
-			dest:     "some-dest",
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  fmt.Errorf("GitHub URLs should be github.com/username/repo"),
 		},
@@ -193,39 +200,39 @@ func TestDownloadWithType(t *testing.T) {
 			name:     "empty URL and Type",
 			Type:     "",
 			URL:      "",
-			dest:     "some-destination",
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  ErrEmptyURLType,
 		},
 		{
 			name:     "empty URL",
-			Type:     "some-type",
+			Type:     someType,
 			URL:      "",
-			dest:     "some-destination",
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
 			name:     "empty Type",
 			Type:     "",
-			URL:      "some-url",
-			dest:     "some-destination",
+			URL:      someURL,
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
 			name:     "empty dest",
-			Type:     "some-type",
-			URL:      "some-url",
+			Type:     someType,
+			URL:      someURL,
 			dest:     "",
 			wantDest: "",
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
 			name:     "invalid url",
-			Type:     "some-type",
+			Type:     someType,
 			URL:      "github.com/some-url",
-			dest:     "some-dest",
+			dest:     someDest,
 			wantDest: "",
 			wantErr:  fmt.Errorf("download not supported for scheme 'some-type'"),
 		},

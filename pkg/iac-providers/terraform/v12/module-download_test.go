@@ -26,6 +26,11 @@ import (
 	"github.com/accurics/terrascan/pkg/downloader"
 )
 
+var (
+	someDest = "some-dest"
+	someAddr = "some-address"
+)
+
 // MockDownloader mocks the downloader.Downloader interface
 type MockDownloader struct {
 	output          string
@@ -140,8 +145,8 @@ func TestDownloadModule(t *testing.T) {
 	}{
 		{
 			name:       "GetURLSubDir error",
-			addr:       "some-address",
-			dest:       "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
 			wantOutput: "",
 			wantErr:    wantErr,
 			r: &RemoteModuleInstaller{
@@ -155,8 +160,8 @@ func TestDownloadModule(t *testing.T) {
 		},
 		{
 			name:       "Download error",
-			addr:       "some-address",
-			dest:       "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
 			wantOutput: "",
 			wantErr:    wantErr,
 			r: &RemoteModuleInstaller{
@@ -170,8 +175,8 @@ func TestDownloadModule(t *testing.T) {
 		},
 		{
 			name:       "SubDirGlob error",
-			addr:       "some-address",
-			dest:       "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
 			wantOutput: "",
 			wantErr:    wantErr,
 			r: &RemoteModuleInstaller{
@@ -185,8 +190,8 @@ func TestDownloadModule(t *testing.T) {
 		},
 		{
 			name:       "no error",
-			addr:       "some-address",
-			dest:       "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
 			wantOutput: wantOutput,
 			wantErr:    wantNoErr,
 			r: &RemoteModuleInstaller{
@@ -199,8 +204,8 @@ func TestDownloadModule(t *testing.T) {
 		},
 		{
 			name:       "cache test",
-			addr:       "some-address",
-			dest:       "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
 			wantOutput: wantOutput,
 			wantErr:    wantNoErr,
 			r: &RemoteModuleInstaller{
@@ -213,9 +218,9 @@ func TestDownloadModule(t *testing.T) {
 		},
 		{
 			name:       "no subdir",
-			addr:       "some-address",
-			dest:       "some-destination",
-			wantOutput: "some-destination",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: someDest,
 			wantErr:    wantNoErr,
 			r: &RemoteModuleInstaller{
 				cache: make(map[string]string),
