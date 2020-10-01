@@ -132,10 +132,10 @@ func TestGetURLSubDir(t *testing.T) {
 			t.Errorf("url got: '%v', want: '%v'", gotURL, tt.wantURL)
 		}
 		if !reflect.DeepEqual(gotSubDir, tt.wantSubDir) {
-			t.Errorf("url got: '%v', want: '%v'", gotSubDir, tt.wantSubDir)
+			t.Errorf("subdir got: '%v', want: '%v'", gotSubDir, tt.wantSubDir)
 		}
 		if !reflect.DeepEqual(gotErr, tt.wantErr) {
-			t.Errorf("url got: '%v', want: '%v'", gotErr, tt.wantErr)
+			t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
 		}
 	}
 }
