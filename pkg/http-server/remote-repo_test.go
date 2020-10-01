@@ -123,7 +123,7 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			iacType:    "terraform",
 			iacVersion: "v12",
 			cloudType:  "aws",
-			remoteURL:  "git@bitbucket.org:accurics/aws-poc-demo.git",
+			remoteURL:  "git@github.com:kanchwala-yusuf/Damn-Vulnerable-Terraform-Project.git",
 			remoteType: "git",
 			wantStatus: http.StatusOK,
 		},
