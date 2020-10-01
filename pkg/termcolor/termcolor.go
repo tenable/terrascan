@@ -10,22 +10,22 @@ import (
 var (
 	// ANSI terminal control codes
 
-    // ColorPrefix contains the ANSI control code prefix
+	// ColorPrefix contains the ANSI control code prefix
 	ColorPrefix = "\u001b["
-    // ColorSuffix contains the ANSI control code suffix
+	// ColorSuffix contains the ANSI control code suffix
 	ColorSuffix = "m"
 
-    // Reset contains the ANSI control code to reset the format
+	// Reset contains the ANSI control code to reset the format
 	Reset = ColorPrefix + "0" + ColorSuffix
 
-    // Bold contains the ANSI control code to enable bold text
-	Bold      = "1" // Bold effect applies to text only (not background)
+	// Bold contains the ANSI control code to enable bold text
+	Bold = "1" // Bold effect applies to text only (not background)
 
-    // Underline contains the ANSI control code to enable underlined text
+	// Underline contains the ANSI control code to enable underlined text
 	Underline = "4" // Underline text
 
-    // Reverse contains the ANSI control code to enable reverse text
-	Reverse   = "7" // Use reverse text (swap foreground and background)
+	// Reverse contains the ANSI control code to enable reverse text
+	Reverse = "7" // Use reverse text (swap foreground and background)
 )
 
 // Fg returns ANSI color code for color "hex", applies to foreground
@@ -51,7 +51,7 @@ func RgbToColor256(red, green, blue uint8) uint8 {
 
 	if red == green && red == blue {
 		// Grayscale
-        switch {
+		switch {
 		case red == 255:
 			// Bright white
 			return 15
@@ -64,8 +64,8 @@ func RgbToColor256(red, green, blue uint8) uint8 {
 	}
 
 	return (36*ColorToAnsiIndex(red) +
-			6*ColorToAnsiIndex(green) +
-			ColorToAnsiIndex(blue)) + 16
+		6*ColorToAnsiIndex(green) +
+		ColorToAnsiIndex(blue)) + 16
 }
 
 // ColorToAnsiIndex converts a uint8 color value (0-255) into an ANSI

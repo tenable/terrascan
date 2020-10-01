@@ -10,9 +10,9 @@ import (
 )
 
 var (
-    // ColorPatterns contains the coloring rules
+	// ColorPatterns contains the coloring rules
 	ColorPatterns map[*regexp.Regexp]FieldStyle
-	patternFile  string
+	patternFile   string
 
 	defaultValuePattern = `.*?`
 )
