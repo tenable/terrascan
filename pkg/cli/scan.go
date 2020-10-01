@@ -18,10 +18,12 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -41,6 +43,9 @@ var (
 	IacDirPath string
 	//ConfigOnly will output resource config (should only be used for debugging purposes)
 	ConfigOnly bool
+	// UseColors indicates whether to use color output
+	UseColors bool
+	useColors string // used for flag processing
 )
 
 var scanCmd = &cobra.Command{
@@ -51,6 +56,28 @@ var scanCmd = &cobra.Command{
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
+		switch strings.ToLower(useColors) {
+		case "auto":
+			if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+				UseColors = true
+			} else {
+				UseColors = false
+			}
+
+		case "true":
+			fallthrough
+		case "t":
+			fallthrough
+		case "y":
+			fallthrough
+		case "1":
+			fallthrough
+		case "force":
+			UseColors = true
+
+		default:
+			UseColors = false
+		}
 		initial(cmd, args)
 	},
 	Run: scan,
@@ -58,7 +85,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 
 func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
-	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile, PolicyPath, OutputType, ConfigOnly)
+	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile, PolicyPath, OutputType, ConfigOnly, UseColors)
 }
 
 func init() {
@@ -69,6 +96,8 @@ func init() {
 	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
 	scanCmd.Flags().StringVarP(&PolicyPath, "policy-path", "p", "", "policy path directory")
 	scanCmd.Flags().BoolVarP(&ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
+	// flag passes a string, but we normalize to bool in PreRun
+	scanCmd.Flags().StringVar(&useColors, "use-colors", "auto", "color output (auto, t, f)")
 	scanCmd.MarkFlagRequired("policy-type")
 	RegisterCommand(rootCmd, scanCmd)
 }
