@@ -10,18 +10,23 @@ import (
 )
 
 var (
+    // ColorPatterns contains the coloring rules
 	ColorPatterns map[*regexp.Regexp]FieldStyle
-	pattern_file  string
+	patternFile  string
 
 	defaultValuePattern = `.*?`
 )
 
+// Style contains a style spec for termcolor.Colorize()
 type Style string
 
+// FieldStyle contains the styles for a particular output field
 type FieldStyle struct {
 	KeyStyle   Style
 	ValueStyle Style
 }
+
+// FieldSpec defines a key/value pattern that the color patterns look for.
 type FieldSpec struct {
 	KeyPattern   string
 	ValuePattern string
@@ -47,7 +52,7 @@ type colorPatternSerialized struct {
  * for Colorize()
 **/
 
-var default_color_patterns = map[FieldSpec]FieldStyle{
+var defaultColorPatterns = map[FieldSpec]FieldStyle{
 	{"description", defaultValuePattern}:   {"", "Fg#0c0"},
 	{"severity", defaultValuePattern}:      {"", "?HIGH=Fg#f00?MEDIUM=Fg#c84?LOW=Fg#cc0"},
 	{"resource_name", defaultValuePattern}: {"", "Fg#0ff|Bold"},
@@ -64,10 +69,11 @@ var default_color_patterns = map[FieldSpec]FieldStyle{
 func init() {
 	cf := os.Getenv("TERRASCAN_COLORS_FILE")
 	if len(cf) > 0 {
-		pattern_file = cf
+		patternFile = cf
 	}
 }
 
+// GetColorPatterns loads the map used by the colorizer
 func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 	var patterns map[FieldSpec]FieldStyle
 	var pdata []byte
@@ -76,9 +82,9 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 		return ColorPatterns
 	}
 
-	if len(pattern_file) > 0 {
+	if len(patternFile) > 0 {
 		var err error
-		pdata, err = ioutil.ReadFile(pattern_file)
+		pdata, err = ioutil.ReadFile(patternFile)
 		if err != nil {
 			zap.S().Warnf("Unable to read color patterns: %v", err)
 			zap.S().Warn("Will proceed with defaults")
@@ -91,9 +97,9 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 
 		err := json.Unmarshal(pdata, &pd)
 		if err != nil {
-			zap.S().Warnf("Unable to process color patterns from %s: %v", pattern_file, err)
+			zap.S().Warnf("Unable to process color patterns from %s: %v", patternFile, err)
 			zap.S().Warn("Will proceed with defaults")
-			patterns = default_color_patterns
+			patterns = defaultColorPatterns
 		}
 
 		for _, item := range pd {
@@ -114,7 +120,7 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 			patterns[fsp] = fs
 		}
 	} else {
-		patterns = default_color_patterns
+		patterns = defaultColorPatterns
 	}
 
 	ColorPatterns = make(map[*regexp.Regexp]FieldStyle, len(patterns))

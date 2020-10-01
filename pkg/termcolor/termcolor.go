@@ -9,60 +9,73 @@ import (
 
 var (
 	// ANSI terminal control codes
+
+    // ColorPrefix contains the ANSI control code prefix
 	ColorPrefix = "\u001b["
+    // ColorSuffix contains the ANSI control code suffix
 	ColorSuffix = "m"
 
+    // Reset contains the ANSI control code to reset the format
 	Reset = ColorPrefix + "0" + ColorSuffix
 
+    // Bold contains the ANSI control code to enable bold text
 	Bold      = "1" // Bold effect applies to text only (not background)
+
+    // Underline contains the ANSI control code to enable underlined text
 	Underline = "4" // Underline text
+
+    // Reverse contains the ANSI control code to enable reverse text
 	Reverse   = "7" // Use reverse text (swap foreground and background)
 )
 
-// ANSI color code for color "hex", applies to foreground
+// Fg returns ANSI color code for color "hex", applies to foreground
 func Fg(hex string) string {
 	return "38;5;" + strconv.Itoa(int(HexToColor256(hex)))
 }
 
-// ANSI color code for color "hex", applies to background
+// Bg return ANSI color code for color "hex", applies to background
 func Bg(hex string) string {
 	return "48;5;" + strconv.Itoa(int(HexToColor256(hex)))
 }
 
-// Convert input "hex" into an ANSI color code (xterm-256)
+// HexToColor256 converts input "hex" into an ANSI color code (xterm-256)
 // hex may be a set of 3 or 6 hexadecimal digits for RGB values
 func HexToColor256(hex string) uint8 {
 	return RgbToColor256(HexToRgb(hex))
 }
 
-// Convert the red, green, blue tuple into an ANSI color code (xterm-256)
+// RgbToColor256 converts the red, green, blue tuple into an ANSI color
+// code (xterm-256)
 func RgbToColor256(red, green, blue uint8) uint8 {
 	// red, green, blue range 0-255 on input
 
 	if red == green && red == blue {
 		// Grayscale
-		if red == 255 {
+        switch {
+		case red == 255:
 			// Bright white
 			return 15
-		} else if red == 0 {
+		case red == 0:
 			// Black
 			return 0
 		}
+
 		return 232 + uint8(math.Round(float64(red)/10.65))
-	} else {
-		return (36*ColorToAnsiIndex(red) +
+	}
+
+	return (36*ColorToAnsiIndex(red) +
 			6*ColorToAnsiIndex(green) +
 			ColorToAnsiIndex(blue)) + 16
-	}
 }
 
-// Converts a uint8 color value (0-255) into an ANSI color value (0-5)
+// ColorToAnsiIndex converts a uint8 color value (0-255) into an ANSI
+// color value (0-5)
 func ColorToAnsiIndex(c uint8) uint8 {
 	return uint8(math.Round(float64(c) / 51.0))
 }
 
-// Convert a 3 or 6 digit hexadecimal string, representing RGB values,
-// into separate R,G,B values
+// HexToRgb converts a 3 or 6 digit hexadecimal string, representing RGB
+// values, into separate R,G,B values
 func HexToRgb(hex string) (r, g, b uint8) {
 	switch len(hex) {
 	case 6:
@@ -80,12 +93,13 @@ func HexToRgb(hex string) (r, g, b uint8) {
 	return
 }
 
+// HexToUint8 converts a hexadecimal string to a uint8
 func HexToUint8(hexbyte string) uint8 {
 	val, _ := strconv.ParseUint(hexbyte, 16, 8)
 	return uint8(val)
 }
 
-// Expands a style string into an ANSI control code
+// ExpandStyle expands a style string into an ANSI control code
 func ExpandStyle(style string) string {
 	switch {
 	case strings.HasPrefix(style, "Fg#"):
@@ -106,8 +120,7 @@ func ExpandStyle(style string) string {
 	return style
 }
 
-/*
- * Colorize "message" with "style".
+/* Colorize "message" with "style".
  *
  * Style may contain multiple conditions, delimited by "?".  Such
  * conditional parts are called "clauses".
@@ -135,6 +148,8 @@ func ExpandStyle(style string) string {
  *   ?Y=Fg#0f0|Bold?N=Fg#f00 uses a green foreground if the message
  *       matches "Y", or red if it matches "N"
 **/
+
+// Colorize applies style st to message, returning the colorized string
 func Colorize(st Style, message string) string {
 	var sb strings.Builder
 

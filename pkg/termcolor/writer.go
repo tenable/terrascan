@@ -5,10 +5,12 @@ import (
 	"io"
 )
 
+// ColorizedWriter provides an io.Writer which colorizes output
 type ColorizedWriter struct {
 	writer io.Writer
 }
 
+// NewColorizedWriter returns a new io.Writer which implements coloring
 func NewColorizedWriter(w io.Writer) ColorizedWriter {
 	return ColorizedWriter{w}
 }

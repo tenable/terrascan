@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+// NewOutputWriter gets a new io.Writer based on os.Stdout.
+// If param useColors=true, the writer will colorize the output
 func NewOutputWriter(useColors bool) io.Writer {
 
 	// Color codes will corrupt output, so suppress if not on terminal
