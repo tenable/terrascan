@@ -135,7 +135,7 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 	// validations
 	// remoteURL and repoType cannot be empty
 	if remoteURL == "" && remoteType == "" {
-		zap.S().Error(ErrEmptyURLType)
+		// zap.S().Error(ErrEmptyURLType)
 		return "", ErrEmptyURLType
 	}
 
