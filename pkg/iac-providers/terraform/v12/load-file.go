@@ -61,6 +61,10 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 		// extract file name from path
 		resourceConfig.Source = getFileName(resourceConfig.Source)
 
+		// resolve references
+		r := NewRefResolver(convertVarSliceToMap(hclFile.Variables))
+		resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
+
 		// append to normalized output
 		if _, present := allResourcesConfig[resourceConfig.Type]; !present {
 			allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
@@ -77,4 +81,14 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 func getFileName(path string) string {
 	_, file := filepath.Split(path)
 	return file
+}
+
+// convertVarSliceToMap converts a slice of variables into map[string]*Variable
+// key in the map is the name of the variable
+func convertVarSliceToMap(varSlice []*hclConfigs.Variable) map[string]*hclConfigs.Variable {
+	var variables = make(map[string]*hclConfigs.Variable)
+	for _, v := range varSlice {
+		variables[v.Name] = v
+	}
+	return variables
 }

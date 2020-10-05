@@ -33,10 +33,23 @@ var (
 	varSuffix     = "}"
 )
 
+// RefResolver tries to resolve all the references in the given terraform
+// config
+type RefResolver struct {
+	variables map[string]*hclConfigs.Variable
+}
+
+// NewRefResolver returns a new RefResolver struct
+func NewRefResolver(variables map[string]*hclConfigs.Variable) *RefResolver {
+	return &RefResolver{
+		variables: variables,
+	}
+}
+
 // ResolveRefs figures out all the variable references in the resource config
 // and tries to replace the variable references, if possible,
 // with actual value
-func ResolveRefs(config jsonObj, variables map[string]*hclConfigs.Variable) jsonObj {
+func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 
 	// iterate over every attribute in the config
 	for k, v := range config {
@@ -50,11 +63,11 @@ func ResolveRefs(config jsonObj, variables map[string]*hclConfigs.Variable) json
 			// case 1: config value is a string; in resource config, refs
 			// are of the type string
 			if isVarRef(v.(string)) {
-				config[k] = getVarValue(v.(string), variables)
+				config[k] = r.getVarValue(v.(string))
 			}
 		} else if valType == "tfv12.jsonObj" && valKind == reflect.Map {
 			// case 2: config value is of type jsonObj
-			config[k] = ResolveRefs(v.(jsonObj), variables)
+			config[k] = r.ResolveRefs(v.(jsonObj))
 		} else if valType == "[]tfv12.jsonObj" && valKind == reflect.Slice {
 			// case 3: config value is of type []jsonObj
 
@@ -66,7 +79,7 @@ func ResolveRefs(config jsonObj, variables map[string]*hclConfigs.Variable) json
 
 			// iterate over the []jsonObj to resolve refs
 			for i, c := range sConfig {
-				sConfig[i] = ResolveRefs(c, variables)
+				sConfig[i] = r.ResolveRefs(c)
 			}
 			config[k] = sConfig
 
@@ -79,13 +92,13 @@ func ResolveRefs(config jsonObj, variables map[string]*hclConfigs.Variable) json
 }
 
 // getVarValue returns the variable value as configured in IaC config
-func getVarValue(varRef string, variables map[string]*hclConfigs.Variable) interface{} {
+func (r *RefResolver) getVarValue(varRef string) interface{} {
 
 	// get variable name from varRef
 	varName := getVarName(varRef)
 
 	// check if variable name exists in the map of variables read from IaC
-	hclVar, present := variables[varName]
+	hclVar, present := r.variables[varName]
 	if !present {
 		zap.S().Debugf("variable name: %q, ref: %q not present in config", varName, varRef)
 		return varRef

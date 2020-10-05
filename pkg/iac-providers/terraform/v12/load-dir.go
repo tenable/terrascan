@@ -141,7 +141,8 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 			}
 
 			// resolve references
-			resourceConfig.Config = ResolveRefs(resourceConfig.Config.(jsonObj), current.Module.Variables)
+			r := NewRefResolver(current.Module.Variables)
+			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {

@@ -22,7 +22,7 @@ import (
 )
 
 // list of available cty to golang type converters
-var ctyConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool}
+var ctyConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool, ctyToSlice}
 
 // ctyToStr tries to convert the given cty.Value into golang string type
 func ctyToStr(ctyVal cty.Value) (interface{}, error) {
