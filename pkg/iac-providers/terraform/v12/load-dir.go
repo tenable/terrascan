@@ -140,6 +140,9 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 				return allResourcesConfig, fmt.Errorf("failed to get resource: %s", err)
 			}
 
+			// resolve references
+			resourceConfig.Config = ResolveRefs(resourceConfig.Config.(jsonObj), current.Module.Variables)
+
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
 				allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
