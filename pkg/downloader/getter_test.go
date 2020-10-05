@@ -52,6 +52,14 @@ func TestGetURLSubDir(t *testing.T) {
 		wantErr    error
 	}{
 		{
+			name:       "github url no subdir",
+			URL:        "github.com/accurics/terrascan",
+			dest:       someDest,
+			wantURL:    "git::https://github.com/accurics/terrascan.git",
+			wantSubDir: "",
+			wantErr:    nil,
+		},
+		{
 			name:       "github url with subdir",
 			URL:        "github.com/accurics/terrascan//some-subdir",
 			dest:       someDest,
