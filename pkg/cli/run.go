@@ -19,18 +19,40 @@ package cli
 import (
 	"flag"
 	"os"
+	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
+	"go.uber.org/zap"
 )
 
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
-	policyPath, format string, configOnly bool, useColors bool) {
+	policyPath, format, remoteType, remoteURL string, configOnly, useColors bool) {
+
+	// temp dir to download the remote repo
+	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	defer os.RemoveAll(tempDir)
+
+	// download remote repository
+	d := downloader.NewDownloader()
+	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
+	if err == downloader.ErrEmptyURLType {
+		// url and type empty, proceed with regular scanning
+		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
+	} else if err != nil {
+		// some error while downloading remote repository
+		return
+	} else {
+		// successfully downloaded remote repository
+		iacDirPath = path
+	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType, iacFilePath,
-		iacDirPath, configFile, policyPath)
+	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
+		iacFilePath, iacDirPath, configFile, policyPath)
 	if err != nil {
 		return
 	}
@@ -50,6 +72,7 @@ func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
 	}
 
 	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
+		os.RemoveAll(tempDir)
 		os.Exit(3)
 	}
 }

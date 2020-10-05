@@ -34,7 +34,7 @@ func TestPath(t *testing.T) {
 	}{
 		{
 			name:    "route someroute version v1",
-			route:   "someroute",
+			route:   "/someroute",
 			version: "v1",
 			want:    "/v1/someroute",
 		},
