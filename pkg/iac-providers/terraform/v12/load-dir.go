@@ -37,6 +37,15 @@ var (
 	errBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
+// ModuleConfig contains the *hclConfigs.Config for every module in the
+// unified config tree along with *hclConfig.ModuleCall made by the parent
+// module. The ParentModuleCall helps in resolving references for variables
+// initilaized in the parent ModuleCall
+type ModuleConfig struct {
+	Config           *hclConfigs.Config
+	ParentModuleCall *hclConfigs.ModuleCall
+}
+
 // LoadIacDir starts traversing from the given rootDir and traverses through
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
@@ -113,7 +122,8 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 	*/
 
 	// queue of for BFS, add root module config to it
-	configsQ := []*hclConfigs.Config{unified.Root}
+	root := &ModuleConfig{Config: unified.Root}
+	configsQ := []*ModuleConfig{root}
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
@@ -126,8 +136,11 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 		current := configsQ[0]
 		configsQ = configsQ[1:]
 
+		// reference resolver
+		r := NewRefResolver(current.Config.Module.Variables, current.ParentModuleCall)
+
 		// traverse through all current's resources
-		for _, managedResource := range current.Module.ManagedResources {
+		for _, managedResource := range current.Config.Module.ManagedResources {
 
 			// create output.ResourceConfig from hclConfigs.Resource
 			resourceConfig, err := CreateResourceConfig(managedResource)
@@ -135,14 +148,14 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 				return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 			}
 
+			// resolve references
+			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
+
+			// source file path
 			resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 			if err != nil {
 				return allResourcesConfig, fmt.Errorf("failed to get resource: %s", err)
 			}
-
-			// resolve references
-			r := NewRefResolver(current.Module.Variables)
-			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
@@ -153,8 +166,12 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 		}
 
 		// add all current's children to the queue
-		for _, childModule := range current.Children {
-			configsQ = append(configsQ, childModule)
+		for childName, childModule := range current.Config.Children {
+			childModuleConfig := &ModuleConfig{
+				Config:           childModule,
+				ParentModuleCall: current.Config.Module.ModuleCalls[childName],
+			}
+			configsQ = append(configsQ, childModuleConfig)
 		}
 	}
 

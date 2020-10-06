@@ -46,6 +46,9 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 		return allResourcesConfig, errLoadConfigFile
 	}
 
+	// reference resolver
+	r := NewRefResolver(convertVarSliceToMap(hclFile.Variables), nil)
+
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
@@ -58,12 +61,11 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}
 
+		// resolve references
+		resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
+
 		// extract file name from path
 		resourceConfig.Source = getFileName(resourceConfig.Source)
-
-		// resolve references
-		r := NewRefResolver(convertVarSliceToMap(hclFile.Variables))
-		resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 		// append to normalized output
 		if _, present := allResourcesConfig[resourceConfig.Type]; !present {
