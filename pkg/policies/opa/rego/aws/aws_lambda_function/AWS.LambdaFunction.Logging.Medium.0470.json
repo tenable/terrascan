@@ -6,7 +6,7 @@
     },
     "severity": "LOW",
     "description": "Lambda tracing is not enabled.",
-    "reference_id": "AWS.VPC.Logging.Medium.0470",
+    "reference_id": "AWS.LambdaFunction.Logging.Medium.0470",
     "category": "Logging",
     "version": 2
 }
