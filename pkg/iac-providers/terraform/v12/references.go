@@ -100,9 +100,6 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 				sConfig[i] = r.ResolveRefs(c)
 			}
 			config[k] = sConfig
-
-		} else {
-			zap.S().Debugf("cannot resolve refs for var: '%v', type '%v', kind: '%v',\nvalue: '%v'", k, reflect.TypeOf(v), valKind, v)
 		}
 	}
 
@@ -146,6 +143,7 @@ func (r *RefResolver) getVarValueFromParentModuleCall(varRef string) (interface{
 	if err != nil {
 		return varRef, false
 	}
+	zap.S().Debugf("resolved variable reference from module call; var ref: '%v', value: '%v', type: '%v'", varRef, val, reflect.TypeOf(val))
 
 	// replace the variable reference string with actual value
 	if reflect.TypeOf(val).Kind() == reflect.String {
@@ -189,6 +187,8 @@ func (r *RefResolver) getVarValue(varRef string) (interface{}, bool) {
 	// based on cty.Type, determine golang type
 	for _, converter := range ctyConverterFuncs {
 		if val, err := converter(hclVar.Default); err == nil {
+			zap.S().Debugf("resolved variable reference; var ref: '%v', value: '%v', type: '%v'", varRef, val, reflect.TypeOf(val))
+
 			// replace the variable reference string with actual value
 			if reflect.TypeOf(val).Kind() == reflect.String {
 				valStr := val.(string)
