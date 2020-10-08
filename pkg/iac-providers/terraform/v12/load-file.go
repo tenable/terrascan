@@ -47,7 +47,7 @@ func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 	}
 
 	// reference resolver
-	r := NewRefResolver(convertVarSliceToMap(hclFile.Variables), nil)
+	r := NewRefResolver(convertVarSliceToMap(hclFile.Variables), nil, nil, nil)
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)

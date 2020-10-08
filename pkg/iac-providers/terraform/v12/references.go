@@ -17,6 +17,7 @@
 package tfv12
 
 import (
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"regexp"
@@ -29,25 +30,31 @@ import (
 )
 
 var (
-	// variable reference pattern
-	refPattern    = regexp.MustCompile(`\$\{.*\}`)
-	varRefPattern = regexp.MustCompile(`\$\{var\..*\}`)
-	varPrefix     = "${var."
-	varSuffix     = "}"
+	// reference patterns
+	refPattern       = regexp.MustCompile(`\$\{.*\}`)
+	moduleRefPattern = regexp.MustCompile(`\$\{module\..*}`)
+	varRefPattern    = regexp.MustCompile(`\$\{var\..*\}`)
 )
 
 // RefResolver tries to resolve all the references in the given terraform
 // config
 type RefResolver struct {
-	variables  map[string]*hclConfigs.Variable
-	moduleCall *hclConfigs.ModuleCall
+	variables        map[string]*hclConfigs.Variable
+	parentModuleCall *hclConfigs.ModuleCall
+	parentChildren   map[string]*hclConfigs.Config
+	children         map[string]*hclConfigs.Config
 }
 
 // NewRefResolver returns a new RefResolver struct
-func NewRefResolver(variables map[string]*hclConfigs.Variable, moduleCall *hclConfigs.ModuleCall) *RefResolver {
+func NewRefResolver(variables map[string]*hclConfigs.Variable,
+	parentModuleCall *hclConfigs.ModuleCall,
+	parentChildren map[string]*hclConfigs.Config,
+	children map[string]*hclConfigs.Config) *RefResolver {
 	return &RefResolver{
-		variables:  variables,
-		moduleCall: moduleCall,
+		variables:        variables,
+		parentModuleCall: parentModuleCall,
+		parentChildren:   parentChildren,
+		children:         children,
 	}
 }
 
@@ -56,7 +63,7 @@ func NewRefResolver(variables map[string]*hclConfigs.Variable, moduleCall *hclCo
 // with actual value
 func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 
-	// iterate over every attribute in the config
+	// iterate over every attribute in the config to resolve references
 	for k, v := range config {
 
 		var (
@@ -64,29 +71,15 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 			valType = reflect.TypeOf(v).String()
 		)
 
-		if valKind == reflect.String {
+		switch {
+		case valKind == reflect.String:
 			// case 1: config value is a string; in resource config, refs
 			// are of the type string
-			if isVarRef(v.(string)) {
-
-				// variable values initialized in the parent module call take
-				// precedence over values initialized in the same module,
-				// hence the following steps:
-
-				// 1. resolve variables initialized in parent module call
-				var resolved bool
-				config[k], resolved = r.getVarValueFromParentModuleCall(v.(string))
-				if resolved {
-					continue
-				}
-
-				// 2. resolve variables initialized in same module
-				config[k], _ = r.getVarValue(v.(string))
-			}
-		} else if valType == "tfv12.jsonObj" && valKind == reflect.Map {
+			config[k] = r.ResolveStrRef(v.(string))
+		case valType == "tfv12.jsonObj" && valKind == reflect.Map:
 			// case 2: config value is of type jsonObj
 			config[k] = r.ResolveRefs(v.(jsonObj))
-		} else if valType == "[]tfv12.jsonObj" && valKind == reflect.Slice {
+		case valType == "[]tfv12.jsonObj" && valKind == reflect.Slice:
 			// case 3: config value is of type []jsonObj
 
 			// type assert interface{} -> []jsonObj
@@ -100,72 +93,180 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 				sConfig[i] = r.ResolveRefs(c)
 			}
 			config[k] = sConfig
+		default:
+			zap.S().Debugf("not processing attribute name: '%v', value: '%v' for resolving references", k, v)
 		}
 	}
 
 	return config
 }
 
+// ResolveStrRef tries to resolve a string reference
+func (r *RefResolver) ResolveStrRef(ref string) interface{} {
+
+	switch {
+	case isVarRef(ref):
+		// variable values initialized in the parent module call take
+		// precedence over values initialized in the same module,
+		// hence the following steps:
+
+		// 1. resolve variables initialized in parent module call
+		val := r.getVarValueFromParentModuleCall(ref)
+
+		if reflect.TypeOf(val).Kind() == reflect.String {
+			valStr := val.(string)
+			if isVarRef(valStr) {
+				// 2. resolve variables initialized in same module
+				return r.getVarValue(valStr)
+			} else if isModuleRef(valStr) {
+				return r.ResolveModuleRef(valStr, r.parentChildren)
+			} else if isRef(valStr) {
+				// 3. if varValue is some other ref like a module ref or local ref
+				// then recursive call to resolve it
+				return r.ResolveStrRef(valStr)
+			}
+		}
+		return val
+	case isModuleRef(ref):
+		return r.ResolveModuleRef(ref, r.children)
+	default:
+		return ref
+	}
+}
+
+// isModuleRef return true if the given string is a cross module references
+func isModuleRef(ref string) bool {
+	return moduleRefPattern.MatchString(ref)
+}
+
+// getModuleVarName extracts and returns the module and variable name from the
+// module reference string
+func getModuleVarName(moduleRef string) (string, string) {
+
+	var (
+		modulePrefix = "${module."
+		moduleSuffix = "}"
+	)
+
+	// ex of moduleRef: ${module.name.variable}
+	// 1. split at "${var.", remove everything before
+	split := strings.Split(moduleRef, modulePrefix)
+	mod := split[1]
+
+	// 2. split at "}", remove everything after
+	split = strings.Split(mod, moduleSuffix)
+	mod = split[0]
+
+	// 3. split at "."; eg: "name.variable"
+	split = strings.Split(mod, ".")
+	if len(split) < 2 {
+		return "", ""
+	}
+
+	// return module name and variable name
+	return split[0], split[1]
+}
+
+// ResolveModuleRef tries to resolve cross module references
+func (r *RefResolver) ResolveModuleRef(moduleRef string,
+	children map[string]*hclConfigs.Config) interface{} {
+
+	// get module and variable name
+	moduleName, varName := getModuleVarName(moduleRef)
+
+	// get module config
+	module, ok := children[moduleName]
+	if !ok {
+		fmt.Printf("module: '%v' not present in children\n", moduleName)
+		return moduleRef
+	}
+
+	// check if variable name exists in the map of variables read from the
+	// referenced module
+	hclVar, present := module.Module.Variables[varName]
+	if !present {
+		zap.S().Debugf("variable name: %q, ref: %q not present in config", varName, moduleRef)
+		return moduleRef
+	}
+
+	// return moduleRef if default value is not present, or value is a NilVal,
+	// or if default value is not known
+	if hclVar.Default.IsNull() || hclVar.Default.RawEquals(cty.NilVal) || !hclVar.Default.IsKnown() {
+		return moduleRef
+	}
+
+	// default value is of cty.Value type, convert it to native golang type
+	// based on cty.Type, determine golang type
+	for _, converter := range ctyConverterFuncs {
+		if val, err := converter(hclVar.Default); err == nil {
+			zap.S().Debugf("resolved variable reference; var ref: '%v', value: '%v', type: '%v'", moduleRef, val, reflect.TypeOf(val))
+
+			// replace the variable reference string with actual value
+			if reflect.TypeOf(val).Kind() == reflect.String {
+				valStr := val.(string)
+				resolvedVal := varRefPattern.ReplaceAll([]byte(moduleRef), []byte(valStr))
+				return string(resolvedVal)
+			}
+			return val
+		}
+	}
+	zap.S().Debugf("failed to convert cty.Value '%v' to golang native value", hclVar.Default.GoString())
+
+	return moduleRef
+}
+
 // getVarValueFromParentModuleCall returns the variable value as configured in
 // ModuleCall from parent module
-func (r *RefResolver) getVarValueFromParentModuleCall(varRef string) (interface{}, bool) {
+func (r *RefResolver) getVarValueFromParentModuleCall(varRef string) interface{} {
 
 	// if module call struct is nil, nothing to process
-	if r.moduleCall == nil {
-		return varRef, false
+	if r.parentModuleCall == nil {
+		return varRef
 	}
 
 	// get variable name from varRef
 	varName := getVarName(varRef)
 
 	// get initialized variables from module call
-	moduleCallBody, ok := r.moduleCall.Config.(*hclsyntax.Body)
+	parentModuleCallBody, ok := r.parentModuleCall.Config.(*hclsyntax.Body)
 	if !ok {
-		return varRef, false
+		return varRef
 	}
 
 	// get varName from module call, if present
-	varAttr, present := moduleCallBody.Attributes[varName]
+	varAttr, present := parentModuleCallBody.Attributes[varName]
 	if !present {
-		return varRef, false
+		return varRef
 	}
 
 	// read source file
-	fileBytes, err := ioutil.ReadFile(r.moduleCall.SourceAddrRange.Filename)
+	fileBytes, err := ioutil.ReadFile(r.parentModuleCall.SourceAddrRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", r.moduleCall.SourceAddr, err)
-		return varRef, false
+		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", r.parentModuleCall.SourceAddr, err)
+		return varRef
 	}
 
 	// extract values from attribute expressions as golang interface{}
 	c := converter{bytes: fileBytes}
 	val, err := c.convertExpression(varAttr.Expr)
 	if err != nil {
-		return varRef, false
+		return varRef
 	}
 	zap.S().Debugf("resolved variable reference from module call; var ref: '%v', value: '%v', type: '%v'", varRef, val, reflect.TypeOf(val))
 
 	// replace the variable reference string with actual value
 	if reflect.TypeOf(val).Kind() == reflect.String {
-
 		valStr := val.(string)
-
-		// if resolved value is a reference eg. "${module.somevalue}",
-		// then return varRef
-		if isRef(valStr) {
-			return varRef, false
-		}
-
 		resolvedVal := varRefPattern.ReplaceAll([]byte(varRef), []byte(valStr))
-		return string(resolvedVal), true
+		return string(resolvedVal)
 	}
 
 	// return extracted value
-	return val, true
+	return val
 }
 
 // getVarValue returns the variable value as configured in IaC config in module
-func (r *RefResolver) getVarValue(varRef string) (interface{}, bool) {
+func (r *RefResolver) getVarValue(varRef string) interface{} {
 
 	// get variable name from varRef
 	varName := getVarName(varRef)
@@ -174,13 +275,13 @@ func (r *RefResolver) getVarValue(varRef string) (interface{}, bool) {
 	hclVar, present := r.variables[varName]
 	if !present {
 		zap.S().Debugf("variable name: %q, ref: %q not present in config", varName, varRef)
-		return varRef, false
+		return varRef
 	}
 
 	// return varRef if default value is not present, or value is a NilVal,
 	// or if default value is not known
 	if hclVar.Default.IsNull() || hclVar.Default.RawEquals(cty.NilVal) || !hclVar.Default.IsKnown() {
-		return varRef, false
+		return varRef
 	}
 
 	// default value is of cty.Value type, convert it to native golang type
@@ -193,15 +294,15 @@ func (r *RefResolver) getVarValue(varRef string) (interface{}, bool) {
 			if reflect.TypeOf(val).Kind() == reflect.String {
 				valStr := val.(string)
 				resolvedVal := varRefPattern.ReplaceAll([]byte(varRef), []byte(valStr))
-				return string(resolvedVal), true
+				return string(resolvedVal)
 			}
-			return val, true
+			return val
 		}
 	}
 	zap.S().Debugf("failed to convert cty.Value '%v' to golang native value", hclVar.Default.GoString())
 
 	// return original reference if cty conversion attempts fail
-	return varRef, false
+	return varRef
 }
 
 // isRef returns true if the given string is a variable reference
@@ -217,6 +318,11 @@ func isVarRef(attrVal string) bool {
 // getVarName returns the actual variable name as configured in IaC. It trims
 // of "${var." prefix and "}" suffix and returns the variable name
 func getVarName(varRef string) string {
+
+	var (
+		varPrefix = "${var."
+		varSuffix = "}"
+	)
 
 	// 1. split at "${var.", remove everything before
 	split := strings.Split(varRef, varPrefix)
