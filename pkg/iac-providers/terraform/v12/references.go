@@ -66,25 +66,42 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 	for k, v := range config {
 
 		var (
-			valKind = reflect.TypeOf(v).Kind()
-			valType = reflect.TypeOf(v).String()
+			vKind = reflect.TypeOf(v).Kind()
+			vType = reflect.TypeOf(v).String()
 		)
 
 		switch {
-		case valKind == reflect.String:
+		case vKind == reflect.String:
 
 			// case 1: config value is a string; in resource config, refs
 			// are of the type string
 			config[k] = r.ResolveStrRef(v.(string))
 
-		case valType == "tfv12.jsonObj" && valKind == reflect.Map:
+		case vType == "tfv12.jsonObj" && vKind == reflect.Map:
 
 			// case 2: config value is of type jsonObj
 			config[k] = r.ResolveRefs(v.(jsonObj))
 
-		case valType == "[]tfv12.jsonObj" && valKind == reflect.Slice:
+		case vType == "[]interface {}" && vKind == reflect.Slice:
 
-			// case 3: config value is of type []jsonObj
+			// case 3: config value is a []interface{}
+			sConfig, ok := v.([]interface{})
+			if !ok {
+				continue
+			}
+
+			// if the golang native type is string, then try and resolve
+			// references
+			if len(sConfig) > 0 && reflect.TypeOf(sConfig[0]).Kind() == reflect.String {
+				for i, c := range sConfig {
+					sConfig[i] = r.ResolveStrRef(c.(string))
+				}
+				config[k] = sConfig
+			}
+
+		case vType == "[]tfv12.jsonObj" && vKind == reflect.Slice:
+
+			// case 4: config value is of type []jsonObj
 
 			// type assert interface{} -> []jsonObj
 			sConfig, ok := v.([]jsonObj)
