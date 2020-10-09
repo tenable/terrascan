@@ -39,33 +39,36 @@ func isVarRef(attrVal string) bool {
 
 // getVarName returns the actual variable name as configured in IaC. It trims
 // of "${var." prefix and "}" suffix and returns the variable name
-func getVarName(varRef string) string {
+func getVarName(varRef string) (string, string) {
 
 	var (
 		varPrefix = "${var."
 		varSuffix = "}"
 	)
 
-	// 1. split at "${var.", remove everything before
-	split := strings.Split(varRef, varPrefix)
+	// 1. extract the exact variable reference from the string
+	varExpr := varRefPattern.FindString(varRef)
+
+	// 2. split at "${var.", remove everything before
+	split := strings.Split(varExpr, varPrefix)
 	varName := split[1]
 
-	// 2. split at "}", remove everything after
+	// 3. split at "}", remove everything after
 	split = strings.Split(varName, varSuffix)
 	varName = split[0]
 
 	zap.S().Debugf("extracted variable name %q from reference %q", varName, varRef)
-	return varName
+	return varName, varExpr
 }
 
 // ResolveVarRef returns the variable value as configured in IaC config in module
 func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
 
 	// get variable name from varRef
-	varName := getVarName(varRef)
+	varName, varExpr := getVarName(varRef)
 
 	// check if variable name exists in the map of variables read from IaC
-	hclVar, present := r.variables[varName]
+	hclVar, present := r.Config.Module.Variables[varName]
 	if !present {
 		zap.S().Debugf("variable name: %q, ref: %q not present in variables", varName, varRef)
 		return varRef
@@ -86,8 +89,8 @@ func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
 			// replace the variable reference string with actual value
 			if reflect.TypeOf(val).Kind() == reflect.String {
 				valStr := val.(string)
-				resolvedVal := varRefPattern.ReplaceAll([]byte(varRef), []byte(valStr))
-				return string(resolvedVal)
+				resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
+				return r.ResolveStrRef(resolvedVal)
 			}
 			return val
 		}
@@ -107,30 +110,30 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface
 	zap.S().Debugf("resolving variable ref %q in parent module call", varRef)
 
 	// if module call struct is nil, nothing to process
-	if r.parentModuleCall == nil {
+	if r.ParentModuleCall == nil {
 		return varRef
 	}
 
 	// get variable name from varRef
-	varName := getVarName(varRef)
+	varName, varExpr := getVarName(varRef)
 
 	// get initialized variables from module call
-	parentModuleCallBody, ok := r.parentModuleCall.Config.(*hclsyntax.Body)
+	ParentModuleCallBody, ok := r.ParentModuleCall.Config.(*hclsyntax.Body)
 	if !ok {
 		return varRef
 	}
 
 	// get varName from module call, if present
-	varAttr, present := parentModuleCallBody.Attributes[varName]
+	varAttr, present := ParentModuleCallBody.Attributes[varName]
 	if !present {
 		zap.S().Debugf("variable name: %q, ref: %q not present in parent module call", varName, varRef)
 		return varRef
 	}
 
 	// read source file
-	fileBytes, err := ioutil.ReadFile(r.parentModuleCall.SourceAddrRange.Filename)
+	fileBytes, err := ioutil.ReadFile(r.ParentModuleCall.SourceAddrRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", r.parentModuleCall.SourceAddr, err)
+		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", r.ParentModuleCall.SourceAddr, err)
 		return varRef
 	}
 
@@ -145,9 +148,9 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface
 	// replace the variable reference string with actual value
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
-		resolvedVal := varRefPattern.ReplaceAll([]byte(varRef), []byte(valStr))
+		resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
 		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
-		return string(resolvedVal)
+		return resolvedVal
 	}
 
 	// return extracted value

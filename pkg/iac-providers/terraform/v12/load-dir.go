@@ -137,13 +137,7 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 		configsQ = configsQ[1:]
 
 		// reference resolver
-		var parentChildren map[string]*hclConfigs.Config
-		if current.Config.Parent != nil {
-			parentChildren = current.Config.Parent.Children
-		}
-
-		r := NewRefResolver(current.Config.Module.Variables,
-			current.ParentModuleCall, parentChildren, current.Config.Children)
+		r := NewRefResolver(current.Config, current.ParentModuleCall)
 
 		// traverse through all current's resources
 		for _, managedResource := range current.Config.Module.ManagedResources {

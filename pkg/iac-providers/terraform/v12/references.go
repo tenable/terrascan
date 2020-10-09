@@ -32,22 +32,16 @@ var (
 // RefResolver tries to resolve all the references in the given terraform
 // config
 type RefResolver struct {
-	variables        map[string]*hclConfigs.Variable
-	parentModuleCall *hclConfigs.ModuleCall
-	parentChildren   map[string]*hclConfigs.Config
-	children         map[string]*hclConfigs.Config
+	Config           *hclConfigs.Config
+	ParentModuleCall *hclConfigs.ModuleCall
 }
 
 // NewRefResolver returns a new RefResolver struct
-func NewRefResolver(variables map[string]*hclConfigs.Variable,
-	parentModuleCall *hclConfigs.ModuleCall,
-	parentChildren map[string]*hclConfigs.Config,
-	children map[string]*hclConfigs.Config) *RefResolver {
+func NewRefResolver(config *hclConfigs.Config,
+	parentModuleCall *hclConfigs.ModuleCall) *RefResolver {
 	return &RefResolver{
-		variables:        variables,
-		parentModuleCall: parentModuleCall,
-		parentChildren:   parentChildren,
-		children:         children,
+		Config:           config,
+		ParentModuleCall: parentModuleCall,
 	}
 }
 
@@ -163,7 +157,7 @@ func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 			case isModuleRef(valStr):
 
 				// resolve cross module reference in parent module
-				return r.ResolveModuleRef(valStr, r.parentChildren)
+				return r.ResolveModuleRef(valStr, r.Config.Parent.Children)
 
 			case isRef(valStr):
 
@@ -178,9 +172,15 @@ func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 	case isModuleRef(ref):
 
 		// resolve cross module references
-		return r.ResolveModuleRef(ref, r.children)
+		return r.ResolveModuleRef(ref, r.Config.Children)
+
+	case isLocalRef(ref):
+
+		// resolve local value references
+		return r.ResolveLocalRef(ref)
 
 	default:
+		zap.S().Debugf("not processing string reference: '%v'", ref)
 		return ref
 	}
 }
