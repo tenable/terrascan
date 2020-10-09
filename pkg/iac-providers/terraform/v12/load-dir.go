@@ -141,6 +141,7 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 		if current.Config.Parent != nil {
 			parentChildren = current.Config.Parent.Children
 		}
+
 		r := NewRefResolver(current.Config.Module.Variables,
 			current.ParentModuleCall, parentChildren, current.Config.Children)
 

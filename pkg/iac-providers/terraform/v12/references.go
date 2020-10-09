@@ -32,7 +32,7 @@ var (
 	// reference patterns
 	refPattern       = regexp.MustCompile(`\$\{.*\}`)
 	moduleRefPattern = regexp.MustCompile(`\$\{module\.(.*)\.(.*)}`)
-	varRefPattern    = regexp.MustCompile(`\$\{var\..*\}`)
+	varRefPattern    = regexp.MustCompile(`\$\{var\.\w*\}`)
 )
 
 // RefResolver tries to resolve all the references in the given terraform
@@ -320,7 +320,7 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
 		resolvedVal := varRefPattern.ReplaceAll([]byte(varRef), []byte(valStr))
-		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, resolvedVal)
+		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
 		return string(resolvedVal)
 	}
 
