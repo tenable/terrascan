@@ -21,7 +21,6 @@ import (
 	"regexp"
 
 	hclConfigs "github.com/hashicorp/terraform/configs"
-	"go.uber.org/zap"
 )
 
 var (
@@ -46,8 +45,8 @@ func NewRefResolver(config *hclConfigs.Config,
 }
 
 // isRef returns true if the given string is a variable reference
-func isRef(attrVal string) bool {
-	return refPattern.MatchString(attrVal)
+func isRef(val string) bool {
+	return refPattern.MatchString(val) || isVarRef(val) || isModuleRef(val) || isLocalRef(val) || isLookupRef(val)
 }
 
 // ResolveRefs figures out all the variable references in the resource config
@@ -107,9 +106,6 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 				sConfig[i] = r.ResolveRefs(c)
 			}
 			config[k] = sConfig
-
-		default:
-			zap.S().Debugf("not processing attribute name: '%v', value: '%v' for resolving references", k, v)
 		}
 	}
 
@@ -122,6 +118,21 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 
 	switch {
+	case isModuleRef(ref):
+
+		// resolve cross module references
+		return r.ResolveModuleRef(ref, r.Config.Children)
+
+	case isLocalRef(ref):
+
+		// resolve local value references
+		return r.ResolveLocalRef(ref)
+
+	case isLookupRef(ref):
+
+		// resolve lookup references
+		return r.ResolveLookupRef(ref)
+
 	case isVarRef(ref):
 
 		/*
@@ -169,18 +180,7 @@ func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 		// hopefully, the variable has been resolved here
 		return val
 
-	case isModuleRef(ref):
-
-		// resolve cross module references
-		return r.ResolveModuleRef(ref, r.Config.Children)
-
-	case isLocalRef(ref):
-
-		// resolve local value references
-		return r.ResolveLocalRef(ref)
-
 	default:
-		zap.S().Debugf("not processing string reference: '%v'", ref)
 		return ref
 	}
 }
