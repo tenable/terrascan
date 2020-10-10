@@ -29,7 +29,7 @@ import (
 
 var (
 	// reference patterns
-	varRefPattern = regexp.MustCompile(`\$\{var\.\w*\}`)
+	varRefPattern = regexp.MustCompile(`(\$\{)?var\.(?P<name>\w*)(\})?`)
 )
 
 // isVarRef returns true if the given string is a variable reference
@@ -41,21 +41,18 @@ func isVarRef(attrVal string) bool {
 // of "${var." prefix and "}" suffix and returns the variable name
 func getVarName(varRef string) (string, string) {
 
-	var (
-		varPrefix = "${var."
-		varSuffix = "}"
-	)
-
 	// 1. extract the exact variable reference from the string
 	varExpr := varRefPattern.FindString(varRef)
 
-	// 2. split at "${var.", remove everything before
-	split := strings.Split(varExpr, varPrefix)
-	varName := split[1]
-
-	// 3. split at "}", remove everything after
-	split = strings.Split(varName, varSuffix)
-	varName = split[0]
+	// 2. extract variable name from variable reference
+	match := varRefPattern.FindStringSubmatch(varRef)
+	result := make(map[string]string)
+	for i, name := range varRefPattern.SubexpNames() {
+		if i != 0 && name != "" {
+			result[name] = match[i]
+		}
+	}
+	varName := result["name"]
 
 	zap.S().Debugf("extracted variable name %q from reference %q", varName, varRef)
 	return varName, varExpr
@@ -150,7 +147,7 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface
 		valStr := val.(string)
 		resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
 		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
-		return resolvedVal
+		return r.ResolveStrRef(resolvedVal)
 	}
 
 	// return extracted value
