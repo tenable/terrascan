@@ -87,8 +87,10 @@ func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
 			if reflect.TypeOf(val).Kind() == reflect.String {
 				valStr := val.(string)
 				resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
+				zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, resolvedVal)
 				return r.ResolveStrRef(resolvedVal)
 			}
+			zap.S().Debugf("resolved variable ref: '%v', value: '%v'", varRef, val)
 			return val
 		}
 	}
