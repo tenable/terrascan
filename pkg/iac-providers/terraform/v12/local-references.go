@@ -28,7 +28,7 @@ import (
 
 var (
 	// reference patterns
-	localRefPattern = regexp.MustCompile(`\$\{local\..*\}`)
+	localRefPattern = regexp.MustCompile(`(\$\{)?local\.(?P<name>\w*)(\})?`)
 )
 
 // isLocalRef returns true if the given string is a local value reference
@@ -38,30 +38,30 @@ func isLocalRef(attrVal string) bool {
 
 // getLocalName returns the actual local value name as configured in IaC. It
 // trims of "${local." prefix and "}" suffix and returns the local value name
-func getLocalName(localRef string) string {
+func getLocalName(localRef string) (string, string) {
 
-	var (
-		localPrefix = "${local."
-		localSuffix = "}"
-	)
+	// 1. extract the exact local value reference from the string
+	localExpr := localRefPattern.FindString(localRef)
 
-	// 1. split at "${local.", remove everything before
-	split := strings.Split(localRef, localPrefix)
-	localName := split[1]
+	// 2. extract local value name from local value reference
+	match := localRefPattern.FindStringSubmatch(localRef)
+	result := make(map[string]string)
+	for i, name := range localRefPattern.SubexpNames() {
+		if i != 0 && name != "" {
+			result[name] = match[i]
+		}
+	}
+	localName := result["name"]
 
-	// 2. split at "}", remove everything after
-	split = strings.Split(localName, localSuffix)
-	localName = split[0]
-
-	zap.S().Debugf("extracted local name %q from reference %q", localName, localRef)
-	return localName
+	zap.S().Debugf("extracted local value name %q from reference %q", localName, localRef)
+	return localName, localExpr
 }
 
 // ResolveLocalRef returns the local value as configured in IaC config in module
 func (r *RefResolver) ResolveLocalRef(localRef string) interface{} {
 
 	// get local name from localRef
-	localName := getLocalName(localRef)
+	localName, localExpr := getLocalName(localRef)
 
 	// check if local name exists in the map of locals read from IaC
 	localAttr, present := r.Config.Module.Locals[localName]
@@ -88,9 +88,9 @@ func (r *RefResolver) ResolveLocalRef(localRef string) interface{} {
 	// replace the local value reference string with actual value
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
-		resolvedVal := localRefPattern.ReplaceAll([]byte(localRef), []byte(valStr))
-		zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, string(resolvedVal))
-		return r.ResolveStrRef(string(resolvedVal))
+		resolvedVal := strings.Replace(localRef, localExpr, valStr, 1)
+		zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, resolvedVal)
+		return r.ResolveStrRef(resolvedVal)
 	}
 
 	// return extracted value
