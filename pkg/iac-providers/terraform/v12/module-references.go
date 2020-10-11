@@ -28,7 +28,7 @@ import (
 
 var (
 	// reference patterns
-	moduleRefPattern = regexp.MustCompile(`\$\{module\.(.*)\.(.*)}`)
+	moduleRefPattern = regexp.MustCompile(`(\$\{)?module\.(?P<module>\w*)\.(?P<variable>\w*)(\})?`)
 )
 
 // isModuleRef return true if the given string has a cross module reference
@@ -38,30 +38,24 @@ func isModuleRef(ref string) bool {
 
 // getModuleVarName extracts and returns the module and variable name from the
 // module reference string
-func getModuleVarName(moduleRef string) (string, string) {
+func getModuleVarName(moduleRef string) (string, string, string) {
 
-	var (
-		modulePrefix = "${module."
-		moduleSuffix = "}"
-	)
+	// 1. extract the exact module reference from the string
+	moduleExpr := moduleRefPattern.FindString(moduleRef)
 
-	// ex of moduleRef: ${module.name.variable}
-	// 1. split at "${var.", remove everything before
-	split := strings.Split(moduleRef, modulePrefix)
-	mod := split[1]
-
-	// 2. split at "}", remove everything after
-	split = strings.Split(mod, moduleSuffix)
-	mod = split[0]
-
-	// 3. split at "."; eg: "name.variable"
-	split = strings.Split(mod, ".")
-	if len(split) < 2 {
-		return "", ""
+	// 2. extract variable name from module reference
+	match := moduleRefPattern.FindStringSubmatch(moduleRef)
+	result := make(map[string]string)
+	for i, name := range moduleRefPattern.SubexpNames() {
+		if i != 0 && name != "" {
+			result[name] = match[i]
+		}
 	}
+	moduleName := result["module"]
+	varName := result["variable"]
 
-	// return module name and variable name
-	return split[0], split[1]
+	zap.S().Debugf("extracted module %q variable %q from reference %q", moduleName, varName, moduleRef)
+	return moduleName, varName, moduleExpr
 }
 
 // ResolveModuleRef tries to resolve cross module references
@@ -69,7 +63,7 @@ func (r *RefResolver) ResolveModuleRef(moduleRef string,
 	children map[string]*hclConfigs.Config) interface{} {
 
 	// get module and variable name
-	moduleName, varName := getModuleVarName(moduleRef)
+	moduleName, varName, moduleExpr := getModuleVarName(moduleRef)
 
 	// module and variable names cannot be empty
 	if moduleName == "" || varName == "" {
@@ -106,9 +100,11 @@ func (r *RefResolver) ResolveModuleRef(moduleRef string,
 			// replace the variable reference string with actual value
 			if reflect.TypeOf(val).Kind() == reflect.String {
 				valStr := val.(string)
-				resolvedVal := varRefPattern.ReplaceAll([]byte(moduleRef), []byte(valStr))
-				return string(resolvedVal)
+				resolvedVal := strings.Replace(moduleRef, moduleExpr, valStr, 1)
+				zap.S().Debugf("resolved str module value ref: '%v', value: '%v'", moduleRef, resolvedVal)
+				return r.ResolveStrRef(resolvedVal)
 			}
+			zap.S().Debugf("resolved module value ref: '%v', value: '%v'", moduleRef, val)
 			return val
 		}
 	}
