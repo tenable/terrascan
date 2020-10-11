@@ -19,14 +19,13 @@ package tfv12
 import (
 	"reflect"
 	"regexp"
-	"strings"
 
 	"go.uber.org/zap"
 )
 
 var (
 	// reference patterns
-	lookupRefPattern = regexp.MustCompile(`\$\{lookup(.*\,.*)}`)
+	lookupRefPattern = regexp.MustCompile(`(\$\{)?lookup\((?P<table>\S+)\,\s*?(?P<key>\S+)\)(\})?`)
 )
 
 // isLookupRef returns true if the given string is a lookup value reference
@@ -36,34 +35,31 @@ func isLookupRef(attrVal string) bool {
 
 // getLookupName returns the actual lookup value name as configured in IaC. It
 // trims of "${lookup(." prefix and ")}" suffix and returns the lookup value name
-func getLookupName(lookupRef string) (string, string) {
+func getLookupName(lookupRef string) (string, string, string) {
 
-	var (
-		lookupPrefix = "${lookup("
-		lookupSuffix = ")}"
-	)
+	// 1. extract the exact lookup value reference from the string
+	lookupExpr := lookupRefPattern.FindString(lookupRef)
 
-	// 1. split at "${lookup(.", remove everything before
-	split := strings.Split(lookupRef, lookupPrefix)
-	lookupName := split[1]
+	// 2. extract lookup value name from lookup value reference
+	match := lookupRefPattern.FindStringSubmatch(lookupRef)
+	result := make(map[string]string)
+	for i, name := range lookupRefPattern.SubexpNames() {
+		if i != 0 && name != "" {
+			result[name] = match[i]
+		}
+	}
+	table := result["table"]
+	key := result["key"]
 
-	// 2. split at "}", remove everything after
-	split = strings.Split(lookupName, lookupSuffix)
-	lookupName = split[0]
-
-	// 3. split at ","
-	split = strings.Split(lookupName, ",")
-	varName, varKey := strings.TrimSpace(split[0]), strings.TrimSpace(split[1])
-
-	zap.S().Debugf("extracted lookup table %q key %q from reference %q", varName, varKey, lookupRef)
-	return varName, varKey
+	zap.S().Debugf("extracted lookup table %q key %q from reference %q", table, key, lookupRef)
+	return table, key, lookupExpr
 }
 
 // ResolveLookupRef returns the lookup value as configured in IaC config in module
 func (r *RefResolver) ResolveLookupRef(lookupRef string) interface{} {
 
 	// get lookup name from lookupRef
-	table, key := getLookupName(lookupRef)
+	table, key, _ := getLookupName(lookupRef)
 
 	// resolve key, if it is a reference
 	resolvedKey := r.ResolveStrRef(key)
