@@ -21,16 +21,16 @@ var Global *GlobalConfig = &GlobalConfig{}
 
 // GlobalConfig struct defines global variables/configurations across terrascan
 type GlobalConfig struct {
-	Policy PolicyConfig
+	Policy PolicyConfig `json:"policy"`
 }
 
 // PolicyConfig struct define policy specific configurations
 type PolicyConfig struct {
 	// policy local path
-	BasePath string
-	RepoPath string
+	BasePath string `json:"rego_subdir"`
+	RepoPath string `json:"path"`
 
 	// policy git url and branch
-	RepoURL string
-	Branch  string
+	RepoURL string `json:"repo_url"`
+	Branch  string `json:"branch"`
 }
