@@ -5,8 +5,8 @@
         "prefix": ""
     },
     "severity": "High",
-    "description": "Lambda does not uses KMS CMK key to protect environment variables.",
-    "reference_id": "AWS.LambdaFunction.EncryptionandKeyManagement.High.0471",
+    "description": "Lambda does not use KMS CMK key to protect environment variables.",
+    "reference_id": "AWS.LambdaFunction.EncryptionandKeyManagement.0471",
     "category": "Encryption and Key Management",
     "version": 2
 }
