@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "Medium",
     "description": "Insecure Cross-Origin Resource Sharing Configuration allowing all domains",
-    "reference_id": "AWS.ApiGatewayV2Api.AccessControl.High.0630",
+    "reference_id": "AWS.ApiGatewayV2Api.AccessControl.0630",
     "category": "AccessControl",
     "version": 2
 }

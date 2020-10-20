@@ -6,7 +6,7 @@
     },
     "severity": "Low",
     "description": "Lambda function doesn't not include a VPC configuration.",
-    "reference_id": "AWS.LambdaFunction.Logging.Low.0472",
+    "reference_id": "AWS.LambdaFunction.Logging.0472",
     "category": "Logging",
     "version": 2
 }

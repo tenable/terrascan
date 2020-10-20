@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "Low",
     "description": "AWS API Gateway V2 Stage is missing access logs",
-    "reference_id": "AWS.ApiGatewayV2Stage.Logging.Low.0630",
+    "reference_id": "AWS.ApiGatewayV2Stage.Logging.0630",
     "category": "Logging",
     "version": 2
 }
