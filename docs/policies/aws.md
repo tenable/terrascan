@@ -86,6 +86,12 @@
 | Network Security | SNS | MEDIUM | Ensure SNS Topic is Publicly Accessible For Subscription | AWS.SNS.NS.Medium.1044 |
 
 
+### aws_apigatewayv2_api
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| AccessControl | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.High.0630 |
+
+
 ### aws_efs_file_system
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -149,6 +155,12 @@
 | Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
 
 
+### aws_apigatewayv2_stage
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Logging | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.Low.0630 |
+
+
 ### aws_ecr_repository
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -168,6 +180,7 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Logging | CloudWatch | MEDIUM | App-Tier CloudWatch Log Group Retention Period | AWS.CloudWatch.Logging.Medium.0631 |
+| Encryption and Key Management | CloudWatch | HIGH | AWS CloudWatch log group is not encrypted with a KMS CMK | AWS.CloudWatch.EncryptionandKeyManagement.High.0632 |
 
 
 ### aws_ami_launch_permission
@@ -340,7 +353,9 @@
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | VPC | LOW | Lambda tracing is not enabled. | AWS.VPC.Logging.Medium.0470 |
+| Logging | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.Low.0472 |
+| Logging | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.Low.0470 |
+| Encryption and Key Management | LambdaFunction | High | Lambda does not uses KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.High.0471 |
 
 
 ### aws_kms_key
