@@ -31,7 +31,7 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 	var resp *http.Response
 
 	// new http request
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(data))
 	if err != nil {
 		zap.S().Errorf("failed to create http request; method: '%v', url: '%v'")
 		return resp, errNewRequest
