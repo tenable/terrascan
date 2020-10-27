@@ -1,0 +1,5 @@
+[policy]
+path = "custom-path"
+rego_subdir = "rego-subdir"
+repo_url = "https://repository/url"
+branch = "branch-name"

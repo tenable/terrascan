@@ -17,22 +17,23 @@
 package config
 
 import (
-	"encoding/json"
+    "os"
 	"fmt"
-	"io/ioutil"
 	"log" // we log from init(), so can't rely on zap to be available
-	"os"
+    "github.com/pelletier/go-toml"
 )
 
 const (
 	policyRepoURL    = "https://github.com/accurics/terrascan.git"
 	policyBranch     = "master"
 	configEnvvarName = "TERRASCAN_CONFIG"
+    policyConfigKey  = "policy"
 )
 
 var (
 	policyRepoPath = os.Getenv("HOME") + "/.terrascan"
 	policyBasePath = policyRepoPath + "/pkg/policies/opa/rego"
+    errTomlKeyNotPresent = fmt.Errorf("%s key not present in toml config", policyConfigKey)
 )
 
 func init() {
@@ -76,14 +77,39 @@ func loadGlobalConfig() {
 
 func loadConfigFile(configFile string) (GlobalConfig, error) {
 	p := GlobalConfig{}
-	data, err := ioutil.ReadFile(configFile)
+
+    config, err := LoadConfig(configFile)
 	if err != nil {
-		return p, fmt.Errorf("unable to read config file: %v", err)
+		return p, fmt.Errorf("unable to read config file %s: %v", configFile, err)
 	}
 
-	if err = json.Unmarshal(data, &p); err != nil {
-		return p, fmt.Errorf("unable to unmarshal config file %s: %v", configFile, err)
-	}
+    keyConfig := config.Get(policyConfigKey)
+    if keyConfig == nil {
+        return p, errTomlKeyNotPresent
+    }
+
+    keyTomlConfig := keyConfig.(*toml.Tree)
+
+    // We want to treat missing keys as empty strings
+    str := func(x interface{}) string {
+        if x == nil {
+            return ""
+        }
+        return x.(string)
+    }
+
+    // path = path where repo will be checked out
+    p.Policy.BasePath = str(keyTomlConfig.Get("path"))
+
+    // repo_url = git url to policy repository
+    p.Policy.RepoURL = str(keyTomlConfig.Get("repo_url"))
+
+    // rego_subdir = subdir of <path> where rego files are located
+    p.Policy.RepoPath = str(keyTomlConfig.Get("rego_subdir"))
+
+    // branch = git branch where policies are stored
+    p.Policy.Branch = str(keyTomlConfig.Get("branch"))
+
 	return p, nil
 }
 

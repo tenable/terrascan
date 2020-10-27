@@ -53,5 +53,5 @@ func testConfigEnv(configPath string, t *testing.T) {
 }
 
 func TestConfigFileLoadsCorrectly(t *testing.T) {
-	testConfigEnv("./testdata/terrascan-config.json", t)
+	testConfigEnv("./testdata/terrascan-config.toml", t)
 }
