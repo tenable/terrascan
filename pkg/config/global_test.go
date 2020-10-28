@@ -17,7 +17,6 @@
 package config
 
 import (
-	"os"
 	"testing"
 )
 
@@ -28,12 +27,7 @@ func testConfigEnv(configPath string, t *testing.T) {
 		t.Error(err)
 	}
 
-	// Set the environment variable and make sure the global config is set
-	oldenv := os.Getenv(configEnvvarName)
-	os.Setenv(configEnvvarName, configPath)
-	defer os.Setenv(configEnvvarName, oldenv)
-
-	loadGlobalConfig()
+	LoadGlobalConfig(configPath)
 
 	if Global.Policy.BasePath != config.Policy.BasePath {
 		t.Errorf("BasePath not overridden!  %v != %v", Global.Policy.BasePath, config.Policy.BasePath)

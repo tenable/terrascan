@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
+	"github.com/accurics/terrascan/pkg/config"
 )
 
 func TestNewNotifier(t *testing.T) {
@@ -51,12 +52,12 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "config not present",
 			configFile: "notthere",
-			wantErr:    errNotPresent,
+			wantErr:    config.ErrNotPresent,
 		},
 		{
 			name:       "invalid toml",
 			configFile: "testdata/invalid.toml",
-			wantErr:    errTomlLoadConfig,
+			wantErr:    config.ErrTomlLoadConfig,
 		},
 		{
 			name:       "key not present",

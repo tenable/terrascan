@@ -18,7 +18,6 @@ package cli
 
 import (
 	"github.com/accurics/terrascan/pkg/initialize"
-	"github.com/accurics/terrascan/pkg/logging"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -34,10 +33,6 @@ Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 }
 
 func initial(cmd *cobra.Command, args []string) {
-
-	// initialize logger
-	logging.Init(LogType, LogLevel)
-
 	// initialize terrascan
 	if err := initialize.Run(); err != nil {
 		zap.S().Error("failed to initialize terrascan")

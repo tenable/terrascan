@@ -19,8 +19,8 @@ package config
 import (
     "os"
 	"fmt"
-	"log" // we log from init(), so can't rely on zap to be available
     "github.com/pelletier/go-toml"
+    "go.uber.org/zap"
 )
 
 const (
@@ -37,10 +37,13 @@ var (
 )
 
 func init() {
-	loadGlobalConfig()
+	// If the user specifies a config file in TERRASCAN_CONFIG,
+	// overwrite the defaults with the values from that file.
+	// Retain the defaults for members not specified in the file.
+	LoadGlobalConfig(os.Getenv(configEnvvarName))
 }
 
-func loadGlobalConfig() {
+func LoadGlobalConfig(configFile string) {
 	// Start with the defaults
 	Global.Policy = PolicyConfig{
 		BasePath: policyBasePath,
@@ -49,15 +52,10 @@ func loadGlobalConfig() {
 		Branch:   policyBranch,
 	}
 
-	// If the user specifies a config file in TERRASCAN_CONFIG,
-	// overwrite the defaults with the values from that file.
-	// Retain the defaults for members not specified in the file.
-	configFile := os.Getenv(configEnvvarName)
-
 	if len(configFile) > 0 {
 		p, err := loadConfigFile(configFile)
 		if err != nil {
-			log.Println(err)
+			zap.S().Error(err)
 			return
 		}
 		if len(p.Policy.BasePath) > 0 {
@@ -80,7 +78,7 @@ func loadConfigFile(configFile string) (GlobalConfig, error) {
 
     config, err := LoadConfig(configFile)
 	if err != nil {
-		return p, fmt.Errorf("unable to read config file %s: %v", configFile, err)
+		return p, ErrNotPresent
 	}
 
     keyConfig := config.Get(policyConfigKey)

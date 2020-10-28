@@ -31,9 +31,7 @@ const (
 )
 
 var (
-	errNotPresent           = fmt.Errorf("config file not present")
 	errNotifierNotSupported = fmt.Errorf("notifier not supported")
-	errTomlLoadConfig       = fmt.Errorf("failed to load toml config")
 	errTomlKeyNotPresent    = fmt.Errorf("key not present in toml config")
 )
 

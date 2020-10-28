@@ -27,6 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/config"
 )
 
 var (
@@ -226,7 +227,7 @@ func TestInit(t *testing.T) {
 				iacVersion: "v12",
 				configFile: "./testdata/does-not-exist",
 			},
-			wantErr:         fmt.Errorf("config file not present"),
+			wantErr:         config.ErrNotPresent,
 			wantIacProvider: &tfv12.TfV12{},
 		},
 		{

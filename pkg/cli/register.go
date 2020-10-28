@@ -22,6 +22,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+    "github.com/accurics/terrascan/pkg/config"
+    "github.com/accurics/terrascan/pkg/logging"
 )
 
 // RegisterCommand Registers a new command under the base command
@@ -56,6 +58,14 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "yaml", "output type (json, yaml, xml)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
+
+    // Function to execute before processing commands
+    cobra.OnInitialize(func() {
+        // Set up the logger
+        logging.Init(LogType, LogLevel)
+        // Make sure we load the global config from the specified config file
+        config.LoadGlobalConfig(ConfigFile)
+    })
 
 	// parse the flags but hack around to avoid exiting with error code 2 on help
 	// override usage so that flag.Parse uses root command's usage instead of default one when invoked with -h
