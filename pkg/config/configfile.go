@@ -25,11 +25,14 @@ import (
 )
 
 var (
-    ErrTomlLoadConfig = fmt.Errorf("failed to load toml config")
-    ErrNotPresent     = fmt.Errorf("config file not present")
+	// ErrTomlLoadConfig indicates error: Failed to load toml config
+	ErrTomlLoadConfig = fmt.Errorf("failed to load toml config")
+	// ErrNotPresent indicates error: Config file not present
+	ErrNotPresent = fmt.Errorf("config file not present")
 )
 
-// NewNotifiers returns a list of notifiers configured in the config file
+// LoadConfig loads a configuration from specified path and
+// returns a *toml.Tree with the contents of the config file
 func LoadConfig(configFile string) (*toml.Tree, error) {
 
 	// empty config file path
@@ -41,14 +44,14 @@ func LoadConfig(configFile string) (*toml.Tree, error) {
 	// check if file exists
 	_, err := os.Stat(configFile)
 	if err != nil {
-        zap.S().Errorf("Can't find '%s'", configFile)
+		zap.S().Errorf("Can't find '%s'", configFile)
 		return nil, ErrNotPresent
 	}
 
 	// parse toml config file
 	config, err := toml.LoadFile(configFile)
 	if err != nil {
-        zap.S().Errorf("Error loading '%s': %v", configFile, err)
+		zap.S().Errorf("Error loading '%s': %v", configFile, err)
 		return nil, ErrTomlLoadConfig
 	}
 

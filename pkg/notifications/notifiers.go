@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
 )
@@ -54,10 +54,10 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 
 	var notifiers []Notifier
 
-    config, err := config.LoadConfig(configFile)
-    if err != nil || config == nil{
-        return notifiers, err
-    }
+	config, err := config.LoadConfig(configFile)
+	if err != nil || config == nil {
+		return notifiers, err
+	}
 
 	// get config for 'notifications'
 	keyConfig := config.Get(notificationsConfigKey)

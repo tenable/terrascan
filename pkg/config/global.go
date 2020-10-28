@@ -17,23 +17,23 @@
 package config
 
 import (
-    "os"
 	"fmt"
-    "github.com/pelletier/go-toml"
-    "go.uber.org/zap"
+	"github.com/pelletier/go-toml"
+	"go.uber.org/zap"
+	"os"
 )
 
 const (
 	policyRepoURL    = "https://github.com/accurics/terrascan.git"
 	policyBranch     = "master"
 	configEnvvarName = "TERRASCAN_CONFIG"
-    policyConfigKey  = "policy"
+	policyConfigKey  = "policy"
 )
 
 var (
-	policyRepoPath = os.Getenv("HOME") + "/.terrascan"
-	policyBasePath = policyRepoPath + "/pkg/policies/opa/rego"
-    errTomlKeyNotPresent = fmt.Errorf("%s key not present in toml config", policyConfigKey)
+	policyRepoPath       = os.Getenv("HOME") + "/.terrascan"
+	policyBasePath       = policyRepoPath + "/pkg/policies/opa/rego"
+	errTomlKeyNotPresent = fmt.Errorf("%s key not present in toml config", policyConfigKey)
 )
 
 func init() {
@@ -43,6 +43,9 @@ func init() {
 	LoadGlobalConfig(os.Getenv(configEnvvarName))
 }
 
+// LoadGlobalConfig loads policy configuration from specified configFile
+// into var Global.Policy.  Members of Global.Policy that are not specified
+// in configFile will get default values
 func LoadGlobalConfig(configFile string) {
 	// Start with the defaults
 	Global.Policy = PolicyConfig{
@@ -76,37 +79,37 @@ func LoadGlobalConfig(configFile string) {
 func loadConfigFile(configFile string) (GlobalConfig, error) {
 	p := GlobalConfig{}
 
-    config, err := LoadConfig(configFile)
+	config, err := LoadConfig(configFile)
 	if err != nil {
 		return p, ErrNotPresent
 	}
 
-    keyConfig := config.Get(policyConfigKey)
-    if keyConfig == nil {
-        return p, errTomlKeyNotPresent
-    }
+	keyConfig := config.Get(policyConfigKey)
+	if keyConfig == nil {
+		return p, errTomlKeyNotPresent
+	}
 
-    keyTomlConfig := keyConfig.(*toml.Tree)
+	keyTomlConfig := keyConfig.(*toml.Tree)
 
-    // We want to treat missing keys as empty strings
-    str := func(x interface{}) string {
-        if x == nil {
-            return ""
-        }
-        return x.(string)
-    }
+	// We want to treat missing keys as empty strings
+	str := func(x interface{}) string {
+		if x == nil {
+			return ""
+		}
+		return x.(string)
+	}
 
-    // path = path where repo will be checked out
-    p.Policy.BasePath = str(keyTomlConfig.Get("path"))
+	// path = path where repo will be checked out
+	p.Policy.BasePath = str(keyTomlConfig.Get("path"))
 
-    // repo_url = git url to policy repository
-    p.Policy.RepoURL = str(keyTomlConfig.Get("repo_url"))
+	// repo_url = git url to policy repository
+	p.Policy.RepoURL = str(keyTomlConfig.Get("repo_url"))
 
-    // rego_subdir = subdir of <path> where rego files are located
-    p.Policy.RepoPath = str(keyTomlConfig.Get("rego_subdir"))
+	// rego_subdir = subdir of <path> where rego files are located
+	p.Policy.RepoPath = str(keyTomlConfig.Get("rego_subdir"))
 
-    // branch = git branch where policies are stored
-    p.Policy.Branch = str(keyTomlConfig.Get("branch"))
+	// branch = git branch where policies are stored
+	p.Policy.Branch = str(keyTomlConfig.Get("branch"))
 
 	return p, nil
 }

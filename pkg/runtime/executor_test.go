@@ -21,13 +21,13 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/config"
 )
 
 var (

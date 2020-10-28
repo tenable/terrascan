@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/notifications/webhook"
 )
 
 func TestNewNotifier(t *testing.T) {
