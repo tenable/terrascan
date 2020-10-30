@@ -18,9 +18,9 @@ package notifications
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
@@ -31,9 +31,7 @@ const (
 )
 
 var (
-	errNotPresent           = fmt.Errorf("config file not present")
 	errNotifierNotSupported = fmt.Errorf("notifier not supported")
-	errTomlLoadConfig       = fmt.Errorf("failed to load toml config")
 	errTomlKeyNotPresent    = fmt.Errorf("key not present in toml config")
 )
 
@@ -56,24 +54,9 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 
 	var notifiers []Notifier
 
-	// empty config file path
-	if configFile == "" {
-		zap.S().Debug("no config file specified")
-		return notifiers, nil
-	}
-
-	// check if file exists
-	_, err := os.Stat(configFile)
-	if err != nil {
-		zap.S().Errorf("config file '%s' not present", configFile)
-		return notifiers, errNotPresent
-	}
-
-	// parse toml config file
-	config, err := toml.LoadFile(configFile)
-	if err != nil {
-		zap.S().Errorf("failed to load toml config file '%s'. error: '%v'", err)
-		return notifiers, errTomlLoadConfig
+	config, err := config.LoadConfig(configFile)
+	if err != nil || config == nil {
+		return notifiers, err
 	}
 
 	// get config for 'notifications'

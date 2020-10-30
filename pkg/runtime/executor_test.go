@@ -21,6 +21,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
@@ -226,7 +227,7 @@ func TestInit(t *testing.T) {
 				iacVersion: "v12",
 				configFile: "./testdata/does-not-exist",
 			},
-			wantErr:         fmt.Errorf("config file not present"),
+			wantErr:         config.ErrNotPresent,
 			wantIacProvider: &tfv12.TfV12{},
 		},
 		{

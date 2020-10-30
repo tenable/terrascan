@@ -32,7 +32,7 @@ func Write(format string, data interface{}, writer io.Writer) error {
 
 	writerFunc, present := writerMap[supportedFormat(format)]
 	if !present {
-		zap.S().Error("output format '%s' not supported", format)
+		zap.S().Errorf("output format '%s' not supported", format)
 		return errNotSupported
 	}
 
