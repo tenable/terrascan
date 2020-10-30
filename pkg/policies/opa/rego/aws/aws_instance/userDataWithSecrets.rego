@@ -6,7 +6,7 @@ EC2withSecrets[retVal] {
 	some i
     instance := input.aws_instance[_]
     user_data := instance.config.user_data
-    regex.match(pattern[i],user_data)
+    re_match(pattern[i],user_data)
     retVal := { "Id": instance.id, "ReplaceType": "edit", "CodeType": "block", "Traverse": "", "Attribute": "", "AttributeDataType": "", "Expected": "No AWS Secrets in user data", "Actual": instance.config.user_data }
-  
+
 }

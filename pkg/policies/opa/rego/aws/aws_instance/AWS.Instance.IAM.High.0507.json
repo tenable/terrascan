@@ -1,0 +1,12 @@
+{
+    "name": "userDataWithSecrets",
+    "file": "userDataWithSecrets.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Hardcoded access keys included in instance user data.",
+    "reference_id": "AWS.Instance.IAM.HIGH.0507",
+    "category": "Identity and Access Management",
+    "version": 2
+}
