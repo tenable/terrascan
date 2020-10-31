@@ -75,7 +75,6 @@ func RegisterIndirectCloudProvider(cloudType supportedCloudType, iacTypeDefault 
 	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, true, getPolicyNames)
 }
 
-// IsCloudProviderSupported returns whether a cloud provider is supported in terrascan
 // RegisterCloudProvider registers a cloud provider with terrascan
 func RegisterCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion) {
 	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, false, func() []string { return []string{basePolicyPath + "/" + string(cloudType)} })

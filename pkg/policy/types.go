@@ -18,6 +18,7 @@ type EngineOutput struct {
 	*results.ViolationStore `json:"results" yaml:"results" xml:"results"`
 }
 
+// EngineOutputFromViolationStore returns an EngineOutput intialized from ViolationStore
 func EngineOutputFromViolationStore(store *results.ViolationStore) EngineOutput {
 	return EngineOutput{
 		xml.Name{},
@@ -25,6 +26,7 @@ func EngineOutputFromViolationStore(store *results.ViolationStore) EngineOutput 
 	}
 }
 
+// AsViolationStore returns EngineOutput as a ViolationStore
 func (me EngineOutput) AsViolationStore() results.ViolationStore {
 	if me.ViolationStore == nil {
 		return results.ViolationStore{}

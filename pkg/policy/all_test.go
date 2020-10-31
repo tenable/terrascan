@@ -22,30 +22,28 @@ import (
 	"testing"
 )
 
-func TestSupportedPolicyTypes(t *testing.T) {
-	t.Run("supported policy types", func(t *testing.T) {
-		var want []string
-		for k := range supportedCloudProvider {
-			want = append(want, string(k))
-		}
+func TestPolicyTypeAllExpandedCorrectly(t *testing.T) {
+	t.Run("policy type all gets right policy names", func(t *testing.T) {
+
+		want := SupportedPolicyTypes(false)
+		got := supportedCloudProvider["all"].policyNames()
+
 		sort.Strings(want)
-		got := SupportedPolicyTypes(true)
+		sort.Strings(got)
+
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: '%v', want: '%v'", got, want)
 		}
 	})
-}
 
-func TestSupportedNotIndirectPolicyTypes(t *testing.T) {
-	t.Run("supported policy types", func(t *testing.T) {
-		var want []string
-		for k, v := range supportedCloudProvider {
-			if !v.isIndirect {
-				want = append(want, string(k))
-			}
-		}
+	t.Run("policy type all gets right policy paths", func(t *testing.T) {
+
+		want := GetDefaultPolicyPaths(SupportedPolicyTypes(false))
+		got := GetDefaultPolicyPaths([]string{"all"})
+
 		sort.Strings(want)
-		got := SupportedPolicyTypes(false)
+		sort.Strings(got)
+
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: '%v', want: '%v'", got, want)
 		}
