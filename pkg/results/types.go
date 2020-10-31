@@ -45,3 +45,17 @@ type ViolationStore struct {
 	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations>violation"`
 	Count      ViolationStats `json:"count" yaml:"count" xml:"count"`
 }
+
+// Add adds two ViolationStores
+func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
+	// Just concatenate the slices, since order shouldn't be important
+	vs.Violations = append(vs.Violations, extra.Violations...)
+
+	// Add the counts
+	vs.Count.LowCount += extra.Count.LowCount
+	vs.Count.MediumCount += extra.Count.MediumCount
+	vs.Count.HighCount += extra.Count.HighCount
+	vs.Count.TotalCount += extra.Count.TotalCount
+
+	return vs
+}

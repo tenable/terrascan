@@ -29,8 +29,9 @@ import (
 )
 
 // Run executes terrascan in CLI mode
-func Run(iacType, iacVersion, cloudType, iacFilePath, iacDirPath, configFile,
-	policyPath, format, remoteType, remoteURL string, configOnly, useColors bool) {
+func Run(iacType, iacVersion string, cloudType []string,
+	iacFilePath, iacDirPath, configFile string, policyPath []string,
+	format, remoteType, remoteURL string, configOnly, useColors bool) {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))

@@ -96,7 +96,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				dirPath:      "./testdata/testdir",
 				iacProvider:  MockIacProvider{err: nil},
-				policyEngine: MockPolicyEngine{err: nil},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
 		},
@@ -113,7 +113,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				filePath:     "./testdata/testfile",
 				iacProvider:  MockIacProvider{err: nil},
-				policyEngine: MockPolicyEngine{err: nil},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
 		},
@@ -122,7 +122,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				iacProvider:  MockIacProvider{err: nil},
 				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
-				policyEngine: MockPolicyEngine{err: nil},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
 		},
@@ -131,7 +131,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				iacProvider:  MockIacProvider{err: nil},
 				notifiers:    []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
-				policyEngine: MockPolicyEngine{err: nil},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: errMockNotifier,
 		},
@@ -140,7 +140,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				iacProvider:  MockIacProvider{err: nil},
 				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
-				policyEngine: MockPolicyEngine{err: nil},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
 		},
@@ -149,7 +149,7 @@ func TestExecute(t *testing.T) {
 			executor: Executor{
 				iacProvider:  MockIacProvider{err: nil},
 				notifiers:    []notifications.Notifier{&MockNotifier{err: nil}},
-				policyEngine: MockPolicyEngine{err: errMockPolicyEngine},
+				policyEngine: []policy.Engine{MockPolicyEngine{err: errMockPolicyEngine}},
 			},
 			wantErr: errMockPolicyEngine,
 		},
@@ -179,10 +179,10 @@ func TestInit(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
-				policyPath: "./testdata/testpolicies",
+				policyPath: []string{"./testdata/testpolicies"},
 			},
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
@@ -193,11 +193,11 @@ func TestInit(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 				configFile: "./testdata/webhook.toml",
-				policyPath: "./testdata/testpolicies",
+				policyPath: []string{"./testdata/testpolicies"},
 			},
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
@@ -208,7 +208,7 @@ func TestInit(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 				configFile: "testdata/invalid-notifier.toml",
@@ -222,7 +222,7 @@ func TestInit(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 				configFile: "./testdata/does-not-exist",
@@ -235,11 +235,11 @@ func TestInit(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 				configFile: "./testdata/webhook.toml",
-				policyPath: "./testdata/notthere",
+				policyPath: []string{"./testdata/notthere"},
 			},
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
 			wantIacProvider: &tfv12.TfV12{},

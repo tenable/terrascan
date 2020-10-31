@@ -29,18 +29,18 @@ import (
 type Executor struct {
 	filePath     string
 	dirPath      string
-	policyPath   string
-	cloudType    string
+	policyPath   []string
+	cloudType    []string
 	iacType      string
 	iacVersion   string
 	configFile   string
 	iacProvider  iacProvider.IacProvider
-	policyEngine policy.Engine
+	policyEngine []policy.Engine
 	notifiers    []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion, cloudType, filePath, dirPath, configFile, policyPath string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath []string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -83,10 +83,14 @@ func (e *Executor) Init() error {
 	}
 
 	// create a new policy engine based on IaC type
-	e.policyEngine, err = opa.NewEngine(e.policyPath)
-	if err != nil {
-		zap.S().Errorf("failed to create policy engine. error: '%s'", err)
-		return err
+	zap.S().Debugf("using policy path %v", e.policyPath)
+	for _, policyPath := range e.policyPath {
+		engine, err := opa.NewEngine(policyPath)
+		if err != nil {
+			zap.S().Errorf("failed to create policy engine. error: '%s'", err)
+			return err
+		}
+		e.policyEngine = append(e.policyEngine, engine)
 	}
 
 	zap.S().Debug("initialized executor")
@@ -107,10 +111,17 @@ func (e *Executor) Execute() (results Output, err error) {
 	}
 
 	// evaluate policies
-	results.Violations, err = e.policyEngine.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
-	if err != nil {
-		return results, err
+	results.Violations = policy.EngineOutput{}
+	violations := results.Violations.AsViolationStore()
+	for _, engine := range e.policyEngine {
+		output, err := engine.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+		if err != nil {
+			return results, err
+		}
+		violations = violations.Add(output.AsViolationStore())
 	}
+
+	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 
 	// send notifications, if configured
 	if err = e.SendNotifications(results); err != nil {

@@ -22,6 +22,15 @@ import (
 	"github.com/accurics/terrascan/pkg/config"
 )
 
+// cloudProviderType data type for supported cloud types in terrascan
+type cloudProviderType struct {
+	isIndirect bool
+	// policyPaths only populated if isIndirect == false
+	policyPaths func() []string
+	// policyNames only populated if isIndirect == true
+	policyNames func() []string
+}
+
 // supportedCloudType data type for supported cloud types in terrascan
 type supportedCloudType string
 
@@ -32,7 +41,7 @@ type supportedIacType string
 type supportedIacVersion string
 
 // supportedCloudProvider map of supported cloud provider and its default policy path
-var supportedCloudProvider = make(map[supportedCloudType]string)
+var supportedCloudProvider = make(map[supportedCloudType]cloudProviderType)
 
 // defaultIacType map of default IaC type for a given policy/cloud provider
 var defaultIacType = make(map[supportedCloudType]supportedIacType)
@@ -44,12 +53,32 @@ var (
 	basePolicyPath = config.GetPolicyBasePath()
 )
 
-// RegisterCloudProvider registers a cloud provider with terrascan
-func RegisterCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion) {
-	policyPath := basePolicyPath + "/" + string(cloudType)
-	supportedCloudProvider[cloudType] = policyPath
+func registerActualCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion, isIndirect bool, getPolicyPaths func() []string) {
+	if isIndirect {
+		supportedCloudProvider[cloudType] = cloudProviderType{
+			isIndirect:  true,
+			policyNames: getPolicyPaths,
+		}
+	} else {
+		supportedCloudProvider[cloudType] = cloudProviderType{
+			isIndirect:  false,
+			policyPaths: getPolicyPaths,
+		}
+	}
+
 	defaultIacType[cloudType] = iacTypeDefault
 	defaultIacVersion[cloudType] = iacVersionDefault
+}
+
+// RegisterIndirectCloudProvider registers a cloud provider with terrascan
+func RegisterIndirectCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion, getPolicyNames func() []string) {
+	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, true, getPolicyNames)
+}
+
+// IsCloudProviderSupported returns whether a cloud provider is supported in terrascan
+// RegisterCloudProvider registers a cloud provider with terrascan
+func RegisterCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion) {
+	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, false, func() []string { return []string{basePolicyPath + "/" + string(cloudType)} })
 }
 
 // IsCloudProviderSupported returns whether a cloud provider is supported in terrascan
@@ -58,9 +87,26 @@ func IsCloudProviderSupported(cloudType string) bool {
 	return supported
 }
 
-// GetDefaultPolicyPath returns the path to default policies for a given cloud provider
-func GetDefaultPolicyPath(cloudType string) string {
-	return supportedCloudProvider[supportedCloudType(cloudType)]
+// GetDefaultPolicyPaths returns the paths to default policies for the given cloud providers
+func GetDefaultPolicyPaths(cloudTypes []string) []string {
+	var providers []string
+
+	// Expand any indirect names
+	var names []string
+	for _, x := range cloudTypes {
+		def := supportedCloudProvider[supportedCloudType(x)]
+		if def.isIndirect {
+			names = append(names, def.policyNames()...)
+		} else {
+			names = append(names, x)
+		}
+	}
+
+	for _, x := range names {
+		paths := (supportedCloudProvider[supportedCloudType(x)]).policyPaths()
+		providers = append(providers, paths...)
+	}
+	return providers
 }
 
 // GetDefaultIacType returns the default IaC type for the given cloudType
@@ -74,9 +120,12 @@ func GetDefaultIacVersion(cloudType string) string {
 }
 
 // SupportedPolicyTypes returns the list of policies supported in terrascan
-func SupportedPolicyTypes() []string {
+func SupportedPolicyTypes(includeIndirect bool) []string {
 	var policyTypes []string
-	for k := range supportedCloudProvider {
+	for k, v := range supportedCloudProvider {
+		if !includeIndirect && v.isIndirect {
+			continue
+		}
 		policyTypes = append(policyTypes, string(k))
 	}
 	sort.Strings(policyTypes)
