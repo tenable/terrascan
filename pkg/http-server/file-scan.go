@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
@@ -36,7 +37,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var (
 		iacType    = params["iac"]
 		iacVersion = params["iacVersion"]
-		cloudType  = params["cloud"]
+		cloudType  = strings.Split(params["cloud"], ",")
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -85,10 +86,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", "./testdata/testpolicies")
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"})
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", "")
+			tempFile.Name(), "", "", []string{})
 	}
 	if err != nil {
 		zap.S().Error(err)

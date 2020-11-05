@@ -17,3 +17,22 @@ type EngineOutput struct {
 	XMLName                 xml.Name `json:"-" yaml:"-" xml:"results"`
 	*results.ViolationStore `json:"results" yaml:"results" xml:"results"`
 }
+
+// EngineOutputFromViolationStore returns an EngineOutput intialized from ViolationStore
+func EngineOutputFromViolationStore(store *results.ViolationStore) EngineOutput {
+	return EngineOutput{
+		xml.Name{},
+		store,
+	}
+}
+
+// AsViolationStore returns EngineOutput as a ViolationStore
+func (me EngineOutput) AsViolationStore() results.ViolationStore {
+	if me.ViolationStore == nil {
+		return results.ViolationStore{}
+	}
+	return results.ViolationStore{
+		Violations: me.Violations,
+		Count:      me.Count,
+	}
+}

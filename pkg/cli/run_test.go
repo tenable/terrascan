@@ -25,7 +25,7 @@ func TestRun(t *testing.T) {
 		name        string
 		iacType     string
 		iacVersion  string
-		cloudType   string
+		cloudType   []string
 		iacFilePath string
 		iacDirPath  string
 		configFile  string
@@ -36,23 +36,23 @@ func TestRun(t *testing.T) {
 	}{
 		{
 			name:       "normal terraform run",
-			cloudType:  "terraform",
+			cloudType:  []string{"terraform"},
 			iacDirPath: "testdata/run-test",
 		},
 		{
 			name:       "normal k8s run",
-			cloudType:  "k8s",
+			cloudType:  []string{"k8s"},
 			iacDirPath: "testdata/run-test",
 		},
 		{
 			name:        "config-only flag terraform",
-			cloudType:   "terraform",
+			cloudType:   []string{"terraform"},
 			iacFilePath: "testdata/run-test/config-only.tf",
 			configOnly:  true,
 		},
 		{
 			name:        "config-only flag k8s",
-			cloudType:   "k8s",
+			cloudType:   []string{"k8s"},
 			iacFilePath: "testdata/run-test/config-only.yaml",
 			configOnly:  true,
 		},
@@ -60,7 +60,7 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, "", "", "", "", tt.configOnly, false)
+			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, "", "", "", tt.configOnly, false)
 		})
 	}
 }

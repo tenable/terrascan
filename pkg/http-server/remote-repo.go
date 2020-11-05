@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
@@ -48,7 +49,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 		// url params
 		iacType    = params["iac"]
 		iacVersion = params["iacVersion"]
-		cloudType  = params["cloud"]
+		cloudType  = strings.Split(params["cloud"], ",")
 	)
 
 	// read request body
@@ -64,10 +65,10 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 	s.d = downloader.NewDownloader()
 	var results interface{}
 	if g.test {
-		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, "./testdata/testpolicies")
+		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{"./testdata/testpolicies"})
 
 	} else {
-		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, "")
+		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{})
 	}
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
@@ -89,7 +90,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 
 // ScanRemoteRepo is the actual method where a remote repo is downloaded and
 // scanned for violations
-func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion, cloudType, policyPath string) (interface{}, error) {
+func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType []string, policyPath []string) (interface{}, error) {
 
 	// return params
 	var (

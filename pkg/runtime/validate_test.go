@@ -33,7 +33,7 @@ func TestValidateInputs(t *testing.T) {
 			executor: Executor{
 				filePath:   "./testdata/testfile",
 				dirPath:    "",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 			},
@@ -44,7 +44,7 @@ func TestValidateInputs(t *testing.T) {
 			executor: Executor{
 				filePath:   "",
 				dirPath:    "./testdata/testdir",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
 			},
@@ -77,7 +77,7 @@ func TestValidateInputs(t *testing.T) {
 			executor: Executor{
 				filePath:   "",
 				dirPath:    "./testdata/testdir",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "notthere",
 				iacVersion: "v12",
 			},
@@ -88,7 +88,7 @@ func TestValidateInputs(t *testing.T) {
 			executor: Executor{
 				filePath:   "",
 				dirPath:    "./testdata/testdir",
-				cloudType:  "aws",
+				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "notthere",
 			},

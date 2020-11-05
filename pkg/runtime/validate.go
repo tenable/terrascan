@@ -19,6 +19,7 @@ package runtime
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/policy"
@@ -73,11 +74,13 @@ func (e *Executor) ValidateInputs() error {
 
 	// set default iac type/version if not already set
 	if e.iacType == "" {
-		e.iacType = policy.GetDefaultIacType(e.cloudType)
+		// TODO: handle more than cloudType[0]
+		e.iacType = policy.GetDefaultIacType(e.cloudType[0])
 	}
 
 	if e.iacVersion == "" {
-		e.iacVersion = policy.GetDefaultIacVersion(e.cloudType)
+		// TODO: handle more than cloudType[0]
+		e.iacVersion = policy.GetDefaultIacVersion(e.cloudType[0])
 	}
 
 	// check if IaC type is supported
@@ -88,13 +91,17 @@ func (e *Executor) ValidateInputs() error {
 	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 
 	// check if cloud type is supported
-	if !policy.IsCloudProviderSupported(e.cloudType) {
-		zap.S().Errorf("cloud type '%s' not supported", e.cloudType)
-		return errCloudNotSupported
+	for _, ct := range e.cloudType {
+		if !policy.IsCloudProviderSupported(ct) {
+			zap.S().Errorf("cloud type '%s' not supported", ct)
+			return errCloudNotSupported
+		}
 	}
-	if e.policyPath == "" {
-		e.policyPath = policy.GetDefaultPolicyPath(e.cloudType)
+	zap.S().Debugf("cloud type '%s' is supported", strings.Join(e.cloudType, ","))
+	if len(e.policyPath) == 0 {
+		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
 	}
+	zap.S().Debugf("using policy path %v", e.policyPath)
 
 	// successful
 	zap.S().Debug("input validation successful")
