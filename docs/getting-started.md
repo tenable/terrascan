@@ -83,11 +83,22 @@ Use "terrascan [command] --help" for more information about a command.
 The initialization process downloads the latest policies from the [repository](https://github.com/accurics/terrascan) into `~/.terrascan`. The policies are located at `~/.terrascan/pkg/policies/opa/rego` and are fetched when scanning the IaC. This command is implicitly executed if the `scan` command doesn't found policies while executing.
 
 ### Scanning
-The CLI will default to the `scan` command if no other subcommands are used. For example, the below two commands will scan the current directory containing Terraform HCL2 files for supported cloud provider (AWS, GCP, and Azure) resources:
+The CLI will default to scanning all supported cloud providers on Terraform HCL files if the `scan` command is used with no arguments. For example, the below two commands will scan the current directory containing Terraform HCL2 files for supported cloud providers (AWS, GCP, and Azure) resources:
 
 ``` Bash
-$ terrascan -t all
-$ terrascan scan -t all
+$ terrascan scan
+```
+
+Individual cloud providers can be specified using the -t flag as follows:
+
+``` Bash
+$ terrascan scan -t aws
+```
+
+By default Terrascan defaults to scanning Terraform HCL files, you can change the IaC provider using the -i flag. Here's an example of scanning kubernetes yaml files:
+
+``` Bash
+$ terrascan scan -t k8s -i k8s
 ```
 
 The `scan` command support flags to configure: the directory being scanned, scanning of a specific file, IaC provier type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
