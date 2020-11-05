@@ -129,7 +129,7 @@ for more information on how to use the server endpoints.
 To scan your code for security issues you can run the following
 
 ```sh
-$ terrascan scan -t aws
+$ terrascan scan -t all
 ```
 Terrascan will exit 3 if any issues are found.
 

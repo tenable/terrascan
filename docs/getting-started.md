@@ -83,11 +83,11 @@ Use "terrascan [command] --help" for more information about a command.
 The initialization process downloads the latest policies from the [repository](https://github.com/accurics/terrascan) into `~/.terrascan`. The policies are located at `~/.terrascan/pkg/policies/opa/rego` and are fetched when scanning the IaC. This command is implicitly executed if the `scan` command doesn't found policies while executing.
 
 ### Scanning
-The CLI will default to the `scan` command if no other subcommands are used. For example, the below two commands will scan the current directory containing Terraform HCL2 files for AWS resources:
+The CLI will default to the `scan` command if no other subcommands are used. For example, the below two commands will scan the current directory containing Terraform HCL2 files for supported cloud provider (AWS, GCP, and Azure) resources:
 
 ``` Bash
-$ terrascan -t aws
-$ terrascan scan -t aws
+$ terrascan -t all
+$ terrascan scan -t all
 ```
 
 The `scan` command support flags to configure: the directory being scanned, scanning of a specific file, IaC provier type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
@@ -102,14 +102,17 @@ Usage:
   terrascan scan [flags]
 
 Flags:
-      --config-only          will output resource config (should only be used for debugging purposes)
-  -h, --help                 help for scan
-  -d, --iac-dir string       path to a directory containing one or more IaC files (default ".")
-  -f, --iac-file string      path to a single IaC file
-  -i, --iac-type string      iac type (terraform, k8s)
-      --iac-version string   iac version terraform:(v12) k8s:(v1)
-  -p, --policy-path string   policy path directory
-  -t, --policy-type string   <required> policy type (aws, azure, gcp, k8s, github)
+      --config-only               will output resource config (should only be used for debugging purposes)
+  -h, --help                      help for scan
+  -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
+  -f, --iac-file string           path to a single IaC file
+  -i, --iac-type string           iac type (k8s, terraform)
+      --iac-version string        iac version (k8s: v1, terraform: v12)
+  -p, --policy-path stringArray   policy path directory
+  -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
+  -r, --remote-type string        type of remote backend (git, s3, gcs, http)
+  -u, --remote-url string         url pointing to remote IaC repository
+      --use-colors string         color output (auto, t, f) (default "auto")
 
 Global Flags:
   -c, --config-path string   config file path
