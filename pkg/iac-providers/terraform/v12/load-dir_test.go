@@ -91,6 +91,13 @@ func TestLoadIacDir(t *testing.T) {
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
+		{
+			name:        "nested module directory",
+			tfConfigDir: "./testdata/deep-modules",
+			tfJSONFile:  "./testdata/tfjson/deep-modules.json",
+			tfv12:       TfV12{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {
