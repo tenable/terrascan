@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -84,9 +83,7 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 			if isLocalSourceAddr(req.SourceAddr) {
 				// determine the absolute path from root module to the sub module
 				// using *configs.ModuleRequest.Path field
-				pathArr := strings.Split(req.Path.String(), ".")
-				pathArr = pathArr[:len(pathArr)-1]
-				pathToModule = filepath.Join(absRootDir, filepath.Join(pathArr...), req.SourceAddr)
+				pathToModule = filepath.Join(absRootDir, req.Parent.SourceAddr, req.SourceAddr)
 				zap.S().Debugf("processing local module %q", req.SourceAddr)
 			} else {
 				// temp dir to download the remote repo

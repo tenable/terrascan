@@ -1,0 +1,15 @@
+{
+  "aws_s3_bucket": [
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "source": "modules/m1/main.tf",
+      "line": 20,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "${module.m3.fullbucketname}",
+        "policy": "${module.m2.fullbucketpolicy}"
+      }
+    }
+  ]
+}
