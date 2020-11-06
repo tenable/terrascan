@@ -82,9 +82,15 @@ func (*TfV12) LoadIacDir(absRootDir string) (allResourcesConfig output.AllResour
 			var pathToModule string
 			if isLocalSourceAddr(req.SourceAddr) {
 				// determine the absolute path from root module to the sub module
-				// using *configs.ModuleRequest.Path field
-				pathToModule = filepath.Join(absRootDir, req.Parent.SourceAddr, req.SourceAddr)
-				zap.S().Debugf("processing local module %q", req.SourceAddr)
+				// since we start at the end of the path, we need to assemble
+				// the parts in reverse order
+
+				pathToModule = req.SourceAddr
+				for p := req.Parent; p != nil; p = p.Parent {
+					pathToModule = filepath.Join(p.SourceAddr, pathToModule)
+				}
+				pathToModule = filepath.Join(absRootDir, pathToModule)
+				zap.S().Debugf("processing local module %q", pathToModule)
 			} else {
 				// temp dir to download the remote repo
 				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
