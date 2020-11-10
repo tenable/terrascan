@@ -68,7 +68,7 @@ func TestRegisterIacProvider(t *testing.T) {
 		if _, present := supportedIacProviders[iacType]; !present {
 			t.Errorf("mockIacType not registered")
 		}
-		got, present := supportedIacProviders[iacType][defaultIacVersion]
+		got, present := supportedIacProviders[iacType][iacDefaultVersion]
 		if !present {
 			t.Errorf("defaultIacVersion not registered")
 		}
