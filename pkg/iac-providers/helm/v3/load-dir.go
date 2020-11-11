@@ -71,7 +71,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var chartMap helmChartData
 		iacDocuments, chartMap, err = h.loadChart(chartPath)
 		if err != nil && err != errSkipTestDir {
-			logger.Warn("error occurred while loading chart", zap.Error(err))
+			logger.Error("error occurred while loading chart", zap.Error(err))
 			continue
 		}
 
@@ -96,7 +96,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 			var config *output.ResourceConfig
 			config, err = k.Normalize(doc)
 			if err != nil {
-				zap.S().Warn("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
+				zap.S().Error("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
 				continue
 			}
 
@@ -114,11 +114,11 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]interface{}) (*output.ResourceConfig, error) {
 	var config output.ResourceConfig
 
-	logger := zap.S().With("chart path", chartPath)
+	logger := zap.S().With("helm chart path", chartPath)
 
 	jsonData, err := json.Marshal(chartData)
 	if err != nil {
-		logger.Warn("unable to marshal chart to json")
+		logger.Error("unable to marshal chart to json")
 		return nil, err
 	}
 
@@ -131,7 +131,7 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 
 	chartName, ok := chartData["name"].(string)
 	if !ok {
-		logger.Warn("unable to determine chart name")
+		logger.Error("unable to determine chart name")
 		return nil, err
 	}
 
@@ -147,81 +147,79 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 
 // renderChart renders a helm chart with the given template files and values
 // returns and IaC document for each rendered file
-func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateFileMap map[string][]*string, valueMap map[string]interface{}) ([]*utils.IacDocument, error) {
+func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateDir string, templateFiles []*string, valueMap map[string]interface{}) ([]*utils.IacDocument, error) {
 	iacDocuments := make([]*utils.IacDocument, 0)
 	logger := zap.S().With("helm chart path", chartPath)
 
-	for templateDir, templateFiles := range templateFileMap {
-		if filepath.Base(templateDir) == helmTestDir {
-			logger.Debug("skipping test dir", zap.String("dir", templateDir))
-			return iacDocuments, errSkipTestDir
+	if filepath.Base(templateDir) == helmTestDir {
+		logger.Debug("skipping test dir", zap.String("dir", templateDir))
+		return iacDocuments, errSkipTestDir
+	}
+
+	// create a list containing raw template file data
+	chartFiles := make([]*chart.File, 0)
+	for _, templateFile := range templateFiles {
+		var fileData []byte
+		fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
+		if err != nil {
+			logger.Error("unable to read template file", zap.String("file", *templateFile))
+			return iacDocuments, err
 		}
 
-		// create a list containing raw template file data
-		chartFiles := make([]*chart.File, 0)
-		for _, templateFile := range templateFiles {
-			var fileData []byte
-			fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
-			if err != nil {
-				logger.Error("unable to read template file", zap.String("file", *templateFile))
-				return iacDocuments, err
-			}
-
-			chartFiles = append(chartFiles, &chart.File{
-				Name: filepath.Join(helmTemplateDir, *templateFile),
-				Data: fileData,
-			})
-		}
-
-		// chart name and version are required parameters
-		chartName, ok := chartMap["name"].(string)
-		if !ok {
-			logger.Error("chart name was invalid")
-			return iacDocuments, errBadChartName
-		}
-
-		var chartVersion string
-		chartVersion, ok = chartMap["version"].(string)
-		if !ok {
-			logger.Error("chart version was invalid")
-			return iacDocuments, errBadChartVersion
-		}
-
-		// build the minimum helm chart data input
-		c := &chart.Chart{
-			Metadata:  &chart.Metadata{Name: chartName, Version: chartVersion},
-			Templates: chartFiles,
-		}
-
-		var v chartutil.Values
-		v, err := chartutil.CoalesceValues(c, chartutil.Values{
-			"Values": valueMap,
-			"Release": chartutil.Values{
-				"Name": defaultChartName,
-			},
+		chartFiles = append(chartFiles, &chart.File{
+			Name: filepath.Join(helmTemplateDir, *templateFile),
+			Data: fileData,
 		})
-		if err != nil {
-			logger.Warn("error encountered in CoalesceValues")
-			return iacDocuments, err
-		}
+	}
 
-		// render all files within the chart
-		var renderData map[string]string
-		renderData, err = engine.Render(c, v)
-		if err != nil {
-			logger.Warn("error encountered while rendering chart", zap.String("template dir", templateDir))
-			return iacDocuments, err
-		}
+	// chart name and version are required parameters
+	chartName, ok := chartMap["name"].(string)
+	if !ok {
+		logger.Error("chart name was invalid")
+		return iacDocuments, errBadChartName
+	}
 
-		for renderFile := range renderData {
-			iacDocuments = append(iacDocuments, &utils.IacDocument{
-				Data:      []byte(renderData[renderFile]),
-				Type:      utils.YAMLDoc,
-				StartLine: 1,
-				EndLine:   1,
-				FilePath:  renderFile,
-			})
-		}
+	var chartVersion string
+	chartVersion, ok = chartMap["version"].(string)
+	if !ok {
+		logger.Error("chart version was invalid")
+		return iacDocuments, errBadChartVersion
+	}
+
+	// build the minimum helm chart data input
+	c := &chart.Chart{
+		Metadata:  &chart.Metadata{Name: chartName, Version: chartVersion},
+		Templates: chartFiles,
+	}
+
+	var v chartutil.Values
+	v, err := chartutil.CoalesceValues(c, chartutil.Values{
+		"Values": valueMap,
+		"Release": chartutil.Values{
+			"Name": defaultChartName,
+		},
+	})
+	if err != nil {
+		logger.Warn("error encountered in CoalesceValues")
+		return iacDocuments, err
+	}
+
+	// render all files within the chart
+	var renderData map[string]string
+	renderData, err = engine.Render(c, v)
+	if err != nil {
+		logger.Warn("error encountered while rendering chart", zap.String("template dir", templateDir))
+		return iacDocuments, err
+	}
+
+	for renderFile := range renderData {
+		iacDocuments = append(iacDocuments, &utils.IacDocument{
+			Data:      []byte(renderData[renderFile]),
+			Type:      utils.YAMLDoc,
+			StartLine: 1,
+			EndLine:   1,
+			FilePath:  renderFile,
+		})
 	}
 
 	return iacDocuments, nil
@@ -235,12 +233,12 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 	// load the chart file and values file from the specified chart path
 	chartFileBytes, err := ioutil.ReadFile(chartPath)
 	if err != nil {
-		logger.Warn("unable to read")
+		logger.Error("unable to read")
 		return iacDocuments, chartMap, err
 	}
 
 	if err = yaml.Unmarshal(chartFileBytes, &chartMap); err != nil {
-		logger.Warn("unable to unmarshal values")
+		logger.Error("unable to unmarshal values")
 		return iacDocuments, chartMap, err
 	}
 
@@ -257,13 +255,13 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 	var valueFileBytes []byte
 	valueFileBytes, err = ioutil.ReadFile(valuesFile)
 	if err != nil {
-		logger.Warn("unable to read values.yaml")
+		logger.Error("unable to read values.yaml")
 		return iacDocuments, chartMap, err
 	}
 
 	var valueMap map[string]interface{}
 	if err = yaml.Unmarshal(valueFileBytes, &valueMap); err != nil {
-		logger.Warn("unable to unmarshal values.yaml")
+		logger.Error("unable to unmarshal values.yaml")
 		return iacDocuments, chartMap, err
 	}
 
@@ -275,7 +273,14 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 		return iacDocuments, chartMap, err
 	}
 
-	iacDocuments, err = h.renderChart(chartPath, chartMap, templateFileMap, valueMap)
+	var renderedCharts []*utils.IacDocument
+	for templateDir, templateFiles := range templateFileMap {
+		renderedCharts, err = h.renderChart(chartPath, chartMap, templateDir, templateFiles, valueMap)
+		if err != nil {
+			continue
+		}
+		iacDocuments = append(iacDocuments, renderedCharts...)
+	}
 	return iacDocuments, chartMap, err
 }
 
