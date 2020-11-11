@@ -19,6 +19,8 @@ package helmv3
 // HelmV3 struct implements the IacProvider interface
 type HelmV3 struct{}
 
+type helmChartData map[string]interface{}
+
 const (
 	defaultChartName   = "terrascan"
 	helmChartFilename  = "Chart.yaml"

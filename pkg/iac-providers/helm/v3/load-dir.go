@@ -54,8 +54,8 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	}
 
 	if len(fileMap) == 0 {
-		zap.S().Error("", zap.String("root dir", absRootDir), zap.Error(err))
 		err = errNoHelmChartsFound
+		zap.S().Error("", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
@@ -63,28 +63,32 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	iacDocumentMap := make(map[string][]*utils.IacDocument)
 	for fileDir, chartFilename := range fileMap {
 		chartPath := filepath.Join(fileDir, *chartFilename[0])
-		zap.S().Debug("processing chart", zap.String("chart path", chartPath), zap.Error(err))
+		logger := zap.S().With("chart path", chartPath)
+		logger.Debug("processing chart", zap.Error(err))
 
+		// load helm charts into a map of IaC documents
 		var iacDocuments []*utils.IacDocument
-		var chartMap map[string]interface{}
+		var chartMap helmChartData
 		iacDocuments, chartMap, err = h.loadChart(chartPath)
 		if err != nil && err != errSkipTestDir {
-			zap.S().Warn("error occurred while loading chart", zap.String("chart path", chartPath), zap.Error(err))
+			logger.Warn("error occurred while loading chart", zap.Error(err))
 			continue
 		}
 
 		iacDocumentMap[chartPath] = iacDocuments
 
+		// for each chart, add a normalized helm_chart resource
 		var config *output.ResourceConfig
 		config, err = h.createHelmChartResource(chartPath, chartMap)
 		if err != nil {
-			zap.S().Debug("failed to create helm chart resource", zap.Any("config", config))
+			logger.Debug("failed to create helm chart resource", zap.Any("config", config))
 			continue
 		}
 
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 
+	// normalize all rendered IaC documents using the kubernetes code
 	for _, iacDocuments := range iacDocumentMap {
 		for _, doc := range iacDocuments {
 			// @TODO add k8s version check
@@ -110,22 +114,24 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]interface{}) (*output.ResourceConfig, error) {
 	var config output.ResourceConfig
 
+	logger := zap.S().With("chart path", chartPath)
+
 	jsonData, err := json.Marshal(chartData)
 	if err != nil {
-		zap.S().Warn("unable to marshal chart to json", zap.String("chart path", chartPath))
+		logger.Warn("unable to marshal chart to json")
 		return nil, err
 	}
 
 	configData := make(map[string]interface{})
 	if err = json.Unmarshal(jsonData, &configData); err != nil {
-		zap.S().Warn("unable to unmarshal normalized config data", zap.String("chart path", chartPath))
-		zap.S().Debug("failed config data", zap.Any("config", configData))
+		logger.Warn("unable to unmarshal normalized config data")
+		logger.Debug("failed config data", zap.Any("config", configData))
 		return nil, err
 	}
 
 	chartName, ok := chartData["name"].(string)
 	if !ok {
-		zap.S().Warn("unable to determine chart name", zap.String("chart path", chartPath))
+		logger.Warn("unable to determine chart name")
 		return nil, err
 	}
 
@@ -139,63 +145,26 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 	return &config, nil
 }
 
-func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]interface{}, error) {
+// renderChart renders a helm chart with the given template files and values
+// returns and IaC document for each rendered file
+func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateFileMap map[string][]*string, valueMap map[string]interface{}) ([]*utils.IacDocument, error) {
 	iacDocuments := make([]*utils.IacDocument, 0)
-	chartMap := make(map[string]interface{})
+	logger := zap.S().With("helm chart path", chartPath)
 
-	// load the chart file and values file from the specified chart path
-	chartFileBytes, err := ioutil.ReadFile(chartPath)
-	if err != nil {
-		zap.S().Warn("unable to read", zap.String("file", chartPath))
-		return iacDocuments, chartMap, err
-	}
-
-	if err = yaml.Unmarshal(chartFileBytes, &chartMap); err != nil {
-		zap.S().Warn("unable to unmarshal values", zap.String("file", chartPath))
-		return iacDocuments, chartMap, err
-	}
-
-	var fileInfo os.FileInfo
-	chartDir := filepath.Dir(chartPath)
-	valuesFile := filepath.Join(chartDir, helmValuesFilename)
-	fileInfo, err = os.Stat(valuesFile)
-	if err != nil {
-		zap.S().Warn("unable to stat values.yaml", zap.String("chart path", chartPath))
-		return iacDocuments, chartMap, err
-	}
-
-	var valueFileBytes []byte
-	valueFileBytes, err = ioutil.ReadFile(valuesFile)
-	if err != nil {
-		zap.S().Warn("unable to read values.yaml", zap.String("file", fileInfo.Name()))
-		return iacDocuments, chartMap, err
-	}
-
-	var valueMap map[string]interface{}
-	if err = yaml.Unmarshal(valueFileBytes, &valueMap); err != nil {
-		zap.S().Warn("unable to unmarshal values.yaml", zap.String("file", fileInfo.Name()))
-		return iacDocuments, chartMap, err
-	}
-
-	// for each template file found, render and save an iacDocument
-	var templateFileMap map[string][]*string
-	templateFileMap, err = utils.FindFilesBySuffix(filepath.Join(chartDir, helmTemplateDir), h.getHelmTemplateExtensions())
-	if err != nil {
-		zap.S().Warn("error while calling FindFilesBySuffix", zap.String("filepath", fileInfo.Name()))
-		return iacDocuments, chartMap, err
-	}
 	for templateDir, templateFiles := range templateFileMap {
 		if filepath.Base(templateDir) == helmTestDir {
-			zap.S().Debug("skipping test dir", zap.String("dir", templateDir))
-			return iacDocuments, chartMap, errSkipTestDir
+			logger.Debug("skipping test dir", zap.String("dir", templateDir))
+			return iacDocuments, errSkipTestDir
 		}
+
+		// create a list containing raw template file data
 		chartFiles := make([]*chart.File, 0)
 		for _, templateFile := range templateFiles {
 			var fileData []byte
-			fileData, err = ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
+			fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
 			if err != nil {
-				zap.S().Warn("unable to read template file", zap.String("file", *templateFile))
-				return iacDocuments, chartMap, err
+				logger.Error("unable to read template file", zap.String("file", *templateFile))
+				return iacDocuments, err
 			}
 
 			chartFiles = append(chartFiles, &chart.File{
@@ -204,40 +173,44 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 			})
 		}
 
+		// chart name and version are required parameters
 		chartName, ok := chartMap["name"].(string)
 		if !ok {
-			return iacDocuments, chartMap, errBadChartName
+			logger.Error("chart name was invalid")
+			return iacDocuments, errBadChartName
 		}
 
 		var chartVersion string
 		chartVersion, ok = chartMap["version"].(string)
 		if !ok {
-			return iacDocuments, chartMap, errBadChartVersion
+			logger.Error("chart version was invalid")
+			return iacDocuments, errBadChartVersion
 		}
 
+		// build the minimum helm chart data input
 		c := &chart.Chart{
 			Metadata:  &chart.Metadata{Name: chartName, Version: chartVersion},
 			Templates: chartFiles,
 		}
 
 		var v chartutil.Values
-		v, err = chartutil.CoalesceValues(c, chartutil.Values{
+		v, err := chartutil.CoalesceValues(c, chartutil.Values{
 			"Values": valueMap,
 			"Release": chartutil.Values{
 				"Name": defaultChartName,
 			},
 		})
 		if err != nil {
-			zap.S().Warn("error encountered in CoalesceValues", zap.String("chart path", chartPath))
-			return iacDocuments, chartMap, err
+			logger.Warn("error encountered in CoalesceValues")
+			return iacDocuments, err
 		}
 
+		// render all files within the chart
 		var renderData map[string]string
 		renderData, err = engine.Render(c, v)
 		if err != nil {
-			zap.S().Warn("error encountered while rendering chart", zap.String("chart path", chartPath),
-				zap.String("template dir", templateDir))
-			return iacDocuments, chartMap, err
+			logger.Warn("error encountered while rendering chart", zap.String("template dir", templateDir))
+			return iacDocuments, err
 		}
 
 		for renderFile := range renderData {
@@ -251,7 +224,59 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 		}
 	}
 
-	return iacDocuments, chartMap, nil
+	return iacDocuments, nil
+}
+
+func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]interface{}, error) {
+	iacDocuments := make([]*utils.IacDocument, 0)
+	chartMap := make(helmChartData)
+	logger := zap.S().With("chart path", chartPath)
+
+	// load the chart file and values file from the specified chart path
+	chartFileBytes, err := ioutil.ReadFile(chartPath)
+	if err != nil {
+		logger.Warn("unable to read")
+		return iacDocuments, chartMap, err
+	}
+
+	if err = yaml.Unmarshal(chartFileBytes, &chartMap); err != nil {
+		logger.Warn("unable to unmarshal values")
+		return iacDocuments, chartMap, err
+	}
+
+	var fileInfo os.FileInfo
+	chartDir := filepath.Dir(chartPath)
+	valuesFile := filepath.Join(chartDir, helmValuesFilename)
+	fileInfo, err = os.Stat(valuesFile)
+	if err != nil {
+		logger.Warn("unable to stat values.yaml")
+		return iacDocuments, chartMap, err
+	}
+
+	logger.With("file name", fileInfo.Name())
+	var valueFileBytes []byte
+	valueFileBytes, err = ioutil.ReadFile(valuesFile)
+	if err != nil {
+		logger.Warn("unable to read values.yaml")
+		return iacDocuments, chartMap, err
+	}
+
+	var valueMap map[string]interface{}
+	if err = yaml.Unmarshal(valueFileBytes, &valueMap); err != nil {
+		logger.Warn("unable to unmarshal values.yaml")
+		return iacDocuments, chartMap, err
+	}
+
+	// for each template file found, render and save an iacDocument
+	var templateFileMap map[string][]*string
+	templateFileMap, err = utils.FindFilesBySuffix(filepath.Join(chartDir, helmTemplateDir), h.getHelmTemplateExtensions())
+	if err != nil {
+		logger.Warn("error while calling FindFilesBySuffix")
+		return iacDocuments, chartMap, err
+	}
+
+	iacDocuments, err = h.renderChart(chartPath, chartMap, templateFileMap, valueMap)
+	return iacDocuments, chartMap, err
 }
 
 func (h *HelmV3) getHelmTemplateExtensions() []string {

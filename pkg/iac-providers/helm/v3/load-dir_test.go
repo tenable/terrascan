@@ -55,12 +55,6 @@ func TestLoadIacDir(t *testing.T) {
 			helmv3:  HelmV3{},
 			wantErr: errNoHelmChartsFound,
 		},
-		{
-			name:    "unreadable chart file",
-			dirPath: "./testdata/bad-chart-file",
-			helmv3:  HelmV3{},
-			wantErr: nil, // these errors are ignored
-		},
 	}
 
 	for _, tt := range table {
@@ -99,7 +93,7 @@ func TestLoadChart(t *testing.T) {
 			name:      "unmarshal bad chart",
 			chartPath: "./testdata/bad-chart-file/Chart.yaml",
 			helmv3:    HelmV3{},
-			wantErr:   &yaml.TypeError{Errors: []string{"line 1: cannot unmarshal !!str `:bad ba...` into map[string]interface {}"}},
+			wantErr:   &yaml.TypeError{Errors: []string{"line 1: cannot unmarshal !!str `:bad ba...` into helmv3.helmChartData"}},
 		},
 		{
 			name:      "chart path with no values.yaml",
