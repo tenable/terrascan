@@ -22,14 +22,14 @@ import (
 	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
 )
 
-// terraform specific constants
+// kustomize specific constants
 const (
 	kustomize                  supportedIacType    = "kustomize"
 	kustomizeV3                supportedIacVersion = "v3"
 	kustomizeDefaultIacVersion                     = kustomizeV3
 )
 
-// register kubernetes as an IaC provider with terrascan
+// register kustomize as an IaC provider with terrascan
 func init() {
 	// register iac provider
 	RegisterIacProvider(kustomize, kustomizeV3, kustomizeDefaultIacVersion, reflect.TypeOf(kustomizev3.KustomizeV3{}))

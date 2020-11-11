@@ -13,93 +13,81 @@ import (
 )
 
 const (
-	kustomizedirectory string = "kustomize_directory"
+	kustomizedirectory string = "kustomization_directory"
 )
 
-// LoadIacDir loads the kustomize directory
+// LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
 func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
-	files, err := utils.FindFilesBySuffixInCurrentDir(absRootDir, KustomizeFileNames())
+	files, err := utils.FindFilesBySuffixInDir(absRootDir, KustomizeFileNames())
 	if err != nil {
-		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(files) == 0 {
-		err := errors.New("could not find a kustomization.yaml/yml file in the directory")
-		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		err = errors.New("could not find a kustomization.yaml/yml file in the directory")
+		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(files) > 1 {
-		err := errors.New("a directory cannot have more than 1 kustomization.yaml/yml file")
-		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		err = errors.New("a directory cannot have more than 1 kustomization.yaml/yml file")
+		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
-	var config output.ResourceConfig
-	config.Type = kustomizedirectory
-	config.Name = filepath.Dir(absRootDir)
-	config.Line = 0
-	config.ID = config.Type + "." + config.Name
-
-	var yamlkustomizeobj map[string]interface{}
-	var kustomizeFileName string
-	for _, filename := range KustomizeFileNames() {
-		yamlkustomizeobj, err = utils.ReadYamlFile(filepath.Join(absRootDir, filename))
-		if err == nil {
-			kustomizeFileName = filename
-			break
-		}
-	}
+	kustomizeFileName := *files[0]
+	yamlkustomizeobj, err := utils.ReadYamlFile(filepath.Join(absRootDir, kustomizeFileName))
 
 	if len(yamlkustomizeobj) == 0 {
 		err := errors.New("unable to read any kustomization file in the directory")
-		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
-	config.Source = filepath.Join(absRootDir, kustomizeFileName)
-	config.Config = yamlkustomizeobj
+	// ResourceConfig representing the kustomization.y(a)ml file
+	config := output.ResourceConfig{
+		Name:   filepath.Dir(absRootDir),
+		Type:   kustomizedirectory,
+		Line:   1,
+		ID:     kustomizedirectory + "." + filepath.Dir(absRootDir),
+		Source: filepath.Join(absRootDir, kustomizeFileName),
+		Config: yamlkustomizeobj,
+	}
 
 	allResourcesConfig[kustomizedirectory] = append(allResourcesConfig[kustomizedirectory], config)
 
-	iacDocumentMap := make(map[string][]*utils.IacDocument)
-	var iacDocuments []*utils.IacDocument
-
-	iacDocuments, err = loadKustomize(absRootDir, kustomizeFileName)
+	// obtaining list of IacDocuments from the target working directory
+	iacDocuments, err := LoadKustomize(absRootDir, kustomizeFileName)
 	if err != nil {
-		zap.S().Warn("error occurred while loading kustomize directory", zap.String("kustomize directory", absRootDir), zap.Error(err))
+		zap.S().Error("error occurred while loading kustomize directory", zap.String("kustomize directory", absRootDir), zap.Error(err))
 		return nil, err
 	}
 
-	iacDocumentMap[absRootDir] = iacDocuments
+	for _, doc := range iacDocuments {
+		var k k8sv1.K8sV1
+		var config *output.ResourceConfig
 
-	for _, iacDocuments := range iacDocumentMap {
-		for _, doc := range iacDocuments {
-			// @TODO add k8s version check
-			var k k8sv1.K8sV1
-			var config *output.ResourceConfig
-
-			config, err = k.Normalize(doc)
-			if err != nil {
-				zap.S().Warn("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
-				continue
-			}
-
-			config.Line = 1
-			config.Source = doc.FilePath
-
-			allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
+		config, err = k.Normalize(doc)
+		if err != nil {
+			zap.S().Warn("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
+			continue
 		}
+
+		// TODO finding a better solution to detect accurate line number for tracing back the files causing violations
+		config.Line = 1
+		config.Source = doc.FilePath
+		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 
 	return allResourcesConfig, nil
 }
 
-func loadKustomize(basepath, filename string) ([]*utils.IacDocument, error) {
+// LoadKustomize loads up a 'kustomized' directory and returns a returns a list of IacDocuments
+func LoadKustomize(basepath, filename string) ([]*utils.IacDocument, error) {
 	fSys := filesys.MakeFsOnDisk()
 	k := krusty.MakeKustomizer(fSys, krusty.MakeDefaultOptions())
 

@@ -1,8 +1,6 @@
 package kustomizev3
 
-import (
-	"fmt"
-)
+import "github.com/accurics/terrascan/pkg/utils"
 
 // KustomizeV3 struct
 type KustomizeV3 struct{}
@@ -19,11 +17,7 @@ const (
 // KustomizeFileNames returns the valid extensions for k8s (yaml, yml, json)
 func KustomizeFileNames() []string {
 	return []string{
-		getFullFileName(KustomizeFileName, YAMLExtension),
-		getFullFileName(KustomizeFileName, YAMLExtension2),
+		utils.AddFileExtension(KustomizeFileName, YAMLExtension),
+		utils.AddFileExtension(KustomizeFileName, YAMLExtension2),
 	}
-}
-
-func getFullFileName(file, ext string) string {
-	return fmt.Sprintf("%v.%v", file, ext)
 }
