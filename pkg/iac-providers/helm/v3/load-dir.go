@@ -290,8 +290,7 @@ func (h *HelmV3) getHelmTemplateExtensions() []string {
 	return []string{"yaml", "yml", "tpl"}
 }
 
-// getHelmFilenames returns valid chart filenames
+// getHelmChartFilenames returns valid chart filenames
 func (h *HelmV3) getHelmChartFilenames() []string {
-	// the main filename is chart.yaml, but rancher contains references to chart.yml
-	return []string{"Chart.yaml", "Chart.yml"}
+	return []string{"Chart.yaml"}
 }
