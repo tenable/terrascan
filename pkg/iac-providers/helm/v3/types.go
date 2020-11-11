@@ -23,7 +23,6 @@ type helmChartData map[string]interface{}
 
 const (
 	defaultChartName   = "terrascan"
-	helmChartFilename  = "Chart.yaml"
 	helmValuesFilename = "values.yaml"
 	helmTemplateDir    = "templates"
 	helmTestDir        = "tests"

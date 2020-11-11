@@ -47,7 +47,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	// find all Chart.yaml files within the specified directory structure
-	fileMap, err := utils.FindFilesBySuffix(absRootDir, []string{helmChartFilename})
+	fileMap, err := utils.FindFilesBySuffix(absRootDir, h.getHelmChartFilenames())
 	if err != nil {
 		zap.S().Error("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
@@ -91,7 +91,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	// normalize all rendered IaC documents using the kubernetes code
 	for _, iacDocuments := range iacDocumentMap {
 		for _, doc := range iacDocuments {
-			// @TODO add k8s version check
+			// helmv3 supports the kubernetes v1 api
 			var k k8sv1.K8sV1
 			var config *output.ResourceConfig
 			config, err = k.Normalize(doc)
@@ -137,7 +137,7 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 
 	config.Type = "helm_chart"
 	config.Name = chartName
-	config.Line = 0
+	config.Line = 1
 	config.Source = chartPath
 	config.ID = config.Type + "." + config.Name
 	config.Config = configData
@@ -225,7 +225,8 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	return iacDocuments, nil
 }
 
-func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]interface{}, error) {
+// loadChart renders and loads all templates within a chart path
+func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartData, error) {
 	iacDocuments := make([]*utils.IacDocument, 0)
 	chartMap := make(helmChartData)
 	logger := zap.S().With("chart path", chartPath)
@@ -284,6 +285,13 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, map[string]i
 	return iacDocuments, chartMap, err
 }
 
+// getHelmTemplateExtensions returns valid helm template extensions
 func (h *HelmV3) getHelmTemplateExtensions() []string {
-	return []string{"yaml", "tpl"}
+	return []string{"yaml", "yml", "tpl"}
+}
+
+// getHelmFilenames returns valid chart filenames
+func (h *HelmV3) getHelmChartFilenames() []string {
+	// the main filename is chart.yaml, but rancher contains references to chart.yml
+	return []string{"Chart.yaml", "Chart.yml"}
 }
