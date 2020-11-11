@@ -84,8 +84,8 @@ func (k *K8sV1) getNormalizedName(kind string) string {
 	return name
 }
 
-// normalize takes the input document and normalizes it
-func (k *K8sV1) normalize(doc *utils.IacDocument) (*output.ResourceConfig, error) {
+// Normalize takes the input document and normalizes it
+func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error) {
 
 	resource, jsonData, err := k.extractResource(doc)
 	if err != nil {

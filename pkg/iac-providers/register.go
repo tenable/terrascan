@@ -21,11 +21,14 @@ import (
 )
 
 // map of supported IaC providers
-var supportedIacProviders = make(map[supportedIacType](map[supportedIacVersion]reflect.Type))
+var supportedIacProviders = make(map[supportedIacType]map[supportedIacVersion]reflect.Type)
+
+// map of default IaC versions for each IaC provider type
+var defaultIacVersions = make(map[supportedIacType]supportedIacVersion)
 
 // RegisterIacProvider registers an IaC provider for terrascan
 // if the Iac provider does not have a version, it can be kept empty
-func RegisterIacProvider(iacType supportedIacType, iacVersion supportedIacVersion, iacProvider reflect.Type) {
+func RegisterIacProvider(iacType supportedIacType, iacVersion supportedIacVersion, defaultIacVersion supportedIacVersion, iacProvider reflect.Type) {
 
 	if iacVersion == "" {
 		iacVersion = defaultIacVersion
@@ -34,6 +37,9 @@ func RegisterIacProvider(iacType supportedIacType, iacVersion supportedIacVersio
 	// version support
 	supportedTerraformVersions := make(map[supportedIacVersion]reflect.Type)
 	supportedTerraformVersions[iacVersion] = iacProvider
+
+	// default version
+	defaultIacVersions[iacType] = defaultIacVersion
 
 	// type support
 	supportedIacProviders[iacType] = supportedTerraformVersions

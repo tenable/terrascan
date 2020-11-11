@@ -33,7 +33,7 @@ func (k *K8sV1) LoadIacFile(absRootPath string) (allResourcesConfig output.AllRe
 
 	for _, doc := range iacDocuments {
 		var config *output.ResourceConfig
-		config, err = k.normalize(doc)
+		config, err = k.Normalize(doc)
 		if err != nil {
 			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absRootPath))
 			continue

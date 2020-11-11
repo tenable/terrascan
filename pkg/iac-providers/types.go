@@ -21,8 +21,3 @@ type supportedIacType string
 
 // supportedIacVersion data type for supported Iac provider
 type supportedIacVersion string
-
-// default Iac versions
-const (
-	defaultIacVersion supportedIacVersion = "default"
-)

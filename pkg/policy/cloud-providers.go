@@ -109,13 +109,10 @@ func GetDefaultPolicyPaths(cloudTypes []string) []string {
 }
 
 // GetDefaultIacType returns the default IaC type for the given cloudType
+// on the command line, the minimum arg required is the policy type (called cloudType here, so it's misleading)
+// thus, for a given policy type, we need to specify a default IaC type
 func GetDefaultIacType(cloudType string) string {
 	return string(defaultIacType[supportedCloudType(cloudType)])
-}
-
-// GetDefaultIacVersion returns the default IaC version for the given cloudType
-func GetDefaultIacVersion(cloudType string) string {
-	return string(defaultIacVersion[supportedCloudType(cloudType)])
 }
 
 // SupportedPolicyTypes returns the list of policies supported in terrascan
