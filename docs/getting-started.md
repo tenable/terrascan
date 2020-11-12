@@ -154,7 +154,7 @@ Helm chart can be scanned by specifying "helm" on the -i flag as follows:
 $ terrascan scan -t k8s -i helm
 ```
 
-This command will recursively look for Chart.yaml files in the current directory and render .yaml, .yml, .tpl template files found under the corresponding /templates directory.
+This command will recursively look for Chart.yaml files in the current directory and scans rendered .yaml, .yml, .tpl template files found under the corresponding /templates directory.
 
 A specific directory to scan can be specified using the `-d` flag. The Helm IaC provider does not support scanning of individual files using the `-f` flag.
 
