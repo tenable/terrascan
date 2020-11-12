@@ -29,3 +29,5 @@ docs/_build/
 /bin
 
 .DS_Store
+
+vendor/
