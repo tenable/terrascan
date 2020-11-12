@@ -34,12 +34,13 @@ func TestRegisterIacProvider(t *testing.T) {
 	t.Run("mock iac provider", func(t *testing.T) {
 
 		var (
-			iacType    = supportedIacType("mockIacType")
-			iacVersion = supportedIacVersion("mockIacVersion")
-			want       = reflect.TypeOf(MockIacProvider{})
+			iacType           = supportedIacType("mockIacType")
+			iacVersion        = supportedIacVersion("mockIacVersion")
+			defaultIacVersion = iacVersion
+			want              = reflect.TypeOf(MockIacProvider{})
 		)
 
-		RegisterIacProvider(iacType, iacVersion, want)
+		RegisterIacProvider(iacType, iacVersion, defaultIacVersion, want)
 
 		if _, present := supportedIacProviders[iacType]; !present {
 			t.Errorf("mockIacType not registered")
@@ -56,12 +57,13 @@ func TestRegisterIacProvider(t *testing.T) {
 	t.Run("mock iac default version", func(t *testing.T) {
 
 		var (
-			iacType    = supportedIacType("mockIacType")
-			iacVersion = supportedIacVersion("")
-			want       = reflect.TypeOf(MockIacProvider{})
+			iacType           = supportedIacType("mockIacType")
+			iacVersion        = supportedIacVersion("mockIacVersion")
+			defaultIacVersion = iacVersion
+			want              = reflect.TypeOf(MockIacProvider{})
 		)
 
-		RegisterIacProvider(iacType, iacVersion, want)
+		RegisterIacProvider(iacType, iacVersion, defaultIacVersion, want)
 
 		if _, present := supportedIacProviders[iacType]; !present {
 			t.Errorf("mockIacType not registered")

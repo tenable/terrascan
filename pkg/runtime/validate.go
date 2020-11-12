@@ -79,8 +79,7 @@ func (e *Executor) ValidateInputs() error {
 	}
 
 	if e.iacVersion == "" {
-		// TODO: handle more than cloudType[0]
-		e.iacVersion = policy.GetDefaultIacVersion(e.cloudType[0])
+		e.iacVersion = IacProvider.GetDefaultIacVersion(e.iacType)
 	}
 
 	// check if IaC type is supported

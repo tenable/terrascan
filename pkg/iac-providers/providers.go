@@ -77,3 +77,8 @@ func SupportedIacVersions() []string {
 	sort.Strings(iacVersions)
 	return iacVersions
 }
+
+// GetDefaultIacVersion returns the default IaC version for the given IaC type
+func GetDefaultIacVersion(iacType string) string {
+	return string(defaultIacVersions[supportedIacType(iacType)])
+}

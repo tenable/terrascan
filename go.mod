@@ -18,14 +18,11 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.3.4
 	github.com/spf13/cobra v1.0.0
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/zclconf/go-cty v1.2.1
-	go.uber.org/zap v1.10.0
-	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
-	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
-	golang.org/x/tools v0.0.0-20201009162240-fcf82128ed91 // indirect
+	go.uber.org/zap v1.13.0
+	golang.org/x/tools v0.0.0-20201110030525-169ad6d6ecb2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
-	gopkg.in/yaml.v2 v2.3.0
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
-	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
+	helm.sh/helm/v3 v3.4.0
+	honnef.co/go/tools v0.0.1-2020.1.6 // indirect
 )

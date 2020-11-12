@@ -20,7 +20,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 ## Features
 * 500+ Policies for security best practices
 * Scanning of Terraform 12+ (HCL2)
-* Scanning of Kubernetes YAML/JSON
+* Scanning of Kubernetes (JSON/YAML), and Helm v3
 * Support for AWS, Azure, GCP, Kubernetes and GitHub
 
 ## Installing
