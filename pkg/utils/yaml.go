@@ -37,13 +37,13 @@ func LoadYAML(filePath string) ([]*IacDocument, error) {
 		return iacDocumentList, err
 	}
 
-	return getIacDocumentList(bufio.NewScanner(file), fileBytes, filePath)
+	return ScanIacDocumentsFromYaml(bufio.NewScanner(file), fileBytes, filePath)
 }
 
 // LoadYAMLString loads a YAML String. Can return one or more IaC Documents.
 // Besides reading in file data, its main purpose is to determine and store line number and filename metadata
 func LoadYAMLString(data, absFilePath string) ([]*IacDocument, error) {
-	return getIacDocumentList(bufio.NewScanner(strings.NewReader(data)), []byte(data), absFilePath)
+	return ScanIacDocumentsFromYaml(bufio.NewScanner(strings.NewReader(data)), []byte(data), absFilePath)
 }
 
 // ReadYamlFile reads a yaml file and load content in a map[string]interface{} type
@@ -60,9 +60,9 @@ func ReadYamlFile(path string) (map[string]interface{}, error) {
 	return output, nil
 }
 
-// getIacDocumentList provides one or more IaC Documents.
+// ScanIacDocumentsFromYaml provides one or more IaC Documents.
 // Besides reading in file data, its main purpose is to determine and store line number and filename metadata
-func getIacDocumentList(scanner *bufio.Scanner, bytearray []byte, filePath string) ([]*IacDocument, error) {
+func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath string) ([]*IacDocument, error) {
 	iacDocumentList := make([]*IacDocument, 0)
 
 	// First pass determines line number data
@@ -94,7 +94,7 @@ func getIacDocumentList(scanner *bufio.Scanner, bytearray []byte, filePath strin
 		return iacDocumentList, err
 	}
 
-	dec := yaml.NewDecoder(bytes.NewReader(bytearray))
+	dec := yaml.NewDecoder(bytes.NewReader(byteArray))
 
 	i := 0
 	for {
