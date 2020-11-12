@@ -101,7 +101,7 @@ By default Terrascan defaults to scanning Terraform HCL files, you can change th
 $ terrascan scan -t k8s -i k8s
 ```
 
-The `scan` command support flags to configure: the directory being scanned, scanning of a specific file, IaC provier type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
+The `scan` command support flags to configure: the directory being scanned, scanning of a specific file, IaC provider type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
 
 ``` Bash
 $ terrascan scan -h
@@ -117,8 +117,8 @@ Flags:
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
-  -i, --iac-type string           iac type (k8s, terraform)
-      --iac-version string        iac version (k8s: v1, terraform: v12)
+  -i, --iac-type string           iac type (helm, k8s, terraform)
+      --iac-version string        iac version (helm: v3, k8s: v1, terraform: v12)
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
@@ -135,6 +135,29 @@ Global Flags:
 By default Terrascan will output YAML. This can be changed to JSON or XML by using the `-o` flag.
 
 Terrascan will exit 3 if any issues are found.
+
+#### Scanning code remotely
+
+Terrascan can download and scan remote repositories/code sources by using the `-r` and `-u` flags. Here's and example:
+
+``` Bash
+$ terrascan scan -t aws -r git -u git@github.com:accurics/KaiMonkey.git//terraform/aws
+```
+
+The URLs for the remote should follow similar naming as the source argument for modules in Terraform. More details [here](https://www.terraform.io/docs/modules/sources.html).
+
+#### Helm
+
+Helm chart can be scanned by specifying "helm" on the -i flag as follows:
+
+```
+$ terrascan scan -t k8s -i helm
+```
+
+This command will recursively look for Chart.yaml files in the current directory and the corresponding /templates directory and will scan any .yaml, .yml, and .tpl files.
+
+A specific directory to scan can be specified using the `-d` flag. The Helm IaC provider does not support scanning of individual files using the `-f` flag.
+
 
 ### CLI Output types
 #### Violations
@@ -159,7 +182,7 @@ results:
     total: 1
 ```
 ##### Resource Config
-Terrascan while scanning the IaC, loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, it possible to print this resource configs list as an output by providing the `--config-only` flag to the `terrascan scan` command.
+Terrascan while scanning the IaC, loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, it is possible to print this resource configs list as an output by providing the `--config-only` flag to the `terrascan scan` command.
 ``` Bash
 $  terrascan scan -t aws --config-only
 aws_ecr_repository:
@@ -282,7 +305,7 @@ Transfer-Encoding: chunked
 ```
 
 ### Config File
-The `-c` or `--config-path` global variable allows you to provide a TOML configuration file for Terrascan. This file can be use to configure the webhook notifications. Here's an example configuration:
+The `-c` or `--config-path` global variable allows you to provide a TOML configuration file for Terrascan. This file can be used to configure the webhook notifications. Here's an example configuration:
 
 ``` TOML
 [notifications]
