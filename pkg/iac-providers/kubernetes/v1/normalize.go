@@ -29,7 +29,8 @@ import (
 
 var (
 	errUnsupportedDoc = fmt.Errorf("unsupported document type")
-	errNoKind         = fmt.Errorf("kind does not exist")
+	// ErrNoKind is returned when the "kind" key is not available (not a valid kubernetes resource)
+	ErrNoKind = fmt.Errorf("kind does not exist")
 )
 
 // k8sMetadata is used to pull the name and namespace types for a given resource
@@ -99,7 +100,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	switch resource.Kind {
 	case "":
 		// error case
-		return nil, errNoKind
+		return nil, ErrNoKind
 	// non-namespaced resources
 	case "ClusterRole":
 		fallthrough
