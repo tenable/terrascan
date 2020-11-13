@@ -110,3 +110,19 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 
 	return retMap, nil
 }
+
+// FindFilesBySuffixInDir finds all the immediate files within a given directory that have the specified suffixes
+// IT DOES NOT LOOK INTO ANY SUBDIRECTORY. JUST A SINGLE LEVEL FILE SEARCH.
+// Returns an array for string pointers as a list of files
+func FindFilesBySuffixInDir(basePath string, suffixes []string) ([]*string, error) {
+	fileInfos, err := ioutil.ReadDir(basePath)
+	if err != nil {
+		return nil, err
+	}
+	return FilterFileInfoBySuffix(&fileInfos, suffixes), nil
+}
+
+// AddFileExtension returns full file name string after adding the extension to the filename
+func AddFileExtension(file, ext string) string {
+	return fmt.Sprintf("%v.%v", file, ext)
+}
