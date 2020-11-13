@@ -80,7 +80,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var config *output.ResourceConfig
 		config, err = h.createHelmChartResource(chartPath, chartMap)
 		if err != nil {
-			logger.Debug("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
+			logger.Error("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
 			continue
 		}
 
@@ -95,7 +95,11 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 			var config *output.ResourceConfig
 			config, err = k.Normalize(doc)
 			if err != nil {
-				zap.S().Error("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
+				// ignore logging errors when the "kind" field is not available because helm chart rendering can create an empty file
+				// in that case, we should not output an error as it was the user's intention to prevent rendering the resource
+				if err != k8sv1.ErrNoKind {
+					zap.S().Error("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
+				}
 				continue
 			}
 
@@ -117,20 +121,20 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 
 	jsonData, err := json.Marshal(chartData)
 	if err != nil {
-		logger.Error("unable to marshal chart to json")
+		logger.Error("unable to marshal chart to json", zap.Error(err))
 		return nil, err
 	}
 
 	configData := make(map[string]interface{})
 	if err = json.Unmarshal(jsonData, &configData); err != nil {
-		logger.Warn("unable to unmarshal normalized config data", zap.Error(err))
+		logger.Error("unable to unmarshal normalized config data", zap.Error(err))
 		logger.Debug("failed config data", zap.Any("config", configData))
 		return nil, err
 	}
 
 	chartName, ok := chartData["name"].(string)
 	if !ok {
-		logger.Error("unable to determine chart name")
+		logger.Error("unable to determine chart name", zap.Error(err))
 		return nil, err
 	}
 
@@ -211,7 +215,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	e.LintMode = true
 	renderData, err = e.Render(c, v)
 	if err != nil {
-		logger.Warn("error encountered while rendering chart", zap.String("template dir", templateDir), zap.Error(err))
+		logger.Error("error encountered while rendering chart", zap.String("template dir", templateDir), zap.Error(err))
 		return iacDocuments, err
 	}
 
@@ -251,7 +255,7 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 	valuesFile := filepath.Join(chartDir, helmValuesFilename)
 	fileInfo, err = os.Stat(valuesFile)
 	if err != nil {
-		logger.Warn("unable to stat values.yaml", zap.Error(err))
+		logger.Error("unable to stat values.yaml", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 
