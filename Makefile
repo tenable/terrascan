@@ -1,5 +1,6 @@
 GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -v -ldflags "-w -s"
+ENV_SETTINGS := CGO_ENABLED=0
 
 BUILD_DIR = ./bin
 BINARY_NAME = terrascan
@@ -30,7 +31,7 @@ help:
 build: clean
 	@mkdir -p $(BUILD_DIR) > /dev/null
 	@export GO111MODULE=on
-	go build ${BUILD_FLAGS} -o ${BUILD_DIR}/${BINARY_NAME} cmd/terrascan/main.go
+	${ENV_SETTINGS} go build ${BUILD_FLAGS} -o ${BUILD_DIR}/${BINARY_NAME} cmd/terrascan/main.go
 	@echo "binary created at ${BUILD_DIR}/${BINARY_NAME}"
 
 
