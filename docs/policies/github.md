@@ -9,3 +9,4 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Encryption and Key Management | github | MEDIUM | Insecure SSL is used for organization webhook. | accurics.github.EKM.1 |
+| Encryption and Key Management | github | MEDIUM | Insecure SSL is used for repository webhook. | accurics.github.EKM.2 |

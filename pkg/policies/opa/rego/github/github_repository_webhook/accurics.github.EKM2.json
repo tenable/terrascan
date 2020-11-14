@@ -1,0 +1,10 @@
+{
+  "name": "insecureSslUsed",
+  "file": "insecureSslUsed.rego",
+  "template_args": null,
+  "severity": "MEDIUM",
+  "description": "Insecure SSL is used for repository webhook.",
+  "reference_id": "accurics.github.EKM.2",
+  "category": "Encryption and Key Management",
+  "version": 1
+}
