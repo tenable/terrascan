@@ -80,10 +80,10 @@ Use "terrascan [command] --help" for more information about a command.
 ```
 
 ### Initializing
-The initialization process downloads the latest policies from the [repository](https://github.com/accurics/terrascan) into `~/.terrascan`. The policies are located at `~/.terrascan/pkg/policies/opa/rego` and are fetched when scanning the IaC. This command is implicitly executed if the `scan` command doesn't found policies while executing.
+The initialization process downloads the latest policies from the [repository](https://github.com/accurics/terrascan) into `~/.terrascan`. The policies are located at `~/.terrascan/pkg/policies/opa/rego` and are fetched when scanning the IaC. This command is implicitly executed if the `scan` command doesn't find policies while executing.
 
 ### Scanning
-The CLI will default to scanning all supported cloud providers on Terraform HCL files if the `scan` command is used with no arguments. For example, the below two commands will scan the current directory containing Terraform HCL2 files for supported cloud providers (AWS, GCP, and Azure) resources:
+The CLI will default to scanning all supported cloud providers on Terraform HCL files if the `scan` command is used with no arguments. For example, the below two commands will scan the current directory containing Terraform HCL2 files for supported providers (AWS, GCP, Azure, and GitHub) resources:
 
 ``` Bash
 $ terrascan scan
@@ -98,10 +98,10 @@ $ terrascan scan -t aws
 By default Terrascan defaults to scanning Terraform HCL files, you can change the IaC provider using the -i flag. Here's an example of scanning kubernetes yaml files:
 
 ``` Bash
-$ terrascan scan -t k8s -i k8s
+$ terrascan scan -i k8s
 ```
 
-The `scan` command support flags to configure: the directory being scanned, scanning of a specific file, IaC provider type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
+The `scan` command supports flags to configure: the directory being scanned, scanning of a specific file, IaC provider type, path to policies, and policy type. The full list of flags can be found by typing `terrascan scan -h`
 
 ``` Bash
 $ terrascan scan -h
@@ -117,8 +117,8 @@ Flags:
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
-  -i, --iac-type string           iac type (helm, k8s, terraform)
-      --iac-version string        iac version (helm: v3, k8s: v1, terraform: v12)
+  -i, --iac-type string           iac type (helm, k8s, kustomize, terraform)
+      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12)
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
@@ -151,12 +151,25 @@ The URLs for the remote should follow similar naming as the source argument for 
 Helm chart can be scanned by specifying "helm" on the -i flag as follows:
 
 ```
-$ terrascan scan -t k8s -i helm
+$ terrascan scan -i helm
 ```
 
 This command will recursively look for Chart.yaml files in the current directory and scans rendered .yaml, .yml, .tpl template files found under the corresponding /templates directory.
 
 A specific directory to scan can be specified using the `-d` flag. The Helm IaC provider does not support scanning of individual files using the `-f` flag.
+
+
+#### Kustomize
+
+Kustomize chart can be scanned by specifying "kustomize" on the -i flag as follows:
+
+```
+$ terrascan scan -i kustomize
+```
+
+This command will look for a kustomization.yaml file in the current directory and scans rendered .yaml or .yml template files.
+
+A specific directory to scan can be specified using the `-d` flag. The Kustomize IaC provider does not support scanning of individual files using the `-f` flag.
 
 
 ### CLI Output types
