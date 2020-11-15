@@ -14,7 +14,7 @@ require (
 	github.com/iancoleman/strcase v0.1.1
 	github.com/mattn/go-isatty v0.0.5
 	github.com/open-policy-agent/opa v0.22.0
-	github.com/pelletier/go-toml v1.8.0
+	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.3.4
 	github.com/spf13/cobra v1.0.0
