@@ -164,7 +164,7 @@ Use "terrascan [command] --help" for more information about a command.
 ```
 
 ## Documentation
-To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and a deep dive into policies.
+To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a breakdown of it's commands, and a deep dive into policies.
 
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
