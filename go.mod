@@ -19,7 +19,7 @@ require (
 	github.com/spf13/afero v1.4.1
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/zclconf/go-cty v1.2.1
+	github.com/zclconf/go-cty v1.7.0
 	go.uber.org/zap v1.10.0
 	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
 	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
