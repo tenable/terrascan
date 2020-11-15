@@ -126,7 +126,7 @@ for more information on how to use the server endpoints.
 
 ## Getting started
 
-To scan your code for security issues you can run the following
+To scan your code for security issues you can run the following (defaults to scanning Terraform).
 
 ```sh
 $ terrascan scan
