@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform v0.12.28
 	github.com/iancoleman/strcase v0.1.2
 	github.com/mattn/go-isatty v0.0.5
-	github.com/open-policy-agent/opa v0.22.0
+	github.com/open-policy-agent/opa v0.24.0
 	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.4.1
@@ -21,7 +21,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/zclconf/go-cty v1.7.0
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
 	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
 	golang.org/x/tools v0.0.0-20201009162240-fcf82128ed91 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
