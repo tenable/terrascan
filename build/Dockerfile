@@ -1,5 +1,5 @@
 # -------- builder stage -------- #
-FROM golang:1.15.5-alpine3.12 AS builder
+FROM golang:alpine AS builder
 
 ARG GOOS_VAL=linux
 ARG GOARCH_VAL=amd64
