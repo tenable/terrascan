@@ -18,14 +18,14 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 ## Features
 * 500+ Policies for security best practices
 * Scanning of Terraform 12+ (HCL2)
-* Scanning of Kubernetes (JSON/YAML), and Helm v3
+* Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
 * Support for AWS, Azure, GCP, Kubernetes and GitHub
 
 ## Installing
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.1.0/terrascan_1.1.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.2.0/terrascan_1.2.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
@@ -39,8 +39,8 @@ If you have go installed, Terrascan can be installed with `go get`
 ```
 $ export GO111MODULE=on
 $ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.1.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.1.0
+  go: downloading github.com/accurics/terrascan v1.2.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
   ...
 $ terrascan
 ```
@@ -72,7 +72,7 @@ $ ./bin/terrascan
 
 ## Getting started
 
-To scan your code for security issues you can run the following
+To scan your code for security issues you can run the following (defaults to scanning Terraform).
 
 ```sh
 $ terrascan scan
@@ -110,7 +110,7 @@ Use "terrascan [command] --help" for more information about a command.
 ```
 
 ## Documentation
-To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a break down of it's commands, and a deep dive into policies.
+To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a breakdown of it's commands, and a deep dive into policies.
 
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
