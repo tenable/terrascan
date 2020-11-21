@@ -49,3 +49,15 @@ func FindResourceByID(resourceID string, normalizedResources *output.AllResource
 
 	return &resource, nil
 }
+
+// GetResourceCount gives out the total number of resources present in a output.ResourceConfig object.
+// Since the ResourceConfig mapping stores resources in lists which can be located resourceMapping[Type],
+// `len(resourceMapping)` does not give the count of the resources but only gives out the total number of
+// the type of resources inside the object.
+func GetResourceCount(resourceMapping map[string][]output.ResourceConfig) (count int) {
+	count = 0
+	for _, list := range resourceMapping {
+		count = count + len(list)
+	}
+	return
+}

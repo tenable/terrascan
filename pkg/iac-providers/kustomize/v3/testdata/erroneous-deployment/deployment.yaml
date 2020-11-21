@@ -1,0 +1,16 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp
+    test: someupdate
+    test2: someupdate3
+spec:
+  template:
+    spec:
+      containers:
+      - name: myapp-container2
+        image: busybox
+        command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+        securityContext:
+          allowPrivilegeEscalation: true
