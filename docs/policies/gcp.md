@@ -74,7 +74,7 @@
 | Network Security | gcp | HIGH | Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters. | accurics.gcp.NS.112 |
 | Operational Efficiency | gcp | HIGH | Ensure Kubernetes Cluster is created with Alias IP ranges enabled | accurics.gcp.OPS.115 |
 | Network Security | gcp | HIGH | Ensure GKE Control Plane is not public. | accurics.gcp.NS.109 |
-| Identity & Access Management | gcp | HIGH | Ensure Kubernetes Cluster is created with Client Certificate enabled. | accurics.gcp.IAM.104 |
+| Identity & Access Management | gcp | HIGH | Ensure Kubernetes Cluster is created with Client Certificate disabled. | accurics.gcp.IAM.104 |
 | Operational Efficiency | gcp | HIGH | Ensure Kubernetes Clusters are configured with Labels. | accurics.gcp.OPS.113 |
 | Identity & Access Management | gcp | HIGH | Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters. | accurics.gcp.IAM.142 |
 | Logging | gcp | HIGH | Ensure Stackdriver Logging is enabled on Kubernetes Engine Clusters. | accurics.gcp.LOG.100 |
