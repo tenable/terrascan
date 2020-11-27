@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl/v2 v2.7.1
-	github.com/hashicorp/terraform v0.12.28
+	github.com/hashicorp/terraform v0.13.5
 	github.com/iancoleman/strcase v0.1.2
 	github.com/mattn/go-isatty v0.0.12
 	github.com/open-policy-agent/opa v0.24.0
