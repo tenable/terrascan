@@ -18,6 +18,7 @@ help:
 	@echo "docker-build\n\tbuild terrascan docker image"
 	@echo "docker-push\n\tpush terrascan docker image"
 	@echo "docker-push-latest\n\tpush terrascan docker image with latest tag"
+	@echo "docker-push-latest-tag\n\tpush terrascan docker image with latest release tag"
 	@echo "gofmt\n\tvalidate gofmt"
 	@echo "golint\n\tvalidate golint"
 	@echo "gomodverify\n\tverify go modules"
@@ -35,7 +36,7 @@ build: clean
 	@echo "binary created at ${BUILD_DIR}/${BINARY_NAME}"
 
 
-# clean build 
+# clean build
 clean:
 	@rm -rf $(BUILD_DIR)
 
@@ -95,3 +96,7 @@ docker-push:
 # push latest terrascan docker image
 docker-push-latest:
 	./scripts/docker-push-latest.sh
+
+# push release tag terrascan docker image
+docker-push-latest-tag:
+	./scripts/docker-push-latest-tag.sh
