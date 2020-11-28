@@ -1,6 +1,6 @@
 # Architecture
 
-Terrascan's architecture is built to be modular to facilitate adding IaC languages and policies. At a high level Terrascan is composed of the following architectural components: a command line interface, API server, runtime, pluggable IaC proviers, pluggable policy engine, notifier, and writer.
+Terrascan's architecture is built to be modular to facilitate adding IaC languages and policies. At a high level Terrascan is composed of the following architectural components: a command line interface, API server, runtime, pluggable IaC providers, pluggable policy engine, notifier, and writer.
 
 * Command Line Interface = Provides CLI input to Terrascan.
 * API Server = Provider input to Terrascan through an API.
