@@ -27,3 +27,20 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # push image to Docker Hub
+  push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Terrascan
+      uses: actions/checkout@v1
+
+    - name: Build Terrascan docker image
+      run: make docker-build
+
+    - name: Login to docker hub
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
+
+    - name: Push Terrascan latest tag docker image
+      run: make docker-push-latest-tag
