@@ -1,0 +1,5 @@
+commonLabels:
+  app: hello
+
+resources:
+- pod.yaml

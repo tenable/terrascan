@@ -1,7 +1,6 @@
 package kustomizev3
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -17,6 +16,12 @@ const (
 	kustomizedirectory string = "kustomization"
 )
 
+var (
+	errorKustomizeNotFound     = fmt.Errorf("kustomization.y(a)ml file not found in the directory")
+	errorMultipleKustomizeFile = fmt.Errorf("multiple kustomization.y(a)ml found in the directory")
+	errorFromKustomize         = fmt.Errorf("error from kustomization")
+)
+
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
 func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
 
@@ -29,13 +34,13 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	}
 
 	if len(files) == 0 {
-		err = errors.New("could not find a kustomization.yaml/yml file in the directory")
+		err = errorKustomizeNotFound
 		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(files) > 1 {
-		err = errors.New("a directory cannot have more than 1 kustomization.yaml/yml file")
+		err = errorMultipleKustomizeFile
 		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
@@ -43,9 +48,9 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	kustomizeFileName := *files[0]
 	yamlkustomizeobj, err := utils.ReadYamlFile(filepath.Join(absRootDir, kustomizeFileName))
 
-	if len(yamlkustomizeobj) == 0 {
-		err = fmt.Errorf("unable to read any kustomization file in the directory : %v", err)
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+	if err != nil {
+		err = fmt.Errorf("unable to read the kustomization file in the directory : %v", err)
+		zap.S().Error("error while reading the file", kustomizeFileName, zap.Error(err))
 		return allResourcesConfig, err
 	}
 
@@ -94,7 +99,7 @@ func LoadKustomize(basepath, filename string) ([]*utils.IacDocument, error) {
 
 	m, err := k.Run(basepath)
 	if err != nil {
-		return nil, err
+		return nil, errorFromKustomize
 	}
 
 	yaml, err := m.AsYaml()

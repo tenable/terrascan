@@ -19,6 +19,9 @@ const (
 
 var (
 	errHighDocumentCount = fmt.Errorf("document count was higher than expected count")
+
+	// ErrYamlFileEmpty is return when empty yaml file is being read.
+	ErrYamlFileEmpty = fmt.Errorf("yaml file is empty")
 )
 
 // LoadYAML loads a YAML file. Can return one or more IaC Documents.
@@ -56,6 +59,9 @@ func ReadYamlFile(path string) (map[string]interface{}, error) {
 	err = yaml.Unmarshal(dat, &output)
 	if err != nil {
 		return nil, err
+	}
+	if len(output) == 0 {
+		return nil, ErrYamlFileEmpty
 	}
 	return output, nil
 }
