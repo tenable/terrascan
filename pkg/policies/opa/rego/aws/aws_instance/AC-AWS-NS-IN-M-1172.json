@@ -1,0 +1,10 @@
+{
+    "name": "ec2UsingIMDSv1",
+    "file": "ec2UsingIMDSv1.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure there are no ECS instances using IMDSv1",
+    "reference_id": "AC-AWS-NS-IN-M-1172",
+    "category": "Unknown",
+    "version": 1
+}
