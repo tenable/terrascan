@@ -17,7 +17,6 @@
 package tfv12
 
 import (
-	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"reflect"
@@ -25,6 +24,47 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
+
+// prepareAllResourceConfigs prepares a
+// map[string]map[string]output.ResourceConfig
+// from the output.AllResourceConfigs, which is a
+// map[string][]output.ResourceConfig
+//
+// The goal is to put the [] into a map[string] so that we don't rely on the
+// implicit order of the [], but can use the keys for ordering.
+// The key is computed from the source and id, which should be globally unique.
+func prepareAllResourceConfigs(v output.AllResourceConfigs) ([]byte, error) {
+
+	newval := make(map[string]map[string]output.ResourceConfig, len(v))
+	for key, val := range v {
+		newval[key] = make(map[string]output.ResourceConfig, len(val))
+		for _, item := range val {
+			newkey := item.Source + "##" + item.ID
+			newval[key][newkey] = item
+		}
+	}
+
+	contents, err := json.Marshal(newval)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	return contents, nil
+}
+
+// identicalAllResourceConfigs determines if a and b have identical contents
+func identicalAllResourceConfigs(a, b output.AllResourceConfigs) (bool, error) {
+	value1, err := prepareAllResourceConfigs(a)
+	if err != nil {
+		return false, err
+	}
+	value2, err := prepareAllResourceConfigs(b)
+	if err != nil {
+		return false, err
+	}
+
+	return reflect.DeepEqual(value1, value2), nil
+}
 
 func TestLoadIacDir(t *testing.T) {
 
@@ -107,12 +147,23 @@ func TestLoadIacDir(t *testing.T) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
-			gotBytes, _ := json.MarshalIndent(got, "", "  ")
-			gotBytes = append(gotBytes, []byte{'\n'}...)
-			wantBytes, _ := ioutil.ReadFile(tt.tfJSONFile)
+			var want output.AllResourceConfigs
 
-			if !bytes.Equal(bytes.TrimSpace(gotBytes), bytes.TrimSpace(wantBytes)) {
-				t.Errorf("got '%v', want: '%v'", string(gotBytes), string(wantBytes))
+			// Read the expected value and unmarshal into want
+			contents, _ := ioutil.ReadFile(tt.tfJSONFile)
+			err := json.Unmarshal(contents, &want)
+			if err != nil {
+				t.Errorf("unexpected error unmarshalling want: %v", err)
+			}
+
+			match, err := identicalAllResourceConfigs(got, want)
+			if err != nil {
+				t.Errorf("unexpected error checking result: %v", err)
+			}
+			if !match {
+				g, _ := json.MarshalIndent(got, "", "  ")
+				w, _ := json.MarshalIndent(want, "", "  ")
+				t.Errorf("got '%v', want: '%v'", string(g), string(w))
 			}
 		})
 	}
