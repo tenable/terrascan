@@ -3,8 +3,8 @@
     "file": "ec2UsingIMDSv1.rego",
     "template_args": null,
     "severity": "MEDIUM",
-    "description": "Ensure there are no ECS instances using IMDSv1",
+    "description": "EC2 instances should disable IMDS or require IMDSv2",
     "reference_id": "AC-AWS-NS-IN-M-1172",
-    "category": "Unknown",
+    "category": "Network Security",
     "version": 1
 }

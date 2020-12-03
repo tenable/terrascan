@@ -89,7 +89,7 @@
 ### aws_apigatewayv2_api
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| AccessControl | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.High.0630 |
+| AccessControl | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.0630 |
 
 
 ### aws_efs_file_system
@@ -109,6 +109,7 @@
 ### aws_instance
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
+| Network Security | json | MEDIUM | EC2 instances should disable IMDS or require IMDSv2 | AC-AWS-NS-IN-M-1172 |
 | Network Security | Instance | MEDIUM | Instance should be configured in vpc. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations. | AWS.Instance.NetworkSecurity.Medium.0506 |
 
 
@@ -158,7 +159,7 @@
 ### aws_apigatewayv2_stage
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.Low.0630 |
+| Logging | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.0630 |
 
 
 ### aws_ecr_repository
@@ -353,9 +354,9 @@
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.Low.0472 |
-| Logging | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.Low.0470 |
-| Encryption and Key Management | LambdaFunction | High | Lambda does not uses KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.High.0471 |
+| Logging | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 |
+| Logging | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 |
+| Encryption and Key Management | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 |
 
 
 ### aws_kms_key
