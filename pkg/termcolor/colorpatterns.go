@@ -112,7 +112,7 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 				ValueStyle: Style(item.ValueStyle),
 			}
 
-			if len(fsp.ValuePattern) == 0 {
+			if fsp.ValuePattern == "" {
 				fsp.ValuePattern = defaultValuePattern
 			} else if fsp.ValuePattern == "-" {
 				fsp.ValuePattern = ""
@@ -130,7 +130,7 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 		var rePtn string
 
 		/* rePtn should process a whole line and have 5 subgroups */
-		if len(ptn.ValuePattern) == 0 {
+		if ptn.ValuePattern == "" {
 			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?:\s*?)()(.*?)\s*$`, ptn.KeyPattern)
 		} else {
 			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?: "?)(%s)("?,?)\s*$`, ptn.KeyPattern, ptn.ValuePattern)
