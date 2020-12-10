@@ -2,7 +2,6 @@ package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[service.id] {
     service := input.{{.resource_type}}[_]
-    service.config.kind == "Service"
     type_check(service.config.spec)
     object.get(service.config.spec, "externalIPs", "undefined") != "undefined"
 }
