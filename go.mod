@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.8.0
 	github.com/iancoleman/strcase v0.1.2
 	github.com/mattn/go-isatty v0.0.12
-	github.com/open-policy-agent/opa v0.25.1
+	github.com/open-policy-agent/opa v0.25.2
 	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.4.1
