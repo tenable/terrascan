@@ -20,8 +20,10 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
+	result "github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
@@ -31,7 +33,7 @@ import (
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion string, cloudType []string,
 	iacFilePath, iacDirPath, configFile string, policyPath []string,
-	format, remoteType, remoteURL string, configOnly, useColors bool) {
+	format, remoteType, remoteURL string, configOnly, useColors, verbose bool) {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
@@ -69,7 +71,12 @@ func Run(iacType, iacVersion string, cloudType []string,
 	if configOnly {
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
-		writer.Write(format, results.Violations, outputWriter)
+		if strings.EqualFold(format, "human") {
+			defaultScanResult := result.NewDefaultScanResult(iacType, iacFilePath, iacDirPath, executor.GetTotalPolicyCount(), verbose, *results.Violations.ViolationStore)
+			writer.Write(format, defaultScanResult, outputWriter)
+		} else {
+			writer.Write(format, results.Violations, outputWriter)
+		}
 	}
 
 	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {

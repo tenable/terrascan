@@ -56,7 +56,7 @@ func setDefaultCommandIfNonePresent() {
 func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogLevel, "log-level", "l", "info", "log level (debug, info, warn, error, panic, fatal)")
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
-	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "yaml", "output type (json, yaml, xml)")
+	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 
 	// Function to execute before processing commands

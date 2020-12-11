@@ -131,3 +131,13 @@ func (e *Executor) Execute() (results Output, err error) {
 	// successful
 	return results, nil
 }
+
+// GetTotalPolicyCount will return the total count of policies in all engines
+func (e Executor) GetTotalPolicyCount() int {
+	policyCount := 0
+	for _, engine := range e.policyEngine {
+		opaEngine := engine.(*opa.Engine)
+		policyCount += opaEngine.GetRuleCount()
+	}
+	return policyCount
+}

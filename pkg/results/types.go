@@ -16,6 +16,12 @@
 
 package results
 
+import (
+	"time"
+
+	"github.com/accurics/terrascan/pkg/utils"
+)
+
 // Violation Contains data for each violation
 type Violation struct {
 	RuleName     string      `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
@@ -46,6 +52,16 @@ type ViolationStore struct {
 	Count      ViolationStats `json:"count" yaml:"count" xml:"count"`
 }
 
+// DefaultScanResult will hold the default scan summary data
+type DefaultScanResult struct {
+	IacType              string
+	ResourcePath         string
+	Timestamp            string
+	TotalPolicies        int
+	ShowViolationDetails bool
+	ViolationStore
+}
+
 // Add adds two ViolationStores
 func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	// Just concatenate the slices, since order shouldn't be important
@@ -58,4 +74,35 @@ func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	vs.Count.TotalCount += extra.Count.TotalCount
 
 	return vs
+}
+
+// NewDefaultScanResult will initialize DefaultScanResult
+func NewDefaultScanResult(iacType, iacFilePath, iacDirPath string, totalPolicyCount int, verbose bool, violationStore ViolationStore) *DefaultScanResult {
+	sr := new(DefaultScanResult)
+
+	if iacType == "" {
+		// the default scan type is terraform
+		sr.IacType = "terraform"
+	} else {
+		sr.IacType = iacType
+	}
+
+	if iacFilePath != "" {
+		// can skip the error as the file validation is already done
+		// while executor is initialized
+		filePath, _ := utils.GetAbsPath(iacFilePath)
+		sr.ResourcePath = filePath
+	} else {
+		// can skip the error as the directory validation is already done
+		// while executor is initialized
+		dirPath, _ := utils.GetAbsPath(iacDirPath)
+		sr.ResourcePath = dirPath
+	}
+	sr.ShowViolationDetails = verbose
+	sr.TotalPolicies = totalPolicyCount
+	sr.ViolationStore = violationStore
+	// set current time as scan time
+	sr.Timestamp = time.Now().UTC().String()
+
+	return sr
 }

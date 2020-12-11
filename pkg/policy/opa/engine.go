@@ -392,3 +392,8 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	e.stats.runTime = time.Since(start)
 	return e.results, nil
 }
+
+// GetRuleCount will return the ruleCount value
+func (e Engine) GetRuleCount() int {
+	return e.stats.ruleCount
+}
