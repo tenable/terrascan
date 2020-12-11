@@ -30,6 +30,11 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	humanOutputFormat = "human"
+	jsonOutputFormat  = "json"
+)
+
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion string, cloudType []string,
 	iacFilePath, iacDirPath, configFile string, policyPath []string,
@@ -69,9 +74,14 @@ func Run(iacType, iacVersion string, cloudType []string,
 	outputWriter := NewOutputWriter(useColors)
 
 	if configOnly {
+		// human readable output doesn't support --config-only flag
+		// if --config-only flag is set, then display json output
+		if strings.EqualFold(format, humanOutputFormat) {
+			format = jsonOutputFormat
+		}
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
-		if strings.EqualFold(format, "human") {
+		if strings.EqualFold(format, humanOutputFormat) {
 			defaultScanResult := result.NewDefaultScanResult(iacType, iacFilePath, iacDirPath, executor.GetTotalPolicyCount(), verbose, *results.Violations.ViolationStore)
 			writer.Write(format, defaultScanResult, outputWriter)
 		} else {
