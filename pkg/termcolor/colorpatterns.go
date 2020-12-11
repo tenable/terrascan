@@ -3,10 +3,11 @@ package termcolor
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"os"
 	"regexp"
+
+	"go.uber.org/zap"
 )
 
 var (
@@ -53,17 +54,18 @@ type colorPatternSerialized struct {
 **/
 
 var defaultColorPatterns = map[FieldSpec]FieldStyle{
-	{"description", defaultValuePattern}:   {"", "Fg#0c0"},
-	{"severity", defaultValuePattern}:      {"", "?HIGH=Fg#f00?MEDIUM=Fg#c84?LOW=Fg#cc0"},
-	{"resource_name", defaultValuePattern}: {"", "Fg#0ff|Bold"},
-	{"resource_type", defaultValuePattern}: {"", "Fg#0cc"},
-	{"file", defaultValuePattern}:          {"", "Fg#fff|Bold"},
-	{"low", `\d+`}:                         {"Fg#cc0", "Fg#cc0"},
-	{"medium", `\d+`}:                      {"Fg#c84", "Fg#c84"},
-	{"high", `\d+`}:                        {"Fg#f00", "Fg#f00"},
-
-	{"count", ""}:                      {"Bg#ccc|Fg#000", ""},
-	{"rule_name", defaultValuePattern}: {"Bg#ccc|Fg#000", ""},
+	{"[dD]escription", defaultValuePattern}:          {"", "Fg#0c0"},
+	{"[sS]everity", defaultValuePattern}:             {"", "?HIGH=Fg#f00?MEDIUM=Fg#c84?LOW=Fg#cc0"},
+	{`[rR]esource[_\s][nN]ame`, defaultValuePattern}: {"", "Fg#0ff|Bold"},
+	{`[rR]esource[_\s][tT]ype`, defaultValuePattern}: {"", "Fg#0cc"},
+	{"[fF]ile", defaultValuePattern}:                 {"", "Fg#00768B|Bold"},
+	{"[lL]ow", `\d+`}:                                {"Fg#cc0", "Fg#cc0"},
+	{"[mM]edium", `\d+`}:                             {"Fg#c84", "Fg#c84"},
+	{"[hH]igh", `\d+`}:                               {"Fg#f00", "Fg#f00"},
+	{"count", ""}:                                    {"Bg#ccc|Fg#000", ""},
+	{`[rR]ule[_\s][nN]ame`, defaultValuePattern}:     {"Bg#ccc|Fg#000", ""},
+	{"File/Folder", defaultValuePattern}:             {"", "Fg#00768B|Bold"},
+	{"Policies Validated", defaultValuePattern}:      {"Bg#ccc|Fg#000", ""},
 }
 
 func init() {
@@ -131,9 +133,9 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 
 		/* rePtn should process a whole line and have 5 subgroups */
 		if len(ptn.ValuePattern) == 0 {
-			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?:\s*?)()(.*?)\s*$`, ptn.KeyPattern)
+			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?\s*:\s*?)()(.*?)\s*$`, ptn.KeyPattern)
 		} else {
-			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?: "?)(%s)("?,?)\s*$`, ptn.KeyPattern, ptn.ValuePattern)
+			rePtn = fmt.Sprintf(`^([-\s]*"?)(%s)("?\s*:\s*"?)(%s)("?,?)\s*$`, ptn.KeyPattern, ptn.ValuePattern)
 		}
 		ColorPatterns[regexp.MustCompile("(?m)"+rePtn)] = fmts
 	}
