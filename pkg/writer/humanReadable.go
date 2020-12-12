@@ -18,10 +18,10 @@ package writer
 
 import (
 	"bytes"
-	"fmt"
 	"io"
-	"os"
 	"text/template"
+
+	"go.uber.org/zap"
 )
 
 const (
@@ -67,8 +67,8 @@ func init() {
 func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 	tmpl, err := template.New("Report").Parse(defaultTemplate)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		zap.S().Errorf("failed to write human readable output. error: '%v'", err)
+		return err
 	}
 
 	buffer := bytes.Buffer{}
