@@ -1,4 +1,4 @@
-# Getting Started
+# Usage
 Terrascan is a static code analyzer for Infrastructure as Code tooling. It can executed with the native binary/executable or by using the [`docker`](#using-docker) container.
 
 ## Installation
