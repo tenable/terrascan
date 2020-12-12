@@ -32,30 +32,30 @@ const (
 Violation Details - 
 	{{- $showDetails := .ShowViolationDetails}}
     {{range $index, $element := .ViolationStore.Violations}}
-	Description{{"\t"}}:{{"\t"}}{{$element.Description}}
-	File{{"\t\t"}}:{{"\t"}}{{$element.File}}
-	Line{{"\t\t"}}:{{"\t"}}{{$element.LineNumber}}
-	Severity{{"\t"}}:{{"\t"}}{{$element.Severity}}
+	{{printf "%-15v" "Description"}}:{{"\t"}}{{$element.Description}}
+	{{printf "%-15v" "File"}}:{{"\t"}}{{$element.File}}
+	{{printf "%-15v" "Line"}}:{{"\t"}}{{$element.LineNumber}}
+	{{printf "%-15v" "Severity"}}:{{"\t"}}{{$element.Severity}}
 	{{if $showDetails -}}
-	Rule Name{{"\t"}}:{{"\t"}}{{$element.RuleName}}
-	Rule ID{{"\t\t"}}:{{"\t"}}{{$element.RuleID}}
-	Resource Name{{"\t"}}:{{"\t"}}{{$element.ResourceName}}
-	Resource Type{{"\t"}}:{{"\t"}}{{$element.ResourceType}}
-	Category{{"\t"}}:{{"\t"}}{{$element.Category}}
+	{{printf "%-15v" "Rule Name"}}:{{"\t"}}{{$element.RuleName}}
+	{{printf "%-15v" "Rule ID"}}:{{"\t"}}{{$element.RuleID}}
+	{{printf "%-15v" "Resource Name"}}:{{"\t"}}{{if $element.ResourceName}}{{$element.ResourceName}}{{else}}""{{end}}
+	{{printf "%-15v" "Resource Type"}}:{{"\t"}}{{$element.ResourceType}}
+	{{printf "%-15v" "Category"}}:{{"\t"}}{{$element.Category}}
 	{{end}}
 	-----------------------------------------------------------------------
 	{{end}}
 {{end}}	
 Scan Summary -
 
-	File/Folder{{"\t\t"}}:{{"\t"}}{{.ResourcePath}}
-	IaC Type{{"\t\t"}}:{{"\t"}}{{.IacType}}
-	Scanned At{{"\t\t"}}:{{"\t"}}{{.Timestamp}}
-	Policies Validated{{"\t"}}:{{"\t"}}{{.TotalPolicies}}
-	Violated Policies{{"\t"}}:{{"\t"}}{{.ViolationStore.Count.TotalCount}}
-	Low{{"\t\t\t"}}:{{"\t"}}{{.ViolationStore.Count.LowCount}}
-	Medium{{"\t\t\t"}}:{{"\t"}}{{.ViolationStore.Count.MediumCount}}
-	High{{"\t\t\t"}}:{{"\t"}}{{.ViolationStore.Count.HighCount}}
+	{{printf "%-20v" "File/Folder"}}:{{"\t"}}{{.ResourcePath}}
+	{{printf "%-20v" "IaC Type"}}:{{"\t"}}{{.IacType}}
+	{{printf "%-20v" "Scanned At"}}:{{"\t"}}{{.Timestamp}}
+	{{printf "%-20v" "Policies Validated"}}:{{"\t"}}{{.TotalPolicies}}
+	{{printf "%-20v" "Violated Policies"}}:{{"\t"}}{{.ViolationStore.Count.TotalCount}}
+	{{printf "%-20v" "Low"}}:{{"\t"}}{{.ViolationStore.Count.LowCount}}
+	{{printf "%-20v" "Medium"}}:{{"\t"}}{{.ViolationStore.Count.MediumCount}}
+	{{printf "%-20v" "High"}}:{{"\t"}}{{.ViolationStore.Count.HighCount}}
 `
 )
 
