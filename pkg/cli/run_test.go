@@ -26,10 +26,12 @@ func TestRun(t *testing.T) {
 		iacType     string
 		iacVersion  string
 		cloudType   []string
+		format      string
 		iacFilePath string
 		iacDirPath  string
 		configFile  string
 		configOnly  bool
+		verbose     bool
 		stdOut      string
 		want        string
 		wantErr     error
@@ -56,11 +58,24 @@ func TestRun(t *testing.T) {
 			iacFilePath: "testdata/run-test/config-only.yaml",
 			configOnly:  true,
 		},
+		{
+			name:        "config-only flag true with human readable format",
+			cloudType:   []string{"terraform"},
+			iacFilePath: "testdata/run-test/config-only.tf",
+			configOnly:  true,
+			format:      "human",
+		},
+		{
+			name:        "config-only flag false with human readable format",
+			cloudType:   []string{"k8s"},
+			iacFilePath: "testdata/run-test/config-only.yaml",
+			format:      "human",
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, "", "", "", tt.configOnly, false, false)
+			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, tt.format, "", "", tt.configOnly, false, tt.verbose)
 		})
 	}
 }
