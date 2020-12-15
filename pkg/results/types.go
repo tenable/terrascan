@@ -46,8 +46,8 @@ type ViolationStore struct {
 
 // ScanSummary will hold the default scan summary data
 type ScanSummary struct {
-	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
 	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file/folder,attr"`
+	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
 	Timestamp            string `json:"scanned_at" yaml:"scanned_at" xml:"scanned_at,attr"`
 	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`
 	TotalPolicies        int    `json:"policies_validated" yaml:"policies_validated" xml:"policies_validated,attr"`

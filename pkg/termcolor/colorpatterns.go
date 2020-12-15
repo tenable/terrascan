@@ -54,18 +54,17 @@ type colorPatternSerialized struct {
 **/
 
 var defaultColorPatterns = map[FieldSpec]FieldStyle{
-	{"[dD]escription", defaultValuePattern}:          {"", "Fg#0c0"},
-	{"[sS]everity", defaultValuePattern}:             {"", "?HIGH=Fg#f00?MEDIUM=Fg#c84?LOW=Fg#cc0"},
-	{`[rR]esource[_\s][nN]ame`, defaultValuePattern}: {"", "Fg#0ff|Bold"},
-	{`[rR]esource[_\s][tT]ype`, defaultValuePattern}: {"", "Fg#0cc"},
-	{"[fF]ile", defaultValuePattern}:                 {"", "Fg#00768B|Bold"},
-	{"[lL]ow", `\d+`}:                                {"Fg#cc0", "Fg#cc0"},
-	{"[mM]edium", `\d+`}:                             {"Fg#c84", "Fg#c84"},
-	{"[hH]igh", `\d+`}:                               {"Fg#f00", "Fg#f00"},
-	{"count", ""}:                                    {"Bg#ccc|Fg#000", ""},
-	{`[rR]ule[_\s][nN]ame`, defaultValuePattern}:     {"Bg#ccc|Fg#000", ""},
-	{"File/Folder", defaultValuePattern}:             {"", "Fg#00768B|Bold"},
-	{"Policies Validated", defaultValuePattern}:      {"Bg#ccc|Fg#000", ""},
+	{"[dD]escription", defaultValuePattern}:               {"", "Fg#0c0"},
+	{"[sS]everity", defaultValuePattern}:                  {"", "?HIGH=Fg#f00?MEDIUM=Fg#c84?LOW=Fg#cc0"},
+	{`[rR]esource[_\s][nN]ame`, defaultValuePattern}:      {"", "Fg#0ff|Bold"},
+	{`[rR]esource[_\s][tT]ype`, defaultValuePattern}:      {"", "Fg#0cc"},
+	{"[fF]ile", defaultValuePattern}:                      {"", "Fg#00768B|Bold"},
+	{"[lL]ow", `\d+`}:                                     {"Fg#cc0", "Fg#cc0"},
+	{"[mM]edium", `\d+`}:                                  {"Fg#c84", "Fg#c84"},
+	{"[hH]igh", `\d+`}:                                    {"Fg#f00", "Fg#f00"},
+	{`[rR]ule[_\s][nN]ame`, defaultValuePattern}:          {"Bg#ccc|Fg#000", ""},
+	{"[fF]ile/[fF]older", defaultValuePattern}:            {"", "Fg#00768B|Bold"},
+	{`[pP]olicies[_\s][vV]alidated`, defaultValuePattern}: {"Bg#ccc|Fg#000", ""},
 }
 
 func init() {
