@@ -10,6 +10,53 @@ import (
 	"github.com/accurics/terrascan/pkg/results"
 )
 
+// these variables would be used as test input accross the writer package
+var (
+	resourceConfigInput = output.AllResourceConfigs{
+		"aws_s3_bucket": []output.ResourceConfig{
+			{
+				ID:     "aws_s3_bucket.bucket",
+				Name:   "bucket",
+				Source: "modules/m1/main.tf",
+				Line:   20,
+				Type:   "aws_s3_bucket",
+				Config: map[string]string{
+					"bucket": "${module.m3.fullbucketname}",
+					"policy": "${module.m2.fullbucketpolicy}",
+				},
+			},
+		},
+	}
+
+	violationsInput = policy.EngineOutput{
+		ViolationStore: &results.ViolationStore{
+			Violations: []*results.Violation{
+				{
+					RuleName:     "s3EnforceUserACL",
+					Description:  "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:       "AWS.S3Bucket.DS.High.1043",
+					Severity:     "HIGH",
+					Category:     "S3",
+					ResourceName: "bucket",
+					ResourceType: "aws_s3_bucket",
+					File:         "modules/m1/main.tf",
+					LineNumber:   20,
+				},
+			},
+			Summary: results.ScanSummary{
+				ResourcePath:     "test",
+				IacType:          "terraform",
+				Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+				TotalPolicies:    566,
+				LowCount:         0,
+				MediumCount:      0,
+				HighCount:        1,
+				ViolatedPolicies: 1,
+			},
+		},
+	}
+)
+
 const (
 	configOnlyTestOutputYAML = `aws_s3_bucket:
     - id: aws_s3_bucket.bucket
@@ -33,8 +80,8 @@ const (
           file: modules/m1/main.tf
           line: 20
     scan_summary:
-        iac_type: terraform
         file/folder: test
+        iac_type: terraform
         scanned_at: 2020-12-12 11:21:29.902796 +0000 UTC
         policies_validated: 566
         violated_policies: 1
@@ -51,53 +98,13 @@ func TestYAMLWriter(t *testing.T) {
 		expectedOutput string
 	}{
 		{
-			name: "YAML Writer: ResourceConfig",
-			input: output.AllResourceConfigs{
-				"aws_s3_bucket": []output.ResourceConfig{
-					{
-						ID:     "aws_s3_bucket.bucket",
-						Name:   "bucket",
-						Source: "modules/m1/main.tf",
-						Line:   20,
-						Type:   "aws_s3_bucket",
-						Config: map[string]string{
-							"bucket": "${module.m3.fullbucketname}",
-							"policy": "${module.m2.fullbucketpolicy}",
-						},
-					},
-				},
-			},
+			name:           "YAML Writer: ResourceConfig",
+			input:          resourceConfigInput,
 			expectedOutput: configOnlyTestOutputYAML,
 		},
 		{
-			name: "YAML Writer: Violations",
-			input: policy.EngineOutput{
-				ViolationStore: &results.ViolationStore{
-					Violations: []*results.Violation{
-						{
-							RuleName:     "s3EnforceUserACL",
-							Description:  "S3 bucket Access is allowed to all AWS Account Users.",
-							RuleID:       "AWS.S3Bucket.DS.High.1043",
-							Severity:     "HIGH",
-							Category:     "S3",
-							ResourceName: "bucket",
-							ResourceType: "aws_s3_bucket",
-							File:         "modules/m1/main.tf",
-							LineNumber:   20,
-						},
-					},
-					Summary: results.ScanSummary{
-						ResourcePath:     "test",
-						IacType:          "terraform",
-						Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
-						TotalPolicies:    566,
-						LowCount:         0,
-						MediumCount:      0,
-						HighCount:        1,
-						ViolatedPolicies: 1,
-					},
-				},
-			},
+			name:           "YAML Writer: Violations",
+			input:          violationsInput,
 			expectedOutput: scanTestOutputYAML,
 		},
 	}
