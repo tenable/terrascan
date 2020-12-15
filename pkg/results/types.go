@@ -16,6 +16,12 @@
 
 package results
 
+import (
+	"time"
+
+	"github.com/accurics/terrascan/pkg/utils"
+)
+
 // Violation Contains data for each violation
 type Violation struct {
 	RuleName     string      `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
@@ -64,4 +70,27 @@ func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	vs.Summary.TotalPolicies += extra.Summary.TotalPolicies
 
 	return vs
+}
+
+// AddSummary will update the summary with remaining details
+func (vs *ViolationStore) AddSummary(iacType, iacFilePath, iacDirPath string) {
+	if iacType == "" {
+		// the default scan type is terraform
+		vs.Summary.IacType = "terraform"
+	} else {
+		vs.Summary.IacType = iacType
+	}
+
+	if iacFilePath != "" {
+		// can skip the error as the file validation is already done
+		// while executor is initialized
+		filePath, _ := utils.GetAbsPath(iacFilePath)
+		vs.Summary.ResourcePath = filePath
+	} else {
+		// can skip the error as the directory validation is already done
+		// while executor is initialized
+		dirPath, _ := utils.GetAbsPath(iacDirPath)
+		vs.Summary.ResourcePath = dirPath
+	}
+	vs.Summary.Timestamp = time.Now().UTC().String()
 }
