@@ -32,11 +32,15 @@ const (
           resource_type: aws_s3_bucket
           file: modules/m1/main.tf
           line: 20
-    count:
+    scan_summary:
+        iac_type: terraform
+        file/folder: test
+        scanned_at: 2020-12-12 11:21:29.902796 +0000 UTC
+        policies_validated: 566
+        violated_policies: 1
         low: 0
         medium: 0
-        high: 1
-        total: 1`
+        high: 1`
 )
 
 func TestYAMLWriter(t *testing.T) {
@@ -82,11 +86,15 @@ func TestYAMLWriter(t *testing.T) {
 							LineNumber:   20,
 						},
 					},
-					Count: results.ViolationStats{
-						LowCount:    0,
-						MediumCount: 0,
-						HighCount:   1,
-						TotalCount:  1,
+					Summary: results.ScanSummary{
+						ResourcePath:     "test",
+						IacType:          "terraform",
+						Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+						TotalPolicies:    566,
+						LowCount:         0,
+						MediumCount:      0,
+						HighCount:        1,
+						ViolatedPolicies: 1,
 					},
 				},
 			},

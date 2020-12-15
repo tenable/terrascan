@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/results"
 )
 
@@ -18,13 +19,8 @@ func TestHumanReadbleWriter(t *testing.T) {
 	}{
 		{
 			name: "Human Readable Writer: Violations",
-			input: results.DefaultScanResult{
-				IacType:              "terraform",
-				ResourcePath:         "/test",
-				Timestamp:            "2020-12-12 11:21:29.902796 +0000 UTC",
-				TotalPolicies:        566,
-				ShowViolationDetails: true,
-				ViolationStore: results.ViolationStore{
+			input: policy.EngineOutput{
+				ViolationStore: &results.ViolationStore{
 					Violations: []*results.Violation{
 						{
 							RuleName:     "s3EnforceUserACL",
@@ -38,23 +34,34 @@ func TestHumanReadbleWriter(t *testing.T) {
 							LineNumber:   20,
 						},
 					},
-					Count: results.ViolationStats{
-						LowCount:    0,
-						MediumCount: 0,
-						HighCount:   1,
-						TotalCount:  1,
+					Summary: results.ScanSummary{
+						ResourcePath:     "test",
+						IacType:          "terraform",
+						Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+						TotalPolicies:    566,
+						LowCount:         0,
+						MediumCount:      0,
+						HighCount:        1,
+						ViolatedPolicies: 1,
 					},
 				},
 			},
 		},
 		{
 			name: "Human Readable Writer: No Violations",
-			input: results.DefaultScanResult{
-				IacType:              "k8s",
-				ResourcePath:         "/test",
-				Timestamp:            "2020-12-12 11:21:29.902796 +0000 UTC",
-				TotalPolicies:        566,
-				ShowViolationDetails: false,
+			input: policy.EngineOutput{
+				ViolationStore: &results.ViolationStore{
+					Summary: results.ScanSummary{
+						ResourcePath:     "test",
+						IacType:          "terraform",
+						Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+						TotalPolicies:    566,
+						LowCount:         0,
+						MediumCount:      0,
+						HighCount:        1,
+						ViolatedPolicies: 1,
+					},
+				},
 			},
 		},
 	}
