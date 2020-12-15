@@ -303,16 +303,16 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 
 	severity := regoData.Metadata.Severity
 	if strings.ToLower(severity) == "high" {
-		e.results.ViolationStore.Count.HighCount++
+		e.results.ViolationStore.Summary.HighCount++
 	} else if strings.ToLower(severity) == "medium" {
-		e.results.ViolationStore.Count.MediumCount++
+		e.results.ViolationStore.Summary.MediumCount++
 	} else if strings.ToLower(severity) == "low" {
-		e.results.ViolationStore.Count.LowCount++
+		e.results.ViolationStore.Summary.LowCount++
 	} else {
 		zap.S().Warn("invalid severity found in rule definition",
 			zap.String("rule id", violation.RuleID), zap.String("severity", severity))
 	}
-	e.results.ViolationStore.Count.TotalCount++
+	e.results.ViolationStore.Summary.ViolatedPolicies++
 
 	e.results.ViolationStore.AddResult(&violation)
 }
@@ -390,10 +390,8 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	}
 
 	e.stats.runTime = time.Since(start)
-	return e.results, nil
-}
 
-// GetRuleCount will return the ruleCount value
-func (e Engine) GetRuleCount() int {
-	return e.stats.ruleCount
+	// add the rule count of the policy engine to result summary
+	e.results.ViolationStore.Summary.TotalPolicies += e.stats.ruleCount
+	return e.results, nil
 }

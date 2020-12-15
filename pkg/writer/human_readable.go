@@ -30,7 +30,7 @@ const (
 	defaultTemplate string = `
 {{if (gt (len .ViolationStore.Violations) 0) }}
 Violation Details - 
-	{{- $showDetails := .ShowViolationDetails}}
+	{{- $showDetails := .ViolationStore.Summary.ShowViolationDetails}}
     {{range $index, $element := .ViolationStore.Violations}}
 	{{printf "%-15v" "Description"}}:{{"\t"}}{{$element.Description}}
 	{{printf "%-15v" "File"}}:{{"\t"}}{{$element.File}}
@@ -48,14 +48,14 @@ Violation Details -
 {{end}}	
 Scan Summary -
 
-	{{printf "%-20v" "File/Folder"}}:{{"\t"}}{{.ResourcePath}}
-	{{printf "%-20v" "IaC Type"}}:{{"\t"}}{{.IacType}}
-	{{printf "%-20v" "Scanned At"}}:{{"\t"}}{{.Timestamp}}
-	{{printf "%-20v" "Policies Validated"}}:{{"\t"}}{{.TotalPolicies}}
-	{{printf "%-20v" "Violated Policies"}}:{{"\t"}}{{.ViolationStore.Count.TotalCount}}
-	{{printf "%-20v" "Low"}}:{{"\t"}}{{.ViolationStore.Count.LowCount}}
-	{{printf "%-20v" "Medium"}}:{{"\t"}}{{.ViolationStore.Count.MediumCount}}
-	{{printf "%-20v" "High"}}:{{"\t"}}{{.ViolationStore.Count.HighCount}}
+	{{printf "%-20v" "File/Folder"}}:{{"\t"}}{{.ViolationStore.Summary.ResourcePath}}
+	{{printf "%-20v" "IaC Type"}}:{{"\t"}}{{.ViolationStore.Summary.IacType}}
+	{{printf "%-20v" "Scanned At"}}:{{"\t"}}{{.ViolationStore.Summary.Timestamp}}
+	{{printf "%-20v" "Policies Validated"}}:{{"\t"}}{{.ViolationStore.Summary.TotalPolicies}}
+	{{printf "%-20v" "Violated Policies"}}:{{"\t"}}{{.ViolationStore.Summary.ViolatedPolicies}}
+	{{printf "%-20v" "Low"}}:{{"\t"}}{{.ViolationStore.Summary.LowCount}}
+	{{printf "%-20v" "Medium"}}:{{"\t"}}{{.ViolationStore.Summary.MediumCount}}
+	{{printf "%-20v" "High"}}:{{"\t"}}{{.ViolationStore.Summary.HighCount}}
 `
 )
 

@@ -16,12 +16,6 @@
 
 package results
 
-import (
-	"time"
-
-	"github.com/accurics/terrascan/pkg/utils"
-)
-
 // Violation Contains data for each violation
 type Violation struct {
 	RuleName     string      `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
@@ -38,28 +32,23 @@ type Violation struct {
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
-// ViolationStats Contains stats related to the violation data
-type ViolationStats struct {
-	LowCount    int `json:"low" yaml:"low" xml:"low,attr"`
-	MediumCount int `json:"medium" yaml:"medium" xml:"medium,attr"`
-	HighCount   int `json:"high" yaml:"high" xml:"high,attr"`
-	TotalCount  int `json:"total" yaml:"total" xml:"total,attr"`
-}
-
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations>violation"`
-	Count      ViolationStats `json:"count" yaml:"count" xml:"count"`
+	Violations []*Violation `json:"violations" yaml:"violations" xml:"violations>violation"`
+	Summary    ScanSummary  `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
 }
 
-// DefaultScanResult will hold the default scan summary data
-type DefaultScanResult struct {
-	IacType              string
-	ResourcePath         string
-	Timestamp            string
-	TotalPolicies        int
-	ShowViolationDetails bool
-	ViolationStore
+// ScanSummary will hold the default scan summary data
+type ScanSummary struct {
+	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
+	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file/folder,attr"`
+	Timestamp            string `json:"timestamp" yaml:"timestamp" xml:"timestamp,attr"`
+	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`
+	TotalPolicies        int    `json:"policies_validated" yaml:"policies_validated" xml:"policies_validated,attr"`
+	ViolatedPolicies     int    `json:"violated_policies" yaml:"violated_policies" xml:"violated_policies,attr"`
+	LowCount             int    `json:"low" yaml:"low" xml:"low,attr"`
+	MediumCount          int    `json:"medium" yaml:"medium" xml:"medium,attr"`
+	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
 }
 
 // Add adds two ViolationStores
@@ -67,42 +56,12 @@ func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	// Just concatenate the slices, since order shouldn't be important
 	vs.Violations = append(vs.Violations, extra.Violations...)
 
-	// Add the counts
-	vs.Count.LowCount += extra.Count.LowCount
-	vs.Count.MediumCount += extra.Count.MediumCount
-	vs.Count.HighCount += extra.Count.HighCount
-	vs.Count.TotalCount += extra.Count.TotalCount
+	// Add the scan summary
+	vs.Summary.LowCount += extra.Summary.LowCount
+	vs.Summary.MediumCount += extra.Summary.MediumCount
+	vs.Summary.HighCount += extra.Summary.HighCount
+	vs.Summary.ViolatedPolicies += extra.Summary.ViolatedPolicies
+	vs.Summary.TotalPolicies += extra.Summary.TotalPolicies
 
 	return vs
-}
-
-// NewDefaultScanResult will initialize DefaultScanResult
-func NewDefaultScanResult(iacType, iacFilePath, iacDirPath string, totalPolicyCount int, verbose bool, violationStore ViolationStore) *DefaultScanResult {
-	sr := new(DefaultScanResult)
-
-	if iacType == "" {
-		// the default scan type is terraform
-		sr.IacType = "terraform"
-	} else {
-		sr.IacType = iacType
-	}
-
-	if iacFilePath != "" {
-		// can skip the error as the file validation is already done
-		// while executor is initialized
-		filePath, _ := utils.GetAbsPath(iacFilePath)
-		sr.ResourcePath = filePath
-	} else {
-		// can skip the error as the directory validation is already done
-		// while executor is initialized
-		dirPath, _ := utils.GetAbsPath(iacDirPath)
-		sr.ResourcePath = dirPath
-	}
-	sr.ShowViolationDetails = verbose
-	sr.TotalPolicies = totalPolicyCount
-	sr.ViolationStore = violationStore
-	// set current time as scan time
-	sr.Timestamp = time.Now().UTC().String()
-
-	return sr
 }

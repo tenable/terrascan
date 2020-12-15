@@ -23,7 +23,6 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
-	result "github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
@@ -81,15 +80,10 @@ func Run(iacType, iacVersion string, cloudType []string,
 		}
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
-		if strings.EqualFold(format, humanOutputFormat) {
-			defaultScanResult := result.NewDefaultScanResult(iacType, iacFilePath, iacDirPath, executor.GetTotalPolicyCount(), verbose, *results.Violations.ViolationStore)
-			writer.Write(format, defaultScanResult, outputWriter)
-		} else {
-			writer.Write(format, results.Violations, outputWriter)
-		}
+		writer.Write(format, results.Violations, outputWriter)
 	}
 
-	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
+	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
 		os.RemoveAll(tempDir)
 		os.Exit(3)
 	}
