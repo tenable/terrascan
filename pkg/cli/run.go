@@ -31,7 +31,6 @@ import (
 
 const (
 	humanOutputFormat = "human"
-	jsonOutputFormat  = "json"
 )
 
 // Run executes terrascan in CLI mode
@@ -70,13 +69,18 @@ func Run(iacType, iacVersion string, cloudType []string,
 		return
 	}
 
+	// add verbose flag to the scan summary
+	results.Violations.ViolationStore.Summary.ShowViolationDetails = verbose
+
 	outputWriter := NewOutputWriter(useColors)
 
 	if configOnly {
 		// human readable output doesn't support --config-only flag
-		// if --config-only flag is set, then display json output
+		// if --config-only flag is set, then exit with an error
+		// asking the user to use yaml or json output format
 		if strings.EqualFold(format, humanOutputFormat) {
-			format = jsonOutputFormat
+			zap.S().Error("please use yaml or json output format when using --config-only flag")
+			return
 		}
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
