@@ -17,7 +17,15 @@
 package cli
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/runtime"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestRun(t *testing.T) {
@@ -76,6 +84,117 @@ func TestRun(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, tt.format, "", "", tt.configOnly, false, tt.verbose)
+		})
+	}
+}
+
+func TestWriteResults(t *testing.T) {
+	testInput := runtime.Output{
+		ResourceConfig: output.AllResourceConfigs{},
+		Violations: policy.EngineOutput{
+			ViolationStore: &results.ViolationStore{},
+		},
+	}
+	type args struct {
+		results    runtime.Output
+		useColors  bool
+		verbose    bool
+		configOnly bool
+		format     string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "config only true with human readable output format",
+			args: args{
+				results:    testInput,
+				configOnly: true,
+				format:     "human",
+			},
+			wantErr: true,
+		},
+		{
+			name: "config only true with non human readable output format",
+			args: args{
+				results:    testInput,
+				configOnly: true,
+				format:     "json",
+			},
+			wantErr: false,
+		},
+		{
+			name: "config only false",
+			args: args{
+				results:    testInput,
+				configOnly: false,
+				format:     "human",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := writeResults(tt.args.results, tt.args.useColors, tt.args.verbose, tt.args.configOnly, tt.args.format); (err != nil) != tt.wantErr {
+				t.Errorf("writeResults() error = gotErr: %v, wantErr: %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestDownloadRemoteRepository(t *testing.T) {
+	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+
+	type args struct {
+		remoteType string
+		remoteURL  string
+		tempDir    string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "blank input paramters",
+			args: args{
+				remoteType: "",
+				remoteURL:  "",
+				tempDir:    "",
+			},
+		},
+		{
+			name: "invalid input parameters",
+			args: args{
+				remoteType: "test",
+				remoteURL:  "test",
+				tempDir:    "test",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid inputs paramters",
+			args: args{
+				remoteType: "git",
+				remoteURL:  "github.com/accurics/terrascan",
+				tempDir:    testTempdir,
+			},
+			want: testTempdir,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := downloadRemoteRepository(tt.args.remoteType, tt.args.remoteURL, tt.args.tempDir)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("downloadRemoteRepository() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

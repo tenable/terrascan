@@ -17,6 +17,7 @@
 package cli
 
 import (
+	"errors"
 	"flag"
 	"os"
 	"path/filepath"
@@ -43,16 +44,12 @@ func Run(iacType, iacVersion string, cloudType []string,
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
-	d := downloader.NewDownloader()
-	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
-	if err == downloader.ErrEmptyURLType {
-		// url and type empty, proceed with regular scanning
-		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
-	} else if err != nil {
-		// some error while downloading remote repository
+	path, err := downloadRemoteRepository(remoteType, remoteURL, tempDir)
+	if err != nil {
 		return
-	} else {
-		// successfully downloaded remote repository
+	}
+
+	if path != "" {
 		iacDirPath = path
 	}
 
@@ -69,6 +66,33 @@ func Run(iacType, iacVersion string, cloudType []string,
 		return
 	}
 
+	// write results to console
+	err = writeResults(results, useColors, verbose, configOnly, humanOutputFormat)
+	if err != nil {
+		zap.S().Error("failed to write results", zap.Error(err))
+		return
+	}
+
+	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
+		os.RemoveAll(tempDir)
+		os.Exit(3)
+	}
+}
+
+func downloadRemoteRepository(remoteType, remoteURL, tempDir string) (string, error) {
+	d := downloader.NewDownloader()
+	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
+	if err == downloader.ErrEmptyURLType {
+		// url and type empty, proceed with regular scanning
+		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
+	} else if err != nil {
+		// some error while downloading remote repository
+		return path, err
+	}
+	return path, nil
+}
+
+func writeResults(results runtime.Output, useColors, verbose, configOnly bool, format string) error {
 	// add verbose flag to the scan summary
 	results.Violations.ViolationStore.Summary.ShowViolationDetails = verbose
 
@@ -79,16 +103,11 @@ func Run(iacType, iacVersion string, cloudType []string,
 		// if --config-only flag is set, then exit with an error
 		// asking the user to use yaml or json output format
 		if strings.EqualFold(format, humanOutputFormat) {
-			zap.S().Error("please use yaml or json output format when using --config-only flag")
-			return
+			return errors.New("please use yaml or json output format when using --config-only flag")
 		}
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
 		writer.Write(format, results.Violations, outputWriter)
 	}
-
-	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
-		os.RemoveAll(tempDir)
-		os.Exit(3)
-	}
+	return nil
 }
