@@ -33,27 +33,3 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 
-  # push image to Docker Hub
-  push:
-    # Ensure "validate" job passes before pushing image.
-    needs: validate
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    steps:
-    - name: Checkout Terrascan
-      uses: actions/checkout@v1
-
-    - name: Build Terrascan docker image
-      run: make docker-build
-
-    - name: Login to docker hub
-      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
-
-    - name: Push Terrascan docker image
-      run: make docker-push
-
-    - name: Push Terrascan latest docker image
-      if: ${{ github.ref == 'refs/heads/master' }}
-      run: make docker-push-latest
