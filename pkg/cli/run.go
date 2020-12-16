@@ -67,7 +67,7 @@ func Run(iacType, iacVersion string, cloudType []string,
 	}
 
 	// write results to console
-	err = writeResults(results, useColors, verbose, configOnly, humanOutputFormat)
+	err = writeResults(results, useColors, verbose, configOnly, format)
 	if err != nil {
 		zap.S().Error("failed to write results", zap.Error(err))
 		return
