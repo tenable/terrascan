@@ -60,6 +60,9 @@ var (
 	// UseColors indicates whether to use color output
 	UseColors bool
 	useColors string // used for flag processing
+
+	// Verbose indicates whether to display all fields in default human readlbe output
+	Verbose bool
 )
 
 var scanCmd = &cobra.Command{
@@ -100,7 +103,7 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
 	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile,
-		PolicyPath, OutputType, RemoteType, RemoteURL, ConfigOnly, UseColors)
+		PolicyPath, OutputType, RemoteType, RemoteURL, ConfigOnly, UseColors, Verbose)
 }
 
 func init() {
@@ -115,5 +118,6 @@ func init() {
 	scanCmd.Flags().BoolVarP(&ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
 	// flag passes a string, but we normalize to bool in PreRun
 	scanCmd.Flags().StringVar(&useColors, "use-colors", "auto", "color output (auto, t, f)")
+	scanCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
 	RegisterCommand(rootCmd, scanCmd)
 }

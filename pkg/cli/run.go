@@ -17,9 +17,11 @@
 package cli
 
 import (
+	"errors"
 	"flag"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
@@ -28,26 +30,26 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	humanOutputFormat = "human"
+)
+
 // Run executes terrascan in CLI mode
 func Run(iacType, iacVersion string, cloudType []string,
 	iacFilePath, iacDirPath, configFile string, policyPath []string,
-	format, remoteType, remoteURL string, configOnly, useColors bool) {
+	format, remoteType, remoteURL string, configOnly, useColors, verbose bool) {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
-	d := downloader.NewDownloader()
-	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
-	if err == downloader.ErrEmptyURLType {
-		// url and type empty, proceed with regular scanning
-		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
-	} else if err != nil {
-		// some error while downloading remote repository
+	path, err := downloadRemoteRepository(remoteType, remoteURL, tempDir)
+	if err != nil {
 		return
-	} else {
-		// successfully downloaded remote repository
+	}
+
+	if path != "" {
 		iacDirPath = path
 	}
 
@@ -64,16 +66,48 @@ func Run(iacType, iacVersion string, cloudType []string,
 		return
 	}
 
+	// write results to console
+	err = writeResults(results, useColors, verbose, configOnly, format)
+	if err != nil {
+		zap.S().Error("failed to write results", zap.Error(err))
+		return
+	}
+
+	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
+		os.RemoveAll(tempDir)
+		os.Exit(3)
+	}
+}
+
+func downloadRemoteRepository(remoteType, remoteURL, tempDir string) (string, error) {
+	d := downloader.NewDownloader()
+	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
+	if err == downloader.ErrEmptyURLType {
+		// url and type empty, proceed with regular scanning
+		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
+	} else if err != nil {
+		// some error while downloading remote repository
+		return path, err
+	}
+	return path, nil
+}
+
+func writeResults(results runtime.Output, useColors, verbose, configOnly bool, format string) error {
+	// add verbose flag to the scan summary
+	results.Violations.ViolationStore.Summary.ShowViolationDetails = verbose
+
 	outputWriter := NewOutputWriter(useColors)
 
 	if configOnly {
+		// human readable output doesn't support --config-only flag
+		// if --config-only flag is set, then exit with an error
+		// asking the user to use yaml or json output format
+		if strings.EqualFold(format, humanOutputFormat) {
+			return errors.New("please use yaml or json output format when using --config-only flag")
+		}
 		writer.Write(format, results.ResourceConfig, outputWriter)
 	} else {
 		writer.Write(format, results.Violations, outputWriter)
 	}
-
-	if results.Violations.ViolationStore.Count.TotalCount != 0 && flag.Lookup("test.v") == nil {
-		os.RemoveAll(tempDir)
-		os.Exit(3)
-	}
+	return nil
 }

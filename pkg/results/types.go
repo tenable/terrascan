@@ -16,6 +16,10 @@
 
 package results
 
+import (
+	"time"
+)
+
 // Violation Contains data for each violation
 type Violation struct {
 	RuleName     string      `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
@@ -32,18 +36,23 @@ type Violation struct {
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
-// ViolationStats Contains stats related to the violation data
-type ViolationStats struct {
-	LowCount    int `json:"low" yaml:"low" xml:"low,attr"`
-	MediumCount int `json:"medium" yaml:"medium" xml:"medium,attr"`
-	HighCount   int `json:"high" yaml:"high" xml:"high,attr"`
-	TotalCount  int `json:"total" yaml:"total" xml:"total,attr"`
-}
-
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations []*Violation   `json:"violations" yaml:"violations" xml:"violations>violation"`
-	Count      ViolationStats `json:"count" yaml:"count" xml:"count"`
+	Violations []*Violation `json:"violations" yaml:"violations" xml:"violations>violation"`
+	Summary    ScanSummary  `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
+}
+
+// ScanSummary will hold the default scan summary data
+type ScanSummary struct {
+	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file/folder,attr"`
+	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
+	Timestamp            string `json:"scanned_at" yaml:"scanned_at" xml:"scanned_at,attr"`
+	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`
+	TotalPolicies        int    `json:"policies_validated" yaml:"policies_validated" xml:"policies_validated,attr"`
+	ViolatedPolicies     int    `json:"violated_policies" yaml:"violated_policies" xml:"violated_policies,attr"`
+	LowCount             int    `json:"low" yaml:"low" xml:"low,attr"`
+	MediumCount          int    `json:"medium" yaml:"medium" xml:"medium,attr"`
+	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
 }
 
 // Add adds two ViolationStores
@@ -51,11 +60,20 @@ func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	// Just concatenate the slices, since order shouldn't be important
 	vs.Violations = append(vs.Violations, extra.Violations...)
 
-	// Add the counts
-	vs.Count.LowCount += extra.Count.LowCount
-	vs.Count.MediumCount += extra.Count.MediumCount
-	vs.Count.HighCount += extra.Count.HighCount
-	vs.Count.TotalCount += extra.Count.TotalCount
+	// Add the scan summary
+	vs.Summary.LowCount += extra.Summary.LowCount
+	vs.Summary.MediumCount += extra.Summary.MediumCount
+	vs.Summary.HighCount += extra.Summary.HighCount
+	vs.Summary.ViolatedPolicies += extra.Summary.ViolatedPolicies
+	vs.Summary.TotalPolicies += extra.Summary.TotalPolicies
 
 	return vs
+}
+
+// AddSummary will update the summary with remaining details
+func (vs *ViolationStore) AddSummary(iacType, iacResourcePath string) {
+
+	vs.Summary.IacType = iacType
+	vs.Summary.ResourcePath = iacResourcePath
+	vs.Summary.Timestamp = time.Now().UTC().String()
 }

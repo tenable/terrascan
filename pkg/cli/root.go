@@ -25,7 +25,7 @@ var (
 	LogLevel string
 	// LogType Logging output type (console, json)
 	LogType string
-	// OutputType Violation output type (text, json, yaml, xml)
+	// OutputType Violation output type (human, json, yaml, xml)
 	OutputType string
 	// ConfigFile Config file path
 	ConfigFile string

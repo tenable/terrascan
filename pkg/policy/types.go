@@ -33,6 +33,6 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 	}
 	return results.ViolationStore{
 		Violations: me.Violations,
-		Count:      me.Count,
+		Summary:    me.Summary,
 	}
 }

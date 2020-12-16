@@ -103,8 +103,8 @@ func TestYAMLFileIsColorized(t *testing.T) {
 	verifyLineWithStringIsColorized("file", yamlData.String(), t)
 }
 
-func TestYAMLCountIsColorized(t *testing.T) {
-	verifyLineWithStringIsColorized("count", yamlData.String(), t)
+func TestYAMLPoliciesValidatedIsColorized(t *testing.T) {
+	verifyLineWithStringIsColorized("policies_validated", yamlData.String(), t)
 }
 func TestYAMLCountLowIsColorized(t *testing.T) {
 	verifyLineWithStringIsColorized("low", yamlData.String(), t)
@@ -162,8 +162,8 @@ func TestJSONFileIsColorized(t *testing.T) {
 	verifyLineWithStringIsColorized("file", jsonData.String(), t)
 }
 
-func TestJSONCountIsColorized(t *testing.T) {
-	verifyLineWithStringIsColorized("count", jsonData.String(), t)
+func TestJSONPoliciesValidatedIsColorized(t *testing.T) {
+	verifyLineWithStringIsColorized("policies_validated", jsonData.String(), t)
 }
 func TestJSONCountLowIsColorized(t *testing.T) {
 	verifyLineWithStringIsColorized("low", jsonData.String(), t)

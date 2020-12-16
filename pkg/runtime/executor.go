@@ -123,6 +123,14 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 
+	resourcePath := e.filePath
+	if resourcePath == "" {
+		resourcePath = e.dirPath
+	}
+
+	// add other summary details after policies are evaluated
+	results.Violations.ViolationStore.AddSummary(e.iacType, resourcePath)
+
 	// send notifications, if configured
 	if err = e.SendNotifications(results); err != nil {
 		return results, err
