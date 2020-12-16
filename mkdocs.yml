@@ -38,7 +38,9 @@ extra:
 # Navigation
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started:
+    - Quickstart: getting-started/quickstart.md
+    - Usage: getting-started/usage.md
   - Architecture: architecture.md
   - Policies:
     - Policy Reference: policies.md
