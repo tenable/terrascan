@@ -19,12 +19,18 @@ package tfv12
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
+	"strings"
 
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"go.uber.org/zap"
+)
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+var (
+	skipRulesPattern = regexp.MustCompile(`#ts:skip=\s*(([A-Za-z0-9]+\.?){5})(\s*,\s*([A-Za-z0-9]+\.?){5})*`)
+	skipRulesPrefix  = "#ts:skip="
 )
 
 // CreateResourceConfig creates output.ResourceConfig
@@ -49,15 +55,40 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 
 	// create a resource config
 	resourceConfig = output.ResourceConfig{
-		ID:     fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
-		Name:   managedResource.Name,
-		Type:   managedResource.Type,
-		Source: managedResource.DeclRange.Filename,
-		Line:   managedResource.DeclRange.Start.Line,
-		Config: goOut,
+		ID:        fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
+		Name:      managedResource.Name,
+		Type:      managedResource.Type,
+		Source:    managedResource.DeclRange.Filename,
+		Line:      managedResource.DeclRange.Start.Line,
+		Config:    goOut,
+		SkipRules: getSkipRules(c.rangeSource(hclBody.Range())),
 	}
 
 	// successful
 	zap.S().Debugf("created resource config for resource '%s', file: '%s'", resourceConfig.Name, resourceConfig.Source)
 	return resourceConfig, nil
+}
+
+// getSkipRules returns a list of rules to be skipped. The rules to be skipped
+// can be set in terraform resource config with the following comma separated pattern:
+// #ts:skip=AWS.S3Bucket.DS.High.1043, AWS.S3Bucket.DS.High.1044
+func getSkipRules(body string) []string {
+
+	var skipRules []string
+
+	// check if any rules comments are present in body
+	if !skipRulesPattern.MatchString(body) {
+		return skipRules
+	}
+
+	// get all skip rule comments
+	comments := skipRulesPattern.FindAllString(body, -1)
+
+	// extract rule ids from comments
+	for _, c := range comments {
+		c = strings.TrimPrefix(c, skipRulesPrefix)
+		c = strings.ReplaceAll(c, ",", " ")
+		skipRules = append(skipRules, strings.Fields(c)...)
+	}
+	return skipRules
 }
