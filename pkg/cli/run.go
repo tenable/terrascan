@@ -35,27 +35,25 @@ const (
 )
 
 // Run executes terrascan in CLI mode
-func Run(iacType, iacVersion string, cloudType []string,
-	iacFilePath, iacDirPath, configFile string, policyPath []string,
-	format, remoteType, remoteURL string, configOnly, useColors, verbose bool) {
+func Run(configFile, format string, scanStruct *ScanOptions) {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
-	path, err := downloadRemoteRepository(remoteType, remoteURL, tempDir)
+	path, err := downloadRemoteRepository(scanStruct.RemoteType, scanStruct.RemoteURL, tempDir)
 	if err != nil {
 		return
 	}
 
 	if path != "" {
-		iacDirPath = path
+		scanStruct.IacDirPath = path
 	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		iacFilePath, iacDirPath, configFile, policyPath)
+	executor, err := runtime.NewExecutor(scanStruct.IacType, scanStruct.IacVersion, scanStruct.PolicyType,
+		scanStruct.IacFilePath, scanStruct.IacDirPath, configFile, scanStruct.PolicyPath)
 	if err != nil {
 		return
 	}
@@ -67,7 +65,7 @@ func Run(iacType, iacVersion string, cloudType []string,
 	}
 
 	// write results to console
-	err = writeResults(results, useColors, verbose, configOnly, format)
+	err = writeResults(results, scanStruct.UseColors, scanStruct.Verbose, scanStruct.ConfigOnly, format)
 	if err != nil {
 		zap.S().Error("failed to write results", zap.Error(err))
 		return

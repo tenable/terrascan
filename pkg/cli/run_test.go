@@ -31,59 +31,65 @@ import (
 func TestRun(t *testing.T) {
 	table := []struct {
 		name        string
-		iacType     string
-		iacVersion  string
-		cloudType   []string
-		format      string
-		iacFilePath string
-		iacDirPath  string
 		configFile  string
-		configOnly  bool
-		verbose     bool
+		format      string
+		scanOptions *ScanOptions
 		stdOut      string
 		want        string
 		wantErr     error
 	}{
 		{
-			name:       "normal terraform run",
-			cloudType:  []string{"terraform"},
-			iacDirPath: "testdata/run-test",
+			name: "normal terraform run",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"terraform"},
+				IacDirPath: "testdata/run-test",
+			},
 		},
 		{
-			name:       "normal k8s run",
-			cloudType:  []string{"k8s"},
-			iacDirPath: "testdata/run-test",
+			name: "normal k8s run",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"k8s"},
+				IacDirPath: "testdata/run-test",
+			},
 		},
 		{
-			name:        "config-only flag terraform",
-			cloudType:   []string{"terraform"},
-			iacFilePath: "testdata/run-test/config-only.tf",
-			configOnly:  true,
+			name: "config-only flag terraform",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"terraform"},
+				IacDirPath: "testdata/run-test/config-only.tf",
+				ConfigOnly: true,
+			},
 		},
 		{
-			name:        "config-only flag k8s",
-			cloudType:   []string{"k8s"},
-			iacFilePath: "testdata/run-test/config-only.yaml",
-			configOnly:  true,
+			name: "config-only flag k8s",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"k8s"},
+				IacDirPath: "testdata/run-test/config-only.yaml",
+				ConfigOnly: true,
+			},
 		},
 		{
-			name:        "config-only flag true with human readable format",
-			cloudType:   []string{"terraform"},
-			iacFilePath: "testdata/run-test/config-only.tf",
-			configOnly:  true,
-			format:      "human",
+			name: "config-only flag true with human readable format",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"terraform"},
+				IacDirPath: "testdata/run-test/config-only.tf",
+				ConfigOnly: true,
+			},
+			format: "human",
 		},
 		{
-			name:        "config-only flag false with human readable format",
-			cloudType:   []string{"k8s"},
-			iacFilePath: "testdata/run-test/config-only.yaml",
-			format:      "human",
+			name: "config-only flag false with human readable format",
+			scanOptions: &ScanOptions{
+				PolicyType: []string{"k8s"},
+				IacDirPath: "testdata/run-test/config-only.yaml",
+			},
+			format: "human",
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, tt.format, "", "", tt.configOnly, false, tt.verbose)
+			Run(tt.configFile, tt.format, scanOptions)
 		})
 	}
 }

@@ -28,7 +28,8 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
+// ScanOptions represents scan command and its optional flags
+type ScanOptions struct {
 	// PolicyPath Policy path directory
 	PolicyPath []string
 
@@ -63,7 +64,9 @@ var (
 
 	// Verbose indicates whether to display all fields in default human readlbe output
 	Verbose bool
-)
+}
+
+var scanOptions = &ScanOptions{}
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
@@ -73,12 +76,12 @@ var scanCmd = &cobra.Command{
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		switch strings.ToLower(useColors) {
+		switch strings.ToLower(scanOptions.useColors) {
 		case "auto":
 			if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
-				UseColors = true
+				scanOptions.UseColors = true
 			} else {
-				UseColors = false
+				scanOptions.UseColors = false
 			}
 
 		case "true":
@@ -90,10 +93,10 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 		case "1":
 			fallthrough
 		case "force":
-			UseColors = true
+			scanOptions.UseColors = true
 
 		default:
-			UseColors = false
+			scanOptions.UseColors = false
 		}
 		initial(cmd, args)
 	},
@@ -102,22 +105,21 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 
 func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
-	Run(IacType, IacVersion, PolicyType, IacFilePath, IacDirPath, ConfigFile,
-		PolicyPath, OutputType, RemoteType, RemoteURL, ConfigOnly, UseColors, Verbose)
+	Run(ConfigFile, OutputType, scanOptions)
 }
 
 func init() {
-	scanCmd.Flags().StringSliceVarP(&PolicyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
-	scanCmd.Flags().StringVarP(&IacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
-	scanCmd.Flags().StringVarP(&IacVersion, "iac-version", "", "", fmt.Sprintf("iac version (%v)", strings.Join(iacProvider.SupportedIacVersions(), ", ")))
-	scanCmd.Flags().StringVarP(&IacFilePath, "iac-file", "f", "", "path to a single IaC file")
-	scanCmd.Flags().StringVarP(&IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
-	scanCmd.Flags().StringArrayVarP(&PolicyPath, "policy-path", "p", []string{}, "policy path directory")
-	scanCmd.Flags().StringVarP(&RemoteType, "remote-type", "r", "", "type of remote backend (git, s3, gcs, http)")
-	scanCmd.Flags().StringVarP(&RemoteURL, "remote-url", "u", "", "url pointing to remote IaC repository")
-	scanCmd.Flags().BoolVarP(&ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
+	scanCmd.Flags().StringSliceVarP(&scanOptions.PolicyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
+	scanCmd.Flags().StringVarP(&scanOptions.IacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
+	scanCmd.Flags().StringVarP(&scanOptions.IacVersion, "iac-version", "", "", fmt.Sprintf("iac version (%v)", strings.Join(iacProvider.SupportedIacVersions(), ", ")))
+	scanCmd.Flags().StringVarP(&scanOptions.IacFilePath, "iac-file", "f", "", "path to a single IaC file")
+	scanCmd.Flags().StringVarP(&scanOptions.IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
+	scanCmd.Flags().StringArrayVarP(&scanOptions.PolicyPath, "policy-path", "p", []string{}, "policy path directory")
+	scanCmd.Flags().StringVarP(&scanOptions.RemoteType, "remote-type", "r", "", "type of remote backend (git, s3, gcs, http)")
+	scanCmd.Flags().StringVarP(&scanOptions.RemoteURL, "remote-url", "u", "", "url pointing to remote IaC repository")
+	scanCmd.Flags().BoolVarP(&scanOptions.ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
 	// flag passes a string, but we normalize to bool in PreRun
-	scanCmd.Flags().StringVar(&useColors, "use-colors", "auto", "color output (auto, t, f)")
-	scanCmd.Flags().BoolVarP(&Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
+	scanCmd.Flags().StringVar(&scanOptions.useColors, "use-colors", "auto", "color output (auto, t, f)")
+	scanCmd.Flags().BoolVarP(&scanOptions.Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
 	RegisterCommand(rootCmd, scanCmd)
 }
