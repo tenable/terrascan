@@ -30,6 +30,11 @@ func TestGetSkipRules(t *testing.T) {
 		expected []string
 	}{
 		{
+			name:  "no rules",
+			input: "no rules here",
+			// expected would be an empty slice of strings
+		},
+		{
 			name:     "single rule id",
 			input:    "#ts:skip=AWS.S3Bucket.DS.High.1041",
 			expected: []string{"AWS.S3Bucket.DS.High.1041"},
