@@ -33,55 +33,55 @@ func TestRun(t *testing.T) {
 		name        string
 		configFile  string
 		format      string
-		scanOptions *ScanOptions
+		scanCommand *ScanCommand
 		stdOut      string
 		want        string
 		wantErr     error
 	}{
 		{
 			name: "normal terraform run",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"terraform"},
-				IacDirPath: "testdata/run-test",
+			scanCommand: &ScanCommand{
+				policyType: []string{"terraform"},
+				iacDirPath: "testdata/run-test",
 			},
 		},
 		{
 			name: "normal k8s run",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"k8s"},
-				IacDirPath: "testdata/run-test",
+			scanCommand: &ScanCommand{
+				policyType: []string{"k8s"},
+				iacDirPath: "testdata/run-test",
 			},
 		},
 		{
 			name: "config-only flag terraform",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"terraform"},
-				IacDirPath: "testdata/run-test/config-only.tf",
-				ConfigOnly: true,
+			scanCommand: &ScanCommand{
+				policyType: []string{"terraform"},
+				iacDirPath: "testdata/run-test/config-only.tf",
+				configOnly: true,
 			},
 		},
 		{
 			name: "config-only flag k8s",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"k8s"},
-				IacDirPath: "testdata/run-test/config-only.yaml",
-				ConfigOnly: true,
+			scanCommand: &ScanCommand{
+				policyType: []string{"k8s"},
+				iacDirPath: "testdata/run-test/config-only.yaml",
+				configOnly: true,
 			},
 		},
 		{
 			name: "config-only flag true with human readable format",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"terraform"},
-				IacDirPath: "testdata/run-test/config-only.tf",
-				ConfigOnly: true,
+			scanCommand: &ScanCommand{
+				policyType: []string{"terraform"},
+				iacDirPath: "testdata/run-test/config-only.tf",
+				configOnly: true,
 			},
 			format: "human",
 		},
 		{
 			name: "config-only flag false with human readable format",
-			scanOptions: &ScanOptions{
-				PolicyType: []string{"k8s"},
-				IacDirPath: "testdata/run-test/config-only.yaml",
+			scanCommand: &ScanCommand{
+				policyType: []string{"k8s"},
+				iacDirPath: "testdata/run-test/config-only.yaml",
 			},
 			format: "human",
 		},
@@ -89,117 +89,258 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.configFile, tt.format, scanOptions)
+			tt.scanCommand.Run()
 		})
 	}
 }
 
-func TestWriteResults(t *testing.T) {
+func TestScanCommand_downloadRemoteRepository(t *testing.T) {
+	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	defer os.RemoveAll(testTempdir)
+
+	type fields struct {
+		RemoteType string
+		RemoteURL  string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		tempDir string
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "blank input parameters",
+			fields: fields{
+				RemoteType: "",
+				RemoteURL:  "",
+			},
+			tempDir: "",
+		},
+		{
+			name: "invalid input parameters",
+			fields: fields{
+				RemoteType: "test",
+				RemoteURL:  "test",
+			},
+			tempDir: "test",
+			wantErr: true,
+		},
+		{
+			name: "invalid input parameters",
+			fields: fields{
+				RemoteType: "git",
+				RemoteURL:  "github.com/accurics/terrascan",
+			},
+			tempDir: testTempdir,
+			want:    testTempdir,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := ScanCommand{
+				remoteType: tt.fields.RemoteType,
+				remoteURL:  tt.fields.RemoteURL,
+			}
+			err := s.downloadRemoteRepository(tt.tempDir)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if s.iacDirPath != tt.want {
+				t.Errorf("ScanOptions.downloadRemoteRepository() = %v, want %v", s.iacDirPath, tt.want)
+			}
+		})
+	}
+}
+
+func TestScanCommand_writeResults(t *testing.T) {
 	testInput := runtime.Output{
 		ResourceConfig: output.AllResourceConfigs{},
 		Violations: policy.EngineOutput{
 			ViolationStore: &results.ViolationStore{},
 		},
 	}
-	type args struct {
-		results    runtime.Output
-		useColors  bool
-		verbose    bool
-		configOnly bool
-		format     string
+
+	type fields struct {
+		ConfigOnly bool
+		OutputType string
 	}
 	tests := []struct {
 		name    string
-		args    args
+		fields  fields
+		args    runtime.Output
 		wantErr bool
 	}{
 		{
-			name: "config only true with human readable output format",
-			args: args{
-				results:    testInput,
-				configOnly: true,
-				format:     "human",
+			name: "config only true",
+			fields: fields{
+				ConfigOnly: true,
+				OutputType: "yaml",
 			},
-			wantErr: true,
-		},
-		{
-			name: "config only true with non human readable output format",
-			args: args{
-				results:    testInput,
-				configOnly: true,
-				format:     "json",
-			},
-			wantErr: false,
+			args: testInput,
 		},
 		{
 			name: "config only false",
-			args: args{
-				results:    testInput,
-				configOnly: false,
-				format:     "human",
+			fields: fields{
+				ConfigOnly: false,
+				OutputType: "json",
 			},
-			wantErr: false,
+			args: testInput,
+		},
+		{
+			// until we support config only flag for xml, this test case is for expected failure
+			name: "config only true for xml",
+			fields: fields{
+				ConfigOnly: true,
+				OutputType: "xml",
+			},
+			args:    testInput,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := writeResults(tt.args.results, tt.args.useColors, tt.args.verbose, tt.args.configOnly, tt.args.format); (err != nil) != tt.wantErr {
-				t.Errorf("writeResults() error = gotErr: %v, wantErr: %v", err, tt.wantErr)
+			s := ScanCommand{
+				configOnly: tt.fields.ConfigOnly,
+				outputType: tt.fields.OutputType,
+			}
+			if err := s.writeResults(tt.args); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.writeResults() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestDownloadRemoteRepository(t *testing.T) {
-	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
-
-	type args struct {
-		remoteType string
-		remoteURL  string
-		tempDir    string
+func TestScanCommand_validate(t *testing.T) {
+	type fields struct {
+		configOnly bool
+		outputType string
 	}
 	tests := []struct {
 		name    string
-		args    args
-		want    string
+		fields  fields
 		wantErr bool
 	}{
 		{
-			name: "blank input paramters",
-			args: args{
-				remoteType: "",
-				remoteURL:  "",
-				tempDir:    "",
-			},
-		},
-		{
-			name: "invalid input parameters",
-			args: args{
-				remoteType: "test",
-				remoteURL:  "test",
-				tempDir:    "test",
+			name: "validate --config-only with human readable output",
+			fields: fields{
+				configOnly: true,
+				outputType: "human",
 			},
 			wantErr: true,
 		},
 		{
-			name: "valid inputs paramters",
-			args: args{
-				remoteType: "git",
-				remoteURL:  "github.com/accurics/terrascan",
-				tempDir:    testTempdir,
+			name: "validate --config-only with non human readable output",
+			fields: fields{
+				configOnly: true,
+				outputType: "json",
 			},
-			want: testTempdir,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := downloadRemoteRepository(tt.args.remoteType, tt.args.remoteURL, tt.args.tempDir)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
-				return
+			s := ScanCommand{
+				configOnly: tt.fields.configOnly,
+				outputType: tt.fields.outputType,
 			}
-			if got != tt.want {
-				t.Errorf("downloadRemoteRepository() = %v, want %v", got, tt.want)
+			if err := s.validate(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanCommand.validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestScanCommand_initColor(t *testing.T) {
+	type fields struct {
+		useColors string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{
+			name: "auto",
+			fields: fields{
+				useColors: "auto",
+			},
+		},
+		{
+			name: "true",
+			fields: fields{
+				useColors: "true",
+			},
+			want: true,
+		},
+		{
+			name: "1",
+			fields: fields{
+				useColors: "1",
+			},
+			want: true,
+		},
+		{
+			name: "false",
+			fields: fields{
+				useColors: "false",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ScanCommand{
+				useColors: tt.fields.useColors,
+			}
+			s.initColor()
+			if s.useColors != "auto" {
+				if s.UseColors != tt.want {
+					t.Errorf("ScanCommand.initColor() incorrect value for UseColors, got: %v, want %v", s.useColors, tt.want)
+				}
+			}
+		})
+	}
+}
+
+func TestScanCommand_Init(t *testing.T) {
+	type fields struct {
+		configOnly bool
+		outputType string
+		useColors  string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		{
+			name: "test for init fail",
+			fields: fields{
+				useColors:  "auto",
+				outputType: "human",
+				configOnly: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "test for init fail",
+			fields: fields{
+				useColors:  "auto",
+				outputType: "human",
+				configOnly: false,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ScanCommand{
+				configOnly: tt.fields.configOnly,
+				outputType: tt.fields.outputType,
+				useColors:  tt.fields.useColors,
+			}
+			if err := s.Init(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanCommand.Init() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

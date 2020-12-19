@@ -18,55 +18,15 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
 
-// ScanOptions represents scan command and its optional flags
-type ScanOptions struct {
-	// PolicyPath Policy path directory
-	PolicyPath []string
-
-	// PolicyType Cloud type (aws, azure, gcp, github)
-	PolicyType []string
-
-	// IacType IaC type (terraform)
-	IacType string
-
-	// IacVersion IaC version (for terraform:v12)
-	IacVersion string
-
-	// IacFilePath Path to a single IaC file
-	IacFilePath string
-
-	// IacDirPath Path to a directory containing one or more IaC files
-	IacDirPath string
-
-	// RemoteType indicates the type of remote backend. Supported backends are
-	// git s3, gcs, http.
-	RemoteType string
-
-	// RemoteURL points to the remote Iac repository on git, s3, gcs, http
-	RemoteURL string
-
-	// ConfigOnly will output resource config (should only be used for debugging purposes)
-	ConfigOnly bool
-
-	// UseColors indicates whether to use color output
-	UseColors bool
-	useColors string // used for flag processing
-
-	// Verbose indicates whether to display all fields in default human readlbe output
-	Verbose bool
-}
-
-var scanOptions = &ScanOptions{}
+var scanCommand = new(ScanCommand)
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
@@ -75,51 +35,29 @@ var scanCmd = &cobra.Command{
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
-	PreRun: func(cmd *cobra.Command, args []string) {
-		switch strings.ToLower(scanOptions.useColors) {
-		case "auto":
-			if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
-				scanOptions.UseColors = true
-			} else {
-				scanOptions.UseColors = false
-			}
-
-		case "true":
-			fallthrough
-		case "t":
-			fallthrough
-		case "y":
-			fallthrough
-		case "1":
-			fallthrough
-		case "force":
-			scanOptions.UseColors = true
-
-		default:
-			scanOptions.UseColors = false
-		}
-		initial(cmd, args)
-	},
-	Run: scan,
+	PreRun: initial,
+	Run:    scan,
 }
 
 func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
-	Run(ConfigFile, OutputType, scanOptions)
+	scanCommand.configFile = ConfigFile
+	scanCommand.outputType = OutputType
+	scanCommand.StartScan()
 }
 
 func init() {
-	scanCmd.Flags().StringSliceVarP(&scanOptions.PolicyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
-	scanCmd.Flags().StringVarP(&scanOptions.IacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
-	scanCmd.Flags().StringVarP(&scanOptions.IacVersion, "iac-version", "", "", fmt.Sprintf("iac version (%v)", strings.Join(iacProvider.SupportedIacVersions(), ", ")))
-	scanCmd.Flags().StringVarP(&scanOptions.IacFilePath, "iac-file", "f", "", "path to a single IaC file")
-	scanCmd.Flags().StringVarP(&scanOptions.IacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
-	scanCmd.Flags().StringArrayVarP(&scanOptions.PolicyPath, "policy-path", "p", []string{}, "policy path directory")
-	scanCmd.Flags().StringVarP(&scanOptions.RemoteType, "remote-type", "r", "", "type of remote backend (git, s3, gcs, http)")
-	scanCmd.Flags().StringVarP(&scanOptions.RemoteURL, "remote-url", "u", "", "url pointing to remote IaC repository")
-	scanCmd.Flags().BoolVarP(&scanOptions.ConfigOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
+	scanCmd.Flags().StringSliceVarP(&scanCommand.policyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
+	scanCmd.Flags().StringVarP(&scanCommand.iacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
+	scanCmd.Flags().StringVarP(&scanCommand.iacVersion, "iac-version", "", "", fmt.Sprintf("iac version (%v)", strings.Join(iacProvider.SupportedIacVersions(), ", ")))
+	scanCmd.Flags().StringVarP(&scanCommand.iacFilePath, "iac-file", "f", "", "path to a single IaC file")
+	scanCmd.Flags().StringVarP(&scanCommand.iacDirPath, "iac-dir", "d", ".", "path to a directory containing one or more IaC files")
+	scanCmd.Flags().StringArrayVarP(&scanCommand.policyPath, "policy-path", "p", []string{}, "policy path directory")
+	scanCmd.Flags().StringVarP(&scanCommand.remoteType, "remote-type", "r", "", "type of remote backend (git, s3, gcs, http)")
+	scanCmd.Flags().StringVarP(&scanCommand.remoteURL, "remote-url", "u", "", "url pointing to remote IaC repository")
+	scanCmd.Flags().BoolVarP(&scanCommand.configOnly, "config-only", "", false, "will output resource config (should only be used for debugging purposes)")
 	// flag passes a string, but we normalize to bool in PreRun
-	scanCmd.Flags().StringVar(&scanOptions.useColors, "use-colors", "auto", "color output (auto, t, f)")
-	scanCmd.Flags().BoolVarP(&scanOptions.Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
+	scanCmd.Flags().StringVar(&scanCommand.useColors, "use-colors", "auto", "color output (auto, t, f)")
+	scanCmd.Flags().BoolVarP(&scanCommand.Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
 	RegisterCommand(rootCmd, scanCmd)
 }

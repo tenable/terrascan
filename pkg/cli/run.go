@@ -27,6 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
+	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
 )
 
@@ -34,78 +35,177 @@ const (
 	humanOutputFormat = "human"
 )
 
+// ScanCommand represents scan command and its optional flags
+type ScanCommand struct {
+	// Policy path directory
+	policyPath []string
+
+	// Cloud type (aws, azure, gcp, github)
+	policyType []string
+
+	// IaC type (terraform)
+	iacType string
+
+	// IaC version (for terraform:v12)
+	iacVersion string
+
+	// Path to a single IaC file
+	iacFilePath string
+
+	// Path to a directory containing one or more IaC files
+	iacDirPath string
+
+	// remoteType indicates the type of remote backend. Supported backends are
+	// git s3, gcs, http.
+	remoteType string
+
+	// remoteURL points to the remote Iac repository on git, s3, gcs, http
+	remoteURL string
+
+	// configOnly will output resource config (should only be used for debugging purposes)
+	configOnly bool
+
+	// config file path
+	configFile string
+
+	// the output format for wring the results
+	outputType string
+
+	// UseColors indicates whether to use color output
+	UseColors bool
+	useColors string // used for flag processing
+
+	// Verbose indicates whether to display all fields in default human readlbe output
+	Verbose bool
+}
+
+// StartScan starts the terrascan scan command
+func (s *ScanCommand) StartScan() error {
+	err := s.Init()
+	if err != nil {
+		return err
+	}
+
+	err = s.Run()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Init initalises and validates ScanCommand
+func (s *ScanCommand) Init() error {
+	s.initColor()
+	err := s.validate()
+	if err != nil {
+		zap.S().Error("failed to start scan", zap.Error(err))
+		return err
+	}
+	return nil
+}
+
+// validate config only for human readable output
+// rest command options are validated by the executor
+func (s ScanCommand) validate() error {
+	// human readable output doesn't support --config-only flag
+	// if --config-only flag is set, then exit with an error
+	// asking the user to use yaml or json output format
+	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
+		return errors.New("please use yaml or json output format when using --config-only flag")
+	}
+	return nil
+}
+
+// initialises use colors options
+func (s *ScanCommand) initColor() {
+	switch strings.ToLower(s.useColors) {
+	case "auto":
+		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+			s.UseColors = true
+		} else {
+			s.UseColors = false
+		}
+
+	case "true":
+		fallthrough
+	case "t":
+		fallthrough
+	case "y":
+		fallthrough
+	case "1":
+		fallthrough
+	case "force":
+		s.UseColors = true
+
+	default:
+		s.UseColors = false
+	}
+}
+
 // Run executes terrascan in CLI mode
-func Run(configFile, format string, scanStruct *ScanOptions) {
+func (s *ScanCommand) Run() error {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
-	path, err := downloadRemoteRepository(scanStruct.RemoteType, scanStruct.RemoteURL, tempDir)
+	err := s.downloadRemoteRepository(tempDir)
 	if err != nil {
-		return
-	}
-
-	if path != "" {
-		scanStruct.IacDirPath = path
+		return err
 	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(scanStruct.IacType, scanStruct.IacVersion, scanStruct.PolicyType,
-		scanStruct.IacFilePath, scanStruct.IacDirPath, configFile, scanStruct.PolicyPath)
+	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
+		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath)
 	if err != nil {
-		return
+		return err
 	}
 
 	// executor output
 	results, err := executor.Execute()
 	if err != nil {
-		return
+		return err
 	}
 
 	// write results to console
-	err = writeResults(results, scanStruct.UseColors, scanStruct.Verbose, scanStruct.ConfigOnly, format)
+	err = s.writeResults(results)
 	if err != nil {
 		zap.S().Error("failed to write results", zap.Error(err))
-		return
+		return err
 	}
 
 	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
 		os.RemoveAll(tempDir)
 		os.Exit(3)
 	}
+	return nil
 }
 
-func downloadRemoteRepository(remoteType, remoteURL, tempDir string) (string, error) {
+func (s *ScanCommand) downloadRemoteRepository(tempDir string) error {
 	d := downloader.NewDownloader()
-	path, err := d.DownloadWithType(remoteType, remoteURL, tempDir)
+	path, err := d.DownloadWithType(s.remoteType, s.remoteURL, tempDir)
+	if path != "" {
+		s.iacDirPath = path
+	}
 	if err == downloader.ErrEmptyURLType {
 		// url and type empty, proceed with regular scanning
 		zap.S().Debugf("remote url and type not configured, proceeding with regular scanning")
 	} else if err != nil {
 		// some error while downloading remote repository
-		return path, err
-	}
-	return path, nil
-}
-
-func writeResults(results runtime.Output, useColors, verbose, configOnly bool, format string) error {
-	// add verbose flag to the scan summary
-	results.Violations.ViolationStore.Summary.ShowViolationDetails = verbose
-
-	outputWriter := NewOutputWriter(useColors)
-
-	if configOnly {
-		// human readable output doesn't support --config-only flag
-		// if --config-only flag is set, then exit with an error
-		// asking the user to use yaml or json output format
-		if strings.EqualFold(format, humanOutputFormat) {
-			return errors.New("please use yaml or json output format when using --config-only flag")
-		}
-		writer.Write(format, results.ResourceConfig, outputWriter)
-	} else {
-		writer.Write(format, results.Violations, outputWriter)
+		return err
 	}
 	return nil
+}
+
+func (s ScanCommand) writeResults(results runtime.Output) error {
+	// add verbose flag to the scan summary
+	results.Violations.ViolationStore.Summary.ShowViolationDetails = s.Verbose
+
+	outputWriter := NewOutputWriter(s.UseColors)
+
+	if s.configOnly {
+		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+	}
+	return writer.Write(s.outputType, results.Violations, outputWriter)
 }
