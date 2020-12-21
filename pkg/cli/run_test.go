@@ -54,14 +54,14 @@ func TestRun(t *testing.T) {
 	table := []struct {
 		name        string
 		configFile  string
-		scanCommand *ScanCommand
+		scanOptions *ScanOptions
 		stdOut      string
 		want        string
 		wantErr     bool
 	}{
 		{
 			name: "normal terraform run",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				// policy type terraform is not supported, error expected
 				policyType: []string{"terraform"},
 				iacDirPath: testDirPath,
@@ -70,7 +70,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "normal terraform run with successful output",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType: []string{"all"},
 				iacDirPath: testDirPath,
 				outputType: "json",
@@ -78,7 +78,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "normal k8s run",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType: []string{"k8s"},
 				// kustomization.y(a)ml file not present under the dir path, error expected
 				iacDirPath: testDirPath,
@@ -87,7 +87,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "normal k8s run with successful output",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType: []string{"k8s"},
 				iacDirPath: kustomizeTestDirPath,
 				outputType: "human",
@@ -95,7 +95,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "config-only flag terraform",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType:  []string{"all"},
 				iacFilePath: testTerraformFilePath,
 				configOnly:  true,
@@ -104,7 +104,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "config-only flag k8s",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType: []string{"k8s"},
 				iacDirPath: kustomizeTestDirPath,
 				configOnly: true,
@@ -115,7 +115,7 @@ func TestRun(t *testing.T) {
 			// xml doesn't support config-only, error expected
 			// modify the test results when xml supports config-only
 			name: "config-only flag true with xml output format",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType:  []string{"all"},
 				iacFilePath: testTerraformFilePath,
 				configOnly:  true,
@@ -125,7 +125,7 @@ func TestRun(t *testing.T) {
 		},
 		{
 			name: "fail to download remote repository",
-			scanCommand: &ScanCommand{
+			scanOptions: &ScanOptions{
 				policyType:  []string{"all"},
 				iacFilePath: testTerraformFilePath,
 				remoteURL:   "test",
@@ -137,16 +137,16 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.scanCommand.Run()
+			err := tt.scanOptions.Run()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.Run() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 		})
 	}
 }
 
-func TestScanCommandDownloadRemoteRepository(t *testing.T) {
+func TestScanOptionsDownloadRemoteRepository(t *testing.T) {
 	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(testTempdir)
 
@@ -190,23 +190,23 @@ func TestScanCommandDownloadRemoteRepository(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := ScanCommand{
+			s := ScanOptions{
 				remoteType: tt.fields.RemoteType,
 				remoteURL:  tt.fields.RemoteURL,
 			}
 			err := s.downloadRemoteRepository(tt.tempDir)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ScanOptions.downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if s.iacDirPath != tt.want {
-				t.Errorf("ScanCommand.downloadRemoteRepository() = %v, want %v", s.iacDirPath, tt.want)
+				t.Errorf("ScanOptions.downloadRemoteRepository() = %v, want %v", s.iacDirPath, tt.want)
 			}
 		})
 	}
 }
 
-func TestScanCommandWriteResults(t *testing.T) {
+func TestScanOptionsWriteResults(t *testing.T) {
 	testInput := runtime.Output{
 		ResourceConfig: output.AllResourceConfigs{},
 		Violations: policy.EngineOutput{
@@ -253,18 +253,18 @@ func TestScanCommandWriteResults(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := ScanCommand{
+			s := ScanOptions{
 				configOnly: tt.fields.ConfigOnly,
 				outputType: tt.fields.OutputType,
 			}
 			if err := s.writeResults(tt.args); (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.writeResults() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ScanOptions.writeResults() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestScanCommandValidate(t *testing.T) {
+func TestScanOptionsValidate(t *testing.T) {
 	type fields struct {
 		configOnly bool
 		outputType string
@@ -293,18 +293,18 @@ func TestScanCommandValidate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := ScanCommand{
+			s := ScanOptions{
 				configOnly: tt.fields.configOnly,
 				outputType: tt.fields.outputType,
 			}
 			if err := s.validate(); (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.validate() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ScanOptions.validate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestScanCommandInitColor(t *testing.T) {
+func TestScanOptionsInitColor(t *testing.T) {
 	type fields struct {
 		useColors string
 	}
@@ -342,20 +342,20 @@ func TestScanCommandInitColor(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &ScanCommand{
+			s := &ScanOptions{
 				useColors: tt.fields.useColors,
 			}
 			s.initColor()
 			if s.useColors != "auto" {
 				if s.UseColors != tt.want {
-					t.Errorf("ScanCommand.initColor() incorrect value for UseColors, got: %v, want %v", s.useColors, tt.want)
+					t.Errorf("ScanOptions.initColor() incorrect value for UseColors, got: %v, want %v", s.useColors, tt.want)
 				}
 			}
 		})
 	}
 }
 
-func TestScanCommandInit(t *testing.T) {
+func TestScanOptionsInit(t *testing.T) {
 	type fields struct {
 		configOnly bool
 		outputType string
@@ -386,19 +386,19 @@ func TestScanCommandInit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &ScanCommand{
+			s := &ScanOptions{
 				configOnly: tt.fields.configOnly,
 				outputType: tt.fields.outputType,
 				useColors:  tt.fields.useColors,
 			}
 			if err := s.Init(); (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.Init() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ScanOptions.Init() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestScanCommandStartScan(t *testing.T) {
+func TestScanOptionsScan(t *testing.T) {
 	type fields struct {
 		policyType []string
 		iacDirPath string
@@ -437,14 +437,14 @@ func TestScanCommandStartScan(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &ScanCommand{
+			s := &ScanOptions{
 				policyType: tt.fields.policyType,
 				iacDirPath: tt.fields.iacDirPath,
 				configOnly: tt.fields.configOnly,
 				outputType: tt.fields.outputType,
 			}
-			if err := s.StartScan(); (err != nil) != tt.wantErr {
-				t.Errorf("ScanCommand.StartScan() error = %v, wantErr %v", err, tt.wantErr)
+			if err := s.Scan(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.Scan() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

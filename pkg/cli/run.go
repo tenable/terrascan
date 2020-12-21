@@ -35,8 +35,8 @@ const (
 	humanOutputFormat = "human"
 )
 
-// ScanCommand represents scan command and its optional flags
-type ScanCommand struct {
+// ScanOptions represents scan command and its optional flags
+type ScanOptions struct {
 	// Policy path directory
 	policyPath []string
 
@@ -79,22 +79,22 @@ type ScanCommand struct {
 	Verbose bool
 }
 
-// StartScan starts the terrascan scan command
-func (s *ScanCommand) StartScan() error {
-	err := s.Init()
-	if err != nil {
+// Scan executes the terrascan scan command
+func (s *ScanOptions) Scan() error {
+	if err := s.Init(); err != nil {
+		zap.S().Error("scan init failed", zap.Error(err))
 		return err
 	}
 
-	err = s.Run()
-	if err != nil {
+	if err := s.Run(); err != nil {
+		zap.S().Error("scan run failed", zap.Error(err))
 		return err
 	}
 	return nil
 }
 
-//Init initalises and validates ScanCommand
-func (s *ScanCommand) Init() error {
+//Init initalises and validates ScanOptions
+func (s *ScanOptions) Init() error {
 	s.initColor()
 	err := s.validate()
 	if err != nil {
@@ -106,7 +106,7 @@ func (s *ScanCommand) Init() error {
 
 // validate config only for human readable output
 // rest command options are validated by the executor
-func (s ScanCommand) validate() error {
+func (s ScanOptions) validate() error {
 	// human readable output doesn't support --config-only flag
 	// if --config-only flag is set, then exit with an error
 	// asking the user to use yaml or json output format
@@ -117,7 +117,7 @@ func (s ScanCommand) validate() error {
 }
 
 // initialises use colors options
-func (s *ScanCommand) initColor() {
+func (s *ScanOptions) initColor() {
 	switch strings.ToLower(s.useColors) {
 	case "auto":
 		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
@@ -143,7 +143,7 @@ func (s *ScanCommand) initColor() {
 }
 
 // Run executes terrascan in CLI mode
-func (s *ScanCommand) Run() error {
+func (s *ScanOptions) Run() error {
 
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
@@ -182,7 +182,7 @@ func (s *ScanCommand) Run() error {
 	return nil
 }
 
-func (s *ScanCommand) downloadRemoteRepository(tempDir string) error {
+func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 	d := downloader.NewDownloader()
 	path, err := d.DownloadWithType(s.remoteType, s.remoteURL, tempDir)
 	if path != "" {
@@ -198,7 +198,7 @@ func (s *ScanCommand) downloadRemoteRepository(tempDir string) error {
 	return nil
 }
 
-func (s ScanCommand) writeResults(results runtime.Output) error {
+func (s ScanOptions) writeResults(results runtime.Output) error {
 	// add verbose flag to the scan summary
 	results.Violations.ViolationStore.Summary.ShowViolationDetails = s.Verbose
 
