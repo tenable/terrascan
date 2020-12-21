@@ -28,7 +28,29 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 )
 
+func TestMain(m *testing.M) {
+	setup()
+	code := m.Run()
+	shutdown()
+	os.Exit(code)
+}
+
+func setup() {
+	// to download the policies for Run test
+	// downloads the policies at $HOME/.terrascan
+	initial(nil, nil)
+}
+
+func shutdown() {
+	// remove the downloaded policies
+	os.RemoveAll(os.Getenv("HOME") + "/.terrascan")
+}
+
 func TestRun(t *testing.T) {
+	testDirPath := "testdata/run-test"
+	kustomizeTestDirPath := testDirPath + "/kustomize-test"
+	testTerraformFilePath := testDirPath + "/config-only.tf"
+
 	table := []struct {
 		name        string
 		configFile  string
@@ -42,7 +64,7 @@ func TestRun(t *testing.T) {
 			scanCommand: &ScanCommand{
 				// policy type terraform is not supported, error expected
 				policyType: []string{"terraform"},
-				iacDirPath: "testdata/run-test",
+				iacDirPath: testDirPath,
 			},
 			wantErr: true,
 		},
@@ -50,7 +72,7 @@ func TestRun(t *testing.T) {
 			name: "normal terraform run with successful output",
 			scanCommand: &ScanCommand{
 				policyType: []string{"all"},
-				iacDirPath: "testdata/run-test",
+				iacDirPath: testDirPath,
 				outputType: "json",
 			},
 		},
@@ -59,7 +81,7 @@ func TestRun(t *testing.T) {
 			scanCommand: &ScanCommand{
 				policyType: []string{"k8s"},
 				// kustomization.y(a)ml file not present under the dir path, error expected
-				iacDirPath: "testdata/run-test",
+				iacDirPath: testDirPath,
 			},
 			wantErr: true,
 		},
@@ -67,7 +89,7 @@ func TestRun(t *testing.T) {
 			name: "normal k8s run with successful output",
 			scanCommand: &ScanCommand{
 				policyType: []string{"k8s"},
-				iacDirPath: "testdata/run-test/kustomize-test",
+				iacDirPath: kustomizeTestDirPath,
 				outputType: "human",
 			},
 		},
@@ -75,7 +97,7 @@ func TestRun(t *testing.T) {
 			name: "config-only flag terraform",
 			scanCommand: &ScanCommand{
 				policyType:  []string{"all"},
-				iacFilePath: "testdata/run-test/config-only.tf",
+				iacFilePath: testTerraformFilePath,
 				configOnly:  true,
 				outputType:  "yaml",
 			},
@@ -84,7 +106,7 @@ func TestRun(t *testing.T) {
 			name: "config-only flag k8s",
 			scanCommand: &ScanCommand{
 				policyType: []string{"k8s"},
-				iacDirPath: "testdata/run-test/kustomize-test",
+				iacDirPath: kustomizeTestDirPath,
 				configOnly: true,
 				outputType: "json",
 			},
@@ -95,7 +117,7 @@ func TestRun(t *testing.T) {
 			name: "config-only flag true with xml output format",
 			scanCommand: &ScanCommand{
 				policyType:  []string{"all"},
-				iacFilePath: "testdata/run-test/config-only.tf",
+				iacFilePath: testTerraformFilePath,
 				configOnly:  true,
 				outputType:  "xml",
 			},
@@ -105,7 +127,7 @@ func TestRun(t *testing.T) {
 			name: "fail to download remote repository",
 			scanCommand: &ScanCommand{
 				policyType:  []string{"all"},
-				iacFilePath: "testdata/run-test/config-only.tf",
+				iacFilePath: testTerraformFilePath,
 				remoteURL:   "test",
 				remoteType:  "test",
 			},
@@ -124,7 +146,7 @@ func TestRun(t *testing.T) {
 	}
 }
 
-func TestScanCommand_downloadRemoteRepository(t *testing.T) {
+func TestScanCommandDownloadRemoteRepository(t *testing.T) {
 	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(testTempdir)
 
@@ -184,7 +206,7 @@ func TestScanCommand_downloadRemoteRepository(t *testing.T) {
 	}
 }
 
-func TestScanCommand_writeResults(t *testing.T) {
+func TestScanCommandWriteResults(t *testing.T) {
 	testInput := runtime.Output{
 		ResourceConfig: output.AllResourceConfigs{},
 		Violations: policy.EngineOutput{
@@ -242,7 +264,7 @@ func TestScanCommand_writeResults(t *testing.T) {
 	}
 }
 
-func TestScanCommand_validate(t *testing.T) {
+func TestScanCommandValidate(t *testing.T) {
 	type fields struct {
 		configOnly bool
 		outputType string
@@ -282,7 +304,7 @@ func TestScanCommand_validate(t *testing.T) {
 	}
 }
 
-func TestScanCommand_initColor(t *testing.T) {
+func TestScanCommandInitColor(t *testing.T) {
 	type fields struct {
 		useColors string
 	}
@@ -333,7 +355,7 @@ func TestScanCommand_initColor(t *testing.T) {
 	}
 }
 
-func TestScanCommand_Init(t *testing.T) {
+func TestScanCommandInit(t *testing.T) {
 	type fields struct {
 		configOnly bool
 		outputType string
@@ -376,7 +398,7 @@ func TestScanCommand_Init(t *testing.T) {
 	}
 }
 
-func TestScanCommand_StartScan(t *testing.T) {
+func TestScanCommandStartScan(t *testing.T) {
 	type fields struct {
 		policyType []string
 		iacDirPath string
