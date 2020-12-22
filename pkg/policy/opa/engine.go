@@ -46,13 +46,13 @@ var (
 )
 
 // NewEngine returns a new OPA policy engine
-func NewEngine(policyPath string) (*Engine, error) {
+func NewEngine(policyPath string, scanRules, skipRules []string) (*Engine, error) {
 
 	// opa engine struct
 	engine := &Engine{}
 
 	// initialize the engine
-	if err := engine.Init(policyPath); err != nil {
+	if err := engine.Init(policyPath, scanRules, skipRules); err != nil {
 		zap.S().Error("failed to initialize OPA policy engine", zap.Error(err))
 		return engine, errInitFailed
 	}
@@ -249,13 +249,19 @@ func (e *Engine) CompileRegoFiles() error {
 
 // Init initializes the Opa engine
 // Handles loading all rules, filtering, compiling, and preparing for evaluation
-func (e *Engine) Init(policyPath string) error {
+func (e *Engine) Init(policyPath string, scanRules, skipRules []string) error {
 	e.context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
 		zap.S().Error("error loading rego files", zap.String("policy path", policyPath), zap.Error(err))
 		return err
 	}
+
+	// before compiling the rego files, filter the rules based on scan and skip rules supplied
+	filterRules(e, policyPath, scanRules, skipRules)
+
+	// update the rule count
+	e.stats.ruleCount = len(e.regoDataMap)
 
 	err := e.CompileRegoFiles()
 	if err != nil {
@@ -394,4 +400,40 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	// add the rule count of the policy engine to result summary
 	e.results.ViolationStore.Summary.TotalPolicies += e.stats.ruleCount
 	return e.results, nil
+}
+
+func filterRules(e *Engine, policyPath string, scanRules, skipRules []string) {
+	// before compilation, apply scan rules and skip rules
+	if len(scanRules) > 0 {
+		// temporary map to store data from original rego data map
+		tempMap := make(map[string]*RegoData)
+		for _, ruleID := range scanRules {
+			regoData, ok := e.regoDataMap[ruleID]
+			if ok {
+				zap.S().Infof("scan rules updated. rule id: %+v found in policy path: %s", ruleID, policyPath)
+				tempMap[ruleID] = regoData
+			} else {
+				zap.S().Warnf("rule id: %+v not found in policy path: %s", ruleID, policyPath)
+			}
+		}
+		if len(tempMap) == 0 {
+			zap.S().Warnf("rule ID's: %+v not found in policy path: %s", scanRules, policyPath)
+		}
+
+		// the regoDataMap should only contain regoData for supplied scan rules
+		e.regoDataMap = tempMap
+	}
+
+	if len(skipRules) > 0 {
+		// remove rules to be skipped from the rego data map
+		for _, ruleID := range skipRules {
+			_, ok := e.regoDataMap[ruleID]
+			if ok {
+				zap.S().Infof("skip rules updated. rule id: %+v found in policy path: %s", ruleID, policyPath)
+				delete(e.regoDataMap, ruleID)
+			} else {
+				zap.S().Warnf("rule id: %+v not found in policy path: %s", ruleID, policyPath)
+			}
+		}
+	}
 }

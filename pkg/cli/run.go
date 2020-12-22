@@ -75,6 +75,12 @@ type ScanOptions struct {
 	UseColors bool
 	useColors string // used for flag processing
 
+	// ScanRules is the array of rules to scan
+	scanRules []string
+
+	// SkipRules is the array of rules to skip while scanning
+	skipRules []string
+
 	// Verbose indicates whether to display all fields in default human readlbe output
 	Verbose bool
 }
@@ -101,8 +107,7 @@ func (s *ScanOptions) Scan() error {
 //Init initalises and validates ScanOptions
 func (s *ScanOptions) Init() error {
 	s.initColor()
-	err := s.validate()
-	if err != nil {
+	if err := s.validate(); err != nil {
 		zap.S().Error("failed to start scan", zap.Error(err))
 		return err
 	}
@@ -162,7 +167,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath)
+		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath, s.scanRules, s.skipRules)
 	if err != nil {
 		return err
 	}

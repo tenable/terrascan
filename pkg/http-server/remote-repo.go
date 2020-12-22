@@ -112,7 +112,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, "", policyPath)
+		"", iacDirPath, "", policyPath, []string{}, []string{})
 	if err != nil {
 		zap.S().Error(err)
 		return output, err

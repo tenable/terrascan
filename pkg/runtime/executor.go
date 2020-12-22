@@ -34,13 +34,15 @@ type Executor struct {
 	iacType      string
 	iacVersion   string
 	configFile   string
+	scanRules    []string
+	skipRules    []string
 	iacProvider  iacProvider.IacProvider
 	policyEngine []policy.Engine
 	notifiers    []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath []string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -49,6 +51,8 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		iacType:    iacType,
 		iacVersion: iacVersion,
 		configFile: configFile,
+		scanRules:  scanRules,
+		skipRules:  skipRules,
 	}
 
 	// initialize executor
@@ -65,6 +69,11 @@ func (e *Executor) Init() error {
 	// validate inputs
 	err := e.ValidateInputs()
 	if err != nil {
+		return err
+	}
+
+	// read config file and update scan and skip rules
+	if err := e.initScanAndSkipRules(); err != nil {
 		return err
 	}
 
@@ -85,7 +94,7 @@ func (e *Executor) Init() error {
 	// create a new policy engine based on IaC type
 	zap.S().Debugf("using policy path %v", e.policyPath)
 	for _, policyPath := range e.policyPath {
-		engine, err := opa.NewEngine(policyPath)
+		engine, err := opa.NewEngine(policyPath, e.scanRules, e.skipRules)
 		if err != nil {
 			zap.S().Errorf("failed to create policy engine. error: '%s'", err)
 			return err
@@ -138,4 +147,10 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	// successful
 	return results, nil
+}
+
+// yet to implement based on file type
+func (e *Executor) initScanAndSkipRules() error {
+
+	return nil
 }

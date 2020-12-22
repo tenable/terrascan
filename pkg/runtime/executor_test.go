@@ -55,7 +55,7 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string) error {
+func (m MockPolicyEngine) Init(input string, scanRules, skipRules []string) error {
 	return m.err
 }
 

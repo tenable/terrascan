@@ -18,7 +18,8 @@ package policy
 
 // Engine Policy Engine interface
 type Engine interface {
-	Init(string) error
+	// to initialize engine with policy path, scan and skip rules
+	Init(string, []string, []string) error
 	Configure() error
 	Evaluate(EngineInput) (EngineOutput, error)
 	GetResults() EngineOutput

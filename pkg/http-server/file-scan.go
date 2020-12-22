@@ -86,10 +86,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"})
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, []string{}, []string{})
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{})
+			tempFile.Name(), "", "", []string{}, []string{}, []string{})
 	}
 	if err != nil {
 		zap.S().Error(err)
