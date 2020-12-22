@@ -79,6 +79,11 @@ type ScanOptions struct {
 	Verbose bool
 }
 
+// NewScanOptions returns a new pointer to ScanOptions
+func NewScanOptions() *ScanOptions {
+	return new(ScanOptions)
+}
+
 // Scan executes the terrascan scan command
 func (s *ScanOptions) Scan() error {
 	if err := s.Init(); err != nil {

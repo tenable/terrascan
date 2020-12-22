@@ -26,7 +26,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var scanOptions = new(ScanOptions)
+var scanOptions = NewScanOptions()
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
