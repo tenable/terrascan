@@ -268,22 +268,23 @@ func TestInit(t *testing.T) {
 
 func TestGetRulesInTomlTree(t *testing.T) {
 	// test data
+	fileLoadErr := "error while loading toml file"
 	emptyTomlTree, err := config.LoadConfig("testdata/empty.toml")
 	if err != nil {
-		t.Fatalf("error while loading toml file %v", err)
+		t.Fatalf(fileLoadErr, err)
 	}
 
 	configFileData, err := config.LoadConfig("testdata/scan-skip-rules.toml")
 	if err != nil {
-		t.Fatalf("error while loading toml file %v", err)
+		t.Fatalf(fileLoadErr, err)
 	}
-	validRulesFormat := (configFileData.Get("rules")).(*toml.Tree)
+	validRulesFormat := (configFileData.Get(rulesKey)).(*toml.Tree)
 
 	configFileData, err = config.LoadConfig("testdata/invalid-scan-skip-rules.toml")
 	if err != nil {
-		t.Fatalf("error while loading toml file %v", err)
+		t.Fatalf(fileLoadErr, err)
 	}
-	invalidRulesFormat := (configFileData.Get("rules")).(*toml.Tree)
+	invalidRulesFormat := (configFileData.Get(rulesKey)).(*toml.Tree)
 
 	type args struct {
 		tree       *toml.Tree
@@ -358,7 +359,7 @@ func TestGetRulesInTomlTree(t *testing.T) {
 	}
 }
 
-func TestExecutor_initScanAndSkipRules(t *testing.T) {
+func TestExecutorInitScanAndSkipRules(t *testing.T) {
 	assertionTestName := "valid config file with scan and skip rules"
 
 	type fields struct {
