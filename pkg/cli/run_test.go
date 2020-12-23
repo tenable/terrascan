@@ -17,7 +17,6 @@
 package cli
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -51,6 +50,7 @@ func TestRun(t *testing.T) {
 	testDirPath := "testdata/run-test"
 	kustomizeTestDirPath := testDirPath + "/kustomize-test"
 	testTerraformFilePath := testDirPath + "/config-only.tf"
+	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
 	table := []struct {
 		name        string
@@ -150,7 +150,7 @@ func TestRun(t *testing.T) {
 				policyType: []string{"all"},
 				iacDirPath: testDirPath,
 				outputType: "json",
-				skipRules:  []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"},
+				skipRules:  ruleSlice,
 			},
 		},
 		{
@@ -159,16 +159,22 @@ func TestRun(t *testing.T) {
 				policyType: []string{"all"},
 				iacDirPath: testDirPath,
 				outputType: "yaml",
-				scanRules:  []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"},
+				scanRules:  ruleSlice,
+			},
+		},
+		{
+			name: "config file with rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				configFile: "testdata/configFile.toml",
 			},
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.name == "run with scan rules" {
-				fmt.Println()
-			}
 			err := tt.scanOptions.Run()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)
