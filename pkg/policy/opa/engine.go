@@ -403,37 +403,47 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 }
 
 func filterRules(e *Engine, policyPath string, scanRules, skipRules []string) {
-	// before compilation, apply scan rules and skip rules
+	// apply scan rules
 	if len(scanRules) > 0 {
-		// temporary map to store data from original rego data map
-		tempMap := make(map[string]*RegoData)
-		for _, ruleID := range scanRules {
-			regoData, ok := e.regoDataMap[ruleID]
-			if ok {
-				zap.S().Infof("scan rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
-				tempMap[ruleID] = regoData
-			} else {
-				zap.S().Warnf("scan rule id: %+v not found in policy path: %s", ruleID, policyPath)
-			}
-		}
-		if len(tempMap) == 0 {
-			zap.S().Warnf("scan rule id's: %+v not found in policy path: %s", scanRules, policyPath)
-		}
-
-		// the regoDataMap should only contain regoData for supplied scan rules
-		e.regoDataMap = tempMap
+		filterScanRules(e, policyPath, scanRules)
 	}
 
+	// apply skip rules
 	if len(skipRules) > 0 {
-		// remove rules to be skipped from the rego data map
-		for _, ruleID := range skipRules {
-			_, ok := e.regoDataMap[ruleID]
-			if ok {
-				zap.S().Infof("skip rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
-				delete(e.regoDataMap, ruleID)
-			} else {
-				zap.S().Warnf("skip rule id: %+v not found in policy path: %s", ruleID, policyPath)
-			}
+		filterSkipRules(e, policyPath, skipRules)
+	}
+}
+
+func filterScanRules(e *Engine, policyPath string, scanRules []string) {
+
+	// temporary map to store data from original rego data map
+	tempMap := make(map[string]*RegoData)
+	for _, ruleID := range scanRules {
+		regoData, ok := e.regoDataMap[ruleID]
+		if ok {
+			zap.S().Infof("scan rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
+			tempMap[ruleID] = regoData
+		} else {
+			zap.S().Warnf("scan rule id: %+v not found in policy path: %s", ruleID, policyPath)
+		}
+	}
+	if len(tempMap) == 0 {
+		zap.S().Warnf("scan rule id's: %+v not found in policy path: %s", scanRules, policyPath)
+	}
+
+	// the regoDataMap should only contain regoData for supplied scan rules
+	e.regoDataMap = tempMap
+}
+
+func filterSkipRules(e *Engine, policyPath string, skipRules []string) {
+	// remove rules to be skipped from the rego data map
+	for _, ruleID := range skipRules {
+		_, ok := e.regoDataMap[ruleID]
+		if ok {
+			zap.S().Infof("skip rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
+			delete(e.regoDataMap, ruleID)
+		} else {
+			zap.S().Warnf("skip rule id: %+v not found in policy path: %s", ruleID, policyPath)
 		}
 	}
 }

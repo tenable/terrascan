@@ -178,32 +178,38 @@ func (e *Executor) initScanAndSkipRules() error {
 			return err
 		}
 
-		if configData.Has("rules") {
+		if configData.Has(rulesKey) {
+
+			data := (configData.Get(rulesKey)).(*toml.Tree)
+
 			// read scan rules in the toml tree
-			data := (configData.Get("rules")).(*toml.Tree)
-			scanRules, err := getRulesInTomlTree(data, e.configFile, "scan-rules")
-			if err != nil {
-				zap.S().Error("error reading config file", zap.Error(err))
+			if err := initRules(e, data, scanRulesKey); err != nil {
 				return err
-			}
-			if len(scanRules) > 0 {
-				e.scanRules = append(e.scanRules, scanRules...)
-			} else {
-				zap.S().Debugf("key 'scan-rules' not found in the config file: %s", e.configFile)
 			}
 
 			// read skip rules in the toml tree
-			skipRules, err := getRulesInTomlTree(data, e.configFile, "skip-rules")
-			if err != nil {
-				zap.S().Error("error reading config file", zap.Error(err))
+			if err := initRules(e, data, skipRulesKey); err != nil {
 				return err
 			}
-			if len(skipRules) > 0 {
-				e.skipRules = append(e.skipRules, skipRules...)
-			} else {
-				zap.S().Debugf("key 'skip-rules' not found in the config file: %s", e.configFile)
-			}
 		}
+	}
+	return nil
+}
+
+func initRules(e *Executor, tree *toml.Tree, key string) error {
+	rules, err := getRulesInTomlTree(tree, e.configFile, key)
+	if err != nil {
+		zap.S().Error("error reading config file", zap.Error(err))
+		return err
+	}
+	if len(rules) > 0 {
+		if key == scanRulesKey {
+			e.scanRules = append(e.scanRules, rules...)
+		} else {
+			e.skipRules = append(e.skipRules, rules...)
+		}
+	} else {
+		zap.S().Debugf("key '%s' not found in the config file: %s", key, e.configFile)
 	}
 	return nil
 }
