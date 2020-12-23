@@ -1,0 +1,9 @@
+# notifications configuration
+[notifications]
+    [notifications.invalid]
+    url = "https://httpbin.org/post"
+[rules]
+    skip-rules = [
+        185,
+        2008
+    ]

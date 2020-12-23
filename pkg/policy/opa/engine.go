@@ -410,14 +410,14 @@ func filterRules(e *Engine, policyPath string, scanRules, skipRules []string) {
 		for _, ruleID := range scanRules {
 			regoData, ok := e.regoDataMap[ruleID]
 			if ok {
-				zap.S().Infof("scan rules updated. rule id: %+v found in policy path: %s", ruleID, policyPath)
+				zap.S().Infof("scan rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
 				tempMap[ruleID] = regoData
 			} else {
-				zap.S().Warnf("rule id: %+v not found in policy path: %s", ruleID, policyPath)
+				zap.S().Warnf("scan rule id: %+v not found in policy path: %s", ruleID, policyPath)
 			}
 		}
 		if len(tempMap) == 0 {
-			zap.S().Warnf("rule ID's: %+v not found in policy path: %s", scanRules, policyPath)
+			zap.S().Warnf("scan rule id's: %+v not found in policy path: %s", scanRules, policyPath)
 		}
 
 		// the regoDataMap should only contain regoData for supplied scan rules
@@ -429,10 +429,10 @@ func filterRules(e *Engine, policyPath string, scanRules, skipRules []string) {
 		for _, ruleID := range skipRules {
 			_, ok := e.regoDataMap[ruleID]
 			if ok {
-				zap.S().Infof("skip rules updated. rule id: %+v found in policy path: %s", ruleID, policyPath)
+				zap.S().Infof("skip rule added. rule id: %+v found in policy path: %s", ruleID, policyPath)
 				delete(e.regoDataMap, ruleID)
 			} else {
-				zap.S().Warnf("rule id: %+v not found in policy path: %s", ruleID, policyPath)
+				zap.S().Warnf("skip rule id: %+v not found in policy path: %s", ruleID, policyPath)
 			}
 		}
 	}

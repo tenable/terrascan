@@ -62,7 +62,7 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "key not present",
 			configFile: "testdata/nokey.toml",
-			wantErr:    errTomlKeyNotPresent,
+			wantErr:    ErrTomlKeyNotPresent,
 		},
 		{
 			name:       "invalid notifier",
@@ -72,7 +72,7 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "empty notifier config",
 			configFile: "testdata/empty-notifier-config.toml",
-			wantErr:    errTomlKeyNotPresent,
+			wantErr:    ErrTomlKeyNotPresent,
 		},
 		{
 			name:       "invalid notifier config",

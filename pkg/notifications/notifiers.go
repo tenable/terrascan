@@ -32,7 +32,9 @@ const (
 
 var (
 	errNotifierNotSupported = fmt.Errorf("notifier not supported")
-	errTomlKeyNotPresent    = fmt.Errorf("key not present in toml config")
+
+	// ErrTomlKeyNotPresent will be returned when config file does not have notificationsConfigKey
+	ErrTomlKeyNotPresent = fmt.Errorf("key not present in toml config")
 )
 
 // NewNotifier returns a new notifier
@@ -63,7 +65,7 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 	keyConfig := config.Get(notificationsConfigKey)
 	if keyConfig == nil {
 		zap.S().Infof("key '%s' not present in toml config", notificationsConfigKey)
-		return notifiers, errTomlKeyNotPresent
+		return notifiers, ErrTomlKeyNotPresent
 	}
 
 	// get all the notifier types configured in TOML config
@@ -84,7 +86,7 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 		nTypeConfig := keyTomlConfig.Get(nType)
 		if nTypeConfig.(*toml.Tree).String() == "" {
 			zap.S().Errorf("notifier '%v' config not present", nType)
-			allErrs = utils.WrapError(errTomlKeyNotPresent, allErrs)
+			allErrs = utils.WrapError(ErrTomlKeyNotPresent, allErrs)
 			continue
 		}
 

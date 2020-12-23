@@ -1,0 +1,10 @@
+# notifications configuration
+[notifications]
+    [notifications.invalid]
+    url = "https://httpbin.org/post"
+[rules]
+    scan-rules = "AWS.S3Bucket.DS.High.1043"
+    skip-rules = [
+        185,
+        2008
+    ]

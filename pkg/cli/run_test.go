@@ -17,6 +17,7 @@
 package cli
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -133,10 +134,41 @@ func TestRun(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "incorrect config file",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testTerraformFilePath,
+				outputType: "json",
+				configFile: "invalidFile",
+			},
+			wantErr: true,
+		},
+		{
+			name: "run with skip rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "json",
+				skipRules:  []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"},
+			},
+		},
+		{
+			name: "run with scan rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				scanRules:  []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"},
+			},
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "run with scan rules" {
+				fmt.Println()
+			}
 			err := tt.scanOptions.Run()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)

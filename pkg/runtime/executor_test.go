@@ -28,6 +28,7 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/pelletier/go-toml"
 )
 
 var (
@@ -228,7 +229,7 @@ func TestInit(t *testing.T) {
 				configFile: "./testdata/does-not-exist",
 			},
 			wantErr:         config.ErrNotPresent,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: nil,
 		},
 		{
 			name: "invalid policy path",
@@ -259,6 +260,176 @@ func TestInit(t *testing.T) {
 			for i, notifier := range tt.executor.notifiers {
 				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
 					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+				}
+			}
+		})
+	}
+}
+
+func TestGetRulesInTomlTree(t *testing.T) {
+	// test data
+	emptyTomlTree, err := config.LoadConfig("testdata/empty.toml")
+	if err != nil {
+		t.Fatalf("error while loading toml file %v", err)
+	}
+
+	configFileData, err := config.LoadConfig("testdata/scan-skip-rules.toml")
+	if err != nil {
+		t.Fatalf("error while loading toml file %v", err)
+	}
+	validRulesFormat := (configFileData.Get("rules")).(*toml.Tree)
+
+	configFileData, err = config.LoadConfig("testdata/invalid-scan-skip-rules.toml")
+	if err != nil {
+		t.Fatalf("error while loading toml file %v", err)
+	}
+	invalidRulesFormat := (configFileData.Get("rules")).(*toml.Tree)
+
+	type args struct {
+		tree       *toml.Tree
+		configFile string
+		key        string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []string
+		wantErr bool
+	}{
+		{
+			name: "empty toml file",
+			args: args{
+				tree:       emptyTomlTree,
+				configFile: "",
+				key:        scanRulesKey,
+			},
+			want: []string{},
+		},
+		{
+			name: "get scan rules - valid data",
+			args: args{
+				tree:       validRulesFormat,
+				configFile: "",
+				key:        scanRulesKey,
+			},
+			want: []string{"AWS.S3Bucket.DS.High.1043", "accurics.kubernetes.IAM.107"},
+		},
+		{
+			name: "get skip rules - valid data",
+			args: args{
+				tree:       validRulesFormat,
+				configFile: "",
+				key:        skipRulesKey,
+			},
+			want: []string{"AWS.S3Bucket.IAM.High.0370", "accurics.kubernetes.IAM.5",
+				"accurics.kubernetes.OPS.461", "accurics.kubernetes.IAM.109"},
+		},
+		{
+			name: "get scan rules - invalid data",
+			args: args{
+				tree:       invalidRulesFormat,
+				configFile: "",
+				key:        scanRulesKey,
+			},
+			wantErr: true,
+		},
+		{
+			name: "get skip rules - invalid data",
+			args: args{
+				tree:       invalidRulesFormat,
+				configFile: "",
+				key:        skipRulesKey,
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getRulesInTomlTree(tt.args.tree, tt.args.configFile, tt.args.key)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getRulesInTomlTree() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getRulesInTomlTree() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestExecutor_initScanAndSkipRules(t *testing.T) {
+	assertionTestName := "valid config file with scan and skip rules"
+
+	type fields struct {
+		configFile string
+		scanRules  []string
+		skipRules  []string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		{
+			name:   "no config file",
+			fields: fields{},
+		},
+		{
+			name: "config file doesn't exist",
+			fields: fields{
+				configFile: "testdata/test.toml",
+			},
+			wantErr: true,
+		},
+		{
+			name: "empty config file",
+			fields: fields{
+				configFile: "testdata/empty.toml",
+			},
+		},
+		{
+			name: "config file with empty rules",
+			fields: fields{
+				configFile: "testdata/webhook.toml",
+			},
+		},
+		{
+			name: assertionTestName,
+			fields: fields{
+				configFile: "testdata/scan-skip-rules.toml",
+				scanRules:  []string{"testRuleA", "testRuleB"},
+				skipRules:  []string{"testRuleC"},
+			},
+		},
+		{
+			name: "valid config file with invalid scan rules",
+			fields: fields{
+				configFile: "testdata/invalid-scan-skip-rules.toml",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid config file with invalid skip rules",
+			fields: fields{
+				configFile: "testdata/invalid-skip-rules.toml",
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &Executor{
+				configFile: tt.fields.configFile,
+				scanRules:  tt.fields.scanRules,
+				skipRules:  tt.fields.skipRules,
+			}
+			if err := e.initScanAndSkipRules(); (err != nil) != tt.wantErr {
+				t.Errorf("Executor.initScanAndSkipRules() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.name == assertionTestName {
+				if len(e.scanRules) != 4 && len(e.skipRules) != 5 {
+					t.Errorf("Expected scanRules: %d and skipRules: %d, got scanRules: %d and skipRules: %d", 4, 5, len(e.scanRules), len(e.skipRules))
 				}
 			}
 		})

@@ -17,12 +17,27 @@
 package runtime
 
 import (
+	"fmt"
+
 	"go.uber.org/zap"
 
+	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/pelletier/go-toml"
+)
+
+const (
+	rulesKey     = "rules"
+	scanRulesKey = "scan-rules"
+	skipRulesKey = "skip-rules"
+)
+
+var (
+	errRuleNotString          = fmt.Errorf("each scan and skip rule must be string")
+	errIncorrectValueForRules = fmt.Errorf("'scan-rules' and 'skip-rules' must be an array")
 )
 
 // Executor object
@@ -74,7 +89,9 @@ func (e *Executor) Init() error {
 
 	// read config file and update scan and skip rules
 	if err := e.initScanAndSkipRules(); err != nil {
-		return err
+		if !(err == errIncorrectValueForRules || err == errRuleNotString) {
+			return err
+		}
 	}
 
 	// create new IacProvider
@@ -88,7 +105,10 @@ func (e *Executor) Init() error {
 	e.notifiers, err = notifications.NewNotifiers(e.configFile)
 	if err != nil {
 		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
-		return err
+		// do not return an error if a key is not present in the config file
+		if err != notifications.ErrTomlKeyNotPresent {
+			return err
+		}
 	}
 
 	// create a new policy engine based on IaC type
@@ -149,8 +169,61 @@ func (e *Executor) Execute() (results Output, err error) {
 	return results, nil
 }
 
-// yet to implement based on file type
+// read the config file and update scan and skip rules
 func (e *Executor) initScanAndSkipRules() error {
+	if e.configFile != "" {
+		configData, err := config.LoadConfig(e.configFile)
+		if err != nil {
+			zap.S().Error("error loading config file", zap.Error(err))
+			return err
+		}
 
+		if configData.Has("rules") {
+			// read scan rules in the toml tree
+			data := (configData.Get("rules")).(*toml.Tree)
+			scanRules, err := getRulesInTomlTree(data, e.configFile, "scan-rules")
+			if err != nil {
+				zap.S().Error("error reading config file", zap.Error(err))
+				return err
+			}
+			if len(scanRules) > 0 {
+				e.scanRules = append(e.scanRules, scanRules...)
+			} else {
+				zap.S().Debugf("key 'scan-rules' not found in the config file: %s", e.configFile)
+			}
+
+			// read skip rules in the toml tree
+			skipRules, err := getRulesInTomlTree(data, e.configFile, "skip-rules")
+			if err != nil {
+				zap.S().Error("error reading config file", zap.Error(err))
+				return err
+			}
+			if len(skipRules) > 0 {
+				e.skipRules = append(e.skipRules, skipRules...)
+			} else {
+				zap.S().Debugf("key 'skip-rules' not found in the config file: %s", e.configFile)
+			}
+		}
+	}
 	return nil
+}
+
+func getRulesInTomlTree(tree *toml.Tree, configFile, key string) ([]string, error) {
+	ruleSlice := make([]string, 0)
+	if tree.Has(key) {
+		rules, ok := (tree.Get(key)).([]interface{})
+		if !ok {
+			zap.S().Errorf("key '%s' must be an array in the config file: %s", key, configFile)
+			return nil, errIncorrectValueForRules
+		}
+		for _, rule := range rules {
+			r, ok := rule.(string)
+			if !ok {
+				zap.S().Errorf("rules must be of type string for key: %s", key)
+				return nil, errRuleNotString
+			}
+			ruleSlice = append(ruleSlice, r)
+		}
+	}
+	return ruleSlice, nil
 }

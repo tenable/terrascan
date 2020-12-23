@@ -4,3 +4,5 @@
 [notifications]
     [notifications.webhook]
     url = "https://httpbin.org/post"
+# empty rules
+[rules]
