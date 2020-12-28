@@ -38,6 +38,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		iacType    = params["iac"]
 		iacVersion = params["iacVersion"]
 		cloudType  = strings.Split(params["cloud"], ",")
+		scanRules  = []string{}
+		skipRules  = []string{}
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -82,14 +84,27 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// write this byte array to our temporary file
 	tempFile.Write(fileBytes)
 
+	// read scan and skip rules from the form data
+	// scan and skip rules are comma separated rule id's in the request body
+	scanRulesValue := r.FormValue("scan_rules")
+	skipRulesValue := r.FormValue("skip_rules")
+
+	if scanRulesValue != "" {
+		scanRules = strings.Split(scanRulesValue, ",")
+	}
+
+	if skipRulesValue != "" {
+		skipRules = strings.Split(skipRulesValue, ",")
+	}
+
 	// create a new runtime executor for scanning the uploaded file
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, []string{}, []string{})
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{}, []string{}, []string{})
+			tempFile.Name(), "", "", []string{}, scanRules, skipRules)
 	}
 	if err != nil {
 		zap.S().Error(err)

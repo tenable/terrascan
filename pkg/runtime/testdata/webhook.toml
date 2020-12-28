@@ -3,6 +3,8 @@
 # notifications configuration
 [notifications]
     [notifications.webhook]
+    type = "webhook"
+    [notifications.webhook.config]
     url = "https://httpbin.org/post"
 # empty rules
 [rules]

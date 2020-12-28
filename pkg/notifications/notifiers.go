@@ -22,7 +22,6 @@ import (
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
 )
 
@@ -31,8 +30,8 @@ const (
 )
 
 var (
-	errNotifierNotSupported = fmt.Errorf("notifier not supported")
-
+	errNotifierNotSupported   = fmt.Errorf("notifier not supported")
+	errNotifierTypeNotPresent = fmt.Errorf("notifier type not present in toml config")
 	// ErrTomlKeyNotPresent will be returned when config file does not have notificationsConfigKey
 	ErrTomlKeyNotPresent = fmt.Errorf("key not present in toml config")
 )
@@ -56,49 +55,47 @@ func NewNotifiers(configFile string) ([]Notifier, error) {
 
 	var notifiers []Notifier
 
-	config, err := config.LoadConfig(configFile)
-	if err != nil || config == nil {
+	if configFile == "" {
+		zap.S().Debug("no config file specified")
+		return notifiers, nil
+	}
+
+	configReader, err := config.NewTerrascanConfigReader(configFile)
+	if err != nil || configReader == nil {
 		return notifiers, err
 	}
 
 	// get config for 'notifications'
-	keyConfig := config.Get(notificationsConfigKey)
-	if keyConfig == nil {
-		zap.S().Infof("key '%s' not present in toml config", notificationsConfigKey)
+	notifications := configReader.GetNotifications()
+	if notifications == nil {
+		zap.S().Debug("key '%s' not present in toml config", notificationsConfigKey)
 		return notifiers, ErrTomlKeyNotPresent
 	}
 
-	// get all the notifier types configured in TOML config
-	keyTomlConfig := keyConfig.(*toml.Tree)
-	notifierTypes := keyTomlConfig.Keys()
-
 	// create notifiers
 	var allErrs error
-	for _, nType := range notifierTypes {
+	for _, notifier := range notifications {
+		if notifier.NotifierType == "" {
+			zap.S().Error(errNotifierTypeNotPresent)
+			allErrs = utils.WrapError(errNotifierTypeNotPresent, allErrs)
+			continue
+		}
 
-		if !IsNotifierSupported(nType) {
-			zap.S().Errorf("notifier type '%s' not supported", nType)
+		if !IsNotifierSupported(notifier.NotifierType) {
+			zap.S().Errorf("notifier type '%s' not supported", notifier.NotifierType)
 			allErrs = utils.WrapError(errNotifierNotSupported, allErrs)
 			continue
 		}
 
-		// check if toml config present for notifier type
-		nTypeConfig := keyTomlConfig.Get(nType)
-		if nTypeConfig.(*toml.Tree).String() == "" {
-			zap.S().Errorf("notifier '%v' config not present", nType)
-			allErrs = utils.WrapError(ErrTomlKeyNotPresent, allErrs)
-			continue
-		}
-
 		// create a new notifier
-		n, err := NewNotifier(nType)
+		n, err := NewNotifier(notifier.NotifierType)
 		if err != nil {
 			allErrs = utils.WrapError(err, allErrs)
 			continue
 		}
 
 		// populate data
-		err = n.Init(nTypeConfig)
+		err = n.Init(notifier.NotifierConfig)
 		if err != nil {
 			allErrs = utils.WrapError(err, allErrs)
 			continue

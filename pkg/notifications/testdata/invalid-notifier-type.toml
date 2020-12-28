@@ -3,4 +3,5 @@
 # notifications configuration
 [notifications]
     [notifications.invalid]
+    type = "invalid"
     url = "https://httpbin.org/post"

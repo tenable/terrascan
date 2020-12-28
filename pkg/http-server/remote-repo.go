@@ -33,9 +33,11 @@ import (
 
 // scanRemoteRepoReq contains request body for remote repository scanning
 type scanRemoteRepoReq struct {
-	RemoteType string `json:"remote_type"`
-	RemoteURL  string `json:"remote_url"`
-	ConfigOnly bool   `json:"config_only"`
+	RemoteType string   `json:"remote_type"`
+	RemoteURL  string   `json:"remote_url"`
+	ConfigOnly bool     `json:"config_only"`
+	ScanRules  []string `json:"scan_rules"`
+	SkipRules  []string `json:"skip_rules"`
 	d          downloader.Downloader
 }
 
@@ -112,7 +114,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, "", policyPath, []string{}, []string{})
+		"", iacDirPath, "", policyPath, s.ScanRules, s.SkipRules)
 	if err != nil {
 		zap.S().Error(err)
 		return output, err

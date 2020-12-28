@@ -46,16 +46,10 @@ var (
 )
 
 // NewEngine returns a new OPA policy engine
-func NewEngine(policyPath string, scanRules, skipRules []string) (*Engine, error) {
+func NewEngine() (*Engine, error) {
 
 	// opa engine struct
 	engine := &Engine{}
-
-	// initialize the engine
-	if err := engine.Init(policyPath, scanRules, skipRules); err != nil {
-		zap.S().Error("failed to initialize OPA policy engine", zap.Error(err))
-		return engine, errInitFailed
-	}
 
 	// successful
 	return engine, nil
@@ -254,11 +248,11 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules []string) error {
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
 		zap.S().Error("error loading rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return err
+		return errInitFailed
 	}
 
 	// before compiling the rego files, filter the rules based on scan and skip rules supplied
-	filterRules(e, policyPath, scanRules, skipRules)
+	e.FilterRules(policyPath, scanRules, skipRules)
 
 	// update the rule count
 	e.stats.ruleCount = len(e.regoDataMap)
@@ -266,7 +260,7 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules []string) error {
 	err := e.CompileRegoFiles()
 	if err != nil {
 		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return err
+		return errInitFailed
 	}
 
 	// initialize ViolationStore
@@ -402,19 +396,20 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	return e.results, nil
 }
 
-func filterRules(e *Engine, policyPath string, scanRules, skipRules []string) {
+// FilterRules will apply the scan and skip rules
+func (e *Engine) FilterRules(policyPath string, scanRules, skipRules []string) {
 	// apply scan rules
 	if len(scanRules) > 0 {
-		filterScanRules(e, policyPath, scanRules)
+		e.filterScanRules(policyPath, scanRules)
 	}
 
 	// apply skip rules
 	if len(skipRules) > 0 {
-		filterSkipRules(e, policyPath, skipRules)
+		e.filterSkipRules(policyPath, skipRules)
 	}
 }
 
-func filterScanRules(e *Engine, policyPath string, scanRules []string) {
+func (e *Engine) filterScanRules(policyPath string, scanRules []string) {
 
 	// temporary map to store data from original rego data map
 	tempMap := make(map[string]*RegoData)
@@ -435,7 +430,7 @@ func filterScanRules(e *Engine, policyPath string, scanRules []string) {
 	e.regoDataMap = tempMap
 }
 
-func filterSkipRules(e *Engine, policyPath string, skipRules []string) {
+func (e *Engine) filterSkipRules(policyPath string, skipRules []string) {
 	// remove rules to be skipped from the rego data map
 	for _, ruleID := range skipRules {
 		_, ok := e.regoDataMap[ruleID]

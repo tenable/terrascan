@@ -17,27 +17,12 @@
 package runtime
 
 import (
-	"fmt"
-
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/pelletier/go-toml"
-)
-
-const (
-	rulesKey     = "rules"
-	scanRulesKey = "scan-rules"
-	skipRulesKey = "skip-rules"
-)
-
-var (
-	errRuleNotString          = fmt.Errorf("each scan and skip rule must be string")
-	errIncorrectValueForRules = fmt.Errorf("'scan-rules' and 'skip-rules' must be an array")
 )
 
 // Executor object
@@ -88,10 +73,9 @@ func (e *Executor) Init() error {
 	}
 
 	// read config file and update scan and skip rules
-	if err := e.initScanAndSkipRules(); err != nil {
-		if !(err == errIncorrectValueForRules || err == errRuleNotString) {
-			return err
-		}
+	if err := e.initRules(); err != nil {
+		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
+		return err
 	}
 
 	// create new IacProvider
@@ -104,9 +88,10 @@ func (e *Executor) Init() error {
 	// create new notifiers
 	e.notifiers, err = notifications.NewNotifiers(e.configFile)
 	if err != nil {
-		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
+		zap.S().Debug("failed to create notifier(s).", zap.Error(err))
 		// do not return an error if a key is not present in the config file
 		if err != notifications.ErrTomlKeyNotPresent {
+			zap.S().Error("failed to create notifier(s).", zap.Error(err))
 			return err
 		}
 	}
@@ -114,9 +99,15 @@ func (e *Executor) Init() error {
 	// create a new policy engine based on IaC type
 	zap.S().Debugf("using policy path %v", e.policyPath)
 	for _, policyPath := range e.policyPath {
-		engine, err := opa.NewEngine(policyPath, e.scanRules, e.skipRules)
+		engine, err := opa.NewEngine()
 		if err != nil {
 			zap.S().Errorf("failed to create policy engine. error: '%s'", err)
+			return err
+		}
+
+		// initialize the engine
+		if err := engine.Init(policyPath, e.scanRules, e.skipRules); err != nil {
+			zap.S().Errorf("%s", err)
 			return err
 		}
 		e.policyEngine = append(e.policyEngine, engine)
@@ -167,69 +158,4 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	// successful
 	return results, nil
-}
-
-// read the config file and update scan and skip rules
-func (e *Executor) initScanAndSkipRules() error {
-	if e.configFile != "" {
-		configData, err := config.LoadConfig(e.configFile)
-		if err != nil {
-			zap.S().Error("error loading config file", zap.Error(err))
-			return err
-		}
-
-		if configData.Has(rulesKey) {
-
-			data := (configData.Get(rulesKey)).(*toml.Tree)
-
-			// read scan rules in the toml tree
-			if err := initRules(e, data, scanRulesKey); err != nil {
-				return err
-			}
-
-			// read skip rules in the toml tree
-			if err := initRules(e, data, skipRulesKey); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-func initRules(e *Executor, tree *toml.Tree, key string) error {
-	rules, err := getRulesInTomlTree(tree, e.configFile, key)
-	if err != nil {
-		zap.S().Error("error reading config file", zap.Error(err))
-		return err
-	}
-	if len(rules) > 0 {
-		if key == scanRulesKey {
-			e.scanRules = append(e.scanRules, rules...)
-		} else {
-			e.skipRules = append(e.skipRules, rules...)
-		}
-	} else {
-		zap.S().Debugf("key '%s' not found in the config file: %s", key, e.configFile)
-	}
-	return nil
-}
-
-func getRulesInTomlTree(tree *toml.Tree, configFile, key string) ([]string, error) {
-	ruleSlice := make([]string, 0)
-	if tree.Has(key) {
-		rules, ok := (tree.Get(key)).([]interface{})
-		if !ok {
-			zap.S().Errorf("key '%s' must be an array in the config file: %s", key, configFile)
-			return nil, errIncorrectValueForRules
-		}
-		for _, rule := range rules {
-			r, ok := rule.(string)
-			if !ok {
-				zap.S().Errorf("rules must be of type string for key: %s", key)
-				return nil, errRuleNotString
-			}
-			ruleSlice = append(ruleSlice, r)
-		}
-	}
-	return ruleSlice, nil
 }

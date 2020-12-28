@@ -20,32 +20,75 @@ import (
 	"testing"
 )
 
-func testConfigEnv(configPath string, t *testing.T) {
-	// Load the test data to compare against
-	config, err := loadConfigFile(configPath)
-	if err != nil {
-		t.Error(err)
+func TestLoadGlobalConfig(t *testing.T) {
+	testConfigFile := "./testdata/terrascan-config.toml"
+
+	type args struct {
+		configFile string
 	}
-
-	LoadGlobalConfig(configPath)
-
-	if Global.Policy.BasePath != config.Policy.BasePath {
-		t.Errorf("BasePath not overridden!  %v != %v", Global.Policy.BasePath, config.Policy.BasePath)
+	tests := []struct {
+		name           string
+		args           args
+		wantErr        bool
+		policyBasePath string
+		policyRepoPath string
+		repoURL        string
+		branchName     string
+	}{
+		{
+			// no error expected
+			name: "global config file not specified",
+			args: args{
+				configFile: "",
+			},
+			policyBasePath: policyBasePath,
+			policyRepoPath: policyRepoPath,
+			repoURL:        policyRepoURL,
+			branchName:     policyBranch,
+		},
+		{
+			name: "global config file specified but doesn't exist",
+			args: args{
+				configFile: "test.toml",
+			},
+			wantErr:        true,
+			policyBasePath: policyBasePath,
+			policyRepoPath: policyRepoPath,
+			repoURL:        policyRepoURL,
+			branchName:     policyBranch,
+		},
+		{
+			name: "valid global config file specified",
+			args: args{
+				configFile: testConfigFile,
+			},
+			policyBasePath: "custom-path",
+			policyRepoPath: "rego-subdir",
+			repoURL:        "https://repository/url",
+			branchName:     "branch-name",
+		},
 	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := LoadGlobalConfig(tt.args.configFile); (err != nil) != tt.wantErr {
+				t.Errorf("LoadGlobalConfig() error = %v, wantErr %v", err, tt.wantErr)
+			}
 
-	if Global.Policy.RepoPath != config.Policy.RepoPath {
-		t.Errorf("RepoPath not overridden!  %v != %v", Global.Policy.RepoPath, config.Policy.RepoPath)
+			if GetPolicyBasePath() != tt.policyBasePath {
+				t.Errorf("LoadGlobalConfig() error = got BasePath: %v, want BasePath: %v", tt.policyBasePath, Global.Policy.BasePath)
+			}
+
+			if GetPolicyRepoPath() != tt.policyRepoPath {
+				t.Errorf("LoadGlobalConfig() error = got RepoPath: %v, want RepoPath: %v", tt.policyRepoPath, Global.Policy.RepoPath)
+			}
+
+			if GetPolicyRepoURL() != tt.repoURL {
+				t.Errorf("LoadGlobalConfig() error = got RepoURL: %v, want RepoURL: %v", tt.repoURL, Global.Policy.RepoURL)
+			}
+
+			if GetPolicyBranch() != tt.branchName {
+				t.Errorf("LoadGlobalConfig() error = got BranchName: %v, want BranchName: %v", tt.branchName, Global.Policy.Branch)
+			}
+		})
 	}
-
-	if Global.Policy.RepoURL != config.Policy.RepoURL {
-		t.Errorf("RepoURL not overridden!  %v != %v", Global.Policy.RepoURL, config.Policy.RepoURL)
-	}
-
-	if Global.Policy.Branch != config.Policy.Branch {
-		t.Errorf("Branch not overridden!  %v != %v", Global.Policy.Branch, config.Policy.Branch)
-	}
-}
-
-func TestConfigFileLoadsCorrectly(t *testing.T) {
-	testConfigEnv("./testdata/terrascan-config.toml", t)
 }
