@@ -74,20 +74,8 @@ func TestLoadGlobalConfig(t *testing.T) {
 				t.Errorf("LoadGlobalConfig() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if GetPolicyBasePath() != tt.policyBasePath {
-				t.Errorf("LoadGlobalConfig() error = got BasePath: %v, want BasePath: %v", tt.policyBasePath, Global.Policy.BasePath)
-			}
-
-			if GetPolicyRepoPath() != tt.policyRepoPath {
-				t.Errorf("LoadGlobalConfig() error = got RepoPath: %v, want RepoPath: %v", tt.policyRepoPath, Global.Policy.RepoPath)
-			}
-
-			if GetPolicyRepoURL() != tt.repoURL {
-				t.Errorf("LoadGlobalConfig() error = got RepoURL: %v, want RepoURL: %v", tt.repoURL, Global.Policy.RepoURL)
-			}
-
-			if GetPolicyBranch() != tt.branchName {
-				t.Errorf("LoadGlobalConfig() error = got BranchName: %v, want BranchName: %v", tt.branchName, Global.Policy.Branch)
+			if GetPolicyBasePath() != tt.policyBasePath || GetPolicyRepoPath() != tt.policyRepoPath || GetPolicyRepoURL() != tt.repoURL || GetPolicyBranch() != tt.branchName {
+				t.Errorf("LoadGlobalConfig() error = got BasePath: %v, RepoPath: %v, RepoURL: %v, BranchName: %v, want BasePath: %v, RepoPath: %v, RepoURL: %v, BranchName: %v", GetPolicyBasePath(), GetPolicyRepoPath(), GetPolicyRepoURL(), GetPolicyBranch(), tt.policyBasePath, tt.policyRepoPath, tt.repoURL, tt.branchName)
 			}
 		})
 	}

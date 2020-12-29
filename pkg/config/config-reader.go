@@ -52,13 +52,13 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 	// return error if file doesn't exist
 	_, err := os.Stat(fileName)
 	if err != nil {
-		zap.S().Debugf("config file: %s, doesn't exist", fileName)
+		zap.S().Error("config file: %s, doesn't exist", fileName)
 		return configReader, ErrNotPresent
 	}
 
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		zap.S().Debugf("error loading config file", zap.Error(err))
+		zap.S().Error("error loading config file", zap.Error(err))
 		return configReader, errTomlLoadConfig
 	}
 

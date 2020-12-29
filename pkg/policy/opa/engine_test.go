@@ -29,7 +29,7 @@ func TestFilterRules(t *testing.T) {
 			name: "scan rules test",
 			args: args{
 				policyPath: testPolicyPath,
-				scanRules:  []string{"Rule.0", "Rule.1", "Rule.2", "Rule.3", "Rule.11"},
+				scanRules:  []string{"Rule.0", "Rule.1", "Rule.2", "Rule.3", "Rule.10"},
 			},
 			regoDataMap: getTestRegoDataMap(10),
 			assert:      true,
@@ -69,7 +69,7 @@ func TestFilterRules(t *testing.T) {
 			name: "both scan and skip rules supplied",
 			args: args{
 				policyPath: testPolicyPath,
-				scanRules:  []string{"Rule.10", "Rule.11", "Rule.12", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
+				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
 			},
 			regoDataMap: getTestRegoDataMap(50),

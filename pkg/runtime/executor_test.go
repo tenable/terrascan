@@ -60,6 +60,9 @@ func (m MockPolicyEngine) Init(input string, scanRules, skipRules []string) erro
 }
 
 func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules []string) {
+	/*
+		This method does nothing. Required to fullfil the Engine interface contract
+	*/
 }
 
 func (m MockPolicyEngine) Configure() error {

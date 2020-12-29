@@ -119,16 +119,8 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 				t.Errorf("NewTerrascanConfigReader() = got %v, want %v", got, tt.want)
 			}
 			if tt.assertGetters {
-				if !reflect.DeepEqual(got.GetPolicyConfig(), tt.Policy) {
-					t.Errorf("NewTerrascanConfigReader() = got config: %v, want config: %v", got.GetPolicyConfig(), tt.Policy)
-				}
-
-				if !reflect.DeepEqual(got.GetNotifications(), tt.notifications) {
-					t.Errorf("NewTerrascanConfigReader() = got notifications: %v, want notifications: %v", got.GetNotifications(), tt.notifications)
-				}
-
-				if !reflect.DeepEqual(got.GetRules(), tt.Rules) {
-					t.Errorf("NewTerrascanConfigReader() = got rules: %v, want rules: %v", got.GetRules(), tt.Rules)
+				if !reflect.DeepEqual(got.GetPolicyConfig(), tt.Policy) || !reflect.DeepEqual(got.GetNotifications(), tt.notifications) || !reflect.DeepEqual(got.GetRules(), tt.Rules) {
+					t.Errorf("NewTerrascanConfigReader() = got config: %v, notifications: %v, rules: %v want config: %v, notifications: %v, rules: %v", got.GetPolicyConfig(), got.GetNotifications(), got.GetRules(), tt.Policy, tt.notifications, tt.Rules)
 				}
 			}
 		})
