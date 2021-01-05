@@ -1,7 +1,9 @@
-# terrascan configuration file
-
 # notifications configuration
 [notifications]
     [notifications.invalid]
-    type = "invalid"
     url = "https://httpbin.org/post"
+[rules]
+    skip-rules = [
+        185,
+        2008
+    ]

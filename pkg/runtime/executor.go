@@ -34,13 +34,15 @@ type Executor struct {
 	iacType      string
 	iacVersion   string
 	configFile   string
+	scanRules    []string
+	skipRules    []string
 	iacProvider  iacProvider.IacProvider
 	policyEngine []policy.Engine
 	notifiers    []notifications.Notifier
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath []string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -49,6 +51,8 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		iacType:    iacType,
 		iacVersion: iacVersion,
 		configFile: configFile,
+		scanRules:  scanRules,
+		skipRules:  skipRules,
 	}
 
 	// initialize executor
@@ -68,6 +72,12 @@ func (e *Executor) Init() error {
 		return err
 	}
 
+	// read config file and update scan and skip rules
+	if err := e.initRules(); err != nil {
+		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
+		return err
+	}
+
 	// create new IacProvider
 	e.iacProvider, err = iacProvider.NewIacProvider(e.iacType, e.iacVersion)
 	if err != nil {
@@ -78,16 +88,26 @@ func (e *Executor) Init() error {
 	// create new notifiers
 	e.notifiers, err = notifications.NewNotifiers(e.configFile)
 	if err != nil {
-		zap.S().Errorf("failed to create notifier(s). error: '%s'", err)
-		return err
+		zap.S().Debug("failed to create notifier(s).", zap.Error(err))
+		// do not return an error if a key is not present in the config file
+		if err != notifications.ErrTomlKeyNotPresent {
+			zap.S().Error("failed to create notifier(s).", zap.Error(err))
+			return err
+		}
 	}
 
 	// create a new policy engine based on IaC type
 	zap.S().Debugf("using policy path %v", e.policyPath)
 	for _, policyPath := range e.policyPath {
-		engine, err := opa.NewEngine(policyPath)
+		engine, err := opa.NewEngine()
 		if err != nil {
 			zap.S().Errorf("failed to create policy engine. error: '%s'", err)
+			return err
+		}
+
+		// initialize the engine
+		if err := engine.Init(policyPath, e.scanRules, e.skipRules); err != nil {
+			zap.S().Errorf("%s", err)
 			return err
 		}
 		e.policyEngine = append(e.policyEngine, engine)

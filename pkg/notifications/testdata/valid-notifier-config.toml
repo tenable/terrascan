@@ -1,0 +1,10 @@
+[notifications]
+[notifications.webhook1]
+type = 'webhook'
+[notifications.webhook1.config]
+url = 'https://httpbin.org/post'
+
+[notifications.webhook2]
+type = 'webhook'
+[notifications.webhook2.config]
+url = 'https://httpbin.org/post'

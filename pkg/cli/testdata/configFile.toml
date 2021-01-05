@@ -1,0 +1,7 @@
+[rules]
+    scan-rules = [
+        "AWS.ECR.DataSecurity.High.0579"
+    ]
+    skip-rules = [
+        "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"
+    ]

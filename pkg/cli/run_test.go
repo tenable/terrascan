@@ -50,6 +50,7 @@ func TestRun(t *testing.T) {
 	testDirPath := "testdata/run-test"
 	kustomizeTestDirPath := testDirPath + "/kustomize-test"
 	testTerraformFilePath := testDirPath + "/config-only.tf"
+	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
 	table := []struct {
 		name        string
@@ -132,6 +133,43 @@ func TestRun(t *testing.T) {
 				remoteType:  "test",
 			},
 			wantErr: true,
+		},
+		{
+			name: "incorrect config file",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testTerraformFilePath,
+				outputType: "json",
+				configFile: "invalidFile",
+			},
+			wantErr: true,
+		},
+		{
+			name: "run with skip rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "json",
+				skipRules:  ruleSlice,
+			},
+		},
+		{
+			name: "run with scan rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				scanRules:  ruleSlice,
+			},
+		},
+		{
+			name: "config file with rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				configFile: "testdata/configFile.toml",
+			},
 		},
 	}
 
