@@ -6,6 +6,8 @@ metadata:
     app: myapp
     test: someupdate
     test2: someupdate3
+  annotations:
+    terrascanSkipRules: [accurics.kubernetes.IAM.109]
 spec:
   containers:
   - name: myapp-container
@@ -22,6 +24,8 @@ metadata:
     app: myapp
     test: someupdate
     test2: someupdate3
+  annotations:
+    terrascanSkipRules: [accurics.kubernetes.IAM.3, accurics.kubernetes.OPS.461]
 spec:
   template:
     spec:
