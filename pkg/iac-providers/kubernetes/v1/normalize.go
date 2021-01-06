@@ -151,11 +151,11 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 			if value, ok := rule.(string); ok {
 				skipRules = append(skipRules, value)
 			} else {
-				zap.S().Debugf("rules in %s must be string", terrascanSkipRules)
+				zap.S().Debugf("each rule in %s must be of string type", terrascanSkipRules)
 			}
 		}
 	} else {
-		zap.S().Debugf("%s must be a slice of rules to skip", terrascanSkipRules)
+		zap.S().Debugf("%s must be an array of rules to skip", terrascanSkipRules)
 	}
 
 	return skipRules
