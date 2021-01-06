@@ -142,14 +142,14 @@ func TestK8sV1GetNormalizedName(t *testing.T) {
 		want string
 	}{
 		{
-			name: "normalized set for pod",
+			name: "normalized name for pod",
 			args: args{
 				kind: "pod",
 			},
 			want: "kubernetes_pod",
 		},
 		{
-			name: "normalized set for DaemonSet",
+			name: "normalized name for DaemonSet",
 			args: args{
 				kind: "DaemonSet",
 			},
