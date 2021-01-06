@@ -57,7 +57,7 @@ terrascan:
 ## ArgoCD Application PreSync Hooks
 
 
-Terrascan can be configured as a job during the application sync process using [resource hooks](https://argoproj.github.io/argo-cd/user-guide/resource_hooks). The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations through notification. 
+Terrascan can be configured as a job during the application sync process using [resource hooks](https://argoproj.github.io/argo-cd/user-guide/resource_hooks). The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations. 
 
 
 ![picture](img/terrascan-argo-cd-pipeline.png)
@@ -107,11 +107,11 @@ For non-public repositories, the private key needs to be added as a kubernetes s
     --from-file=ssh-publickey=/path/to/.ssh/id_rsa.pub
 ```
 
-Configuring the job to delete only after the specified time see `ttlSecondsAfterFinished` will allow users to check for violations in the UI w/o having to use the notification, see example below.
+Configuring the job to delete only after the specified time see `ttlSecondsAfterFinished` will allow users to check for violations in the User Interface, the alternative is through **notifications**.
 
 ![picture](img/terrascan-argo-cd-resource-hook-logs.png)
 
-Below if a full example on building the terrascan-argo-cd integration container. 
+Below is the full example of building the terrascan-argo-cd integration container. 
 
 `known_hosts`
 
