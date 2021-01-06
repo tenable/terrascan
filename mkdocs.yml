@@ -49,6 +49,7 @@ nav:
     - Azure: policies/azure.md
     - GitHub: policies/github.md
   # - Educational Resources: learning.md
+  - CI/CD Integration: cicd.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - About: about.md

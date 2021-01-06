@@ -95,8 +95,8 @@ Now that you understand how to run Terrascan, explore the other options availabl
 
 # Related resources
 
-* [Terrascan Policy Reference](/policies/)
-* The [usage guide](/getting-started/usage/) explains general usage and how to scan other types of IaC, such as Kubernetes, Helm, and Kustomize.
+* [Terrascan Policy Reference](../policies.md)
+* The [usage guide](./usage.md) explains general usage and how to scan other types of IaC, such as Kubernetes, Helm, and Kustomize.
 
 [//]: # (TODO: add info about CI/CD integrations * CI/CD integration )
 
