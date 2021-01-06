@@ -36,9 +36,9 @@ Documentation on the GitHub actions workflow syntax is available [here](https://
 
 ## GitLab CI
 
-GitLab CI can use [Docker images](https://docs.gitlab.com/ee/ci/docker/using_docker_images.html) as part of a pipeline. We can take advantage of this functionality and use Terrascan's docker image as part of your [pipeline](https://docs.gitlab.com/ee/ci/pipelines/) to scan infrastructure as code.
+[GitLab CI](https://docs.gitlab.com/ee/ci/README.html) can use [Docker images](https://docs.gitlab.com/ee/ci/docker/using_docker_images.html) as part of a pipeline. We can take advantage of this functionality and use Terrascan's docker image as part of your [pipeline](https://docs.gitlab.com/ee/ci/pipelines/) to scan infrastructure as code.
 
-To do this you can update your .gitlab-ci.yml file to use the "accurics/terrascan:latest" image with the ["bin/sh", "-c"] entrypoint. Terrascan can be found on "/go/bin" in the image and you can use any of it's commands depending on your needs. Here's an example .gitlab-ci.yml file:
+To do this you can update your .gitlab-ci.yml file to use the "accurics/terrascan:latest" image with the ["bin/sh", "-c"] entrypoint. Terrascan can be found on "/go/bin" in the image and you can use any [Terrascan command line options](http://ubusvr:8000/getting-started/usage/#terrascan-commands) according to your needs. Here's an example .gitlab-ci.yml file:
 
 ``` YAML
 stages:
@@ -52,6 +52,3 @@ terrascan:
   script:
     - /go/bin/terrascan scan .
 ```
-
-Documentation for GitLab CI can be found [here](https://docs.gitlab.com/ee/ci/README.html).
-
