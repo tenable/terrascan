@@ -18,6 +18,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
@@ -43,7 +44,9 @@ func scan(cmd *cobra.Command, args []string) {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
 	scanOptions.outputType = OutputType
-	scanOptions.Scan()
+	if err := scanOptions.Scan(); err != nil {
+		os.Exit(1)
+	}
 }
 
 func init() {
