@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package tfv14
 
 import (
 	"encoding/json"
@@ -71,39 +71,39 @@ func TestLoadIacDir(t *testing.T) {
 	table := []struct {
 		name    string
 		dirPath string
-		tfv12   TfV12
+		tfv14   TfV14
 		want    output.AllResourceConfigs
 		wantErr error
 	}{
 		{
 			name:    "invalid dirPath",
 			dirPath: "not-there",
-			tfv12:   TfV12{},
+			tfv14:   TfV14{},
 			wantErr: errEmptyTFConfigDir,
 		},
 		{
 			name:    "empty config",
 			dirPath: "./testdata/testfile",
-			tfv12:   TfV12{},
+			tfv14:   TfV14{},
 			wantErr: errEmptyTFConfigDir,
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: "./testdata/invalid-moduleconfigs",
-			tfv12:   TfV12{},
+			tfv14:   TfV14{},
 			wantErr: errBuildTFConfigDir,
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata",
-			tfv12:   TfV12{},
+			tfv14:   TfV14{},
 			wantErr: errLoadConfigDir,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath)
+			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -114,35 +114,35 @@ func TestLoadIacDir(t *testing.T) {
 		name        string
 		tfConfigDir string
 		tfJSONFile  string
-		tfv12       TfV12
+		tfv14       TfV14
 		wantErr     error
 	}{
 		{
 			name:        "config1",
 			tfConfigDir: "./testdata/tfconfigs",
 			tfJSONFile:  "testdata/tfjson/fullconfig.json",
-			tfv12:       TfV12{},
+			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "module directory",
 			tfConfigDir: "./testdata/moduleconfigs",
 			tfJSONFile:  "./testdata/tfjson/moduleconfigs.json",
-			tfv12:       TfV12{},
+			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "nested module directory",
 			tfConfigDir: "./testdata/deep-modules",
 			tfJSONFile:  "./testdata/tfjson/deep-modules.json",
-			tfv12:       TfV12{},
+			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 	}
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir)
+			got, gotErr := tt.tfv14.LoadIacDir(tt.tfConfigDir)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}

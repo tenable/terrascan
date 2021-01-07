@@ -18,7 +18,7 @@ import (
 func TestUpload(t *testing.T) {
 	testFilePath := "./testdata/testconfig.tf"
 	testIacType := "terraform"
-	testIacVersion := "v12"
+	testIacVersion := "v14"
 	testCloudType := "aws"
 	testParamName := "file"
 

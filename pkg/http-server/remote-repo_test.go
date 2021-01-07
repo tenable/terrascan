@@ -83,7 +83,7 @@ func TestScanRemoteRepo(t *testing.T) {
 func TestScanRemoteRepoHandler(t *testing.T) {
 	validRepo := "https://github.com/kanchwala-yusuf/Damn-Vulnerable-Terraform-Project.git"
 	testIacType := "terraform"
-	testIacVersion := "v12"
+	testIacVersion := "v14"
 	testCloudType := "aws"
 
 	table := []struct {

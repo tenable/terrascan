@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package tfv14
 
 import (
 	"fmt"
@@ -31,7 +31,7 @@ var (
 )
 
 // LoadIacFile parses the given terraform file from the given file path
-func (*TfV12) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (*TfV14) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())

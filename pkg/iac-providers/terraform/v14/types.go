@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package tfv14
 
-// TfV12 struct implements the IacProvider interface
-type TfV12 struct{}
+// TfV14 struct implements the IacProvider interface
+type TfV14 struct{}

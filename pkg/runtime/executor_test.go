@@ -24,7 +24,7 @@ import (
 	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
+	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
@@ -187,11 +187,11 @@ func TestInit(t *testing.T) {
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
-				iacVersion: "v12",
+				iacVersion: "v14",
 				policyPath: []string{"./testdata/testpolicies"},
 			},
 			wantErr:         nil,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -201,12 +201,12 @@ func TestInit(t *testing.T) {
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
-				iacVersion: "v12",
+				iacVersion: "v14",
 				configFile: "./testdata/webhook.toml",
 				policyPath: []string{"./testdata/testpolicies"},
 			},
 			wantErr:         nil,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -216,11 +216,11 @@ func TestInit(t *testing.T) {
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
-				iacVersion: "v12",
+				iacVersion: "v14",
 				configFile: "testdata/invalid-notifier.toml",
 			},
 			wantErr:         fmt.Errorf("notifier not supported"),
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -230,7 +230,7 @@ func TestInit(t *testing.T) {
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
-				iacVersion: "v12",
+				iacVersion: "v14",
 				configFile: "./testdata/does-not-exist",
 			},
 			wantErr:         config.ErrNotPresent,
@@ -243,12 +243,12 @@ func TestInit(t *testing.T) {
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
-				iacVersion: "v12",
+				iacVersion: "v14",
 				configFile: "./testdata/webhook.toml",
 				policyPath: []string{"./testdata/notthere"},
 			},
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 	}

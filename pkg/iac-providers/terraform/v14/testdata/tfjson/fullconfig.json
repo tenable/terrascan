@@ -4,7 +4,7 @@
       "id": "aws_instance.instance_playground",
       "name": "instance_playground",
       "source": "config1.tf",
-      "line": 78,
+      "line": 77,
       "type": "aws_instance",
       "config": {
         "ami": "${lookup(var.aws_amis, var.aws_region)}",
@@ -46,7 +46,7 @@
       "id": "aws_internet_gateway.igw_playground",
       "name": "igw_playground",
       "source": "config1.tf",
-      "line": 15,
+      "line": 14,
       "type": "aws_internet_gateway",
       "config": {
         "tags": {
@@ -61,7 +61,7 @@
       "id": "aws_key_pair.ec2key_playground",
       "name": "ec2key_playground",
       "source": "config1.tf",
-      "line": 73,
+      "line": 72,
       "type": "aws_key_pair",
       "config": {
         "key_name": "testKey",
@@ -74,7 +74,7 @@
       "id": "aws_route_table.rtb_public_playground",
       "name": "rtb_public_playground",
       "source": "config1.tf",
-      "line": 31,
+      "line": 30,
       "type": "aws_route_table",
       "config": {
         "route": [
@@ -95,7 +95,7 @@
       "id": "aws_route_table_association.rta_subnet_public_playground",
       "name": "rta_subnet_public_playground",
       "source": "config1.tf",
-      "line": 42,
+      "line": 41,
       "type": "aws_route_table_association",
       "config": {
         "route_table_id": "${aws_route_table.rtb_public_playground.id}",
@@ -108,7 +108,7 @@
       "id": "aws_security_group.sg_playground",
       "name": "sg_playground",
       "source": "config1.tf",
-      "line": 47,
+      "line": 46,
       "type": "aws_security_group",
       "config": {
         "egress": [
@@ -152,7 +152,7 @@
       "id": "aws_subnet.subnet_public_playground",
       "name": "subnet_public_playground",
       "source": "config1.tf",
-      "line": 22,
+      "line": 21,
       "type": "aws_subnet",
       "config": {
         "cidr_block": "${var.cidr_subnet}",
@@ -169,7 +169,7 @@
       "id": "aws_vpc.vpc_playground",
       "name": "vpc_playground",
       "source": "config1.tf",
-      "line": 6,
+      "line": 5,
       "type": "aws_vpc",
       "config": {
         "cidr_block": "${var.cidr_vpc}",

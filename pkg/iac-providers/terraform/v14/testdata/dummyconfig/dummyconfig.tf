@@ -14,7 +14,7 @@ resource "type2" "resource2"{
 	other = {
 		num = local.test2 + 5
 		thing = [for x in local.arr: x * 2]
-		"${local.test3}" = 4
+		local.test3 = 4
 		3 = 1
 		"local.test1" = 89
 		"a.b.c[\"hi\"][3].*" = 3
@@ -26,14 +26,14 @@ resource "type2" "resource2"{
 resource "type3" "resource3" {
 	heredoc = <<-EOF
 		This is a heredoc template.
-		It references ${local.other.3}
+		It references local.other.3
 	EOF
 	simple = 4 - 2
 	cond = test3 > 2 ? 1: 0
 	heredoc2 = <<EOF
 		Another heredoc, that
 		doesn't remove indentation
-		${local.other.3}
+		local.other.3
 		%{if true ? false : true}"gotcha"\n%{else}4%{endif}
 	EOF
 }

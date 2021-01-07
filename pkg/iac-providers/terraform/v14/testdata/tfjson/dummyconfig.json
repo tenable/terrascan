@@ -53,11 +53,11 @@
       "type": "type2",
       "config": {
         "other": {
-          "${local.test3}": 4,
           "3": 1,
           "a.b.c": "True",
           "a.b.c[\"hi\"][3].*": 3,
           "local.test1": 89,
+          "local.test3": 4,
           "loop": "This has a for loop: %{for x in local.arr}x,%{endfor}",
           "num": "${local.test2 + 5}",
           "thing": "${[for x in local.arr: x * 2]}"
@@ -75,8 +75,8 @@
       "type": "type3",
       "config": {
         "cond": "${test3 \u003e 2 ? 1: 0}",
-        "heredoc": "This is a heredoc template.\nIt references ${local.other.3}\n",
-        "heredoc2": "\t\tAnother heredoc, that\n\t\tdoesn't remove indentation\n\t\t${local.other.3}\n\t\t%{if true ? false : true}\"gotcha\"\\n%{else}4%{endif}\n",
+        "heredoc": "This is a heredoc template.\nIt references local.other.3\n",
+        "heredoc2": "\t\tAnother heredoc, that\n\t\tdoesn't remove indentation\n\t\tlocal.other.3\n\t\t%{if true ? false : true}\"gotcha\"\\n%{else}4%{endif}\n",
         "simple": "${4 - 2}"
       },
       "skip_rules": null

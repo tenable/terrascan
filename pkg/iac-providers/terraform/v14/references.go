@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package tfv14
 
 import (
 	"reflect"
@@ -69,7 +69,7 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 			// are of the type string
 			config[k] = r.ResolveStrRef(v.(string))
 
-		case vType == "tfv12.jsonObj" && vKind == reflect.Map:
+		case vType == "tfv14.jsonObj" && vKind == reflect.Map:
 
 			// case 2: config value is of type jsonObj
 			config[k] = r.ResolveRefs(v.(jsonObj))
@@ -91,7 +91,7 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 				config[k] = sConfig
 			}
 
-		case vType == "[]tfv12.jsonObj" && vKind == reflect.Slice:
+		case vType == "[]tfv14.jsonObj" && vKind == reflect.Slice:
 
 			// case 4: config value is of type []jsonObj
 
