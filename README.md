@@ -8,11 +8,10 @@
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
 
-Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+Detect security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
 
 
-* GitHub Repo: https://github.com/accurics/terrascan
-* Documentation: https://docs.accurics.com
+* Documentation: https://docs.accurics.com/projects/accurics-terrascan/en/latest/
 * Discuss: https://community.accurics.com
 
 ## Features
@@ -21,7 +20,11 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
 * Support for AWS, Azure, GCP, Kubernetes and GitHub
 
-## Installing
+
+## Quick Start 
+### Step 1: Install
+Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases)
+
 Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
 
 ```sh
@@ -34,44 +37,7 @@ $ tar -xvf terrascan.tar.gz
 $ install terrascan /usr/local/bin
 $ terrascan
 ```
-
-If you have go installed, Terrascan can be installed with `go get`
-```
-$ export GO111MODULE=on
-$ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.2.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
-  ...
-$ terrascan
-```
-
-### Install via `brew`
-
-[Homebrew](https://brew.sh/) users can install by:
-
-```sh
-$ brew install terrascan
-```
-
-### Docker
-Terrascan is also available as a Docker image and can be used as follows
-
-```sh
-$ docker run accurics/terrascan
-```
-
-### Building Terrascan
-Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
-
-```sh
-$ git clone git@github.com:accurics/terrascan.git
-$ cd terrascan
-$ make build
-$ ./bin/terrascan
-```
-
-## Getting started
-
+### Step 2: Run
 To scan your code for security issues you can run the following (defaults to scanning Terraform).
 
 ```sh
@@ -109,8 +75,45 @@ Flags:
 Use "terrascan [command] --help" for more information about a command.
 ```
 
-## Documentation
-To learn more about Terrascan check out the documentation https://docs.accurics.com where we include a getting started guide, Terrascan's architecture, a breakdown of it's commands, and a deep dive into policies.
+
+
+## Other Installation Options
+
+If you have go installed, Terrascan can be installed with `go get`
+```
+$ export GO111MODULE=on
+$ go get -u github.com/accurics/terrascan/cmd/terrascan
+  go: downloading github.com/accurics/terrascan v1.2.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
+  ...
+$ terrascan
+```
+
+### Install via `brew`
+
+[Homebrew](https://brew.sh/) users can install by:
+
+```sh
+$ brew install terrascan
+```
+
+### Docker
+Terrascan is also available as a Docker image and can be used as follows
+
+```sh
+$ docker run accurics/terrascan
+```
+
+### Building Terrascan
+Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
+
+```sh
+$ git clone git@github.com:accurics/terrascan.git
+$ cd terrascan
+$ make build
+$ ./bin/terrascan
+```
+
 
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
