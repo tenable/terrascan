@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package utils
 
 import (
 	"reflect"
@@ -58,7 +58,7 @@ func TestGetSkipRules(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			actual := getSkipRules(tt.input)
+			actual := GetSkipRules(tt.input)
 			if !reflect.DeepEqual(actual, tt.expected) {
 				t.Errorf("rule ids got: '%v', want: '%v'", actual, tt.expected)
 			}
