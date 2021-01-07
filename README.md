@@ -75,6 +75,10 @@ Flags:
 Use "terrascan [command] --help" for more information about a command.
 ```
 
+### Step 3: Integrate with CI\CD
+Please refer to our documentation to integrate with your pipeline:
+https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/ 
+
 
 
 ## Other Installation Options
