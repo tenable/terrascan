@@ -11,7 +11,7 @@
 Detect security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
 
 
-* Documentation: https://docs.accurics.com/projects/accurics-terrascan/en/latest/
+* Documentation: https://docs.accurics.com/projects/accurics-terrascan
 * Discuss: https://community.accurics.com
 
 ## Features
