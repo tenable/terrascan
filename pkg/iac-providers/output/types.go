@@ -18,13 +18,16 @@ package output
 
 // ResourceConfig describes a resource present in IaC
 type ResourceConfig struct {
-	ID        string      `json:"id"`
-	Name      string      `json:"name"`
-	Source    string      `json:"source"`
-	Line      int         `json:"line"`
-	Type      string      `json:"type"`
-	Config    interface{} `json:"config"`
-	SkipRules []string    `json:"skip_rules"`
+	ID     string      `json:"id"`
+	Name   string      `json:"name"`
+	Source string      `json:"source"`
+	Line   int         `json:"line"`
+	Type   string      `json:"type"`
+	Config interface{} `json:"config"`
+	// SkipRules will hold the rules to be skipped for the resource.
+	// Each iac provider should append the rules to be skipped for a resource,
+	// while extracting resource from the iac files
+	SkipRules []string `json:"skip_rules"`
 }
 
 // AllResourceConfigs is a list/slice of resource configs present in IaC
