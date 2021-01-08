@@ -55,7 +55,7 @@ kind: Pod
 metadata:
   name: myapp-pod
   annotations:
-    terrascanSkipRules: [accurics.kubernetes.IAM.109]
+    terrascanSkip: [accurics.kubernetes.IAM.109]
 spec:
   containers:
     - name: myapp-container
@@ -110,7 +110,7 @@ func TestK8sV1ExtractResource(t *testing.T) {
 				Metadata: k8sMetadata{
 					Name: "myapp-pod",
 					Annotations: map[string]interface{}{
-						terrascanSkipRules: []interface{}{"accurics.kubernetes.IAM.109"},
+						terrascanSkip: []interface{}{"accurics.kubernetes.IAM.109"},
 					},
 				},
 			},
@@ -204,7 +204,7 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "Pod",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							terrascanSkipRules: []interface{}{testRule},
+							terrascanSkip: []interface{}{testRule},
 						},
 						"name": "myapp-pod",
 					},
@@ -269,7 +269,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with invalid terrascanSkipRules type",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkipRules: "test",
+					terrascanSkip: "test",
 				},
 			},
 			want: []string{},
@@ -278,7 +278,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with invalid terrascanSkipRules rule value",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkipRules: []interface{}{1},
+					terrascanSkip: []interface{}{1},
 				},
 			},
 			want: []string{},
@@ -287,7 +287,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with one terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkipRules: []interface{}{testRuleA},
+					terrascanSkip: []interface{}{testRuleA},
 				},
 			},
 			want: []string{testRuleA},
@@ -296,7 +296,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with multiple terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkipRules: []interface{}{testRuleA, testRuleB, testRuleC},
+					terrascanSkip: []interface{}{testRuleA, testRuleB, testRuleC},
 				},
 			},
 			want: []string{testRuleA, testRuleB, testRuleC},

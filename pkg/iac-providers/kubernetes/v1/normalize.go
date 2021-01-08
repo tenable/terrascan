@@ -28,7 +28,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const terrascanSkipRules = "terrascanSkipRules"
+const terrascanSkip = "terrascanSkip"
 
 var (
 	errUnsupportedDoc = fmt.Errorf("unsupported document type")
@@ -139,23 +139,24 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 
 func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID string) []string {
 
-	if _, ok := annotations[terrascanSkipRules]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanSkipRules, resourceID)
+	var skipRulesFromAnnotations interface{}
+	var ok bool
+	if skipRulesFromAnnotations, ok = annotations[terrascanSkip]; !ok {
+		zap.S().Debugf("%s not present for resource: %s", terrascanSkip, resourceID)
 		return nil
 	}
 
 	skipRules := make([]string, 0)
-	skipRulesFromAnnotations := annotations[terrascanSkipRules]
 	if rules, ok := skipRulesFromAnnotations.([]interface{}); ok {
 		for _, rule := range rules {
 			if value, ok := rule.(string); ok {
 				skipRules = append(skipRules, value)
 			} else {
-				zap.S().Debugf("each rule in %s must be of string type", terrascanSkipRules)
+				zap.S().Debugf("each rule in %s must be of string type", terrascanSkip)
 			}
 		}
 	} else {
-		zap.S().Debugf("%s must be an array of rules to skip", terrascanSkipRules)
+		zap.S().Debugf("%s must be an array of rules to skip", terrascanSkip)
 	}
 
 	return skipRules
