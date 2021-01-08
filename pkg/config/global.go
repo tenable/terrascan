@@ -17,10 +17,9 @@
 package config
 
 import (
-	"fmt"
-	"github.com/pelletier/go-toml"
-	"go.uber.org/zap"
 	"os"
+
+	"go.uber.org/zap"
 )
 
 const (
@@ -31,87 +30,54 @@ const (
 )
 
 var (
-	policyRepoPath       = os.Getenv("HOME") + "/.terrascan"
-	policyBasePath       = policyRepoPath + "/pkg/policies/opa/rego"
-	errTomlKeyNotPresent = fmt.Errorf("%s key not present in toml config", policyConfigKey)
+	policyRepoPath = os.Getenv("HOME") + "/.terrascan"
+	policyBasePath = policyRepoPath + "/pkg/policies/opa/rego"
 )
 
 func init() {
 	// If the user specifies a config file in TERRASCAN_CONFIG,
 	// overwrite the defaults with the values from that file.
 	// Retain the defaults for members not specified in the file.
-	LoadGlobalConfig(os.Getenv(configEnvvarName))
+	if err := LoadGlobalConfig(os.Getenv(configEnvvarName)); err != nil {
+		zap.S().Error("error while loading global config", zap.Error(err))
+	}
 }
 
 // LoadGlobalConfig loads policy configuration from specified configFile
 // into var Global.Policy.  Members of Global.Policy that are not specified
 // in configFile will get default values
-func LoadGlobalConfig(configFile string) {
+func LoadGlobalConfig(configFile string) error {
 	// Start with the defaults
-	Global.Policy = PolicyConfig{
+	Global.Policy = Policy{
 		BasePath: policyBasePath,
 		RepoPath: policyRepoPath,
 		RepoURL:  policyRepoURL,
 		Branch:   policyBranch,
 	}
 
-	if len(configFile) > 0 {
-		p, err := loadConfigFile(configFile)
-		if err != nil {
-			zap.S().Error(err)
-			return
-		}
-		if len(p.Policy.BasePath) > 0 {
-			Global.Policy.BasePath = p.Policy.BasePath
-		}
-		if len(p.Policy.RepoPath) > 0 {
-			Global.Policy.RepoPath = p.Policy.RepoPath
-		}
-		if len(p.Policy.RepoURL) > 0 {
-			Global.Policy.RepoURL = p.Policy.RepoURL
-		}
-		if len(p.Policy.Branch) > 0 {
-			Global.Policy.Branch = p.Policy.Branch
-		}
+	if configFile == "" {
+		zap.S().Debug("global config env variable is not specified")
+		return nil
 	}
-}
 
-func loadConfigFile(configFile string) (GlobalConfig, error) {
-	p := GlobalConfig{}
-
-	config, err := LoadConfig(configFile)
+	configReader, err := NewTerrascanConfigReader(configFile)
 	if err != nil {
-		return p, ErrNotPresent
+		return err
 	}
 
-	keyConfig := config.Get(policyConfigKey)
-	if keyConfig == nil {
-		return p, errTomlKeyNotPresent
+	if len(configReader.GetPolicyConfig().BasePath) > 0 {
+		Global.Policy.BasePath = configReader.GetPolicyConfig().BasePath
 	}
-
-	keyTomlConfig := keyConfig.(*toml.Tree)
-
-	// We want to treat missing keys as empty strings
-	str := func(x interface{}) string {
-		if x == nil {
-			return ""
-		}
-		return x.(string)
+	if len(configReader.GetPolicyConfig().RepoPath) > 0 {
+		Global.Policy.RepoPath = configReader.GetPolicyConfig().RepoPath
 	}
-
-	// path = path where repo will be checked out
-	p.Policy.BasePath = str(keyTomlConfig.Get("path"))
-
-	// repo_url = git url to policy repository
-	p.Policy.RepoURL = str(keyTomlConfig.Get("repo_url"))
-
-	// rego_subdir = subdir of <path> where rego files are located
-	p.Policy.RepoPath = str(keyTomlConfig.Get("rego_subdir"))
-
-	// branch = git branch where policies are stored
-	p.Policy.Branch = str(keyTomlConfig.Get("branch"))
-
-	return p, nil
+	if len(configReader.GetPolicyConfig().RepoURL) > 0 {
+		Global.Policy.RepoURL = configReader.GetPolicyConfig().RepoURL
+	}
+	if len(configReader.GetPolicyConfig().Branch) > 0 {
+		Global.Policy.Branch = configReader.GetPolicyConfig().Branch
+	}
+	return nil
 }
 
 // GetPolicyBasePath returns policy base path as set in global config

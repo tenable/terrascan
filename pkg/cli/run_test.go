@@ -28,172 +28,461 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 )
 
+func TestMain(m *testing.M) {
+	setup()
+	code := m.Run()
+	shutdown()
+	os.Exit(code)
+}
+
+func setup() {
+	// to download the policies for Run test
+	// downloads the policies at $HOME/.terrascan
+	initial(nil, nil)
+}
+
+func shutdown() {
+	// remove the downloaded policies
+	os.RemoveAll(os.Getenv("HOME") + "/.terrascan")
+}
+
 func TestRun(t *testing.T) {
+	testDirPath := "testdata/run-test"
+	kustomizeTestDirPath := testDirPath + "/kustomize-test"
+	testTerraformFilePath := testDirPath + "/config-only.tf"
+	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
+
 	table := []struct {
 		name        string
-		iacType     string
-		iacVersion  string
-		cloudType   []string
-		format      string
-		iacFilePath string
-		iacDirPath  string
 		configFile  string
-		configOnly  bool
-		verbose     bool
+		scanOptions *ScanOptions
 		stdOut      string
 		want        string
-		wantErr     error
+		wantErr     bool
 	}{
 		{
-			name:       "normal terraform run",
-			cloudType:  []string{"terraform"},
-			iacDirPath: "testdata/run-test",
+			name: "normal terraform run",
+			scanOptions: &ScanOptions{
+				// policy type terraform is not supported, error expected
+				policyType: []string{"terraform"},
+				iacDirPath: testDirPath,
+			},
+			wantErr: true,
 		},
 		{
-			name:       "normal k8s run",
-			cloudType:  []string{"k8s"},
-			iacDirPath: "testdata/run-test",
+			name: "normal terraform run with successful output",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "json",
+			},
 		},
 		{
-			name:        "config-only flag terraform",
-			cloudType:   []string{"terraform"},
-			iacFilePath: "testdata/run-test/config-only.tf",
-			configOnly:  true,
+			name: "normal k8s run",
+			scanOptions: &ScanOptions{
+				policyType: []string{"k8s"},
+				// kustomization.y(a)ml file not present under the dir path, error expected
+				iacDirPath: testDirPath,
+			},
+			wantErr: true,
 		},
 		{
-			name:        "config-only flag k8s",
-			cloudType:   []string{"k8s"},
-			iacFilePath: "testdata/run-test/config-only.yaml",
-			configOnly:  true,
+			name: "normal k8s run with successful output",
+			scanOptions: &ScanOptions{
+				policyType: []string{"k8s"},
+				iacDirPath: kustomizeTestDirPath,
+				outputType: "human",
+			},
 		},
 		{
-			name:        "config-only flag true with human readable format",
-			cloudType:   []string{"terraform"},
-			iacFilePath: "testdata/run-test/config-only.tf",
-			configOnly:  true,
-			format:      "human",
+			name: "config-only flag terraform",
+			scanOptions: &ScanOptions{
+				policyType:  []string{"all"},
+				iacFilePath: testTerraformFilePath,
+				configOnly:  true,
+				outputType:  "yaml",
+			},
 		},
 		{
-			name:        "config-only flag false with human readable format",
-			cloudType:   []string{"k8s"},
-			iacFilePath: "testdata/run-test/config-only.yaml",
-			format:      "human",
+			name: "config-only flag k8s",
+			scanOptions: &ScanOptions{
+				policyType: []string{"k8s"},
+				iacDirPath: kustomizeTestDirPath,
+				configOnly: true,
+				outputType: "json",
+			},
+		},
+		{
+			// xml doesn't support config-only, error expected
+			// modify the test results when xml supports config-only
+			name: "config-only flag true with xml output format",
+			scanOptions: &ScanOptions{
+				policyType:  []string{"all"},
+				iacFilePath: testTerraformFilePath,
+				configOnly:  true,
+				outputType:  "xml",
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail to download remote repository",
+			scanOptions: &ScanOptions{
+				policyType:  []string{"all"},
+				iacFilePath: testTerraformFilePath,
+				remoteURL:   "test",
+				remoteType:  "test",
+			},
+			wantErr: true,
+		},
+		{
+			name: "incorrect config file",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testTerraformFilePath,
+				outputType: "json",
+				configFile: "invalidFile",
+			},
+			wantErr: true,
+		},
+		{
+			name: "run with skip rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "json",
+				skipRules:  ruleSlice,
+			},
+		},
+		{
+			name: "run with scan rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				scanRules:  ruleSlice,
+			},
+		},
+		{
+			name: "config file with rules",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				iacDirPath: testDirPath,
+				outputType: "yaml",
+				configFile: "testdata/configFile.toml",
+			},
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			Run(tt.iacType, tt.iacVersion, tt.cloudType, tt.iacFilePath, tt.iacDirPath, tt.configFile, []string{}, tt.format, "", "", tt.configOnly, false, tt.verbose)
+			err := tt.scanOptions.Run()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 		})
 	}
 }
 
-func TestWriteResults(t *testing.T) {
+func TestScanOptionsDownloadRemoteRepository(t *testing.T) {
+	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	defer os.RemoveAll(testTempdir)
+
+	type fields struct {
+		RemoteType string
+		RemoteURL  string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		tempDir string
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "blank input parameters",
+			fields: fields{
+				RemoteType: "",
+				RemoteURL:  "",
+			},
+			tempDir: "",
+		},
+		{
+			name: "invalid input parameters",
+			fields: fields{
+				RemoteType: "test",
+				RemoteURL:  "test",
+			},
+			tempDir: "test",
+			wantErr: true,
+		},
+		{
+			name: "valid input parameters",
+			fields: fields{
+				RemoteType: "git",
+				RemoteURL:  "github.com/accurics/terrascan",
+			},
+			tempDir: testTempdir,
+			want:    testTempdir,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := ScanOptions{
+				remoteType: tt.fields.RemoteType,
+				remoteURL:  tt.fields.RemoteURL,
+			}
+			err := s.downloadRemoteRepository(tt.tempDir)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if s.iacDirPath != tt.want {
+				t.Errorf("ScanOptions.downloadRemoteRepository() = %v, want %v", s.iacDirPath, tt.want)
+			}
+		})
+	}
+}
+
+func TestScanOptionsWriteResults(t *testing.T) {
 	testInput := runtime.Output{
 		ResourceConfig: output.AllResourceConfigs{},
 		Violations: policy.EngineOutput{
 			ViolationStore: &results.ViolationStore{},
 		},
 	}
-	type args struct {
-		results    runtime.Output
-		useColors  bool
-		verbose    bool
-		configOnly bool
-		format     string
+
+	type fields struct {
+		ConfigOnly bool
+		OutputType string
 	}
 	tests := []struct {
 		name    string
-		args    args
+		fields  fields
+		args    runtime.Output
 		wantErr bool
 	}{
 		{
-			name: "config only true with human readable output format",
-			args: args{
-				results:    testInput,
-				configOnly: true,
-				format:     "human",
+			name: "config only true",
+			fields: fields{
+				ConfigOnly: true,
+				OutputType: "yaml",
 			},
-			wantErr: true,
-		},
-		{
-			name: "config only true with non human readable output format",
-			args: args{
-				results:    testInput,
-				configOnly: true,
-				format:     "json",
-			},
-			wantErr: false,
+			args: testInput,
 		},
 		{
 			name: "config only false",
-			args: args{
-				results:    testInput,
-				configOnly: false,
-				format:     "human",
+			fields: fields{
+				ConfigOnly: false,
+				OutputType: "json",
 			},
-			wantErr: false,
+			args: testInput,
+		},
+		{
+			// until we support config only flag for xml, this test case is for expected failure
+			name: "config only true for xml",
+			fields: fields{
+				ConfigOnly: true,
+				OutputType: "xml",
+			},
+			args:    testInput,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := writeResults(tt.args.results, tt.args.useColors, tt.args.verbose, tt.args.configOnly, tt.args.format); (err != nil) != tt.wantErr {
-				t.Errorf("writeResults() error = gotErr: %v, wantErr: %v", err, tt.wantErr)
+			s := ScanOptions{
+				configOnly: tt.fields.ConfigOnly,
+				outputType: tt.fields.OutputType,
+			}
+			if err := s.writeResults(tt.args); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.writeResults() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestDownloadRemoteRepository(t *testing.T) {
-	testTempdir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
-
-	type args struct {
-		remoteType string
-		remoteURL  string
-		tempDir    string
+func TestScanOptionsValidate(t *testing.T) {
+	type fields struct {
+		configOnly bool
+		outputType string
 	}
 	tests := []struct {
 		name    string
-		args    args
-		want    string
+		fields  fields
 		wantErr bool
 	}{
 		{
-			name: "blank input paramters",
-			args: args{
-				remoteType: "",
-				remoteURL:  "",
-				tempDir:    "",
-			},
-		},
-		{
-			name: "invalid input parameters",
-			args: args{
-				remoteType: "test",
-				remoteURL:  "test",
-				tempDir:    "test",
+			name: "validate --config-only with human readable output",
+			fields: fields{
+				configOnly: true,
+				outputType: "human",
 			},
 			wantErr: true,
 		},
 		{
-			name: "valid inputs paramters",
-			args: args{
-				remoteType: "git",
-				remoteURL:  "github.com/accurics/terrascan",
-				tempDir:    testTempdir,
+			name: "validate --config-only with non human readable output",
+			fields: fields{
+				configOnly: true,
+				outputType: "json",
 			},
-			want: testTempdir,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := downloadRemoteRepository(tt.args.remoteType, tt.args.remoteURL, tt.args.tempDir)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("downloadRemoteRepository() error = %v, wantErr %v", err, tt.wantErr)
-				return
+			s := ScanOptions{
+				configOnly: tt.fields.configOnly,
+				outputType: tt.fields.outputType,
 			}
-			if got != tt.want {
-				t.Errorf("downloadRemoteRepository() = %v, want %v", got, tt.want)
+			if err := s.validate(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestScanOptionsInitColor(t *testing.T) {
+	type fields struct {
+		useColors string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{
+			name: "test for auto as input",
+			fields: fields{
+				useColors: "auto",
+			},
+		},
+		{
+			name: "test for true as input",
+			fields: fields{
+				useColors: "true",
+			},
+			want: true,
+		},
+		{
+			name: "test for 1 as input",
+			fields: fields{
+				useColors: "1",
+			},
+			want: true,
+		},
+		{
+			name: "test for false as input",
+			fields: fields{
+				useColors: "false",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ScanOptions{
+				useColors: tt.fields.useColors,
+			}
+			s.initColor()
+			if s.useColors != "auto" {
+				if s.UseColors != tt.want {
+					t.Errorf("ScanOptions.initColor() incorrect value for UseColors, got: %v, want %v", s.useColors, tt.want)
+				}
+			}
+		})
+	}
+}
+
+func TestScanOptionsInit(t *testing.T) {
+	type fields struct {
+		configOnly bool
+		outputType string
+		useColors  string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		{
+			name: "test for init fail",
+			fields: fields{
+				useColors:  "auto",
+				outputType: "human",
+				configOnly: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "test for init success",
+			fields: fields{
+				useColors:  "auto",
+				outputType: "human",
+				configOnly: false,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ScanOptions{
+				configOnly: tt.fields.configOnly,
+				outputType: tt.fields.outputType,
+				useColors:  tt.fields.useColors,
+			}
+			if err := s.Init(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.Init() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestScanOptionsScan(t *testing.T) {
+	type fields struct {
+		policyType []string
+		iacDirPath string
+		configOnly bool
+		outputType string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		{
+			name: "failure in init",
+			fields: fields{
+				configOnly: true,
+				outputType: "human",
+			},
+			wantErr: true,
+		},
+		{
+			name: "failure in run",
+			fields: fields{
+				policyType: []string{"terraform"},
+				iacDirPath: "testdata/run-test",
+			},
+			wantErr: true,
+		},
+		{
+			name: "successful scan",
+			fields: fields{
+				policyType: []string{"all"},
+				iacDirPath: "testdata/run-test",
+				outputType: "json",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ScanOptions{
+				policyType: tt.fields.policyType,
+				iacDirPath: tt.fields.iacDirPath,
+				configOnly: tt.fields.configOnly,
+				outputType: tt.fields.outputType,
+			}
+			if err := s.Scan(); (err != nil) != tt.wantErr {
+				t.Errorf("ScanOptions.Scan() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

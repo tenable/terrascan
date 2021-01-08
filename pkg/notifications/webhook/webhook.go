@@ -22,25 +22,40 @@ import (
 	"net/http"
 
 	httputils "github.com/accurics/terrascan/pkg/utils/http"
-	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
 )
 
 var (
 	errInitFailed = fmt.Errorf("failed to initialize webhook notifier")
+	// ErrNilConfigData will be returned when config is nil
+	ErrNilConfigData = fmt.Errorf("config data is nil")
 )
 
 // Init initalizes the webhook notifier, reads config file and configures the
 // necessary parameters for webhook notifications to work
 func (w *Webhook) Init(config interface{}) error {
+	// return error if config data is not present
+	if config == nil {
+		return ErrNilConfigData
+	}
 
 	// config to *toml.Tree
-	tomlConfig := config.(*toml.Tree)
+	webhookConfig, ok := config.(map[string]interface{})
+	if !ok {
+		zap.S().Errorf("error type casting webhook config data")
+		return errInitFailed
+	}
 
 	// initalize Webhook struct with url and token
-	err := tomlConfig.Unmarshal(w)
+
+	jsonData, err := json.Marshal(webhookConfig)
 	if err != nil {
-		zap.S().Error(errInitFailed.Error())
+		zap.S().Error("error while marshalling webhook config data", zap.Error(err))
+		return errInitFailed
+	}
+
+	if err = json.Unmarshal(jsonData, w); err != nil {
+		zap.S().Error("error while un-marshalling webhook config data", zap.Error(err))
 		return errInitFailed
 	}
 

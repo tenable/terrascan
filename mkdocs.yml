@@ -38,7 +38,9 @@ extra:
 # Navigation
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started:
+    - Quickstart: getting-started/quickstart.md
+    - Usage: getting-started/usage.md
   - Architecture: architecture.md
   - Policies:
     - Policy Reference: policies.md
@@ -47,6 +49,7 @@ nav:
     - Azure: policies/azure.md
     - GitHub: policies/github.md
   # - Educational Resources: learning.md
+  - CI/CD Integration: cicd.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - About: about.md

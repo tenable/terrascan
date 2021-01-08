@@ -55,8 +55,14 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string) error {
+func (m MockPolicyEngine) Init(input string, scanRules, skipRules []string) error {
 	return m.err
+}
+
+func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules []string) {
+	/*
+		This method does nothing. Required to fullfil the Engine interface contract
+	*/
 }
 
 func (m MockPolicyEngine) Configure() error {
@@ -228,7 +234,7 @@ func TestInit(t *testing.T) {
 				configFile: "./testdata/does-not-exist",
 			},
 			wantErr:         config.ErrNotPresent,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: nil,
 		},
 		{
 			name: "invalid policy path",

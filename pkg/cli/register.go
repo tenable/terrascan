@@ -18,7 +18,6 @@ package cli
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -29,27 +28,6 @@ import (
 // RegisterCommand Registers a new command under the base command
 func RegisterCommand(baseCommand *cobra.Command, command *cobra.Command) {
 	baseCommand.AddCommand(command)
-}
-
-func subCommands() (commandNames []string) {
-	for _, command := range rootCmd.Commands() {
-		commandNames = append(commandNames, append(command.Aliases, command.Name())...)
-	}
-	return
-}
-
-// setDefaultCommand sets `scan` as default command if no other command is specified
-func setDefaultCommandIfNonePresent() {
-	if len(os.Args) > 1 {
-		potentialCommand := os.Args[1]
-		for _, command := range subCommands() {
-			if command == potentialCommand {
-				return
-			}
-		}
-		os.Args = append([]string{os.Args[0], "scan"}, os.Args[1:]...)
-	}
-
 }
 
 // Execute the entrypoint called by main
@@ -81,9 +59,7 @@ func Execute() {
 		}
 	}
 
-	setDefaultCommandIfNonePresent()
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }

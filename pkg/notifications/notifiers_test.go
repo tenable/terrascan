@@ -1,6 +1,7 @@
 package notifications
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -57,12 +58,12 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "invalid toml",
 			configFile: "testdata/invalid.toml",
-			wantErr:    config.ErrTomlLoadConfig,
+			wantErr:    fmt.Errorf("(1, 3): was expecting token =, but got \"am\" instead"),
 		},
 		{
 			name:       "key not present",
 			configFile: "testdata/nokey.toml",
-			wantErr:    errTomlKeyNotPresent,
+			wantErr:    ErrTomlKeyNotPresent,
 		},
 		{
 			name:       "invalid notifier",
@@ -72,12 +73,21 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "empty notifier config",
 			configFile: "testdata/empty-notifier-config.toml",
-			wantErr:    errTomlKeyNotPresent,
+			wantErr:    errNotifierTypeNotPresent,
 		},
 		{
 			name:       "invalid notifier config",
 			configFile: "testdata/invalid-notifier-config.toml",
+			wantErr:    webhook.ErrNilConfigData,
+		},
+		{
+			name:       "valid multiple notifier config",
+			configFile: "testdata/valid-notifier-config.toml",
 			wantErr:    nil,
+		},
+		{
+			name:    "no config file specified",
+			wantErr: nil,
 		},
 	}
 

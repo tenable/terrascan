@@ -81,6 +81,10 @@ func TestScanRemoteRepo(t *testing.T) {
 }
 
 func TestScanRemoteRepoHandler(t *testing.T) {
+	validRepo := "https://github.com/kanchwala-yusuf/Damn-Vulnerable-Terraform-Project.git"
+	testIacType := "terraform"
+	testIacVersion := "v12"
+	testCloudType := "aws"
 
 	table := []struct {
 		name       string
@@ -89,42 +93,56 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 		cloudType  string
 		remoteURL  string
 		remoteType string
+		scanRules  []string
+		skipRules  []string
 		wantStatus int
 	}{
 		{
 			name:       "empty url and type",
-			iacType:    "terraform",
-			iacVersion: "v12",
-			cloudType:  "aws",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
 			remoteURL:  "",
 			remoteType: "",
 			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "empty type",
-			iacType:    "terraform",
-			iacVersion: "v12",
-			cloudType:  "aws",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
 			remoteURL:  someURL,
 			remoteType: "",
 			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "invalid url and type",
-			iacType:    "terraform",
-			iacVersion: "v12",
-			cloudType:  "aws",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
 			remoteURL:  someURL,
 			remoteType: someType,
 			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "valid url and type",
-			iacType:    "terraform",
-			iacVersion: "v12",
-			cloudType:  "aws",
-			remoteURL:  "https://github.com/kanchwala-yusuf/Damn-Vulnerable-Terraform-Project.git",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			remoteURL:  validRepo,
 			remoteType: "git",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid url and type with scan and skip rules",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			remoteURL:  validRepo,
+			remoteType: "git",
+			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
+				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
+			skipRules:  []string{"AWS.CloudFront.Network Security.Low.0568"},
 			wantStatus: http.StatusOK,
 		},
 	}
@@ -141,6 +159,8 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			s := scanRemoteRepoReq{
 				RemoteURL:  tt.remoteURL,
 				RemoteType: tt.remoteType,
+				ScanRules:  tt.scanRules,
+				SkipRules:  tt.skipRules,
 			}
 			reqBody, _ := json.Marshal(s)
 

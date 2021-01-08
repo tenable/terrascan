@@ -1,0 +1,14 @@
+{
+    "name": "disAllowedVolumes",
+    "file": "disAllowedVolumes.rego",
+    "template_args": {
+        "name": "disAllowedVolumes",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Vulnerable to CVE-2020-8555",
+    "reference_id": "AC-K8-DS-PO-M-0143",
+    "category": "Network Security",
+    "version": 1
+}

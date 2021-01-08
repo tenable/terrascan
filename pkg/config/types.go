@@ -17,20 +17,34 @@
 package config
 
 // Global initalizes GlobalConfig struct
-var Global *GlobalConfig = &GlobalConfig{}
+var Global *TerrascanConfig = &TerrascanConfig{}
 
-// GlobalConfig struct defines global variables/configurations across terrascan
-type GlobalConfig struct {
-	Policy PolicyConfig
+// TerrascanConfig struct defines global variables/configurations across terrascan
+type TerrascanConfig struct {
+	Policy        `toml:"policy,omitempty"`
+	Notifications map[string]Notifier `toml:"notifications,omitempty"`
+	Rules         `toml:"rules,omitempty"`
 }
 
-// PolicyConfig struct define policy specific configurations
-type PolicyConfig struct {
+// Policy struct defines policy specific configurations
+type Policy struct {
 	// policy local path
-	BasePath string
-	RepoPath string
+	BasePath string `toml:"path,omitempty"`
+	RepoPath string `toml:"rego_subdir,omitempty"`
 
 	// policy git url and branch
-	RepoURL string
-	Branch  string
+	RepoURL string `toml:"repo_url,omitempty"`
+	Branch  string `toml:"branch,omitempty"`
+}
+
+// Notifier represent a single notification in the terrascan config file
+type Notifier struct {
+	NotifierType   string      `toml:"type"`
+	NotifierConfig interface{} `toml:"config"`
+}
+
+// Rules represents scan and skip rules in the terrascan config file
+type Rules struct {
+	ScanRules []string `toml:"scan-rules,omitempty"`
+	SkipRules []string `toml:"skip-rules,omitempty"`
 }
