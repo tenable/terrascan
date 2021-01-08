@@ -66,6 +66,12 @@ func TestLoadIacFile(t *testing.T) {
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
+		{
+			name:     "file with skip rules in annotations",
+			filePath: "./testdata/file-test-data/test_pod_skip_rules.yaml",
+			k8sV1:    K8sV1{},
+			wantErr:  nil,
+		},
 	}
 
 	for _, tt := range table {
