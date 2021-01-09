@@ -3,6 +3,9 @@ package accurics
 {{.prefix}}s3EnforceUserACL[retVal] {
     bucket := input.aws_s3_bucket[_]
 
+    #proceeding forward only if inline policy is not included
+    not bucket.config.policy
+
     bucket_policies_set := { policy_id | policy_id := split(input.aws_s3_bucket_policy[_].id, "." )[1] }
 
     not bucket_policies_set[split(bucket.id, ".")[1]]
