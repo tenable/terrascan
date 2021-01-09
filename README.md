@@ -23,7 +23,7 @@ Detect security vulnerabilities and compliance violations across your Infrastruc
 
 ## Quick Start 
 ### Step 1: Install
-Terrascan's supports multiple ways to install, including brew (see more below).
+Terrascan's supports multiple ways to install, including [brew](https://github.com/accurics/terrascan#install-via-brew).
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
@@ -75,7 +75,7 @@ Use "terrascan [command] --help" for more information about a command.
 ```
 
 ### Step 3: Integrate with CI\CD
-Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/)
+Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/).
 
 
 ## Other Installation Options
