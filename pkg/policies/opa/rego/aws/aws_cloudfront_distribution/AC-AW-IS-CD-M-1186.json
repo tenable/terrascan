@@ -1,0 +1,10 @@
+{
+    "name": "noWafEnabled",
+    "file": "noWafEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "As cloud-front is a public facing service. Thus, having no web application firewall makes it vulnerable to application layer attacks",
+    "reference_id": "AC-AW-IS-CD-M-1186",
+    "category": "Infrastructure Security",
+    "version": 1
+}
