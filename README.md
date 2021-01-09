@@ -23,9 +23,8 @@ Detect security vulnerabilities and compliance violations across your Infrastruc
 
 ## Quick Start 
 ### Step 1: Install
-Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases)
-
-Terrascan's binary for your architecture can be found on the [releases](https://github.com/accurics/terrascan/releases) page. Here's an example of how to install it:
+Terrascan's supports multiple ways to install, including brew (see more below).
+Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
 $ curl --location https://github.com/accurics/terrascan/releases/download/v1.2.0/terrascan_1.2.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
@@ -77,21 +76,10 @@ Use "terrascan [command] --help" for more information about a command.
 
 ### Step 3: Integrate with CI\CD
 Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/)
-https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/ 
-
 
 
 ## Other Installation Options
 
-If you have go installed, Terrascan can be installed with `go get`
-```
-$ export GO111MODULE=on
-$ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.2.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
-  ...
-$ terrascan
-```
 
 ### Install via `brew`
 
@@ -106,6 +94,16 @@ Terrascan is also available as a Docker image and can be used as follows
 
 ```sh
 $ docker run accurics/terrascan
+```
+
+### Install via go get, if you have Go installed
+```
+$ export GO111MODULE=on
+$ go get -u github.com/accurics/terrascan/cmd/terrascan
+  go: downloading github.com/accurics/terrascan v1.2.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
+  ...
+$ terrascan
 ```
 
 ### Building Terrascan
