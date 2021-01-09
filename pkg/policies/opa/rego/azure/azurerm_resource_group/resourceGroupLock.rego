@@ -24,4 +24,8 @@ resourceLockExist(resource_group) = exists {
     resource_group_name := sprintf("azurerm_resource_group.%s", [resource_group.name])
 	resource_lock_exist_set[resource_group_name]
     exists = true
+} else = exists {
+	resource_lock_exist_set := { resource_lock_id | resource_lock_id := split(input.azurerm_management_lock[i].config.scope, ".")[1] }
+	resource_lock_exist_set[resource_group.name]
+    exists = true
 }
