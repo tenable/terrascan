@@ -7,7 +7,9 @@ metadata:
     test: someupdate
     test2: someupdate3
   annotations:
-    terrascanSkip: [accurics.kubernetes.IAM.109]
+    terrascanSkip:
+      - rule: accurics.kubernetes.IAM.109
+        comment: reason to skip the rule
 spec:
   containers:
   - name: myapp-container
@@ -25,7 +27,11 @@ metadata:
     test: someupdate
     test2: someupdate3
   annotations:
-    terrascanSkip: [accurics.kubernetes.IAM.3, accurics.kubernetes.OPS.461]
+    terrascanSkip:
+      - rule: accurics.kubernetes.IAM.3
+        comment: reason to skip the rule
+      - rule: accurics.kubernetes.OPS.461
+        comment: reason to skip the rule
 spec:
   template:
     spec:
