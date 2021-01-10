@@ -27,7 +27,13 @@ type ResourceConfig struct {
 	// SkipRules will hold the rules to be skipped for the resource.
 	// Each iac provider should append the rules to be skipped for a resource,
 	// while extracting resource from the iac files
-	SkipRules []string `json:"skip_rules"`
+	SkipRules []SkipRule `json:"skip_rules" yaml:"skip_rules"`
+}
+
+// SkipRule struct will hold the skipped rule and any comment for the skipped rule
+type SkipRule struct {
+	Rule    string `json:"rule"`
+	Comment string `json:"comment"`
 }
 
 // AllResourceConfigs is a list/slice of resource configs present in IaC

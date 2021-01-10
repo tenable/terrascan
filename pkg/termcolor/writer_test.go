@@ -26,7 +26,7 @@ func buildStore() *results.ViolationStore {
 		ResourceType: "resource type",
 		File:         "file",
 		LineNumber:   1,
-	})
+	}, false)
 
 	return res
 }

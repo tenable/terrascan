@@ -29,6 +29,7 @@ type Violation struct {
 	Category     string      `json:"category" yaml:"category" xml:"category,attr"`
 	RuleFile     string      `json:"-" yaml:"-" xml:"-"`
 	RuleData     interface{} `json:"-" yaml:"-" xml:"-"`
+	Comment      string      `json:"skip_comment,omitempty" yaml:"skip_comment,omitempty" xml:"skip_comment,omitempty"`
 	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
@@ -38,8 +39,9 @@ type Violation struct {
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations []*Violation `json:"violations" yaml:"violations" xml:"violations>violation"`
-	Summary    ScanSummary  `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
+	Violations        []*Violation `json:"violations" yaml:"violations" xml:"violations>violation"`
+	SkippedViolations []*Violation `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
+	Summary           ScanSummary  `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
 }
 
 // ScanSummary will hold the default scan summary data
@@ -59,6 +61,7 @@ type ScanSummary struct {
 func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	// Just concatenate the slices, since order shouldn't be important
 	vs.Violations = append(vs.Violations, extra.Violations...)
+	vs.SkippedViolations = append(vs.SkippedViolations, extra.SkippedViolations...)
 
 	// Add the scan summary
 	vs.Summary.LowCount += extra.Summary.LowCount

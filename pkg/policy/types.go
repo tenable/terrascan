@@ -32,7 +32,8 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 		return results.ViolationStore{}
 	}
 	return results.ViolationStore{
-		Violations: me.Violations,
-		Summary:    me.Summary,
+		Violations:        me.Violations,
+		SkippedViolations: me.SkippedViolations,
+		Summary:           me.Summary,
 	}
 }
