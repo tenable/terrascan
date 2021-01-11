@@ -19,19 +19,22 @@ package utils
 import (
 	"regexp"
 	"strings"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 var (
-	skipRulesPattern = regexp.MustCompile(`#ts:skip=\s*(([A-Za-z0-9]+\.?){5})(\s*,\s*([A-Za-z0-9]+\.?){5})*`)
-	skipRulesPrefix  = "#ts:skip="
+	skipRulesPattern     = regexp.MustCompile(`#ts:skip=\s*(([A-Za-z0-9]+\.?){5}(\s*[|][\w\s]*\.){0,1})(\s*,\s*([A-Za-z0-9]+\.?){5}(\s*[|][\w\s]*\.){0,1})*`)
+	skipRulesPrefix      = "#ts:skip="
+	ruleCommentSeparator = "|"
 )
 
 // GetSkipRules returns a list of rules to be skipped. The rules to be skipped
 // can be set in terraform resource config with the following comma separated pattern:
 // #ts:skip=AWS.S3Bucket.DS.High.1043, AWS.S3Bucket.DS.High.1044
-func GetSkipRules(body string) []string {
+func GetSkipRules(body string) []output.SkipRule {
 
-	var skipRules []string
+	var skipRules []output.SkipRule
 
 	// check if any rules comments are present in body
 	if !skipRulesPattern.MatchString(body) {
@@ -44,8 +47,27 @@ func GetSkipRules(body string) []string {
 	// extract rule ids from comments
 	for _, c := range comments {
 		c = strings.TrimPrefix(c, skipRulesPrefix)
-		c = strings.ReplaceAll(c, ",", " ")
-		skipRules = append(skipRules, strings.Fields(c)...)
+		cmts := strings.Split(c, ",")
+		for _, v := range cmts {
+			skipRule := getSkipRuleObject(v)
+			if skipRule != nil {
+				skipRules = append(skipRules, *skipRule)
+			}
+		}
 	}
 	return skipRules
+}
+
+func getSkipRuleObject(s string) *output.SkipRule {
+	if s == "" {
+		return nil
+	}
+	var skipRule output.SkipRule
+	ruleComment := strings.Split(s, ruleCommentSeparator)
+
+	skipRule.Rule = strings.TrimSpace(ruleComment[0])
+	if len(ruleComment) > 1 {
+		skipRule.Comment = strings.TrimSpace(ruleComment[1])
+	}
+	return &skipRule
 }

@@ -19,40 +19,93 @@ package utils
 import (
 	"reflect"
 	"testing"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // ---------------------- unit tests -------------------------------- //
 func TestGetSkipRules(t *testing.T) {
+	testRule1 := "AWS.S3Bucket.DS.High.1041"
+	testRule2 := "AWS.S3Bucket.DS.High.1042"
 
 	table := []struct {
 		name     string
 		input    string
-		expected []string
+		expected []output.SkipRule
 	}{
 		{
 			name:  "no rules",
 			input: "no rules here",
-			// expected would be an empty slice of strings
+			// expected would be an empty slice of output.SkipRule
 		},
 		{
-			name:     "single rule id",
-			input:    "#ts:skip=AWS.S3Bucket.DS.High.1041",
-			expected: []string{"AWS.S3Bucket.DS.High.1041"},
+			name:  "single rule id with no comment",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041",
+			expected: []output.SkipRule{
+				{Rule: testRule1},
+			},
 		},
 		{
-			name:     "multiple comma separated no space",
-			input:    "#ts:skip=AWS.S3Bucket.DS.High.1041,AWS.S3Bucket.DS.High.1042",
-			expected: []string{"AWS.S3Bucket.DS.High.1041", "AWS.S3Bucket.DS.High.1042"},
+			name:  "single rule id with comment",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041 | this rule should be skipped.",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRule1,
+					Comment: "this rule should be skipped.",
+				},
+			},
 		},
 		{
-			name: "multiple comma separated random space",
+			name:  "multiple comma separated no space, with comments",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041|some reason to skip. , AWS.S3Bucket.DS.High.1042| should_skip_the_rule.",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRule1,
+					Comment: "some reason to skip.",
+				},
+				{
+					Rule:    testRule2,
+					Comment: "should_skip_the_rule.",
+				},
+			},
+		},
+		{
+			name: "multiple comma separated random space, without comments",
 			input: "#ts:skip=  AWS.S3Bucket.DS.High.1041   ,		AWS.S3Bucket.DS.High.1042",
-			expected: []string{"AWS.S3Bucket.DS.High.1041", "AWS.S3Bucket.DS.High.1042"},
+			expected: []output.SkipRule{
+				{
+					Rule: testRule1,
+				},
+				{
+					Rule: testRule2,
+				},
+			},
 		},
 		{
-			name:     "sample resource config",
-			input:    "{\n     #ts:skip=AWS.S3Bucket.DS.High.1041\n   region        = var.region\n   #ts:skip=AWS.S3Bucket.DS.High.1042 AWS.S3Bucket.DS.High.1043\n   bucket        = local.bucket_name\n   #ts:skip=AWS.S3Bucket.DS.High.1044,AWS.S3Bucket.DS.High.1045\n   force_destroy = true\n   #ts:skip= AWS.S3Bucket.DS.High.1046   ,   AWS.S3Bucket.DS.High.1047\n   acl           = \"public-read\"\n }",
-			expected: []string{"AWS.S3Bucket.DS.High.1041", "AWS.S3Bucket.DS.High.1042", "AWS.S3Bucket.DS.High.1044", "AWS.S3Bucket.DS.High.1045", "AWS.S3Bucket.DS.High.1046", "AWS.S3Bucket.DS.High.1047"},
+			name:  "sample resource config",
+			input: "{\n     #ts:skip=AWS.S3Bucket.DS.High.1041 | skip the rule. \n   region        = var.region\n   #ts:skip=AWS.S3Bucket.DS.High.1042 AWS.S3Bucket.DS.High.1043\n   bucket        = local.bucket_name\n   #ts:skip=AWS.S3Bucket.DS.High.1044 | resource skipped for this rule. ,AWS.S3Bucket.DS.High.1045\n   force_destroy = true\n   #ts:skip= AWS.S3Bucket.DS.High.1046   ,   AWS.S3Bucket.DS.High.1047\n   acl           = \"public-read\"\n }",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRule1,
+					Comment: "skip the rule.",
+				},
+				{
+					Rule: testRule2,
+				},
+				{
+					Rule:    "AWS.S3Bucket.DS.High.1044",
+					Comment: "resource skipped for this rule.",
+				},
+				{
+					Rule: "AWS.S3Bucket.DS.High.1045",
+				},
+				{
+					Rule: "AWS.S3Bucket.DS.High.1046",
+				},
+				{
+					Rule: "AWS.S3Bucket.DS.High.1047",
+				},
+			},
 		},
 	}
 
