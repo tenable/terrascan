@@ -62,8 +62,9 @@ Terrascan can be configured as a job during the application sync process using [
 
 ![picture](img/terrascan-argo-cd-pipeline.png)
 
-
+&nbsp;
 ### step 1: configure presync resource hook
+&nbsp;
 
 See example hooks yaml where one can simply add it to an existing kubernetes configuration.
 
@@ -85,7 +86,7 @@ spec:
           secretName: ssh-key-secret    
       containers:
       - name: terrascan-argocd
-        image: <your container namespace>/<your container build from steps below>:latest
+        image: <your container namespace>/<your container build from steps below>:<hash>
         command: ["/bin/ash", "-c"]
         args:
         - >
@@ -114,7 +115,9 @@ Configuring the job to delete only after the specified time see `ttlSecondsAfter
 
 ![picture](img/terrascan-argo-cd-resource-hook-logs.png)
 
+&nbsp;
 ### step 2: create container with the following files (known_hosts, notify_slack.sh, Dockerfile)
+&nbsp;
 
 Below is the full example of building the terrascan-argo-cd integration container. 
 
