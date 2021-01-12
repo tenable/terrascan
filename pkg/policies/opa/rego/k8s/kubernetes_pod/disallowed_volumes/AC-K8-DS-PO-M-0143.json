@@ -1,0 +1,14 @@
+{
+    "name": "disAllowedVolumes",
+    "file": "disAllowedVolumes.rego",
+    "template_args": {
+        "name": "disAllowedVolumes",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Vulnerable to CVE-2020-8555 (affected version of kube-controller-manager: v1.18.0, v1.17.0 - v1.17.4, v1.16.0 - v1.16.8,< v1.15.11",
+    "reference_id": "AC-K8-DS-PO-M-0143",
+    "category": "Data Security",
+    "version": 1
+}

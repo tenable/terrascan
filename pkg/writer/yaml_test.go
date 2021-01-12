@@ -66,7 +66,8 @@ const (
       type: aws_s3_bucket
       config:
         bucket: ${module.m3.fullbucketname}
-        policy: ${module.m2.fullbucketpolicy}`
+        policy: ${module.m2.fullbucketpolicy}
+      skiprules: []`
 
 	scanTestOutputYAML = `results:
     violations:
