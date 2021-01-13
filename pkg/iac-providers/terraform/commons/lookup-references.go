@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package tfv12
+package commons
 
 import (
 	"reflect"

@@ -23,48 +23,9 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
+	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
 )
-
-// prepareAllResourceConfigs prepares a
-// map[string]map[string]output.ResourceConfig
-// from the output.AllResourceConfigs, which is a
-// map[string][]output.ResourceConfig
-//
-// The goal is to put the [] into a map[string] so that we don't rely on the
-// implicit order of the [], but can use the keys for ordering.
-// The key is computed from the source and id, which should be globally unique.
-func prepareAllResourceConfigs(v output.AllResourceConfigs) ([]byte, error) {
-
-	newval := make(map[string]map[string]output.ResourceConfig, len(v))
-	for key, val := range v {
-		newval[key] = make(map[string]output.ResourceConfig, len(val))
-		for _, item := range val {
-			newkey := item.Source + "##" + item.ID
-			newval[key][newkey] = item
-		}
-	}
-
-	contents, err := json.Marshal(newval)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return contents, nil
-}
-
-// identicalAllResourceConfigs determines if a and b have identical contents
-func identicalAllResourceConfigs(a, b output.AllResourceConfigs) (bool, error) {
-	value1, err := prepareAllResourceConfigs(a)
-	if err != nil {
-		return false, err
-	}
-	value2, err := prepareAllResourceConfigs(b)
-	if err != nil {
-		return false, err
-	}
-
-	return reflect.DeepEqual(value1, value2), nil
-}
 
 func TestLoadIacDir(t *testing.T) {
 
@@ -79,25 +40,25 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid dirPath",
 			dirPath: "not-there",
 			tfv12:   TfV12{},
-			wantErr: errEmptyTFConfigDir,
+			wantErr: commons.ErrEmptyTFConfigDir,
 		},
 		{
 			name:    "empty config",
 			dirPath: "./testdata/testfile",
 			tfv12:   TfV12{},
-			wantErr: errEmptyTFConfigDir,
+			wantErr: commons.ErrEmptyTFConfigDir,
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: "./testdata/invalid-moduleconfigs",
 			tfv12:   TfV12{},
-			wantErr: errBuildTFConfigDir,
+			wantErr: commons.ErrBuildTFConfigDir,
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata",
 			tfv12:   TfV12{},
-			wantErr: errLoadConfigDir,
+			wantErr: commons.ErrLoadConfigDir,
 		},
 	}
 
@@ -163,7 +124,7 @@ func TestLoadIacDir(t *testing.T) {
 				t.Errorf("unexpected error unmarshalling want: %v", err)
 			}
 
-			match, err := identicalAllResourceConfigs(got, want)
+			match, err := commons_test.IdenticalAllResourceConfigs(got, want)
 			if err != nil {
 				t.Errorf("unexpected error checking result: %v", err)
 			}

@@ -8,14 +8,14 @@ resource "aws_vpc" "vpc_playground" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
 }
 
 resource "aws_internet_gateway" "igw_playground" {
   vpc_id = aws_vpc.vpc_playground.id
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "subnet_public_playground" {
   cidr_block              = var.cidr_subnet
   map_public_ip_on_launch = "true"
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_route_table" "rtb_public_playground" {
     gateway_id = aws_internet_gateway.igw_playground.id
   }
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
 }
 
@@ -66,7 +66,7 @@ resource "aws_security_group" "sg_playground" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
 }
 
@@ -82,7 +82,7 @@ resource "aws_instance" "instance_playground" {
   vpc_security_group_ids = [aws_security_group.sg_playground.id]
   key_name               = aws_key_pair.ec2key_playground.key_name
   tags = {
-    Environment = "${var.environment_tag}"
+    Environment = "var.environment_tag"
   }
   provisioner "remote-exec" {
 

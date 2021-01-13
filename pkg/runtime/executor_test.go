@@ -25,6 +25,7 @@ import (
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
+	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
@@ -174,6 +175,103 @@ func TestExecute(t *testing.T) {
 func TestInit(t *testing.T) {
 
 	table := []struct {
+		name            string
+		executor        Executor
+		wantErr         error
+		wantIacProvider iacProvider.IacProvider
+		wantNotifiers   []notifications.Notifier
+	}{
+		{
+			name: "valid filePath",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				policyPath: []string{"./testdata/testpolicies"},
+			},
+			wantErr:         nil,
+			wantIacProvider: &tfv14.TfV14{},
+			wantNotifiers:   []notifications.Notifier{},
+		},
+		{
+			name: "valid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				configFile: "./testdata/webhook.toml",
+				policyPath: []string{"./testdata/testpolicies"},
+			},
+			wantErr:         nil,
+			wantIacProvider: &tfv14.TfV14{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
+			name: "invalid notifier",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				configFile: "testdata/invalid-notifier.toml",
+			},
+			wantErr:         fmt.Errorf("notifier not supported"),
+			wantIacProvider: &tfv14.TfV14{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+		{
+			name: "config not present",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				configFile: "./testdata/does-not-exist",
+			},
+			wantErr:         config.ErrNotPresent,
+			wantIacProvider: nil,
+		},
+		{
+			name: "invalid policy path",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				configFile: "./testdata/webhook.toml",
+				policyPath: []string{"./testdata/notthere"},
+			},
+			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
+			wantIacProvider: &tfv14.TfV14{},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := tt.executor.Init()
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+			if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
+				t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
+			}
+			for i, notifier := range tt.executor.notifiers {
+				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
+					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+				}
+			}
+		})
+	}
+
+	table = []struct {
 		name            string
 		executor        Executor
 		wantErr         error

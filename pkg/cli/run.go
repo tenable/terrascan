@@ -46,7 +46,7 @@ type ScanOptions struct {
 	// IaC type (terraform)
 	iacType string
 
-	// IaC version (for terraform:v12)
+	// IaC version (for terraform:v14)
 	iacVersion string
 
 	// Path to a single IaC file

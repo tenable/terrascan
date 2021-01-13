@@ -118,7 +118,7 @@ Flags:
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
   -i, --iac-type string           iac type (helm, k8s, kustomize, terraform)
-      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12)
+      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v14)
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
@@ -240,7 +240,7 @@ $ docker run --rm --name terrascan -p 9010:9010 accurics/terrascan
 Here's an example of how to send a request to the Terrascan server using curl:
 
 ``` Bash
-$ curl -i -F "file=@aws_cloudfront_distribution.tf" localhost:9010/v1/terraform/v12/aws/local/file/scan
+$ curl -i -F "file=@aws_cloudfront_distribution.tf" localhost:9010/v1/terraform/v14/aws/local/file/scan
 HTTP/1.1 100 Continue
 
 HTTP/1.1 200 OK

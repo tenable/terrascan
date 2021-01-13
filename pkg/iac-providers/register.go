@@ -34,13 +34,15 @@ func RegisterIacProvider(iacType supportedIacType, iacVersion, defaultIacVersion
 		iacVersion = defaultIacVersion
 	}
 
-	// version support
-	supportedTerraformVersions := make(map[supportedIacVersion]reflect.Type)
-	supportedTerraformVersions[iacVersion] = iacProvider
+	if IacVersionMap, IacExists := supportedIacProviders[iacType]; IacExists {
+		IacVersionMap[iacVersion] = iacProvider
+	} else {
+		// version support
+		supportedIacVersions := make(map[supportedIacVersion]reflect.Type)
+		supportedIacVersions[iacVersion] = iacProvider
+		supportedIacProviders[iacType] = supportedIacVersions
+	}
 
 	// default version
 	defaultIacVersions[iacType] = defaultIacVersion
-
-	// type support
-	supportedIacProviders[iacType] = supportedTerraformVersions
 }
