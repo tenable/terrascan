@@ -377,6 +377,22 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 				zap.S().Error(err)
 				continue
 			}
+
+			// do no report violations if rule is skipped for resource
+			if len(resource.SkipRules) > 0 {
+				found := false
+				for _, rule := range resource.SkipRules {
+					if strings.EqualFold(k, rule) {
+						found = true
+						break
+					}
+				}
+				if found {
+					zap.S().Debugf("rule: %s skipped for resource: %s", k, resource.Name)
+					continue
+				}
+			}
+
 			if resource == nil {
 				zap.S().Warn("resource was not found", zap.String("resource id", resourceID))
 				continue

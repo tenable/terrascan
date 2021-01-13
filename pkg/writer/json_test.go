@@ -18,7 +18,8 @@ const (
       "config": {
         "bucket": "${module.m3.fullbucketname}",
         "policy": "${module.m2.fullbucketpolicy}"
-      }
+      },
+      "skip_rules": null
     }
   ]
 }`
