@@ -60,6 +60,17 @@ spec:
   containers:
     - name: myapp-container
       image: busybox`)
+
+	testYAMLDataWithGenerateName = []byte(`apiVersion: v1
+kind: CRD
+metadata:
+  generateName: myapp-pod-prefix-
+  annotations:
+    terrascanSkip: [accurics.kubernetes.IAM.109]
+spec:
+  containers:
+    - name: myapp-container
+      image: busybox`)
 )
 
 func TestK8sV1ExtractResource(t *testing.T) {
@@ -207,6 +218,40 @@ func TestK8sV1Normalize(t *testing.T) {
 							terrascanSkip: []interface{}{testRule},
 						},
 						"name": "myapp-pod",
+					},
+					"spec": map[string]interface{}{
+						"containers": []interface{}{
+							map[string]interface{}{
+								"image": "busybox",
+								"name":  "myapp-container",
+							},
+						},
+					},
+				},
+				SkipRules: []string{testRule},
+			},
+		},
+		{
+			name: "valid iac document object with generateName",
+			args: args{
+				&utils.IacDocument{
+					Type: "yaml",
+					Data: testYAMLDataWithGenerateName,
+				},
+			},
+			want: &output.ResourceConfig{
+				ID:   "kubernetes_crd.myapp-pod-prefix-.default",
+				Name: "myapp-pod-prefix-",
+				Line: 0,
+				Type: "kubernetes_crd",
+				Config: map[string]interface{}{
+					"apiVersion": "v1",
+					"kind":       "CRD",
+					"metadata": map[string]interface{}{
+						"annotations": map[string]interface{}{
+							terrascanSkip: []interface{}{testRule},
+						},
+						"generateName": "myapp-pod-prefix-",
 					},
 					"spec": map[string]interface{}{
 						"containers": []interface{}{

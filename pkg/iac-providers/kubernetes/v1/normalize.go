@@ -38,9 +38,18 @@ var (
 
 // k8sMetadata is used to pull the name, namespace types and annotations for a given resource
 type k8sMetadata struct {
-	Name        string                 `yaml:"name" json:"name"`
-	Namespace   string                 `yaml:"namespace" json:"namespace"`
-	Annotations map[string]interface{} `yaml:"annotations" json:"annotations"`
+	Name         string                 `yaml:"name" json:"name"`
+	GenerateName string                 `yaml:"generateName,omitempty" json:"generateName,omitempty"`
+	Namespace    string                 `yaml:"namespace" json:"namespace"`
+	Annotations  map[string]interface{} `yaml:"annotations" json:"annotations"`
+}
+
+// NameOrGenerateName gets the metadata's Name member, or if Name is not set then GenerateName (for CRDs, for example)
+func (m k8sMetadata) NameOrGenerateName() string {
+	if len(m.Name) > 0 {
+		return m.Name
+	}
+	return m.GenerateName
 }
 
 // k8sResource is a generic struct to handle all k8s resource types
@@ -109,7 +118,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	case "ClusterRole":
 		fallthrough
 	case "Namespace":
-		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.Name
+		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName()
 	default:
 		// namespaced-resources
 		namespace := resource.Metadata.Namespace
@@ -117,7 +126,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 			namespace = "default"
 		}
 
-		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.Name + "." + namespace
+		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName() + "." + namespace
 	}
 
 	// read and update skip rules, if present
@@ -131,7 +140,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 		return nil, err
 	}
 
-	resourceConfig.Name = resource.Metadata.Name
+	resourceConfig.Name = resource.Metadata.NameOrGenerateName()
 	resourceConfig.Config = configData
 
 	return &resourceConfig, nil
