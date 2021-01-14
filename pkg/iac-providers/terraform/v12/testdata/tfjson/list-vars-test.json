@@ -1,0 +1,27 @@
+{
+    "aws_instance": [
+      {
+        "id": "aws_instance.app",
+        "name": "app",
+        "source": "main.tf",
+        "line": 5,
+        "type": "aws_instance",
+        "config": {
+          "ami": "${data.aws_ami.amazon_linux.id}",
+          "count": [
+            1
+          ],
+          "instance_type": "blah_instance",
+          "subnet_id": [
+            "10.0.0.0/8"
+          ],
+          "tags": {
+            "a": "b",
+            "c": "d"
+          },
+          "vpc_security_group_ids": "${var.security_group_ids}"
+        },
+        "skip_rules": null
+      }
+    ]
+  }

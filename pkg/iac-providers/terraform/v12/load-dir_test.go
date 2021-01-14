@@ -138,10 +138,20 @@ func TestLoadIacDir(t *testing.T) {
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
+		{
+			name:        "variables of list type",
+			tfConfigDir: "./testdata/list-type-vars-test",
+			tfJSONFile:  "./testdata/tfjson/list-vars-test.json",
+			tfv12:       TfV12{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.name != "variables of list type" {
+				t.Skip()
+			}
 			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)

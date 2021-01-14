@@ -18,6 +18,8 @@ package tfv12
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/pkg/errors"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
@@ -26,7 +28,7 @@ import (
 // list of available cty to golang type converters
 var (
 	ctyConverterFuncs       = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool, ctyToSlice, ctyToMap}
-	ctyNativeConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool, ctyToSlice}
+	ctyNativeConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool}
 )
 
 // ctyToStr tries to convert the given cty.Value into golang string type
@@ -54,8 +56,22 @@ func ctyToBool(ctyVal cty.Value) (interface{}, error) {
 // interfce{}
 func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 	var val []interface{}
-	err := gocty.FromCtyValue(ctyVal, &val)
-	return val, err
+	if strings.Contains(ctyVal.Type().FriendlyName(), "list") {
+		var allErrs error
+		if len(ctyVal.AsValueSlice()) > 0 {
+			for _, v := range ctyVal.AsValueSlice() {
+				for _, converter := range ctyNativeConverterFuncs {
+					resolved, err := converter(v)
+					if err == nil {
+						val = append(val, resolved)
+						return val, nil
+					}
+					allErrs = errors.Wrap(allErrs, err.Error())
+				}
+			}
+		}
+	}
+	return val, fmt.Errorf("list doesn't contain any elements")
 }
 
 // ctyToMap tries to converts the incoming cty.Value into map[string]cty.Value
