@@ -24,16 +24,16 @@ import (
 )
 
 var (
-	skipRulesPattern     = regexp.MustCompile(`#ts:skip=\s*(([A-Za-z0-9]+\.?){5}(\s*[|][\w\s]*\.){0,1})(\s*,\s*([A-Za-z0-9]+\.?){5}(\s*[|][\w\s]*\.){0,1})*`)
-	skipRulesPrefix      = "#ts:skip="
-	ruleCommentSeparator = "|"
+	skipRulesPattern = regexp.MustCompile(`(#ts:skip=[ \t]*(([A-Za-z0-9]+[.-]{1}){3,5}([\d]+)){1}([ \t]+.*){0,1})`)
+	skipRulesPrefix  = "#ts:skip="
 )
 
 // GetSkipRules returns a list of rules to be skipped. The rules to be skipped
-// can be set in terraform resource config with the following comma separated pattern:
-// #ts:skip=AWS.S3Bucket.DS.High.1043, AWS.S3Bucket.DS.High.1044
+// can be set in terraform resource config with the following pattern:
+// #ts:skip=AWS.S3Bucket.DS.High.1043
+// $ts:skip=AWS.S3Bucket.DS.High.1044 reason to skip the rule
+// each rule and its optional comment must be in a new line
 func GetSkipRules(body string) []output.SkipRule {
-
 	var skipRules []output.SkipRule
 
 	// check if any rules comments are present in body
@@ -47,12 +47,9 @@ func GetSkipRules(body string) []output.SkipRule {
 	// extract rule ids from comments
 	for _, c := range comments {
 		c = strings.TrimPrefix(c, skipRulesPrefix)
-		cmts := strings.Split(c, ",")
-		for _, v := range cmts {
-			skipRule := getSkipRuleObject(v)
-			if skipRule != nil {
-				skipRules = append(skipRules, *skipRule)
-			}
+		skipRule := getSkipRuleObject(c)
+		if skipRule != nil {
+			skipRules = append(skipRules, *skipRule)
 		}
 	}
 	return skipRules
@@ -63,11 +60,12 @@ func getSkipRuleObject(s string) *output.SkipRule {
 		return nil
 	}
 	var skipRule output.SkipRule
-	ruleComment := strings.Split(s, ruleCommentSeparator)
+	ruleComment := strings.Fields(s)
 
 	skipRule.Rule = strings.TrimSpace(ruleComment[0])
 	if len(ruleComment) > 1 {
-		skipRule.Comment = strings.TrimSpace(ruleComment[1])
+		comment := strings.Join(ruleComment[1:], " ")
+		skipRule.Comment = strings.TrimSpace(comment)
 	}
 	return &skipRule
 }

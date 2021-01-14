@@ -25,8 +25,11 @@ import (
 
 // ---------------------- unit tests -------------------------------- //
 func TestGetSkipRules(t *testing.T) {
-	testRule1 := "AWS.S3Bucket.DS.High.1041"
-	testRule2 := "AWS.S3Bucket.DS.High.1042"
+	testRuleAWS1 := "AWS.S3Bucket.DS.High.1041"
+	testRuleAWS2 := "AWS.S3Bucket.DS.High.1042"
+	testRuleAWSwithHyphen := "AC-AWS-NS-IN-M-1172"
+	testRuleAzure := "accurics.azure.NS.147"
+	testRuleKubernetesWithHyphen := "AC-K8-DS-PO-M-0143"
 
 	table := []struct {
 		name     string
@@ -39,71 +42,93 @@ func TestGetSkipRules(t *testing.T) {
 			// expected would be an empty slice of output.SkipRule
 		},
 		{
-			name:  "single rule id with no comment",
-			input: "#ts:skip=AWS.S3Bucket.DS.High.1041",
+			name:  "rule id with no comment, aws",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041\n",
 			expected: []output.SkipRule{
-				{Rule: testRule1},
+				{Rule: testRuleAWS1},
 			},
 		},
 		{
-			name:  "single rule id with comment",
-			input: "#ts:skip=AWS.S3Bucket.DS.High.1041 | this rule should be skipped.",
+			name:  "rule id with no comment, aws, with '-'",
+			input: "#ts:skip=AC-AWS-NS-IN-M-1172\n",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWSwithHyphen},
+			},
+		},
+		{
+			// gcp, kubernetes, github rules are of same format
+			name:  "rule id with no comment, azure",
+			input: "#ts:skip=accurics.azure.NS.147\n",
+			expected: []output.SkipRule{
+				{Rule: testRuleAzure},
+			},
+		},
+		{
+			name:  "rule id with no comment, kubernetes with '-'",
+			input: "#ts:skip=AC-K8-DS-PO-M-0143\n",
+			expected: []output.SkipRule{
+				{Rule: testRuleKubernetesWithHyphen},
+			},
+		},
+		{
+			name:  "rule id with comment",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041 This rule should be skipped.\n",
 			expected: []output.SkipRule{
 				{
-					Rule:    testRule1,
-					Comment: "this rule should be skipped.",
+					Rule:    testRuleAWS1,
+					Comment: "This rule should be skipped.",
 				},
 			},
 		},
 		{
+			// should match only one rule, we support single rule and comment in one line
+			// everything after the first group match will be considered a comment
 			name:  "multiple comma separated no space, with comments",
-			input: "#ts:skip=AWS.S3Bucket.DS.High.1041|some reason to skip. , AWS.S3Bucket.DS.High.1042| should_skip_the_rule.",
+			input: "#ts:skip=AWS.S3Bucket.DS.High.1041 some reason to skip. , AWS.S3Bucket.DS.High.1042 should_skip_the_rule.\n",
 			expected: []output.SkipRule{
 				{
-					Rule:    testRule1,
-					Comment: "some reason to skip.",
-				},
-				{
-					Rule:    testRule2,
-					Comment: "should_skip_the_rule.",
+					Rule:    testRuleAWS1,
+					Comment: "some reason to skip. , AWS.S3Bucket.DS.High.1042 should_skip_the_rule.",
 				},
 			},
 		},
 		{
-			name: "multiple comma separated random space, without comments",
-			input: "#ts:skip=  AWS.S3Bucket.DS.High.1041   ,		AWS.S3Bucket.DS.High.1042",
+			name: "rule and comment with random space characters",
+			input: "#ts:skip=  AWS.S3Bucket.DS.High.1041  		reason_to skip. the rule\n",
 			expected: []output.SkipRule{
 				{
-					Rule: testRule1,
-				},
-				{
-					Rule: testRule2,
+					Rule:    testRuleAWS1,
+					Comment: "reason_to skip. the rule",
 				},
 			},
 		},
 		{
-			name:  "sample resource config",
-			input: "{\n     #ts:skip=AWS.S3Bucket.DS.High.1041 | skip the rule. \n   region        = var.region\n   #ts:skip=AWS.S3Bucket.DS.High.1042 AWS.S3Bucket.DS.High.1043\n   bucket        = local.bucket_name\n   #ts:skip=AWS.S3Bucket.DS.High.1044 | resource skipped for this rule. ,AWS.S3Bucket.DS.High.1045\n   force_destroy = true\n   #ts:skip= AWS.S3Bucket.DS.High.1046   ,   AWS.S3Bucket.DS.High.1047\n   acl           = \"public-read\"\n }",
+			name: "sample resource config",
+			input: `{
+			#ts:skip=AWS.S3Bucket.DS.High.1041 skip the rule.
+			region        = var.region
+			#ts:skip=AWS.S3Bucket.DS.High.1042 AWS.S3Bucket.DS.High.1043
+			bucket        = local.bucket_name
+			#ts:skip=AWS.S3Bucket.DS.High.1044 resource skipped for this rule.
+			force_destroy = true
+			#ts:skip= AWS.S3Bucket.DS.High.1046
+			acl           = "public-read"
+			}`,
 			expected: []output.SkipRule{
 				{
-					Rule:    testRule1,
+					Rule:    testRuleAWS1,
 					Comment: "skip the rule.",
 				},
 				{
-					Rule: testRule2,
+					Rule:    testRuleAWS2,
+					Comment: "AWS.S3Bucket.DS.High.1043",
 				},
 				{
 					Rule:    "AWS.S3Bucket.DS.High.1044",
 					Comment: "resource skipped for this rule.",
 				},
 				{
-					Rule: "AWS.S3Bucket.DS.High.1045",
-				},
-				{
 					Rule: "AWS.S3Bucket.DS.High.1046",
-				},
-				{
-					Rule: "AWS.S3Bucket.DS.High.1047",
 				},
 			},
 		},
