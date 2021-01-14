@@ -68,7 +68,9 @@ kind: CRD
 metadata:
   generateName: myapp-pod-prefix-
   annotations:
-    terrascanSkip: [accurics.kubernetes.IAM.109]
+    terrascanSkip:
+      - rule: accurics.kubernetes.IAM.109
+        comment: reason to skip the rule
 spec:
   containers:
     - name: myapp-container
@@ -242,7 +244,7 @@ func TestK8sV1Normalize(t *testing.T) {
 						},
 					},
 				},
-				SkipRules: []string{testRule},
+				SkipRules: []output.SkipRule{testSkipRule},
 			},
 		},
 		{
@@ -263,7 +265,10 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "CRD",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							terrascanSkip: []interface{}{testRule},
+							terrascanSkip: []interface{}{map[string]interface{}{
+								"rule":    testRule,
+								"comment": testComment,
+							}},
 						},
 						"generateName": "myapp-pod-prefix-",
 					},
