@@ -1,0 +1,15 @@
+{
+    "ruleName": "noHttps",
+    "file": "noHttps.rego",
+    "ruleTemplate": "noHttps",
+    "ruleTemplateArgs": {
+        "name": "noHttps",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "TLS disabled can affect the confidentiality of the data in transit",
+    "ruleReferenceId": "AC-K8-NS-IN-H-0131",
+    "category": "Network Security",
+    "version": 0
+}

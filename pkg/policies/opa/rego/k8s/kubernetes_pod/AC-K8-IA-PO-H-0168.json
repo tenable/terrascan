@@ -1,0 +1,22 @@
+{
+    "ruleName": "runAsNonRootCheck",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "false",
+        "arg1": "cpu",
+        "arg2": "limits",
+        "name": "runAsNonRootCheck",
+        "not_allowed": "true",
+        "param": "runAsNonRoot",
+        "param1": "securityContext",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "HIGH",
+    "description": "Minimize Admission of Root Containers",
+    "ruleReferenceId": "AC-K8-IA-PO-H-0168",
+    "category": "Identity and Access Management",
+    "version": 0
+}

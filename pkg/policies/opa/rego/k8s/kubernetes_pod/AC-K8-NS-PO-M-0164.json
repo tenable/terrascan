@@ -1,0 +1,17 @@
+{
+    "ruleName": "falseHostNetwork",
+    "file": "specBoolCheck.rego",
+    "ruleTemplate": "specBoolCheck",
+    "ruleTemplateArgs": {
+        "name": "falseHostNetwork",
+        "param": "hostNetwork",
+        "prefix": "",
+        "suffix": "",
+        "value": "true"
+    },
+    "severity": "MEDIUM",
+    "description": "Containers Should Not Share the Host Network Namespace",
+    "ruleReferenceId": "AC-K8-NS-PO-M-0164",
+    "category": "Network Security",
+    "version": 0
+}

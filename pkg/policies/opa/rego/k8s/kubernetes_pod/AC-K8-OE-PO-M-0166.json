@@ -1,0 +1,15 @@
+{
+    "ruleName": "otherNamespace",
+    "file": "otherNamespace.rego",
+    "ruleTemplate": "otherNamespace",
+    "ruleTemplateArgs": {
+        "name": "otherNamespace",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Default Namespace Should Not be Used",
+    "ruleReferenceId": "AC-K8-OE-PO-M-0166",
+    "category": "Operational Efficiency",
+    "version": 0
+}

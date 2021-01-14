@@ -1,0 +1,17 @@
+{
+    "ruleName": "noReadinessProbe",
+    "file": "probeCheck.rego",
+    "ruleTemplate": "probeCheck",
+    "ruleTemplateArgs": {
+        "argument": "readinessProbe",
+        "argumentTF": "readiness_probe",
+        "name": "noReadinessProbe",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "No readiness probe will affect automatic recovery in case of unexpected errors",
+    "ruleReferenceId": "AC-K8-OE-PO-L-0130",
+    "category": "Operational Efficiency",
+    "version": 0
+}

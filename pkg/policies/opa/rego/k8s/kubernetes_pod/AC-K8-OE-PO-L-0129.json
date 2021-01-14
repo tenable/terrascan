@@ -1,0 +1,17 @@
+{
+    "ruleName": "nolivenessProbe",
+    "file": "probeCheck.rego",
+    "ruleTemplate": "probeCheck",
+    "ruleTemplateArgs": {
+        "argument": "livenessProbe",
+        "argumentTF": "liveness_probe",
+        "name": "nolivenessProbe",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "No liveness probe will ensure there is no recovery in case of unexpected errors",
+    "ruleReferenceId": "AC-K8-OE-PO-L-0129",
+    "category": "Operational Efficiency",
+    "version": 0
+}

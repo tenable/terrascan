@@ -1,0 +1,15 @@
+{
+    "ruleName": "autoMountTokenEnabled",
+    "file": "autoMountTokenEnabled.rego",
+    "ruleTemplate": "autoMountTokenEnabled",
+    "ruleTemplateArgs": {
+        "name": "autoMountTokenEnabled",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Service Account Tokens are only mounted where necessary",
+    "ruleReferenceId": "AC-K8-IA-PO-M-0105",
+    "category": "Identity and Access Management",
+    "version": 0
+}

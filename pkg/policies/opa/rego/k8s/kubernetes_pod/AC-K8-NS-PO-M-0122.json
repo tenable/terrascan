@@ -1,0 +1,15 @@
+{
+    "ruleName": "securityContextUsed",
+    "file": "securityContextUsed.rego",
+    "ruleTemplate": "securityContextUsed",
+    "ruleTemplateArgs": {
+        "name": "securityContextUsed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Apply Security Context to Your Pods and Containers",
+    "ruleReferenceId": "AC-K8-NS-PO-M-0122",
+    "category": "Network Security",
+    "version": 0
+}

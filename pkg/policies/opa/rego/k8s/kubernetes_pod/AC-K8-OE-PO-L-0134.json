@@ -1,0 +1,15 @@
+{
+    "ruleName": "imageWithLatestTag",
+    "file": "imageWithLatestTag.rego",
+    "ruleTemplate": "imageWithLatestTag",
+    "ruleTemplateArgs": {
+        "name": "imageWithLatestTag",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "No tag or container image with :Latest tag makes difficult to rollback and track",
+    "ruleReferenceId": "AC-K8-OE-PO-L-0134",
+    "category": "Operational Efficiency",
+    "version": 0
+}

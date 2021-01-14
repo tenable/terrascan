@@ -1,0 +1,18 @@
+{
+    "ruleName": "dontConnectDockerSock",
+    "file": "dockerSockCheck.rego",
+    "ruleTemplate": "dockerSockCheck",
+    "ruleTemplateArgs": {
+        "attrib": "spec.volumes[_].hostPath",
+        "name": "dontConnectDockerSock",
+        "param": "path",
+        "prefix": "",
+        "suffix": "",
+        "value": "/var/run/docker"
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict Mounting Docker Socket in a Container",
+    "ruleReferenceId": "AC-K8-NS-PO-M-0171",
+    "category": "Network Security",
+    "version": 0
+}

@@ -1,0 +1,20 @@
+{
+    "ruleName": "alwaysPullImages",
+    "file": "commandCheck.rego",
+    "ruleTemplate": "commandCheck",
+    "ruleTemplateArgs": {
+        "argument": "--enable-admission-plugins",
+        "name": "alwaysPullImages",
+        "negation": "",
+        "optional": "",
+        "param": "AlwaysPullImages",
+        "prefix": "",
+        "presence": "not",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "AlwaysPullImages plugin is not set",
+    "ruleReferenceId": "AC-K8-OE-PK-M-0034",
+    "category": "Operational Efficiency",
+    "version": 0
+}

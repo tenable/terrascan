@@ -1,0 +1,22 @@
+{
+    "ruleName": "privilegeEscalationCheck",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "false",
+        "arg1": "cpu",
+        "arg2": "limits",
+        "name": "privilegeEscalationCheck",
+        "not_allowed": "true",
+        "param": "allowPrivilegeEscalation",
+        "param1": "securityContext",
+        "prefix": "",
+        "suffix": "",
+        "value": "true"
+    },
+    "severity": "HIGH",
+    "description": "Containers Should Not Run with AllowPrivilegeEscalation",
+    "ruleReferenceId": "AC-K8-CA-PO-H-0165",
+    "category": "Cloud Assets Management",
+    "version": 0
+}

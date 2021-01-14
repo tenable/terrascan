@@ -1,0 +1,17 @@
+{
+    "ruleName": "falseHostPID",
+    "file": "specBoolCheck.rego",
+    "ruleTemplate": "specBoolCheck",
+    "ruleTemplateArgs": {
+        "name": "falseHostPID",
+        "param": "hostPID",
+        "prefix": "",
+        "suffix": "",
+        "value": "true"
+    },
+    "severity": "MEDIUM",
+    "description": "Containers Should Not Share Host Process ID Namespace",
+    "ruleReferenceId": "AC-K8-IA-PO-M-0162",
+    "category": "Identity and Access Management",
+    "version": 0
+}

@@ -1,0 +1,15 @@
+{
+    "ruleName": "capSysAdminUsed",
+    "file": "capSysAdminUsed.rego",
+    "ruleTemplate": "capSysAdminUsed",
+    "ruleTemplateArgs": {
+        "name": "capSysAdminUsed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Do Not Use CAP_SYS_ADMIN Linux Capability",
+    "ruleReferenceId": "AC-K8-NS-PO-H-0170",
+    "category": "Network Security",
+    "version": 0
+}

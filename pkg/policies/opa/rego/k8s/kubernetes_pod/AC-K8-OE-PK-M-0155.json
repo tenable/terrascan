@@ -1,0 +1,22 @@
+{
+    "ruleName": "CpuRequestsCheck",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "true",
+        "arg1": "requests",
+        "arg2": "cpu",
+        "name": "CpuRequestsCheck",
+        "not_allowed": "false",
+        "param": "resources",
+        "param1": "resources",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "Medium",
+    "description": "CPU Request Not Set in config file.",
+    "ruleReferenceId": "AC-K8-OE-PK-M-0155",
+    "category": "Operational Efficiency",
+    "version": 0
+}
