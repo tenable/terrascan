@@ -1,0 +1,22 @@
+{
+    "ruleName": "MemorylimitsCheck",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "true",
+        "arg1": "limits",
+        "arg2": "memory",
+        "name": "MemorylimitsCheck",
+        "not_allowed": "false",
+        "param": "limits",
+        "param1": "resources",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "Medium",
+    "description": "Memory Limits Not Set in config file.",
+    "ruleReferenceId": "AC-K8-OE-PK-M-0158",
+    "category": "Operational Efficiency",
+    "version": 0
+}

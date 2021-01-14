@@ -1,0 +1,15 @@
+{
+    "ruleName": "tillerDeployed",
+    "file": "tillerDeployed.rego",
+    "ruleTemplate": "tillerDeployed",
+    "ruleTemplateArgs": {
+        "name": "tillerDeployed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure That Tiller (Helm V2) Is Not Deployed",
+    "ruleReferenceId": "AC-K8-DS-PO-M-0177",
+    "category": "Data Security",
+    "version": 0
+}

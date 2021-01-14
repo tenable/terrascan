@@ -1,0 +1,15 @@
+{
+    "ruleName": "kubeDashboardEnabled",
+    "file": "kubeDashboardEnabled.rego",
+    "ruleTemplate": "kubeDashboardEnabled",
+    "ruleTemplateArgs": {
+        "name": "kubeDashboardEnabled",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Kubernetes Dashboard Is Not Deployed",
+    "ruleReferenceId": "AC-K8-DS-PO-M-0176",
+    "category": "Data Security",
+    "version": 0
+}

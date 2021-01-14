@@ -1,0 +1,15 @@
+{
+    "ruleName": "ensurePrivateIP",
+    "file": "ensurePrivateIP.rego",
+    "ruleTemplate": "ensurePrivateIP",
+    "ruleTemplateArgs": {
+        "name": "ensurePrivateIP",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict the use of externalIPs",
+    "ruleReferenceId": "AC-K8-NS-SE-M-0188",
+    "category": "Network Security",
+    "version": 0
+}

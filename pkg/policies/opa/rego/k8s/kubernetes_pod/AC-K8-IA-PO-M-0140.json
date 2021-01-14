@@ -1,0 +1,22 @@
+{
+    "ruleName": "readOnlyFileSystem",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "false",
+        "arg1": "limits",
+        "arg2": "cpu",
+        "name": "readOnlyFileSystem",
+        "not_allowed": "true",
+        "param": "readOnlyRootFilesystem",
+        "param1": "securityContext",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "MEDIUM",
+    "description": "Container images with readOnlyRootFileSystem set as false mounts the container root file system with write permissions",
+    "ruleReferenceId": "AC-K8-IA-PO-M-0140",
+    "category": "Identity and Access Management",
+    "version": 0
+}

@@ -1,0 +1,15 @@
+{
+    "ruleName": "secCompProfile",
+    "file": "secCompProfile.rego",
+    "ruleTemplate": "secCompProfile",
+    "ruleTemplateArgs": {
+        "name": "secCompProfile",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Default seccomp profile not enabled will make the container to make non-essential system calls",
+    "ruleReferenceId": "AC-K8-IA-PO-M-0141",
+    "category": "Identity and Access Management",
+    "version": 0
+}

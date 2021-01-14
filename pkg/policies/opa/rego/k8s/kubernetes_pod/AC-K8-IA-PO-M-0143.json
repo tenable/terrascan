@@ -1,0 +1,23 @@
+{
+    "ruleName": "allowedVolumes",
+    "file": "allowedVolumes.rego",
+    "ruleTemplate": "allowedVolumes",
+    "ruleTemplateArgs": {
+        "name": "allowedVolumes",
+        "prefix": "",
+        "secure_volumes": [
+            "configMap",
+            "emptyDir",
+            "projected",
+            "secret",
+            "downwardAPI",
+            "persistentVolumeClaim"
+        ],
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Some volume types mount the host file system paths to the pod or container, thus increasing the chance of escaping the container to access the host",
+    "ruleReferenceId": "AC-K8-IA-PO-M-0143",
+    "category": "Identity and Access Management",
+    "version": 0
+}

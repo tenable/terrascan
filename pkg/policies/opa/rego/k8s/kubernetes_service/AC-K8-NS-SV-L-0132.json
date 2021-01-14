@@ -1,0 +1,15 @@
+{
+    "ruleName": "nodePort",
+    "file": "nodePort.rego",
+    "ruleTemplate": "nodePort",
+    "ruleTemplateArgs": {
+        "name": "nodePort",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Nodeport service can expose the worker nodes as they have public interface",
+    "ruleReferenceId": "AC-K8-NS-SV-L-0132",
+    "category": "Network Security",
+    "version": 0
+}

@@ -1,0 +1,15 @@
+{
+    "ruleName": "disallowedSysCalls",
+    "file": "disallowedSysCalls.rego",
+    "ruleTemplate": "disallowedSysCalls",
+    "ruleTemplateArgs": {
+        "name": "disallowedSysCalls",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Allowing the pod to make system level calls provide access to host/node sensitive information",
+    "ruleReferenceId": "AC-K8-IA-PO-H-0137",
+    "category": "Identity and Access Management",
+    "version": 0
+}

@@ -1,0 +1,22 @@
+{
+    "ruleName": "MemoryRequestsCheck",
+    "file": "securityContextCheck.rego",
+    "ruleTemplate": "securityContextCheck",
+    "ruleTemplateArgs": {
+        "allowed": "true",
+        "arg1": "requests",
+        "arg2": "memory",
+        "name": "MemoryRequestsCheck",
+        "not_allowed": "false",
+        "param": "resources",
+        "param1": "resources",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "Medium",
+    "description": "Memory Request Not Set in config file.",
+    "ruleReferenceId": "AC-K8-OE-PK-M-0157",
+    "category": "Operational Efficiency",
+    "version": 0
+}
