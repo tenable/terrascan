@@ -56,22 +56,25 @@ func ctyToBool(ctyVal cty.Value) (interface{}, error) {
 // interfce{}
 func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 	var val []interface{}
+	var allErrs error
+
 	if strings.Contains(ctyVal.Type().FriendlyName(), "list") {
-		var allErrs error
-		if len(ctyVal.AsValueSlice()) > 0 {
-			for _, v := range ctyVal.AsValueSlice() {
-				for _, converter := range ctyNativeConverterFuncs {
-					resolved, err := converter(v)
-					if err == nil {
-						val = append(val, resolved)
-						return val, nil
-					}
-					allErrs = errors.Wrap(allErrs, err.Error())
+		for _, v := range ctyVal.AsValueSlice() {
+			for _, converter := range ctyNativeConverterFuncs {
+				resolved, err := converter(v)
+				if err == nil {
+					val = append(val, resolved)
+					break
 				}
+				allErrs = errors.Wrap(allErrs, err.Error())
 			}
 		}
+		if allErrs != nil {
+			return nil, allErrs
+		}
+		return val, nil
 	}
-	return val, fmt.Errorf("list doesn't contain any elements")
+	return val, fmt.Errorf("incorrect type")
 }
 
 // ctyToMap tries to converts the incoming cty.Value into map[string]cty.Value
