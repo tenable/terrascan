@@ -149,9 +149,6 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.name != "variables of list type" {
-				t.Skip()
-			}
 			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
