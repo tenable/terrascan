@@ -19,7 +19,7 @@ package policy
 const (
 	aws                  supportedCloudType  = "aws"
 	defaultAWSIacType    supportedIacType    = "terraform"
-	defaultAWSIacVersion supportedIacVersion = "v12"
+	defaultAWSIacVersion supportedIacVersion = "v14"
 )
 
 func init() {

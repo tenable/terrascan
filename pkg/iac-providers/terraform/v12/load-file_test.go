@@ -24,6 +24,7 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 )
 
 func TestLoadIacFile(t *testing.T) {
@@ -39,7 +40,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv12:    TfV12{},
-			wantErr:  errLoadConfigFile,
+			wantErr:  commons.ErrLoadConfigFile,
 		},
 		{
 			name:     "empty config",
@@ -51,7 +52,13 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid config",
 			filePath: "./testdata/empty.tf",
 			tfv12:    TfV12{},
-			wantErr:  errLoadConfigFile,
+			wantErr:  commons.ErrLoadConfigFile,
+		},
+		{
+			name:     "destroy-provisioners",
+			filePath: "./testdata/destroy-provisioners/main.tf",
+			tfv12:    TfV12{},
+			wantErr:  commons.ErrLoadConfigFile,
 		},
 	}
 

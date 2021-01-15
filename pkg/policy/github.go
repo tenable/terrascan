@@ -19,7 +19,7 @@ package policy
 const (
 	github                  supportedCloudType  = "github"
 	defaultGithubIacType    supportedIacType    = "terraform"
-	defaultGithubIacVersion supportedIacVersion = "v12"
+	defaultGithubIacVersion supportedIacVersion = "v14"
 )
 
 func init() {

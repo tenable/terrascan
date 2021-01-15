@@ -18,7 +18,7 @@ package policy
 
 const (
 	defaultAllIacType    supportedIacType    = "terraform"
-	defaultAllIacVersion supportedIacVersion = "v12"
+	defaultAllIacVersion supportedIacVersion = "v14"
 )
 
 func init() {

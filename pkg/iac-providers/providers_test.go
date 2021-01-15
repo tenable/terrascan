@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
+	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 )
 
 func TestNewIacProvider(t *testing.T) {
@@ -34,6 +35,13 @@ func TestNewIacProvider(t *testing.T) {
 		wantErr    error
 	}{
 		{
+			name:       "terraform v14",
+			iacType:    terraform,
+			iacVersion: terraformV14,
+			want:       &tfv14.TfV14{},
+			wantErr:    nil,
+		},
+		{
 			name:       "terraform v12",
 			iacType:    terraform,
 			iacVersion: terraformV12,
@@ -43,7 +51,7 @@ func TestNewIacProvider(t *testing.T) {
 		{
 			name:       "not supported iac type",
 			iacType:    "not-supported",
-			iacVersion: terraformV12,
+			iacVersion: terraformV14,
 			want:       nil,
 			wantErr:    errIacNotSupported,
 		},
@@ -78,7 +86,19 @@ func TestIsIacSupported(t *testing.T) {
 		want       bool
 	}{
 		{
-			name:       "terraform v12",
+			name:       "terraform v14",
+			iacType:    terraform,
+			iacVersion: terraformV14,
+			want:       true,
+		},
+		{
+			name:       "not supported iac type",
+			iacType:    "not-supported",
+			iacVersion: terraformV14,
+			want:       false,
+		},
+		{
+			name:       "terraform v14",
 			iacType:    terraform,
 			iacVersion: terraformV12,
 			want:       true,
