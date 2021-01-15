@@ -138,6 +138,13 @@ func TestLoadIacDir(t *testing.T) {
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
+		{
+			name:        "variables of list type",
+			tfConfigDir: "./testdata/list-type-vars-test",
+			tfJSONFile:  "./testdata/tfjson/list-vars-test.json",
+			tfv12:       TfV12{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {
