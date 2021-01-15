@@ -18,7 +18,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.3.4
 	github.com/spf13/cobra v1.0.0
-	github.com/zclconf/go-cty v1.2.1
+	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.13.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
