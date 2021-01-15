@@ -16,7 +16,7 @@ Terrascan detect security vulnerabilities and compliance violations across your 
 
 ## Features
 * 500+ Policies for security best practices
-* Scanning of Terraform 12+ (HCL2)
+* Scanning of Terraform (HCL2)
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
 * Support for AWS, Azure, GCP, Kubernetes and GitHub
 
@@ -27,7 +27,7 @@ Terrascan's supports multiple ways to install, including [brew](https://github.c
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.2.0/terrascan_1.2.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.0/terrascan_1.3.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
@@ -50,9 +50,8 @@ The following commands are available:
 $ terrascan
 Terrascan
 
-An advanced IaC (Infrastructure-as-Code) file scanner written in Go.
-Secure your cloud deployments at design time.
-For more information, please visit https://www.accurics.com
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+For more information, please visit https://docs.accurics.com
 
 Usage:
   terrascan [command]
@@ -60,16 +59,16 @@ Usage:
 Available Commands:
   help        Help about any command
   init        Initialize Terrascan
-  scan        Scan IaC (Infrastructure-as-Code) files for vulnerabilities.
+  scan        Detect compliance and security violations across Infrastructure as Code.
   server      Run Terrascan as an API server
+  version     Terrascan version
 
 Flags:
   -c, --config-path string   config file path
   -h, --help                 help for terrascan
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output-type string   output type (json, yaml, xml) (default "yaml")
-  -v, --version              version for terrascan
+  -o, --output string        output type (human, json, yaml, xml) (default "human")
 
 Use "terrascan [command] --help" for more information about a command.
 ```
@@ -100,8 +99,8 @@ $ docker run accurics/terrascan
 ```
 $ export GO111MODULE=on
 $ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.2.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.2.0
+  go: downloading github.com/accurics/terrascan v1.3.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.3.0
   ...
 $ terrascan
 ```

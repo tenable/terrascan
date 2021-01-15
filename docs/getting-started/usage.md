@@ -5,7 +5,7 @@ Terrascan is a static code analyzer for Infrastructure as Code tooling. It can e
 Terrascan's binary can be found on the package for each [release](https://github.com/accurics/terrascan/releases). Here's an example of how to install it:
 
 ``` Bash
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.1.0/terrascan_1.1.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.0/terrascan_1.3.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
 x CHANGELOG.md
 x LICENSE
@@ -19,8 +19,8 @@ If you have go installed, Terrascan can be installed with `go get`
 ```
 $ export GO111MODULE=on
 $ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.1.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.1.0
+  go: downloading github.com/accurics/terrascan v1.3.0
+  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.3.0
   ...
 $ terrascan
 ```
@@ -67,14 +67,14 @@ Available Commands:
   init        Initialize Terrascan
   scan        Detect compliance and security violations across Infrastructure as Code.
   server      Run Terrascan as an API server
+  version     Terrascan version
 
 Flags:
   -c, --config-path string   config file path
   -h, --help                 help for terrascan
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output string        output type (json, yaml, xml) (default "yaml")
-  -v, --version              version for terrascan
+  -o, --output string        output type (human, json, yaml, xml) (default "human")
 
 Use "terrascan [command] --help" for more information about a command.
 ```
@@ -123,16 +123,19 @@ Flags:
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
   -u, --remote-url string         url pointing to remote IaC repository
+      --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
+      --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
+  -v, --verbose                   will show violations with details (applicable for default output)
 
 Global Flags:
   -c, --config-path string   config file path
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output string        output type (json, yaml, xml) (default "yaml")
+  -o, --output string        output type (human, json, yaml, xml) (default "human")
 ```
 
-By default Terrascan will output YAML. This can be changed to JSON or XML by using the `-o` flag.
+By default Terrascan will output human friendly format. This can be changed to YAML, JSON, or XML by using the `-o` flag.
 
 Terrascan will exit 3 if any issues are found.
 
