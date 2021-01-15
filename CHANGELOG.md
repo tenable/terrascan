@@ -1,5 +1,90 @@
 # Changelog
 
+## [v1.3.0](https://github.com/accurics/terrascan/tree/v1.3.0) (2021-01-15)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.2.0...v1.3.0)
+
+**Implemented enhancements:**
+
+- Tag released Docker images [\#398](https://github.com/accurics/terrascan/issues/398)
+- Add policy for checking insecure\_ssl configuration for github\_repository\_webhook in GitHub provider [\#355](https://github.com/accurics/terrascan/issues/355)
+- Prints output in human friendly format [\#168](https://github.com/accurics/terrascan/issues/168)
+
+**Fixed bugs:**
+
+- Fixes resource lock [\#432](https://github.com/accurics/terrascan/issues/432)
+- Fixes Issue where Terrascan paniced with list variables [\#412](https://github.com/accurics/terrascan/issues/412)
+- Resolves false positive for AWS rule vpcFlowLogsNotEnabled [\#408](https://github.com/accurics/terrascan/issues/408)
+- Resolves s3EnforceUserACL False Positive [\#359](https://github.com/accurics/terrascan/issues/359)
+- Resolves accurics.gcp.IAM.104 suggests enabling a client certificate [\#330](https://github.com/accurics/terrascan/issues/330)
+
+**Closed issues:**
+
+- Terraform can't detect violations in terraform modules [\#468](https://github.com/accurics/terrascan/issues/468)
+- uniformBucketEnabled.rego referencing deprecated config [\#453](https://github.com/accurics/terrascan/issues/453)
+- Unable to run terrascan scan [\#446](https://github.com/accurics/terrascan/issues/446)
+- Terrascan doesn't exit with error on CLI or Parsing errors. [\#442](https://github.com/accurics/terrascan/issues/442)
+- Terrascan Failure When Using Terraform 13 + Variable Validation [\#426](https://github.com/accurics/terrascan/issues/426)
+- Update policy example in documentation to use latest GitHub implementation [\#422](https://github.com/accurics/terrascan/issues/422)
+- Fix link to repo playground in policies documentation [\#421](https://github.com/accurics/terrascan/issues/421)
+- terrascan scan  crashes with runtime: goroutine stack exceeds 1000000000-byte limit [\#406](https://github.com/accurics/terrascan/issues/406)
+- Typo error in the terrascan Architecture page [\#403](https://github.com/accurics/terrascan/issues/403)
+- accurics.gcp.OPS.114 should also check for cos\_containerd image [\#395](https://github.com/accurics/terrascan/issues/395)
+- accurics.gcp.NS.112 suggest basic auth is enabled when is not [\#394](https://github.com/accurics/terrascan/issues/394)
+- Test coverage missing for kustomize iac-provider [\#379](https://github.com/accurics/terrascan/issues/379)
+- Why is vpcFlowLogsNotEnabled determined to be a violation? [\#352](https://github.com/accurics/terrascan/issues/352)
+
+**Merged pull requests:**
+
+- Bump github.com/iancoleman/strcase from 0.1.1 to 0.1.3 [\#484](https://github.com/accurics/terrascan/pull/484) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/pelletier/go-toml from 1.8.0 to 1.8.1 [\#481](https://github.com/accurics/terrascan/pull/481) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Policy update 2021 01 14 [\#480](https://github.com/accurics/terrascan/pull/480) ([williepaul](https://github.com/williepaul))
+- fix panic for list variables [\#479](https://github.com/accurics/terrascan/pull/479) ([patilpankaj212](https://github.com/patilpankaj212))
+- adding an else condition to relate management lock with resource group [\#476](https://github.com/accurics/terrascan/pull/476) ([harkirat22](https://github.com/harkirat22))
+- adding an else condition to relate the flow log with vpc [\#475](https://github.com/accurics/terrascan/pull/475) ([harkirat22](https://github.com/harkirat22))
+- including a check for verifying in-line policy is included  [\#474](https://github.com/accurics/terrascan/pull/474) ([harkirat22](https://github.com/harkirat22))
+- adding rule to check if waf is enabled at cloud front distribution [\#473](https://github.com/accurics/terrascan/pull/473) ([harkirat22](https://github.com/harkirat22))
+- recognize metadata.generateName [\#465](https://github.com/accurics/terrascan/pull/465) ([acc-jon](https://github.com/acc-jon))
+- Update mkdocs-material to 6.2.4 [\#464](https://github.com/accurics/terrascan/pull/464) ([pyup-bot](https://github.com/pyup-bot))
+- Update README.md [\#463](https://github.com/accurics/terrascan/pull/463) ([amirbenv](https://github.com/amirbenv))
+- Deprecated gcs bucket [\#462](https://github.com/accurics/terrascan/pull/462) ([jdyke](https://github.com/jdyke))
+- changed the description to include the vulnerable versions [\#460](https://github.com/accurics/terrascan/pull/460) ([harkirat22](https://github.com/harkirat22))
+- Fix exit code on error [\#458](https://github.com/accurics/terrascan/pull/458) ([patilpankaj212](https://github.com/patilpankaj212))
+- policy for CVE-2020-8555 [\#457](https://github.com/accurics/terrascan/pull/457) ([harkirat22](https://github.com/harkirat22))
+- Update README.md [\#456](https://github.com/accurics/terrascan/pull/456) ([amirbenv](https://github.com/amirbenv))
+- rule skipping for resources in k8s [\#455](https://github.com/accurics/terrascan/pull/455) ([patilpankaj212](https://github.com/patilpankaj212))
+- terrascan argo-cd instructions [\#454](https://github.com/accurics/terrascan/pull/454) ([storebot](https://github.com/storebot))
+- Adds CI/CD integration docs [\#452](https://github.com/accurics/terrascan/pull/452) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- Bump github.com/zclconf/go-cty from 1.2.1 to 1.7.1 [\#449](https://github.com/accurics/terrascan/pull/449) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/gorilla/mux from 1.7.4 to 1.8.0 [\#447](https://github.com/accurics/terrascan/pull/447) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update mkdocs-material to 6.2.3 [\#445](https://github.com/accurics/terrascan/pull/445) ([pyup-bot](https://github.com/pyup-bot))
+- deps: add dependabot support [\#444](https://github.com/accurics/terrascan/pull/444) ([chenrui333](https://github.com/chenrui333))
+- bump go to 1.15 [\#443](https://github.com/accurics/terrascan/pull/443) ([chenrui333](https://github.com/chenrui333))
+- implement scan and skip rules [\#441](https://github.com/accurics/terrascan/pull/441) ([patilpankaj212](https://github.com/patilpankaj212))
+- scan command refactor [\#436](https://github.com/accurics/terrascan/pull/436) ([patilpankaj212](https://github.com/patilpankaj212))
+- Fixes dead link to old getting started page [\#435](https://github.com/accurics/terrascan/pull/435) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- Add support to extract rules to skip from terraform comments [\#434](https://github.com/accurics/terrascan/pull/434) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- bash output improvements [\#431](https://github.com/accurics/terrascan/pull/431) ([patilpankaj212](https://github.com/patilpankaj212))
+- APE-1319: Revamped Getting Started Section [\#430](https://github.com/accurics/terrascan/pull/430) ([acc-jon](https://github.com/acc-jon))
+- Add policy AC-K8-NS-SE-M-0188 for CVE-2020-8554 [\#428](https://github.com/accurics/terrascan/pull/428) ([gauravgogia-accurics](https://github.com/gauravgogia-accurics))
+- set console mode on windows so colors render [\#427](https://github.com/accurics/terrascan/pull/427) ([acc-jon](https://github.com/acc-jon))
+- Update mkdocs-material to 6.1.7 [\#425](https://github.com/accurics/terrascan/pull/425) ([pyup-bot](https://github.com/pyup-bot))
+- Update policy example in the documentation [\#424](https://github.com/accurics/terrascan/pull/424) ([HorizonNet](https://github.com/HorizonNet))
+- Fix link to rego playground in policies documentation [\#423](https://github.com/accurics/terrascan/pull/423) ([HorizonNet](https://github.com/HorizonNet))
+- hopefully remove test failures due to non-deterministic comparisons [\#420](https://github.com/accurics/terrascan/pull/420) ([acc-jon](https://github.com/acc-jon))
+- IMDSv1 policy: update category, description [\#419](https://github.com/accurics/terrascan/pull/419) ([acc-jon](https://github.com/acc-jon))
+- IMDSv1 check policy [\#417](https://github.com/accurics/terrascan/pull/417) ([harkirat22](https://github.com/harkirat22))
+- Add Docker image release tagging on release [\#410](https://github.com/accurics/terrascan/pull/410) ([HorizonNet](https://github.com/HorizonNet))
+- Fix typo in architecture documentation [\#409](https://github.com/accurics/terrascan/pull/409) ([HorizonNet](https://github.com/HorizonNet))
+- accurics.gcp.IAM.104 Fire rule when client certificate is enabled [\#402](https://github.com/accurics/terrascan/pull/402) ([lucas-giaco](https://github.com/lucas-giaco))
+- Update mkdocs-material to 6.1.6 [\#401](https://github.com/accurics/terrascan/pull/401) ([pyup-bot](https://github.com/pyup-bot))
+- Added Unit test coverage for Kustomize V3 Iac-provider [\#399](https://github.com/accurics/terrascan/pull/399) ([dev-gaur](https://github.com/dev-gaur))
+- Fixes GCP cos node image policy [\#397](https://github.com/accurics/terrascan/pull/397) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- \#394: recognize that empty values for username and password in master… [\#396](https://github.com/accurics/terrascan/pull/396) ([acc-jon](https://github.com/acc-jon))
+- Fix infinite loop on variable resolution [\#393](https://github.com/accurics/terrascan/pull/393) ([dinedal](https://github.com/dinedal))
+- Update mkdocs-material to 6.1.5 [\#387](https://github.com/accurics/terrascan/pull/387) ([pyup-bot](https://github.com/pyup-bot))
+- Add new policy for checking insecure\_ssl on github\_repository\_webhook [\#386](https://github.com/accurics/terrascan/pull/386) ([HorizonNet](https://github.com/HorizonNet))
+
 ## [v1.2.0](https://github.com/accurics/terrascan/tree/v1.2.0) (2020-11-16)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.1.0...v1.2.0)
