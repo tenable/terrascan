@@ -24,4 +24,8 @@ flowLogExist(vpc, vpc_input) = exists {
     vpc_name := sprintf("aws_vpc.%s", [vpc.name])
 	flow_log_tags_set[vpc_name]
     exists = true
+} else = exists {
+	flow_log_vpcs_set := { vpc_id | input.aws_flow_log[i].type == "aws_flow_log"; vpc_id := split(input.aws_flow_log[i].config.vpc_id, ".")[1] }
+	flow_log_vpcs_set[vpc.name]
+    exists = true
 }
