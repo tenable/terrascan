@@ -60,6 +60,12 @@ func TestLoadIacDir(t *testing.T) {
 			tfv12:   TfV12{},
 			wantErr: commons.ErrLoadConfigDir,
 		},
+		{
+			name:    "load invalid config dir",
+			dirPath: "./testdata/multiple-required-providers",
+			tfv12:   TfV12{},
+			wantErr: commons.ErrLoadConfigDir,
+		},
 	}
 
 	for _, tt := range table {

@@ -54,6 +54,12 @@ func TestLoadIacFile(t *testing.T) {
 			tfv12:    TfV12{},
 			wantErr:  commons.ErrLoadConfigFile,
 		},
+		{
+			name:     "destroy-provisioners",
+			filePath: "./testdata/destroy-provisioners/main.tf",
+			tfv12:    TfV12{},
+			wantErr:  commons.ErrLoadConfigFile,
+		},
 	}
 
 	for _, tt := range table {
