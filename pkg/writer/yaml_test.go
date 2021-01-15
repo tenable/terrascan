@@ -43,15 +43,30 @@ var (
 					LineNumber:   20,
 				},
 			},
+			SkippedViolations: []*results.Violation{
+				{
+					RuleName:     "s3EnforceUserACL",
+					Description:  "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:       "AWS.S3Bucket.DS.High.1043",
+					Severity:     "HIGH",
+					Category:     "S3",
+					Comment:      "",
+					ResourceName: "bucket",
+					ResourceType: "aws_s3_bucket",
+					File:         "modules/m1/main.tf",
+					LineNumber:   20,
+				},
+			},
 			Summary: results.ScanSummary{
-				ResourcePath:     "test",
-				IacType:          "terraform",
-				Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
-				TotalPolicies:    566,
-				LowCount:         0,
-				MediumCount:      0,
-				HighCount:        1,
-				ViolatedPolicies: 1,
+				ResourcePath:         "test",
+				IacType:              "terraform",
+				Timestamp:            "2020-12-12 11:21:29.902796 +0000 UTC",
+				TotalPolicies:        566,
+				LowCount:             0,
+				MediumCount:          0,
+				HighCount:            1,
+				ViolatedPolicies:     1,
+				ShowViolationDetails: true,
 			},
 		},
 	}
@@ -67,10 +82,20 @@ const (
       config:
         bucket: ${module.m3.fullbucketname}
         policy: ${module.m2.fullbucketpolicy}
-      skiprules: []`
+      skip_rules: []`
 
 	scanTestOutputYAML = `results:
     violations:
+        - rule_name: s3EnforceUserACL
+          description: S3 bucket Access is allowed to all AWS Account Users.
+          rule_id: AWS.S3Bucket.DS.High.1043
+          severity: HIGH
+          category: S3
+          resource_name: bucket
+          resource_type: aws_s3_bucket
+          file: modules/m1/main.tf
+          line: 20
+    skipped_violations:
         - rule_name: s3EnforceUserACL
           description: S3 bucket Access is allowed to all AWS Account Users.
           rule_id: AWS.S3Bucket.DS.High.1043

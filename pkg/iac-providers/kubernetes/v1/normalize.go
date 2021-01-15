@@ -28,7 +28,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const terrascanSkip = "terrascanSkip"
+const (
+	terrascanSkip        = "terrascanSkip"
+	terrascanSkipRule    = "rule"
+	terrascanSkipComment = "comment"
+)
 
 var (
 	errUnsupportedDoc = fmt.Errorf("unsupported document type")
@@ -146,7 +150,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	return &resourceConfig, nil
 }
 
-func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID string) []string {
+func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID string) []output.SkipRule {
 
 	var skipRulesFromAnnotations interface{}
 	var ok bool
@@ -155,18 +159,47 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 		return nil
 	}
 
-	skipRules := make([]string, 0)
+	skipRules := make([]output.SkipRule, 0)
 	if rules, ok := skipRulesFromAnnotations.([]interface{}); ok {
 		for _, rule := range rules {
-			if value, ok := rule.(string); ok {
-				skipRules = append(skipRules, value)
+			if value, ok := rule.(map[string]interface{}); ok {
+				skipRule := getSkipRuleObject(value)
+				if skipRule != nil {
+					skipRules = append(skipRules, *skipRule)
+				}
 			} else {
-				zap.S().Debugf("each rule in %s must be of string type", terrascanSkip)
+				zap.S().Debugf("each rule in %s must be of map type", terrascanSkip)
 			}
 		}
 	} else {
-		zap.S().Debugf("%s must be an array of rules to skip", terrascanSkip)
+		zap.S().Debugf("%s must be an array of {rule: ruleID, comment: reason for skipping}", terrascanSkip)
 	}
 
 	return skipRules
+}
+
+func getSkipRuleObject(m map[string]interface{}) *output.SkipRule {
+	var skipRule output.SkipRule
+	var rule, comment interface{}
+	var ok bool
+
+	// get rule, if rule not found return nil
+	if rule, ok = m[terrascanSkipRule]; ok {
+		if _, ok = rule.(string); ok {
+			skipRule.Rule = rule.(string)
+		} else {
+			return nil
+		}
+	} else {
+		return nil
+	}
+
+	// get comment
+	if comment, ok = m[terrascanSkipComment]; ok {
+		if _, ok = comment.(string); ok {
+			skipRule.Comment = comment.(string)
+		}
+	}
+
+	return &skipRule
 }

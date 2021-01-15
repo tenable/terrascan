@@ -285,7 +285,7 @@ func (e *Engine) Release() error {
 }
 
 // reportViolation Add a violation for a given resource
-func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceConfig) {
+func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceConfig, isSkipped bool, skipComment string) {
 	violation := results.Violation{
 		RuleName:     regoData.Metadata.Name,
 		Description:  regoData.Metadata.Description,
@@ -301,20 +301,24 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 		LineNumber:   resource.Line,
 	}
 
-	severity := regoData.Metadata.Severity
-	if strings.ToLower(severity) == "high" {
-		e.results.ViolationStore.Summary.HighCount++
-	} else if strings.ToLower(severity) == "medium" {
-		e.results.ViolationStore.Summary.MediumCount++
-	} else if strings.ToLower(severity) == "low" {
-		e.results.ViolationStore.Summary.LowCount++
+	if !isSkipped {
+		severity := regoData.Metadata.Severity
+		if strings.ToLower(severity) == "high" {
+			e.results.ViolationStore.Summary.HighCount++
+		} else if strings.ToLower(severity) == "medium" {
+			e.results.ViolationStore.Summary.MediumCount++
+		} else if strings.ToLower(severity) == "low" {
+			e.results.ViolationStore.Summary.LowCount++
+		} else {
+			zap.S().Warn("invalid severity found in rule definition",
+				zap.String("rule id", violation.RuleID), zap.String("severity", severity))
+		}
+		e.results.ViolationStore.AddResult(&violation, false)
+		e.results.ViolationStore.Summary.ViolatedPolicies++
 	} else {
-		zap.S().Warn("invalid severity found in rule definition",
-			zap.String("rule id", violation.RuleID), zap.String("severity", severity))
+		violation.Comment = skipComment
+		e.results.ViolationStore.AddResult(&violation, true)
 	}
-	e.results.ViolationStore.Summary.ViolatedPolicies++
-
-	e.results.ViolationStore.AddResult(&violation)
 }
 
 // Evaluate Executes compiled OPA queries against the input JSON data
@@ -378,16 +382,19 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 				continue
 			}
 
-			// do no report violations if rule is skipped for resource
+			// add to skipped violations if rule is skipped for resource
 			if len(resource.SkipRules) > 0 {
 				found := false
+				var skipComment string
 				for _, rule := range resource.SkipRules {
-					if strings.EqualFold(k, rule) {
+					if strings.EqualFold(k, rule.Rule) {
 						found = true
+						skipComment = rule.Comment
 						break
 					}
 				}
 				if found {
+					e.reportViolation(e.regoDataMap[k], resource, true, skipComment)
 					zap.S().Debugf("rule: %s skipped for resource: %s", k, resource.Name)
 					continue
 				}
@@ -401,7 +408,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 			zap.S().Debug("violation found for rule with rego", zap.String("rego", string("\n")+string(e.regoDataMap[k].RawRego)+string("\n")))
 
 			// Report the violation
-			e.reportViolation(e.regoDataMap[k], resource)
+			e.reportViolation(e.regoDataMap[k], resource, false, "")
 		}
 	}
 
