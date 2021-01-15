@@ -1,4 +1,4 @@
-# Terrascan
+![Terrascan](https://raw.githubusercontent.com/accurics/terrascan/master/docs/img/Terrascan_By_Accurics_Logo_38B34A-333F48.svg)
 
 [![GitHub release](https://img.shields.io/github/release/accurics/terrascan)](https://github.com/accurics/terrascan/releases/latest)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/accurics/terrascan/blob/master/LICENSE)
@@ -8,7 +8,7 @@
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
 
-Detect security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
+Terrascan detect security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
 
 
 * Documentation: https://docs.accurics.com/projects/accurics-terrascan
@@ -21,7 +21,7 @@ Detect security vulnerabilities and compliance violations across your Infrastruc
 * Support for AWS, Azure, GCP, Kubernetes and GitHub
 
 
-## Quick Start 
+## Quick Start
 ### Step 1: Install
 Terrascan's supports multiple ways to install, including [brew](https://github.com/accurics/terrascan#install-via-brew).
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
