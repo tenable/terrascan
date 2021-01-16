@@ -6,14 +6,14 @@
 
 **Implemented enhancements:**
 
-- Improved bash output [\#415](https://github.com/accurics/terrascan/issues/415)
-- Scanning profiles [\#414](https://github.com/accurics/terrascan/issues/414)
-- Tag released Docker images [\#398](https://github.com/accurics/terrascan/issues/398)
-- How to ignore a rule? [\#367](https://github.com/accurics/terrascan/issues/367)
-- Add policy for checking insecure\_ssl configuration for github\_repository\_webhook in GitHub provider [\#355](https://github.com/accurics/terrascan/issues/355)
-- Support for Terraform v0.13 [\#324](https://github.com/accurics/terrascan/issues/324)
-- Ability to add ignore findings through comments in code [\#310](https://github.com/accurics/terrascan/issues/310)
+**Implemented enhancements:**
 - Prints output in human friendly format [\#168](https://github.com/accurics/terrascan/issues/168)
+- Support for rule suppression using terraform comments,kubernetes annotations, cli arguments, and config file. 
+- New Policies for Kubernetes [\#480] https://github.com/accurics/terrascan/pull/480
+- Tag released Docker images [\#398](https://github.com/accurics/terrascan/issues/398)
+- Add policy for checking insecure\_ssl configuration for github\_repository\_webhook in GitHub provider [\#355](https://github.com/accurics/terrascan/issues/355)
+- Introduced support for terraform .14 and .13. Note: This will introduce some breaking changes for terraform v.12 files, even if using --iac-version v.12 flag. Notably we will no longer support multiple providers blocks, and certain references inside provisioner blocks (objects other than self, count or each, where when = destroy) . For more details see: https://github.com/hashicorp/terraform/releases/tag/v0.13.0 
+
 
 **Fixed bugs:**
 
