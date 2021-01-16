@@ -5,8 +5,6 @@
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
-
-**Implemented enhancements:**
 - Prints output in human friendly format [\#168](https://github.com/accurics/terrascan/issues/168)
 - Support for rule suppression using terraform comments,kubernetes annotations, cli arguments, and config file. 
 - New Policies for Kubernetes [\#480] https://github.com/accurics/terrascan/pull/480
