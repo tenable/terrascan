@@ -1,22 +1,28 @@
 # Changelog
 
-## [v1.3.0](https://github.com/accurics/terrascan/tree/v1.3.0) (2021-01-15)
+## [v1.3.0](https://github.com/accurics/terrascan/tree/v1.3.0) (2021-01-16)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
 
+- Improved bash output [\#415](https://github.com/accurics/terrascan/issues/415)
+- Scanning profiles [\#414](https://github.com/accurics/terrascan/issues/414)
 - Tag released Docker images [\#398](https://github.com/accurics/terrascan/issues/398)
+- How to ignore a rule? [\#367](https://github.com/accurics/terrascan/issues/367)
 - Add policy for checking insecure\_ssl configuration for github\_repository\_webhook in GitHub provider [\#355](https://github.com/accurics/terrascan/issues/355)
+- Support for Terraform v0.13 [\#324](https://github.com/accurics/terrascan/issues/324)
+- Ability to add ignore findings through comments in code [\#310](https://github.com/accurics/terrascan/issues/310)
 - Prints output in human friendly format [\#168](https://github.com/accurics/terrascan/issues/168)
 
 **Fixed bugs:**
 
-- Fixes resource lock [\#432](https://github.com/accurics/terrascan/issues/432)
-- Fixes Issue where Terrascan paniced with list variables [\#412](https://github.com/accurics/terrascan/issues/412)
-- Resolves false positive for AWS rule vpcFlowLogsNotEnabled [\#408](https://github.com/accurics/terrascan/issues/408)
-- Resolves s3EnforceUserACL False Positive [\#359](https://github.com/accurics/terrascan/issues/359)
-- Resolves accurics.gcp.IAM.104 suggests enabling a client certificate [\#330](https://github.com/accurics/terrascan/issues/330)
+- Terrascan doesn't allow registering multiple versions for an iac-type [\#471](https://github.com/accurics/terrascan/issues/471)
+- Resource lock issue [\#432](https://github.com/accurics/terrascan/issues/432)
+- Issue where Terrascan paniced with list variables [\#412](https://github.com/accurics/terrascan/issues/412)
+- False positive for aws rule vpcFlowLogsNotEnabled [\#408](https://github.com/accurics/terrascan/issues/408)
+- s3EnforceUserACL - False Positive [\#359](https://github.com/accurics/terrascan/issues/359)
+- Why accurics.gcp.IAM.104 suggests enabling a client certificate? [\#330](https://github.com/accurics/terrascan/issues/330)
 
 **Closed issues:**
 
@@ -36,6 +42,8 @@
 
 **Merged pull requests:**
 
+- Bump go.uber.org/zap from 1.13.0 to 1.16.0 [\#486](https://github.com/accurics/terrascan/pull/486) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/spf13/afero from 1.3.4 to 1.5.1 [\#485](https://github.com/accurics/terrascan/pull/485) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/iancoleman/strcase from 0.1.1 to 0.1.3 [\#484](https://github.com/accurics/terrascan/pull/484) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/pelletier/go-toml from 1.8.0 to 1.8.1 [\#481](https://github.com/accurics/terrascan/pull/481) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Policy update 2021 01 14 [\#480](https://github.com/accurics/terrascan/pull/480) ([williepaul](https://github.com/williepaul))
@@ -44,6 +52,8 @@
 - adding an else condition to relate the flow log with vpc [\#475](https://github.com/accurics/terrascan/pull/475) ([harkirat22](https://github.com/harkirat22))
 - including a check for verifying in-line policy is included  [\#474](https://github.com/accurics/terrascan/pull/474) ([harkirat22](https://github.com/harkirat22))
 - adding rule to check if waf is enabled at cloud front distribution [\#473](https://github.com/accurics/terrascan/pull/473) ([harkirat22](https://github.com/harkirat22))
+- Added terraform v14 support besides v12. [\#470](https://github.com/accurics/terrascan/pull/470) ([dev-gaur](https://github.com/dev-gaur))
+- support comment with rule skipping for resource and scan summary modifications [\#466](https://github.com/accurics/terrascan/pull/466) ([patilpankaj212](https://github.com/patilpankaj212))
 - recognize metadata.generateName [\#465](https://github.com/accurics/terrascan/pull/465) ([acc-jon](https://github.com/acc-jon))
 - Update mkdocs-material to 6.2.4 [\#464](https://github.com/accurics/terrascan/pull/464) ([pyup-bot](https://github.com/pyup-bot))
 - Update README.md [\#463](https://github.com/accurics/terrascan/pull/463) ([amirbenv](https://github.com/amirbenv))
@@ -56,6 +66,7 @@
 - terrascan argo-cd instructions [\#454](https://github.com/accurics/terrascan/pull/454) ([storebot](https://github.com/storebot))
 - Adds CI/CD integration docs [\#452](https://github.com/accurics/terrascan/pull/452) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
 - Bump github.com/zclconf/go-cty from 1.2.1 to 1.7.1 [\#449](https://github.com/accurics/terrascan/pull/449) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump sigs.k8s.io/kustomize/api from 0.6.5 to 0.7.1 [\#448](https://github.com/accurics/terrascan/pull/448) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/gorilla/mux from 1.7.4 to 1.8.0 [\#447](https://github.com/accurics/terrascan/pull/447) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Update mkdocs-material to 6.2.3 [\#445](https://github.com/accurics/terrascan/pull/445) ([pyup-bot](https://github.com/pyup-bot))
 - deps: add dependabot support [\#444](https://github.com/accurics/terrascan/pull/444) ([chenrui333](https://github.com/chenrui333))
