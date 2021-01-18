@@ -20,4 +20,8 @@ loggingExist(key_vault) = exists {
     log_name := sprintf("azurerm_key_vault.%s.log", [key_vault.name])
 	log_set[log_name]
     exists = true
+} else = exists {
+	log_set := { key_vault_id | key_vault_id := split(input.azurerm_monitor_diagnostic_setting[i].config.target_resource_id, ".")[1] }
+	log_set[key_vault.name]
+    exists = true
 }
