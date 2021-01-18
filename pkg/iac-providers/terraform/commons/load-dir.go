@@ -95,11 +95,21 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 				pathToModule = filepath.Join(absRootDir, pathToModule)
 				zap.S().Debugf("processing local module %q", pathToModule)
 			} else {
+				sourcePath := req.SourceAddr
+				var err error
+				tr, ok := isRemoteModuleValid(req.SourceAddr)
+				if ok {
+					sourcePath, err = tr.getResourceURL()
+					if err != nil {
+						sourcePath = req.SourceAddr
+					}
+				}
+
 				// temp dir to download the remote repo
 				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 
 				// Download remote module
-				pathToModule, err = r.DownloadModule(req.SourceAddr, tempDir)
+				pathToModule, err = r.DownloadModule(sourcePath, tempDir)
 				if err != nil {
 					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
 				}
