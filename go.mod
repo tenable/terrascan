@@ -23,7 +23,7 @@ require (
 	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.5.1
-	github.com/spf13/cobra v1.0.0
+	github.com/spf13/cobra v1.1.1
 	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.1 // indirect
