@@ -19,7 +19,7 @@ package policy
 const (
 	azure                  supportedCloudType  = "azure"
 	defaultAzureIacType    supportedIacType    = "terraform"
-	defaultAzureIacVersion supportedIacVersion = "v14"
+	defaultAzureIacVersion supportedIacVersion = "v12"
 )
 
 func init() {
