@@ -2,7 +2,7 @@ package policy
 
 const (
 	defaultKustomizeIacType    supportedIacType    = "kustomize"
-	defaultKustomizeIacVersion supportedIacVersion = "v3"
+	defaultKustomizeIacVersion supportedIacVersion = version3
 )
 
 func init() {

@@ -19,7 +19,7 @@ package policy
 const (
 	gcp                  supportedCloudType  = "gcp"
 	defaultGCPIacType    supportedIacType    = "terraform"
-	defaultGCPIacVersion supportedIacVersion = "v14"
+	defaultGCPIacVersion supportedIacVersion = version12
 )
 
 func init() {
