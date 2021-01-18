@@ -24,8 +24,10 @@ import (
 	"strings"
 )
 
-var modulesPath = "v1/modules"
 var terraformPublicRegistryURL = "registry.terraform.io"
+
+// the service discovery endpoint
+// source: https://www.terraform.io/docs/internals/remote-service-discovery.html#discovery-process
 var discoveryEndpoint = "/.well-known/terraform.json"
 
 // RegistryResponse is the response received from terraform registry
@@ -62,22 +64,60 @@ func NewTerraformRegistry(host, namespace, name, provider string) *TerraformRegi
 	return tfRegistry
 }
 
-func (tr TerraformRegistry) getReqURL() string {
-	return "https://" + tr.Host + "/" + modulesPath + "/" + tr.Namespace + "/" + tr.Name + "/" + tr.Provider
+// returns the request url to fetch the source url of the remote module
+func (tr TerraformRegistry) getReqURL(modulesPath, version string) string {
+	// form https://{host}/{modulesPath}/{namespace}/{name}/{provider}/
+	reqURL := "https://" + tr.Host + modulesPath + tr.Namespace + "/" + tr.Name + "/" + tr.Provider
+	if version != "" {
+		reqURL = reqURL + "/" + version
+	}
+
+	return reqURL
 }
 
-func (tr TerraformRegistry) getResourceURL() (string, error) {
-	res, err := http.Get(tr.getReqURL())
+func (tr TerraformRegistry) getModulesPath() (string, error) {
+	// get the modules path by hitting the discovery endpoint
+	response, err := http.Get("https://" + tr.Host + discoveryEndpoint)
 	if err != nil {
 		return "", err
 	}
 
-	if res.StatusCode != http.StatusOK {
+	// if the response received is not 200, then return
+	if response.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("received non 200 response for the request")
 	}
 
-	data, _ := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
+	data, _ := ioutil.ReadAll(response.Body)
+	defer response.Body.Close()
+
+	dr := DiscoveryResponse{}
+	err = json.Unmarshal(data, &dr)
+	if err != nil {
+		return "", err
+	}
+	return dr.Modules, nil
+}
+
+func (tr TerraformRegistry) getResourceURL(version string) (string, error) {
+	// get the modules path by hitting the discovery endpoint
+	modulesPath, err := tr.getModulesPath()
+	if err != nil {
+		return "", err
+	}
+
+	// check if the specified registry url exists
+	response, err := http.Get(tr.getReqURL(modulesPath, version))
+	if err != nil {
+		return "", err
+	}
+
+	// if the response received is not 200, then return
+	if response.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("received non 200 response for the request")
+	}
+
+	data, _ := ioutil.ReadAll(response.Body)
+	defer response.Body.Close()
 
 	regRes := RegistryResponse{}
 	err = json.Unmarshal(data, &regRes)
@@ -89,42 +129,39 @@ func (tr TerraformRegistry) getResourceURL() (string, error) {
 	return fmt.Sprintf("git::%s.git?ref=%s", regRes.Source, regRes.Tag), nil
 }
 
+// this function checks if the module source string is of format <HOST>/<NAMESPACE>/<NAME>/<PROVIDER>
+// and returns a TerraforRegistry struct if the module string format is valid
 func isRemoteModuleValid(source string) (*TerraformRegistry, bool) {
 	URLParts := strings.Split(source, "/")
 	partsLength := len(URLParts)
 
 	// the module is of the form <HOST>/<NAMESPACE>/<NAME>/<PROVIDER>,
-	// <HOST> valud is present when the registry is not public terraform registry
+	// <HOST> value is present when the registry is not public terraform registry
 	if partsLength < 3 || partsLength > 4 {
 		return nil, false
 	}
 
 	// if the length is 3, host is terraform public registry
 	if partsLength == 3 {
-		reqURL := "https://" + terraformPublicRegistryURL + "/" + modulesPath + "/" + strings.Join(URLParts, "/")
-
-		res, err := http.Get(reqURL)
-		if err != nil {
-			return nil, false
-		}
-
-		if res.StatusCode != http.StatusOK {
-			return nil, false
-		}
-
+		// since the parts length is 3, the module has to belong to terraform public registry
 		return NewTerraformRegistry(terraformPublicRegistryURL, URLParts[0], URLParts[1], URLParts[2]), true
 	}
 
-	// if the length is 4, the 1st element of the slice would be the hostname
-	// hit the discover endpoint and check for 200 resopnse
+	// if the length is 4, the 1st element of the slice would be the hostname of the terraform registry
+	// hit the discovery endpoint and check for 200 resopnse
 	if partsLength == 4 {
+
+		// every terraform registry has to provide a valid response for reqURL formed below,
+		// if not, it is not a valid terraform registry.
+		// source: https://www.terraform.io/docs/internals/remote-service-discovery.html#discovery-process
+
 		reqURL := "https://" + URLParts[0] + discoveryEndpoint
-		res, err := http.Get(reqURL)
+		response, err := http.Get(reqURL)
 		if err != nil {
 			return nil, false
 		}
 
-		if res.StatusCode != http.StatusOK {
+		if response.StatusCode != http.StatusOK {
 			return nil, false
 		}
 

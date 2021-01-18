@@ -99,7 +99,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 				var err error
 				tr, ok := isRemoteModuleValid(req.SourceAddr)
 				if ok {
-					sourcePath, err = tr.getResourceURL()
+					sourcePath, err = tr.getResourceURL(req.VersionConstraint.Required.String())
 					if err != nil {
 						sourcePath = req.SourceAddr
 					}
