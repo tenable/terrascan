@@ -19,7 +19,7 @@ package policy
 const (
 	helm                  supportedCloudType  = "k8s"
 	defaultHelmIacType    supportedIacType    = "helm"
-	defaultHelmIacVersion supportedIacVersion = "3"
+	defaultHelmIacVersion supportedIacVersion = version3
 )
 
 func init() {

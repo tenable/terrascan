@@ -19,7 +19,7 @@ package policy
 const (
 	kubernetes                  supportedCloudType  = "k8s"
 	defaultKubernetesIacType    supportedIacType    = "k8s"
-	defaultKubernetesIacVersion supportedIacVersion = "v1"
+	defaultKubernetesIacVersion supportedIacVersion = version1
 )
 
 func init() {

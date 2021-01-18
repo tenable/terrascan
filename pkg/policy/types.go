@@ -7,6 +7,12 @@ import (
 	"github.com/accurics/terrascan/pkg/results"
 )
 
+const (
+	version12 = "v12"
+	version1  = "v1"
+	version3  = "v3"
+)
+
 // EngineInput Contains data used as input to the engine
 type EngineInput struct {
 	InputData *output.AllResourceConfigs
