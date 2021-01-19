@@ -63,5 +63,6 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.Verbose, "verbose", "v", false, "will show violations with details (applicable for default output)")
 	scanCmd.Flags().StringSliceVarP(&scanOptions.scanRules, "scan-rules", "", []string{}, "one or more rules to scan (example: --scan-rules=\"ruleID1,ruleID2\")")
 	scanCmd.Flags().StringSliceVarP(&scanOptions.skipRules, "skip-rules", "", []string{}, "one or more rules to skip while scanning (example: --skip-rules=\"ruleID1,ruleID2\")")
+	scanCmd.Flags().StringVar(&scanOptions.severity, "severity", "", "minimum severity level of the policy violations that you want to be reported")
 	RegisterCommand(rootCmd, scanCmd)
 }

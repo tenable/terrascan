@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/runtime"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
@@ -89,6 +90,9 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
 
+	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
+	severity := r.FormValue("severity")
+
 	if scanRulesValue != "" {
 		scanRules = strings.Split(scanRulesValue, ",")
 	}
@@ -97,14 +101,18 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules = strings.Split(skipRulesValue, ",")
 	}
 
+	if severity != "" {
+		severity = utils.EnsureUpperCaseTrimmed(severity)
+	}
+
 	// create a new runtime executor for scanning the uploaded file
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules)
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{}, scanRules, skipRules)
+			tempFile.Name(), "", "", []string{}, scanRules, skipRules, severity)
 	}
 	if err != nil {
 		zap.S().Error(err)
