@@ -118,7 +118,7 @@ Flags:
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
   -i, --iac-type string           iac type (helm, k8s, kustomize, terraform)
-      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
+      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14)
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
