@@ -1,30 +1,31 @@
 # Changelog
 
-## [v1.3.0](https://github.com/accurics/terrascan/tree/v1.3.0) (2021-01-16)
+## [v1.3.0](https://github.com/accurics/terrascan/tree/v1.3.0) (2021-01-19)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.2.0...v1.3.0)
 
 **Implemented enhancements:**
 - Prints output in human friendly format [\#168](https://github.com/accurics/terrascan/issues/168)
-- Support for rule suppression using terraform comments,kubernetes annotations, cli arguments, and config file. 
+- Support for rule suppression using terraform comments,kubernetes annotations, cli arguments, and config file.
 - New Policies for Kubernetes [\#480](https://github.com/accurics/terrascan/pull/480)
 - Tag released Docker images [\#398](https://github.com/accurics/terrascan/issues/398)
 - Add policy for checking insecure\_ssl configuration for github\_repository\_webhook in GitHub provider [\#355](https://github.com/accurics/terrascan/issues/355)
-- Introduced support for terraform .14 and .13. Note: This will introduce some breaking changes for terraform v.12 files, even if using --iac-version v.12 flag. Notably we will no longer support multiple providers blocks, and certain references inside provisioner blocks (objects other than self, count or each, where when = destroy) . For more details see: https://github.com/hashicorp/terraform/releases/tag/v0.13.0 
-
+- Introduced support for terraform .14 and .13. Note: This will introduce some breaking changes for terraform v.12 files, even if using --iac-version v.12 flag. Notably we will no longer support multiple providers blocks, and certain references inside provisioner blocks (objects other than self, count or each, where when = destroy) . For more details see: https://github.com/hashicorp/terraform/releases/tag/v0.13.0
 
 **Fixed bugs:**
 
-- Terrascan doesn't allow registering multiple versions for an iac-type [\#471](https://github.com/accurics/terrascan/issues/471)
-- Resource lock issue [\#432](https://github.com/accurics/terrascan/issues/432)
-- Issue where Terrascan paniced with list variables [\#412](https://github.com/accurics/terrascan/issues/412)
+- terrascan doesn't allow registering multiple versions for an iac-type [\#471](https://github.com/accurics/terrascan/issues/471)
+- Debug resource lock [\#432](https://github.com/accurics/terrascan/issues/432)
+- terrascan panic: not a string [\#412](https://github.com/accurics/terrascan/issues/412)
 - False positive for aws rule vpcFlowLogsNotEnabled [\#408](https://github.com/accurics/terrascan/issues/408)
+- accurics.GCP.EKM.132 and accurics.GCP.EKM.131 wrong violation using disk\_encryption\_key [\#382](https://github.com/accurics/terrascan/issues/382)
 - s3EnforceUserACL - False Positive [\#359](https://github.com/accurics/terrascan/issues/359)
+- How to fix accurics.azure.EKM.20 [\#331](https://github.com/accurics/terrascan/issues/331)
 - Why accurics.gcp.IAM.104 suggests enabling a client certificate? [\#330](https://github.com/accurics/terrascan/issues/330)
 
 **Closed issues:**
 
-- Terraform can't detect violations in terraform modules [\#468](https://github.com/accurics/terrascan/issues/468)
+- terraform can't detect violations in terraform modules [\#468](https://github.com/accurics/terrascan/issues/468)
 - uniformBucketEnabled.rego referencing deprecated config [\#453](https://github.com/accurics/terrascan/issues/453)
 - Unable to run terrascan scan [\#446](https://github.com/accurics/terrascan/issues/446)
 - Terrascan doesn't exit with error on CLI or Parsing errors. [\#442](https://github.com/accurics/terrascan/issues/442)
@@ -40,9 +41,18 @@
 
 **Merged pull requests:**
 
+- update version to  v1.3.0 [\#502](https://github.com/accurics/terrascan/pull/502) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- Add v13 flag option for terraform iac [\#499](https://github.com/accurics/terrascan/pull/499) ([dev-gaur](https://github.com/dev-gaur))
+- Fix: potential bug added in PR \#470 [\#497](https://github.com/accurics/terrascan/pull/497) ([dev-gaur](https://github.com/dev-gaur))
+- Bump sigs.k8s.io/kustomize/api from 0.7.1 to 0.7.2 [\#494](https://github.com/accurics/terrascan/pull/494) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/mattn/go-isatty from 0.0.8 to 0.0.12 [\#492](https://github.com/accurics/terrascan/pull/492) ([dependabot[bot]](https://github.com/apps/dependabot))
+- solves issue \#382, and improved policy to relate disk with the instance [\#490](https://github.com/accurics/terrascan/pull/490) ([harkirat22](https://github.com/harkirat22))
+- solves issue \#331 [\#489](https://github.com/accurics/terrascan/pull/489) ([harkirat22](https://github.com/harkirat22))
+- Update mkdocs-material to 6.2.5 [\#488](https://github.com/accurics/terrascan/pull/488) ([pyup-bot](https://github.com/pyup-bot))
 - Bump go.uber.org/zap from 1.13.0 to 1.16.0 [\#486](https://github.com/accurics/terrascan/pull/486) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/spf13/afero from 1.3.4 to 1.5.1 [\#485](https://github.com/accurics/terrascan/pull/485) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/iancoleman/strcase from 0.1.1 to 0.1.3 [\#484](https://github.com/accurics/terrascan/pull/484) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/hashicorp/go-version from 1.2.0 to 1.2.1 [\#482](https://github.com/accurics/terrascan/pull/482) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/pelletier/go-toml from 1.8.0 to 1.8.1 [\#481](https://github.com/accurics/terrascan/pull/481) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Policy update 2021 01 14 [\#480](https://github.com/accurics/terrascan/pull/480) ([williepaul](https://github.com/williepaul))
 - fix panic for list variables [\#479](https://github.com/accurics/terrascan/pull/479) ([patilpankaj212](https://github.com/patilpankaj212))
@@ -91,8 +101,8 @@
 - Fixes GCP cos node image policy [\#397](https://github.com/accurics/terrascan/pull/397) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
 - \#394: recognize that empty values for username and password in master… [\#396](https://github.com/accurics/terrascan/pull/396) ([acc-jon](https://github.com/acc-jon))
 - Fix infinite loop on variable resolution [\#393](https://github.com/accurics/terrascan/pull/393) ([dinedal](https://github.com/dinedal))
+- Remove demo badge [\#389](https://github.com/accurics/terrascan/pull/389) ([kklin](https://github.com/kklin))
 - Update mkdocs-material to 6.1.5 [\#387](https://github.com/accurics/terrascan/pull/387) ([pyup-bot](https://github.com/pyup-bot))
-- Add new policy for checking insecure\_ssl on github\_repository\_webhook [\#386](https://github.com/accurics/terrascan/pull/386) ([HorizonNet](https://github.com/HorizonNet))
 
 ## [v1.2.0](https://github.com/accurics/terrascan/tree/v1.2.0) (2020-11-16)
 
