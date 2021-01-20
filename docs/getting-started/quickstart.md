@@ -11,10 +11,10 @@ Terrascan is a portable executable that does not strictly require installation, 
 Terrascan's [release page](https://github.com/accurics/terrascan/releases) includes builds for common platforms.  Just download and extract the package for your platform.  For example, if you use a Mac you might do this:
 
 ``` Bash
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.2.0/terrascan_1.2.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.0/terrascan_1.3.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar xzf terrascan.tar.gz
 $ ./terrascan version
-version: v1.2.0
+version: v1.3.0
 ```
 
 If you want to use this executable for the rest of this quickstart, it will help to create an alias or install the executable onto your path. For example with bash you could do something like this:
@@ -34,7 +34,7 @@ Terrascan is also available as a Docker image in Docker Hub and can be used as f
 
 ``` Bash
 $ docker run --rm accurics/terrascan version
-version: v1.2.0
+version: v1.3.0
 ```
 
 If you want to use the Docker image for the rest of this quickstart, it will help to create an alias, script or batch file that reduces the typing necessary.  For example with bash you could do something like this:
@@ -58,35 +58,76 @@ $ cd KaiMonkey/terraform/aws
 $ terrascan scan
 ```
 
-By default Terrascan will output its findings in YAML format:
+By default Terrascan will output its findings in human friendy format:
 
-``` YAML
-results:
-    violations:
-        - rule_name: s3Versioning
-          description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites
-          rule_id: AWS.S3Bucket.IAM.High.0370
-          severity: HIGH
-          category: IAM
-          resource_name: km_public_blob
-          resource_type: aws_s3_bucket
-          file: modules/storage/main.tf
-          line: 112
-#... lines elided ...
-        - rule_name: ec2UsingIMDSv1
-          description: EC2 instances should disable IMDS or require IMDSv2
-          rule_id: AC-AWS-NS-IN-M-1172
-          severity: MEDIUM
-          category: Network Security
-          resource_name: km_vm
-          resource_type: aws_instance
-          file: modules/compute/main.tf
-          line: 124
-    count:
-        low: 0
-        medium: 2
-        high: 7
-        total: 9
+``` sh
+Violation Details -
+
+	Description    :	S3 bucket Access is allowed to all AWS Account Users.
+	File           :	modules/storage/main.tf
+	Line           :	104
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	S3 bucket Access is allowed to all AWS Account Users.
+	File           :	modules/storage/main.tf
+	Line           :	112
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	Ensure that your RDS database has IAM Authentication enabled.
+	File           :	modules/storage/main.tf
+	Line           :	45
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	Ensure VPC flow logging is enabled in all VPCs
+	File           :	modules/network/main.tf
+	Line           :	4
+	Severity       :	MEDIUM
+	-----------------------------------------------------------------------
+
+	Description    :	EC2 instances should disable IMDS or require IMDSv2
+	File           :	modules/compute/main.tf
+	Line           :	124
+	Severity       :	MEDIUM
+	-----------------------------------------------------------------------
+
+	Description    :	http port open to internet
+	File           :	modules/network/main.tf
+	Line           :	102
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites
+	File           :	modules/storage/main.tf
+	Line           :	104
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites
+	File           :	modules/storage/main.tf
+	Line           :	112
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+	Description    :	AWS CloudWatch log group is not encrypted with a KMS CMK
+	File           :	modules/compute/main.tf
+	Line           :	115
+	Severity       :	HIGH
+	-----------------------------------------------------------------------
+
+
+Scan Summary -
+
+	File/Folder         :	/var/folders/2g/9lkfm6ld2lv350svwr15fdgc0000gn/T/x9wqg4/terraform/aws
+	IaC Type            :	terraform
+	Scanned At          :	2021-01-15 03:11:31.869816 +0000 UTC
+	Policies Validated  :	571
+	Violated Policies   :	9
+	Low                 :	0
+	Medium              :	2
+	High                :	7
 ```
 
 You should see a total of 9 violations, which are detailed in the output.
@@ -97,6 +138,4 @@ Now that you understand how to run Terrascan, explore the other options availabl
 
 * [Terrascan Policy Reference](../policies.md)
 * The [usage guide](./usage.md) explains general usage and how to scan other types of IaC, such as Kubernetes, Helm, and Kustomize.
-
-[//]: # (TODO: add info about CI/CD integrations * CI/CD integration )
-
+* The [CI/CD](../cicd.md) page explains how to integrate Terrascan on CI/CD pipelines.

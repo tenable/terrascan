@@ -45,9 +45,10 @@ nav:
   - Policies:
     - Policy Reference: policies.md
     - AWS: policies/aws.md
-    - GCP: policies/gcp.md
     - Azure: policies/azure.md
+    - GCP: policies/gcp.md
     - GitHub: policies/github.md
+    - Kubernetes: policies/k8s.md
   # - Educational Resources: learning.md
   - CI/CD Integration: cicd.md
   - Contributing: contributing.md
