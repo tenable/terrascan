@@ -77,6 +77,27 @@ Use "terrascan [command] --help" for more information about a command.
 Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/).
 
 
+## Rule Suppression
+If a resource should not be tested against a particular rule, you can tell terrascan to skip it.
+
+### Terraform
+In Terraform scripts, you can tell terrascan to skip rules by inserting a comment with the phrase "ts:skip=RULENAME SKIP_REASON". The comment should be inside the resource.
+
+![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
+
+### Kubernetes 
+In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotation as seen in the snippet below.
+
+![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
+
+### Broad Rule Suppression
+Use our config file to manually pick which rules should be applied or suppressed from the entire scan. This is suitable for edge use cases. Please use in-file suppression to specify resources that shouldn't be tested against particular rules. This ensures that the rules are skipped only for particular resources, rather than all of the resources.
+
+![config](https://user-images.githubusercontent.com/74685902/105115887-83e2f380-5a7e-11eb-82b8-a1d18c83a405.png)
+
+### Sample Output
+![Screenshot 2021-01-19 at 10 52 47 PM](https://user-images.githubusercontent.com/74685902/105115731-32d2ff80-5a7e-11eb-93b0-2f0620eb1295.png)
+
 ## Other Installation Options
 
 
