@@ -18,6 +18,8 @@ package cli
 
 import (
 	"flag"
+	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -57,6 +59,11 @@ func Execute() {
 		if err == flag.ErrHelp {
 			os.Exit(0)
 		}
+	}
+
+	// disable terraform logs when TF_LOG env variable is not set
+	if os.Getenv("TF_LOG") == "" {
+		log.SetOutput(ioutil.Discard)
 	}
 
 	if err := rootCmd.Execute(); err != nil {

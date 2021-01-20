@@ -23,6 +23,8 @@ import (
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"go.uber.org/zap"
+
+	"github.com/hashicorp/terraform/registry/regsrc"
 )
 
 var localSourcePrefixes = []string{
@@ -39,6 +41,15 @@ func isLocalSourceAddr(addr string) bool {
 		}
 	}
 	return false
+}
+
+// isRegistrySourceAddr will validate if the source address is a valid registry
+// module or not.
+// a valid source address is of the form <HOSTNAME>/NAMESPACE>/<NAME>/<PROVIDER>
+// regsrc.ParseModuleSource func returns a terraform registry module source.
+func isRegistrySourceAddr(addr string) bool {
+	_, err := regsrc.ParseModuleSource(addr)
+	return err == nil
 }
 
 // RemoteModuleInstaller helps in downloading remote modules, it also maintains a
