@@ -73,6 +73,10 @@ Flags:
 Use "terrascan [command] --help" for more information about a command.
 ```
 
+### Step 3: Integrate with CI\CD	## Rule Suppression
+Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/cicd/).
+
+
 ## Rule Suppression
 If a rule is generating an expected false positive, you can tell terrascan to skip it.
 
@@ -86,7 +90,8 @@ In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotatio
 ![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
 
 ### Broad Rule Suppression
-Use our config file to manually pick which rules should be applied or suppressed from the entire scan. This is suitable for edge use cases. Please use in-file suppression to account for known false positives. This ensures that the rule is skipped for a particular resource, not for all of them. 
+Use our config file to manually pick which rules should be applied or suppressed from the entire scan. This is suitable for edge use cases. Please use in-file suppression to account for known false positives. This ensures that the rule is skipped only for one particular resource, rather than all of them.
+
 ![config](https://user-images.githubusercontent.com/74685902/105115887-83e2f380-5a7e-11eb-82b8-a1d18c83a405.png)
 
 ### Sample Output
