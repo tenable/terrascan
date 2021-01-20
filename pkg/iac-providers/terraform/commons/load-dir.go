@@ -20,12 +20,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
 )
@@ -52,6 +54,9 @@ type ModuleConfig struct {
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
 func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
+
+	// map to hold the download paths of remote modules
+	remoteModPaths := make(map[string]string)
 
 	// create a new config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
@@ -92,8 +97,36 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 				for p := req.Parent; p != nil; p = p.Parent {
 					pathToModule = filepath.Join(p.SourceAddr, pathToModule)
 				}
-				pathToModule = filepath.Join(absRootDir, pathToModule)
+
+				// check if pathToModule consists of a remote module downloaded
+				// if yes, then update the module path, with the remote module
+				// download path
+				keyFound := false
+				for remoteSourceAddr, downloadPath := range remoteModPaths {
+					if strings.Contains(pathToModule, remoteSourceAddr) {
+						pathToModule = strings.Replace(pathToModule, remoteSourceAddr, "", 1)
+						pathToModule = downloadPath + pathToModule
+						keyFound = true
+						break
+					}
+				}
+				if !keyFound {
+					pathToModule = filepath.Join(absRootDir, pathToModule)
+				}
 				zap.S().Debugf("processing local module %q", pathToModule)
+			} else if isRegistrySourceAddr(req.SourceAddr) {
+				// regsrc.ParseModuleSource func returns a terraform registry module source
+				// error check is not required as the source address is already validated above
+				module, _ := regsrc.ParseModuleSource(req.SourceAddr)
+
+				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+				pathToModule, err = r.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				} else {
+					// add the entry of remote module's source address to the map
+					remoteModPaths[req.SourceAddr] = pathToModule
+				}
 			} else {
 				// temp dir to download the remote repo
 				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
