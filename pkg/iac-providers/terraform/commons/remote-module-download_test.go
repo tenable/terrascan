@@ -47,7 +47,6 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 	}
 	type args struct {
 		requiredVersion hclConfigs.VersionConstraint
-		destPath        string
 		module          *regsrc.Module
 	}
 	tests := []struct {
