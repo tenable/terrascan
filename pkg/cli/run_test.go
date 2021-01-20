@@ -50,6 +50,8 @@ func TestRun(t *testing.T) {
 	testDirPath := "testdata/run-test"
 	kustomizeTestDirPath := testDirPath + "/kustomize-test"
 	testTerraformFilePath := testDirPath + "/config-only.tf"
+	testRemoteModuleFilePath := testDirPath + "/remote-modules.tf"
+
 	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
 	table := []struct {
@@ -169,6 +171,15 @@ func TestRun(t *testing.T) {
 				iacDirPath: testDirPath,
 				outputType: "yaml",
 				configFile: "testdata/configFile.toml",
+			},
+		},
+		{
+			name: "config file with remote module",
+			scanOptions: &ScanOptions{
+				policyType:  []string{"all"},
+				iacFilePath: testRemoteModuleFilePath,
+				outputType:  "human",
+				configFile:  "testdata/configFile.toml",
 			},
 		},
 	}

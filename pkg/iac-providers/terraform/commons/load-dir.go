@@ -18,6 +18,8 @@ package commons
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,6 +56,11 @@ type ModuleConfig struct {
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
 func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
+
+	// disable terraform logs when TF_LOG env variable is not set
+	if os.Getenv("TF_LOG") == "" {
+		log.SetOutput(ioutil.Discard)
+	}
 
 	// map to hold the download paths of remote modules
 	remoteModPaths := make(map[string]string)
