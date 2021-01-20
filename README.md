@@ -78,7 +78,7 @@ Please refer to our [documentation to integrate with your pipeline](https://docs
 
 
 ## Rule Suppression
-If a rule is generating an expected false positive, you can tell terrascan to skip it.
+If a resource should not be tested against a particular rule, you can tell terrascan to skip it.
 
 ### Terraform
 In Terraform scripts, you can tell terrascan to skip rules by inserting a comment with the phrase "ts:skip=RULENAME SKIP_REASON". The comment should be inside the resource.
@@ -91,7 +91,7 @@ In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotatio
 ![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
 
 ### Broad Rule Suppression
-Use our config file to manually pick which rules should be applied or suppressed from the entire scan. This is suitable for edge use cases. Please use in-file suppression to account for known false positives. This ensures that the rule is skipped only for one particular resource, rather than all of them.
+Use our config file to manually pick which rules should be applied or suppressed from the entire scan. This is suitable for edge use cases. Please use in-file suppression to specify resources that shouldn't be tested against particular rules. This ensures that the rules are skipped only for particular resources, rather than all of the resources.
 
 ![config](https://user-images.githubusercontent.com/74685902/105115887-83e2f380-5a7e-11eb-82b8-a1d18c83a405.png)
 
