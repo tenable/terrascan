@@ -86,7 +86,8 @@ In Terraform scripts, you can tell terrascan to skip rules by inserting a commen
 ![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
 
 ### Kubernetes 
-In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotation as seen in the snippet below
+In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotation as seen in the snippet below.
+
 ![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
 
 ### Broad Rule Suppression
