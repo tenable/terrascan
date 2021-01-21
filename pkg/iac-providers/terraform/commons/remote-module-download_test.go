@@ -21,6 +21,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/downloader"
@@ -28,6 +29,7 @@ import (
 	version "github.com/hashicorp/go-version"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
+	"github.com/hashicorp/terraform/registry/response"
 )
 
 func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
@@ -40,6 +42,8 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 	testConstraintsSecurityGroup, _ := version.NewConstraint("3.17.0")
 	testModuleSecurityGroup, _ := regsrc.ParseModuleSource("terraform-aws-modules/security-group/aws")
 	testModuleInvalidProvider, _ := regsrc.ParseModuleSource("terraform-aws-modules/testgroup/testprovider")
+	testModuleRdsWithRawSubModule, _ := regsrc.ParseModuleSource("terraform-aws-modules/security-group/aws//db_subnet_group")
+	testRawSubModuleName := "db_subnet_group"
 
 	type fields struct {
 		cache      InstalledCache
@@ -50,11 +54,13 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 		module          *regsrc.Module
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    string
-		wantErr bool
+		name            string
+		fields          fields
+		args            args
+		want            string
+		wantErr         bool
+		hasRawSubModule bool
+		rawSubModule    string
 	}{
 		{
 			name: "remote module download with valid module and version",
@@ -92,6 +98,19 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "remote module download with raw sub module",
+			fields: fields{
+				cache:      make(map[string]string),
+				downloader: downloader.NewDownloader(),
+			},
+			args: args{
+				requiredVersion: hclConfigs.VersionConstraint{},
+				module:          testModuleRdsWithRawSubModule,
+			},
+			hasRawSubModule: true,
+			rawSubModule:    testRawSubModuleName,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -105,6 +124,10 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 				tt.want = ""
 			}
 
+			if tt.hasRawSubModule {
+				tt.want = tt.want + string(os.PathSeparator) + tt.rawSubModule
+			}
+
 			defer os.RemoveAll(testDir)
 			got, err := r.DownloadRemoteModule(tt.args.requiredVersion, testDir, tt.args.module)
 			if (err != nil) != tt.wantErr {
@@ -113,6 +136,121 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("RemoteModuleInstaller.DownloadRemoteModule() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetVersionToDownload(t *testing.T) {
+	source := "terraform-aws-modules/security-group/aws"
+	testModule, _ := regsrc.ParseModuleSource(source)
+	testVersionConstraint, _ := version.NewConstraint("3.17.0")
+	testVersionConstraintMatching, _ := version.NewConstraint("1.2.0")
+	testVersion, _ := version.NewVersion("1.2.0")
+	testVersions := []*response.ModuleVersion{
+		{
+			Version: "1.0.0",
+		},
+		{
+			Version: "1.1.0",
+		},
+		{
+			Version: "1.2.0",
+		},
+	}
+
+	type args struct {
+		moduleVersions  *response.ModuleVersions
+		requiredVersion hclConfigs.VersionConstraint
+		module          *regsrc.Module
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *version.Version
+		wantErr bool
+	}{
+		{
+			name: "invalid version",
+			args: args{
+				moduleVersions: &response.ModuleVersions{
+					Modules: []*response.ModuleProviderVersions{
+						{
+							Source: "",
+							Versions: []*response.ModuleVersion{
+								{},
+							},
+						},
+					},
+				},
+				module: testModule,
+				requiredVersion: hclConfigs.VersionConstraint{
+					Required: testVersionConstraint,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "no matching versions",
+			args: args{
+				moduleVersions: &response.ModuleVersions{
+					Modules: []*response.ModuleProviderVersions{
+						{
+							Source:   "source",
+							Versions: testVersions,
+						},
+					},
+				},
+				module: testModule,
+				requiredVersion: hclConfigs.VersionConstraint{
+					Required: testVersionConstraint,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "no required version specified",
+			args: args{
+				moduleVersions: &response.ModuleVersions{
+					Modules: []*response.ModuleProviderVersions{
+						{
+							Source:   "source",
+							Versions: testVersions,
+						},
+					},
+				},
+				module: testModule,
+			},
+			want: testVersion,
+		},
+		{
+			name: "required version specified",
+			args: args{
+				moduleVersions: &response.ModuleVersions{
+					Modules: []*response.ModuleProviderVersions{
+						{
+							Source:   "source",
+							Versions: testVersions,
+						},
+					},
+				},
+				module: testModule,
+				requiredVersion: hclConfigs.VersionConstraint{
+					Required: testVersionConstraintMatching,
+				},
+			},
+			want: testVersion,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getVersionToDownload(tt.args.moduleVersions, tt.args.requiredVersion, tt.args.module)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getVersionToDownload() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getVersionToDownload() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -24,6 +24,7 @@ import (
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry"
 	"github.com/hashicorp/terraform/registry/regsrc"
+	"github.com/hashicorp/terraform/registry/response"
 	"go.uber.org/zap"
 )
 
@@ -53,6 +54,44 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 		return "", err
 	}
 
+	// get the version to download
+	versionToDownload, err := getVersionToDownload(moduleVersions, requiredVersion, module)
+	if err != nil {
+		zap.S().Error("error while fetching the version to download,", zap.Error(err))
+		return "", err
+	}
+
+	// get the source location for the matched version
+	sourceLocation, err := regClient.ModuleLocation(module, versionToDownload.String())
+	if err != nil {
+		zap.S().Errorf("error while getting the source location for module: %s, at registry: %s", module.String(), module.Host().Display())
+		return "", err
+	}
+
+	downloadLocation, err := r.DownloadModule(sourceLocation, destPath)
+	if err != nil {
+		zap.S().Errorf("error while downloading module: %s, with source location: %s", module.String(), sourceLocation)
+		return "", nil
+	}
+
+	if module.RawSubmodule != "" {
+		// Append the user's requested subdirectory
+		downloadLocation = filepath.Join(downloadLocation, module.RawSubmodule)
+	}
+
+	return downloadLocation, nil
+}
+
+// helper func to compare and update the version
+func getGreaterVersion(latestVersion *version.Version, currentVersion *version.Version) *version.Version {
+	if latestVersion == nil || currentVersion.GreaterThan(latestVersion) {
+		latestVersion = currentVersion
+	}
+	return latestVersion
+}
+
+// helper func to get the module version to download
+func getVersionToDownload(moduleVersions *response.ModuleVersions, requiredVersion hclConfigs.VersionConstraint, module *regsrc.Module) (*version.Version, error) {
 	// terraform init command pulls all the available versions of a module,
 	// and downloads the latest non pre-release (unless a pre-release version was
 	// specified in tf file) version, if a version constraint is not provided in the tf file.
@@ -95,11 +134,11 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 	}
 
 	if latestVersion == nil {
-		return "", fmt.Errorf("no versions for module: %s, found at registry: %s", module.String(), module.Host().Display())
+		return nil, fmt.Errorf("no versions for module: %s, found at registry: %s", module.String(), module.Host().Display())
 	}
 
 	if requiredVersion.Required != nil && latestMatch == nil {
-		return "", fmt.Errorf("no versions matching: %s, for module: %s, found at registry: %s, latest version found: %s", requiredVersion.Required.String(), module.String(), module.Host().Display(), latestVersion.String())
+		return nil, fmt.Errorf("no versions matching: %s, for module: %s, found at registry: %s, latest version found: %s", requiredVersion.Required.String(), module.String(), module.Host().Display(), latestVersion.String())
 	}
 
 	versionToDownload = latestVersion
@@ -107,31 +146,5 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 		versionToDownload = latestMatch
 	}
 
-	// get the source location for the matched version
-	sourceLocation, err := regClient.ModuleLocation(module, versionToDownload.String())
-	if err != nil {
-		zap.S().Errorf("error while getting the source location for module: %s, at registry: %s", module.String(), module.Host().Display())
-		return "", err
-	}
-
-	downloadLocation, err := r.DownloadModule(sourceLocation, destPath)
-	if err != nil {
-		zap.S().Errorf("error while downloading module: %s, with source location: %s", module.String(), sourceLocation)
-		return "", nil
-	}
-
-	if module.RawSubmodule != "" {
-		// Append the user's requested subdirectory to any subdirectory that
-		// was implied by any of the nested layers we expanded within go-getter.
-		downloadLocation = filepath.Join(downloadLocation, module.RawSubmodule)
-	}
-
-	return downloadLocation, nil
-}
-
-func getGreaterVersion(latestVersion *version.Version, currentVersion *version.Version) *version.Version {
-	if latestVersion == nil || currentVersion.GreaterThan(latestVersion) {
-		latestVersion = currentVersion
-	}
-	return latestVersion
+	return versionToDownload, nil
 }
