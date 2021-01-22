@@ -1497,6 +1497,8 @@ sigs.k8s.io/apiserver-network-proxy/konnectivity-client v0.0.9/go.mod h1:dzAXnQb
 sigs.k8s.io/kustomize v2.0.3+incompatible h1:JUufWFNlI44MdtnjUqVnvh29rR37PQFzPbLXqhyOyX0=
 sigs.k8s.io/kustomize v2.0.3+incompatible/go.mod h1:MkjgH3RdOWrievjo6c9T245dYlB5QeXV4WCbnt/PEpU=
 sigs.k8s.io/kustomize/api v0.7.2 h1:ItTD/2XaKO8CosOMFZdaGFdUGTCHdQriW7zQ7AR98rs=
+sigs.k8s.io/kustomize/api v0.7.2 h1:ItTD/2XaKO8CosOMFZdaGFdUGTCHdQriW7zQ7AR98rs=
+sigs.k8s.io/kustomize/api v0.7.2/go.mod h1:50/vLATrjhRmMr3spZsI1GcpoZJ8IARy9QstPbA9lGE=
 sigs.k8s.io/kustomize/api v0.7.2/go.mod h1:50/vLATrjhRmMr3spZsI1GcpoZJ8IARy9QstPbA9lGE=
 sigs.k8s.io/kustomize/kyaml v0.10.6 h1:xUJxc/k8JoWqHUahaB8DTqY0KwEPxTbTGStvW8TOcDc=
 sigs.k8s.io/kustomize/kyaml v0.10.6/go.mod h1:K9yg1k/HB/6xNOf5VH3LhTo1DK9/5ykSZO5uIv+Y/1k=
