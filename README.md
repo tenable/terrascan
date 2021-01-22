@@ -27,7 +27,7 @@ Terrascan's supports multiple ways to install, including [brew](https://github.c
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.0/terrascan_1.3.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.1/terrascan_1.3.1_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
@@ -85,7 +85,7 @@ In Terraform scripts, you can tell terrascan to skip rules by inserting a commen
 
 ![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
 
-### Kubernetes 
+### Kubernetes
 In Kubernetes yamls, you can tell terrascan to skip rules by adding an annotation as seen in the snippet below.
 
 ![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
@@ -135,7 +135,7 @@ RUN apk add --update git
 
 RUN git clone https://github.com/accurics/terrascan && cd terrascan \
   && CGO_ENABLED=0 GO111MODULE=on go build -o /go/bin/terrascan cmd/terrascan/main.go
-  
+
 ```
 
 
