@@ -116,15 +116,6 @@ Terrascan is also available as a Docker image and can be used as follows
 $ docker run accurics/terrascan
 ```
 
-### Install via go get, if you have Go installed
-```
-$ export GO111MODULE=on
-$ go get -u github.com/accurics/terrascan/cmd/terrascan
-  go: downloading github.com/accurics/terrascan v1.3.0
-  go: found github.com/accurics/terrascan/cmd/terrascan in github.com/accurics/terrascan v1.3.0
-  ...
-$ terrascan
-```
 
 ### Building Terrascan
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
@@ -134,6 +125,17 @@ $ git clone git@github.com:accurics/terrascan.git
 $ cd terrascan
 $ make build
 $ ./bin/terrascan
+```
+
+### To build your own docker, refer to this example (Alpine Linux):
+```
+FROM golang:alpine AS build-env
+
+RUN apk add --update git
+
+RUN git clone https://github.com/accurics/terrascan && cd terrascan \
+  && CGO_ENABLED=0 GO111MODULE=on go build -o /go/bin/terrascan cmd/terrascan/main.go
+  
 ```
 
 
