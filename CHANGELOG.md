@@ -6,11 +6,12 @@
 
 **Implemented enhancements:**
 
+- Support for remote modules
 - Tag container image with release version [\#504](https://github.com/accurics/terrascan/issues/504)
 
 **Fixed bugs:**
 
-- Terrascan 1.3.0 fails to build on alpine [\#506](https://github.com/accurics/terrascan/issues/506)
+- Build error on ARM MacOS
 - terrascan consider  source = "terraform-aws-modules/vpc/aws"  as local path [\#418](https://github.com/accurics/terrascan/issues/418)
 - Failed to read module directory [\#332](https://github.com/accurics/terrascan/issues/332)
 
