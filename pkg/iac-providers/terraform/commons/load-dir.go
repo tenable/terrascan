@@ -90,47 +90,20 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 			// figure out path sub module directory, if it's remote then download it locally
 			var pathToModule string
 			if utils.IsLocalSourceAddr(req.SourceAddr) {
-				// determine the absolute path from root module to the sub module
-				// since we start at the end of the path, we need to assemble
-				// the parts in reverse order
 
-				pathToModule = req.SourceAddr
-				for p := req.Parent; p != nil; p = p.Parent {
-					pathToModule = filepath.Join(p.SourceAddr, pathToModule)
-				}
-
-				// check if pathToModule consists of a remote module downloaded
-				// if yes, then update the module path, with the remote module
-				// download path
-				keyFound := false
-				for remoteSourceAddr, downloadPath := range remoteModPaths {
-					if strings.Contains(pathToModule, remoteSourceAddr) {
-						pathToModule = strings.Replace(pathToModule, remoteSourceAddr, "", 1)
-						pathToModule = downloadPath + pathToModule
-						keyFound = true
-						break
-					}
-				}
-				if !keyFound {
-					pathToModule = filepath.Join(absRootDir, pathToModule)
-				}
+				pathToModule = processLocalSource(req, remoteModPaths, absRootDir)
 				zap.S().Debugf("processing local module %q", pathToModule)
 			} else if utils.IsRegistrySourceAddr(req.SourceAddr) {
-				// regsrc.ParseModuleSource func returns a terraform registry module source
-				// error check is not required as the source address is already validated above
-				module, _ := regsrc.ParseModuleSource(req.SourceAddr)
+				// temp dir to download the remote repo
+				tempDir := generateTempDir()
 
-				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
-				pathToModule, err = d.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
+				pathToModule, err = processTerraformRegistrySource(req, remoteModPaths, tempDir, d)
 				if err != nil {
 					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
-				} else {
-					// add the entry of remote module's source address to the map
-					remoteModPaths[req.SourceAddr] = pathToModule
 				}
 			} else {
 				// temp dir to download the remote repo
-				tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+				tempDir := generateTempDir()
 
 				// Download remote module
 				pathToModule, err = d.DownloadModule(req.SourceAddr, tempDir)
@@ -217,4 +190,51 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 
 	// successful
 	return allResourcesConfig, nil
+}
+
+func generateTempDir() string {
+	return filepath.Join(os.TempDir(), utils.GenRandomString(6))
+}
+
+func processLocalSource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, absRootDir string) string {
+	// determine the absolute path from root module to the sub module
+	// since we start at the end of the path, we need to assemble
+	// the parts in reverse order
+
+	pathToModule := req.SourceAddr
+	for p := req.Parent; p != nil; p = p.Parent {
+		pathToModule = filepath.Join(p.SourceAddr, pathToModule)
+	}
+
+	// check if pathToModule consists of a remote module downloaded
+	// if yes, then update the module path, with the remote module
+	// download path
+	keyFound := false
+	for remoteSourceAddr, downloadPath := range remoteModPaths {
+		if strings.Contains(pathToModule, remoteSourceAddr) {
+			pathToModule = strings.Replace(pathToModule, remoteSourceAddr, "", 1)
+			pathToModule = downloadPath + pathToModule
+			keyFound = true
+			break
+		}
+	}
+	if !keyFound {
+		pathToModule = filepath.Join(absRootDir, pathToModule)
+	}
+	return pathToModule
+}
+
+func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, tempDir string, d downloader.Downloader) (string, error) {
+	// regsrc.ParseModuleSource func returns a terraform registry module source
+	// error check is not required as the source address is already validated
+	module, _ := regsrc.ParseModuleSource(req.SourceAddr)
+
+	pathToModule, err := d.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
+	if err != nil {
+		return pathToModule, err
+	}
+
+	// add the entry of remote module's source address to the map
+	remoteModPaths[req.SourceAddr] = pathToModule
+	return pathToModule, nil
 }

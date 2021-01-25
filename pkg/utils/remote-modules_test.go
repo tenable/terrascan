@@ -228,7 +228,7 @@ func TestGetSourceAddrAndVersion(t *testing.T) {
 		{
 			name: "source address with version",
 			args: args{
-				sourceURL: testSourceURL + testVersion,
+				sourceURL: testSourceURL + ":" + testVersion,
 			},
 			wantSource:  testSourceURL,
 			wantVersion: testVersion,
