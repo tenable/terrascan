@@ -22,8 +22,13 @@ import (
 	"github.com/hashicorp/terraform/registry/regsrc"
 )
 
+const (
+	terraformRegistry            = "terraform-registry"
+	registryAddrVersionSeparator = ":"
+)
+
 var (
-	supportedRemoteTypes = []string{"git", "s3", "gcs", "http", "terraform-registry"}
+	supportedRemoteTypes = []string{"git", "s3", "gcs", "http", terraformRegistry}
 	localSourcePrefixes  = []string{
 		"./",
 		"../",
@@ -40,6 +45,11 @@ func IsValidRemoteType(remoteType string) bool {
 		}
 	}
 	return false
+}
+
+// IsRemoteTypeTerraformRegistry checks if supplied remote type is terraform-registry
+func IsRemoteTypeTerraformRegistry(remoteType string) bool {
+	return strings.EqualFold(terraformRegistry, strings.ToLower(strings.TrimSpace(remoteType)))
 }
 
 // IsLocalSourceAddr validates if a source address is a local address or not
@@ -59,4 +69,13 @@ func IsLocalSourceAddr(addr string) bool {
 func IsRegistrySourceAddr(addr string) bool {
 	_, err := regsrc.ParseModuleSource(addr)
 	return err == nil
+}
+
+// GetSourceAddrAndVersion extracts source address and version from supplied source url
+func GetSourceAddrAndVersion(sourceURL string) (string, string) {
+	separatorIndex := strings.LastIndex(sourceURL, registryAddrVersionSeparator)
+	if separatorIndex == -1 {
+		return sourceURL, ""
+	}
+	return strings.TrimSpace(sourceURL[0:separatorIndex]), strings.TrimSpace(sourceURL[separatorIndex+1:])
 }

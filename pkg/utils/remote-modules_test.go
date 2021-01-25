@@ -172,3 +172,91 @@ func TestIsValidRemoteType(t *testing.T) {
 		})
 	}
 }
+
+func TestIsRemoteTypeTerraformRegistry(t *testing.T) {
+	type args struct {
+		remoteType string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "valid remote type terraform-registry",
+			args: args{
+				remoteType: "terraform-registry",
+			},
+			want: true,
+		},
+		{
+			name: "valid remote type terraform-registry in mixed case and space",
+			args: args{
+				remoteType: " TerraForm-Registry  ",
+			},
+			want: true,
+		},
+		{
+			name: "invalid remote type terraform-registry",
+			args: args{
+				remoteType: "terraformRegistry",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsRemoteTypeTerraformRegistry(tt.args.remoteType); got != tt.want {
+				t.Errorf("IsRemoteTypeTerraformRegistry() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetSourceAddrAndVersion(t *testing.T) {
+	testSourceURL := "terraform-aws-modules/eks/aws"
+	testVersion := "2.20.0"
+
+	type args struct {
+		sourceURL string
+	}
+	tests := []struct {
+		name        string
+		args        args
+		wantSource  string
+		wantVersion string
+	}{
+		{
+			name: "source address with version",
+			args: args{
+				sourceURL: testSourceURL + testVersion,
+			},
+			wantSource:  testSourceURL,
+			wantVersion: testVersion,
+		},
+		{
+			name: "source address without version",
+			args: args{
+				sourceURL: testSourceURL,
+			},
+			wantSource: testSourceURL,
+		},
+		{
+			name: "source address with empty version",
+			args: args{
+				sourceURL: testSourceURL + ": ",
+			},
+			wantSource: testSourceURL,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := GetSourceAddrAndVersion(tt.args.sourceURL)
+			if got != tt.wantSource {
+				t.Errorf("GetSourceAddrAndVersion() got source = %v, want %v", got, tt.wantSource)
+			}
+			if got1 != tt.wantVersion {
+				t.Errorf("GetSourceAddrAndVersion() got version = %v, want %v", got1, tt.wantVersion)
+			}
+		})
+	}
+}

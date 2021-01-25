@@ -22,6 +22,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/utils"
 	getter "github.com/hashicorp/go-getter"
+	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"go.uber.org/zap"
@@ -32,7 +33,7 @@ var (
 	ErrEmptyURLType      = fmt.Errorf("empty remote url and type")
 	ErrEmptyURLDest      = fmt.Errorf("remote url or destination dir path cannot be empty")
 	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or desitnation dir path")
-	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not support")
+	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not supported")
 )
 
 // NewGoGetter returns a new GoGetter struct
@@ -155,9 +156,21 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 		return "", ErrInvalidRemoteType
 	}
 
-	if utils.IsRegistrySourceAddr(remoteURL) {
-		module, _ := regsrc.ParseModuleSource(remoteURL)
-		return g.DownloadRemoteModule(configs.VersionConstraint{}, remoteURL, module)
+	if utils.IsRemoteTypeTerraformRegistry(remoteType) {
+		sourceAddr, ver := utils.GetSourceAddrAndVersion(remoteURL)
+		if utils.IsRegistrySourceAddr(sourceAddr) {
+			module, _ := regsrc.ParseModuleSource(sourceAddr)
+			versionConstraints := configs.VersionConstraint{}
+			if ver != "" {
+				versionConstraint, err := version.NewConstraint(ver)
+				if err != nil {
+					return "", err
+				}
+				versionConstraints.Required = versionConstraint
+			}
+			return g.DownloadRemoteModule(versionConstraints, destPath, module)
+		}
+		return "", fmt.Errorf("%s, is not a valid terraform registry", remoteURL)
 	}
 
 	URLWithType := fmt.Sprintf("%s::%s", remoteType, remoteURL)

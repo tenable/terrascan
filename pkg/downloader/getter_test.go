@@ -231,12 +231,20 @@ func TestDownloadWithType(t *testing.T) {
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
-			name:     "invalid url",
+			name:     "invalid remote type",
 			Type:     someType,
 			URL:      "github.com/some-url",
 			dest:     someDest,
 			wantDest: "",
-			wantErr:  fmt.Errorf("download not supported for scheme 'some-type'"),
+			wantErr:  ErrInvalidRemoteType,
+		},
+		{
+			name:     "valid remote type with invalid url",
+			Type:     "git",
+			URL:      "github.com/some-url",
+			dest:     someDest,
+			wantDest: "",
+			wantErr:  fmt.Errorf("GitHub URLs should be github.com/username/repo"),
 		},
 	}
 
