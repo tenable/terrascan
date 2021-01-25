@@ -14,13 +14,14 @@
     limitations under the License.
 */
 
-package commons
+package downloader
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
-	version "github.com/hashicorp/go-version"
+	"github.com/hashicorp/go-version"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry"
 	"github.com/hashicorp/terraform/registry/regsrc"
@@ -28,9 +29,55 @@ import (
 	"go.uber.org/zap"
 )
 
+// DownloadModule retrieves the package referenced in the given address
+// into the installation path and then returns the full path to any subdir
+// indicated in the address.
+func (g *GoGetter) DownloadModule(addr, destPath string) (string, error) {
+
+	// split url and subdir
+	URLWithType, subDir, err := g.GetURLSubDir(addr, destPath)
+	if err != nil {
+		return "", err
+	}
+
+	// check if the module has already been downloaded
+	if prevDir, exists := g.cache[URLWithType]; exists {
+		zap.S().Debugf("module %q already installed at %q", URLWithType, prevDir)
+		destPath = prevDir
+	} else {
+		destPath, err := g.Download(URLWithType, destPath)
+		if err != nil {
+			zap.S().Debugf("failed to download remote module. error: '%v'", err)
+			return "", err
+		}
+		// Remember where we installed this so we might reuse this directory
+		// on subsequent calls to avoid re-downloading.
+		g.cache[URLWithType] = destPath
+	}
+
+	// Our subDir string can contain wildcards until this point, so that
+	// e.g. a subDir of * can expand to one top-level directory in a .tar.gz
+	// archive. Now that we've expanded the archive successfully we must
+	// resolve that into a concrete path.
+	var finalDir string
+	if subDir != "" {
+		finalDir, err = g.SubDirGlob(destPath, subDir)
+		if err != nil {
+			return "", err
+		}
+		zap.S().Debugf("expanded %q to %q", subDir, finalDir)
+	} else {
+		finalDir = destPath
+	}
+
+	// If we got this far then we have apparently succeeded in downloading
+	// the requested object!
+	return filepath.Clean(finalDir), nil
+}
+
 // DownloadRemoteModule will download remote modules from public and private terraform registries
 // this function takes similar approach taken by terraform init for downloading terraform registry modules
-func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error) {
+func (g *GoGetter) DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error) {
 	// Terraform doesn't allow the hostname to contain Punycode
 	// module.SvcHost returns an error for such case
 	_, err := module.SvcHost()
@@ -68,7 +115,7 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 		return "", err
 	}
 
-	downloadLocation, err := r.DownloadModule(sourceLocation, destPath)
+	downloadLocation, err := g.DownloadModule(sourceLocation, destPath)
 	if err != nil {
 		zap.S().Errorf("error while downloading module: %s, with source location: %s", module.String(), sourceLocation)
 		return "", nil
@@ -80,6 +127,14 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 	}
 
 	return downloadLocation, nil
+}
+
+// CleanUp cleans up all the locally downloaded modules
+func (g *GoGetter) CleanUp() {
+	for url, path := range g.cache {
+		zap.S().Debugf("deleting %q installed at %q", url, path)
+		os.RemoveAll(path)
+	}
 }
 
 // helper func to compare and update the version

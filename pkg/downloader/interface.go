@@ -16,6 +16,11 @@
 
 package downloader
 
+import (
+	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/hashicorp/terraform/registry/regsrc"
+)
+
 // Downloader helps in downloading different kinds of modules from
 // different types of sources
 type Downloader interface {
@@ -23,6 +28,9 @@ type Downloader interface {
 	DownloadWithType(remoteType, url, dest string) (finalDir string, err error)
 	GetURLSubDir(url, dest string) (urlWithType string, subDir string, err error)
 	SubDirGlob(string, string) (string, error)
+	DownloadModule(addr, destPath string) (string, error)
+	DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error)
+	CleanUp()
 }
 
 // NewDownloader returns a new downloader

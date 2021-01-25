@@ -32,8 +32,10 @@ var (
 func TestNewGoGetter(t *testing.T) {
 	t.Run("new GoGetter", func(t *testing.T) {
 		var (
-			want = &GoGetter{}
-			got  = NewGoGetter()
+			want = &GoGetter{
+				cache: make(map[string]string),
+			}
+			got = NewGoGetter()
 		)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: '%v', want: '%v'", got, want)

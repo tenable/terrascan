@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package commons
+package downloader
 
 import (
 	"io/ioutil"
@@ -24,15 +24,40 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/utils"
-	version "github.com/hashicorp/go-version"
+	"github.com/hashicorp/go-version"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/hashicorp/terraform/registry/response"
 )
 
-func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
+func TestCleanUp(t *testing.T) {
+
+	t.Run("test cache clean up", func(t *testing.T) {
+
+		// create temp dir
+		tempDir, err := ioutil.TempDir("", "")
+		if err != nil {
+			t.Errorf("failed to create temp dir. error: '%v'", err)
+		}
+
+		// store temp dir into the installer cache
+		r := &GoGetter{
+			cache: map[string]string{"some-module": tempDir},
+		}
+
+		// run clean up, expect clean up to delete the temp dir
+		r.CleanUp()
+
+		// check if temp dir is deleted
+		_, err = os.Stat(tempDir)
+		if err == nil {
+			t.Errorf("clean up failed")
+		}
+	})
+}
+
+func TestDownloadRemoteModule(t *testing.T) {
 
 	// disable terraform logs when TF_LOG env variable is not set
 	if os.Getenv("TF_LOG") == "" {
@@ -46,8 +71,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 	testRawSubModuleName := "db_subnet_group"
 
 	type fields struct {
-		cache      InstalledCache
-		downloader downloader.Downloader
+		downloader Downloader
 	}
 	type args struct {
 		requiredVersion hclConfigs.VersionConstraint
@@ -65,8 +89,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with valid module and version",
 			fields: fields{
-				cache:      make(map[string]string),
-				downloader: downloader.NewDownloader(),
+				downloader: NewDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{
@@ -78,8 +101,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with valid module, without version",
 			fields: fields{
-				cache:      make(map[string]string),
-				downloader: downloader.NewDownloader(),
+				downloader: NewDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -89,8 +111,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with invalid module source",
 			fields: fields{
-				cache:      make(map[string]string),
-				downloader: downloader.NewDownloader(),
+				downloader: NewDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -101,8 +122,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with raw sub module",
 			fields: fields{
-				cache:      make(map[string]string),
-				downloader: downloader.NewDownloader(),
+				downloader: NewDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -114,10 +134,6 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := &RemoteModuleInstaller{
-				cache:      tt.fields.cache,
-				downloader: tt.fields.downloader,
-			}
 			testDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 			tt.want = testDir
 			if tt.wantErr {
@@ -129,7 +145,7 @@ func TestRemoteModuleInstallerDownloadRemoteModule(t *testing.T) {
 			}
 
 			defer os.RemoveAll(testDir)
-			got, err := r.DownloadRemoteModule(tt.args.requiredVersion, testDir, tt.args.module)
+			got, err := tt.fields.downloader.DownloadRemoteModule(tt.args.requiredVersion, testDir, tt.args.module)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("RemoteModuleInstaller.DownloadRemoteModule() got error = %v, wantErr %v", err, tt.wantErr)
 				return

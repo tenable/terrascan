@@ -22,7 +22,9 @@ import (
 )
 
 // GoGetter implements the Downloader interface
-type GoGetter struct{}
+type GoGetter struct {
+	cache InstalledCache
+}
 
 // list of supported detectors
 var goGetterDetectors = []getter.Detector{
@@ -71,3 +73,11 @@ var getterHTTPGetter = &getter.HttpGetter{
 	Client: getterHTTPClient,
 	Netrc:  true,
 }
+
+// InstalledCache remembers the final resolved addresses of all the sources
+// already downloaded.
+//
+// The keys in InstalledCache are resolved and trimmed source addresses
+// (with a scheme always present, and without any "subdir" component),
+// and the values are the paths where each source was previously installed.
+type InstalledCache map[string]string
