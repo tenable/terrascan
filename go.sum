@@ -572,6 +572,7 @@ github.com/hashicorp/serf v0.0.0-20160124182025-e4ec8cc423bb/go.mod h1:h/Ru6tmZa
 github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/JwenrHc=
 github.com/hashicorp/terraform v0.14.4 h1:PZFImSTFl3cSxbefHOvEvId2l4I+ozwceLr0t9ka658=
 github.com/hashicorp/terraform v0.14.4/go.mod h1:q7VVurTsAQV89N/1TaaDIKWnvPbBI/4x0ob+vcHpFrQ=
+github.com/hashicorp/terraform v0.14.5/go.mod h1:DfimDncvShwtT6by5OzM5GZQObjHHk5XxKqqMDQ4uKg=
 github.com/hashicorp/terraform-config-inspect v0.0.0-20191212124732-c6ae6269b9d7/go.mod h1:p+ivJws3dpqbp1iP84+npOyAmTTOLMgCzrXd3GSdn/A=
 github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734 h1:HKLsbzeOsfXmKNpr3GiT18XAblV0BjCbzL8KQAMZGa0=
 github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734/go.mod h1:kNDNcF7sN4DocDLBkQYz73HGKwN1ANB1blq4lIYLYvg=
