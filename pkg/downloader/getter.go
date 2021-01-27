@@ -36,16 +36,14 @@ var (
 	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not supported")
 )
 
-// NewGoGetter returns a new GoGetter struct
-func NewGoGetter() *GoGetter {
-	return &GoGetter{
-		cache: make(map[string]string),
-	}
+// newGoGetter returns a new GoGetter struct
+func newGoGetter() *goGetter {
+	return &goGetter{}
 }
 
 // GetURLSubDir returns the download URL with it's respective type prefix
 // along with subDir path, if present.
-func (g *GoGetter) GetURLSubDir(remoteURL, destPath string) (string, string, error) {
+func (g *goGetter) GetURLSubDir(remoteURL, destPath string) (string, string, error) {
 
 	// get subDir, if present
 	repoURL, subDir := SplitAddrSubdir(remoteURL)
@@ -76,7 +74,7 @@ func (g *GoGetter) GetURLSubDir(remoteURL, destPath string) (string, string, err
 // Download retrieves the remote repository referenced in the given remoteURL
 // into the destination path and then returns the full path to any subdir
 // indicated in the URL
-func (g *GoGetter) Download(remoteURL, destPath string) (string, error) {
+func (g *goGetter) Download(remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote url: %q, destination dir: %q",
 		remoteURL, destPath)
@@ -134,7 +132,7 @@ func (g *GoGetter) Download(remoteURL, destPath string) (string, error) {
 //
 // DownloadWithType enforces download type on go-getter to get rid of any
 // ambiguities in remoteURL
-func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
+func (g *goGetter) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote type: %q, remote URL: %q, destination dir: %q",
 		remoteType, remoteURL, destPath)
@@ -168,7 +166,7 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 				}
 				versionConstraints.Required = versionConstraint
 			}
-			return g.DownloadRemoteModule(versionConstraints, destPath, module)
+			return NewRemoteDownloader().DownloadRemoteModule(versionConstraints, destPath, module)
 		}
 		return "", fmt.Errorf("%s, is not a valid terraform registry", remoteURL)
 	}
@@ -180,7 +178,7 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 }
 
 // SubDirGlob returns the actual subdir with globbing processed
-func (g *GoGetter) SubDirGlob(destPath, subDir string) (string, error) {
+func (g *goGetter) SubDirGlob(destPath, subDir string) (string, error) {
 	return getter.SubdirGlob(destPath, subDir)
 }
 

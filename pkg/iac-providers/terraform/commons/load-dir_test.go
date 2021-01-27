@@ -91,7 +91,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 		req            *hclConfigs.ModuleRequest
 		remoteModPaths map[string]string
 		tempDir        string
-		d              downloader.Downloader
+		m              downloader.ModuleDownloader
 	}
 	tests := []struct {
 		name    string
@@ -107,7 +107,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 				},
 				remoteModPaths: make(map[string]string),
 				tempDir:        generateTempDir(),
-				d:              downloader.NewDownloader(),
+				m:              downloader.NewRemoteDownloader(),
 			},
 			wantErr: true,
 		},
@@ -119,7 +119,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 				},
 				remoteModPaths: make(map[string]string),
 				tempDir:        testTempDir,
-				d:              downloader.NewDownloader(),
+				m:              downloader.NewRemoteDownloader(),
 			},
 			want: testTempDir,
 		},
@@ -127,7 +127,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			got, err := processTerraformRegistrySource(tt.args.req, tt.args.remoteModPaths, tt.args.tempDir, tt.args.d)
+			got, err := processTerraformRegistrySource(tt.args.req, tt.args.remoteModPaths, tt.args.tempDir, tt.args.m)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
 				return

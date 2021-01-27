@@ -21,10 +21,8 @@ import (
 	getter "github.com/hashicorp/go-getter"
 )
 
-// GoGetter implements the Downloader interface
-type GoGetter struct {
-	cache InstalledCache
-}
+// goGetter implements the Downloader interface
+type goGetter struct{}
 
 // list of supported detectors
 var goGetterDetectors = []getter.Detector{
@@ -74,10 +72,19 @@ var getterHTTPGetter = &getter.HttpGetter{
 	Netrc:  true,
 }
 
-// InstalledCache remembers the final resolved addresses of all the sources
+// installedCache remembers the final resolved addresses of all the sources
 // already downloaded.
 //
 // The keys in InstalledCache are resolved and trimmed source addresses
 // (with a scheme always present, and without any "subdir" component),
 // and the values are the paths where each source was previously installed.
-type InstalledCache map[string]string
+type installedCache map[string]string
+
+// RemoteModuleInstaller helps in downloading remote modules, it also maintains a
+// cache of all the installed modules and their respective resolved addresses
+// (URL)
+type remoteModuleInstaller struct {
+	cache      installedCache
+	downloader Downloader
+	terraformRegistryClient
+}

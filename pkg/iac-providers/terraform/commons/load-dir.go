@@ -76,8 +76,8 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	}
 
 	// create a new downloader to install remote modules
-	d := downloader.NewDownloader()
-	defer d.CleanUp()
+	r := downloader.NewRemoteDownloader()
+	defer r.CleanUp()
 
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
 	// descendant modules from the root module and create a unified
@@ -97,7 +97,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 				// temp dir to download the remote repo
 				tempDir := generateTempDir()
 
-				pathToModule, err = processTerraformRegistrySource(req, remoteModPaths, tempDir, d)
+				pathToModule, err = processTerraformRegistrySource(req, remoteModPaths, tempDir, r)
 				if err != nil {
 					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
 				}
@@ -106,7 +106,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 				tempDir := generateTempDir()
 
 				// Download remote module
-				pathToModule, err = d.DownloadModule(req.SourceAddr, tempDir)
+				pathToModule, err = r.DownloadModule(req.SourceAddr, tempDir)
 				if err != nil {
 					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
 				}
@@ -224,12 +224,12 @@ func processLocalSource(req *hclConfigs.ModuleRequest, remoteModPaths map[string
 	return pathToModule
 }
 
-func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, tempDir string, d downloader.Downloader) (string, error) {
+func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, tempDir string, m downloader.ModuleDownloader) (string, error) {
 	// regsrc.ParseModuleSource func returns a terraform registry module source
 	// error check is not required as the source address is already validated
 	module, _ := regsrc.ParseModuleSource(req.SourceAddr)
 
-	pathToModule, err := d.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
+	pathToModule, err := m.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
 	if err != nil {
 		return pathToModule, err
 	}

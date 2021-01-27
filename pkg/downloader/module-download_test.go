@@ -17,6 +17,7 @@
 package downloader
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -31,6 +32,182 @@ import (
 	"github.com/hashicorp/terraform/registry/response"
 )
 
+var (
+	someAddr = "some-address"
+)
+
+// MockDownloader mocks the downloader.Downloader interface
+type MockDownloader struct {
+	output          string
+	subDir          string
+	errDownload     error
+	errGetURLSubDir error
+	errSubDirGlob   error
+}
+
+// Download mock method
+func (m *MockDownloader) Download(url, destDir string) (string, error) {
+	return m.output, m.errDownload
+}
+
+// DownloadWithType mock method
+func (m *MockDownloader) DownloadWithType(remoteType, url, destDir string) (string, error) {
+	return m.output, m.errDownload
+}
+
+// GetURLSubDir mock method
+func (m *MockDownloader) GetURLSubDir(url, destDir string) (string, string, error) {
+	return m.output, m.subDir, m.errGetURLSubDir
+}
+
+// SubDirGlob mock method
+func (m *MockDownloader) SubDirGlob(destDir, subDir string) (string, error) {
+	return m.output, m.errSubDirGlob
+}
+
+// terraformRegistryClientMocks is a mock implementation of terraform registry client
+type MockTerraformRegistryClient struct {
+	location       string
+	moduleVersions *response.ModuleVersions
+	versionError   error
+	locationError  error
+}
+
+// ModuleVersions mock method
+func (t *MockTerraformRegistryClient) ModuleVersions(module *regsrc.Module) (*response.ModuleVersions, error) {
+	if t.versionError != nil {
+		return nil, t.versionError
+	}
+	return t.moduleVersions, nil
+}
+
+// ModuleLocation mock method
+func (t *MockTerraformRegistryClient) ModuleLocation(module *regsrc.Module, version string) (string, error) {
+	if t.locationError != nil {
+		return "", t.locationError
+	}
+	return t.location, nil
+}
+
+func TestDownloadModule(t *testing.T) {
+
+	var (
+		wantOutput string = "want-output"
+		wantSubDir string = "want-subdir"
+		wantErr    error  = fmt.Errorf("want-error")
+		wantNoErr  error  = nil
+	)
+
+	table := []struct {
+		name       string
+		addr       string
+		dest       string
+		wantOutput string
+		wantSubDir string
+		wantErr    error
+		r          *remoteModuleInstaller
+	}{
+		{
+			name:       "GetURLSubDir error",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: "",
+			wantErr:    wantErr,
+			r: &remoteModuleInstaller{
+				cache: make(map[string]string),
+				downloader: &MockDownloader{
+					output:          wantOutput,
+					subDir:          wantSubDir,
+					errGetURLSubDir: wantErr,
+				},
+			},
+		},
+		{
+			name:       "Download error",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: "",
+			wantErr:    wantErr,
+			r: &remoteModuleInstaller{
+				cache: make(map[string]string),
+				downloader: &MockDownloader{
+					output:      wantOutput,
+					subDir:      wantSubDir,
+					errDownload: wantErr,
+				},
+			},
+		},
+		{
+			name:       "SubDirGlob error",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: "",
+			wantErr:    wantErr,
+			r: &remoteModuleInstaller{
+				cache: make(map[string]string),
+				downloader: &MockDownloader{
+					output:        wantOutput,
+					subDir:        wantSubDir,
+					errSubDirGlob: wantErr,
+				},
+			},
+		},
+		{
+			name:       "no error",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: wantOutput,
+			wantErr:    wantNoErr,
+			r: &remoteModuleInstaller{
+				cache: make(map[string]string),
+				downloader: &MockDownloader{
+					output: wantOutput,
+					subDir: wantSubDir,
+				},
+			},
+		},
+		{
+			name:       "cache test",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: wantOutput,
+			wantErr:    wantNoErr,
+			r: &remoteModuleInstaller{
+				cache: map[string]string{wantOutput: "some-cache"},
+				downloader: &MockDownloader{
+					output: wantOutput,
+					subDir: wantSubDir,
+				},
+			},
+		},
+		{
+			name:       "no subdir",
+			addr:       someAddr,
+			dest:       someDest,
+			wantOutput: someDest,
+			wantErr:    wantNoErr,
+			r: &remoteModuleInstaller{
+				cache: make(map[string]string),
+				downloader: &MockDownloader{
+					output: wantOutput,
+				},
+			},
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			gotOutput, gotErr := tt.r.DownloadModule(tt.addr, tt.dest)
+			if !reflect.DeepEqual(gotOutput, tt.wantOutput) {
+				t.Errorf("output got: '%v', want: '%v'", gotOutput, tt.wantOutput)
+			}
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestCleanUp(t *testing.T) {
 
 	t.Run("test cache clean up", func(t *testing.T) {
@@ -42,7 +219,7 @@ func TestCleanUp(t *testing.T) {
 		}
 
 		// store temp dir into the installer cache
-		r := &GoGetter{
+		r := &remoteModuleInstaller{
 			cache: map[string]string{"some-module": tempDir},
 		}
 
@@ -69,9 +246,25 @@ func TestDownloadRemoteModule(t *testing.T) {
 	testModuleInvalidProvider, _ := regsrc.ParseModuleSource("terraform-aws-modules/testgroup/testprovider")
 	testModuleRdsWithRawSubModule, _ := regsrc.ParseModuleSource("terraform-aws-modules/security-group/aws//db_subnet_group")
 	testRawSubModuleName := "db_subnet_group"
+	testModuleVersions := []*response.ModuleProviderVersions{
+		{
+			Source: "source",
+			Versions: []*response.ModuleVersion{
+				{
+					Version: "12.3.1",
+				},
+			},
+		},
+	}
+	testNoModuleVersions := []*response.ModuleProviderVersions{
+		{
+			Source:   "no version",
+			Versions: []*response.ModuleVersion{},
+		},
+	}
 
 	type fields struct {
-		downloader Downloader
+		moduleDownloader ModuleDownloader
 	}
 	type args struct {
 		requiredVersion hclConfigs.VersionConstraint
@@ -89,7 +282,7 @@ func TestDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with valid module and version",
 			fields: fields{
-				downloader: NewDownloader(),
+				moduleDownloader: NewRemoteDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{
@@ -101,7 +294,7 @@ func TestDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with valid module, without version",
 			fields: fields{
-				downloader: NewDownloader(),
+				moduleDownloader: NewRemoteDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -111,7 +304,7 @@ func TestDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with invalid module source",
 			fields: fields{
-				downloader: NewDownloader(),
+				moduleDownloader: NewRemoteDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -122,7 +315,7 @@ func TestDownloadRemoteModule(t *testing.T) {
 		{
 			name: "remote module download with raw sub module",
 			fields: fields{
-				downloader: NewDownloader(),
+				moduleDownloader: NewRemoteDownloader(),
 			},
 			args: args{
 				requiredVersion: hclConfigs.VersionConstraint{},
@@ -130,6 +323,84 @@ func TestDownloadRemoteModule(t *testing.T) {
 			},
 			hasRawSubModule: true,
 			rawSubModule:    testRawSubModuleName,
+		},
+		{
+			name: "error while getting module versions",
+			fields: fields{
+				moduleDownloader: &remoteModuleInstaller{
+					cache:      make(map[string]string),
+					downloader: &MockDownloader{},
+					terraformRegistryClient: &MockTerraformRegistryClient{
+						versionError: fmt.Errorf("Error while getting versions"),
+					},
+				},
+			},
+			args: args{
+				requiredVersion: hclConfigs.VersionConstraint{},
+				module:          testModuleSecurityGroup,
+			},
+			wantErr: true,
+		},
+		{
+			name: "no versions available to download",
+			fields: fields{
+				moduleDownloader: &remoteModuleInstaller{
+					cache:      make(map[string]string),
+					downloader: &MockDownloader{},
+					terraformRegistryClient: &MockTerraformRegistryClient{
+						moduleVersions: &response.ModuleVersions{
+							Modules: testNoModuleVersions,
+						},
+					},
+				},
+			},
+			args: args{
+				requiredVersion: hclConfigs.VersionConstraint{},
+				module:          testModuleSecurityGroup,
+			},
+			wantErr: true,
+		},
+		{
+			name: "error while getting module location",
+			fields: fields{
+				moduleDownloader: &remoteModuleInstaller{
+					cache:      make(map[string]string),
+					downloader: &MockDownloader{},
+					terraformRegistryClient: &MockTerraformRegistryClient{
+						moduleVersions: &response.ModuleVersions{
+							Modules: testModuleVersions,
+						},
+						locationError: fmt.Errorf("Error getting module location"),
+					},
+				},
+			},
+			args: args{
+				requiredVersion: hclConfigs.VersionConstraint{},
+				module:          testModuleSecurityGroup,
+			},
+			wantErr: true,
+		},
+		{
+			name: "error while downloading module",
+			fields: fields{
+				moduleDownloader: &remoteModuleInstaller{
+					cache: make(map[string]string),
+					downloader: &MockDownloader{
+						errGetURLSubDir: fmt.Errorf("Error in download"),
+					},
+					terraformRegistryClient: &MockTerraformRegistryClient{
+						moduleVersions: &response.ModuleVersions{
+							Modules: testModuleVersions,
+						},
+						location: "test",
+					},
+				},
+			},
+			args: args{
+				requiredVersion: hclConfigs.VersionConstraint{},
+				module:          testModuleSecurityGroup,
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
@@ -145,7 +416,7 @@ func TestDownloadRemoteModule(t *testing.T) {
 			}
 
 			defer os.RemoveAll(testDir)
-			got, err := tt.fields.downloader.DownloadRemoteModule(tt.args.requiredVersion, testDir, tt.args.module)
+			got, err := tt.fields.moduleDownloader.DownloadRemoteModule(tt.args.requiredVersion, testDir, tt.args.module)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("RemoteModuleInstaller.DownloadRemoteModule() got error = %v, wantErr %v", err, tt.wantErr)
 				return
