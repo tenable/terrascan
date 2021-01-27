@@ -75,7 +75,7 @@ func (e *Executor) Init() error {
 	}
 
 	// read config file and update scan and skip rules
-	if err := e.initRules(); err != nil {
+	if err := e.initRulesAndSeverity(); err != nil {
 		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
 		return err
 	}

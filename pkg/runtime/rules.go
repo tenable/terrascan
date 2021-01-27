@@ -6,7 +6,7 @@ import (
 )
 
 // read the config file and update scan and skip rules
-func (e *Executor) initRules() error {
+func (e *Executor) initRulesAndSeverity() error {
 	if e.configFile == "" {
 		return nil
 	}
@@ -25,6 +25,11 @@ func (e *Executor) initRules() error {
 	// append skip rules
 	if len(configReader.GetRules().SkipRules) > 0 {
 		e.skipRules = append(e.skipRules, configReader.GetRules().SkipRules...)
+	}
+
+	// specify severity of violations to be reported
+	if len(configReader.GetSeverity().Level) > 0 {
+		e.severity = configReader.GetSeverity().Level
 	}
 	return nil
 }

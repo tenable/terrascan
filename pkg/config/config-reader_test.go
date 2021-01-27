@@ -39,9 +39,12 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		SkipRules: []string{"rule.1"},
 	}
 
+	highSeverity := Severity{Level: "high"}
+
 	type args struct {
 		fileName string
 	}
+
 	tests := []struct {
 		name          string
 		args          args
@@ -98,6 +101,28 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 						"webhook1": testNotifier,
 					},
 					Rules: testRules,
+				},
+			},
+			assertGetters: true,
+			notifications: map[string]Notifier{
+				"webhook1": testNotifier,
+			},
+			Policy: testPolicy,
+			Rules:  testRules,
+		},
+		{
+			name: "valid toml config file with all fields and severity defined",
+			args: args{
+				fileName: "testdata/terrascan-config-severity.toml",
+			},
+			want: &TerrascanConfigReader{
+				config: TerrascanConfig{
+					Policy: testPolicy,
+					Notifications: map[string]Notifier{
+						"webhook1": testNotifier,
+					},
+					Rules:    testRules,
+					Severity: highSeverity,
 				},
 			},
 			assertGetters: true,
