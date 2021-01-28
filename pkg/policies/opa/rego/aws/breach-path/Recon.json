@@ -1,0 +1,12 @@
+{
+    "name": "recon",
+    "file": "recon.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Instance exposed to Internet --> Reconnaissance",
+    "reference_id": "AWS.VPC.Logging.Medium.0470",
+    "category": "Infrastructure Security",
+    "version": 2
+}
