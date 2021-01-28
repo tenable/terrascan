@@ -12,3 +12,8 @@ check(cmds) {
     {{.presence}} contains(cmd, "{{.param}}")
     {{.optional}}
 }
+
+{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+    pod := input.kubernetes_pod[_]
+    cmds := pod.config.spec.containers[_].imagePullPolicy != "Always"
+}
