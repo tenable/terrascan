@@ -6,7 +6,7 @@ import (
 )
 
 // read the config file and update scan and skip rules
-func (e *Executor) initRulesAndSeverity() error {
+func (e *Executor) initRulesAndCategories() error {
 	if e.configFile == "" {
 		return nil
 	}
@@ -28,8 +28,8 @@ func (e *Executor) initRulesAndSeverity() error {
 	}
 
 	// specify severity of violations to be reported
-	if len(configReader.GetSeverity().Level) > 0 {
-		e.severity = configReader.GetSeverity().Level
+	if len(configReader.GetCategories()) > 0 {
+		e.categories = configReader.GetCategories()
 	}
 	return nil
 }

@@ -9,16 +9,16 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 		configFile string
 		scanRules  []string
 		skipRules  []string
-		severity   string
+		categories []string
 	}
 	tests := []struct {
-		name         string
-		fields       fields
-		wantErr      bool
-		assert       bool
-		lenScanRules int
-		lenSkipRules int
-		severity     string
+		name          string
+		fields        fields
+		wantErr       bool
+		assert        bool
+		lenScanRules  int
+		lenSkipRules  int
+		lenCategories int
 	}{
 		{
 			name:   "no config file",
@@ -60,7 +60,7 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 				configFile: "testdata/scan-skip-rules-low-severity.toml",
 				scanRules:  []string{"testRuleA", "testRuleB"},
 				skipRules:  []string{"testRuleC"},
-				severity:   "low",
+				categories: []string{},
 			},
 			assert:       true,
 			lenScanRules: 4,
@@ -95,12 +95,12 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 				scanRules:  tt.fields.scanRules,
 				skipRules:  tt.fields.skipRules,
 			}
-			if err := e.initRulesAndSeverity(); (err != nil) != tt.wantErr {
-				t.Errorf("Executor.initRulesAndSeverity() error = %v, wantErr %v", err, tt.wantErr)
+			if err := e.initRulesAndCategories(); (err != nil) != tt.wantErr {
+				t.Errorf("Executor.initRulesAndCategories() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.assert {
-				if len(e.scanRules) != tt.lenScanRules && len(e.skipRules) != tt.lenSkipRules && e.severity != tt.severity {
-					t.Errorf("Executor.initRulesAndSeverity() expected scanRules: %d , skipRules: %d & severity : %s, got scanRules: %d , skipRules: %d and severity: %s", tt.lenScanRules, tt.lenSkipRules, tt.severity, len(e.scanRules), len(e.skipRules), e.severity)
+				if len(e.scanRules) != tt.lenScanRules && len(e.skipRules) != tt.lenSkipRules && e.categories != tt.lenCategories {
+					t.Errorf("Executor.initRulesAndCategories() expected scanRules: %d , skipRules: %d & categories : %d, got scanRules: %d , skipRules: %d and categories: %d", tt.lenScanRules, tt.lenSkipRules, tt.lenCategories, len(e.scanRules), len(e.skipRules), len(e.categories))
 				}
 			}
 		})

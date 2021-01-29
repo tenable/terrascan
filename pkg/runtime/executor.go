@@ -39,11 +39,11 @@ type Executor struct {
 	iacProvider   iacProvider.IacProvider
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
-	severity      string
+	categories    []string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string, severity string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules, categories []string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -54,7 +54,7 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		configFile: configFile,
 		scanRules:  scanRules,
 		skipRules:  skipRules,
-		severity:   severity,
+		categories: categories,
 	}
 
 	// initialize executor
@@ -75,7 +75,7 @@ func (e *Executor) Init() error {
 	}
 
 	// read config file and update scan and skip rules
-	if err := e.initRulesAndSeverity(); err != nil {
+	if err := e.initRulesAndCategories(); err != nil {
 		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
 		return err
 	}
@@ -108,7 +108,7 @@ func (e *Executor) Init() error {
 		}
 
 		// initialize the engine
-		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.severity); err != nil {
+		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.categories); err != nil {
 			zap.S().Errorf("%s", err)
 			return err
 		}

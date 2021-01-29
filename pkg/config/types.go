@@ -24,12 +24,12 @@ type TerrascanConfig struct {
 	Policy        `toml:"policy,omitempty"`
 	Notifications map[string]Notifier `toml:"notifications,omitempty"`
 	Rules         `toml:"rules,omitempty"`
-	Severity      `toml:"severity,omitempty"`
+	Category      `toml:"category,omitempty"`
 }
 
-// Severity defines the minimum level of severity of violations that you want to be reported
-type Severity struct {
-	Level string `toml:"level"`
+// Category defines the categories of violations that you want to be reported
+type Category struct {
+	list []string `toml:"list"`
 }
 
 // Policy struct defines policy specific configurations

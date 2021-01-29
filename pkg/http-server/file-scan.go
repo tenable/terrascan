@@ -25,7 +25,6 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
@@ -41,6 +40,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		cloudType  = strings.Split(params["cloud"], ",")
 		scanRules  = []string{}
 		skipRules  = []string{}
+		categories = []string{}
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -90,8 +90,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
 
-	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
-	severity := r.FormValue("severity")
+	// categories is the list categories of violations that the user want to get informed about: low, medium or high
+	categoriesValue := r.FormValue("categories")
 
 	if scanRulesValue != "" {
 		scanRules = strings.Split(scanRulesValue, ",")
@@ -101,18 +101,18 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules = strings.Split(skipRulesValue, ",")
 	}
 
-	if severity != "" {
-		severity = utils.EnsureUpperCaseTrimmed(severity)
+	if categoriesValue != "" {
+		categories = strings.Split(categoriesValue, ",")
 	}
 
 	// create a new runtime executor for scanning the uploaded file
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, severity)
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{}, scanRules, skipRules, severity)
+			tempFile.Name(), "", "", []string{}, scanRules, skipRules, categories)
 	}
 	if err != nil {
 		zap.S().Error(err)

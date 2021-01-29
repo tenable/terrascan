@@ -83,7 +83,7 @@ func (r TerrascanConfigReader) GetRules() Rules {
 	return r.config.Rules
 }
 
-// GetSeverity will return the level of severity specified in the terrascan config file
-func (r TerrascanConfigReader) GetSeverity() Severity {
-	return r.config.Severity
+// GetCategories will return the list of categories specified in the terrascan config file
+func (r TerrascanConfigReader) GetCategories() []string {
+	return r.config.Category.list
 }

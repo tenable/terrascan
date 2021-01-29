@@ -103,10 +103,10 @@ func (e *Executor) ValidateInputs() error {
 	}
 	zap.S().Debugf("using policy path %v", e.policyPath)
 
-	if len(e.severity) > 0 && !utils.ValidateSeverityInput(e.severity) {
+	if len(e.categories) > 0 && !utils.ValidateCategoryInput(e.categories) {
 		return errSeverityNotSupported
 	}
-	zap.S().Debugf("using severity level %v", e.severity)
+	zap.S().Debugf("using categories %v", e.categories)
 
 	// successful
 	zap.S().Debug("input validation successful")

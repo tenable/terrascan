@@ -39,7 +39,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		SkipRules: []string{"rule.1"},
 	}
 
-	highSeverity := Severity{Level: "high"}
+	categoryList := Category{list: []string{"Infrastructure Security"}}
 
 	type args struct {
 		fileName string
@@ -122,7 +122,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 						"webhook1": testNotifier,
 					},
 					Rules:    testRules,
-					Severity: highSeverity,
+					Category: categoryList,
 				},
 			},
 			assertGetters: true,

@@ -81,8 +81,9 @@ type ScanOptions struct {
 	// SkipRules is the array of rules to skip while scanning
 	skipRules []string
 
-	// severity is the level of severity of policy violations that should be reported
-	severity string
+	// categories is the array categories of policy violations that should be reported
+	categories []string
+
 	// Verbose indicates whether to display all fields in default human readlbe output
 	Verbose bool
 }
@@ -169,7 +170,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath, s.scanRules, s.skipRules, s.severity)
+		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath, s.scanRules, s.skipRules, s.categories)
 	if err != nil {
 		return err
 	}

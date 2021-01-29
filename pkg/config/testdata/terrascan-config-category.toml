@@ -22,5 +22,8 @@ skip-rules = [
     "rule.1"
 ]
 
-[severity]
-level = "high"
+[category]
+list = [
+    "category.1",
+    "category.2",
+]

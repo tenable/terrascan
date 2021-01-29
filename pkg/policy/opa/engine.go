@@ -243,7 +243,7 @@ func (e *Engine) CompileRegoFiles() error {
 
 // Init initializes the Opa engine
 // Handles loading all rules, filtering, compiling, and preparing for evaluation
-func (e *Engine) Init(policyPath string, scanRules, skipRules []string, severity string) error {
+func (e *Engine) Init(policyPath string, scanRules, skipRules, categories []string) error {
 	e.context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
@@ -252,7 +252,7 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules []string, severity
 	}
 
 	// before compiling the rego files, filter the rules based on scan and skip rules, and severity level supplied
-	e.FilterRules(policyPath, scanRules, skipRules, severity)
+	e.FilterRules(policyPath, scanRules, skipRules, categories)
 
 	// update the rule count
 	e.stats.ruleCount = len(e.regoDataMap)
@@ -420,7 +420,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 }
 
 // FilterRules will apply the scan and skip rules, and severity level
-func (e *Engine) FilterRules(policyPath string, scanRules, skipRules []string, severity string) {
+func (e *Engine) FilterRules(policyPath string, scanRules, skipRules, categories []string) {
 	// apply scan rules
 	if len(scanRules) > 0 {
 		e.filterScanRules(policyPath, scanRules)
@@ -431,8 +431,8 @@ func (e *Engine) FilterRules(policyPath string, scanRules, skipRules []string, s
 		e.filterSkipRules(policyPath, skipRules)
 	}
 
-	if len(severity) > 0 {
-		e.filterBySeverity(policyPath, severity)
+	if len(categories) > 0 {
+		e.filterByCategories(policyPath, categories)
 	}
 }
 
@@ -470,18 +470,18 @@ func (e *Engine) filterSkipRules(policyPath string, skipRules []string) {
 	}
 }
 
-func (e *Engine) filterBySeverity(policyPath string, severity string) {
+func (e *Engine) filterByCategories(policyPath string, categories []string) {
 
 	// temporary map to store data from original rego data map
 	tempMap := make(map[string]*RegoData)
 	for ruleID, regoData := range e.regoDataMap {
 
-		if utils.CheckSeverity(regoData.Metadata.Severity, severity) {
+		if utils.CheckCategory(regoData.Metadata.Category, categories) {
 			tempMap[ruleID] = regoData
 		}
 	}
 	if len(tempMap) == 0 {
-		zap.S().Warnf("policy path: %s, doesn't have any rule matching the severity level : %s", policyPath, severity)
+		zap.S().Warnf("policy path: %s, doesn't have any rule matching the categories : %v", policyPath, categories)
 	}
 
 	// the regoDataMap should only contain regoData for required minimum severity level
