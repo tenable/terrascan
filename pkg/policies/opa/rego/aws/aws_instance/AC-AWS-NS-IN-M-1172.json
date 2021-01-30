@@ -3,7 +3,7 @@
     "file": "ec2UsingIMDSv1.rego",
     "template_args": null,
     "severity": "MEDIUM",
-    "description": "EC2 instances should disable IMDS or require IMDSv2",
+    "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
     "reference_id": "AC-AWS-NS-IN-M-1172",
     "category": "Network Security",
     "version": 1
