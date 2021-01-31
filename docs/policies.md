@@ -15,7 +15,7 @@ In a future enhancement, Terrascan will have a better way to ignore individual p
 
 ## Adding policies
 
-For each policy there are 2 files required by Terrascan, a rule `.json` file with metada for the policy and a `.opa` [rego](https://www.openpolicyagent.org/docs/latest/policy-language/) file.
+For each policy there are 2 files required by Terrascan, a rule `.json` file with metadata for the policy and a `.opa` [rego](https://www.openpolicyagent.org/docs/latest/policy-language/) file for the policy itself.
 
 ### Writing an OPA rego policy file
 The input for the rego policies is the normalized input from the IaC provider. When writing policies you can obtain this as a normalized `.json` by using the `--config-only` flag of the scan command in combination with `-o json`. Let's use this Terraform HCL file for example:
