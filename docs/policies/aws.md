@@ -256,7 +256,7 @@
 ### aws_redshift_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | Redshift | HIGH | Ensure Redshift clusters are not publicly accessible to minimise security risks. | AWS.Redshift.NetworkSecurity.HIGH.0564 |
+| Network Security | Redshift | HIGH | Ensure Redshift clusters are not publicly accessible to minimize security risks. | AWS.Redshift.NetworkSecurity.HIGH.0564 |
 | Logging | Redshift | MEDIUM | Ensure audit logging is enabled for Redshift clusters for security and troubleshooting purposes. | AWS.Redshift.Logging.Medium.0565 |
 | Encryption and Key Management | Redshift | HIGH | Use customer-managed KMS keys instead of AWS-managed keys, to have granular control over encrypting and encrypting data. Encrypt Redshift clusters with a Customer-managed KMS key. This is a recommended best practice. | AWS.Redshift.EncryptionandKeyManagement.High.0415 |
 

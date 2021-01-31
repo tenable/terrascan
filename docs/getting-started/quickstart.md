@@ -58,7 +58,7 @@ $ cd KaiMonkey/terraform/aws
 $ terrascan scan
 ```
 
-By default Terrascan will output its findings in human friendy format:
+By default Terrascan will output its findings in human friendly format:
 
 ``` sh
 Violation Details -
