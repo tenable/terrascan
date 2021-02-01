@@ -96,6 +96,7 @@ func (r *remoteModuleInstaller) DownloadModule(addr, destPath string) (string, e
 // this function takes similar approach taken by terraform init for downloading terraform registry modules
 func (r *remoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error) {
 	// Terraform doesn't allow the hostname to contain Punycode
+	// for more information on Punycode refer https://en.wikipedia.org/wiki/Punycode
 	// module.SvcHost returns an error for such case
 	_, err := module.SvcHost()
 	if err != nil {

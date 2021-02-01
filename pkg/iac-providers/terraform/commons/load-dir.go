@@ -89,11 +89,11 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 
 			// figure out path sub module directory, if it's remote then download it locally
 			var pathToModule string
-			if utils.IsLocalSourceAddr(req.SourceAddr) {
+			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 
 				pathToModule = processLocalSource(req, remoteModPaths, absRootDir)
 				zap.S().Debugf("processing local module %q", pathToModule)
-			} else if utils.IsRegistrySourceAddr(req.SourceAddr) {
+			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
 				// temp dir to download the remote repo
 				tempDir := generateTempDir()
 
@@ -213,7 +213,7 @@ func processLocalSource(req *hclConfigs.ModuleRequest, remoteModPaths map[string
 	for remoteSourceAddr, downloadPath := range remoteModPaths {
 		if strings.Contains(pathToModule, remoteSourceAddr) {
 			pathToModule = strings.Replace(pathToModule, remoteSourceAddr, "", 1)
-			pathToModule = downloadPath + pathToModule
+			pathToModule = filepath.Join(downloadPath, pathToModule)
 			keyFound = true
 			break
 		}

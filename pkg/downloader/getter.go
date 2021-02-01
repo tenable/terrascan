@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	getter "github.com/hashicorp/go-getter"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform/configs"
@@ -150,13 +149,13 @@ func (g *goGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 		return "", ErrEmptyURLDest
 	}
 
-	if !utils.IsValidRemoteType(remoteType) {
+	if !IsValidRemoteType(remoteType) {
 		return "", ErrInvalidRemoteType
 	}
 
-	if utils.IsRemoteTypeTerraformRegistry(remoteType) {
-		sourceAddr, ver := utils.GetSourceAddrAndVersion(remoteURL)
-		if utils.IsRegistrySourceAddr(sourceAddr) {
+	if IsRemoteTypeTerraformRegistry(remoteType) {
+		sourceAddr, ver := GetSourceAddrAndVersion(remoteURL)
+		if IsRegistrySourceAddr(sourceAddr) {
 			module, _ := regsrc.ParseModuleSource(sourceAddr)
 			versionConstraints := configs.VersionConstraint{}
 			if ver != "" {
