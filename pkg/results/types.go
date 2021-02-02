@@ -55,6 +55,7 @@ type ScanSummary struct {
 	LowCount             int    `json:"low" yaml:"low" xml:"low,attr"`
 	MediumCount          int    `json:"medium" yaml:"medium" xml:"medium,attr"`
 	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
+	TotalTime            int64  `json:"-" yaml:"-" xml:"-"`
 }
 
 // Add adds two ViolationStores
