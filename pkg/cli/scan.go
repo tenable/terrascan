@@ -35,7 +35,7 @@ var scanCmd = &cobra.Command{
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
-	PreRunE:       initial,
+	// PreRunE:       initial,
 	RunE:          scan,
 	SilenceUsage:  true,
 	SilenceErrors: true,

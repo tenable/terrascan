@@ -39,10 +39,10 @@ func Run() error {
 
 	zap.S().Debug("initializing terrascan")
 
-	// check if policy paths exist
-	if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
-		return nil
-	}
+	// // check if policy paths exist
+	// if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
+	// 	return nil
+	// }
 
 	// download policies
 	os.RemoveAll(basePath)
