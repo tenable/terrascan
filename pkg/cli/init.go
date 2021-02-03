@@ -24,7 +24,7 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Initialize Terrascan",
+	Short: "Initializes Terrascan and clones policies from the Terrascan GitHub repository.",
 	Long: `Terrascan
 
 Initializes Terrascan and clones policies from the Terrascan GitHub repository.
