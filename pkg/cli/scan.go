@@ -21,7 +21,6 @@ import (
 	"strings"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -36,19 +35,12 @@ var scanCmd = &cobra.Command{
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
-	PreRunE:       initialScan,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		return initial(cmd, args, true)
+	},
 	RunE:          scan,
 	SilenceUsage:  true,
 	SilenceErrors: true,
-}
-
-func initialScan(cmd *cobra.Command, args []string) error {
-	// initialize terrascan
-	if err := initialize.Run(true); err != nil {
-		zap.S().Error("failed to initialize terrascan")
-		return err
-	}
-	return nil
 }
 
 func scan(cmd *cobra.Command, args []string) error {
