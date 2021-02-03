@@ -2,7 +2,7 @@
 ### aws_iam_role_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1189 |
 
 
 ### aws_route53_record
@@ -71,7 +71,7 @@
 ### aws_iam_role
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1188 |
 
 
 ### aws_ebs_encryption_by_default
@@ -109,7 +109,9 @@
 ### aws_instance
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | json | MEDIUM | EC2 instances should disable IMDS or require IMDSv2 | AC-AWS-NS-IN-M-1172 |
+| Network Security | json | MEDIUM | EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain | AC-AWS-NS-IN-M-1172 |
+| Identity and Access Management | json | HIGH | Ensure that instance launched follows the least privilege principle as this can be related to delivery-exploitation-Installation phases of kill  chain | AC-AW-IA-LC-H-0442 |
+| Infrastructure Security | json | HIGH | Security group attached to launch configuration is wide open to internet and this can be related to reconnaissance phase | AC-AW-IS-LC-H-0443 |
 | Network Security | Instance | MEDIUM | Instance should be configured in vpc. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations. | AWS.Instance.NetworkSecurity.Medium.0506 |
 
 
@@ -131,8 +133,8 @@
 ### aws_iam_user_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
 | Identity and Access Management | IamUser | HIGH | Ensure Hardware MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0387 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1190 |
 | Identity and Access Management | IamUser | HIGH | Ensure Virtual MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0388 |
 | Identity and Access Management | IamUser | HIGH | It is recommended that MFA be enabled for all accounts that have a console password. Enabling MFA provides increased security for console access as it requires the authenticating principal to possess a device that emits a time-sensitive key and have knowledge of a credential | AWS.IamUser.IAM.High.0389 |
 
@@ -153,7 +155,7 @@
 ### aws_iam_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1187 |
 
 
 ### aws_apigatewayv2_stage
@@ -173,6 +175,7 @@
 | -------- | -------- | -------- | ----------- | ------------ |
 | Encryption and Key Management | CloudFront | HIGH | Secure ciphers are not used in CloudFront distribution | AWS.CloudFront.EncryptionandKeyManagement.High.0408 |
 | Network Security | CloudFront | LOW | Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content. | AWS.CloudFront.Network Security.Low.0568 |
+| Encryption and Key Management | json | Medium | Ensure that cloud-front has web application firewall enabled | AC-AW-IS-CD-M-1186 |
 | Encryption and Key Management | CloudFront | HIGH | Use encrypted connection between CloudFront and origin server | AWS.CloudFront.EncryptionandKeyManagement.High.0407 |
 | Logging | CloudFront | MEDIUM | Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN). | AWS.CloudFront.Logging.Medium.0567 |
 
@@ -194,8 +197,12 @@
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Encryption and Key Management | EcsCluster | HIGH | Ensure that AWS ECS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS ECS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
+| Identity and Access Management | json | HIGH | Ensure that launch configuration launched follows the least privilege principle | AC-AW-IA-LC-H-0441 |
 | Data Security | LaunchConfiguration | HIGH | Avoid using base64 encoded private keys as part of config | AWS.LaunchConfiguration.DataSecurity.High.0102 |
 | Data Security | LaunchConfiguration | HIGH | Avoid using base64 encoded shell script as part of config | AWS.LaunchConfiguration.DataSecurity.High.0101 |
+| Logging and Monitoring | json | Medium | It is important to enable cloudWatch monitoring incase monitoring the activity | AC-AW-LM-LC-M-0440 |
+| Configuration and Vulnerability Analysis | json | HIGH | Launch configuration uses IMDSv1 which vulnerable to SSRF | AC-AW-CA-LC-H-0439 |
+| Infrastructure Security | json | HIGH | Security group attached to launch configuration is wide open to internet  | AC-AW-IS-LC-H-0438 |
 
 
 ### aws_api_gateway_stage
@@ -224,7 +231,7 @@
 ### aws_iam_group_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-0392 |
 
 
 ### aws_load_balancer_policy
