@@ -38,7 +38,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	// to download the policies for Run test
 	// downloads the policies at $HOME/.terrascan
-	initial(nil, nil)
+	initialScan(nil, nil)
 }
 
 func shutdown() {
