@@ -5,7 +5,7 @@
         "prefix": ""
     },
     "severity": "HIGH",
-    "description": "Ensure Redshift clusters are not publicly accessible to minimise security risks.",
+    "description": "Ensure Redshift clusters are not publicly accessible to minimize security risks.",
     "reference_id": "AWS.Redshift.NetworkSecurity.HIGH.0564",
     "category": "Network Security",
     "version": 2
