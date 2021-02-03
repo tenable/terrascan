@@ -35,17 +35,21 @@ var (
 )
 
 // Run initializes terrascan if not done already
-func Run() error {
+func Run(isScanCmd bool) error {
 
 	zap.S().Debug("initializing terrascan")
 
 	// check if policy paths exist
 	if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
-		return nil
+		if isScanCmd {
+			return nil
+		}
+		if err := os.RemoveAll(basePath); err != nil {
+			return err
+		}
 	}
 
 	// download policies
-	os.RemoveAll(basePath)
 	if err := DownloadPolicies(); err != nil {
 		return err
 	}
