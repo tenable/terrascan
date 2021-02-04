@@ -1,12 +1,5 @@
 # Changelog
 
-## [v1.3.2](https://github.com/accurics/terrascan/tree/v1.3.2) (2021-02-03)
-
-[Full Changelog](https://github.com/accurics/terrascan/compare/v1.3.2...v1.3.2)
-
-**Merged pull requests:**
-
-- Update readme for v1.3.2 [\#534](https://github.com/accurics/terrascan/pull/534) ([dev-gaur](https://github.com/dev-gaur))
 
 ## [v1.3.2](https://github.com/accurics/terrascan/tree/v1.3.2) (2021-02-03)
 
@@ -14,11 +7,10 @@
 
 **Fixed bugs:**
 
-- terrascan doesn't find violations in terraform files created using modules [\#302](https://github.com/accurics/terrascan/issues/302)
+- terrascan init should download new policies [\#521](https://github.com/accurics/terrascan/issues/521)
 
 **Closed issues:**
 
-- terrascan init should download new policies [\#521](https://github.com/accurics/terrascan/issues/521)
 - How to get rid of "Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary." [\#405](https://github.com/accurics/terrascan/issues/405)
 - False Positive for accurics.azure.NS.161 when Security Groups Association and Subnets are defined indepently from VNet [\#391](https://github.com/accurics/terrascan/issues/391)
 - Calico is not supported as a valid Network Security for azurerm\_kubernetes\_cluster [\#376](https://github.com/accurics/terrascan/issues/376)
