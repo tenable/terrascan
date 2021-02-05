@@ -19,6 +19,7 @@ package helmv3
 import (
 	"fmt"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
 )
@@ -29,6 +30,6 @@ var (
 
 // LoadIacFile is not supported for helm. Only loading chart directories are supported
 func (h *HelmV3) LoadIacFile(absRootPath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-	zap.S().Errorf("load iac file is not supported for helm")
-	return make(map[string][]output.ResourceConfig), errLoadIacFileNotSupported
+	zap.S().Debug(errLoadIacFileNotSupported)
+	return make(map[string][]output.ResourceConfig), &iacloaderror.LoadError{Err: errLoadIacFileNotSupported}
 }

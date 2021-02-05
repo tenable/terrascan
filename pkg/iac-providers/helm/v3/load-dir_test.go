@@ -63,7 +63,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "no helm charts in directory",
 			dirPath:       "./testdata/no-helm-charts",
 			helmv3:        HelmV3{},
-			wantErr:       errNoHelmChartsFound,
+			wantErr:       fmt.Errorf("no helm charts found in ./testdata/no-helm-charts"),
 			resourceCount: 0,
 		},
 	}

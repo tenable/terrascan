@@ -48,14 +48,14 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	// find all Chart.yaml files within the specified directory structure
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, h.getHelmChartFilenames())
 	if err != nil {
-		zap.S().Error("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Debug("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(fileMap) == 0 {
-		err = errNoHelmChartsFound
-		zap.S().Error("", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		errMessage := fmt.Sprintf("no helm charts found in %s", absRootDir)
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
 	// fileDir now contains the chart path
@@ -70,7 +70,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var chartMap helmChartData
 		iacDocuments, chartMap, err = h.loadChart(chartPath)
 		if err != nil && err != errSkipTestDir {
-			logger.Error("error occurred while loading chart", zap.Error(err))
+			logger.Debug("error occurred while loading chart", zap.Error(err))
 			continue
 		}
 
@@ -80,7 +80,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var config *output.ResourceConfig
 		config, err = h.createHelmChartResource(chartPath, chartMap)
 		if err != nil {
-			logger.Error("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
+			logger.Debug("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
 			continue
 		}
 
@@ -98,7 +98,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 				// ignore logging errors when the "kind" field is not available because helm chart rendering can create an empty file
 				// in that case, we should not output an error as it was the user's intention to prevent rendering the resource
 				if err != k8sv1.ErrNoKind {
-					zap.S().Error("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
+					zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
 				}
 				continue
 			}
@@ -165,7 +165,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 		var fileData []byte
 		fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
 		if err != nil {
-			logger.Error("unable to read template file", zap.String("file", *templateFile), zap.Error(err))
+			logger.Warn("unable to read template file", zap.String("file", *templateFile), zap.Error(err))
 			return iacDocuments, err
 		}
 
@@ -178,14 +178,14 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	// chart name and version are required parameters
 	chartName, ok := chartMap["name"].(string)
 	if !ok {
-		logger.Error("chart name was invalid")
+		logger.Warn("chart name was invalid")
 		return iacDocuments, errBadChartName
 	}
 
 	var chartVersion string
 	chartVersion, ok = chartMap["version"].(string)
 	if !ok {
-		logger.Error("chart version was invalid")
+		logger.Warn("chart version was invalid")
 		return iacDocuments, errBadChartVersion
 	}
 

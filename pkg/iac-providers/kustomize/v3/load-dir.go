@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -20,6 +21,7 @@ var (
 	errorKustomizeNotFound     = fmt.Errorf("kustomization.y(a)ml file not found in the directory")
 	errorMultipleKustomizeFile = fmt.Errorf("multiple kustomization.y(a)ml found in the directory")
 	errorFromKustomize         = fmt.Errorf("error from kustomization")
+	errorDirRead               = fmt.Errorf("error while reading the directory")
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
@@ -29,29 +31,30 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 
 	files, err := utils.FindFilesBySuffixInDir(absRootDir, KustomizeFileNames())
 	if err != nil {
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		errMessage := fmt.Sprintf("error while searching for iac files, %v, %v", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: errorDirRead}
 	}
 
 	if len(files) == 0 {
-		err = errorKustomizeNotFound
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		errMessage := fmt.Sprintf("error while searching for iac files, %v, %v", zap.String("root dir", absRootDir), zap.Error(errorKustomizeNotFound))
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: errorKustomizeNotFound}
 	}
 
 	if len(files) > 1 {
-		err = errorMultipleKustomizeFile
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		errMessage := fmt.Sprintf("error while searching for iac files, %v, %v", zap.String("root dir", absRootDir), zap.Error(errorMultipleKustomizeFile))
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: errorMultipleKustomizeFile}
 	}
 
 	kustomizeFileName := *files[0]
 	yamlkustomizeobj, err := utils.ReadYamlFile(filepath.Join(absRootDir, kustomizeFileName))
 
 	if err != nil {
-		err = fmt.Errorf("unable to read the kustomization file in the directory : %v", err)
-		zap.S().Error("error while reading the file", kustomizeFileName, zap.Error(err))
-		return allResourcesConfig, err
+		errMessage := fmt.Sprintf("error while reading the file %s %v", kustomizeFileName, zap.Error(err))
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: err}
 	}
 
 	// ResourceConfig representing the kustomization.y(a)ml file

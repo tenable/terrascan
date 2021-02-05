@@ -22,6 +22,7 @@ import (
 	"reflect"
 	"testing"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
@@ -65,8 +66,14 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			if gotErr != nil {
+				if e, ok := gotErr.(*iacloaderror.LoadError); !ok || e.Err != tt.wantErr {
+					t.Errorf("TestLoadIacDir()= gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else {
+				if gotErr != tt.wantErr {
+					t.Errorf("TestLoadIacDir()= gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
 			}
 		})
 	}

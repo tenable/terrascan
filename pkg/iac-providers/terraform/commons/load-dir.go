@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	version "github.com/hashicorp/go-version"
@@ -70,15 +71,17 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !parser.IsConfigDir(absRootDir) {
-		zap.S().Errorf("directory '%s' has no terraform config files", absRootDir)
-		return allResourcesConfig, ErrEmptyTFConfigDir
+		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", absRootDir)
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: ErrEmptyTFConfigDir}
 	}
 
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
-		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
-		return allResourcesConfig, ErrLoadConfigDir
+		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: ErrLoadConfigDir}
 	}
 
 	// create a new remote module installer to install remote modules
@@ -153,8 +156,9 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 		},
 	))
 	if diags.HasErrors() {
-		zap.S().Errorf("failed to build unified config. errors:\n%+v\n", diags)
-		return allResourcesConfig, ErrBuildTFConfigDir
+		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: ErrBuildTFConfigDir}
 	}
 
 	/*

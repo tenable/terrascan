@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
@@ -39,12 +40,14 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
-		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
-		return allResourcesConfig, ErrLoadConfigFile
+		errMessage := fmt.Sprintf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: ErrLoadConfigFile}
 	}
 	if hclFile == nil && diags.HasErrors() {
-		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
-		return allResourcesConfig, ErrLoadConfigFile
+		errMessage := fmt.Sprintf("error occured while loading config file. error:\n%v\n", diags)
+		zap.S().Debugf(errMessage)
+		return allResourcesConfig, &iacloaderror.LoadError{ErrMessage: errMessage, Err: ErrLoadConfigFile}
 	}
 
 	// initialize normalized output

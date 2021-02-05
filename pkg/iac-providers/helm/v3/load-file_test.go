@@ -20,6 +20,7 @@ import (
 	"reflect"
 	"testing"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
@@ -44,9 +45,10 @@ func TestLoadIacFile(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.helmv3.LoadIacFile(tt.filePath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
-			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {
+			if e, ok := gotErr.(*iacloaderror.LoadError); !ok || e.Err != tt.wantErr {
+				t.Errorf("TestLoadIacFile()= gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+			if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", reflect.TypeOf(gotErr), reflect.TypeOf(tt.wantErr))
 			}
 		})

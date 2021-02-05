@@ -28,7 +28,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, K8sFileExtensions())
 	if err != nil {
-		zap.S().Warn("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 

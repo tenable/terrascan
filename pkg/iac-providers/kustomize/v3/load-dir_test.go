@@ -2,16 +2,16 @@ package kustomizev3
 
 import (
 	"fmt"
-	"os"
 	"reflect"
-	"syscall"
 	"testing"
 
+	iacloaderror "github.com/accurics/terrascan/pkg/iac-providers/iac-load-error"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	"go.uber.org/zap"
 )
 
-var errorReadKustomize = fmt.Errorf("unable to read the kustomization file in the directory : %s", utils.ErrYamlFileEmpty.Error())
+var errorReadKustomize = fmt.Errorf("error while reading the file %s %v", "kustomization.yaml", zap.Error(utils.ErrYamlFileEmpty))
 
 func TestLoadIacDir(t *testing.T) {
 
@@ -27,7 +27,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "invalid dirPath",
 			dirPath:       "not-there",
 			kustomize:     KustomizeV3{},
-			wantErr:       &os.PathError{Err: syscall.ENOENT, Op: "open", Path: "not-there"},
+			wantErr:       errorDirRead,
 			resourceCount: 0,
 		},
 		{
@@ -84,7 +84,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "kustomize-file-empty",
 			dirPath:       "./testdata/kustomize-file-empty",
 			kustomize:     KustomizeV3{},
-			wantErr:       errorReadKustomize,
+			wantErr:       utils.ErrYamlFileEmpty,
 			resourceCount: 0,
 		},
 	}
@@ -92,13 +92,19 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			resourceMap, gotErr := tt.kustomize.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			if gotErr != nil {
+				if e, ok := gotErr.(*iacloaderror.LoadError); !ok || e.Err != tt.wantErr {
+					t.Errorf("TestLoadIacDir()= gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else {
+				if gotErr != tt.wantErr {
+					t.Errorf("TestLoadIacDir()= gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
 			}
 
 			resCount := utils.GetResourceCount(resourceMap)
 			if resCount != tt.resourceCount {
-				t.Errorf("resource count (%d) does not match expected (%d)", resCount, tt.resourceCount)
+				t.Errorf("TestLoadIacDir()= resource count (%d) does not match expected (%d)", resCount, tt.resourceCount)
 			}
 		})
 	}
