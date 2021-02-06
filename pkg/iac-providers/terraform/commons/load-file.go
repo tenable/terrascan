@@ -26,11 +26,6 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
-	// ErrLoadConfigFile error
-	ErrLoadConfigFile = fmt.Errorf("failed to load config file")
-)
-
 // LoadIacFile parses the given terraform file from the given file path
 func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 
@@ -39,12 +34,14 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if diags != nil {
-		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
-		return allResourcesConfig, ErrLoadConfigFile
+		errMessage := fmt.Sprintf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 	if hclFile == nil && diags.HasErrors() {
-		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
-		return allResourcesConfig, ErrLoadConfigFile
+		errMessage := fmt.Sprintf("error occured while loading config file. error:\n%v\n", diags)
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
 	// initialize normalized output

@@ -109,6 +109,22 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: errDirNotExists,
 		},
 		{
+			// should error out in validations if -f option is not a file
+			name: "valid directory passed as file path",
+			executor: Executor{
+				filePath: "./testdata/testdir",
+			},
+			wantErr: errNotValidFile,
+		},
+		{
+			// should error out in validations if -d option is not a dir
+			name: "valid directory passed as file path",
+			executor: Executor{
+				dirPath: "./testdata/testdir/testfile",
+			},
+			wantErr: errNotValidDir,
+		},
+		{
 			name: "invalid iac type",
 			executor: Executor{
 				filePath:   "",

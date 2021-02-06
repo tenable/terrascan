@@ -35,35 +35,33 @@ func TestLoadIacDir(t *testing.T) {
 		dirPath       string
 		helmv3        HelmV3
 		want          output.AllResourceConfigs
-		wantErr       error
+		wantErr       bool
 		resourceCount int
 	}{
 		{
 			name:          "happy path (credit to madhuakula/kubernetes-goat)",
 			dirPath:       "./testdata/happy-path",
 			helmv3:        HelmV3{},
-			wantErr:       nil,
 			resourceCount: 3,
 		},
 		{
 			name:          "happy path with subchart (credit to madhuakula/kubernetes-goat)",
 			dirPath:       "./testdata/happy-path-with-subchart",
 			helmv3:        HelmV3{},
-			wantErr:       nil,
 			resourceCount: 5,
 		},
 		{
 			name:          "bad directory",
 			dirPath:       "./testdata/bad-dir",
 			helmv3:        HelmV3{},
-			wantErr:       &os.PathError{Err: syscall.ENOENT, Op: "lstat", Path: "./testdata/bad-dir"},
+			wantErr:       true,
 			resourceCount: 0,
 		},
 		{
 			name:          "no helm charts in directory",
 			dirPath:       "./testdata/no-helm-charts",
 			helmv3:        HelmV3{},
-			wantErr:       errNoHelmChartsFound,
+			wantErr:       true,
 			resourceCount: 0,
 		},
 	}
@@ -71,7 +69,7 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if tt.wantErr && gotErr == nil {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
