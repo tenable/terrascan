@@ -24,7 +24,6 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 )
 
 func TestLoadIacFile(t *testing.T) {
@@ -34,38 +33,37 @@ func TestLoadIacFile(t *testing.T) {
 		filePath string
 		tfv12    TfV12
 		want     output.AllResourceConfigs
-		wantErr  error
+		wantErr  bool
 	}{
 		{
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv12:    TfV12{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  true,
 		},
 		{
 			name:     "empty config",
 			filePath: "./testdata/testfile",
 			tfv12:    TfV12{},
-			wantErr:  nil,
 		},
 		{
 			name:     "invalid config",
 			filePath: "./testdata/empty.tf",
 			tfv12:    TfV12{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  true,
 		},
 		{
 			name:     "destroy-provisioners",
 			filePath: "./testdata/destroy-provisioners/main.tf",
 			tfv12:    TfV12{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  true,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv12.LoadIacFile(tt.filePath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if tt.wantErr && gotErr == nil {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})

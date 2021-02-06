@@ -23,7 +23,6 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
 )
 
@@ -34,38 +33,38 @@ func TestLoadIacDir(t *testing.T) {
 		dirPath string
 		tfv14   TfV14
 		want    output.AllResourceConfigs
-		wantErr error
+		wantErr bool
 	}{
 		{
 			name:    "invalid dirPath",
 			dirPath: "not-there",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrEmptyTFConfigDir,
+			wantErr: true,
 		},
 		{
 			name:    "empty config",
 			dirPath: "./testdata/testfile",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrEmptyTFConfigDir,
+			wantErr: true,
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: "./testdata/invalid-moduleconfigs",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrBuildTFConfigDir,
+			wantErr: true,
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrLoadConfigDir,
+			wantErr: true,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if tt.wantErr && gotErr == nil {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})

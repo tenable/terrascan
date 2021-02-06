@@ -24,7 +24,6 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 )
 
 func TestLoadIacFile(t *testing.T) {
@@ -34,56 +33,51 @@ func TestLoadIacFile(t *testing.T) {
 		filePath string
 		tfv14    TfV14
 		want     output.AllResourceConfigs
-		wantErr  error
+		wantErr  bool
 	}{
 		{
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv14:    TfV14{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  true,
 		},
 		{
 			name:     "empty config",
 			filePath: "./testdata/testfile",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "invalid config",
 			filePath: "./testdata/empty.tf",
 			tfv14:    TfV14{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  true,
 		},
 		{
 			name:     "depends_on",
 			filePath: "./testdata/depends_on/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "count",
 			filePath: "./testdata/count/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "for_each",
 			filePath: "./testdata/for_each/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "required_providers",
 			filePath: "./testdata/required-providers/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv14.LoadIacFile(tt.filePath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if tt.wantErr && gotErr == nil {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
