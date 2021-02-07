@@ -1,10 +1,11 @@
 package termcolor
 
 import (
-	"go.uber.org/zap"
 	"math"
 	"strconv"
 	"strings"
+
+	"go.uber.org/zap"
 )
 
 var (
@@ -155,7 +156,7 @@ func Colorize(st Style, message string) string {
 
 	style := string(st)
 
-	if len(message) == 0 {
+	if message == "" {
 		return message
 	}
 
@@ -164,7 +165,7 @@ func Colorize(st Style, message string) string {
 		clause = strings.TrimSpace(clause)
 
 		// Skip if there is an empty clause
-		if len(clause) == 0 {
+		if clause == "" {
 			continue
 		}
 
@@ -184,7 +185,7 @@ func Colorize(st Style, message string) string {
 		}
 	}
 
-	if len(style) == 0 {
+	if style == "" {
 		return message
 	}
 
