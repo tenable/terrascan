@@ -51,6 +51,42 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: nil,
 		},
 		{
+			name: "valid filePath",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "high",
+			},
+			wantErr: nil,
+		},
+		{
+			name: "valid dirPath",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "MEDIUM",
+			},
+			wantErr: nil,
+		},
+		{
+			name: "valid dirPath",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v12",
+				severity:   " LOW ",
+			},
+			wantErr: nil,
+		},
+		{
 			name: "empty iac path",
 			executor: Executor{
 				filePath: "",
@@ -93,6 +129,18 @@ func TestValidateInputs(t *testing.T) {
 				iacVersion: "notthere",
 			},
 			wantErr: errIacNotSupported,
+		},
+		{
+			name: "invalid severity",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "HGIH",
+			},
+			wantErr: errSeverityNotSupported,
 		},
 	}
 

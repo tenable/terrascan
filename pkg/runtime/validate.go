@@ -28,11 +28,12 @@ import (
 )
 
 var (
-	errEmptyIacPath      = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errDirNotExists      = fmt.Errorf("directory does not exist")
-	errFileNotExists     = fmt.Errorf("file does not exist")
-	errIacNotSupported   = fmt.Errorf("iac type or version not supported")
-	errCloudNotSupported = fmt.Errorf("cloud type not supported")
+	errEmptyIacPath         = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists         = fmt.Errorf("directory does not exist")
+	errFileNotExists        = fmt.Errorf("file does not exist")
+	errIacNotSupported      = fmt.Errorf("iac type or version not supported")
+	errCloudNotSupported    = fmt.Errorf("cloud type not supported")
+	errSeverityNotSupported = fmt.Errorf("severity level not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
@@ -101,6 +102,11 @@ func (e *Executor) ValidateInputs() error {
 		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
 	}
 	zap.S().Debugf("using policy path %v", e.policyPath)
+
+	if len(e.severity) > 0 && !utils.ValidateSeverityInput(e.severity) {
+		return errSeverityNotSupported
+	}
+	zap.S().Debugf("using severity level %v", e.severity)
 
 	// successful
 	zap.S().Debug("input validation successful")
