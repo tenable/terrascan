@@ -29,6 +29,7 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 var (
@@ -364,6 +365,147 @@ func TestInit(t *testing.T) {
 				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
 					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
 				}
+			}
+		})
+	}
+}
+
+type flagSet struct {
+	iacType    string
+	iacVersion string
+	filePath   string
+	dirPath    string
+	policyPath []string
+	cloudType  []string
+	severity   string
+	scanRules  []string
+	skipRules  []string
+}
+
+func TestNewExecutor(t *testing.T) {
+	table := []struct {
+		name          string
+		wantErr       error
+		configfile    string
+		flags         flagSet
+		wantScanRules []string
+		wantSkipRules []string
+		wantSeverity  string
+	}{
+		{
+			name:       "values passed through flag should override configfile value",
+			configfile: "./testdata/scan-skip-rules-low-severity.toml",
+			wantErr:    nil,
+			flags: flagSet{
+				severity:   "high",
+				scanRules:  []string{"AWS.S3Bucket.DS.High.1043"},
+				skipRules:  []string{"accurics.kubernetes.IAM.109"},
+				dirPath:    "./testdata/testdir",
+				policyPath: []string{"./testdata/testpolicies"},
+				cloudType:  []string{"aws"},
+			},
+			wantScanRules: []string{
+				"AWS.S3Bucket.DS.High.1043",
+			},
+			wantSkipRules: []string{
+				"accurics.kubernetes.IAM.109",
+			},
+			wantSeverity: "high",
+		},
+		{
+			name:       "skipRules passed through flag should override configfile value",
+			configfile: "./testdata/scan-skip-rules-low-severity.toml",
+			wantErr:    nil,
+			flags: flagSet{
+				skipRules:  []string{"accurics.kubernetes.IAM.109"},
+				dirPath:    "./testdata/testdir",
+				policyPath: []string{"./testdata/testpolicies"},
+				cloudType:  []string{"aws"},
+			},
+			wantScanRules: []string{
+				"AWS.S3Bucket.DS.High.1043",
+				"accurics.kubernetes.IAM.107",
+			},
+			wantSkipRules: []string{
+				"accurics.kubernetes.IAM.109",
+			},
+			wantSeverity: "low",
+		},
+		{
+			name:       "scanRules passed through flag should override configfile value",
+			configfile: "./testdata/scan-skip-rules-low-severity.toml",
+			wantErr:    nil,
+			flags: flagSet{
+				scanRules:  []string{"AWS.S3Bucket.DS.High.1043"},
+				dirPath:    "./testdata/testdir",
+				policyPath: []string{"./testdata/testpolicies"},
+				cloudType:  []string{"aws"},
+			},
+			wantScanRules: []string{
+				"AWS.S3Bucket.DS.High.1043",
+			},
+			wantSkipRules: []string{
+				"AWS.S3Bucket.IAM.High.0370",
+				"accurics.kubernetes.IAM.5",
+				"accurics.kubernetes.OPS.461",
+				"accurics.kubernetes.IAM.109",
+			},
+			wantSeverity: "low",
+		},
+		{
+			name:       "severity passed through flag should override configfile value",
+			configfile: "./testdata/scan-skip-rules-low-severity.toml",
+			wantErr:    nil,
+			flags: flagSet{
+				severity:   "medium",
+				dirPath:    "./testdata/testdir",
+				policyPath: []string{"./testdata/testpolicies"},
+				cloudType:  []string{"aws"},
+			},
+			wantScanRules: []string{
+				"AWS.S3Bucket.DS.High.1043",
+				"accurics.kubernetes.IAM.107",
+			},
+			wantSkipRules: []string{
+				"AWS.S3Bucket.IAM.High.0370",
+				"accurics.kubernetes.IAM.5",
+				"accurics.kubernetes.OPS.461",
+				"accurics.kubernetes.IAM.109",
+			},
+			wantSeverity: "medium",
+		},
+		{
+			name:       "configfile value will be used if no flags are passed",
+			configfile: "./testdata/scan-skip-rules-low-severity.toml",
+			wantErr:    nil,
+			flags: flagSet{
+				dirPath:    "./testdata/testdir",
+				policyPath: []string{"./testdata/testpolicies"},
+				cloudType:  []string{"aws"},
+			},
+			wantScanRules: []string{
+				"AWS.S3Bucket.DS.High.1043",
+				"accurics.kubernetes.IAM.107",
+			},
+			wantSkipRules: []string{
+				"AWS.S3Bucket.IAM.High.0370",
+				"accurics.kubernetes.IAM.5",
+				"accurics.kubernetes.OPS.461",
+				"accurics.kubernetes.IAM.109",
+			},
+			wantSeverity: "low",
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.configfile, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.severity)
+
+			if !reflect.DeepEqual(tt.wantErr, gotErr) {
+				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)
+			}
+			if utils.IsSliceEqual(gotExecutor.scanRules, tt.wantScanRules) && utils.IsSliceEqual(gotExecutor.skipRules, tt.wantSkipRules) && gotExecutor.severity != tt.wantSeverity {
+				t.Errorf("got: 'scanRules = %v, skipRules = %v, severity = %s', want: 'scanRules = %v, skipRules = %v, severity = %s'", gotExecutor.scanRules, gotExecutor.skipRules, gotExecutor.severity, tt.wantScanRules, tt.wantSkipRules, tt.wantSeverity)
 			}
 		})
 	}
