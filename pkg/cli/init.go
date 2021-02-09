@@ -24,19 +24,21 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Initialize Terrascan",
+	Short: "Initializes Terrascan and clones policies from the Terrascan GitHub repository.",
 	Long: `Terrascan
 
 Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 `,
-	RunE:          initial,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return initial(cmd, args, false)
+	},
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
 
-func initial(cmd *cobra.Command, args []string) error {
+func initial(cmd *cobra.Command, args []string, isScanCmd bool) error {
 	// initialize terrascan
-	if err := initialize.Run(); err != nil {
+	if err := initialize.Run(isScanCmd); err != nil {
 		zap.S().Error("failed to initialize terrascan")
 		return err
 	}

@@ -19,6 +19,7 @@ package initialize
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
@@ -35,17 +36,18 @@ var (
 )
 
 // Run initializes terrascan if not done already
-func Run() error {
+func Run(isScanCmd bool) error {
 
 	zap.S().Debug("initializing terrascan")
 
 	// check if policy paths exist
 	if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
-		return nil
+		if isScanCmd {
+			return nil
+		}
 	}
 
 	// download policies
-	os.RemoveAll(basePath)
 	if err := DownloadPolicies(); err != nil {
 		return err
 	}
@@ -57,8 +59,10 @@ func Run() error {
 // DownloadPolicies clones the policies to a local folder
 func DownloadPolicies() error {
 
+	tempPath := filepath.Join(os.TempDir(), "terrascan")
+
 	// clone the repo
-	r, err := git.PlainClone(basePath, false, &git.CloneOptions{
+	r, err := git.PlainClone(tempPath, false, &git.CloneOptions{
 		URL: repoURL,
 	})
 	if err != nil {
@@ -92,5 +96,7 @@ func DownloadPolicies() error {
 		return err
 	}
 
-	return nil
+	os.RemoveAll(basePath)
+
+	return os.Rename(tempPath, basePath)
 }
