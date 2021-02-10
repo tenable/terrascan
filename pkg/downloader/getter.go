@@ -21,24 +21,28 @@ import (
 	"path/filepath"
 
 	getter "github.com/hashicorp/go-getter"
+	"github.com/hashicorp/go-version"
+	"github.com/hashicorp/terraform/configs"
+	"github.com/hashicorp/terraform/registry/regsrc"
 	"go.uber.org/zap"
 )
 
 // list of errors
 var (
-	ErrEmptyURLType     = fmt.Errorf("empty remote url and type")
-	ErrEmptyURLDest     = fmt.Errorf("remote url or destination dir path cannot be empty")
-	ErrEmptyURLTypeDest = fmt.Errorf("empty remote url or type or desitnation dir path")
+	ErrEmptyURLType      = fmt.Errorf("empty remote url and type")
+	ErrEmptyURLDest      = fmt.Errorf("remote url or destination dir path cannot be empty")
+	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or desitnation dir path")
+	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not supported")
 )
 
-// NewGoGetter returns a new GoGetter struct
-func NewGoGetter() *GoGetter {
-	return &GoGetter{}
+// newGoGetter returns a new GoGetter struct
+func newGoGetter() *goGetter {
+	return &goGetter{}
 }
 
 // GetURLSubDir returns the download URL with it's respective type prefix
 // along with subDir path, if present.
-func (g *GoGetter) GetURLSubDir(remoteURL, destPath string) (string, string, error) {
+func (g *goGetter) GetURLSubDir(remoteURL, destPath string) (string, string, error) {
 
 	// get subDir, if present
 	repoURL, subDir := SplitAddrSubdir(remoteURL)
@@ -69,7 +73,7 @@ func (g *GoGetter) GetURLSubDir(remoteURL, destPath string) (string, string, err
 // Download retrieves the remote repository referenced in the given remoteURL
 // into the destination path and then returns the full path to any subdir
 // indicated in the URL
-func (g *GoGetter) Download(remoteURL, destPath string) (string, error) {
+func (g *goGetter) Download(remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote url: %q, destination dir: %q",
 		remoteURL, destPath)
@@ -127,7 +131,7 @@ func (g *GoGetter) Download(remoteURL, destPath string) (string, error) {
 //
 // DownloadWithType enforces download type on go-getter to get rid of any
 // ambiguities in remoteURL
-func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
+func (g *goGetter) DownloadWithType(remoteType, remoteURL, destPath string) (string, error) {
 
 	zap.S().Debugf("download with remote type: %q, remote URL: %q, destination dir: %q",
 		remoteType, remoteURL, destPath)
@@ -144,6 +148,28 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 		zap.S().Error(ErrEmptyURLTypeDest)
 		return "", ErrEmptyURLDest
 	}
+
+	if !IsValidRemoteType(remoteType) {
+		return "", ErrInvalidRemoteType
+	}
+
+	if IsRemoteTypeTerraformRegistry(remoteType) {
+		sourceAddr, ver := GetSourceAddrAndVersion(remoteURL)
+		if IsRegistrySourceAddr(sourceAddr) {
+			module, _ := regsrc.ParseModuleSource(sourceAddr)
+			versionConstraints := configs.VersionConstraint{}
+			if ver != "" {
+				versionConstraint, err := version.NewConstraint(ver)
+				if err != nil {
+					return "", err
+				}
+				versionConstraints.Required = versionConstraint
+			}
+			return NewRemoteDownloader().DownloadRemoteModule(versionConstraints, destPath, module)
+		}
+		return "", fmt.Errorf("%s, is not a valid terraform registry", remoteURL)
+	}
+
 	URLWithType := fmt.Sprintf("%s::%s", remoteType, remoteURL)
 
 	// Download
@@ -151,7 +177,7 @@ func (g *GoGetter) DownloadWithType(remoteType, remoteURL, destPath string) (str
 }
 
 // SubDirGlob returns the actual subdir with globbing processed
-func (g *GoGetter) SubDirGlob(destPath, subDir string) (string, error) {
+func (g *goGetter) SubDirGlob(destPath, subDir string) (string, error) {
 	return getter.SubdirGlob(destPath, subDir)
 }
 
