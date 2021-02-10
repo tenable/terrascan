@@ -23,7 +23,7 @@ require (
 	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.5.1
-	github.com/spf13/cobra v1.0.0
+	github.com/spf13/cobra v1.1.1
 	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.1 // indirect
@@ -33,5 +33,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	helm.sh/helm/v3 v3.4.0
 	honnef.co/go/tools v0.1.0 // indirect
-	sigs.k8s.io/kustomize/api v0.7.2
+	sigs.k8s.io/kustomize/api v0.8.0
 )
