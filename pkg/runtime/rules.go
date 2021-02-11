@@ -27,9 +27,15 @@ func (e *Executor) initRuleSetFromConfigFile() error {
 		e.skipRules = append(e.skipRules, configReader.GetRules().SkipRules...)
 	}
 
+	// specify category of violations to be reported
+	if len(configReader.GetCategory().List) > 0 {
+		e.categories = configReader.GetCategories().List
+	}
+
 	// specify severity of violations to be reported
 	if len(configReader.GetSeverity().Level) > 0 {
 		e.severity = configReader.GetSeverity().Level
 	}
+
 	return nil
 }

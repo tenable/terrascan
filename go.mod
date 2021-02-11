@@ -9,6 +9,7 @@ replace (
 )
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-cleanhttp v0.5.1
@@ -24,14 +25,17 @@ require (
 	github.com/onsi/ginkgo v1.12.1
 	github.com/onsi/gomega v1.10.5
 	github.com/open-policy-agent/opa v0.22.0
-	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.5.1
 	github.com/spf13/cobra v1.1.1
 	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.1 // indirect
+<<<<<<< HEAD
 	golang.org/x/sys v0.0.0-20210218155724-8ebf48af031b
+=======
+	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
+>>>>>>> c325b24 (feature: add options to specify desired categories of violations to be reported)
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0

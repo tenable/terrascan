@@ -9,16 +9,18 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 		configFile string
 		scanRules  []string
 		skipRules  []string
+		categories []string
 		severity   string
 	}
 	tests := []struct {
-		name         string
-		fields       fields
-		wantErr      bool
-		assert       bool
-		lenScanRules int
-		lenSkipRules int
-		severity     string
+		name          string
+		fields        fields
+		wantErr       bool
+		assert        bool
+		lenScanRules  int
+		lenSkipRules  int
+		lenCategories int
+		severity      string
 	}{
 		{
 			name:   "no config file",
@@ -60,6 +62,7 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 				configFile: "testdata/scan-skip-rules-low-severity.toml",
 				scanRules:  []string{"testRuleA", "testRuleB"},
 				skipRules:  []string{"testRuleC"},
+				categories: []string{},
 				severity:   "low",
 			},
 			assert:       true,

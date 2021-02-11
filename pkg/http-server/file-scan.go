@@ -45,6 +45,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules  = []string{}
 		configOnly = false
 		showPassed = false
+		categories = []string{}
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -94,6 +95,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
 
+	// categories is the list categories of violations that the user want to get informed about: low, medium or high
+	categoriesValue := r.FormValue("categories")
 	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
 	severity := r.FormValue("severity")
 
@@ -129,6 +132,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules = strings.Split(skipRulesValue, ",")
 	}
 
+	if categoriesValue != "" {
+		categories = strings.Split(categoriesValue, ",")
+	}
+
 	if severity != "" {
 		severity = utils.EnsureUpperCaseTrimmed(severity)
 	}
@@ -137,7 +144,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, severity)
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
 			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, severity)

@@ -21,7 +21,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/pelletier/go-toml"
+	"github.com/BurntSushi/toml"
 	"go.uber.org/zap"
 )
 
@@ -81,6 +81,11 @@ func (r TerrascanConfigReader) GetNotifications() map[string]Notifier {
 // GetRules will return the rules specified in the terrascan config file
 func (r TerrascanConfigReader) GetRules() Rules {
 	return r.config.Rules
+}
+
+// GetCategory will return the category specified in the terrascan config file
+func (r TerrascanConfigReader) GetCategory() Category {
+	return r.config.Category
 }
 
 // GetSeverity will return the level of severity specified in the terrascan config file
