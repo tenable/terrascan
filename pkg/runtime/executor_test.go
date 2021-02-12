@@ -57,11 +57,11 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string, scanRules, skipRules []string, severity string) error {
+func (m MockPolicyEngine) Init(input string, scanRules, skipRules, categories []string, severity string) error {
 	return m.err
 }
 
-func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules []string, severity string) {
+func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules, categories []string, severity string) {
 	/*
 		This method does nothing. Required to fullfil the Engine interface contract
 	*/

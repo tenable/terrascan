@@ -56,7 +56,7 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 	}
 
 	// read config file and update scan and skip rules
-	if err := e.initRuleSetFromconfigFile(); err != nil {
+	if err := e.initRuleSetFromConfigFile(); err != nil {
 		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
 		return nil, err
 	}

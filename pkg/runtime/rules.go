@@ -29,7 +29,7 @@ func (e *Executor) initRuleSetFromConfigFile() error {
 
 	// specify category of violations to be reported
 	if len(configReader.GetCategory().List) > 0 {
-		e.categories = configReader.GetCategories().List
+		e.categories = configReader.GetCategory().List
 	}
 
 	// specify severity of violations to be reported
