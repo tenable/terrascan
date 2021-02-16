@@ -39,7 +39,7 @@ Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 func initial(cmd *cobra.Command, args []string, isScanCmd bool) error {
 	// initialize terrascan
 	if err := initialize.Run(isScanCmd); err != nil {
-		zap.S().Error("failed to initialize terrascan")
+		zap.S().Errorf("failed to initialize terrascan. error : %v", err)
 		return err
 	}
 	return nil
