@@ -26,6 +26,7 @@ help:
 	@echo "staticcheck\n\trun static code analysis"
 	@echo "test\n\texecute unit and integration tests"
 	@echo "unit-tests\n\texecute unit tests"
+	@echo "e2e-tests\n\texecute e2e tests"
 	@echo "validate\n\trun all validations"
 
 # build terrascan binary
@@ -82,6 +83,9 @@ staticcheck:
 unit-tests:
 	./scripts/generate-coverage.sh
 
+# run e2e tests
+e2e-tests: build
+	./scripts/run-e2e.sh
 
 # build terrascan docker image
 docker-build:
