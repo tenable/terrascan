@@ -416,6 +416,9 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 
 	// add the rule count of the policy engine to result summary
 	e.results.ViolationStore.Summary.TotalPolicies += e.stats.ruleCount
+
+	// add the time taken to the result summary
+	e.results.ViolationStore.Summary.TotalTime += int64(e.stats.runTime)
 	return e.results, nil
 }
 
