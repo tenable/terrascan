@@ -129,17 +129,33 @@ $ ./bin/terrascan
 ```
 
 ### To build your own docker, refer to this example (Alpine Linux):
+Create Dockerfile
 ```
-FROM golang:alpine AS build-env
-
-RUN apk add --update git
-
+FROM alpine:latest AS builder
+RUN apk upgrade -U -a && \
+          apk upgrade && \
+          apk add --update go gcc g++ git ca-certificates curl make
 RUN git clone https://github.com/accurics/terrascan && cd terrascan \
   && CGO_ENABLED=0 GO111MODULE=on go build -o /go/bin/terrascan cmd/terrascan/main.go
 
+FROM alpine:latest
+# create non root user
+RUN addgroup --gid 101 terrascan && \
+    adduser -S --uid 101 --ingroup terrascan terrascan && \
+    apk add --no-cache ca-certificates
+
+# run as non root user
+USER terrascan
+# copy terrascan binary from build
+COPY --from=builder /go/bin/terrascan /go/bin/terrascan
+
+ENTRYPOINT ["/go/bin/terrascan"]
+
 ```
-
-
+Build docker image
+```sh
+docker build  -f Dockerfile  -t accurics/terrascan  .
+```
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
 
