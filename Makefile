@@ -4,10 +4,11 @@ ENV_SETTINGS := CGO_ENABLED=0
 
 BUILD_DIR = ./bin
 BINARY_NAME = terrascan
+DOCKER_REPO ?= accurics/terrascan
+TAG ?= ${GIT_COMMIT}
 
 # default
 default: help
-
 
 # please keep the commands in lexicographical order
 help:
@@ -85,12 +86,11 @@ unit-tests:
 
 # build terrascan docker image
 docker-build:
-	./scripts/docker-build.sh
-
+	./scripts/docker-build.sh ${DOCKER_REPO} ${TAG}
 
 # push terrascan docker image
 docker-push:
-	./scripts/docker-push.sh
+	./scripts/docker-push.sh ${DOCKER_REPO} ${TAG}
 
 
 # push latest terrascan docker image
