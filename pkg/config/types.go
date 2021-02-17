@@ -25,7 +25,7 @@ type TerrascanConfig struct {
 	Notifications map[string]Notifier `toml:"notifications,omitempty"`
 	Rules         `toml:"rules,omitempty"`
 	Category      `toml:"category,omitempty"`
-	Severity      `toml:"category,omitempty"`
+	Severity      `toml:"severity,omitempty"`
 }
 
 // Category defines the categories of violations that you want to be reported
