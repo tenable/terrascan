@@ -1,6 +1,6 @@
 package utils
 
-var acceptedCategories []string = []string{
+var AcceptedCategories []string = []string{
 	"LOGGING AND MONITORING",
 	"COMPLIANCE VALIDATION",
 	"RESILIENCE",
@@ -14,7 +14,7 @@ var acceptedCategories []string = []string{
 func ValidateCategoryInput(categories []string) bool {
 	for _, category := range categories {
 		category = EnsureUpperCaseTrimmed(category)
-		if !find(acceptedCategories, category) {
+		if !find(AcceptedCategories, category) {
 			return false
 		}
 	}

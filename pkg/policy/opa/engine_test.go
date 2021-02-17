@@ -100,7 +100,6 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "HIGH",
 			},
 			regoDataMap: getTestRegoDataMapHighSeverity(50),
@@ -113,7 +112,6 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "HIGH",
 			},
 			regoDataMap: getTestRegoDataMapLowSeverity(50),
@@ -126,7 +124,6 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "high",
 			},
 			regoDataMap: getTestRegoDataMapMediumSeverity(50),
@@ -139,7 +136,6 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "MEDIUM",
 			},
 			regoDataMap: getTestRegoDataMapLowSeverity(50),
@@ -152,7 +148,6 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "MEDIUM",
 			},
 			regoDataMap: getTestRegoDataMapMediumSeverity(50),
@@ -165,10 +160,21 @@ func TestFilterRules(t *testing.T) {
 				policyPath: testPolicyPath,
 				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
 				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
-				categories: []string{"COMPLIANCE VALIDATION"},
 				severity:   "low",
 			},
 			regoDataMap: getTestRegoDataMapLowSeverity(50),
+			assert:      true,
+			regoMapSize: 7,
+		},
+		{
+			name: "both scan and skip rules supplied, with desired category : COMPLIANCE VALIDATION",
+			args: args{
+				policyPath: testPolicyPath,
+				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
+				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
+				categories: []string{"COMPLIANCE VALIDATION"},
+			},
+			regoDataMap: getTestRegoDataMapCVCategory(50),
 			assert:      true,
 			regoMapSize: 7,
 		},
@@ -347,6 +353,15 @@ func getTestRegoDataMapWithSeverity(size int, severity string) map[string]*RegoD
 	return testRegoDataMap
 }
 
+func getTestRegoDataMapWithCategory(size int, category string) map[string]*RegoData {
+	testRegoDataMap := getTestRegoDataMap(size)
+
+	for _, regoData := range testRegoDataMap {
+		regoData.Metadata.Category = category
+	}
+	return testRegoDataMap
+}
+
 // helper func to generate test rego data map of given size with high severity
 func getTestRegoDataMapHighSeverity(size int) map[string]*RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.HighSeverity)
@@ -360,4 +375,8 @@ func getTestRegoDataMapMediumSeverity(size int) map[string]*RegoData {
 // helper func to generate test rego data map of given size with low severity
 func getTestRegoDataMapLowSeverity(size int) map[string]*RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.LowSeverity)
+}
+
+func getTestRegoDataMapCVCategory(size int) map[string]*RegoData {
+	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[1])
 }
