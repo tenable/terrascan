@@ -125,6 +125,7 @@ func (e *Executor) ValidateInputs() error {
 		return errSeverityNotSupported
 	}
 	zap.S().Debugf("using categories %v", e.categories)
+
 	if len(e.severity) > 0 && !utils.ValidateSeverityInput(e.severity) {
 		return errSeverityNotSupported
 	}
