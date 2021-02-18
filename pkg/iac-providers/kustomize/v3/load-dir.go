@@ -45,7 +45,7 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	yamlkustomizeobj, err := utils.ReadYamlFile(filepath.Join(absRootDir, kustomizeFileName))
 
 	if err != nil {
-		err = fmt.Errorf("unable to read the kustomization file in the directory : %v", err)
+		err = fmt.Errorf("unable to read the kustomization file in the directory %s, error: %v", absRootDir, err)
 		zap.S().Error("error while reading the file", kustomizeFileName, zap.Error(err))
 		return allResourcesConfig, err
 	}

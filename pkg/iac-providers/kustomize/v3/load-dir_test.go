@@ -1,7 +1,10 @@
 package kustomizev3
 
 import (
+	"fmt"
+	"os"
 	"reflect"
+	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -15,14 +18,14 @@ func TestLoadIacDir(t *testing.T) {
 		dirPath       string
 		kustomize     KustomizeV3
 		want          output.AllResourceConfigs
-		wantErr       bool
+		wantErr       error
 		resourceCount int
 	}{
 		{
 			name:          "invalid dirPath",
 			dirPath:       "not-there",
 			kustomize:     KustomizeV3{},
-			wantErr:       true,
+			wantErr:       &os.PathError{Err: syscall.ENOENT, Op: "open", Path: "not-there"},
 			resourceCount: 0,
 		},
 		{
@@ -66,14 +69,14 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "no-kustomize-directory",
 			dirPath:       "./testdata/no-kustomizefile",
 			kustomize:     KustomizeV3{},
-			wantErr:       true,
+			wantErr:       fmt.Errorf("kustomization.y(a)ml file not found in the directory ./testdata/no-kustomizefile"),
 			resourceCount: 0,
 		},
 		{
 			name:          "kustomize-file-empty",
 			dirPath:       "./testdata/kustomize-file-empty",
 			kustomize:     KustomizeV3{},
-			wantErr:       true,
+			wantErr:       fmt.Errorf("unable to read the kustomization file in the directory ./testdata/kustomize-file-empty, error: yaml file is empty"),
 			resourceCount: 0,
 		},
 	}
@@ -81,7 +84,7 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			resourceMap, gotErr := tt.kustomize.LoadIacDir(tt.dirPath)
-			if tt.wantErr && gotErr == nil {
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 

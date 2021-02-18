@@ -68,7 +68,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
-		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
+		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", absRootDir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
