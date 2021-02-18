@@ -11,10 +11,10 @@ Terrascan is a portable executable that does not strictly require installation, 
 Terrascan's [release page](https://github.com/accurics/terrascan/releases) includes builds for common platforms.  Just download and extract the package for your platform.  For example, if you use a Mac you might do this:
 
 ``` Bash
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.2/terrascan_1.3.2_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.3/terrascan_1.3.3_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar xzf terrascan.tar.gz
 $ ./terrascan version
-version: v1.3.2
+version: v1.3.3
 ```
 
 If you want to use this executable for the rest of this quickstart, it will help to create an alias or install the executable onto your path. For example with bash you could do something like this:
@@ -34,7 +34,7 @@ Terrascan is also available as a Docker image in Docker Hub and can be used as f
 
 ``` Bash
 $ docker run --rm accurics/terrascan version
-version: v1.3.2
+version: v1.3.3
 ```
 
 If you want to use the Docker image for the rest of this quickstart, it will help to create an alias, script or batch file that reduces the typing necessary.  For example with bash you could do something like this:
