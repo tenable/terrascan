@@ -18,17 +18,25 @@ package tfv14
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
 )
 
 func TestLoadIacDir(t *testing.T) {
 
+	testErrorMessage := `failed to load terraform config dir './testdata'. error from terraform:
+testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`
+
+	testDirPath1 := "not-there"
+	testDirPath2 := "./testdata/testfile"
+	invalidDirErrStringTemplate := "directory '%s' has no terraform config files"
 	table := []struct {
 		name    string
 		dirPath string
@@ -38,27 +46,27 @@ func TestLoadIacDir(t *testing.T) {
 	}{
 		{
 			name:    "invalid dirPath",
-			dirPath: "not-there",
+			dirPath: testDirPath1,
 			tfv14:   TfV14{},
-			wantErr: commons.ErrEmptyTFConfigDir,
+			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath1),
 		},
 		{
 			name:    "empty config",
-			dirPath: "./testdata/testfile",
+			dirPath: testDirPath2,
 			tfv14:   TfV14{},
-			wantErr: commons.ErrEmptyTFConfigDir,
+			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath2),
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: "./testdata/invalid-moduleconfigs",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrBuildTFConfigDir,
+			wantErr: fmt.Errorf("failed to build terraform allResourcesConfig"),
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata",
 			tfv14:   TfV14{},
-			wantErr: commons.ErrLoadConfigDir,
+			wantErr: fmt.Errorf(testErrorMessage),
 		},
 	}
 

@@ -17,9 +17,7 @@ const (
 )
 
 var (
-	errorKustomizeNotFound     = fmt.Errorf("kustomization.y(a)ml file not found in the directory")
-	errorMultipleKustomizeFile = fmt.Errorf("multiple kustomization.y(a)ml found in the directory")
-	errorFromKustomize         = fmt.Errorf("error from kustomization")
+	errorFromKustomize = fmt.Errorf("error from kustomization")
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
@@ -29,27 +27,25 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 
 	files, err := utils.FindFilesBySuffixInDir(absRootDir, KustomizeFileNames())
 	if err != nil {
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(files) == 0 {
-		err = errorKustomizeNotFound
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		return allResourcesConfig, fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", absRootDir)
 	}
 
 	if len(files) > 1 {
-		err = errorMultipleKustomizeFile
-		zap.S().Error("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		return allResourcesConfig, fmt.Errorf("multiple kustomization.y(a)ml found in the directory %s", absRootDir)
 	}
 
 	kustomizeFileName := *files[0]
 	yamlkustomizeobj, err := utils.ReadYamlFile(filepath.Join(absRootDir, kustomizeFileName))
 
 	if err != nil {
-		err = fmt.Errorf("unable to read the kustomization file in the directory : %v", err)
+		err = fmt.Errorf("unable to read the kustomization file in the directory %s, error: %v", absRootDir, err)
 		zap.S().Error("error while reading the file", kustomizeFileName, zap.Error(err))
 		return allResourcesConfig, err
 	}

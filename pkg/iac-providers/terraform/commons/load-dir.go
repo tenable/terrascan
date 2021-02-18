@@ -34,10 +34,6 @@ import (
 )
 
 var (
-	// ErrEmptyTFConfigDir error
-	ErrEmptyTFConfigDir = fmt.Errorf("directory has no terraform files")
-	// ErrLoadConfigDir error
-	ErrLoadConfigDir = fmt.Errorf("failed to load terraform allResourcesConfig dir")
 	// ErrBuildTFConfigDir error
 	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
@@ -64,15 +60,17 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !parser.IsConfigDir(absRootDir) {
-		zap.S().Errorf("directory '%s' has no terraform config files", absRootDir)
-		return allResourcesConfig, ErrEmptyTFConfigDir
+		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", absRootDir)
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
 	// load root config directory
 	rootMod, diags := parser.LoadConfigDir(absRootDir)
 	if diags.HasErrors() {
-		zap.S().Errorf("failed to load terraform config dir '%s'. error:\n%+v\n", absRootDir, diags)
-		return allResourcesConfig, ErrLoadConfigDir
+		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", absRootDir, getErrorMessagesFromDiagnostics(diags))
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
 	// create a new downloader to install remote modules

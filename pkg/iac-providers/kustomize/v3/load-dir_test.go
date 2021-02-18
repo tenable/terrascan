@@ -11,8 +11,6 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 )
 
-var errorReadKustomize = fmt.Errorf("unable to read the kustomization file in the directory : %s", utils.ErrYamlFileEmpty.Error())
-
 func TestLoadIacDir(t *testing.T) {
 
 	table := []struct {
@@ -34,28 +32,24 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "simple-deployment",
 			dirPath:       "./testdata/simple-deployment",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 4,
 		},
 		{
 			name:          "multibases",
 			dirPath:       "./testdata/multibases/base",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       "./testdata/multibases/dev",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       "./testdata/multibases/prod",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 2,
 		},
 
@@ -63,28 +57,26 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "multibases",
 			dirPath:       "./testdata/multibases/stage",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       "./testdata/multibases",
 			kustomize:     KustomizeV3{},
-			wantErr:       nil,
 			resourceCount: 4,
 		},
 		{
 			name:          "no-kustomize-directory",
 			dirPath:       "./testdata/no-kustomizefile",
 			kustomize:     KustomizeV3{},
-			wantErr:       errorKustomizeNotFound,
+			wantErr:       fmt.Errorf("kustomization.y(a)ml file not found in the directory ./testdata/no-kustomizefile"),
 			resourceCount: 0,
 		},
 		{
 			name:          "kustomize-file-empty",
 			dirPath:       "./testdata/kustomize-file-empty",
 			kustomize:     KustomizeV3{},
-			wantErr:       errorReadKustomize,
+			wantErr:       fmt.Errorf("unable to read the kustomization file in the directory ./testdata/kustomize-file-empty, error: yaml file is empty"),
 			resourceCount: 0,
 		},
 	}
