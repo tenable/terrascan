@@ -47,7 +47,7 @@ cicd: validate build test docker-build
 
 
 # run all unit and integration tests
-test: unit-tests
+test: unit-tests e2e-tests
 
 
 # run all validation tests

@@ -4,7 +4,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
+	initUtil "github.com/accurics/terrascan/test/e2e/init"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -13,15 +15,13 @@ import (
 	"gopkg.in/src-d/go-git.v4"
 )
 
-const (
-	initCommandTimeout = 60
-)
-
 var (
+	initCommand            string = "init"
 	defaultPolicyRepoPath  string = os.Getenv("HOME") + "/.terrascan"
 	terrascanGitURL        string = "https://github.com/accurics/terrascan.git"
 	terrascanDefaultBranch string = "master"
 	terrascanConfigEnvName string = "TERRASCAN_CONFIG"
+	kaiMoneyGitURL         string = "https://github.com/accurics/KaiMonkey.git"
 )
 
 var _ = Describe("Init", func() {
@@ -46,10 +46,9 @@ var _ = Describe("Init", func() {
 	})
 
 	Describe("terrascan init is run", func() {
-		When("terrascan init is run without any flags", func() {
+		When("without any flags", func() {
 			It("should download policies and exit with status code 0", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init")
-				Eventually(session, initCommandTimeout).Should(gexec.Exit(0))
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
 				Expect(outWriter).Should(gbytes.Say(""))
 			})
 
@@ -61,19 +60,10 @@ var _ = Describe("Init", func() {
 				var repo *git.Repository
 				var err error
 				It("should be a valid git repo", func() {
-					repo, err = git.PlainOpen(defaultPolicyRepoPath)
-					Expect(err).NotTo(HaveOccurred())
-					Expect(repo).NotTo(BeNil())
+					repo = initUtil.OpenGitRepo(defaultPolicyRepoPath)
 				})
 				It("should be terrascan git repo", func() {
-					remote, err := repo.Remote("origin")
-					Expect(err).NotTo(HaveOccurred())
-					Expect(remote).NotTo(BeNil())
-					remoteConfig := remote.Config()
-					Expect(remoteConfig).NotTo(BeNil())
-					err = remoteConfig.Validate()
-					Expect(err).NotTo(HaveOccurred())
-					Expect(remoteConfig.URLs[0]).To(BeEquivalentTo(terrascanGitURL))
+					initUtil.ValidateGitRepo(repo, terrascanGitURL)
 				})
 				It("master branch should be present", func() {
 					_, err = repo.Branch(terrascanDefaultBranch)
@@ -84,14 +74,14 @@ var _ = Describe("Init", func() {
 
 		When("terrascan init is run with -h flag", func() {
 			It("should print help", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init", "-h")
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, initCommand, "-h")
 				goldenFileAbsPath, err := filepath.Abs("golden/init_help.txt")
 				Expect(err).NotTo(HaveOccurred())
 				helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
 			})
 
 			It("should exit with status code 0", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init", "-h")
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, initCommand, "-h")
 				Eventually(session).Should(gexec.Exit(0))
 			})
 		})
@@ -128,9 +118,8 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init")
-				Eventually(session, initCommandTimeout).Should(gexec.Exit(1))
-				helper.ContainsErrorSubString(session, `failed to download policies. error: 'Get "https://repository/url/info/refs?service=git-upload-pack": dial tcp: lookup repository on 8.8.8.8:53: no such host'`)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
+				helper.ContainsErrorSubString(session, `failed to download policies. error: 'Get "https://repository/url/info/refs?service=git-upload-pack": dial tcp:`)
 			})
 		})
 		When("the config file has invalid branch name", func() {
@@ -141,9 +130,8 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init")
-				Eventually(session, initCommandTimeout).Should(gexec.Exit(1))
-				helper.ContainsErrorSubString(session, `failed to checkout branch 'invalid-branch'. error: 'reference not found'`)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
+				helper.ContainsErrorSubString(session, `failed to initialize terrascan. error : failed to checkout git branch 'invalid-branch'. error: 'reference not found'`)
 			})
 		})
 		When("the config file has invalid rego subdir", func() {
@@ -154,8 +142,7 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init")
-				Eventually(session, initCommandTimeout).Should(gexec.Exit(1))
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
 				helper.ContainsErrorSubString(session, "invalid/path: no such file or directory")
 			})
 		})
@@ -166,8 +153,49 @@ var _ = Describe("Init", func() {
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
-			It("should error out and exit with status code 1", func() {
-				Skip("Skipping invalid path test until discussion with team")
+			It("should should download policies and exit with status code 0", func() {
+				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+			})
+		})
+		Context("the config file has valid data", func() {
+			When("config file has different git repo and branch", func() {
+				JustBeforeEach(func() {
+					os.Setenv(terrascanConfigEnvName, "config/valid_config.toml")
+				})
+				JustAfterEach(func() {
+					os.Setenv(terrascanConfigEnvName, "")
+				})
+				It("init should download the repo provided in the config file", func() {
+					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+				})
+				Context("Kai Monkey git repo is downloaded", func() {
+					It("should validate Kai Monkey repo in the policy path", func() {
+						repo := initUtil.OpenGitRepo(defaultPolicyRepoPath)
+						initUtil.ValidateGitRepo(repo, kaiMoneyGitURL)
+					})
+				})
+			})
+		})
+	})
+
+	Describe("terrascan init is run multiple times", func() {
+		Context("init clones the git repo to a temp dir, deletes policy path and renames tempdir to policy path", func() {
+			Context("running init the first time", func() {
+				var modifiedTime time.Time
+				It("should download policies at the default policy path", func() {
+					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+					fi, err := os.Stat(defaultPolicyRepoPath)
+					Expect(err).ToNot(HaveOccurred())
+					modifiedTime = fi.ModTime()
+				})
+				Context("running init the second time", func() {
+					It("should download policies again at the default policy path", func() {
+						initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+						fi, err := os.Stat(defaultPolicyRepoPath)
+						Expect(err).ToNot(HaveOccurred())
+						Expect(fi.ModTime()).To(BeTemporally(">", modifiedTime))
+					})
+				})
 			})
 		})
 	})
