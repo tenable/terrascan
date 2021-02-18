@@ -28,14 +28,13 @@ import (
 )
 
 var (
-	errEmptyIacPath         = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errDirNotExists         = fmt.Errorf("directory does not exist")
-	errFileNotExists        = fmt.Errorf("file does not exist")
-	errNotValidFile         = fmt.Errorf("not a valid file")
-	errNotValidDir          = fmt.Errorf("not a valid directory")
-	errIacNotSupported      = fmt.Errorf("iac type or version not supported")
-	errCloudNotSupported    = fmt.Errorf("cloud type not supported")
-	errSeverityNotSupported = fmt.Errorf("severity level not supported")
+	errEmptyIacPath      = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists      = fmt.Errorf("directory does not exist")
+	errFileNotExists     = fmt.Errorf("file does not exist")
+	errNotValidFile      = fmt.Errorf("not a valid file")
+	errNotValidDir       = fmt.Errorf("not a valid directory")
+	errIacNotSupported   = fmt.Errorf("iac type or version not supported")
+	errCloudNotSupported = fmt.Errorf("cloud type not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
