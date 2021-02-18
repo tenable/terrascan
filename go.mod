@@ -32,5 +32,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	helm.sh/helm/v3 v3.4.0
 	honnef.co/go/tools v0.1.1 // indirect
-	sigs.k8s.io/kustomize/api v0.7.2
+	sigs.k8s.io/kustomize/api v0.8.1
 )
