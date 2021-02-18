@@ -19,6 +19,7 @@ package tfv14
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
@@ -28,18 +29,26 @@ import (
 
 func TestLoadIacFile(t *testing.T) {
 
+	testErrorString1 := `error occured while loading config file 'not-there'. error:
+<nil>: Failed to read file; The file "not-there" could not be read.
+`
+	testErrorString2 := `failed to load config file './testdata/empty.tf'. error:
+./testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+./testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`
+
 	table := []struct {
 		name     string
 		filePath string
 		tfv14    TfV14
 		want     output.AllResourceConfigs
-		wantErr  bool
+		wantErr  error
 	}{
 		{
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv14:    TfV14{},
-			wantErr:  true,
+			wantErr:  fmt.Errorf(testErrorString1),
 		},
 		{
 			name:     "empty config",
@@ -50,7 +59,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid config",
 			filePath: "./testdata/empty.tf",
 			tfv14:    TfV14{},
-			wantErr:  true,
+			wantErr:  fmt.Errorf(testErrorString2),
 		},
 		{
 			name:     "depends_on",
@@ -77,7 +86,7 @@ func TestLoadIacFile(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv14.LoadIacFile(tt.filePath)
-			if tt.wantErr && gotErr == nil {
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})

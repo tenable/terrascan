@@ -18,6 +18,7 @@ package tfv12
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
@@ -27,50 +28,60 @@ import (
 )
 
 func TestLoadIacDir(t *testing.T) {
+	testErrorString1 := `failed to load terraform config dir './testdata'. error from terraform:
+testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`
+	testErrorString2 := `failed to load terraform config dir './testdata/multiple-required-providers'. error from terraform:
+testdata/multiple-required-providers/b.tf:2,3-21: Duplicate required providers configuration; A module may have only one required providers configuration. The required providers were previously configured at testdata/multiple-required-providers/a.tf:2,3-21.
+`
+	testDirPath1 := "not-there"
+	testDirPath2 := "./testdata/testfile"
+	invalidDirErrStringTemplate := "directory '%s' has no terraform config files"
 
 	table := []struct {
 		name    string
 		dirPath string
 		tfv12   TfV12
 		want    output.AllResourceConfigs
-		wantErr bool
+		wantErr error
 	}{
 		{
 			name:    "invalid dirPath",
-			dirPath: "not-there",
+			dirPath: testDirPath1,
 			tfv12:   TfV12{},
-			wantErr: true,
+			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath1),
 		},
 		{
 			name:    "empty config",
-			dirPath: "./testdata/testfile",
+			dirPath: testDirPath2,
 			tfv12:   TfV12{},
-			wantErr: true,
+			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath2),
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: "./testdata/invalid-moduleconfigs",
 			tfv12:   TfV12{},
-			wantErr: true,
+			wantErr: fmt.Errorf("failed to build terraform allResourcesConfig"),
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata",
 			tfv12:   TfV12{},
-			wantErr: true,
+			wantErr: fmt.Errorf(testErrorString1),
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: "./testdata/multiple-required-providers",
 			tfv12:   TfV12{},
-			wantErr: true,
+			wantErr: fmt.Errorf(testErrorString2),
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath)
-			if tt.wantErr && gotErr == nil {
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})

@@ -35,8 +35,8 @@ import (
 
 var (
 	errSkipTestDir     = fmt.Errorf("skipping test directory")
-	errBadChartName    = fmt.Errorf("bad chart name in Chart.yaml")
-	errBadChartVersion = fmt.Errorf("bad chart version in Chart.yaml")
+	errBadChartName    = fmt.Errorf("invalid chart name in Chart.yaml")
+	errBadChartVersion = fmt.Errorf("invalid chart version in Chart.yaml")
 )
 
 // LoadIacDir loads all helm charts under the specified directory
