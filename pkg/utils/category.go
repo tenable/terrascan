@@ -9,6 +9,7 @@ var AcceptedCategories []string = []string{
 	"INFRASTRUCTURE SECURITY",
 	"IDENTITY AND ACCESS MANAGEMENT",
 	"CONFIGURATION AND VULNERABILITY ANALYSIS",
+	"DATA PROTECTION",
 }
 
 // ValidateCategoryInput validates input for --category flag

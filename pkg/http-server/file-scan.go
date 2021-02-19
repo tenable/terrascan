@@ -97,6 +97,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	// categories is the list categories of violations that the user want to get informed about: low, medium or high
 	categoriesValue := r.FormValue("categories")
+
 	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
 	severity := r.FormValue("severity")
 

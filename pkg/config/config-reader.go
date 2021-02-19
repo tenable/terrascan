@@ -21,7 +21,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/BurntSushi/toml"
+	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
 )
 
