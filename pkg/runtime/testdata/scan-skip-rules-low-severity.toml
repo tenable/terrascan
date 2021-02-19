@@ -12,3 +12,9 @@
 
 [severity]
 level = "low"
+
+[category]
+list = [
+    "RESILIENCE",
+    "IDENTITY AND ACCESS MANAGEMENT",
+]
