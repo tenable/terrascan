@@ -2,9 +2,11 @@ package runtime
 
 import (
 	"testing"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
-func TestExecutorInitRulesAndSeverity(t *testing.T) {
+func TestExecutorInitRulesSeverityAndCategories(t *testing.T) {
 	type fields struct {
 		configFile string
 		scanRules  []string
@@ -57,12 +59,12 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 			lenSkipRules: 5,
 		},
 		{
-			name: "valid config file with scan and skip rules with low severity",
+			name: "valid config file with scan and skip rules with low severity and compliance validation category",
 			fields: fields{
 				configFile: "testdata/scan-skip-rules-low-severity.toml",
 				scanRules:  []string{"testRuleA", "testRuleB"},
 				skipRules:  []string{"testRuleC"},
-				categories: []string{},
+				categories: []string{"RESILIENCE", "IDENTITY AND ACCESS MANAGEMENT"},
 				severity:   "low",
 			},
 			assert:       true,
@@ -84,9 +86,17 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 			wantErr: true,
 		},
 		{
+
 			name: "valid config file with invalid severity",
 			fields: fields{
 				configFile: "testdata/invalid-severity.toml",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid config file with invalid category",
+			fields: fields{
+				configFile: "testdata/invalid-category.toml",
 			},
 			wantErr: true,
 		},
@@ -103,7 +113,10 @@ func TestExecutorInitRulesAndSeverity(t *testing.T) {
 			}
 			if tt.assert {
 				if len(e.scanRules) != tt.lenScanRules && len(e.skipRules) != tt.lenSkipRules && e.severity != tt.severity {
-					t.Errorf("Executor.initRulesAndSeverity() expected scanRules: %d , skipRules: %d & severity : %s, got scanRules: %d , skipRules: %d and severity: %s", tt.lenScanRules, tt.lenSkipRules, tt.severity, len(e.scanRules), len(e.skipRules), e.severity)
+					t.Errorf("Executor.TestExecutorInitRulesSeverityAndCategories() expected scanRules: %d , skipRules: %d & severity : %s, got scanRules: %d , skipRules: %d and severity: %s", tt.lenScanRules, tt.lenSkipRules, tt.severity, len(e.scanRules), len(e.skipRules), e.severity)
+				}
+				if !utils.IsSliceEqual(e.categories, tt.fields.categories) {
+					t.Errorf("Executor.TestExecutorInitRulesSeverityAndCategories() expected categories: %v, got categories: %v", e.categories, tt.fields.categories)
 				}
 			}
 		})

@@ -36,6 +36,7 @@ var (
 	errIacNotSupported      = fmt.Errorf("iac type or version not supported")
 	errCloudNotSupported    = fmt.Errorf("cloud type not supported")
 	errSeverityNotSupported = fmt.Errorf("severity level not supported")
+	errCategoryNotSupported = fmt.Errorf("category not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object

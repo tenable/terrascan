@@ -22,6 +22,7 @@ func TestUpload(t *testing.T) {
 	testIacVersion := "v14"
 	testCloudType := "aws"
 	testParamName := "file"
+	testCategories := []string{"COMPLIANCE VALIDATION", "DATA PROTECTION"}
 
 	table := []struct {
 		name              string
@@ -38,6 +39,7 @@ func TestUpload(t *testing.T) {
 		showPassed        bool
 		invalidShowPassed bool
 		wantStatus        int
+		categories        []string
 	}{
 		{
 			name:       "valid file scan",
@@ -47,6 +49,7 @@ func TestUpload(t *testing.T) {
 			iacVersion: testIacVersion,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan default iac type",
@@ -54,6 +57,7 @@ func TestUpload(t *testing.T) {
 			param:      testParamName,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan default iac version",
@@ -62,6 +66,7 @@ func TestUpload(t *testing.T) {
 			iacType:    testIacType,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan default iac version, with invalid severity level input",
@@ -71,6 +76,7 @@ func TestUpload(t *testing.T) {
 			severity:   "HGIH",
 			cloudType:  testCloudType,
 			wantStatus: http.StatusBadRequest,
+			categories: testCategories,
 		},
 		{
 			name:       "invalid iacType",
@@ -80,6 +86,7 @@ func TestUpload(t *testing.T) {
 			iacVersion: testIacVersion,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusBadRequest,
+			categories: testCategories,
 		},
 		{
 			name:       "invalid file param",
@@ -95,6 +102,7 @@ func TestUpload(t *testing.T) {
 			iacVersion: testIacVersion,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusInternalServerError,
+			categories: testCategories,
 		},
 		{
 			name:       "empty file config",
@@ -104,6 +112,7 @@ func TestUpload(t *testing.T) {
 			iacVersion: testIacVersion,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan with scan and skip rules",
@@ -125,6 +134,7 @@ func TestUpload(t *testing.T) {
 			cloudType:  testCloudType,
 			severity:   "low ",
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan default iac version  with MEDIUM severity",
@@ -134,6 +144,7 @@ func TestUpload(t *testing.T) {
 			cloudType:  testCloudType,
 			severity:   " MEDIUM ",
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan default iac version with high severity",
@@ -143,6 +154,7 @@ func TestUpload(t *testing.T) {
 			cloudType:  testCloudType,
 			severity:   "high",
 			wantStatus: http.StatusOK,
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan with scan and skip rules with low severity",
@@ -155,7 +167,8 @@ func TestUpload(t *testing.T) {
 			severity:   "low ",
 			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
 				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
-			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
+			skipRules:  []string{"AWS.CloudFront.Network Security.Low.0568"},
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan with scan and skip rules with medium severity",
@@ -168,7 +181,8 @@ func TestUpload(t *testing.T) {
 			severity:   " medium",
 			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
 				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
-			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
+			skipRules:  []string{"AWS.CloudFront.Network Security.Low.0568"},
+			categories: testCategories,
 		},
 		{
 			name:       "valid file scan with scan and skip rules with HIGH severity",
@@ -280,6 +294,13 @@ func TestUpload(t *testing.T) {
 				}
 			} else {
 				if err = writer.WriteField("show_passed", "invalid"); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if len(tt.categories) > 0 {
+				if err = writer.WriteField("categories", strings.Join(tt.categories, ",")); err != nil {
 					writer.Close()
 					t.Error(err)
 				}

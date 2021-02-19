@@ -148,7 +148,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, severity)
+			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, categories, severity)
 	}
 	if err != nil {
 		zap.S().Error(err)

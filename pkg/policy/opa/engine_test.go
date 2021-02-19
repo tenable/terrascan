@@ -178,6 +178,18 @@ func TestFilterRules(t *testing.T) {
 			assert:      true,
 			regoMapSize: 7,
 		},
+		{
+			name: "both scan and skip rules supplied, with desired category : DATA PROTECTION",
+			args: args{
+				policyPath: testPolicyPath,
+				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
+				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
+				categories: []string{"DATA PROTECTION"},
+			},
+			regoDataMap: getTestRegoDataMapDPCategory(50),
+			assert:      true,
+			regoMapSize: 7,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -379,4 +391,8 @@ func getTestRegoDataMapLowSeverity(size int) map[string]*RegoData {
 
 func getTestRegoDataMapCVCategory(size int) map[string]*RegoData {
 	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[1])
+}
+
+func getTestRegoDataMapDPCategory(size int) map[string]*RegoData {
+	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[7])
 }

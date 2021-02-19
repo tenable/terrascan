@@ -83,6 +83,7 @@ func TestValidateInputs(t *testing.T) {
 				iacType:    "terraform",
 				iacVersion: "v12",
 				severity:   " LOW ",
+				categories: []string{" identity And ACCESS Management ", "data Protection "},
 			},
 			wantErr: nil,
 		},
@@ -157,6 +158,19 @@ func TestValidateInputs(t *testing.T) {
 				severity:   "HGIH",
 			},
 			wantErr: errSeverityNotSupported,
+		},
+		{
+			name: "invalid category",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "HGIH",
+				categories: []string{"DTA PROTECTIO"},
+			},
+			wantErr: errCategoryNotSupported,
 		},
 	}
 
