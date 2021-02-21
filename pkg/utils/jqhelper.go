@@ -17,8 +17,10 @@
 package utils
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/itchyny/gojq"
 	"go.uber.org/zap"
@@ -42,7 +44,9 @@ func JQFilterWithQuery(jqQuery string, jsonInput []byte) ([]byte, error) {
 	}
 
 	// run jq query on input
-	iter := query.Run(input)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+	iter := query.RunWithContext(ctx, input)
 	for {
 		v, ok := iter.Next()
 		if !ok {
