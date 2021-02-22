@@ -1,0 +1,6 @@
+Error: unknown command "scna" for "terrascan"
+
+Did you mean this?
+	scan
+
+Run 'terrascan --help' for usage.

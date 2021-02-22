@@ -1,0 +1,25 @@
+Violation Details -
+    
+	Description    :	Enable AWS AMI Encryption
+	File           :	main.tf
+	Line           :	5
+	Severity       :	MEDIUM
+	Rule Name      :	amiNotEncrypted
+	Rule ID        :	AWS.EC2.Encryption&KeyManagement.Medium.0688
+	Resource Name  :	awsAmiEncrypted
+	Resource Type  :	aws_ami
+	Category       :	Encryption & KeyManagement
+	
+	-----------------------------------------------------------------------
+	
+
+Scan Summary -
+
+	File/Folder         :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation
+	IaC Type            :	terraform
+	Scanned At          :	2021-02-22 18:49:04.693303 +0000 UTC
+	Policies Validated  :	53
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	1
+	High                :	0

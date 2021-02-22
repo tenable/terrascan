@@ -12,15 +12,13 @@ import (
 )
 
 var (
-	scanComand string = "scan"
+	scanComand           string = "scan"
+	session              *gexec.Session
+	terrascanBinaryPath  string
+	outWriter, errWriter io.Writer
 )
 
 var _ = Describe("Scan", func() {
-
-	var session *gexec.Session
-	var terrascanBinaryPath string
-
-	var outWriter, errWriter io.Writer
 
 	BeforeSuite(func() {
 		terrascanBinaryPath = helper.GetTerrascanBinaryPath()
@@ -37,16 +35,36 @@ var _ = Describe("Scan", func() {
 	})
 
 	Describe("scan command is run with -h flag", func() {
-		It("should exit with status code 0", func() {
+		It("should print help for scan and exit with status code 0", func() {
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-h")
 			Eventually(session).Should(gexec.Exit(0))
-		})
-
-		It("should print the scan help", func() {
-			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-h")
 			goldenFileAbsPath, err := filepath.Abs("golden/scan_help.txt")
 			Expect(err).NotTo(HaveOccurred())
 			helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
+		})
+	})
+
+	Describe("typo in the scan command, eg: scna", func() {
+		It("should exit with status code 1", func() {
+			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "scna")
+			Eventually(session).Should(gexec.Exit(1))
+		})
+
+		It("should print scan command suggestion", func() {
+			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "scna")
+			goldenFileAbsPath, err := filepath.Abs("golden/scan_typo_help.txt")
+			Expect(err).NotTo(HaveOccurred())
+			helper.CompareActualWithGolden(session, goldenFileAbsPath, false)
+		})
+	})
+
+	Describe("scan command is run without any flags", func() {
+		Context("when scan command is run without any flags, terrascan with scan for terraform files in working directory", func() {
+			It("should error out as no terraform files are present in working directory", func() {
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand)
+				Eventually(session, 2).Should(gexec.Exit(1))
+				helper.ContainsErrorSubString(session, "has no terraform config files")
+			})
 		})
 	})
 })

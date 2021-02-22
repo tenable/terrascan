@@ -1,0 +1,85 @@
+<testsuites tests="53" name="TERRASCAN_POLICY_SUITES" failures="26" time="0">
+  <testsuite tests="53" failures="26" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_s3_bucket_violation">
+    <properties>
+      <property name="Terrascan Version" value="v1.3.3"></property>
+    </properties>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketNoWebsiteIndexDoc&#34; at line: 34, violates: RULE - AWS.S3Bucket.NetworkSecurity.High.0417" severity="HIGH" category="Network Security">
+      <failure message="Description: Ensure that there are not any static websites being hosted on buckets you aren&#39;t aware of, File: main.tf, Line: 34, Severity: HIGH, Rule Name: s3BucketNoWebsiteIndexDoc, Rule ID: AWS.S3Bucket.NetworkSecurity.High.0417, Resource Name: s3BucketNoWebsiteIndexDoc, Resource Type: aws_s3_bucket, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3VersioningMfaFalse&#34; at line: 53, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 53, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: s3VersioningMfaFalse, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;authUsersReadAccess&#34; at line: 76, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 76, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: authUsersReadAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadWriteAccess&#34; at line: 86, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 86, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: allUsersReadWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;noS3BucketSseRules&#34; at line: 5, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 5, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: noS3BucketSseRules, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketSseRulesWithKmsNull&#34; at line: 16, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 16, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: s3BucketSseRulesWithKmsNull, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketNoWebsiteIndexDoc&#34; at line: 34, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 34, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: s3BucketNoWebsiteIndexDoc, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadAccess&#34; at line: 71, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 71, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: allUsersReadAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersWriteAccess&#34; at line: 81, violates: RULE - AWS.S3Bucket.IAM.High.0370" severity="HIGH" category="IAM">
+      <failure message="Description: Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites, File: main.tf, Line: 81, Severity: HIGH, Rule Name: s3Versioning, Rule ID: AWS.S3Bucket.IAM.High.0370, Resource Name: allUsersWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;authUsersReadAccess&#34; at line: 76, violates: RULE - AWS.S3Bucket.IAM.High.0378" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 76, Severity: HIGH, Rule Name: authUsersReadAccess, Rule ID: AWS.S3Bucket.IAM.High.0378, Resource Name: authUsersReadAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3VersioningMfaFalse&#34; at line: 53, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 53, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: s3VersioningMfaFalse, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;authUsersReadAccess&#34; at line: 76, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 76, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: authUsersReadAccess, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadWriteAccess&#34; at line: 86, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 86, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: allUsersReadWriteAccess, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3VersioningOnly&#34; at line: 91, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 91, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: s3VersioningOnly, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3MFADeleteOnly&#34; at line: 108, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 108, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: s3MFADeleteOnly, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;noS3BucketSseRules&#34; at line: 5, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 5, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: noS3BucketSseRules, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketSseRulesWithKmsNull&#34; at line: 16, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 16, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: s3BucketSseRulesWithKmsNull, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketNoWebsiteIndexDoc&#34; at line: 34, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 34, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: s3BucketNoWebsiteIndexDoc, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadAccess&#34; at line: 71, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 71, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: allUsersReadAccess, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersWriteAccess&#34; at line: 81, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
+      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: main.tf, Line: 81, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: allUsersWriteAccess, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadWriteAccess&#34; at line: 86, violates: RULE - AWS.S3Bucket.IAM.High.0381" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 86, Severity: HIGH, Rule Name: allUsersReadWriteAccess, Rule ID: AWS.S3Bucket.IAM.High.0381, Resource Name: allUsersReadWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersWriteAccess&#34; at line: 81, violates: RULE - AWS.S3Bucket.IAM.High.0381" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 81, Severity: HIGH, Rule Name: allUsersReadWriteAccess, Rule ID: AWS.S3Bucket.IAM.High.0381, Resource Name: allUsersWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadWriteAccess&#34; at line: 86, violates: RULE - AWS.S3Bucket.IAM.High.0379" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 86, Severity: HIGH, Rule Name: allUsersWriteAccess, Rule ID: AWS.S3Bucket.IAM.High.0379, Resource Name: allUsersReadWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersWriteAccess&#34; at line: 81, violates: RULE - AWS.S3Bucket.IAM.High.0379" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 81, Severity: HIGH, Rule Name: allUsersWriteAccess, Rule ID: AWS.S3Bucket.IAM.High.0379, Resource Name: allUsersWriteAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;s3BucketNoWebsiteIndexDoc&#34; at line: 34, violates: RULE - AWS.S3Bucket.IAM.High.0377" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 34, Severity: HIGH, Rule Name: allUsersReadAccess, Rule ID: AWS.S3Bucket.IAM.High.0377, Resource Name: s3BucketNoWebsiteIndexDoc, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;allUsersReadAccess&#34; at line: 71, violates: RULE - AWS.S3Bucket.IAM.High.0377" severity="HIGH" category="IAM">
+      <failure message="Description: Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion, File: main.tf, Line: 71, Severity: HIGH, Rule Name: allUsersReadAccess, Rule ID: AWS.S3Bucket.IAM.High.0377, Resource Name: allUsersReadAccess, Resource Type: aws_s3_bucket, Category: IAM" type=""></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

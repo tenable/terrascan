@@ -1,0 +1,9 @@
+<results>
+  <violations>
+    <violation rule_name="reme_appGatewayWAFEnabled" description="Ensure Azure Application Gateway Web application firewall (WAF) is enabled" rule_id="accurics.azure.NS.147" severity="MEDIUM" category="Network Security" resource_name="accurics_application_gateway" resource_type="azurerm_application_gateway" file="main.tf" line="42"></violation>
+    <violation rule_name="reme_appGatewayWAFEnabled" description="Ensure Azure Application Gateway Web application firewall (WAF) is enabled" rule_id="accurics.azure.NS.147" severity="MEDIUM" category="Network Security" resource_name="accurics_application_gateway2" resource_type="azurerm_application_gateway" file="main.tf" line="98"></violation>
+    <violation rule_name="reme_resourceGroupLock" description="Ensure that Azure Resource Group has resource lock enabled" rule_id="accurics.azure.NS.272" severity="LOW" category="Network Security" resource_name="example" resource_type="azurerm_resource_group" file="main.tf" line="5"></violation>
+  </violations>
+  <skipped_violations></skipped_violations>
+  <scan_summary file_folder="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/azure/azurem_application_gateway_violation" iac_type="terraform" scanned_at="2021-02-23 10:12:27.833392 +0000 UTC" policies_validated="53" violated_policies="3" low="1" medium="2" high="0"></scan_summary>
+</results>

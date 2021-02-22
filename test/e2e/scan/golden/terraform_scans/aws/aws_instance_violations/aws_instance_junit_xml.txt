@@ -1,0 +1,40 @@
+<testsuites tests="53" name="TERRASCAN_POLICY_SUITES" failures="11" time="0">
+  <testsuite tests="53" failures="11" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_instance_violation">
+    <properties>
+      <property name="Terrascan Version" value="v1.3.3"></property>
+    </properties>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithPublicIp&#34; at line: 19, violates: RULE - AC-AWS-NS-IN-M-1172" severity="MEDIUM" category="Network Security">
+      <failure message="Description: EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain, File: main.tf, Line: 19, Severity: MEDIUM, Rule Name: ec2UsingIMDSv1, Rule ID: AC-AWS-NS-IN-M-1172, Resource Name: instanceWithPublicIp, Resource Type: aws_instance, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_endpoint_not_present&#34; at line: 67, violates: RULE - AC-AWS-NS-IN-M-1172" severity="MEDIUM" category="Network Security">
+      <failure message="Description: EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain, File: main.tf, Line: 67, Severity: MEDIUM, Rule Name: ec2UsingIMDSv1, Rule ID: AC-AWS-NS-IN-M-1172, Resource Name: instanceWithIMDv1_endpoint_not_present, Resource Type: aws_instance, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_emptyblock&#34; at line: 29, violates: RULE - AC-AWS-NS-IN-M-1172" severity="MEDIUM" category="Network Security">
+      <failure message="Description: EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain, File: main.tf, Line: 29, Severity: MEDIUM, Rule Name: ec2UsingIMDSv1, Rule ID: AC-AWS-NS-IN-M-1172, Resource Name: instanceWithIMDv1_emptyblock, Resource Type: aws_instance, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_fullblock&#34; at line: 40, violates: RULE - AC-AWS-NS-IN-M-1172" severity="MEDIUM" category="Network Security">
+      <failure message="Description: EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain, File: main.tf, Line: 40, Severity: MEDIUM, Rule Name: ec2UsingIMDSv1, Rule ID: AC-AWS-NS-IN-M-1172, Resource Name: instanceWithIMDv1_fullblock, Resource Type: aws_instance, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_token_not_present&#34; at line: 54, violates: RULE - AC-AWS-NS-IN-M-1172" severity="MEDIUM" category="Network Security">
+      <failure message="Description: EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain, File: main.tf, Line: 54, Severity: MEDIUM, Rule Name: ec2UsingIMDSv1, Rule ID: AC-AWS-NS-IN-M-1172, Resource Name: instanceWithIMDv1_token_not_present, Resource Type: aws_instance, Category: Network Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_endpoint_not_present&#34; at line: 67, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 67, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithIMDv1_endpoint_not_present, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithNoVpc&#34; at line: 5, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 5, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithNoVpc, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithPublicIp&#34; at line: 19, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 19, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithPublicIp, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_emptyblock&#34; at line: 29, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 29, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithIMDv1_emptyblock, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_fullblock&#34; at line: 40, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 40, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithIMDv1_fullblock, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;instanceWithIMDv1_token_not_present&#34; at line: 54, violates: RULE - AC-AW-IS-IN-M-0144" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices, File: main.tf, Line: 54, Severity: MEDIUM, Rule Name: instanceWithNoVpc, Rule ID: AC-AW-IS-IN-M-0144, Resource Name: instanceWithIMDv1_token_not_present, Resource Type: aws_instance, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

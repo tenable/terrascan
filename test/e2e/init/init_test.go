@@ -153,7 +153,7 @@ var _ = Describe("Init", func() {
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
-			It("should should download policies and exit with status code 0", func() {
+			It("should download policies and exit with status code 0", func() {
 				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
 			})
 		})

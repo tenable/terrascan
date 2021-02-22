@@ -1,0 +1,10 @@
+<testsuites tests="53" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="53" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_vpc_violation">
+    <properties>
+      <property name="Terrascan Version" value="v1.3.3"></property>
+    </properties>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;ptshggav1&#34; at line: 5, violates: RULE - AWS.VPC.Logging.Medium.0470" severity="MEDIUM" category="Logging">
+      <failure message="Description: Ensure VPC flow logging is enabled in all VPCs, File: main.tf, Line: 5, Severity: MEDIUM, Rule Name: vpcFlowLogsNotEnabled, Rule ID: AWS.VPC.Logging.Medium.0470, Resource Name: ptshggav1, Resource Type: aws_vpc, Category: Logging" type=""></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

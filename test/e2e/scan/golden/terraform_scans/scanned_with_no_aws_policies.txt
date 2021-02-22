@@ -1,0 +1,10 @@
+Scan Summary -
+
+	File/Folder         :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation
+	IaC Type            :	terraform
+	Scanned At          :	2021-02-22 20:31:29.619574 +0000 UTC
+	Policies Validated  :	8
+	Violated Policies   :	0
+	Low                 :	0
+	Medium              :	0
+	High                :	0

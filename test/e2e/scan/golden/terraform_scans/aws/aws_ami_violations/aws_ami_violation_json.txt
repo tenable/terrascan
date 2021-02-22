@@ -1,0 +1,28 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "amiNotEncrypted",
+        "description": "Enable AWS AMI Encryption",
+        "rule_id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+        "severity": "MEDIUM",
+        "category": "Encryption \u0026 KeyManagement",
+        "resource_name": "awsAmiEncrypted",
+        "resource_type": "aws_ami",
+        "file": "main.tf",
+        "line": 5
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+      "iac_type": "terraform",
+      "scanned_at": "2021-02-22 18:59:02.40087 +0000 UTC",
+      "policies_validated": 53,
+      "violated_policies": 1,
+      "low": 0,
+      "medium": 1,
+      "high": 0
+    }
+  }
+}
