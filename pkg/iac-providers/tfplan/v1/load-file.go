@@ -28,7 +28,13 @@ import (
 )
 
 const (
-	jqQuery = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
+	jqQuery             = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
+	tfPlanFormatVersion = "0.1"
+)
+
+var (
+	errIncorrectFormatVersion = fmt.Errorf("terraform format version shoule be '%s'", tfPlanFormatVersion)
+	errEmptyTerraformVersion  = fmt.Errorf("terraform version cannot be empty in tfplan json")
 )
 
 // LoadIacFile parses the given tfplan file from the given file path
@@ -36,14 +42,17 @@ func (t *TFPlan) LoadIacFile(absFilePath string) (allResourcesConfig output.AllR
 
 	zap.S().Debug("processing tfplan file")
 
-	// validate if provide file is a valid tfplan file
-
 	// read tfplan json file
 	tfjson, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to read tfplan JSON file. error: '%v'", err)
 		zap.S().Debug(errMsg)
 		return allResourcesConfig, fmt.Errorf(errMsg)
+	}
+
+	// validate if provide file is a valid tfplan file
+	if err := t.isValidTFPlanJSON(tfjson); err != nil {
+		return allResourcesConfig, fmt.Errorf("invalid terraform json file; error: '%v'", err)
 	}
 
 	// run jq query on tfplan json
@@ -75,6 +84,27 @@ func (t *TFPlan) LoadIacFile(absFilePath string) (allResourcesConfig output.AllR
 
 	// return output
 	return allResourcesConfig, nil
+}
+
+// isValidTFPlanJSON validates whether the provided file is a valid tf json file
+func (t *TFPlan) isValidTFPlanJSON(tfjson []byte) error {
+
+	// decode tfjson into map[string]interface{}
+	if err := json.Unmarshal(tfjson, &t); err != nil {
+		return fmt.Errorf("failed to decode tfplan json. error: '%v'", err)
+	}
+
+	// check format version
+	if t.FormatVersion != tfPlanFormatVersion {
+		return errIncorrectFormatVersion
+	}
+
+	// check terraform version
+	if t.TerraformVersion == "" {
+		return errEmptyTerraformVersion
+	}
+
+	return nil
 }
 
 // getTFID returns a valid resource ID for terraform
