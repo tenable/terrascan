@@ -1,0 +1,12 @@
+{
+    "name": "reme_containerRegistryResourceLock",
+    "file": "containerRegistryResourceLock.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure Container Registry has locks",
+    "reference_id": "accurics.azure.AKS.3",
+    "category": "Azure Container Services",
+    "version": 2
+}

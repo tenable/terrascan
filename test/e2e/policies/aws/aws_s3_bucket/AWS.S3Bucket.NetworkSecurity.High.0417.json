@@ -1,0 +1,12 @@
+{
+    "name": "s3BucketNoWebsiteIndexDoc",
+    "file": "s3BucketNoWebsiteIndexDoc.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that there are not any static websites being hosted on buckets you aren't aware of",
+    "reference_id": "AWS.S3Bucket.NetworkSecurity.High.0417",
+    "category": "Network Security",
+    "version": 2
+}

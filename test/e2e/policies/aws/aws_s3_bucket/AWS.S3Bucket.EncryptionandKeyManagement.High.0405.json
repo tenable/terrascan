@@ -1,0 +1,12 @@
+{
+    "name": "s3BucketSseRulesWithKmsNull",
+    "file": "s3BucketSseRulesWithKmsNull.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that S3 Buckets have server side encryption at rest enabled with KMS key to protect sensitive data.",
+    "reference_id": "AWS.S3Bucket.EncryptionandKeyManagement.High.0405",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

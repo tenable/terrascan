@@ -1,0 +1,10 @@
+{
+    "name": "encryptedwithCsek",
+    "file": "encryptedwithCsek.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "VM disks attached to a compute instance should be encrypted with Customer Supplied Encryption Keys (CSEK) .",
+    "reference_id": "accurics.gcp.EKM.132",
+    "category": "Encryption \u0026 Key Management",
+    "version": 1
+}

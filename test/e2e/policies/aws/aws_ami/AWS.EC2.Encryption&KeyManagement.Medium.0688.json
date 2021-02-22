@@ -1,0 +1,10 @@
+{
+    "name": "amiNotEncrypted",
+    "file": "amiNotEncrypted.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable AWS AMI Encryption",
+    "reference_id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+    "category": "Encryption \u0026 KeyManagement",
+    "version": 1
+}

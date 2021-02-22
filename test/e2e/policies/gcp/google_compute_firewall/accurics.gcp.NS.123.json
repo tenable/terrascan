@@ -1,0 +1,10 @@
+{
+    "name": "unrestrictedRdpAccess",
+    "file": "unrestrictedRdpAccess.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure Google compute firewall ingress does not allow unrestricted rdp access.",
+    "reference_id": "accurics.gcp.NS.123",
+    "category": "Network Security ",
+    "version": 1
+}

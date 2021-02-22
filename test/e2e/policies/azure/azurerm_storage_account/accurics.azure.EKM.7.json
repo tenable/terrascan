@@ -1,0 +1,12 @@
+{
+    "name": "reme_storageAccountEnableHttps",
+    "file": "storageAccountEnableHttps.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that 'Secure transfer required' is enabled for Storage Accounts",
+    "reference_id": "accurics.azure.EKM.7",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

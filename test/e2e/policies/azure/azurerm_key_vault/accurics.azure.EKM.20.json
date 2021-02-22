@@ -1,0 +1,12 @@
+{
+    "name": "reme_keyVaultAuditLoggingEnabled",
+    "file": "keyVaultAuditLoggingEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that logging for Azure KeyVault is 'Enabled'",
+    "reference_id": "accurics.azure.EKM.20",
+    "category": "Encryption and Key Management",
+    "version": 2
+}
