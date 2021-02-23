@@ -38,9 +38,10 @@ var _ = Describe("Scan", func() {
 		It("should print help for scan and exit with status code 0", func() {
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-h")
 			Eventually(session).Should(gexec.Exit(0))
-			goldenFileAbsPath, err := filepath.Abs("golden/scan_help.txt")
-			Expect(err).NotTo(HaveOccurred())
-			helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
+			sessionBytes, fileBytes := helper.GetByteData(session, "golden/scan_help.txt", true)
+			sessionBytes = helper.TerraformIacVersion.ReplaceAll(sessionBytes, []byte(""))
+			fileBytes = helper.TerraformIacVersion.ReplaceAll(fileBytes, []byte(""))
+			Expect(string(sessionBytes)).Should(Equal(string(fileBytes)))
 		})
 	})
 

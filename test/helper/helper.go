@@ -22,38 +22,42 @@ import (
 )
 
 var (
-	// ScannedAtRegex is regex for 'scanned at' attribute in violations output
-	ScannedAtRegex = regexp.MustCompile(`["]*[sS]canned[ _][aA]t["]*[ \t]*[:=][ \t]*["]*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{3,6} [+-][0-9]{4} UTC["]*[,]{0,1}`)
-	// FileFolderRegex is regex for 'file/folder' attribute in violations output
-	FileFolderRegex = regexp.MustCompile(`["]*[fF]ile\/[fF]older["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
-	// PackageRegex is regex for 'package' attribute in junit-xml output
-	PackageRegex = regexp.MustCompile(`package=["]*(.+)\/(.+)["]*`)
-	// VersionValueRegex is regex for 'value' attribute in junit-xml output (which is terrascan version)
-	VersionValueRegex = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
+	// ScannedAt is regex for 'scanned at' attribute in violations output
+	ScannedAt = regexp.MustCompile(`["]*[sS]canned[ _][aA]t["]*[ \t]*[:=][ \t]*["]*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{1,9} [+-][0-9]{4} UTC["]*[,]{0,1}`)
+
+	// FileFolder is regex for 'file/folder' attribute in violations output
+	FileFolder = regexp.MustCompile(`["]*[fF]ile[\/_][fF]older["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
+
+	// Package is regex for 'package' attribute in junit-xml output
+	Package = regexp.MustCompile(`package=["]*(.+)\/(.+)["]*`)
+
+	// VersionValue is regex for 'value' attribute in junit-xml output (which is terrascan version)
+	VersionValue = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
+
+	// TerraformIacVersion is regex for terraform iac version displayed in help for scan command
+	TerraformIacVersion = regexp.MustCompile(`terraform: +([v][1][1-4], ){2}([v][1][1-4])`)
+
+	// SourceRegex is regex for 'file/folder' attribute in violations output
+	SourceRegex = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)\/(.+)["]*`)
 )
 
 // CompareActualWithGolden compares actual string with contents of golden file path passed as parameter
 func CompareActualWithGolden(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
-	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
-	gomega.Expect(err).NotTo(gomega.HaveOccurred())
-
-	var sessionContents, fileContents string
-
-	fileContents = string(fileData)
-	if isStdOut {
-		sessionContents = string(session.Wait().Out.Contents())
-	} else {
-		sessionContents = string(session.Wait().Err.Contents())
-	}
-
-	fileContents = strings.TrimSpace(fileContents)
-	sessionContents = strings.TrimSpace(sessionContents)
-	gomega.Expect(sessionContents).Should(gomega.BeIdenticalTo(fileContents))
+	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
+	gomega.Expect(string(sessionBytes)).Should(gomega.Equal(string(fileBytes)))
 }
 
-// CompareActualWithGoldenRegex compares actual string with contents of golden file passed as parameter
+// CompareActualWithGoldenConfigOnlyRegex compares actual string with contents of golden file path passed as parameter
+func CompareActualWithGoldenConfigOnlyRegex(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
+	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
+	sessionBytes = SourceRegex.ReplaceAll(sessionBytes, []byte(""))
+	fileBytes = SourceRegex.ReplaceAll(fileBytes, []byte(""))
+	gomega.Expect(string(sessionBytes)).Should(gomega.Equal(string(fileBytes)))
+}
+
+// CompareActualWithGoldenSummaryRegex compares actual string with contents of golden file passed as parameter
 // ignores specified regex patterns from the actual and golden text
-func CompareActualWithGoldenRegex(session *gexec.Session, goldenFileAbsPath string, isJunitXML, isStdOut bool) {
+func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPath string, isJunitXML, isStdOut bool) {
 	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	var sessionOutput, fileContents string
@@ -70,17 +74,17 @@ func CompareActualWithGoldenRegex(session *gexec.Session, goldenFileAbsPath stri
 	fileContents = strings.TrimSpace(fileContents)
 
 	if isJunitXML {
-		sessionOutput = PackageRegex.ReplaceAllString(sessionOutput, "")
-		fileContents = PackageRegex.ReplaceAllString(fileContents, "")
+		sessionOutput = Package.ReplaceAllString(sessionOutput, "")
+		fileContents = Package.ReplaceAllString(fileContents, "")
 
-		sessionOutput = VersionValueRegex.ReplaceAllString(sessionOutput, "")
-		fileContents = VersionValueRegex.ReplaceAllString(fileContents, "")
+		sessionOutput = VersionValue.ReplaceAllString(sessionOutput, "")
+		fileContents = VersionValue.ReplaceAllString(fileContents, "")
 	} else {
-		sessionOutput = ScannedAtRegex.ReplaceAllString(sessionOutput, "")
-		fileContents = ScannedAtRegex.ReplaceAllString(fileContents, "")
+		sessionOutput = ScannedAt.ReplaceAllString(sessionOutput, "")
+		fileContents = ScannedAt.ReplaceAllString(fileContents, "")
 
-		sessionOutput = FileFolderRegex.ReplaceAllString(sessionOutput, "")
-		fileContents = FileFolderRegex.ReplaceAllString(fileContents, "")
+		sessionOutput = FileFolder.ReplaceAllString(sessionOutput, "")
+		fileContents = FileFolder.ReplaceAllString(fileContents, "")
 	}
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
@@ -88,7 +92,7 @@ func CompareActualWithGoldenRegex(session *gexec.Session, goldenFileAbsPath stri
 
 // CompareActualWithGoldenJSON compares actual data with contents of golden file passed as parameter
 func CompareActualWithGoldenJSON(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
-	sessionBytes, fileBytes := getByteData(session, goldenFileAbsPath, isStdOut)
+	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
 
 	var sessionEngineOutput, fileDataEngineOutput policy.EngineOutput
 
@@ -102,7 +106,7 @@ func CompareActualWithGoldenJSON(session *gexec.Session, goldenFileAbsPath strin
 
 // CompareActualWithGoldenYAML compares actual data with contents of golden file passed as parameter
 func CompareActualWithGoldenYAML(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
-	sessionBytes, fileBytes := getByteData(session, goldenFileAbsPath, isStdOut)
+	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
 
 	var sessionEngineOutput, fileDataEngineOutput policy.EngineOutput
 
@@ -116,7 +120,7 @@ func CompareActualWithGoldenYAML(session *gexec.Session, goldenFileAbsPath strin
 
 // CompareActualWithGoldenXML compares actual data with contents of golden file passed as parameter
 func CompareActualWithGoldenXML(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
-	sessionBytes, fileBytes := getByteData(session, goldenFileAbsPath, isStdOut)
+	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
 
 	var sessionEngineOutput, fileDataEngineOutput policy.EngineOutput
 
@@ -157,8 +161,8 @@ func RunCommand(path string, outWriter, errWriter io.Writer, args ...string) *ge
 	return session
 }
 
-// getByteData is a helper function to get data in byte slice from session and golden file
-func getByteData(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) ([]byte, []byte) {
+// GetByteData is a helper function to get data in byte slice from session and golden file
+func GetByteData(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) ([]byte, []byte) {
 	fileBytes, err := ioutil.ReadFile(goldenFileAbsPath)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	var sessionBytes []byte

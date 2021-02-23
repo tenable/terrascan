@@ -17,7 +17,7 @@ const (
 // RunScanCommandAndAssertTextOutput runs the scan command with supplied paramters and compares actual and golden output
 func RunScanCommandAndAssertTextOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
-	helper.CompareActualWithGoldenRegex(session, goldenFileAbsPath, isJunitXML, isStdOut)
+	helper.CompareActualWithGoldenSummaryRegex(session, goldenFileAbsPath, isJunitXML, isStdOut)
 }
 
 // RunScanCommandAndAssertJSONOutput runs the scan command with supplied paramters and compares actual and golden output
