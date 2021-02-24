@@ -18,6 +18,7 @@ package utils
 
 import (
 	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 )
@@ -39,19 +40,19 @@ func TestGetAbsPath(t *testing.T) {
 		{
 			name:    "user HOME dir",
 			path:    "~",
-			want:    os.Getenv("HOME"),
+			want:    GetHomeDir(),
 			wantErr: nil,
 		},
 		{
 			name:    "dir in HOME dir",
 			path:    "~/somedir",
-			want:    os.Getenv("HOME") + "/somedir",
+			want:    filepath.Join(GetHomeDir(), "somedir"),
 			wantErr: nil,
 		},
 		{
 			name:    "testdata dir",
 			path:    "./testdata",
-			want:    os.Getenv("PWD") + "/testdata",
+			want:    filepath.Join(os.Getenv("PWD"), "testdata"),
 			wantErr: nil,
 		},
 	}

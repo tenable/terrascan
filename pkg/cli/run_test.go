@@ -45,7 +45,7 @@ func setup() {
 
 func shutdown() {
 	// remove the downloaded policies
-	os.RemoveAll(os.Getenv("HOME") + "/.terrascan")
+	os.RemoveAll(filepath.Join(utils.GetHomeDir(), ".terrascan"))
 }
 
 func TestRun(t *testing.T) {
@@ -55,9 +55,9 @@ func TestRun(t *testing.T) {
 	}
 
 	testDirPath := "testdata/run-test"
-	kustomizeTestDirPath := testDirPath + "/kustomize-test"
-	testTerraformFilePath := testDirPath + "/config-only.tf"
-	testRemoteModuleFilePath := testDirPath + "/remote-modules.tf"
+	kustomizeTestDirPath := filepath.Join(testDirPath, "kustomize-test")
+	testTerraformFilePath := filepath.Join(testDirPath, "config-only.tf")
+	testRemoteModuleFilePath := filepath.Join(testDirPath, "remote-modules.tf")
 
 	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 

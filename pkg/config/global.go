@@ -18,7 +18,9 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -30,8 +32,8 @@ const (
 )
 
 var (
-	policyRepoPath = os.Getenv("HOME") + "/.terrascan"
-	policyBasePath = policyRepoPath + "/pkg/policies/opa/rego"
+	policyRepoPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
+	policyBasePath = filepath.Join(policyRepoPath, "pkg", "policies", "opa", "rego")
 )
 
 func init() {
