@@ -12,7 +12,7 @@ func GetHomeDir() (terrascanDir string) {
 	terrascanDir, err := homedir.Dir()
 
 	if err != nil {
-		zap.S().Warnf("unable to find determine the home directory: %v\n", err)
+		zap.S().Warnf("unable to determine the home directory: %v\n", err)
 	}
 
 	return
