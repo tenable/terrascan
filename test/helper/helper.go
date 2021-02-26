@@ -21,6 +21,15 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const (
+	// ExitCodeZero represents command exit code 0
+	ExitCodeZero = 0
+	// ExitCodeOne represents command exit code 0
+	ExitCodeOne = 1
+	// ExitCodeThree represents command exit code 0
+	ExitCodeThree = 3
+)
+
 var (
 	// ScannedAt is regex for 'scanned at' attribute in violations output
 	ScannedAt = regexp.MustCompile(`["]*[sS]canned[ _][aA]t["]*[ \t]*[:=][ \t]*["]*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{1,9} [+-][0-9]{4} UTC["]*[,]{0,1}`)
@@ -203,12 +212,23 @@ func GetByteData(session *gexec.Session, goldenFileAbsPath string, isStdOut bool
 func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput policy.EngineOutput) {
 	var sessionOutputSummary, fileDataSummary results.ScanSummary
 	var actualViolations, expectedViolations violations
+	var actualSkippedViolations, expectedSkippedViolations violations
 
 	actualViolations = sessionEngineOutput.ViolationStore.Violations
 	expectedViolations = fileDataEngineOutput.ViolationStore.Violations
 
 	sort.Sort(actualViolations)
 	sort.Sort(expectedViolations)
+	removeFileFromViolations(actualViolations)
+	removeFileFromViolations(expectedViolations)
+
+	actualSkippedViolations = sessionEngineOutput.ViolationStore.SkippedViolations
+	expectedSkippedViolations = fileDataEngineOutput.ViolationStore.SkippedViolations
+
+	sort.Sort(actualSkippedViolations)
+	sort.Sort(expectedSkippedViolations)
+	removeFileFromViolations(actualSkippedViolations)
+	removeFileFromViolations(expectedSkippedViolations)
 
 	sessionOutputSummary = sessionEngineOutput.ViolationStore.Summary
 	removeTimestampAndResourcePath(&sessionOutputSummary)
@@ -218,10 +238,20 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 
 	gomega.Expect(reflect.DeepEqual(sessionOutputSummary, fileDataSummary)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualViolations, expectedViolations)).To(gomega.BeTrue())
+	gomega.Expect(reflect.DeepEqual(actualSkippedViolations, expectedSkippedViolations)).To(gomega.BeTrue())
 }
 
 // removeTimestampAndResourcePath is helper func to make timestamp and resource path blank
 func removeTimestampAndResourcePath(summary *results.ScanSummary) {
 	summary.Timestamp = ""
 	summary.ResourcePath = ""
+}
+
+// removeFileFromViolations is helper func to make file in violations blank
+func removeFileFromViolations(v violations) {
+	vs := []*results.Violation(v)
+
+	for _, violation := range vs {
+		violation.File = ""
+	}
 }

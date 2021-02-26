@@ -3,6 +3,7 @@ package scan_test
 import (
 	"path/filepath"
 
+	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -35,8 +36,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			Context("it doesn't support --config-only flag", func() {
 				Context("human readable output format is the default output format", func() {
 					It("should result in an error and exit with status code 1", func() {
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only")
-						Eventually(session).Should(gexec.Exit(1))
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only")
+						Eventually(session).Should(gexec.Exit(helper.ExitCodeOne))
 						helper.ContainsErrorSubString(session, "please use yaml or json output format when using --config-only flag")
 					})
 				})
@@ -46,8 +47,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		When("output type is xml", func() {
 			Context("it doesn't support --config-only flag", func() {
 				It("should result in an error and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "xml")
-					Eventually(session, 5).Should(gexec.Exit(1))
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "xml")
+					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 					helper.ContainsErrorSubString(session, "failed to write XML output. error: 'xml: unsupported type: output.AllResourceConfigs'")
 				})
 			})
@@ -56,8 +57,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		When("output type is junit-xml", func() {
 			Context("it doesn't support --config-only flag", func() {
 				It("should result in an error and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "junit-xml")
-					Eventually(session, 5).Should(gexec.Exit(1))
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "junit-xml")
+					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 					helper.ContainsErrorSubString(session, "incorrect input for JunitXML writer, supported type is policy.EngineOutput")
 				})
 			})
@@ -69,8 +70,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {
 					It("should display config json and exit with status code 3", func() {
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "json")
-						Eventually(session, 5).Should(gexec.Exit(3))
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "json")
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 					})
 				})
 			})
@@ -78,8 +79,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			When("output type is yaml", func() {
 				Context("it supports --config-only flag", func() {
 					It("should display config json and exit with status code 3", func() {
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "yaml")
-						Eventually(session, 5).Should(gexec.Exit(3))
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "yaml")
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 					})
 				})
 			})
@@ -92,8 +93,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {
 					It("should display config json and exit with status code 3", func() {
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "json", "-i", "k8s")
-						Eventually(session, 5).Should(gexec.Exit(3))
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "json", "-i", "k8s")
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 					})
 				})
 			})
@@ -101,8 +102,8 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			When("output type is yaml", func() {
 				Context("it supports --config-only flag", func() {
 					It("should display config json and exit with status code 3", func() {
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "yaml", "-i", "k8s")
-						Eventually(session, 5).Should(gexec.Exit(3))
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "yaml", "-i", "k8s")
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 					})
 				})
 			})

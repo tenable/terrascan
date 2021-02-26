@@ -1,0 +1,29 @@
+{
+  "results": {
+    "violations": null,
+    "skipped_violations": [
+      {
+        "rule_name": "noOwnerLabel",
+        "description": "No owner for namespace affects the operations",
+        "rule_id": "AC-K8-OE-NS-L-0128",
+        "severity": "LOW",
+        "category": "Operational Efficiency",
+        "skip_comment": "reason to skip the rule",
+        "resource_name": "production",
+        "resource_type": "kubernetes_namespace",
+        "file": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/resource_skipping/kubernetes/config.yaml",
+        "line": 1
+      }
+    ],
+    "scan_summary": {
+      "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/resource_skipping/kubernetes",
+      "iac_type": "k8s",
+      "scanned_at": "2021-02-26 17:22:16.050445 +0000 UTC",
+      "policies_validated": 53,
+      "violated_policies": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0
+    }
+  }
+}
