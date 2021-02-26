@@ -15,7 +15,7 @@ const (
 	backwardsCompatibilityWarningMessage = "There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/accurics/terrascan/releases/v1.3.0"
 )
 
-var _ = Describe("Scan is run for iac type - Terraform for aws policies", func() {
+var _ = Describe("Scan is run for terraform files", func() {
 
 	BeforeEach(func() {
 		outWriter = gbytes.NewBuffer()
@@ -31,7 +31,7 @@ var _ = Describe("Scan is run for iac type - Terraform for aws policies", func()
 
 		var iacDir string
 		var err error
-		iacDir, err = filepath.Abs("../test_data/iac/aws/aws_vpc_violation")
+		iacDir, err = filepath.Abs("../test_data/iac/aws/aws_ami_violation")
 
 		It("should not error out while getting absolute path", func() {
 			Expect(err).NotTo(HaveOccurred())
@@ -163,90 +163,6 @@ var _ = Describe("Scan is run for iac type - Terraform for aws policies", func()
 				It("should display violations in xml format", func() {
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "xml"}
 					scanUtils.RunScanCommandAndAssertXMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_db_instance_violations/aws_db_instance_xml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-		})
-
-		Context("iac file violates aws_instance policy", func() {
-			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/aws/aws_instance_violation")
-				policyDir, err = filepath.Abs("../test_data/policies/")
-			})
-
-			When("when output type is json", func() {
-				It("should display violations in json format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-					scanUtils.RunScanCommandAndAssertJSONOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_instance_violations/aws_instance_json.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is yaml", func() {
-				It("should display violations in yaml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "yaml"}
-					scanUtils.RunScanCommandAndAssertYAMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_instance_violations/aws_instance_yaml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is xml", func() {
-				It("should display violations in xml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "xml"}
-					scanUtils.RunScanCommandAndAssertXMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_instance_violations/aws_instance_xml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-		})
-
-		Context("iac file violates aws_s3_bucket policy", func() {
-			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/aws/aws_s3_bucket_violation")
-				policyDir, err = filepath.Abs("../test_data/policies/")
-			})
-
-			When("when output type is json", func() {
-				It("should display violations in json format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-					scanUtils.RunScanCommandAndAssertJSONOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_s3_bucket_violations/aws_s3_bucket_json.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is yaml", func() {
-				It("should display violations in yaml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "yaml"}
-					scanUtils.RunScanCommandAndAssertYAMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_s3_bucket_violations/aws_s3_bucket_yaml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is xml", func() {
-				It("should display violations in xml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "xml"}
-					scanUtils.RunScanCommandAndAssertXMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_s3_bucket_violations/aws_s3_bucket_xml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-		})
-
-		Context("iac file violates aws_vpc policy", func() {
-			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/aws/aws_vpc_violation")
-				policyDir, err = filepath.Abs("../test_data/policies/")
-			})
-
-			When("when output type is json", func() {
-				It("should display violations in json format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-					scanUtils.RunScanCommandAndAssertJSONOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_vpc_violations/aws_vpc_json.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is yaml", func() {
-				It("should display violations in yaml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "yaml"}
-					scanUtils.RunScanCommandAndAssertYAMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_vpc_violations/aws_vpc_yaml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
-				})
-			})
-
-			When("when output type is xml", func() {
-				It("should display violations in xml format", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "xml"}
-					scanUtils.RunScanCommandAndAssertXMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_vpc_violations/aws_vpc_xml.txt", 3, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})

@@ -76,10 +76,7 @@ var _ = Describe("Help", func() {
 		Context("for scan command", func() {
 			It("should print help for init and exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, helpCommand, "scan")
-				sessionBytes, fileBytes := helper.GetByteData(session, "golden/help_scan.txt", true)
-				sessionBytes = helper.TerraformIacVersion.ReplaceAll(sessionBytes, []byte(""))
-				fileBytes = helper.TerraformIacVersion.ReplaceAll(fileBytes, []byte(""))
-				Expect(string(sessionBytes)).Should(Equal(string(fileBytes)))
+				helpUtils.ValidateExitCodeAndOutput(session, 0, "golden/help_scan.txt", true)
 			})
 		})
 

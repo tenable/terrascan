@@ -28,14 +28,17 @@ var (
 	// FileFolder is regex for 'file/folder' attribute in violations output
 	FileFolder = regexp.MustCompile(`["]*[fF]ile[\/_][fF]older["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
 
+	// File is regex for 'file' attribute in violations output
+	File = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
+
 	// Package is regex for 'package' attribute in junit-xml output
 	Package = regexp.MustCompile(`package=["]*(.+)\/(.+)["]*`)
 
+	// Classname is regex for 'package' attribute in junit-xml output
+	Classname = regexp.MustCompile(`classname=["]*(.+)\/(.+)["]*`)
+
 	// VersionValue is regex for 'value' attribute in junit-xml output (which is terrascan version)
 	VersionValue = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
-
-	// TerraformIacVersion is regex for terraform iac version displayed in help for scan command
-	TerraformIacVersion = regexp.MustCompile(`terraform: +([v][1][1-4], ){2}([v][1][1-4])`)
 
 	// SourceRegex is regex for 'file/folder' attribute in violations output
 	SourceRegex = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)\/(.+)["]*`)
@@ -73,9 +76,16 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 	sessionOutput = strings.TrimSpace(sessionOutput)
 	fileContents = strings.TrimSpace(fileContents)
 
+	// replace file from the output, it will cause issues for absolute paths
+	sessionOutput = File.ReplaceAllString(sessionOutput, "")
+	fileContents = File.ReplaceAllString(fileContents, "")
+
 	if isJunitXML {
 		sessionOutput = Package.ReplaceAllString(sessionOutput, "")
 		fileContents = Package.ReplaceAllString(fileContents, "")
+
+		sessionOutput = Classname.ReplaceAllString(sessionOutput, "")
+		fileContents = Classname.ReplaceAllString(fileContents, "")
 
 		sessionOutput = VersionValue.ReplaceAllString(sessionOutput, "")
 		fileContents = VersionValue.ReplaceAllString(fileContents, "")
@@ -153,9 +163,20 @@ func GetTerrascanBinaryPath() string {
 	return terrascanBinaryPath
 }
 
-// RunCommand will return session
+// RunCommand will initialise the command to run and return session
 func RunCommand(path string, outWriter, errWriter io.Writer, args ...string) *gexec.Session {
 	cmd := exec.Command(path, args...)
+	return getSession(cmd, outWriter, errWriter)
+}
+
+// RunCommandDir will initialise the command to run in a specific directory and return session
+func RunCommandDir(path, workDir string, outWriter, errWriter io.Writer, args ...string) *gexec.Session {
+	cmd := exec.Command(path, args...)
+	cmd.Dir = workDir
+	return getSession(cmd, outWriter, errWriter)
+}
+
+func getSession(cmd *exec.Cmd, outWriter, errWriter io.Writer) *gexec.Session {
 	session, err := gexec.Start(cmd, outWriter, errWriter)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	return session

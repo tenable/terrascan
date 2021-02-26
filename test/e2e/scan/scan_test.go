@@ -38,10 +38,9 @@ var _ = Describe("Scan", func() {
 		It("should print help for scan and exit with status code 0", func() {
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-h")
 			Eventually(session).Should(gexec.Exit(0))
-			sessionBytes, fileBytes := helper.GetByteData(session, "golden/scan_help.txt", true)
-			sessionBytes = helper.TerraformIacVersion.ReplaceAll(sessionBytes, []byte(""))
-			fileBytes = helper.TerraformIacVersion.ReplaceAll(fileBytes, []byte(""))
-			Expect(string(sessionBytes)).Should(Equal(string(fileBytes)))
+			goldenFileAbsPath, err := filepath.Abs("golden/scan_help.txt")
+			Expect(err).NotTo(HaveOccurred())
+			helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
 		})
 	})
 
@@ -60,12 +59,40 @@ var _ = Describe("Scan", func() {
 	})
 
 	Describe("scan command is run without any flags", func() {
-		Context("when scan command is run without any flags, terrascan with scan for terraform files in working directory", func() {
-			It("should error out as no terraform files are present in working directory", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand)
-				Eventually(session, 2).Should(gexec.Exit(1))
-				helper.ContainsErrorSubString(session, "has no terraform config files")
+		When("scan command is run without any flags, terrascan with scan for terraform files in working directory", func() {
+			Context("no tf files are present in the working directory", func() {
+				It("should error out as no terraform files are present in working directory", func() {
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand)
+					Eventually(session, 2).Should(gexec.Exit(1))
+					helper.ContainsErrorSubString(session, "has no terraform config files")
+				})
+			})
+
+			Context("tf files are present in the working directory", func() {
+				It("should scan the directory, return results and exit with status code 3", func() {
+					workDir, err := filepath.Abs("../test_data/iac/aws/aws_ami_violation")
+					Expect(err).NotTo(HaveOccurred())
+					session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanComand)
+					Eventually(session, 2).Should(gexec.Exit(3))
+				})
+
+				When("tf file present in the dir has no violations", func() {
+					Context("when there are no violations, terrascan exits with status code 0", func() {
+						It("should scan the directory and exit with status code 0", func() {
+							workDir, err := filepath.Abs("../test_data/iac/aws/aws_db_instance_violation")
+							Expect(err).NotTo(HaveOccurred())
+
+							// set a policy path that doesn't have any s3 bucket policies
+							policyDir, err := filepath.Abs("../test_data/policies/k8s")
+							Expect(err).NotTo(HaveOccurred())
+
+							session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanComand, "-p", policyDir)
+							Eventually(session, 2).Should(gexec.Exit(0))
+						})
+					})
+				})
 			})
 		})
 	})
+
 })

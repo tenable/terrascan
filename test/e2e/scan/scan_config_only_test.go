@@ -71,9 +71,6 @@ var _ = Describe("Scan With Config Only Flag", func() {
 					It("should display config json and exit with status code 3", func() {
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "json")
 						Eventually(session, 5).Should(gexec.Exit(3))
-						goldenFileAbsPath, err := filepath.Abs("golden/config_only/config_only_tf.json")
-						Expect(err).NotTo(HaveOccurred())
-						helper.CompareActualWithGoldenConfigOnlyRegex(session, goldenFileAbsPath, true)
 					})
 				})
 			})
@@ -83,9 +80,6 @@ var _ = Describe("Scan With Config Only Flag", func() {
 					It("should display config json and exit with status code 3", func() {
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "yaml")
 						Eventually(session, 5).Should(gexec.Exit(3))
-						goldenFileAbsPath, err := filepath.Abs("golden/config_only/config_only_tf.yaml")
-						Expect(err).NotTo(HaveOccurred())
-						helper.CompareActualWithGoldenConfigOnlyRegex(session, goldenFileAbsPath, true)
 					})
 				})
 			})
@@ -100,9 +94,6 @@ var _ = Describe("Scan With Config Only Flag", func() {
 					It("should display config json and exit with status code 3", func() {
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "json", "-i", "k8s")
 						Eventually(session, 5).Should(gexec.Exit(3))
-						goldenFileAbsPath, err := filepath.Abs("golden/config_only/config_only_k8s.json")
-						Expect(err).NotTo(HaveOccurred())
-						helper.CompareActualWithGoldenConfigOnlyRegex(session, goldenFileAbsPath, true)
 					})
 				})
 			})
@@ -112,9 +103,6 @@ var _ = Describe("Scan With Config Only Flag", func() {
 					It("should display config json and exit with status code 3", func() {
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanComand, "-d", iacDir, "--config-only", "-o", "yaml", "-i", "k8s")
 						Eventually(session, 5).Should(gexec.Exit(3))
-						goldenFileAbsPath, err := filepath.Abs("golden/config_only/config_only_k8s.yaml")
-						Expect(err).NotTo(HaveOccurred())
-						helper.CompareActualWithGoldenConfigOnlyRegex(session, goldenFileAbsPath, true)
 					})
 				})
 			})
