@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package scan_test
 
 import (
@@ -24,16 +40,13 @@ var _ = Describe("Scan is run for k8s files", func() {
 
 	Context("scan iac files violating k8s policies", func() {
 		var policyDir, iacDir string
-		var err error
 
-		policyDir, err = filepath.Abs("../test_data/policies/")
-		It("should not error out while getting absolute path", func() {
-			Expect(err).NotTo(HaveOccurred())
-		})
+		policyDir, err1 := filepath.Abs("../test_data/policies/")
+		iacDir, err2 := filepath.Abs("../test_data/iac/k8s/kubernetes_ingress_violation")
 
-		iacDir, err = filepath.Abs("../test_data/iac/k8s/kubernetes_ingress_violation")
 		It("should not error out while getting absolute path", func() {
-			Expect(err).NotTo(HaveOccurred())
+			Expect(err1).NotTo(HaveOccurred())
+			Expect(err2).NotTo(HaveOccurred())
 		})
 
 		Context("iac type k8s is not default", func() {

@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package scan_test
 
 import (
@@ -215,18 +231,34 @@ var _ = Describe("Scan", func() {
 			})
 
 			When("multiple valid policy paths are supplied", func() {
-				It("should scan with the policies and display results", func() {
-					validPolicyPath1, err := filepath.Abs("../test_data/policies/aws")
-					Expect(err).NotTo(HaveOccurred())
-					validPolicyPath2, err := filepath.Abs("../test_data/policies/azure")
-					Expect(err).NotTo(HaveOccurred())
-					workDirPath, err := filepath.Abs("../test_data/iac/k8s")
-					Expect(err).NotTo(HaveOccurred())
+				Context("workdir contains k8s files", func() {
+					validPolicyPath1, err1 := filepath.Abs("../test_data/policies/aws")
+					validPolicyPath2, err2 := filepath.Abs("../test_data/policies/azure")
+					workDirPath, err3 := filepath.Abs("../test_data/iac/k8s")
+					It("should not error out", func() {
+						Expect(err1).NotTo(HaveOccurred())
+						Expect(err2).NotTo(HaveOccurred())
+						Expect(err3).NotTo(HaveOccurred())
+					})
 
-					scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2}
-					session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
-					// exits with status code 1, because the work dir has k8s iac file and supplied policies are for tf files
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
+					Context("default iac type is terraform", func() {
+						It("should scan with the policies and exit with status code 1", func() {
+							scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2}
+							session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
+							// exits with status code 1, because the work dir has k8s iac file and default iac type is terraform
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
+						})
+					})
+
+					Context("iac type is k8s", func() {
+						It("should scan with the policies and display results", func() {
+							scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2, "-i", "k8s"}
+							session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
+							// exits with status code 0, because no violations would be reported,
+							// the work dir has k8s iac file and supplied policies are for tf files
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+						})
+					})
 				})
 			})
 		})
