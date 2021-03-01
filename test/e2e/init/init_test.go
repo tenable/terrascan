@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/accurics/terrascan/pkg/utils"
 	initUtil "github.com/accurics/terrascan/test/e2e/init"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -17,7 +18,7 @@ import (
 
 var (
 	initCommand            string = "init"
-	defaultPolicyRepoPath  string = os.Getenv("HOME") + "/.terrascan"
+	defaultPolicyRepoPath  string = filepath.Join(utils.GetHomeDir(), ".terrascan")
 	terrascanGitURL        string = "https://github.com/accurics/terrascan.git"
 	terrascanDefaultBranch string = "master"
 	terrascanConfigEnvName string = "TERRASCAN_CONFIG"
