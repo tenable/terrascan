@@ -38,22 +38,18 @@ var _ = Describe("Scan", func() {
 
 	Describe("scan command is run with -h flag", func() {
 		It("should print help for scan and exit with status code 0", func() {
-			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-h")
-			Eventually(session).Should(gexec.Exit(helper.ExitCodeZero))
-			goldenFileAbsPath, err := filepath.Abs("golden/scan_help.txt")
-			Expect(err).NotTo(HaveOccurred())
-			helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
+			scanArgs := []string{scanUtils.ScanCommand, "-h"}
+			scanUtils.RunScanAndAssertGoldenOutput(terrascanBinaryPath, "golden/scan_help.txt", helper.ExitCodeZero, true, outWriter, errWriter, scanArgs...)
 		})
 	})
 
 	Describe("typo in the scan command, eg: scna", func() {
-		It("should exit with status code 1", func() {
-			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "scna")
-			Eventually(session).Should(gexec.Exit(helper.ExitCodeOne))
-		})
+		scanTypo := "scna"
 
-		It("should print scan command suggestion", func() {
-			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "scna")
+		It("should print scan command suggestion and exit with status code 1", func() {
+			scanArgs := []string{scanTypo}
+			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+			Eventually(session).Should(gexec.Exit(helper.ExitCodeOne))
 			goldenFileAbsPath, err := filepath.Abs("golden/scan_typo_help.txt")
 			Expect(err).NotTo(HaveOccurred())
 			helper.CompareActualWithGolden(session, goldenFileAbsPath, false)
@@ -64,9 +60,9 @@ var _ = Describe("Scan", func() {
 		Context("by default, terrascan will scan for terraform files in the working directory", func() {
 			Context("no tf files are present in the working directory", func() {
 				It("should error out as no terraform files are present in working directory", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand)
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-					helper.ContainsErrorSubString(session, "has no terraform config files")
+					scanArgs := []string{scanUtils.ScanCommand}
+					errString := "has no terraform config files"
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 
@@ -74,7 +70,9 @@ var _ = Describe("Scan", func() {
 				It("should scan the directory, return results and exit with status code 3", func() {
 					workDir, err := filepath.Abs("../test_data/iac/aws/aws_ami_violation")
 					Expect(err).NotTo(HaveOccurred())
-					session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanUtils.ScanCommand)
+
+					scanArgs := []string{scanUtils.ScanCommand}
+					session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanArgs...)
 					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 				})
 
@@ -88,7 +86,8 @@ var _ = Describe("Scan", func() {
 							policyDir, err := filepath.Abs("../test_data/policies/k8s")
 							Expect(err).NotTo(HaveOccurred())
 
-							session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanUtils.ScanCommand, "-p", policyDir)
+							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir}
+							session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanArgs...)
 							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 						})
 					})
@@ -107,21 +106,17 @@ var _ = Describe("Scan", func() {
 			invalidPath := "invalid/path"
 			When("supplied with -d flag", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", invalidPath)
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-
 					errString := fmt.Sprintf("directory '%s' does not exist", filepath.Join(workDir, invalidPath))
-					helper.ContainsErrorSubString(session, errString)
+					scanArgs := []string{scanUtils.ScanCommand, "-d", invalidPath}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 
 			When("supplied with -f flag", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-f", invalidPath)
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-
 					errString := fmt.Sprintf("file '%s' does not exist", filepath.Join(workDir, invalidPath))
-					helper.ContainsErrorSubString(session, errString)
+					scanArgs := []string{scanUtils.ScanCommand, "-f", invalidPath}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -131,11 +126,9 @@ var _ = Describe("Scan", func() {
 				validAbsFilePath, err := filepath.Abs("golden/scan_help.txt")
 				Expect(err).NotTo(HaveOccurred())
 
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-d", validAbsFilePath)
-				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-
 				errString := fmt.Sprintf("input path '%s' is not a valid directory", validAbsFilePath)
-				helper.ContainsErrorSubString(session, errString)
+				scanArgs := []string{scanUtils.ScanCommand, "-d", validAbsFilePath}
+				scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 			})
 		})
 
@@ -144,11 +137,9 @@ var _ = Describe("Scan", func() {
 				validAbsDirPath, err := filepath.Abs("golden")
 				Expect(err).NotTo(HaveOccurred())
 
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-f", validAbsDirPath)
-				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-
 				errString := fmt.Sprintf("input path '%s' is not a valid file", validAbsDirPath)
-				helper.ContainsErrorSubString(session, errString)
+				scanArgs := []string{scanUtils.ScanCommand, "-f", validAbsDirPath}
+				scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 			})
 		})
 	})
@@ -157,18 +148,16 @@ var _ = Describe("Scan", func() {
 		errString := "iac type or version not supported"
 		When("-i flag is supplied with unsupported iac type", func() {
 			It("should error out and exit with status code 1", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-i", "test")
-				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-				helper.ContainsErrorSubString(session, errString)
+				scanArgs := []string{scanUtils.ScanCommand, "-i", "test"}
+				scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 			})
 		})
 
 		When("--iac-version flag is supplied invalid version", func() {
 			Context("default iac type is terraform", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "--iac-version", "test")
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-					helper.ContainsErrorSubString(session, errString)
+					scanArgs := []string{scanUtils.ScanCommand, "--iac-version", "test"}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -176,26 +165,22 @@ var _ = Describe("Scan", func() {
 		Context("iac type is valid but iac version isn't", func() {
 			When("iac type is k8s and supplied version is invalid", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-i", "k8s", "--iac-version", "test")
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-					helper.ContainsErrorSubString(session, errString)
-
+					scanArgs := []string{scanUtils.ScanCommand, "-i", "k8s", "--iac-version", "test"}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 
 			When("iac type is helm and supplied version is invalid", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-i", "helm", "--iac-version", "test")
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-					helper.ContainsErrorSubString(session, errString)
+					scanArgs := []string{scanUtils.ScanCommand, "-i", "helm", "--iac-version", "test"}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 
 			When("iac type is kustomize and supplied version is invalid", func() {
 				It("should error out and exit with status code 1", func() {
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-i", "kustomize", "--iac-version", "test")
-					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
-					helper.ContainsErrorSubString(session, errString)
+					scanArgs := []string{scanUtils.ScanCommand, "-i", "kustomize", "--iac-version", "test"}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -208,7 +193,8 @@ var _ = Describe("Scan", func() {
 
 		When("supplied policy path doesn't exist", func() {
 			It("should error out and exit with status code 1", func() {
-				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-p", invalidPolicyPath)
+				scanArgs := []string{scanUtils.ScanCommand, "-p", invalidPolicyPath}
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 				helper.ContainsErrorSubString(session, errString1)
 				helper.ContainsErrorSubString(session, errString2)
@@ -220,7 +206,8 @@ var _ = Describe("Scan", func() {
 				It("should error out and exit with staus code 1", func() {
 					validPolicyPath, err := filepath.Abs("../test_data")
 					Expect(err).NotTo(HaveOccurred())
-					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanUtils.ScanCommand, "-p", validPolicyPath, "-p", invalidPolicyPath)
+					scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath, "-p", invalidPolicyPath}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 					helper.ContainsErrorSubString(session, errString1)
 					helper.ContainsErrorSubString(session, errString2)
@@ -236,7 +223,8 @@ var _ = Describe("Scan", func() {
 					workDirPath, err := filepath.Abs("../test_data/iac/k8s")
 					Expect(err).NotTo(HaveOccurred())
 
-					session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2)
+					scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2}
+					session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
 					// exits with status code 1, because the work dir has k8s iac file and supplied policies are for tf files
 					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 				})
