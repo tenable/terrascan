@@ -14,13 +14,14 @@
     limitations under the License.
 */
 
-package commons
+package downloader
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
-	version "github.com/hashicorp/go-version"
+	"github.com/hashicorp/go-version"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry"
 	"github.com/hashicorp/terraform/registry/regsrc"
@@ -28,10 +29,74 @@ import (
 	"go.uber.org/zap"
 )
 
+// newRemoteModuleInstaller returns a RemoteModuleInstaller initialized with a
+// new cache, downloader and terraform registry client
+func newRemoteModuleInstaller() *remoteModuleInstaller {
+	return &remoteModuleInstaller{
+		cache:                   make(map[string]string),
+		downloader:              NewDownloader(),
+		terraformRegistryClient: newClientRegistry(),
+	}
+}
+
+// newTerraformRegistryClient returns a client to query terraform registries
+func newTerraformRegistryClient() terraformRegistryClient {
+	// get terraform registry client.
+	// terraform registry client provides methods for querying the terraform module registry
+	return registry.NewClient(nil, nil)
+}
+
+// DownloadModule retrieves the package referenced in the given address
+// into the installation path and then returns the full path to any subdir
+// indicated in the address.
+func (r *remoteModuleInstaller) DownloadModule(addr, destPath string) (string, error) {
+
+	// split url and subdir
+	URLWithType, subDir, err := r.downloader.GetURLSubDir(addr, destPath)
+	if err != nil {
+		return "", err
+	}
+
+	// check if the module has already been downloaded
+	if prevDir, exists := r.cache[URLWithType]; exists {
+		zap.S().Debugf("module %q already installed at %q", URLWithType, prevDir)
+		destPath = prevDir
+	} else {
+		destPath, err := r.downloader.Download(URLWithType, destPath)
+		if err != nil {
+			zap.S().Debugf("failed to download remote module. error: '%v'", err)
+			return "", err
+		}
+		// Remember where we installed this so we might reuse this directory
+		// on subsequent calls to avoid re-downloading.
+		r.cache[URLWithType] = destPath
+	}
+
+	// Our subDir string can contain wildcards until this point, so that
+	// e.g. a subDir of * can expand to one top-level directory in a .tar.gz
+	// archive. Now that we've expanded the archive successfully we must
+	// resolve that into a concrete path.
+	var finalDir string
+	if subDir != "" {
+		finalDir, err = r.downloader.SubDirGlob(destPath, subDir)
+		if err != nil {
+			return "", err
+		}
+		zap.S().Debugf("expanded %q to %q", subDir, finalDir)
+	} else {
+		finalDir = destPath
+	}
+
+	// If we got this far then we have apparently succeeded in downloading
+	// the requested object!
+	return filepath.Clean(finalDir), nil
+}
+
 // DownloadRemoteModule will download remote modules from public and private terraform registries
 // this function takes similar approach taken by terraform init for downloading terraform registry modules
-func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error) {
+func (r *remoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error) {
 	// Terraform doesn't allow the hostname to contain Punycode
+	// for more information on Punycode refer https://en.wikipedia.org/wiki/Punycode
 	// module.SvcHost returns an error for such case
 	_, err := module.SvcHost()
 	if err != nil {
@@ -39,12 +104,8 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 		return "", err
 	}
 
-	// get terraform registry client.
-	// terraform registry client provides methods for querying the terraform module registry
-	regClient := registry.NewClient(nil, nil)
-
 	// get all the available module versions from the terraform registry
-	moduleVersions, err := regClient.ModuleVersions(module)
+	moduleVersions, err := r.terraformRegistryClient.ModuleVersions(module)
 	if err != nil {
 		if registry.IsModuleNotFound(err) {
 			zap.S().Errorf("module: %s, not be found at registry: %s", module.String(), module.Host().Display())
@@ -62,7 +123,7 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 	}
 
 	// get the source location for the matched version
-	sourceLocation, err := regClient.ModuleLocation(module, versionToDownload.String())
+	sourceLocation, err := r.terraformRegistryClient.ModuleLocation(module, versionToDownload.String())
 	if err != nil {
 		zap.S().Errorf("error while getting the source location for module: %s, at registry: %s", module.String(), module.Host().Display())
 		return "", err
@@ -71,7 +132,7 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 	downloadLocation, err := r.DownloadModule(sourceLocation, destPath)
 	if err != nil {
 		zap.S().Errorf("error while downloading module: %s, with source location: %s", module.String(), sourceLocation)
-		return "", nil
+		return "", err
 	}
 
 	if module.RawSubmodule != "" {
@@ -80,6 +141,14 @@ func (r *RemoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 	}
 
 	return downloadLocation, nil
+}
+
+// CleanUp cleans up all the locally downloaded modules
+func (r *remoteModuleInstaller) CleanUp() {
+	for url, path := range r.cache {
+		zap.S().Debugf("deleting %q installed at %q", url, path)
+		os.RemoveAll(path)
+	}
 }
 
 // helper func to compare and update the version

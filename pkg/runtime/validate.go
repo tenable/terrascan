@@ -28,17 +28,22 @@ import (
 )
 
 var (
-	errEmptyIacPath      = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errDirNotExists      = fmt.Errorf("directory does not exist")
-	errFileNotExists     = fmt.Errorf("file does not exist")
-	errIacNotSupported   = fmt.Errorf("iac type or version not supported")
-	errCloudNotSupported = fmt.Errorf("cloud type not supported")
+	errEmptyIacPath         = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists         = fmt.Errorf("directory does not exist")
+	errFileNotExists        = fmt.Errorf("file does not exist")
+	errNotValidFile         = fmt.Errorf("not a valid file")
+	errNotValidDir          = fmt.Errorf("not a valid directory")
+	errIacNotSupported      = fmt.Errorf("iac type or version not supported")
+	errCloudNotSupported    = fmt.Errorf("cloud type not supported")
+	errSeverityNotSupported = fmt.Errorf("severity level not supported")
 )
 
 // ValidateInputs validates the inputs to the executor object
 func (e *Executor) ValidateInputs() error {
 
 	var err error
+	var fi os.FileInfo
+	var mode os.FileMode
 
 	// terrascan can accept either a file or a directory
 	if e.filePath == "" && e.dirPath == "" {
@@ -53,10 +58,17 @@ func (e *Executor) ValidateInputs() error {
 			return err
 		}
 
-		if _, err := os.Stat(e.filePath); err != nil {
+		if fi, err = os.Stat(e.filePath); err != nil {
 			zap.S().Errorf("file '%s' does not exist", e.filePath)
 			return errFileNotExists
 		}
+
+		mode = fi.Mode()
+		if !mode.IsRegular() {
+			zap.S().Errorf("input path '%s' is not a valid file", e.filePath)
+			return errNotValidFile
+		}
+
 		zap.S().Debugf("file '%s' exists", e.filePath)
 	} else {
 		// if directory, check if directory exists
@@ -65,10 +77,17 @@ func (e *Executor) ValidateInputs() error {
 			return err
 		}
 
-		if _, err := os.Stat(e.dirPath); err != nil {
+		if fi, err = os.Stat(e.dirPath); err != nil {
 			zap.S().Errorf("directory '%s' does not exist", e.dirPath)
 			return errDirNotExists
 		}
+
+		mode = fi.Mode()
+		if !mode.IsDir() {
+			zap.S().Errorf("input path '%s' is not a valid directory", e.dirPath)
+			return errNotValidDir
+		}
+
 		zap.S().Debugf("directory '%s' exists", e.dirPath)
 	}
 
@@ -101,6 +120,11 @@ func (e *Executor) ValidateInputs() error {
 		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
 	}
 	zap.S().Debugf("using policy path %v", e.policyPath)
+
+	if len(e.severity) > 0 && !utils.ValidateSeverityInput(e.severity) {
+		return errSeverityNotSupported
+	}
+	zap.S().Debugf("using severity level %v", e.severity)
 
 	// successful
 	zap.S().Debug("input validation successful")

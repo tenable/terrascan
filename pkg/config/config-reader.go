@@ -82,3 +82,8 @@ func (r TerrascanConfigReader) GetNotifications() map[string]Notifier {
 func (r TerrascanConfigReader) GetRules() Rules {
 	return r.config.Rules
 }
+
+// GetSeverity will return the level of severity specified in the terrascan config file
+func (r TerrascanConfigReader) GetSeverity() Severity {
+	return r.config.Severity
+}

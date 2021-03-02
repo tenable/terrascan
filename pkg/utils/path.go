@@ -34,7 +34,7 @@ func GetAbsPath(path string) (string, error) {
 
 	// Only shell resolves `~` to home so handle it specially
 	if strings.HasPrefix(path, "~") {
-		homeDir := os.Getenv("HOME")
+		homeDir := GetHomeDir()
 		if len(path) > 1 {
 			path = filepath.Join(homeDir, path[1:])
 		} else {

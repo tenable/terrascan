@@ -31,6 +31,7 @@ func TestUpload(t *testing.T) {
 		cloudType  string
 		scanRules  []string
 		skipRules  []string
+		severity   string
 		wantStatus int
 	}{
 		{
@@ -56,6 +57,15 @@ func TestUpload(t *testing.T) {
 			iacType:    testIacType,
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid file scan default iac version, with invalid severity level input",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			severity:   "HGIH",
+			cloudType:  testCloudType,
+			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "invalid iacType",
@@ -102,6 +112,72 @@ func TestUpload(t *testing.T) {
 				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
 			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
 		},
+		{
+			name:       "valid file scan default iac version",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			cloudType:  testCloudType,
+			severity:   "low ",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid file scan default iac version  with MEDIUM severity",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			cloudType:  testCloudType,
+			severity:   " MEDIUM ",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid file scan default iac version with high severity",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			cloudType:  testCloudType,
+			severity:   "high",
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "valid file scan with scan and skip rules with low severity",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+			severity:   "low ",
+			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
+				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
+			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
+		},
+		{
+			name:       "valid file scan with scan and skip rules with medium severity",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+			severity:   " medium",
+			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
+				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
+			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
+		},
+		{
+			name:       "valid file scan with scan and skip rules with HIGH severity",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+			severity:   "HIGH",
+			scanRules: []string{"AWS.CloudFront.EncryptionandKeyManagement.High.0407", "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
+				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
+			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
+		},
 	}
 
 	for _, tt := range table {
@@ -114,7 +190,6 @@ func TestUpload(t *testing.T) {
 				t.Error(err)
 			}
 			defer file.Close()
-
 			// use buffer to store response body
 			body := &bytes.Buffer{}
 			writer := multipart.NewWriter(body)
@@ -137,6 +212,14 @@ func TestUpload(t *testing.T) {
 					t.Error(err)
 				}
 			}
+
+			if len(tt.severity) > 0 {
+				if err = writer.WriteField("severity", tt.severity); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
 			writer.Close()
 
 			// http request of the type "/v1/{iacType}/{iacVersion}/{cloudType}/file/scan"
@@ -154,7 +237,7 @@ func TestUpload(t *testing.T) {
 			h.scanFile(res, req)
 
 			if res.Code != tt.wantStatus {
-				t.Errorf("incorrect status code, got: '%v', want: '%v', error: '%v'", res.Code, http.StatusOK, res.Body)
+				t.Errorf("incorrect status code, got: '%v', want: '%v', error: '%v'", res.Code, tt.wantStatus, res.Body)
 			}
 		})
 	}

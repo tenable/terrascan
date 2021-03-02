@@ -17,6 +17,8 @@
 package cli
 
 import (
+	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -43,14 +45,19 @@ func setup() {
 
 func shutdown() {
 	// remove the downloaded policies
-	os.RemoveAll(os.Getenv("HOME") + "/.terrascan")
+	os.RemoveAll(filepath.Join(utils.GetHomeDir(), ".terrascan"))
 }
 
 func TestRun(t *testing.T) {
+	// disable terraform logs when TF_LOG env variable is not set
+	if os.Getenv("TF_LOG") == "" {
+		log.SetOutput(ioutil.Discard)
+	}
+
 	testDirPath := "testdata/run-test"
-	kustomizeTestDirPath := testDirPath + "/kustomize-test"
-	testTerraformFilePath := testDirPath + "/config-only.tf"
-	testRemoteModuleFilePath := testDirPath + "/remote-modules.tf"
+	kustomizeTestDirPath := filepath.Join(testDirPath, "kustomize-test")
+	testTerraformFilePath := filepath.Join(testDirPath, "config-only.tf")
+	testRemoteModuleFilePath := filepath.Join(testDirPath, "remote-modules.tf")
 
 	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
@@ -174,13 +181,33 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
-			name: "config file with remote module",
+			name: "scan file with remote module",
 			scanOptions: &ScanOptions{
 				policyType:  []string{"all"},
 				iacFilePath: testRemoteModuleFilePath,
 				outputType:  "human",
 				configFile:  "testdata/configFile.toml",
 			},
+		},
+		{
+			name: "invalid remote type",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				remoteType: "test",
+				remoteURL:  "test",
+				outputType: "human",
+			},
+			wantErr: true,
+		},
+		{
+			name: "valid remote type with invalid remote url",
+			scanOptions: &ScanOptions{
+				policyType: []string{"all"},
+				remoteType: "terraform-registry",
+				remoteURL:  "terraform-aws-modules/eks",
+				outputType: "human",
+			},
+			wantErr: true,
 		},
 	}
 

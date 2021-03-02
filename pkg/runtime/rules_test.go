@@ -4,11 +4,12 @@ import (
 	"testing"
 )
 
-func TestExecutorInitRules(t *testing.T) {
+func TestExecutorInitRulesAndSeverity(t *testing.T) {
 	type fields struct {
 		configFile string
 		scanRules  []string
 		skipRules  []string
+		severity   string
 	}
 	tests := []struct {
 		name         string
@@ -17,6 +18,7 @@ func TestExecutorInitRules(t *testing.T) {
 		assert       bool
 		lenScanRules int
 		lenSkipRules int
+		severity     string
 	}{
 		{
 			name:   "no config file",
@@ -53,6 +55,18 @@ func TestExecutorInitRules(t *testing.T) {
 			lenSkipRules: 5,
 		},
 		{
+			name: "valid config file with scan and skip rules with low severity",
+			fields: fields{
+				configFile: "testdata/scan-skip-rules-low-severity.toml",
+				scanRules:  []string{"testRuleA", "testRuleB"},
+				skipRules:  []string{"testRuleC"},
+				severity:   "low",
+			},
+			assert:       true,
+			lenScanRules: 4,
+			lenSkipRules: 5,
+		},
+		{
 			name: "valid config file with invalid scan rules",
 			fields: fields{
 				configFile: "testdata/invalid-scan-skip-rules.toml",
@@ -66,6 +80,13 @@ func TestExecutorInitRules(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "valid config file with invalid severity",
+			fields: fields{
+				configFile: "testdata/invalid-severity.toml",
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -74,12 +95,12 @@ func TestExecutorInitRules(t *testing.T) {
 				scanRules:  tt.fields.scanRules,
 				skipRules:  tt.fields.skipRules,
 			}
-			if err := e.initRules(); (err != nil) != tt.wantErr {
-				t.Errorf("Executor.initRules() error = %v, wantErr %v", err, tt.wantErr)
+			if err := e.initRuleSetFromConfigFile(); (err != nil) != tt.wantErr {
+				t.Errorf("Executor.initRulesAndSeverity() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.assert {
-				if len(e.scanRules) != tt.lenScanRules && len(e.skipRules) != tt.lenSkipRules {
-					t.Errorf("Executor.initRules() expected scanRules: %d and skipRules: %d, got scanRules: %d and skipRules: %d", tt.lenScanRules, tt.lenSkipRules, len(e.scanRules), len(e.skipRules))
+				if len(e.scanRules) != tt.lenScanRules && len(e.skipRules) != tt.lenSkipRules && e.severity != tt.severity {
+					t.Errorf("Executor.initRulesAndSeverity() expected scanRules: %d , skipRules: %d & severity : %s, got scanRules: %d , skipRules: %d and severity: %s", tt.lenScanRules, tt.lenSkipRules, tt.severity, len(e.scanRules), len(e.skipRules), e.severity)
 				}
 			}
 		})

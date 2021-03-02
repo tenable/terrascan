@@ -34,10 +34,9 @@ import (
 )
 
 var (
-	errSkipTestDir       = fmt.Errorf("skipping test directory")
-	errNoHelmChartsFound = fmt.Errorf("no helm charts found")
-	errBadChartName      = fmt.Errorf("bad chart name in Chart.yaml")
-	errBadChartVersion   = fmt.Errorf("bad chart version in Chart.yaml")
+	errSkipTestDir     = fmt.Errorf("skipping test directory")
+	errBadChartName    = fmt.Errorf("invalid chart name in Chart.yaml")
+	errBadChartVersion = fmt.Errorf("invalid chart version in Chart.yaml")
 )
 
 // LoadIacDir loads all helm charts under the specified directory
@@ -48,14 +47,13 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	// find all Chart.yaml files within the specified directory structure
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, h.getHelmChartFilenames())
 	if err != nil {
-		zap.S().Error("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
+		zap.S().Debug("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, err
 	}
 
 	if len(fileMap) == 0 {
-		err = errNoHelmChartsFound
-		zap.S().Error("", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		zap.S().Debug(zap.String("root dir", absRootDir), zap.Error(err))
+		return allResourcesConfig, fmt.Errorf("no helm charts found in directory %s", absRootDir)
 	}
 
 	// fileDir now contains the chart path
@@ -70,7 +68,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var chartMap helmChartData
 		iacDocuments, chartMap, err = h.loadChart(chartPath)
 		if err != nil && err != errSkipTestDir {
-			logger.Error("error occurred while loading chart", zap.Error(err))
+			logger.Debug("error occurred while loading chart", zap.Error(err))
 			continue
 		}
 
@@ -165,7 +163,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 		var fileData []byte
 		fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
 		if err != nil {
-			logger.Error("unable to read template file", zap.String("file", *templateFile), zap.Error(err))
+			logger.Debug("error while reading template file", zap.String("file", *templateFile), zap.Error(err))
 			return iacDocuments, err
 		}
 
@@ -178,14 +176,14 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	// chart name and version are required parameters
 	chartName, ok := chartMap["name"].(string)
 	if !ok {
-		logger.Error("chart name was invalid")
+		logger.Debug("chart name is invalid")
 		return iacDocuments, errBadChartName
 	}
 
 	var chartVersion string
 	chartVersion, ok = chartMap["version"].(string)
 	if !ok {
-		logger.Error("chart version was invalid")
+		logger.Debug("chart version is invalid")
 		return iacDocuments, errBadChartVersion
 	}
 
@@ -203,7 +201,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 
 	v, err := chartutil.ToRenderValues(c, valueMap, options, nil)
 	if err != nil {
-		logger.Error("value rendering failed", zap.Any("values", v), zap.Error(err))
+		logger.Debug("value rendering failed", zap.Any("values", v), zap.Error(err))
 		return iacDocuments, err
 	}
 
@@ -215,7 +213,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	e.LintMode = true
 	renderData, err = e.Render(c, v)
 	if err != nil {
-		logger.Error("error encountered while rendering chart", zap.String("template dir", templateDir), zap.Error(err))
+		logger.Debug("error encountered while rendering chart", zap.String("template dir", templateDir), zap.Error(err))
 		return iacDocuments, err
 	}
 
@@ -241,12 +239,12 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 	// load the chart file and values file from the specified chart path
 	chartFileBytes, err := ioutil.ReadFile(chartPath)
 	if err != nil {
-		logger.Error("unable to read", zap.Error(err))
+		logger.Debug("unable to read", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 
 	if err = yaml.Unmarshal(chartFileBytes, &chartMap); err != nil {
-		logger.Error("unable to unmarshal values", zap.Error(err))
+		logger.Debug("unable to unmarshal values", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 
@@ -255,7 +253,7 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 	valuesFile := filepath.Join(chartDir, helmValuesFilename)
 	fileInfo, err = os.Stat(valuesFile)
 	if err != nil {
-		logger.Error("unable to stat values.yaml", zap.Error(err))
+		logger.Debug("unable to stat values.yaml", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 
@@ -263,13 +261,13 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 	var valueFileBytes []byte
 	valueFileBytes, err = ioutil.ReadFile(valuesFile)
 	if err != nil {
-		logger.Error("unable to read values.yaml", zap.Error(err))
+		logger.Debug("unable to read values.yaml", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 
 	var valueMap map[string]interface{}
 	if err = yaml.Unmarshal(valueFileBytes, &valueMap); err != nil {
-		logger.Error("unable to unmarshal values.yaml", zap.Error(err))
+		logger.Debug("unable to unmarshal values.yaml", zap.Error(err))
 		return iacDocuments, chartMap, err
 	}
 

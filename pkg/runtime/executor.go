@@ -27,22 +27,23 @@ import (
 
 // Executor object
 type Executor struct {
-	filePath     string
-	dirPath      string
-	policyPath   []string
-	cloudType    []string
-	iacType      string
-	iacVersion   string
-	configFile   string
-	scanRules    []string
-	skipRules    []string
-	iacProvider  iacProvider.IacProvider
-	policyEngine []policy.Engine
-	notifiers    []notifications.Notifier
+	filePath      string
+	dirPath       string
+	policyPath    []string
+	cloudType     []string
+	iacType       string
+	iacVersion    string
+	configFile    string
+	scanRules     []string
+	skipRules     []string
+	iacProvider   iacProvider.IacProvider
+	policyEngines []policy.Engine
+	notifiers     []notifications.Notifier
+	severity      string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string, severity string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -51,8 +52,24 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		iacType:    iacType,
 		iacVersion: iacVersion,
 		configFile: configFile,
-		scanRules:  scanRules,
-		skipRules:  skipRules,
+	}
+
+	// read config file and update scan and skip rules
+	if err := e.initRuleSetFromConfigFile(); err != nil {
+		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
+		return nil, err
+	}
+
+	if len(scanRules) > 0 {
+		e.scanRules = scanRules
+	}
+
+	if len(skipRules) > 0 {
+		e.skipRules = skipRules
+	}
+
+	if len(severity) > 0 {
+		e.severity = severity
 	}
 
 	// initialize executor
@@ -69,12 +86,6 @@ func (e *Executor) Init() error {
 	// validate inputs
 	err := e.ValidateInputs()
 	if err != nil {
-		return err
-	}
-
-	// read config file and update scan and skip rules
-	if err := e.initRules(); err != nil {
-		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
 		return err
 	}
 
@@ -106,11 +117,11 @@ func (e *Executor) Init() error {
 		}
 
 		// initialize the engine
-		if err := engine.Init(policyPath, e.scanRules, e.skipRules); err != nil {
+		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.severity); err != nil {
 			zap.S().Errorf("%s", err)
 			return err
 		}
-		e.policyEngine = append(e.policyEngine, engine)
+		e.policyEngines = append(e.policyEngines, engine)
 	}
 
 	zap.S().Debug("initialized executor")
@@ -133,7 +144,7 @@ func (e *Executor) Execute() (results Output, err error) {
 	// evaluate policies
 	results.Violations = policy.EngineOutput{}
 	violations := results.Violations.AsViolationStore()
-	for _, engine := range e.policyEngine {
+	for _, engine := range e.policyEngines {
 		output, err := engine.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
 		if err != nil {
 			return results, err

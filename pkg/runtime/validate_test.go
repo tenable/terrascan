@@ -51,6 +51,42 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: nil,
 		},
 		{
+			name: "valid filePath",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "high",
+			},
+			wantErr: nil,
+		},
+		{
+			name: "valid dirPath",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "MEDIUM",
+			},
+			wantErr: nil,
+		},
+		{
+			name: "valid dirPath",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v12",
+				severity:   " LOW ",
+			},
+			wantErr: nil,
+		},
+		{
 			name: "empty iac path",
 			executor: Executor{
 				filePath: "",
@@ -73,6 +109,22 @@ func TestValidateInputs(t *testing.T) {
 			wantErr: errDirNotExists,
 		},
 		{
+			// should error out in validations if -f option is not a file
+			name: "valid directory passed as file path",
+			executor: Executor{
+				filePath: "./testdata/testdir",
+			},
+			wantErr: errNotValidFile,
+		},
+		{
+			// should error out in validations if -d option is not a dir
+			name: "valid directory passed as file path",
+			executor: Executor{
+				dirPath: "./testdata/testdir/testfile",
+			},
+			wantErr: errNotValidDir,
+		},
+		{
 			name: "invalid iac type",
 			executor: Executor{
 				filePath:   "",
@@ -93,6 +145,18 @@ func TestValidateInputs(t *testing.T) {
 				iacVersion: "notthere",
 			},
 			wantErr: errIacNotSupported,
+		},
+		{
+			name: "invalid severity",
+			executor: Executor{
+				filePath:   "",
+				dirPath:    "./testdata/testdir",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				severity:   "HGIH",
+			},
+			wantErr: errSeverityNotSupported,
 		},
 	}
 

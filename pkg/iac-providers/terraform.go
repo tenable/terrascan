@@ -13,7 +13,7 @@ const (
 	terraformV12            supportedIacVersion = "v12"
 	terraformV13            supportedIacVersion = "v13"
 	terraformV14            supportedIacVersion = "v14"
-	terraformDefaultVersion                     = terraformV12
+	terraformDefaultVersion                     = terraformV14
 )
 
 // register terraform as an IaC provider with terrascan

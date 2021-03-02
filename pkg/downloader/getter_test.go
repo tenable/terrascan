@@ -32,8 +32,8 @@ var (
 func TestNewGoGetter(t *testing.T) {
 	t.Run("new GoGetter", func(t *testing.T) {
 		var (
-			want = &GoGetter{}
-			got  = NewGoGetter()
+			want = &goGetter{}
+			got  = newGoGetter()
 		)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: '%v', want: '%v'", got, want)
@@ -126,7 +126,7 @@ func TestGetURLSubDir(t *testing.T) {
 	}
 
 	for _, tt := range table {
-		g := NewGoGetter()
+		g := newGoGetter()
 		gotURL, gotSubDir, gotErr := g.GetURLSubDir(tt.URL, tt.dest)
 		if !reflect.DeepEqual(gotURL, tt.wantURL) {
 			t.Errorf("url got: '%v', want: '%v'", gotURL, tt.wantURL)
@@ -148,6 +148,8 @@ func TestDownload(t *testing.T) {
 		dest     string
 		wantDest string
 		wantErr  error
+		// when error is expected, but assertion is not required
+		skipErrAssert bool
 	}{
 		{
 			name:     "empty URL",
@@ -170,14 +172,27 @@ func TestDownload(t *testing.T) {
 			wantDest: "",
 			wantErr:  fmt.Errorf("GitHub URLs should be github.com/username/repo"),
 		},
+		{
+			name:          "valid url, non existing repo",
+			URL:           "github.com/testuser/testrepo",
+			dest:          someDest,
+			wantDest:      "",
+			skipErrAssert: true,
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			g := NewGoGetter()
+			g := newGoGetter()
 			gotDest, gotErr := g.Download(tt.URL, tt.dest)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
+			if !tt.skipErrAssert {
+				if !reflect.DeepEqual(gotErr, tt.wantErr) {
+					t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
+				}
+			} else {
+				if gotErr == nil {
+					t.Error("error expected")
+				}
 			}
 			if !reflect.DeepEqual(gotDest, tt.wantDest) {
 				t.Errorf("dest got: '%v', want: '%v'", gotDest, tt.wantDest)
@@ -188,6 +203,10 @@ func TestDownload(t *testing.T) {
 
 func TestDownloadWithType(t *testing.T) {
 
+	remoteTypeTerraformRegistry := "terraform-registry"
+	testInvalidRegistrySource := "test/some-url"
+	testValidNonExistentRegistrySource := "terraform-aws-modules/xyz/aws:1.0.0"
+
 	table := []struct {
 		name     string
 		Type     string
@@ -195,6 +214,8 @@ func TestDownloadWithType(t *testing.T) {
 		dest     string
 		wantDest string
 		wantErr  error
+		// when error is expected, but assertion is not required
+		skipErrAssert bool
 	}{
 		{
 			name:     "empty URL and Type",
@@ -229,21 +250,59 @@ func TestDownloadWithType(t *testing.T) {
 			wantErr:  ErrEmptyURLDest,
 		},
 		{
-			name:     "invalid url",
+			name:     "invalid remote type",
 			Type:     someType,
 			URL:      "github.com/some-url",
 			dest:     someDest,
 			wantDest: "",
-			wantErr:  fmt.Errorf("download not supported for scheme 'some-type'"),
+			wantErr:  ErrInvalidRemoteType,
+		},
+		{
+			name:     "valid remote type with invalid url",
+			Type:     "git",
+			URL:      "github.com/some-url",
+			dest:     someDest,
+			wantDest: "",
+			wantErr:  fmt.Errorf("GitHub URLs should be github.com/username/repo"),
+		},
+		{
+			name:     "terraform-registry remote type with invalid source addr",
+			Type:     remoteTypeTerraformRegistry,
+			URL:      testInvalidRegistrySource,
+			dest:     someDest,
+			wantDest: "",
+			wantErr:  fmt.Errorf("%s, is not a valid terraform registry", testInvalidRegistrySource),
+		},
+		{
+			name:          "terraform-registry remote type with valid non-existent source addr",
+			Type:          remoteTypeTerraformRegistry,
+			URL:           testValidNonExistentRegistrySource,
+			dest:          someDest,
+			wantDest:      "",
+			skipErrAssert: true,
+		},
+		{
+			name:          "terraform-registry remote type with invalid version",
+			Type:          remoteTypeTerraformRegistry,
+			URL:           "terraform-aws-modules/xyz/aws:x.y",
+			dest:          someDest,
+			wantDest:      "",
+			skipErrAssert: true,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			g := NewGoGetter()
+			g := newGoGetter()
 			gotDest, gotErr := g.DownloadWithType(tt.Type, tt.URL, tt.dest)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
+			if !tt.skipErrAssert {
+				if !reflect.DeepEqual(gotErr, tt.wantErr) {
+					t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
+				}
+			} else {
+				if gotErr == nil {
+					t.Error("error expected")
+				}
 			}
 			if !reflect.DeepEqual(gotDest, tt.wantDest) {
 				t.Errorf("dest got: '%v', want: '%v'", gotDest, tt.wantDest)
