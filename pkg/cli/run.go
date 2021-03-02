@@ -83,8 +83,12 @@ type ScanOptions struct {
 
 	// severity is the level of severity of policy violations that should be reported
 	severity string
-	// Verbose indicates whether to display all fields in default human readlbe output
-	Verbose bool
+
+	// verbose indicates whether to display all fields in default human readlbe output
+	verbose bool
+
+	// showPassedRules indicates whether to display passed rules or not
+	showPassedRules bool
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -212,7 +216,11 @@ func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 
 func (s ScanOptions) writeResults(results runtime.Output) error {
 	// add verbose flag to the scan summary
-	results.Violations.ViolationStore.Summary.ShowViolationDetails = s.Verbose
+	results.Violations.ViolationStore.Summary.ShowViolationDetails = s.verbose
+
+	if !s.showPassedRules {
+		results.Violations.ViolationStore.PassedRules = nil
+	}
 
 	outputWriter := NewOutputWriter(s.UseColors)
 
