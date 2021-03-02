@@ -47,26 +47,26 @@ const (
 )
 
 var (
-	// ScannedAt is regex for 'scanned at' attribute in violations output
-	ScannedAt = regexp.MustCompile(`["]*[sS]canned[ _][aA]t["]*[ \t]*[:=][ \t]*["]*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{1,9} [+-][0-9]{4} UTC["]*[,]{0,1}`)
+	// scannedAtPattern is regex for 'scanned at' attribute in violations output
+	scannedAtPattern = regexp.MustCompile(`["]*[sS]canned[ _][aA]t["]*[ \t]*[:=][ \t]*["]*[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{1,9} [+-][0-9]{4} UTC["]*[,]{0,1}`)
 
-	// FileFolder is regex for 'file/folder' attribute in violations output
-	FileFolder = regexp.MustCompile(`["]*[fF]ile[\/_][fF]older["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
+	// fileFolderPattern is regex for 'file/folder' attribute in violations output
+	fileFolderPattern = regexp.MustCompile(`["]*[fF]ile[\/_][fF]older["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
 
-	// File is regex for 'file' attribute in violations output
-	File = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
+	// filePattern is regex for 'file' attribute in violations output
+	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)\/(.+)["]*`)
 
-	// Package is regex for 'package' attribute in junit-xml output
-	Package = regexp.MustCompile(`package=["]*(.+)\/(.+)["]*`)
+	// packagePattern is regex for 'package' attribute in junit-xml output
+	packagePattern = regexp.MustCompile(`package=["]*(.+)\/(.+)["]*`)
 
-	// Classname is regex for 'package' attribute in junit-xml output
-	Classname = regexp.MustCompile(`classname=["]*(.+)\/(.+)["]*`)
+	// classnamePattern is regex for 'package' attribute in junit-xml output
+	classnamePattern = regexp.MustCompile(`classname=["]*(.+)\/(.+)["]*`)
 
-	// VersionValue is regex for 'value' attribute in junit-xml output (which is terrascan version)
-	VersionValue = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
+	// versionValuePattern is regex for 'value' attribute in junit-xml output (which is terrascan version)
+	versionValuePattern = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
 
-	// SourceRegex is regex for 'file/folder' attribute in violations output
-	SourceRegex = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)\/(.+)["]*`)
+	// sourceRegexPattern is regex for 'file/folder' attribute in violations output
+	sourceRegexPattern = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)\/(.+)["]*`)
 )
 
 // CompareActualWithGolden compares actual string with contents of golden file path passed as parameter
@@ -78,8 +78,8 @@ func CompareActualWithGolden(session *gexec.Session, goldenFileAbsPath string, i
 // CompareActualWithGoldenConfigOnlyRegex compares actual string with contents of golden file path passed as parameter
 func CompareActualWithGoldenConfigOnlyRegex(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
 	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)
-	sessionBytes = SourceRegex.ReplaceAll(sessionBytes, []byte(""))
-	fileBytes = SourceRegex.ReplaceAll(fileBytes, []byte(""))
+	sessionBytes = sourceRegexPattern.ReplaceAll(sessionBytes, []byte(""))
+	fileBytes = sourceRegexPattern.ReplaceAll(fileBytes, []byte(""))
 	gomega.Expect(string(sessionBytes)).Should(gomega.Equal(string(fileBytes)))
 }
 
@@ -89,6 +89,16 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	var sessionOutput, fileContents string
+
+	/*
+		-There are a few attributes in our generated output which is going to vary for every machine.
+		 eg: file/folder, scannedAt, file
+
+		-These attributes needs to be removed from the actual and golden output before comparing
+		-These attributes are removed based on the scan result output type
+		 eg: 1. junit-xml has attributes "package", "classname", "value" that needs to be removed
+		 	 2. other output formats has attributes "scannedAt", "file/folder" that needs to be removed
+	*/
 
 	if isStdOut {
 		sessionOutput = string(session.Wait().Out.Contents())
@@ -102,24 +112,24 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 	fileContents = strings.TrimSpace(fileContents)
 
 	// replace file from the output, it will cause issues for absolute paths
-	sessionOutput = File.ReplaceAllString(sessionOutput, "")
-	fileContents = File.ReplaceAllString(fileContents, "")
+	sessionOutput = filePattern.ReplaceAllString(sessionOutput, "")
+	fileContents = filePattern.ReplaceAllString(fileContents, "")
 
 	if isJunitXML {
-		sessionOutput = Package.ReplaceAllString(sessionOutput, "")
-		fileContents = Package.ReplaceAllString(fileContents, "")
+		sessionOutput = packagePattern.ReplaceAllString(sessionOutput, "")
+		fileContents = packagePattern.ReplaceAllString(fileContents, "")
 
-		sessionOutput = Classname.ReplaceAllString(sessionOutput, "")
-		fileContents = Classname.ReplaceAllString(fileContents, "")
+		sessionOutput = classnamePattern.ReplaceAllString(sessionOutput, "")
+		fileContents = classnamePattern.ReplaceAllString(fileContents, "")
 
-		sessionOutput = VersionValue.ReplaceAllString(sessionOutput, "")
-		fileContents = VersionValue.ReplaceAllString(fileContents, "")
+		sessionOutput = versionValuePattern.ReplaceAllString(sessionOutput, "")
+		fileContents = versionValuePattern.ReplaceAllString(fileContents, "")
 	} else {
-		sessionOutput = ScannedAt.ReplaceAllString(sessionOutput, "")
-		fileContents = ScannedAt.ReplaceAllString(fileContents, "")
+		sessionOutput = scannedAtPattern.ReplaceAllString(sessionOutput, "")
+		fileContents = scannedAtPattern.ReplaceAllString(fileContents, "")
 
-		sessionOutput = FileFolder.ReplaceAllString(sessionOutput, "")
-		fileContents = FileFolder.ReplaceAllString(fileContents, "")
+		sessionOutput = fileFolderPattern.ReplaceAllString(sessionOutput, "")
+		fileContents = fileFolderPattern.ReplaceAllString(fileContents, "")
 	}
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
@@ -233,6 +243,21 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	actualViolations = sessionEngineOutput.ViolationStore.Violations
 	expectedViolations = fileDataEngineOutput.ViolationStore.Violations
 
+	/*
+		-There are a few attributes in our generated output which is going to vary for every machine.
+		-eg: file/folder, scannedAt, file
+		-These attributes needs to be removed from the actual and golden output before comparing
+		-Also, the violations are not in order, they need to be sorted from both actual and golden output,
+		 before the comparision is made. Below are the steps:
+
+		1. sort actual and golden violations and remove "file" attribute
+		2. sort actual and golden skipped violations and remove "file" attribute
+		3. remove "scannedAt" attribute, which is a timestamp from actual summary
+		4. remove "scannedAt" from golden summary
+		5. compare violations, skipped violations and summary in actual and golden
+	*/
+
+	// 1. sort actual and golden violations and remove "file" attribute
 	sort.Sort(actualViolations)
 	sort.Sort(expectedViolations)
 	removeFileFromViolations(actualViolations)
@@ -241,17 +266,21 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	actualSkippedViolations = sessionEngineOutput.ViolationStore.SkippedViolations
 	expectedSkippedViolations = fileDataEngineOutput.ViolationStore.SkippedViolations
 
+	// 2. sort actual and golden skipped violations and remove "file" attribute
 	sort.Sort(actualSkippedViolations)
 	sort.Sort(expectedSkippedViolations)
 	removeFileFromViolations(actualSkippedViolations)
 	removeFileFromViolations(expectedSkippedViolations)
 
+	// 3. remove "scannedAt" attribute, which is a timestamp from actual summary
 	sessionOutputSummary = sessionEngineOutput.ViolationStore.Summary
 	removeTimestampAndResourcePath(&sessionOutputSummary)
 
+	// 4. remove "scannedAt" from golden summary
 	fileDataSummary = fileDataEngineOutput.ViolationStore.Summary
 	removeTimestampAndResourcePath(&fileDataSummary)
 
+	// 5. compare violations, skipped violations and summary in actual and golden
 	gomega.Expect(reflect.DeepEqual(sessionOutputSummary, fileDataSummary)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualViolations, expectedViolations)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualSkippedViolations, expectedSkippedViolations)).To(gomega.BeTrue())

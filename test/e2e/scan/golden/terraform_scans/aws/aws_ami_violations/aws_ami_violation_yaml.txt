@@ -13,8 +13,8 @@ results:
     scan_summary:
         file/folder: /Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation
         iac_type: terraform
-        scanned_at: 2021-02-22 19:04:17.723363 +0000 UTC
-        policies_validated: 53
+        scanned_at: 2021-03-02 15:46:38.259501 +0000 UTC
+        policies_validated: 7
         violated_policies: 1
         low: 0
         medium: 1

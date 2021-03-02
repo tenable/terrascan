@@ -2,104 +2,153 @@ provider "aws" {
   region = "us-west-2"
 }
 
-resource "aws_ebs_volume" "example" {
-  availability_zone = "us-west-2a"
-  size              = 8
+resource "aws_kms_key" "PtShGgAkk1" {
+  description             = "ptshggakk1"
+  deletion_window_in_days = 10
 }
 
-resource "aws_ebs_snapshot" "example_snapshot" {
-  volume_id = aws_ebs_volume.example.id
-}
-resource "aws_ami" "tesami" {
-  name                = "ptshavaa1"
-  virtualization_type = "hvm"
-  root_device_name    = "/dev/xvda"
-
-  ebs_block_device {
-    device_name = "/dev/xvda"
-    snapshot_id = aws_ebs_snapshot.example_snapshot.id
-    volume_size = 8
-  }
-}
-resource "aws_default_vpc" "main" {
-  tags = {
-    Name = "Default VPC"
-  }
+resource "aws_db_instance" "PtShGgAdi1" {
+  allocated_storage                   = 20
+  storage_type                        = "gp2"
+  engine                              = "mysql"
+  engine_version                      = "5.7"
+  instance_class                      = "db.t3.micro"
+  name                                = "ptshggadi1"
+  backup_retention_period             = 30
+  iam_database_authentication_enabled = true
+  auto_minor_version_upgrade          = true
+  username                            = "slaflheafllaflaehf"
+  password                            = "something"
+  skip_final_snapshot                 = true
 }
 
-resource "aws_security_group" "allow_tls" {
-  name        = "ptshavasg1"
-  description = "Allow TLS inbound traffic"
-  vpc_id      = aws_default_vpc.main.id
-
-  ingress {
-    description = "TLS from VPC"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [aws_default_vpc.main.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_db_instance" "PtShGgAdi2" {
+  allocated_storage       = 20
+  storage_type            = "gp2"
+  engine                  = "mysql"
+  engine_version          = "5.7"
+  instance_class          = "db.t2.micro"
+  name                    = "ptshggadi2"
+  backup_retention_period = 0
+  username                = "slaflheafllaflaehf"
+  password                = "something"
+  skip_final_snapshot     = true
+  multi_az = false
 }
 
-resource "aws_instance" "instanceWithNoVpc" {
-  ami           = aws_ami.tesami.id
-  instance_type = "t2.micro"
-
-  metadata_options {
-    http_endpoint = "disabled"
-    http_tokens   = "required"
-  }
+resource "aws_db_instance" "PtShGgAdi3" {
+  allocated_storage                   = 20
+  storage_type                        = "gp2"
+  engine                              = "mysql"
+  engine_version                      = "5.7"
+  instance_class                      = "db.t3.micro"
+  name                                = "ptshggadi3"
+  backup_retention_period             = 30
+  iam_database_authentication_enabled = false
+  auto_minor_version_upgrade          = false
+  publicly_accessible                 = true
+  username                            = "slaflheafllaflaehf"
+  password                            = "something"
+  skip_final_snapshot                 = true
 }
 
-resource "aws_instance" "instanceWithPublicIp" {
-  #ts:skip=AC-AWS-NS-IN-M-1172 should skip this rule  
-  ami           = aws_ami.tesami.id
-  instance_type = "t2.micro"
-  hibernation   = false
-
-  associate_public_ip_address = true
+resource "aws_db_instance" "PtShGgAdi4" {
+  #ts:skip=AWS.RDS.DataSecurity.High.0414 need to skip this rule
+  #ts:skip=AWS.RDS.DataSecurity.High.0577 need to skip this rule
+  allocated_storage       = 20
+  storage_type            = "gp2"
+  engine                  = "mysql"
+  engine_version          = "5.7"
+  instance_class          = "db.t2.micro"
+  name                    = "ptshggadi4"
+  backup_retention_period = 0
+  ca_cert_identifier      = "rds-ca-2019"
+  username                = "slaflheafllaflaehf"
+  password                = "something"
+  skip_final_snapshot     = true
 }
 
-resource "aws_instance" "instanceWithIMDv1_emptyblock" {
-  ami           = "ami-1234"
-  instance_type = "t2.micro"
-
-  metadata_options {}
+resource "aws_db_instance" "PtShGgAdi5" {
+  #ts:skip=AWS.RDS.DataSecurity.High.0577 need to skip this rule
+  allocated_storage     = 20
+  max_allocated_storage = 50
+  storage_type          = "gp2"
+  engine                = "mysql"
+  engine_version        = "5.7"
+  instance_class        = "db.t2.micro"
+  name                  = "ptshggadi5"
+  username              = "slaflheafllaflaehf"
+  password              = "something"
+  skip_final_snapshot   = true
 }
 
-resource "aws_instance" "instanceWithIMDv1_fullblock" {
-  ami           = "ami-1234"
-  instance_type = "t2.micro"
-
-  metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "optional"
-  }
+resource "aws_db_instance" "PtShGgAdi6" {
+  allocated_storage   = 20
+  storage_type        = "gp2"
+  engine              = "mysql"
+  engine_version      = "5.7"
+  instance_class      = "db.t3.micro"
+  name                = "ptshggadi6"
+  storage_encrypted   = false
+  username            = "slaflheafllaflaehf"
+  password            = "something"
+  skip_final_snapshot = true
 }
 
-resource "aws_instance" "instanceWithIMDv1_token_not_present" {
-  #ts:skip=AC-AWS-NS-IN-M-1172 need to skip this rule
-  #ts:skip=AC-AW-IS-IN-M-0144 can skip this rule 
-  ami           = "ami-1234"
-  instance_type = "t2.micro"
-
-  metadata_options {
-    http_endpoint = "enabled"
-  }
+resource "aws_db_instance" "PtShGgAdi7" {
+  allocated_storage                   = 120
+  storage_type                        = "io1"
+  iops                                = 2400
+  engine                              = "mysql"
+  engine_version                      = "5.7"
+  instance_class                      = "db.t3.micro"
+  name                                = "ptshggadi7"
+  storage_encrypted                   = true
+  kms_key_id                          = aws_kms_key.PtShGgAkk1.arn
+  auto_minor_version_upgrade          = true
+  backup_retention_period             = 30
+  ca_cert_identifier                  = "rds-ca-2019"
+  iam_database_authentication_enabled = true
+  publicly_accessible                 = false
+  username                            = "slaflheafllaflaehf"
+  password                            = "something"
+  skip_final_snapshot                 = true
 }
 
-resource "aws_instance" "instanceWithIMDv1_endpoint_not_present" {
-  ami           = "ami-1234"
-  instance_type = "t2.micro"
+resource "aws_db_instance" "PtShGgAdi8" {
+  allocated_storage                   = 20
+  storage_type                        = "gp2"
+  engine                              = "mysql"
+  engine_version                      = "5.7"
+  instance_class                      = "db.t3.micro"
+  name                                = "ptshggadi8"
+  storage_encrypted                   = true
+  kms_key_id                          = aws_kms_key.PtShGgAkk1.arn
+  auto_minor_version_upgrade          = true
+  backup_retention_period             = 30
+  ca_cert_identifier                  = "rds-ca-2019"
+  iam_database_authentication_enabled = true
+  publicly_accessible                 = false
+  username                            = "awsuser"
+  password                            = "something"
+  skip_final_snapshot                 = true
+}
 
-  metadata_options {
-    http_tokens = "optional"
-  }
+resource "aws_db_instance" "PtShGgAdi9" {
+  allocated_storage                   = 20
+  storage_type                        = "gp2"
+  engine                              = "mysql"
+  engine_version                      = "5.7"
+  instance_class                      = "db.t3.micro"
+  name                                = "ptshggadi9"
+  storage_encrypted                   = true
+  kms_key_id                          = aws_kms_key.PtShGgAkk1.arn
+  auto_minor_version_upgrade          = true
+  backup_retention_period             = 30
+  ca_cert_identifier                  = "rds-ca-2019"
+  iam_database_authentication_enabled = true
+  publicly_accessible                 = false
+  username                            = "somelahfaflahf"
+  password                            = "something"
+  skip_final_snapshot                 = true
 }

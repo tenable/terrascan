@@ -141,6 +141,13 @@ var _ = Describe("Scan Command using remote types", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 				Eventually(session, 10).Should(gexec.Exit(helper.ExitCodeThree))
 			})
+
+			It("should download the resource and generate scan results", func() {
+				remoteURL := "https://github.com/accurics/KaiMonkey.git//terraform/aws"
+				scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 10).Should(gexec.Exit(helper.ExitCodeThree))
+			})
 		})
 
 		When("remote type is s3", func() {

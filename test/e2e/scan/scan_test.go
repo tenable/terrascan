@@ -232,8 +232,8 @@ var _ = Describe("Scan", func() {
 
 			When("multiple valid policy paths are supplied", func() {
 				Context("workdir contains k8s files", func() {
-					validPolicyPath1, err1 := filepath.Abs("../test_data/policies/aws")
-					validPolicyPath2, err2 := filepath.Abs("../test_data/policies/azure")
+					validPolicyPath1, err1 := filepath.Abs("../test_data/policies/aws/aws_ami")
+					validPolicyPath2, err2 := filepath.Abs("../test_data/policies/aws/aws_db_instance")
 					workDirPath, err3 := filepath.Abs("../test_data/iac/k8s")
 					It("should not error out", func() {
 						Expect(err1).NotTo(HaveOccurred())

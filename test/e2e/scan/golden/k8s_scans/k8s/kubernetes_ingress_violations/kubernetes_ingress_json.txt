@@ -17,8 +17,8 @@
     "scan_summary": {
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation",
       "iac_type": "k8s",
-      "scanned_at": "2021-02-26 05:24:28.203209 +0000 UTC",
-      "policies_validated": 53,
+      "scanned_at": "2021-03-02 15:52:42.748543 +0000 UTC",
+      "policies_validated": 7,
       "violated_policies": 1,
       "low": 0,
       "medium": 0,

@@ -17,8 +17,8 @@ Scan Summary -
 
 	File/Folder         :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation
 	IaC Type            :	k8s
-	Scanned At          :	2021-02-26 05:24:09.444259 +0000 UTC
-	Policies Validated  :	53
+	Scanned At          :	2021-03-02 15:52:18.820415 +0000 UTC
+	Policies Validated  :	7
 	Violated Policies   :	1
 	Low                 :	0
 	Medium              :	0

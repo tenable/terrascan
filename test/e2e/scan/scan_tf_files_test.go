@@ -147,7 +147,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 
 			Context("policy path with no aws policies is supplied", func() {
 				JustBeforeEach(func() {
-					policyDir, err = filepath.Abs("../test_data/policies/azure")
+					policyDir, err = filepath.Abs("../test_data/policies/k8s")
 				})
 				It("should not display any violations and exit with status code 0", func() {
 					scanArgs := []string{"-p", policyDir, "-d", iacDir}

@@ -2,141 +2,174 @@
   "results": {
     "violations": [
       {
-        "rule_name": "ec2UsingIMDSv1",
-        "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
-        "rule_id": "AC-AWS-NS-IN-M-1172",
-        "severity": "MEDIUM",
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi6",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 85
+      },
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 39
+      },
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi1",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 10
+      },
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi2",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 25
+      },
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi5",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 71
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 39
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi6",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 85
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi2",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 25
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 39
+      },
+      {
+        "rule_name": "rdsPubliclyAccessible",
+        "description": "RDS Instance publicly_accessible flag is true",
+        "rule_id": "AWS.AWS RDS.NS.High.0101",
+        "severity": "HIGH",
         "category": "Network Security",
-        "resource_name": "instanceWithIMDv1_emptyblock",
-        "resource_type": "aws_instance",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
         "file": "main.tf",
-        "line": 70
+        "line": 39
       },
       {
-        "rule_name": "ec2UsingIMDSv1",
-        "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
-        "rule_id": "AC-AWS-NS-IN-M-1172",
-        "severity": "MEDIUM",
-        "category": "Network Security",
-        "resource_name": "instanceWithIMDv1_fullblock",
-        "resource_type": "aws_instance",
+        "rule_name": "rdsAutoMinorVersionUpgradeEnabled",
+        "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
+        "rule_id": "AWS.RDS.DS.High.1041",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
         "file": "main.tf",
-        "line": 77
-      },
-      {
-        "rule_name": "ec2UsingIMDSv1",
-        "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
-        "rule_id": "AC-AWS-NS-IN-M-1172",
-        "severity": "MEDIUM",
-        "category": "Network Security",
-        "resource_name": "instanceWithIMDv1_endpoint_not_present",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 98
-      },
-      {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "resource_name": "instanceWithNoVpc",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 51
-      },
-      {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "resource_name": "instanceWithIMDv1_emptyblock",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 70
-      },
-      {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "resource_name": "instanceWithIMDv1_fullblock",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 77
-      },
-      {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "resource_name": "instanceWithIMDv1_endpoint_not_present",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 98
-      },
-      {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "resource_name": "instanceWithPublicIp",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 61
+        "line": 39
       }
     ],
     "skipped_violations": [
       {
-        "rule_name": "ec2UsingIMDSv1",
-        "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
-        "rule_id": "AC-AWS-NS-IN-M-1172",
-        "severity": "MEDIUM",
-        "category": "Network Security",
-        "skip_comment": "should skip this rule",
-        "resource_name": "instanceWithPublicIp",
-        "resource_type": "aws_instance",
-        "file": "main.tf",
-        "line": 61
-      },
-      {
-        "rule_name": "ec2UsingIMDSv1",
-        "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
-        "rule_id": "AC-AWS-NS-IN-M-1172",
-        "severity": "MEDIUM",
-        "category": "Network Security",
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
         "skip_comment": "need to skip this rule",
-        "resource_name": "instanceWithIMDv1_token_not_present",
-        "resource_type": "aws_instance",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
         "file": "main.tf",
-        "line": 87
+        "line": 55
       },
       {
-        "rule_name": "instanceWithNoVpc",
-        "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
-        "rule_id": "AC-AW-IS-IN-M-0144",
-        "severity": "MEDIUM",
-        "category": "Infrastructure Security",
-        "skip_comment": "can skip this rule",
-        "resource_name": "instanceWithIMDv1_token_not_present",
-        "resource_type": "aws_instance",
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "skip_comment": "need to skip this rule",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
         "file": "main.tf",
-        "line": 87
+        "line": 55
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "skip_comment": "need to skip this rule",
+        "resource_name": "PtShGgAdi5",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 71
       }
     ],
     "scan_summary": {
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/resource_skipping/terraform",
       "iac_type": "terraform",
-      "scanned_at": "2021-02-26 17:05:56.671863 +0000 UTC",
-      "policies_validated": 53,
-      "violated_policies": 8,
+      "scanned_at": "2021-03-02 16:00:46.95002 +0000 UTC",
+      "policies_validated": 7,
+      "violated_policies": 11,
       "low": 0,
-      "medium": 8,
-      "high": 0
+      "medium": 0,
+      "high": 11
     }
   }
 }
