@@ -92,7 +92,7 @@ var _ = Describe("Init", func() {
 		When("terrascan init is run with -h flag", func() {
 			It("should print help", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, initCommand, "-h")
-				goldenFileAbsPath, err := filepath.Abs("../help/golden/help_init.txt")
+				goldenFileAbsPath, err := filepath.Abs(filepath.Join("..", "help", "golden", "help_init.txt"))
 				Expect(err).NotTo(HaveOccurred())
 				helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
 			})
@@ -106,7 +106,7 @@ var _ = Describe("Init", func() {
 		When("terrascan init command has typo. eg: inti", func() {
 			It("should print command suggestion", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "inti")
-				goldenFileAbsPath, err := filepath.Abs("golden/init_typo_help.txt")
+				goldenFileAbsPath, err := filepath.Abs(filepath.Join("golden", "init_typo_help.txt"))
 				Expect(err).NotTo(HaveOccurred())
 				helper.CompareActualWithGolden(session, goldenFileAbsPath, false)
 			})
@@ -129,7 +129,7 @@ var _ = Describe("Init", func() {
 	Describe("terrascan init is run when TERRASCAN_CONFIG is set", func() {
 		When("the config file has invalid repo url", func() {
 			JustBeforeEach(func() {
-				os.Setenv(terrascanConfigEnvName, "config/invalid_repo.toml")
+				os.Setenv(terrascanConfigEnvName, filepath.Join("config", "invalid_repo.toml"))
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
@@ -141,7 +141,7 @@ var _ = Describe("Init", func() {
 		})
 		When("the config file has invalid branch name", func() {
 			JustBeforeEach(func() {
-				os.Setenv(terrascanConfigEnvName, "config/invalid_branch.toml")
+				os.Setenv(terrascanConfigEnvName, filepath.Join("config", "invalid_branch.toml"))
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
@@ -153,7 +153,7 @@ var _ = Describe("Init", func() {
 		})
 		When("the config file has invalid rego subdir", func() {
 			JustBeforeEach(func() {
-				os.Setenv(terrascanConfigEnvName, "config/invalid_rego_subdir.toml")
+				os.Setenv(terrascanConfigEnvName, filepath.Join("config", "invalid_rego_subdir.toml"))
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
@@ -165,7 +165,7 @@ var _ = Describe("Init", func() {
 		})
 		When("the config file has invalid path", func() {
 			JustBeforeEach(func() {
-				os.Setenv(terrascanConfigEnvName, "config/invalid_path.toml")
+				os.Setenv(terrascanConfigEnvName, filepath.Join("config", "invalid_path.toml"))
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
@@ -177,7 +177,7 @@ var _ = Describe("Init", func() {
 		Context("the config file has valid data", func() {
 			When("config file has different git repo and branch", func() {
 				JustBeforeEach(func() {
-					os.Setenv(terrascanConfigEnvName, "config/valid_config.toml")
+					os.Setenv(terrascanConfigEnvName, filepath.Join("config", "valid_config.toml"))
 				})
 				JustAfterEach(func() {
 					os.Setenv(terrascanConfigEnvName, "")
