@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure Container Registry has locks",
     "reference_id": "accurics.azure.AKS.3",
-    "category": "Azure Container Services",
+    "category": "Resilience",
     "version": 2
 }

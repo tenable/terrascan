@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Prevalent known internal port (TCP:3000) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.99",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

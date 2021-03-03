@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure that the expiration date is set on all keys",
     "reference_id": "accurics.azure.EKM.25",
-    "category": "Key Management",
+    "category": "Data Protection",
     "version": 2
 }

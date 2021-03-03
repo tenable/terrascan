@@ -9,6 +9,6 @@
     "severity": "HIGH",
     "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
     "reference_id": "accurics.azure.NS.21",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

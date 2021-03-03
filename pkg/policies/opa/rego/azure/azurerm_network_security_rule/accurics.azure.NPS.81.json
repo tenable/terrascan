@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "NetBIOS Datagram Service (TCP:138) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.81",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

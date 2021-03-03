@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server.",
     "reference_id": "accurics.azure.NS.361",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

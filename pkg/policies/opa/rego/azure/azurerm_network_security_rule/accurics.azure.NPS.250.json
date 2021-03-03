@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "Telnet (TCP:23) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.250",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

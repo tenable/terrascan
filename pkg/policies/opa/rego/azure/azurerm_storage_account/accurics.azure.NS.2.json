@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access",
     "reference_id": "accurics.azure.NS.2",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server",
     "reference_id": "accurics.azure.LOG.153",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

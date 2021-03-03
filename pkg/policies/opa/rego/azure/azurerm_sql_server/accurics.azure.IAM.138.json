@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Avoid using names like 'Admin' for an Azure SQL Server admin account login",
     "reference_id": "accurics.azure.IAM.138",
-    "category": "Identity and Access Management",
+    "category": "Compliance Validation",
     "version": 2
 }
