@@ -1,0 +1,64 @@
+{
+  "aws_s3_bucket": [
+    {
+      "id": "aws_s3_bucket.demo-example",
+      "name": "demo-example",
+      "source": "",
+      "line": 0,
+      "type": "aws_s3_bucket",
+      "config": {
+        "acl": "private",
+        "bucket": "demoexample-1",
+        "bucket_prefix": null,
+        "cors_rule": [],
+        "force_destroy": false,
+        "grant": [],
+        "lifecycle_rule": [],
+        "logging": [],
+        "object_lock_configuration": [],
+        "policy": null,
+        "replication_configuration": [],
+        "server_side_encryption_configuration": [],
+        "tags": null,
+        "versioning": [
+          {
+            "enabled": false,
+            "mfa_delete": false
+          }
+        ],
+        "website": []
+      },
+      "skip_rules": null
+    },
+    {
+      "id": "aws_s3_bucket.demo-s3",
+      "name": "demo-s3",
+      "source": "",
+      "line": 0,
+      "type": "aws_s3_bucket",
+      "config": {
+        "acl": "private",
+        "bucket": "sample_prefix_test20-terraformcloud",
+        "bucket_prefix": null,
+        "cors_rule": [],
+        "force_destroy": false,
+        "grant": [],
+        "lifecycle_rule": [],
+        "logging": [],
+        "object_lock_configuration": [],
+        "policy": null,
+        "replication_configuration": [],
+        "server_side_encryption_configuration": [],
+        "tags": null,
+        "versioning": [
+          {
+            "enabled": false,
+            "mfa_delete": false
+          }
+        ],
+        "website": []
+      },
+      "skip_rules": null
+    }
+  ]
+}
