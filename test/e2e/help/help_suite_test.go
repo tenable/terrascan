@@ -13,8 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-package init_test
+package help_test
 
 import (
 	"testing"
@@ -23,7 +22,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestInit(t *testing.T) {
+func TestHelp(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Init Suite")
+	RunSpecs(t, "Help Suite")
 }

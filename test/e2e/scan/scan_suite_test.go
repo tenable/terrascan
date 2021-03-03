@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package init_test
+package scan_test
 
 import (
 	"testing"
@@ -23,7 +23,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestInit(t *testing.T) {
+func TestScan(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Init Suite")
+	RunSpecs(t, "Scan Suite")
 }

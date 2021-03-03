@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package init_test
 
 import (
@@ -49,7 +65,7 @@ var _ = Describe("Init", func() {
 	Describe("terrascan init is run", func() {
 		When("without any flags", func() {
 			It("should download policies and exit with status code 0", func() {
-				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 				Expect(outWriter).Should(gbytes.Say(""))
 			})
 
@@ -83,7 +99,7 @@ var _ = Describe("Init", func() {
 
 			It("should exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, initCommand, "-h")
-				Eventually(session).Should(gexec.Exit(0))
+				Eventually(session).Should(gexec.Exit(helper.ExitCodeZero))
 			})
 		})
 
@@ -97,7 +113,7 @@ var _ = Describe("Init", func() {
 
 			It("should exit with status code 1", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "inti")
-				Eventually(session, 5).Should(gexec.Exit(1))
+				Eventually(session, 5).Should(gexec.Exit(helper.ExitCodeOne))
 			})
 		})
 
@@ -119,7 +135,7 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeOne)
 				helper.ContainsErrorSubString(session, `failed to download policies. error: 'Get "https://repository/url/info/refs?service=git-upload-pack": dial tcp:`)
 			})
 		})
@@ -131,7 +147,7 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeOne)
 				helper.ContainsErrorSubString(session, `failed to initialize terrascan. error : failed to checkout git branch 'invalid-branch'. error: 'reference not found'`)
 			})
 		})
@@ -143,7 +159,7 @@ var _ = Describe("Init", func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
 			It("should error out and exit with status code 1", func() {
-				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 1)
+				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeOne)
 				helper.ContainsErrorSubString(session, "invalid/path: no such file or directory")
 			})
 		})
@@ -154,8 +170,8 @@ var _ = Describe("Init", func() {
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
-			It("should should download policies and exit with status code 0", func() {
-				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+			It("should download policies and exit with status code 0", func() {
+				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 			})
 		})
 		Context("the config file has valid data", func() {
@@ -167,7 +183,7 @@ var _ = Describe("Init", func() {
 					os.Setenv(terrascanConfigEnvName, "")
 				})
 				It("init should download the repo provided in the config file", func() {
-					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 				})
 				Context("Kai Monkey git repo is downloaded", func() {
 					It("should validate Kai Monkey repo in the policy path", func() {
@@ -184,14 +200,14 @@ var _ = Describe("Init", func() {
 			Context("running init the first time", func() {
 				var modifiedTime time.Time
 				It("should download policies at the default policy path", func() {
-					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 					fi, err := os.Stat(defaultPolicyRepoPath)
 					Expect(err).ToNot(HaveOccurred())
 					modifiedTime = fi.ModTime()
 				})
 				Context("running init the second time", func() {
 					It("should download policies again at the default policy path", func() {
-						initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, 0)
+						initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 						fi, err := os.Stat(defaultPolicyRepoPath)
 						Expect(err).ToNot(HaveOccurred())
 						Expect(fi.ModTime()).To(BeTemporally(">", modifiedTime))

@@ -1,0 +1,15 @@
+Terrascan
+
+Displays the version of this Terrascan binary
+
+Usage:
+  terrascan version [flags]
+
+Flags:
+  -h, --help   help for version
+
+Global Flags:
+  -c, --config-path string   config file path
+  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
+  -x, --log-type string      log output type (console, json) (default "console")
+  -o, --output string        output type (human, json, yaml, xml, junit-xml) (default "human")

@@ -1,0 +1,20 @@
+Violation Details -
+    
+	Description    :	TLS disabled can affect the confidentiality of the data in transit
+	File           :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation/config.yaml
+	Line           :	1
+	Severity       :	HIGH
+	
+	-----------------------------------------------------------------------
+	
+
+Scan Summary -
+
+	File/Folder         :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation
+	IaC Type            :	k8s
+	Scanned At          :	2021-03-02 15:51:59.060974 +0000 UTC
+	Policies Validated  :	7
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1
