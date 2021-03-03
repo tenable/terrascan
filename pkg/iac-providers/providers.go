@@ -71,6 +71,7 @@ func SupportedIacVersions() []string {
 		for k := range versions {
 			versionSlice = append(versionSlice, string(k))
 		}
+		sort.Strings(versionSlice)
 		versionString := strings.Join(versionSlice, ", ")
 		iacVersions = append(iacVersions, fmt.Sprintf("%s: %s", string(iac), versionString))
 	}

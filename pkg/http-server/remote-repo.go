@@ -38,6 +38,7 @@ type scanRemoteRepoReq struct {
 	ConfigOnly bool     `json:"config_only"`
 	ScanRules  []string `json:"scan_rules"`
 	SkipRules  []string `json:"skip_rules"`
+	Severity   string   `json:"severity"`
 	d          downloader.Downloader
 }
 
@@ -114,7 +115,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, "", policyPath, s.ScanRules, s.SkipRules)
+		"", iacDirPath, "", policyPath, s.ScanRules, s.SkipRules, s.Severity)
 	if err != nil {
 		zap.S().Error(err)
 		return output, err

@@ -1,0 +1,10 @@
+<testsuites tests="7" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="7" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation">
+    <properties>
+      <property name="Terrascan Version" value="v1.3.3"></property>
+    </properties>
+    <testcase classname="main.tf" name="[ERROR] resource: &#34;awsAmiEncrypted&#34; at line: 5, violates: RULE - AWS.EC2.Encryption&amp;KeyManagement.Medium.0688" severity="MEDIUM" category="Encryption &amp; KeyManagement">
+      <failure message="Description: Enable AWS AMI Encryption, File: main.tf, Line: 5, Severity: MEDIUM, Rule Name: amiNotEncrypted, Rule ID: AWS.EC2.Encryption&amp;KeyManagement.Medium.0688, Resource Name: awsAmiEncrypted, Resource Type: aws_ami, Category: Encryption &amp; KeyManagement" type=""></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

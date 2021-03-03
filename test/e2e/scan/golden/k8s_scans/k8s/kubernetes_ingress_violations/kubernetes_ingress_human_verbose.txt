@@ -1,0 +1,25 @@
+Violation Details -
+    
+	Description    :	TLS disabled can affect the confidentiality of the data in transit
+	File           :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation/config.yaml
+	Line           :	1
+	Severity       :	HIGH
+	Rule Name      :	noHttps
+	Rule ID        :	AC-K8-NS-IN-H-0020
+	Resource Name  :	ingress-demo-disallowed
+	Resource Type  :	kubernetes_ingress
+	Category       :	Network Security
+	
+	-----------------------------------------------------------------------
+	
+
+Scan Summary -
+
+	File/Folder         :	/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation
+	IaC Type            :	k8s
+	Scanned At          :	2021-03-02 15:52:18.820415 +0000 UTC
+	Policies Validated  :	7
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1

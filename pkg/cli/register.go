@@ -18,6 +18,8 @@ package cli
 
 import (
 	"flag"
+	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -34,7 +36,7 @@ func RegisterCommand(baseCommand *cobra.Command, command *cobra.Command) {
 func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogLevel, "log-level", "l", "info", "log level (debug, info, warn, error, panic, fatal)")
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
-	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml)")
+	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 
 	// Function to execute before processing commands
@@ -57,6 +59,11 @@ func Execute() {
 		if err == flag.ErrHelp {
 			os.Exit(0)
 		}
+	}
+
+	// disable terraform logs when TF_LOG env variable is not set
+	if os.Getenv("TF_LOG") == "" {
+		log.SetOutput(ioutil.Discard)
 	}
 
 	if err := rootCmd.Execute(); err != nil {

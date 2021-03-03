@@ -19,16 +19,13 @@ package commons
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
-)
-
-var (
-	// ErrLoadConfigFile error
-	ErrLoadConfigFile = fmt.Errorf("failed to load config file")
 )
 
 // LoadIacFile parses the given terraform file from the given file path
@@ -38,13 +35,15 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	parser := hclConfigs.NewParser(afero.NewOsFs())
 
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
-	if diags != nil {
-		zap.S().Errorf("failed to load config file '%s'. error:\n%v\n", absFilePath, diags)
-		return allResourcesConfig, ErrLoadConfigFile
+	if hclFile == nil {
+		errMessage := fmt.Sprintf("error occured while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
-	if hclFile == nil && diags.HasErrors() {
-		zap.S().Errorf("error occured while loading config file. error:\n%v\n", diags)
-		return allResourcesConfig, ErrLoadConfigFile
+	if diags != nil {
+		errMessage := fmt.Sprintf("failed to load config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
+		zap.S().Debug(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
 	// initialize normalized output
@@ -78,4 +77,13 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 func getFileName(path string) string {
 	_, file := filepath.Split(path)
 	return file
+}
+
+// getErrorMessagesFromDiagnostics should be called when diags.HasErrors is true
+func getErrorMessagesFromDiagnostics(diags hcl.Diagnostics) string {
+	var errMsgs []string
+	for _, v := range diags.Errs() {
+		errMsgs = append(errMsgs, v.Error())
+	}
+	return strings.Join(errMsgs, "\n")
 }

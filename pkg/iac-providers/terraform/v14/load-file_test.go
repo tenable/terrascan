@@ -19,15 +19,23 @@ package tfv14
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
 )
 
 func TestLoadIacFile(t *testing.T) {
+
+	testErrorString1 := `error occured while loading config file 'not-there'. error:
+<nil>: Failed to read file; The file "not-there" could not be read.
+`
+	testErrorString2 := `failed to load config file './testdata/empty.tf'. error:
+./testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+./testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`
 
 	table := []struct {
 		name     string
@@ -40,43 +48,38 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv14:    TfV14{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  fmt.Errorf(testErrorString1),
 		},
 		{
 			name:     "empty config",
 			filePath: "./testdata/testfile",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "invalid config",
 			filePath: "./testdata/empty.tf",
 			tfv14:    TfV14{},
-			wantErr:  commons.ErrLoadConfigFile,
+			wantErr:  fmt.Errorf(testErrorString2),
 		},
 		{
 			name:     "depends_on",
 			filePath: "./testdata/depends_on/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "count",
 			filePath: "./testdata/count/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "for_each",
 			filePath: "./testdata/for_each/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 		{
 			name:     "required_providers",
 			filePath: "./testdata/required-providers/main.tf",
 			tfv14:    TfV14{},
-			wantErr:  nil,
 		},
 	}
 

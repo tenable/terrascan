@@ -1,0 +1,12 @@
+{
+    "name": "rdsPubliclyAccessible",
+    "file": "rdsPubliclyAccessible.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "RDS Instance publicly_accessible flag is true",
+    "reference_id": "AWS.AWS RDS.NS.High.0101",
+    "category": "Network Security",
+    "version": 2
+}

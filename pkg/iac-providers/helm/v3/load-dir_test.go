@@ -42,14 +42,12 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "happy path (credit to madhuakula/kubernetes-goat)",
 			dirPath:       "./testdata/happy-path",
 			helmv3:        HelmV3{},
-			wantErr:       nil,
 			resourceCount: 3,
 		},
 		{
 			name:          "happy path with subchart (credit to madhuakula/kubernetes-goat)",
 			dirPath:       "./testdata/happy-path-with-subchart",
 			helmv3:        HelmV3{},
-			wantErr:       nil,
 			resourceCount: 5,
 		},
 		{
@@ -63,7 +61,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "no helm charts in directory",
 			dirPath:       "./testdata/no-helm-charts",
 			helmv3:        HelmV3{},
-			wantErr:       errNoHelmChartsFound,
+			wantErr:       fmt.Errorf("no helm charts found in directory ./testdata/no-helm-charts"),
 			resourceCount: 0,
 		},
 	}

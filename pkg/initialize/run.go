@@ -18,8 +18,8 @@ package initialize
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
-	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
@@ -37,7 +37,6 @@ var (
 
 // Run initializes terrascan if not done already
 func Run(isScanCmd bool) error {
-
 	zap.S().Debug("initializing terrascan")
 
 	// check if policy paths exist
@@ -58,23 +57,29 @@ func Run(isScanCmd bool) error {
 
 // DownloadPolicies clones the policies to a local folder
 func DownloadPolicies() error {
+	zap.S().Debug("downloading policies")
 
-	tempPath := filepath.Join(os.TempDir(), "terrascan")
+	tempPath, err := ioutil.TempDir("", "terrascan-")
+	if err != nil {
+		return fmt.Errorf("failed to create temporary directory. error: '%v'", err)
+	}
+
+	defer os.RemoveAll(tempPath)
+
+	zap.S().Debugf("cloning terrascan repo at %s", tempPath)
 
 	// clone the repo
 	r, err := git.PlainClone(tempPath, false, &git.CloneOptions{
 		URL: repoURL,
 	})
 	if err != nil {
-		zap.S().Errorf("failed to download policies. error: '%v'", err)
-		return err
+		return fmt.Errorf("failed to download policies. error: '%v'", err)
 	}
 
 	// create working tree
 	w, err := r.Worktree()
 	if err != nil {
-		zap.S().Errorf("failed to create working tree. error: '%v'", err)
-		return err
+		return fmt.Errorf("failed to create working tree. error: '%v'", err)
 	}
 
 	// fetch references
@@ -82,8 +87,7 @@ func DownloadPolicies() error {
 		RefSpecs: []gitConfig.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
 	})
 	if err != nil {
-		zap.S().Errorf("failed to fetch references from repo. error: '%v'", err)
-		return err
+		return fmt.Errorf("failed to fetch references from git repo. error: '%v'", err)
 	}
 
 	// checkout policies branch
@@ -92,11 +96,18 @@ func DownloadPolicies() error {
 		Force:  true,
 	})
 	if err != nil {
-		zap.S().Errorf("failed to checkout branch '%v'. error: '%v'", branch, err)
-		return err
+		return fmt.Errorf("failed to checkout git branch '%v'. error: '%v'", branch, err)
 	}
 
-	os.RemoveAll(basePath)
+	// cleaning the existing cached policies at basePath
+	if err = os.RemoveAll(basePath); err != nil {
+		return fmt.Errorf("failed to clean up the directory '%s'. error: '%v'", basePath, err)
+	}
 
-	return os.Rename(tempPath, basePath)
+	// move the freshly cloned repo from tempPath to basePath
+	if err = os.Rename(tempPath, basePath); err != nil {
+		return fmt.Errorf("failed to install policies to '%s'. error: '%v'", basePath, err)
+	}
+
+	return nil
 }

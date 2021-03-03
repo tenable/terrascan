@@ -1,0 +1,28 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "rdsAutoMinorVersionUpgradeEnabled",
+        "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
+        "rule_id": "AWS.RDS.DS.High.1041",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi3",
+        "resource_type": "aws_db_instance",
+        "file": "main.tf",
+        "line": 39
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_db_instance_violation",
+      "iac_type": "terraform",
+      "scanned_at": "2021-03-02 13:51:32.518205 +0000 UTC",
+      "policies_validated": 1,
+      "violated_policies": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 1
+    }
+  }
+}

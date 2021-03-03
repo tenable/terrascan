@@ -1,0 +1,9 @@
+[rules]
+    scan-rules = [
+        "AWS.RDS.DS.High.1041",
+        "AWS.AWS RDS.NS.High.0101",
+        "AWS.RDS.DataSecurity.High.0577"
+    ]
+    skip-rules = [
+        "AWS.RDS.DataSecurity.High.0577"
+    ]
