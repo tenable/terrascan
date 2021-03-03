@@ -92,7 +92,7 @@ var _ = Describe("Init", func() {
 		When("terrascan init is run with -h flag", func() {
 			It("should print help", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, initCommand, "-h")
-				goldenFileAbsPath, err := filepath.Abs("golden/init_help.txt")
+				goldenFileAbsPath, err := filepath.Abs("../help/golden/help_init.txt")
 				Expect(err).NotTo(HaveOccurred())
 				helper.CompareActualWithGolden(session, goldenFileAbsPath, true)
 			})

@@ -239,6 +239,7 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	var sessionOutputSummary, fileDataSummary results.ScanSummary
 	var actualViolations, expectedViolations violations
 	var actualSkippedViolations, expectedSkippedViolations violations
+	var actualPassedRules, expectedPassedRules passedRules
 
 	actualViolations = sessionEngineOutput.ViolationStore.Violations
 	expectedViolations = fileDataEngineOutput.ViolationStore.Violations
@@ -272,6 +273,13 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	removeFileFromViolations(actualSkippedViolations)
 	removeFileFromViolations(expectedSkippedViolations)
 
+	actualPassedRules = sessionEngineOutput.ViolationStore.PassedRules
+	expectedPassedRules = fileDataEngineOutput.ViolationStore.PassedRules
+
+	// 3. sort actual and golden passed rules
+	sort.Sort(actualPassedRules)
+	sort.Sort(expectedPassedRules)
+
 	// 3. remove "scannedAt" attribute, which is a timestamp from actual summary
 	sessionOutputSummary = sessionEngineOutput.ViolationStore.Summary
 	removeTimestampAndResourcePath(&sessionOutputSummary)
@@ -280,8 +288,9 @@ func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	fileDataSummary = fileDataEngineOutput.ViolationStore.Summary
 	removeTimestampAndResourcePath(&fileDataSummary)
 
-	// 5. compare violations, skipped violations and summary in actual and golden
+	// 5. compare passed rules, violations, skipped violations and summary in actual and golden
 	gomega.Expect(reflect.DeepEqual(sessionOutputSummary, fileDataSummary)).To(gomega.BeTrue())
+	gomega.Expect(reflect.DeepEqual(actualPassedRules, expectedPassedRules)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualViolations, expectedViolations)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualSkippedViolations, expectedSkippedViolations)).To(gomega.BeTrue())
 }
