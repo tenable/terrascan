@@ -1,0 +1,12 @@
+{
+    "name": "cloudWatchMonitoringLaunchConfig",
+    "file": "cloudWatchMonitoringLaunchConfig.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "Medium",
+    "description": "It is important to enable cloudWatch monitoring incase monitoring the activity",
+    "reference_id": "AC-AW-LM-LC-M-0375",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

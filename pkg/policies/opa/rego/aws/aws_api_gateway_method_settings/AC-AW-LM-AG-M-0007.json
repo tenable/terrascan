@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewaySettingMetrics",
+    "file": "apiGatewaySettingMetrics.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable Detailed CloudWatch Metrics for APIs",
+    "reference_id": "AC-AW-LM-AG-M-0007",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

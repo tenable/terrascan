@@ -1,0 +1,12 @@
+{
+    "name": "storageNotEncrypted",
+    "file": "storageNotEncrypted.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Encrypt Amazon RDS instances and snapshots at rest, by enabling the encryption option for your Amazon RDS DB instance",
+    "reference_id": "AC-AW-DP-RD-H-0179",
+    "category": "Data Protection",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "kmsKeyRotationDisabled",
+    "file": "kmsKeyRotationDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure rotation for customer created CMKs is enabled",
+    "reference_id": "AC-AW-DP-KK-H-0153",
+    "category": "Data Protection",
+    "version": 2
+}

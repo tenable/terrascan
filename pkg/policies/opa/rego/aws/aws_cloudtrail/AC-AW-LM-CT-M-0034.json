@@ -1,0 +1,12 @@
+{
+    "name": "cloudTrailMultiRegionNotCreated",
+    "file": "cloudTrailMultiRegionNotCreated.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Cloud Trail Multi Region not enabled",
+    "reference_id": "AC-AW-LM-CT-M-0034",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

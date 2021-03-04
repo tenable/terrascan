@@ -1,0 +1,12 @@
+{
+    "name": "snsPublicAccess",
+    "file": "snsPublicAccess.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure SNS Topic is Publicly Accessible For Subscription",
+    "reference_id": "AC-AW-CV-SN-M-0357",
+    "category": "Compliance Validation",
+    "version": 2
+}

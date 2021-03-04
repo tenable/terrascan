@@ -1,0 +1,15 @@
+{
+    "name": "port3020AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port3020AlbNetworkPortSecurityPublicScope",
+        "portNumber": 3020,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'CIFS / SMB' (TCP:3020) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0272",
+    "category": "Infrastructure Security",
+    "version": 2
+}

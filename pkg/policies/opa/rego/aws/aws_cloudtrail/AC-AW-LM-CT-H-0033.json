@@ -1,0 +1,12 @@
+{
+    "name": "cloudTrailLogNotEncrypted",
+    "file": "cloudTrailLogNotEncrypted.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure CloudTrail logs are encrypted at rest using KMS CMKs",
+    "reference_id": "AC-AW-LM-CT-H-0033",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

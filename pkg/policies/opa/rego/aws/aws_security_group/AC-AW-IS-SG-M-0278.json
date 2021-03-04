@@ -1,0 +1,15 @@
+{
+    "name": "port636AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port636AlbNetworkPortSecurityPublicScope",
+        "portNumber": 636,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'LDAP SSL ' (TCP:636) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0278",
+    "category": "Infrastructure Security",
+    "version": 2
+}

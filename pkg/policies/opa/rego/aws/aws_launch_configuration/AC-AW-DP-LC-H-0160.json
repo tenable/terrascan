@@ -1,0 +1,12 @@
+{
+    "name": "launchConfigurationEBSBlockUnEncrypted",
+    "file": "launchConfigurationEBSBlockUnEncrypted.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that AWS ECS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS ECS clusters and associated cache storage systems.",
+    "reference_id": "AC-AW-DP-LC-H-0160",
+    "category": "Data Protection",
+    "version": 2
+}

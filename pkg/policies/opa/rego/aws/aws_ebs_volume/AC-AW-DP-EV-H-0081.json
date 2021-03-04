@@ -1,0 +1,13 @@
+{
+    "name": "ebsSnapshotDisabled",
+    "file": "ebsSnapshot.rego",
+    "template_args": {
+        "name": "ebsSnapshotDisabled",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Enable AWS EBS Snapshot Encryption",
+    "reference_id": "AC-AW-DP-EV-H-0081",
+    "category": "Data Protection",
+    "version": 1
+}

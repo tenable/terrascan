@@ -1,0 +1,15 @@
+{
+    "name": "port22OpenToInternet",
+    "file": "portOpenToInternet.rego",
+    "template_args": {
+        "from_port": 22,
+        "name": "port22OpenToInternet",
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "HIGH",
+    "description": "ssh port open to internet",
+    "reference_id": "AC-AW-IS-SG-M-0220",
+    "category": "Infrastructure Security",
+    "version": 2
+}

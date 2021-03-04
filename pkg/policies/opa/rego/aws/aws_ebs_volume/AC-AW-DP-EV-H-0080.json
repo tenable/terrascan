@@ -1,0 +1,13 @@
+{
+    "name": "ebsVolumeEncryptedWithNoKms",
+    "file": "ebsEncryption.rego",
+    "template_args": {
+        "name": "ebsVolumeEncryptedWithNoKms",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that AWS EBS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS EBS clusters and associated cache storage systems.",
+    "reference_id": "AC-AW-DP-EV-H-0080",
+    "category": "Data Protection",
+    "version": 2
+}

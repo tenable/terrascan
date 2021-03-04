@@ -1,0 +1,10 @@
+{
+    "name": "noWafEnabled",
+    "file": "noWafEnabled.rego",
+    "template_args": null,
+    "severity": "Medium",
+    "description": "Ensure that cloud-front has web application firewall enabled",
+    "reference_id": "AC-AW-IS-CD-M-1186",
+    "category": "Infrastructure Security",
+    "version": 2
+}

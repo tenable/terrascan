@@ -1,0 +1,12 @@
+{
+    "name": "lambdaNotInVpc",
+    "file": "lambdaNotInVpc.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "Low",
+    "description": "Lambda function doesn't not include a VPC configuration.",
+    "reference_id": "AC-AW-IS-LF-M-0157",
+    "category": "Infrastructure Security",
+    "version": 2
+}

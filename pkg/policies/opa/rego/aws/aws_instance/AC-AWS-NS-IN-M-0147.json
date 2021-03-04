@@ -1,0 +1,10 @@
+{
+    "name": "ec2UsingIMDSv1",
+    "file": "ec2UsingIMDSv1.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
+    "reference_id": "AC-AWS-IS-IN-H-0147",
+    "category": "Infrastructure Security",
+    "version": 1
+}

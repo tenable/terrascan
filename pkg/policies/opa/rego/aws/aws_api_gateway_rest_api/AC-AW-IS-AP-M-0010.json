@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayContentEncoding",
+    "file": "apiGatewayContentEncoding.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable Content Encoding",
+    "reference_id": "AC-AW-IS-AP-M-0010",
+    "category": "Infrastructure Security ",
+    "version": 1
+}

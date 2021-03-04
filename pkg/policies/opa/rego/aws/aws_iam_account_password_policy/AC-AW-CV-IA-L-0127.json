@@ -1,0 +1,14 @@
+{
+    "name": "passwordRequireLowerCase",
+    "file": "passwordPolicyRequirement.rego",
+    "template_args": {
+        "name": "passwordRequireLowerCase",
+        "prefix": "",
+        "required_parameter": "require_lowercase_characters"
+    },
+    "severity": "MEDIUM",
+    "description": "Lower case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
+    "reference_id": "AC-AW-CV-IA-L-0127",
+    "category": "Compliance Validation",
+    "version": 2
+}
