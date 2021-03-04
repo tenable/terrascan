@@ -146,7 +146,7 @@ func CompareActualWithGoldenJSON(session *gexec.Session, goldenFileAbsPath strin
 	err = json.Unmarshal(fileBytes, &fileDataEngineOutput)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
-	compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
+	CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
 }
 
 // CompareActualWithGoldenYAML compares actual data with contents of golden file passed as parameter
@@ -160,7 +160,7 @@ func CompareActualWithGoldenYAML(session *gexec.Session, goldenFileAbsPath strin
 	err = yaml.Unmarshal(fileBytes, &fileDataEngineOutput)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
-	compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
+	CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
 }
 
 // CompareActualWithGoldenXML compares actual data with contents of golden file passed as parameter
@@ -174,7 +174,7 @@ func CompareActualWithGoldenXML(session *gexec.Session, goldenFileAbsPath string
 	err = xml.Unmarshal(fileBytes, &fileDataEngineOutput)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
-	compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
+	CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
 }
 
 // ContainsErrorSubString will assert if error string is part of error output
@@ -234,8 +234,8 @@ func GetByteData(session *gexec.Session, goldenFileAbsPath string, isStdOut bool
 	return sessionBytes, fileBytes
 }
 
-// compareSummaryAndViolations is a helper function to compare actual and expected, summary and violations
-func compareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput policy.EngineOutput) {
+// CompareSummaryAndViolations is a helper function to compare actual and expected, summary and violations
+func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput policy.EngineOutput) {
 	var sessionOutputSummary, fileDataSummary results.ScanSummary
 	var actualViolations, expectedViolations violations
 	var actualSkippedViolations, expectedSkippedViolations violations

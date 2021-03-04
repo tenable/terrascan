@@ -29,7 +29,7 @@ var serverCmd = &cobra.Command{
 Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Code) files and returns the scan results.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		initial(cmd, args, false)
+		initial(cmd, args, true)
 	},
 	Run: server,
 }
