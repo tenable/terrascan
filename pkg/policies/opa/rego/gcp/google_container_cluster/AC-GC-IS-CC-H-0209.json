@@ -1,0 +1,10 @@
+{
+    "name": "gkeControlPlaneNotPublic",
+    "file": "gkeControlPlaneNotPublic.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure GKE Control Plane is not public.",
+    "reference_id": "AC-GC-IS-CC-H-0209",
+    "category": "Infrastructure Security",
+    "version": 1
+}

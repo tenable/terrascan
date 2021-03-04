@@ -1,0 +1,13 @@
+{
+    "name": "projectWideSshKeysUsed",
+    "file": "metadataDisabled.rego",
+    "template_args": {
+        "metaKey": "block-project-ssh-keys",
+        "name": "projectWideSshKeysUsed"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure 'Block Project-wide SSH keys' is enabled for VM instances.",
+    "reference_id": "AC-GC-IS-CI-M-0192",
+    "category": "Infrastructure Security",
+    "version": 1
+}

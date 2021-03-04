@@ -1,0 +1,14 @@
+{
+    "name": "checkIpForward",
+    "file": "checkIpForward.rego",
+    "template_args": {
+        "name": "checkIpForward",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure IP forwarding is not enabled on Instances.",
+    "reference_id": "AC-GC-IS-CI-M-0195",
+    "category": "Infrastructure Security",
+    "version": 1
+}

@@ -1,0 +1,10 @@
+{
+    "name": "privateClusterEnabled",
+    "file": "privateClusterEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Kubernetes Cluster is created with Private cluster enabled.",
+    "reference_id": "AC-GC-IS-CC-H-0212",
+    "category": "Infrastructure Security",
+    "version": 1
+}

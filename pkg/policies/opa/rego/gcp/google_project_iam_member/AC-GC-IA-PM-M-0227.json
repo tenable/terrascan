@@ -1,0 +1,10 @@
+{
+    "name": "serviceAccountAdminPriviledges",
+    "file": "serviceAccountAdminPriviledges.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that Service Account has no Admin privileges.",
+    "reference_id": "AC-GC-IA-PM-M-0227",
+    "category": "Identity and Access Management",
+    "version": 1
+}
