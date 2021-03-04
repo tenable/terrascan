@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort11214ExposedPublicEntireUdp",
+  "file": "networkPortExposedPublic.rego",
+  "template_args": {
+    "endLimit": 0,
+    "evalHosts": true,
+    "name": "networkPort11214ExposedPublicEntireUdp",
+    "numberOfHosts": 1,
+    "portNumber": 11214,
+    "prefix": "reme_",
+    "protocol": "UDP"
+  },
+  "severity": "High",
+  "description": "Memcached SSL (UDP:11214) is exposed to entire Public network",
+  "reference_id": "AC-AZ-IS-NS-H-0111",
+  "category": "Infrastructure Security",
+  "version": 2
+}

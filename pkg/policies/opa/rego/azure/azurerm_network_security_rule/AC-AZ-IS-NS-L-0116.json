@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort11215ExposedPrivateWideUdp",
+  "file": "networkPortExposedPrivate.rego",
+  "template_args": {
+    "endLimit": 1,
+    "evalHosts": false,
+    "name": "networkPort11215ExposedPrivateWideUdp",
+    "numberOfHosts": 24,
+    "portNumber": 11215,
+    "prefix": "reme_",
+    "protocol": "UDP"
+  },
+  "severity": "Low",
+  "description": "Memcached SSL (UDP:11215) is exposed to wide Private network",
+  "reference_id": "AC-AZ-IS-NS-L-0116",
+  "category": "Infrastructure Security",
+  "version": 2
+}

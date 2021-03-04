@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort3000ExposedPrivateWide",
+  "file": "networkPortExposedPrivate.rego",
+  "template_args": {
+    "endLimit": 1,
+    "evalHosts": false,
+    "name": "networkPort3000ExposedPrivateWide",
+    "numberOfHosts": 24,
+    "portNumber": 3000,
+    "prefix": "reme_",
+    "protocol": "TCP"
+  },
+  "severity": "Low",
+  "description": "Prevalent known internal port (TCP:3000) is exposed to wide Private network",
+  "reference_id": "AC-AZ-IS-NS-L-0161",
+  "category": "Infrastructure Security",
+  "version": 2
+}
