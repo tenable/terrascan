@@ -1,0 +1,12 @@
+{
+    "name": "reme_sqlServerADAdminConfigured",
+    "file": "sqlServerADAdminConfigured.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that Azure Active Directory Admin is configured for SQL Server",
+    "reference_id": "AC-AZ-IA-SQ-H-0232",
+    "category": "Identity and Access Management",
+    "version": 2
+}

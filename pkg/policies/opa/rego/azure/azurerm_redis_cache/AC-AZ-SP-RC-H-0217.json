@@ -1,0 +1,12 @@
+{
+    "name": "reme_redisCacheNoUpdatePatchSchedule",
+    "file": "redisCacheNoUpdatePatchSchedule.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that Redis is updated regularly with security and operational updates.\n\nNote this feature is only available to Premium tier Redis Caches.",
+    "reference_id": "AC-AZ-SP-RC-H-0217",
+    "category": "Security Best Practices",
+    "version": 2
+}
