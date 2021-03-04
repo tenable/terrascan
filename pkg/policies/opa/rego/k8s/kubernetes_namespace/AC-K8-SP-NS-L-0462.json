@@ -1,0 +1,16 @@
+{
+    "name": "defaultNamespaceUsed4",
+    "file": "defaultNamespaceUsed.rego",
+    "template_args": {
+        "generate_name": "generate_name",
+        "name": "defaultNamespaceUsed4",
+        "prefix": "",
+        "resource_type": "kubernetes_job",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "The default namespace should not be used",
+    "reference_id": "AC-K8-SP-NS-L-0462",
+    "category": "Security Best Practices",
+    "version": 1
+}

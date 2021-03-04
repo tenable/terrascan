@@ -1,0 +1,14 @@
+{
+    "name": "tillerDeployed",
+    "file": "tillerDeployed.rego",
+    "template_args": {
+        "name": "tillerDeployed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure That Tiller (Helm V2) Is Not Deployed",
+    "reference_id": "AC-K8-DP-PO-M-0177",
+    "category": "Data Protection",
+    "version": 1
+}

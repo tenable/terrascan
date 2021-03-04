@@ -1,0 +1,16 @@
+{
+    "name": "falseHostIPC",
+    "file": "specBoolCheck.rego",
+    "template_args": {
+        "name": "falseHostIPC",
+        "param": "hostIPC",
+        "prefix": "",
+        "suffix": "",
+        "value": "true"
+    },
+    "severity": "MEDIUM",
+    "description": "Containers Should Not Share Host IPC Namespace",
+    "reference_id": "AC-K8-IS-PO-M-0163",
+    "category": "Infrastructure Security",
+    "version": 1
+}

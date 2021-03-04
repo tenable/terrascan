@@ -1,0 +1,17 @@
+{
+    "name": "dontConnectDockerSock",
+    "file": "dockerSockCheck.rego",
+    "template_args": {
+        "attrib": "spec.volumes[_].hostPath",
+        "name": "dontConnectDockerSock",
+        "param": "path",
+        "prefix": "",
+        "suffix": "",
+        "value": "/var/run/docker"
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict Mounting Docker Socket in a Container",
+    "reference_id": "AC-K8-IS-PO-M-0171",
+    "category": "Infrastructure Security",
+    "version": 1
+}

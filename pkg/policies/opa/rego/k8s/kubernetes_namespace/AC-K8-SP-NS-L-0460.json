@@ -1,0 +1,16 @@
+{
+    "name": "defaultNamespaceUsed",
+    "file": "defaultNamespaceUsed.rego",
+    "template_args": {
+        "generate_name": "generate_name",
+        "name": "defaultNamespaceUsed",
+        "prefix": "",
+        "resource_type": "kubernetes_pod",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "The default namespace should not be used",
+    "reference_id": "AC-K8-SP-NS-L-0460",
+    "category": "Security Best Practices",
+    "version": 1
+}
