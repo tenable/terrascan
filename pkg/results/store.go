@@ -21,6 +21,7 @@ func NewViolationStore() *ViolationStore {
 	return &ViolationStore{
 		Violations:        []*Violation{},
 		SkippedViolations: []*Violation{},
+		PassedRules:       []*PassedRule{},
 	}
 }
 
@@ -41,4 +42,14 @@ func (s *ViolationStore) GetResults(isSkipped bool) []*Violation {
 		return s.SkippedViolations
 	}
 	return s.Violations
+}
+
+// AddPassedRule Adds individual passed rule into the violation store
+func (s *ViolationStore) AddPassedRule(rule *PassedRule) {
+	s.PassedRules = append(s.PassedRules, rule)
+}
+
+// GetPassedRules Retrieves all passed rules from the violation store
+func (s *ViolationStore) GetPassedRules() []*PassedRule {
+	return s.PassedRules
 }

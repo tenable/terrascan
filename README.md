@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
 Terrascan detects security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
 
@@ -28,7 +28,7 @@ Terrascan's supports multiple ways to install, including [brew](https://github.c
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.3.3/terrascan_1.3.3_Darwin_x86_64.tar.gz --output terrascan.tar.gz
+$ curl --location https://github.com/accurics/terrascan/releases/download/v1.4.0/terrascan_1.4.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
 $ tar -xvf terrascan.tar.gz
   x CHANGELOG.md
   x LICENSE
@@ -144,7 +144,7 @@ RUN git clone https://github.com/accurics/terrascan && cd terrascan \
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
 
 ## Code of Conduct
-We believe having an open and inclusive community benefits all of us. Please note that this project is released with a [Contributor Code of Conduct](code_of_conduct.md). By participating in this project you agree to abide by its terms. 
+We believe having an open and inclusive community benefits all of us. Please note that this project is released with a [Contributor Code of Conduct](code_of_conduct.md). By participating in this project you agree to abide by its terms.
 
 ## License
 

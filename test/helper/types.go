@@ -21,7 +21,9 @@ import (
 )
 
 type violations []*results.Violation
+type passedRules []*results.PassedRule
 
+// sort for violations
 func (v violations) Len() int {
 	return len(v)
 }
@@ -67,4 +69,30 @@ func (v violations) Less(i, j int) bool {
 	}
 
 	return v[i].LineNumber > v[j].LineNumber
+}
+
+// sort for passed rules
+func (p passedRules) Len() int {
+	return len(p)
+}
+
+func (p passedRules) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
+}
+
+func (p passedRules) Less(i, j int) bool {
+
+	if p[i].RuleName < p[j].RuleName {
+		return true
+	}
+
+	if p[i].RuleName > p[j].RuleName {
+		return false
+	}
+
+	if p[i].RuleID < p[j].RuleID {
+		return true
+	}
+
+	return p[i].RuleID > p[j].RuleID
 }

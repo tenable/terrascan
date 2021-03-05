@@ -11,6 +11,7 @@ const (
 
 	scanTestOutputXML = `
 <results>
+  <passed_rules></passed_rules>
   <violations>
     <violation rule_name="s3EnforceUserACL" description="S3 bucket Access is allowed to all AWS Account Users." rule_id="AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3" resource_name="bucket" resource_type="aws_s3_bucket" file="modules/m1/main.tf" line="20"></violation>
   </violations>

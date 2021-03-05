@@ -25,6 +25,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
@@ -43,6 +44,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		scanRules  = []string{}
 		skipRules  = []string{}
 		configOnly = false
+		showPassed = false
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -107,6 +109,18 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// read show_passed from the form data
+	showPassedValue := r.FormValue("show_passed")
+	if showPassedValue != "" {
+		showPassed, err = strconv.ParseBool(showPassedValue)
+		if err != nil {
+			errMsg := fmt.Sprintf("error while reading 'show_passed' value. error: '%v'", err)
+			zap.S().Error(errMsg)
+			apiErrorResponse(w, errMsg, http.StatusBadRequest)
+			return
+		}
+	}
+
 	if scanRulesValue != "" {
 		scanRules = strings.Split(scanRulesValue, ",")
 	}
@@ -126,7 +140,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{}, scanRules, skipRules, severity)
+			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, severity)
 	}
 	if err != nil {
 		zap.S().Error(err)
@@ -142,6 +156,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var output interface{}
+
+	if !showPassed {
+		normalized.Violations.ViolationStore.PassedRules = nil
+	}
 
 	// if config only, return resource config else return violations
 	if configOnly {
@@ -160,4 +178,21 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	// return that we have successfully uploaded our file!
 	apiResponse(w, string(j), http.StatusOK)
+}
+
+// getPolicyPathFromEnv reads the TERRASCAN_CONFIG env variable (if present) and returns the policy path
+func getPolicyPathFromEnv() []string {
+	policyPath := []string{}
+
+	// read policy path from TERRASCAN_CONFIG env variable
+	terrascanConfigFile := os.Getenv("TERRASCAN_CONFIG")
+	if terrascanConfigFile != "" {
+		terrascanConfigReader, err := config.NewTerrascanConfigReader(terrascanConfigFile)
+		if err != nil {
+			zap.S().Errorf("error while reading config file, %s; err %v", terrascanConfigFile, err)
+		} else {
+			policyPath = append(policyPath, terrascanConfigReader.GetPolicyConfig().RepoPath)
+		}
+	}
+	return policyPath
 }

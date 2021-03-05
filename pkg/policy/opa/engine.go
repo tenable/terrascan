@@ -321,6 +321,19 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 	}
 }
 
+// reportPassed Adds a passed rule which wasn't violated by all the resources
+func (e *Engine) reportPassed(regoData *RegoData) {
+	passedRule := results.PassedRule{
+		RuleName:    regoData.Metadata.Name,
+		Description: regoData.Metadata.Description,
+		RuleID:      regoData.Metadata.ReferenceID,
+		Severity:    regoData.Metadata.Severity,
+		Category:    regoData.Metadata.Category,
+	}
+
+	e.results.ViolationStore.AddPassedRule(&passedRule)
+}
+
 // Evaluate Executes compiled OPA queries against the input JSON data
 func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, error) {
 	// Keep track of how long it takes to evaluate the policies
@@ -343,6 +356,8 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 		resourceViolations := rs[0].Expressions[0].Value.([]interface{})
 		if len(resourceViolations) == 0 {
 			zap.S().Debug("query executed but found no violations", zap.Error(err), zap.String("rule", "'"+k+"'"))
+			// add the passed rule
+			e.reportPassed(e.regoDataMap[k])
 			continue
 		}
 
