@@ -39,6 +39,7 @@ type scanRemoteRepoReq struct {
 	ScanRules  []string `json:"scan_rules"`
 	SkipRules  []string `json:"skip_rules"`
 	Severity   string   `json:"severity"`
+	ShowPassed bool     `json:"show_passed"`
 	d          downloader.Downloader
 }
 
@@ -127,6 +128,10 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		return output, err
+	}
+
+	if !s.ShowPassed {
+		results.Violations.ViolationStore.PassedRules = nil
 	}
 
 	// if config only, return only config else return only violations

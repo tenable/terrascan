@@ -182,6 +182,13 @@ var _ = Describe("Scan is run for terraform files", func() {
 					scanUtils.RunScanAndAssertXMLOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_db_instance_violations/aws_db_instance_xml.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
+
+			When("when --show-passed option is used", func() {
+				It("should display passed rules in the output", func() {
+					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--show-passed"}
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/terraform_scans/aws/aws_db_instance_violations/aws_db_instance_json_show_passed.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				})
+			})
 		})
 	})
 })

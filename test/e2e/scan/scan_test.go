@@ -55,7 +55,7 @@ var _ = Describe("Scan", func() {
 	Describe("scan command is run with -h flag", func() {
 		It("should print help for scan and exit with status code 0", func() {
 			scanArgs := []string{scanUtils.ScanCommand, "-h"}
-			scanUtils.RunScanAndAssertGoldenOutput(terrascanBinaryPath, "golden/scan_help.txt", helper.ExitCodeZero, true, outWriter, errWriter, scanArgs...)
+			scanUtils.RunScanAndAssertGoldenOutput(terrascanBinaryPath, "../help/golden/help_scan.txt", helper.ExitCodeZero, true, outWriter, errWriter, scanArgs...)
 		})
 	})
 
@@ -139,7 +139,7 @@ var _ = Describe("Scan", func() {
 
 		Context("-d flag is supplied with a valid file path", func() {
 			It("should error out and exit with status code 1", func() {
-				validAbsFilePath, err := filepath.Abs("golden/scan_help.txt")
+				validAbsFilePath, err := filepath.Abs("golden/scan_typo_help.txt")
 				Expect(err).NotTo(HaveOccurred())
 
 				errString := fmt.Sprintf("input path '%s' is not a valid directory", validAbsFilePath)

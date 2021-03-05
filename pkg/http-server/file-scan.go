@@ -43,6 +43,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		scanRules  = []string{}
 		skipRules  = []string{}
 		configOnly = false
+		showPassed = false
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -107,6 +108,18 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// read show_passed from the form data
+	showPassedValue := r.FormValue("show_passed")
+	if showPassedValue != "" {
+		showPassed, err = strconv.ParseBool(showPassedValue)
+		if err != nil {
+			errMsg := fmt.Sprintf("error while reading 'show_passed' value. error: '%v'", err)
+			zap.S().Error(errMsg)
+			apiErrorResponse(w, errMsg, http.StatusBadRequest)
+			return
+		}
+	}
+
 	if scanRulesValue != "" {
 		scanRules = strings.Split(scanRulesValue, ",")
 	}
@@ -142,6 +155,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var output interface{}
+
+	if !showPassed {
+		normalized.Violations.ViolationStore.PassedRules = nil
+	}
 
 	// if config only, return resource config else return violations
 	if configOnly {

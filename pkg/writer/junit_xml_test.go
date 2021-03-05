@@ -46,11 +46,22 @@ func TestJUnitXMLWriter(t *testing.T) {
   `, version.Get())
 
 	testOutputNoViolations := fmt.Sprintf(`
-<testsuites tests="550" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
-  <testsuite tests="550" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="test_resource_path">
+<testsuites tests="566" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="566" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="test">
     <properties>
       <property name="Terrascan Version" value="%s"></property>
     </properties>
+  </testsuite>
+</testsuites>
+	`, version.Get())
+
+	testOutputPassedRules := fmt.Sprintf(`
+<testsuites tests="566" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="566" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="test">
+    <properties>
+      <property name="Terrascan Version" value="%s"></property>
+    </properties>
+    <testcase classname="s3EnforceUserACL" name="RULE - AWS.S3Bucket.DS.High.1043, CATEGORY - S3, DESCRIPTION - S3 bucket Access is allowed to all AWS Account Users." severity="HIGH" category="S3"></testcase>
   </testsuite>
 </testsuites>
 	`, version.Get())
@@ -84,20 +95,18 @@ func TestJUnitXMLWriter(t *testing.T) {
 			args: args{
 				policy.EngineOutput{
 					ViolationStore: &results.ViolationStore{
-						Summary: results.ScanSummary{
-							ResourcePath:     "test_resource_path",
-							IacType:          "k8s",
-							Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
-							TotalPolicies:    550,
-							LowCount:         0,
-							MediumCount:      0,
-							HighCount:        1,
-							ViolatedPolicies: 1,
-						},
+						Summary: summaryWithNoViolations,
 					},
 				},
 			},
 			wantWriter: testOutputNoViolations,
+		},
+		{
+			name: "data with passed rules",
+			args: args{
+				data: outputWithPassedRules,
+			},
+			wantWriter: testOutputPassedRules,
 		},
 	}
 	for _, tt := range tests {

@@ -18,6 +18,7 @@ Flags:
   -u, --remote-url string         url pointing to remote IaC repository
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --severity string           minimum severity level of the policy violations to be reported by terrascan
+      --show-passed               display passed rules, along with violations
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
   -v, --verbose                   will show violations with details (applicable for default output)

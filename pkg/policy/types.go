@@ -40,6 +40,7 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 	return results.ViolationStore{
 		Violations:        me.Violations,
 		SkippedViolations: me.SkippedViolations,
+		PassedRules:       me.PassedRules,
 		Summary:           me.Summary,
 	}
 }

@@ -30,7 +30,14 @@ const (
 	humanReadbleFormat supportedFormat = "human"
 
 	defaultTemplate string = `
-{{if (gt (len .ViolationStore.Violations) 0) }}
+{{if (gt (len .ViolationStore.PassedRules) 0) }}
+Passed Rules - 
+    {{range $index, $element := .ViolationStore.PassedRules}}
+	{{passedRules $element | printf "%s"}}
+	-----------------------------------------------------------------------
+	{{end}}
+{{end}}
+{{- if (gt (len .ViolationStore.Violations) 0) }}
 Violation Details - 
 	{{- $showDetails := .ViolationStore.Summary.ShowViolationDetails}}
     {{range $index, $element := .ViolationStore.Violations}}
@@ -68,6 +75,7 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 		"defaultViolations":  defaultViolations,
 		"detailedViolations": detailedViolations,
 		"scanSummary":        scanSummary,
+		"passedRules":        passedRules,
 	}).Parse(defaultTemplate)
 	if err != nil {
 		zap.S().Errorf("failed to write human readable output. error: '%v'", err)
@@ -123,5 +131,15 @@ func scanSummary(s results.ScanSummary) string {
 		"Low", s.LowCount,
 		"Medium", s.MediumCount,
 		"High", s.HighCount)
+	return out
+}
+
+func passedRules(v results.PassedRule) string {
+	out := fmt.Sprintf("%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t",
+		"Rule ID", v.RuleID,
+		"Rule Name", v.RuleName,
+		"Description", v.Description,
+		"Severity", v.Severity,
+		"Category", v.Category)
 	return out
 }
