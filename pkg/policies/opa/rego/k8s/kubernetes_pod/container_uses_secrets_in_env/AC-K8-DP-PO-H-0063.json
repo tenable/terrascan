@@ -2,7 +2,7 @@
     "name": "containerUsesSecretsInEnvironmentVar",
     "file": "containerUsesSecretsInEnvironmentVar.rego",
     "template_args": {
-        "is_init": true,
+        "is_init": false,
         "name": "containerUsesSecretsInEnvironmentVar",
         "prefix": "",
         "resource_type": "kubernetes_replication_controller",
@@ -10,7 +10,7 @@
     },
     "severity": "HIGH",
     "description": "Container uses secrets in environment variables",
-    "reference_id": "accurics.kubernetes.EKM.71",
-    "category": "Encryption and Key Management",
+    "reference_id": "AC-K8-DP-PO-H-0063",
+    "category": "Data Protection",
     "version": 1
 }
