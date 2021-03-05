@@ -1,11 +1,11 @@
 {
-    "name": "CpuRequestsCheck",
+    "name": "MemoryRequestsCheck",
     "file": "securityContextCheck.rego",
     "template_args": {
         "allowed": "true",
         "arg1": "requests",
-        "arg2": "cpu",
-        "name": "CpuRequestsCheck",
+        "arg2": "memory",
+        "name": "MemoryRequestsCheck",
         "not_allowed": "false",
         "param": "resources",
         "param1": "resources",
@@ -14,8 +14,8 @@
         "value": "false"
     },
     "severity": "Medium",
-    "description": "CPU Request Not Set in config file.",
-    "reference_id": "AC-K8-CV-PK-M-0097",
-    "category": "Compliance Validation",
+    "description": "Memory Request Not Set in config file.",
+    "reference_id": "AC-K8-SP-PK-M-0099",
+    "category": "Security Best Practices",
     "version": 1
 }

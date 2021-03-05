@@ -1,11 +1,11 @@
 {
-    "name": "CpulimitsCheck",
+    "name": "MemorylimitsCheck",
     "file": "securityContextCheck.rego",
     "template_args": {
         "allowed": "true",
         "arg1": "limits",
-        "arg2": "cpu",
-        "name": "CpulimitsCheck",
+        "arg2": "memory",
+        "name": "MemorylimitsCheck",
         "not_allowed": "false",
         "param": "limits",
         "param1": "resources",
@@ -14,8 +14,8 @@
         "value": "false"
     },
     "severity": "Medium",
-    "description": "CPU Limits Not Set in config file.",
-    "reference_id": "AC-K8-CV-PK-M-0098",
-    "category": "Compliance Validation",
+    "description": "Memory Limits Not Set in config file.",
+    "reference_id": "AC-K8-SP-PK-M-0100",
+    "category": "Security Best Practices",
     "version": 1
 }
