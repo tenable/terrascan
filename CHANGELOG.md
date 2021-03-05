@@ -1,5 +1,53 @@
 # Changelog
 
+## [v1.4.0](https://github.com/accurics/terrascan/tree/v1.4.0) (2021-03-05)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.3.3...v1.4.0)
+
+**Implemented enhancements:**
+
+- Sanning terraform plan files [\#407](https://github.com/accurics/terrascan/issues/407)
+
+**Fixed bugs:**
+
+- Difference in violated policies for the same terraform file [\#519](https://github.com/accurics/terrascan/issues/519)
+- false positive for AWS.Instance.NetworkSecurity.Medium.0506 [\#404](https://github.com/accurics/terrascan/issues/404)
+- accurics.gcp.IAM.122 needs to take into account the new name for Uniform bucket-level access flag [\#329](https://github.com/accurics/terrascan/issues/329)
+- fix the 'repo already exist' bug and improve error logging for terrascan init [\#552](https://github.com/accurics/terrascan/pull/552) ([dev-gaur](https://github.com/dev-gaur))
+
+**Closed issues:**
+
+- terrascan API server's file scan always returns the resource config [\#578](https://github.com/accurics/terrascan/issues/578)
+- Issue on Azure DevOps Agents since 1.3.2 : failed to initialize terrascan [\#561](https://github.com/accurics/terrascan/issues/561)
+- Could not get terrascan init to work - would not download policy documents [\#551](https://github.com/accurics/terrascan/issues/551)
+
+**Merged pull requests:**
+
+- release 1.4.0 [\#586](https://github.com/accurics/terrascan/pull/586) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- adds e2e tests for api server [\#585](https://github.com/accurics/terrascan/pull/585) ([patilpankaj212](https://github.com/patilpankaj212))
+- adds support to use 'config\_only' attribute in api server's file scan [\#579](https://github.com/accurics/terrascan/pull/579) ([patilpankaj212](https://github.com/patilpankaj212))
+- adds support to display passed rules [\#572](https://github.com/accurics/terrascan/pull/572) ([patilpankaj212](https://github.com/patilpankaj212))
+- Update mkdocs-material to 7.0.1 [\#567](https://github.com/accurics/terrascan/pull/567) ([pyup-bot](https://github.com/pyup-bot))
+- fix filepaths and home directory lookup [\#566](https://github.com/accurics/terrascan/pull/566) ([dev-gaur](https://github.com/dev-gaur))
+- adds e2e test scenarios for help and scan command [\#564](https://github.com/accurics/terrascan/pull/564) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds support for scanning tfplan json file [\#562](https://github.com/accurics/terrascan/pull/562) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- fix: renamed the json file to remove spaces [\#560](https://github.com/accurics/terrascan/pull/560) ([harkirat22](https://github.com/harkirat22))
+- fix: Changed the description message to handle the violation correctly [\#559](https://github.com/accurics/terrascan/pull/559) ([harkirat22](https://github.com/harkirat22))
+- bump versions to v1.3.3 [\#558](https://github.com/accurics/terrascan/pull/558) ([dev-gaur](https://github.com/dev-gaur))
+- updated go module files [\#557](https://github.com/accurics/terrascan/pull/557) ([dev-gaur](https://github.com/dev-gaur))
+- Initial changes for e2e testing framework [\#553](https://github.com/accurics/terrascan/pull/553) ([patilpankaj212](https://github.com/patilpankaj212))
+- Add code of conduct [\#545](https://github.com/accurics/terrascan/pull/545) ([jlk](https://github.com/jlk))
+- Fixes incorrect description of RDS encryption policy [\#542](https://github.com/accurics/terrascan/pull/542) ([alex-petrov-vt](https://github.com/alex-petrov-vt))
+- changes in log level and messages for load iac functions [\#541](https://github.com/accurics/terrascan/pull/541) ([patilpankaj212](https://github.com/patilpankaj212))
+- Update mkdocs-material to 6.2.8 [\#539](https://github.com/accurics/terrascan/pull/539) ([pyup-bot](https://github.com/pyup-bot))
+- Updates docs for v1.3.2 [\#537](https://github.com/accurics/terrascan/pull/537) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- update readme for v1.3.2 [\#534](https://github.com/accurics/terrascan/pull/534) ([dev-gaur](https://github.com/dev-gaur))
+- fix - improved description for init command in help [\#532](https://github.com/accurics/terrascan/pull/532) ([nathannaveen](https://github.com/nathannaveen))
+- Adds support for junit xml output [\#527](https://github.com/accurics/terrascan/pull/527) ([patilpankaj212](https://github.com/patilpankaj212))
+- enhancement: scan terraform registry modules as remote type [\#513](https://github.com/accurics/terrascan/pull/513) ([patilpankaj212](https://github.com/patilpankaj212))
+- support for terraform registry remote modules [\#505](https://github.com/accurics/terrascan/pull/505) ([patilpankaj212](https://github.com/patilpankaj212))
+- feature: add options to specify desired severity level of violations to be reported [\#501](https://github.com/accurics/terrascan/pull/501) ([dev-gaur](https://github.com/dev-gaur))
+- Bump github.com/spf13/cobra from 1.0.0 to 1.1.1 [\#493](https://github.com/accurics/terrascan/pull/493) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v1.3.2](https://github.com/accurics/terrascan/tree/v1.3.2) (2021-02-03)
 
