@@ -9,7 +9,7 @@
     },
     "severity": "HIGH",
     "description": "ssh port open to internet",
-    "reference_id": "AC-AW-IS-SG-M-0220",
+    "reference_id": "AC-AW-IS-SG-H-0220",
     "category": "Infrastructure Security",
     "version": 2
 }

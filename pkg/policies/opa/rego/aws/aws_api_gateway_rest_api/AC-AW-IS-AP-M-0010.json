@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Enable Content Encoding",
     "reference_id": "AC-AW-IS-AP-M-0010",
-    "category": "Infrastructure Security ",
+    "category": "Infrastructure Security",
     "version": 1
 }

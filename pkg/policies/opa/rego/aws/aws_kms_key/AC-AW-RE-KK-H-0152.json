@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure rotation for customer created CMKs is enabled",
     "reference_id": "AC-AW-RE-KK-H-0152",
-    "category": "Resilence",
+    "category": "Resilience",
     "version": 2
 }

@@ -7,7 +7,7 @@
     },
     "severity": "LOW",
     "description": "Reducing the password lifetime increases account resiliency against brute force login attempts",
-    "reference_id": "AC-AW-CV-IA-M-0131",
+    "reference_id": "AC-AW-CV-IA-L-0131",
     "category": "Compliance Validation",
     "version": 2
 }

@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Avoid creating resources in default VPC",
     "reference_id": "AC-AW-SP-VP-M-0363",
-    "category": "Logging and Monitoring",
+    "category": "Security Best Practices",
     "version": 1
 }

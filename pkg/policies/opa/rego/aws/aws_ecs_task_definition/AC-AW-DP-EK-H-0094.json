@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Sensitive Information Disclosure",
-    "reference_id": "AC-AW-DP-EK-H-0088",
+    "reference_id": "AC-AW-DP-EK-H-0094",
     "category": "Data Protection",
     "version": 1
 }

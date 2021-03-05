@@ -7,7 +7,7 @@
         "prefix": "",
         "protocol": "tcp"
     },
-    "severity": "HIGH",
+    "severity": "Low",
     "description": "'SSH' (TCP:22) is accessible by a CIDR block range",
     "reference_id": "AC-AW-IS-SG-L-0312",
     "category": "Infrastructure Security",

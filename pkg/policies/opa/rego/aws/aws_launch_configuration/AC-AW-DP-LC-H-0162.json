@@ -6,7 +6,7 @@
     },
     "severity": "HIGH",
     "description": "Avoid using base64 encoded absolute URLs as part of config",
-    "reference_id": "AAC-AW-DP-LC-H-0162",
+    "reference_id": "AC-AW-DP-LC-H-0162",
     "category": "Data Protection",
     "version": 1
 }

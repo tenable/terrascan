@@ -6,7 +6,7 @@
     },
     "severity": "HIGH",
     "description": "Avoid using base64 encoded shell script as part of config",
-    "reference_id": "AAC-AW-DP-LC-H-0163",
+    "reference_id": "AC-AW-DP-LC-H-0163",
     "category": "Data Protection",
     "version": 1
 }
