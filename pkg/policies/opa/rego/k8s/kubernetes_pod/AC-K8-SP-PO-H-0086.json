@@ -6,9 +6,9 @@
         "prefix": "",
         "suffix": ""
     },
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Default Namespace Should Not be Used",
-    "reference_id": "AC-K8-CV-PO-M-0086",
-    "category": "Compliance Validation",
+    "reference_id": "AC-K8-SP-PO-H-0086",
+    "category": "Security Best Practices",
     "version": 1
 }

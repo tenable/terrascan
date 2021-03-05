@@ -10,7 +10,7 @@
     },
     "severity": "LOW",
     "description": "No liveness probe will ensure there is no recovery in case of unexpected errors",
-    "reference_id": "AC-K8-CV-PO-L-0070",
-    "category": "Compliance Validation",
+    "reference_id": "AC-K8-SP-PO-L-0070",
+    "category": "Security Best Practices",
     "version": 1
 }

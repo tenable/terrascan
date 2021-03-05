@@ -10,7 +10,7 @@
     },
     "severity": "LOW",
     "description": "No readiness probe will affect automatic recovery in case of unexpected errors",
-    "reference_id": "AC-K8-CV-PO-L-0072",
-    "category": "Compliance Validation",
+    "reference_id": "AC-K8-SP-PO-L-0072",
+    "category": "Security Best Practices",
     "version": 1
 }
