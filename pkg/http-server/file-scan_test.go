@@ -275,6 +275,13 @@ func TestUpload(t *testing.T) {
 				}
 			}
 
+			if len(tt.categories) > 0 {
+				if err = writer.WriteField("categories", strings.Join(tt.categories, ",")); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
 			if !tt.invalidConfigOnly {
 				if err = writer.WriteField("config_only", strconv.FormatBool(tt.configOnly)); err != nil {
 					writer.Close()

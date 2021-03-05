@@ -31,11 +31,7 @@ require (
 	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.1 // indirect
-<<<<<<< HEAD
 	golang.org/x/sys v0.0.0-20210218155724-8ebf48af031b
-=======
-	golang.org/x/sys v0.0.0-20210219172841-57ea560cfca1
->>>>>>> fd72556 (update deps)
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
