@@ -168,7 +168,9 @@ path = "%s"
 rego_subdir = "%s"`, policyAbsPath, policyAbsPath)
 
 	// create config file in work directory
-	file, _ := os.Create(configFileName)
-	file.WriteString(configFileContents)
+	file, err := os.Create(configFileName)
+	Expect(err).NotTo(HaveOccurred())
+	_, err = file.WriteString(configFileContents)
+	Expect(err).NotTo(HaveOccurred())
 	os.Setenv(terrascanConfigEnvName, configFileName)
 }
