@@ -6,10 +6,15 @@
 
 **Implemented enhancements:**
 
-- Sanning terraform plan files [\#407](https://github.com/accurics/terrascan/issues/407)
+- Scanning terraform plan files [\#407](https://github.com/accurics/terrascan/issues/407)
+- Adds support for junit xml output [\#527](https://github.com/accurics/terrascan/pull/527)
+- Adds e2e test scenarios for help and scan command [\#564](https://github.com/accurics/terrascan/pull/564)
+- Adds e2e tests for api server [\#585](https://github.com/accurics/terrascan/pull/585)
+- Please checkout our new [Github Action!](https://github.com/marketplace/actions/terrascan-iac-scanner)
 
 **Fixed bugs:**
 
+- Fixed a few bugs in the init command and downloading of fresh policies, including [\#561](https://github.com/accurics/terrascan/issues/561)
 - Difference in violated policies for the same terraform file [\#519](https://github.com/accurics/terrascan/issues/519)
 - false positive for AWS.Instance.NetworkSecurity.Medium.0506 [\#404](https://github.com/accurics/terrascan/issues/404)
 - accurics.gcp.IAM.122 needs to take into account the new name for Uniform bucket-level access flag [\#329](https://github.com/accurics/terrascan/issues/329)
