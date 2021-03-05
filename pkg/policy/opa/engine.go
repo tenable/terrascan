@@ -503,7 +503,7 @@ func (e *Engine) filterByCategories(policyPath string, categories []string) {
 		}
 	}
 	if len(tempMap) == 0 {
-		zap.S().Warnf("policy path: %s, doesn't have any rule matching the categories : %v", policyPath, categories)
+		zap.S().Debugf("policy path: %s, doesn't have any rule matching the categories : %v", policyPath, categories)
 	}
 
 	// the regoDataMap should only contain regoData for required minimum severity level

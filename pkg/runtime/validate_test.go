@@ -17,6 +17,7 @@
 package runtime
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -170,7 +171,7 @@ func TestValidateInputs(t *testing.T) {
 				severity:   "HGIH",
 				categories: []string{"DTA PROTECTIO"},
 			},
-			wantErr: errCategoryNotSupported,
+			wantErr: fmt.Errorf(errCategoryNotSupported, []string{"DTA PROTECTIO"}),
 		},
 	}
 

@@ -13,14 +13,22 @@ var AcceptedCategories []string = []string{
 }
 
 // ValidateCategoryInput validates input for --category flag
-func ValidateCategoryInput(categories []string) bool {
+func ValidateCategoryInput(categories []string) (bool, []string) {
+	flag := false
+	var invalidInputs []string
 	for _, category := range categories {
 		category = EnsureUpperCaseTrimmed(category)
 		if !find(AcceptedCategories, category) {
-			return false
+			flag = true
+			invalidInputs = append(invalidInputs, category)
 		}
 	}
-	return true
+
+	if flag {
+		return false, invalidInputs
+	}
+
+	return true, invalidInputs
 }
 
 // CheckCategory validates if the category of policy rule is present in the list of specificed categories
