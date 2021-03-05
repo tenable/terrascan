@@ -1,6 +1,7 @@
 package server_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -164,8 +165,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_type"] = "invalid"
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 
@@ -177,8 +178,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["scan_rules"] = "Rule.1"
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 
@@ -190,8 +191,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["skip_rules"] = "Rule.1"
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 
@@ -203,8 +204,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["config_only"] = "invalid"
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 
@@ -216,8 +217,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["show_passed"] = "invalid"
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 
@@ -229,8 +230,8 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["severity"] = 1
 
-							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
-							Eventually(session.Err).Should(gbytes.Say(errMessage))
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
 				})
