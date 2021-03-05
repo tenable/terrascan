@@ -1,0 +1,14 @@
+{
+    "name": "noOwnerLabel",
+    "file": "noOwnerLabel.rego",
+    "template_args": {
+        "name": "noOwnerLabel",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "No owner for namespace affects the operations",
+    "reference_id": "AC-K8-SP-NS-L-0013",
+    "category": "Security Best Practices",
+    "version": 1
+}

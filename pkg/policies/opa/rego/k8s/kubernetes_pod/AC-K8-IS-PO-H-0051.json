@@ -1,0 +1,14 @@
+{
+    "name": "secretsAsEnvVariables",
+    "file": "secretsAsEnvVariables.rego",
+    "template_args": {
+        "name": "secretsAsEnvVariables",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Prefer using secrets as files over secrets as environment variables",
+    "reference_id": "AC-K8-IS-PO-H-0051",
+    "category": "Infrastructure Security",
+    "version": 1
+}

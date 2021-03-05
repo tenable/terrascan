@@ -1,0 +1,14 @@
+{
+    "name": "otherNamespace",
+    "file": "otherNamespace.rego",
+    "template_args": {
+        "name": "otherNamespace",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Default Namespace Should Not be Used",
+    "reference_id": "AC-K8-CV-PO-M-0086",
+    "category": "Compliance Validation",
+    "version": 1
+}

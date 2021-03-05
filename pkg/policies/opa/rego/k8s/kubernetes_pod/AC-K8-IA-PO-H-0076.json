@@ -1,0 +1,14 @@
+{
+    "name": "allowedHostPath",
+    "file": "allowedHostPath.rego",
+    "template_args": {
+        "name": "allowedHostPath",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Allowing hostPaths to mount to Pod arise the probability of getting access to the node's filesystem",
+    "reference_id": "AC-K8-IA-PO-H-0076",
+    "category": "Identity and Access Management",
+    "version": 1
+}
