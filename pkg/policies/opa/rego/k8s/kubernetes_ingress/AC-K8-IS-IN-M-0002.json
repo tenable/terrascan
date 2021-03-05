@@ -6,7 +6,7 @@
         "prefix": "",
         "suffix": ""
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "TLS disabled can affect the confidentiality of the data in transit",
     "reference_id": "AC-K8-IS-IN-M-0002",
     "category": "Infrastructure Security",
