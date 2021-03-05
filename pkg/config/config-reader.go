@@ -52,7 +52,7 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 	// return error if file doesn't exist
 	_, err := os.Stat(fileName)
 	if err != nil {
-		zap.S().Error("config file: %s, doesn't exist", fileName)
+		zap.S().Errorf("config file: %s, doesn't exist", fileName)
 		return configReader, ErrNotPresent
 	}
 

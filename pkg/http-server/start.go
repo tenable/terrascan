@@ -35,12 +35,17 @@ func Start() {
 	// get all routes
 	routes := server.Routes()
 
+	serverPort := os.Getenv(TerrascanServerPort)
+	if serverPort == "" {
+		serverPort = GatewayDefaultPort
+	}
+
 	// register routes and start the http server
-	server.start(routes)
+	server.start(routes, serverPort)
 }
 
 // start http server
-func (g *APIServer) start(routes []*Route) {
+func (g *APIServer) start(routes []*Route, port string) {
 
 	var (
 		err    error
@@ -58,7 +63,7 @@ func (g *APIServer) start(routes []*Route) {
 
 	// start http server
 	server := &http.Server{
-		Addr:    ":" + GatewayDefaultPort,
+		Addr:    ":" + port,
 		Handler: router,
 	}
 
@@ -68,7 +73,7 @@ func (g *APIServer) start(routes []*Route) {
 			logger.Fatal(err)
 		}
 	}()
-	logger.Infof("http server listening at port %v", GatewayDefaultPort)
+	logger.Infof("http server listening at port %v", port)
 
 	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)

@@ -72,7 +72,7 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{"./testdata/testpolicies"})
 
 	} else {
-		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{})
+		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, getPolicyPathFromEnv())
 	}
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
