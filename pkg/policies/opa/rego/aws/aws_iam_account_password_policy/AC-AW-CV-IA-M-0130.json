@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
-    "reference_id": "AAC-AW-CV-IA-M-0130",
+    "reference_id": "AC-AW-CV-IA-M-0130",
     "category": "Compliance Validation",
     "version": 2
 }
