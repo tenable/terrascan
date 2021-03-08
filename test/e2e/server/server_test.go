@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package server_test
 
 import (
@@ -24,7 +40,15 @@ const (
 )
 
 var (
-	terrascanBinaryPath string
+	terrascanBinaryPath        string
+	iacRootRelPath             = filepath.Join("..", "test_data", "iac")
+	awsIacRelPath              = filepath.Join(iacRootRelPath, "aws")
+	policyRootRelPath          = filepath.Join("..", "test_data", "policies")
+	goldenFilesRelPath         = filepath.Join("..", "scan", "golden")
+	tfGoldenFilesRelPath       = filepath.Join(goldenFilesRelPath, "terraform_scans", "aws")
+	awsAmiGoldenRelPath        = filepath.Join(tfGoldenFilesRelPath, "aws_ami_violations")
+	awsDbInstanceGoldenRelPath = filepath.Join(tfGoldenFilesRelPath, "aws_db_instance_violations")
+	k8sGoldenRelPath           = filepath.Join(goldenFilesRelPath, "k8s_scans", "k8s")
 )
 
 var _ = Describe("Server", func() {
@@ -160,7 +184,7 @@ var _ = Describe("Server", func() {
 // createAndSetEnvConfigFile creates a config file with test policy path
 // and sets and env variable
 func createAndSetEnvConfigFile(configFileName string) {
-	var policyAbsPath, _ = filepath.Abs(filepath.Join("..", "test_data", "policies"))
+	var policyAbsPath, _ = filepath.Abs(policyRootRelPath)
 
 	// contents of the config file
 	configFileContents := fmt.Sprintf(`[policy]
@@ -169,8 +193,14 @@ rego_subdir = "%s"`, policyAbsPath, policyAbsPath)
 
 	// create config file in work directory
 	file, err := os.Create(configFileName)
-	Expect(err).NotTo(HaveOccurred())
+	if err != nil {
+		errMessage := fmt.Sprintf("config file creation failed, err: %v", err)
+		Fail(errMessage)
+	}
 	_, err = file.WriteString(configFileContents)
-	Expect(err).NotTo(HaveOccurred())
+	if err != nil {
+		errMessage := fmt.Sprintf("error while writing to config file, err: %v", err)
+		Fail(errMessage)
+	}
 	os.Setenv(terrascanConfigEnvName, configFileName)
 }

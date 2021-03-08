@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package server_test
 
 import (
@@ -39,14 +55,17 @@ var _ = Describe("Server File Scan", func() {
 			Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say(fmt.Sprintf("http server listening at port %s", port)))
 		})
 
+		awsDbInsViolationRelPath := filepath.Join(awsIacRelPath, "aws_db_instance_violation")
+		awsAmiViolationRelPath := filepath.Join(awsIacRelPath, "aws_ami_violation")
+
 		Context("terraform file scan", func() {
 			requestURL := fmt.Sprintf("%s:%s/v1/terraform/v12/all/local/file/scan", host, port)
 			When("iac file violates aws_db_instance_violation", func() {
 				It("should return violations successfully", func() {
-					iacFilePath, err := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_db_instance_violation", "main.tf"))
+					iacFilePath, err := filepath.Abs(filepath.Join(awsDbInsViolationRelPath, "main.tf"))
 					Expect(err).NotTo(HaveOccurred())
 
-					goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_db_instance_violations", "aws_db_instance_json.txt"))
+					goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
 
 					responseBytes := serverUtils.MakeFileScanRequest(iacFilePath, requestURL, nil, http.StatusOK)
@@ -55,10 +74,10 @@ var _ = Describe("Server File Scan", func() {
 			})
 			When("iac file violates aws_ami", func() {
 				It("should return violations successfully", func() {
-					iacFilePath, err := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_ami_violation", "main.tf"))
+					iacFilePath, err := filepath.Abs(filepath.Join(awsAmiViolationRelPath, "main.tf"))
 					Expect(err).NotTo(HaveOccurred())
 
-					goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_ami_violations", "aws_ami_violation_json.txt"))
+					goldenFilePath, err := filepath.Abs(filepath.Join(awsAmiGoldenRelPath, "aws_ami_violation_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
 
 					responseBytes := serverUtils.MakeFileScanRequest(iacFilePath, requestURL, nil, http.StatusOK)
@@ -68,7 +87,7 @@ var _ = Describe("Server File Scan", func() {
 
 			Context("iac provider or iac version is invalid", func() {
 				errMessage := "iac type or version not supported"
-				iacFilePath, err := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_db_instance_violation", "main.tf"))
+				iacFilePath, err := filepath.Abs(filepath.Join(awsDbInsViolationRelPath, "main.tf"))
 
 				When("iac provider is invalid", func() {
 					It("should get and error response", func() {
@@ -91,7 +110,7 @@ var _ = Describe("Server File Scan", func() {
 			})
 
 			Context("body attributes present in the request", func() {
-				awsAmiIacFilePath, _ := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_ami_violation", "main.tf"))
+				awsAmiIacFilePath, _ := filepath.Abs(filepath.Join(awsAmiViolationRelPath, "main.tf"))
 
 				When("config_only attribute is set", func() {
 
@@ -113,10 +132,10 @@ var _ = Describe("Server File Scan", func() {
 
 				When("show_passed attribute is set", func() {
 					It("should receive passed rules along with violations", func() {
-						iacFilePath, err := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_db_instance_violation", "main.tf"))
+						iacFilePath, err := filepath.Abs(filepath.Join(awsDbInsViolationRelPath, "main.tf"))
 						Expect(err).NotTo(HaveOccurred())
 
-						goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_db_instance_violations", "aws_db_instance_json_show_passed.txt"))
+						goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json_show_passed.txt"))
 						Expect(err).NotTo(HaveOccurred())
 
 						bodyAttrs := make(map[string]string)
@@ -169,7 +188,7 @@ var _ = Describe("Server File Scan", func() {
 
 		Context("rules filtering options for file scan", func() {
 			requestURL := fmt.Sprintf("%s:%s/v1/terraform/v12/all/local/file/scan", host, port)
-			iacFilePath, _ := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_db_instance_violation", "main.tf"))
+			iacFilePath, _ := filepath.Abs(filepath.Join(awsDbInsViolationRelPath, "main.tf"))
 
 			When("scan_rules is used", func() {
 				It("should receive violations and 200 OK resopnse", func() {
@@ -219,7 +238,7 @@ var _ = Describe("Server File Scan", func() {
 			})
 
 			When("severity is used", func() {
-				awsAmiIacFilePath, _ := filepath.Abs(filepath.Join("..", "test_data", "iac", "aws", "aws_ami_violation", "main.tf"))
+				awsAmiIacFilePath, _ := filepath.Abs(filepath.Join(awsAmiViolationRelPath, "main.tf"))
 
 				When("severity is invalid", func() {
 					It("should receive a 400 bad request", func() {
@@ -237,6 +256,29 @@ var _ = Describe("Server File Scan", func() {
 						bodyAttrs["severity"] = "HIGH"
 
 						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+			})
+
+			Context("resource is skipped", func() {
+				resourceSkipIacRelPath := filepath.Join(iacRootRelPath, "resource_skipping")
+
+				When("tf file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						iacFilePath, err := filepath.Abs(filepath.Join(resourceSkipIacRelPath, "terraform", "main.tf"))
+						Expect(err).NotTo(HaveOccurred())
+
+						goldenFilePath, err := filepath.Abs(filepath.Join(goldenFilesRelPath, "resource_skipping", "terraform_file_resource_skipping.txt"))
+						Expect(err).NotTo(HaveOccurred())
+
+						respBytes := serverUtils.MakeFileScanRequest(iacFilePath, requestURL, nil, http.StatusOK)
+						serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, respBytes)
+					})
+				})
+
+				When("k8s file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						Skip("add test case when https://github.com/accurics/terrascan/issues/584 is fixed")
 					})
 				})
 			})
