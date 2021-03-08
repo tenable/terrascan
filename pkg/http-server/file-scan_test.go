@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -23,16 +24,20 @@ func TestUpload(t *testing.T) {
 	testParamName := "file"
 
 	table := []struct {
-		name       string
-		path       string
-		param      string
-		iacType    string
-		iacVersion string
-		cloudType  string
-		scanRules  []string
-		skipRules  []string
-		severity   string
-		wantStatus int
+		name              string
+		path              string
+		param             string
+		iacType           string
+		iacVersion        string
+		cloudType         string
+		scanRules         []string
+		skipRules         []string
+		severity          string
+		configOnly        bool
+		invalidConfigOnly bool
+		showPassed        bool
+		invalidShowPassed bool
+		wantStatus        int
 	}{
 		{
 			name:       "valid file scan",
@@ -178,6 +183,42 @@ func TestUpload(t *testing.T) {
 				"AWS.CloudFront.Logging.Medium.0567", "AWS.CloudFront.Network Security.Low.0568"},
 			skipRules: []string{"AWS.CloudFront.Network Security.Low.0568"},
 		},
+		{
+			name:       "test for config only",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+			configOnly: true,
+		},
+		{
+			name:              "test for invalid value config only",
+			path:              testFilePath,
+			param:             testParamName,
+			iacType:           testIacType,
+			cloudType:         testCloudType,
+			wantStatus:        http.StatusBadRequest,
+			invalidConfigOnly: true,
+		},
+		{
+			name:       "test for show passed attribute",
+			path:       testFilePath,
+			param:      testParamName,
+			iacType:    testIacType,
+			cloudType:  testCloudType,
+			showPassed: true,
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:              "test for invalid show_passed value",
+			path:              testFilePath,
+			param:             testParamName,
+			iacType:           testIacType,
+			cloudType:         testCloudType,
+			invalidShowPassed: true,
+			wantStatus:        http.StatusBadRequest,
+		},
 	}
 
 	for _, tt := range table {
@@ -215,6 +256,30 @@ func TestUpload(t *testing.T) {
 
 			if len(tt.severity) > 0 {
 				if err = writer.WriteField("severity", tt.severity); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if !tt.invalidConfigOnly {
+				if err = writer.WriteField("config_only", strconv.FormatBool(tt.configOnly)); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			} else {
+				if err = writer.WriteField("config_only", "invalid"); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if !tt.invalidShowPassed {
+				if err = writer.WriteField("show_passed", strconv.FormatBool(tt.showPassed)); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			} else {
+				if err = writer.WriteField("show_passed", "invalid"); err != nil {
 					writer.Close()
 					t.Error(err)
 				}

@@ -104,6 +104,15 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "normal k8s run with successful output for junit-xml with passed tests",
+			scanOptions: &ScanOptions{
+				policyType:      []string{"k8s"},
+				iacDirPath:      kustomizeTestDirPath,
+				outputType:      "junit-xml",
+				showPassedRules: true,
+			},
+		},
+		{
 			name: "config-only flag terraform",
 			scanOptions: &ScanOptions{
 				policyType:  []string{"all"},

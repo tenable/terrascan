@@ -1,0 +1,30 @@
+Terrascan
+
+Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
+
+Usage:
+  terrascan scan [flags]
+
+Flags:
+      --config-only               will output resource config (should only be used for debugging purposes)
+  -h, --help                      help for scan
+  -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
+  -f, --iac-file string           path to a single IaC file
+  -i, --iac-type string           iac type (helm, k8s, kustomize, terraform, tfplan)
+      --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, tfplan: v1)
+  -p, --policy-path stringArray   policy path directory
+  -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
+  -r, --remote-type string        type of remote backend (git, s3, gcs, http, terraform-registry)
+  -u, --remote-url string         url pointing to remote IaC repository
+      --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
+      --severity string           minimum severity level of the policy violations to be reported by terrascan
+      --show-passed               display passed rules, along with violations
+      --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
+      --use-colors string         color output (auto, t, f) (default "auto")
+  -v, --verbose                   will show violations with details (applicable for default output)
+
+Global Flags:
+  -c, --config-path string   config file path
+  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
+  -x, --log-type string      log output type (console, json) (default "console")
+  -o, --output string        output type (human, json, yaml, xml, junit-xml) (default "human")

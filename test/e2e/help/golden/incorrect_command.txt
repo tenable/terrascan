@@ -1,0 +1,2 @@
+Error: unknown command "test" for "terrascan"
+Run 'terrascan --help' for usage.

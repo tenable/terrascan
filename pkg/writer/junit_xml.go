@@ -27,10 +27,11 @@ import (
 )
 
 const (
-	junitXMLFormat supportedFormat = "junit-xml"
-	testSuiteName  string          = "TERRASCAN_POLICY_SUITE"
-	testSuitesName string          = "TERRASCAN_POLICY_SUITES"
-	testNameFormat string          = `[ERROR] resource: "%s" at line: %d, violates: RULE - %s`
+	junitXMLFormat       supportedFormat = "junit-xml"
+	testSuiteName        string          = "TERRASCAN_POLICY_SUITE"
+	testSuitesName       string          = "TERRASCAN_POLICY_SUITES"
+	testNameFormatFailed string          = `[ERROR] resource: "%s" at line: %d, violates: RULE - %s`
+	testNameFormatPassed string          = "RULE - %s, CATEGORY - %s, DESCRIPTION - %s"
 )
 
 // JUnitTestSuites is a collection of JUnit test suites.
@@ -132,9 +133,14 @@ func convert(output policy.EngineOutput) JUnitTestSuites {
 	// since we have a single suite for now, a suite will have same data as in root level element testsuites
 	suite := newJunitTestSuite(output.Summary)
 
-	tests := violationsToTestCases(output.ViolationStore.Violations, false)
-	if tests != nil {
-		suite.TestCases = append(suite.TestCases, tests...)
+	passedTests := passedRulesToTestCases(output.ViolationStore.PassedRules)
+	if passedTests != nil {
+		suite.TestCases = append(suite.TestCases, passedTests...)
+	}
+
+	failedTests := violationsToTestCases(output.ViolationStore.Violations, false)
+	if failedTests != nil {
+		suite.TestCases = append(suite.TestCases, failedTests...)
 	}
 
 	skippedTests := violationsToTestCases(output.ViolationStore.SkippedViolations, true)
@@ -149,6 +155,9 @@ func convert(output policy.EngineOutput) JUnitTestSuites {
 
 // violationsToTestCases is helper func to convert scan violations to JunitTestCases
 func violationsToTestCases(violations []*results.Violation, isSkipped bool) []JUnitTestCase {
+	if len(violations) == 0 {
+		return nil
+	}
 	testCases := make([]JUnitTestCase, 0)
 	for _, v := range violations {
 		var testCase JUnitTestCase
@@ -159,12 +168,28 @@ func violationsToTestCases(violations []*results.Violation, isSkipped bool) []JU
 			testCase = JUnitTestCase{Failure: new(JUnitFailure)}
 		}
 		testCase.Classname = v.File
-		testCase.Name = fmt.Sprintf(testNameFormat, v.ResourceName, v.LineNumber, v.RuleID)
+		testCase.Name = fmt.Sprintf(testNameFormatFailed, v.ResourceName, v.LineNumber, v.RuleID)
 		testCase.Severity = v.Severity
 		testCase.Category = v.Category
 		// since junitXML doesn't contain the attributes we want to show as violations
 		// we would add details of violations in the failure message
 		testCase.Failure.Message = getViolationString(*v)
+		testCases = append(testCases, testCase)
+	}
+	return testCases
+}
+
+// passedRulesToTestCases is helper func to convert passed rules to JunitTestCases
+func passedRulesToTestCases(passedRules []*results.PassedRule) []JUnitTestCase {
+	if len(passedRules) == 0 {
+		return nil
+	}
+	testCases := make([]JUnitTestCase, 0)
+	for _, v := range passedRules {
+		testCase := JUnitTestCase{Classname: v.RuleName}
+		testCase.Name = fmt.Sprintf(testNameFormatPassed, v.RuleID, v.Category, v.Description)
+		testCase.Severity = v.Severity
+		testCase.Category = v.Category
 		testCases = append(testCases, testCase)
 	}
 	return testCases

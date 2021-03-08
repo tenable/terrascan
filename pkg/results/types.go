@@ -37,16 +37,26 @@ type Violation struct {
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
+// PassedRule contains information of a passed rule
+type PassedRule struct {
+	RuleName    string `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
+	Description string `json:"description" yaml:"description" xml:"description,attr"`
+	RuleID      string `json:"rule_id" yaml:"rule_id" xml:"rule_id,attr"`
+	Severity    string `json:"severity" yaml:"severity" xml:"severity,attr"`
+	Category    string `json:"category" yaml:"category" xml:"category,attr"`
+}
+
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	Violations        []*Violation `json:"violations" yaml:"violations" xml:"violations>violation"`
-	SkippedViolations []*Violation `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
-	Summary           ScanSummary  `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
+	PassedRules       []*PassedRule `json:"passed_rules,omitempty" yaml:"passed_rules,omitempty" xml:"passed_rules>passed_rule,omitempty"`
+	Violations        []*Violation  `json:"violations" yaml:"violations" xml:"violations>violation"`
+	SkippedViolations []*Violation  `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
+	Summary           ScanSummary   `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
 }
 
 // ScanSummary will hold the default scan summary data
 type ScanSummary struct {
-	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file/folder,attr"`
+	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file_folder,attr"`
 	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
 	Timestamp            string `json:"scanned_at" yaml:"scanned_at" xml:"scanned_at,attr"`
 	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`
@@ -55,7 +65,8 @@ type ScanSummary struct {
 	LowCount             int    `json:"low" yaml:"low" xml:"low,attr"`
 	MediumCount          int    `json:"medium" yaml:"medium" xml:"medium,attr"`
 	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
-	TotalTime            int64  `json:"-" yaml:"-" xml:"-"`
+	// field TotalTime is added for junit-xml output
+	TotalTime int64 `json:"-" yaml:"-" xml:"-"`
 }
 
 // Add adds two ViolationStores
@@ -63,6 +74,7 @@ func (vs ViolationStore) Add(extra ViolationStore) ViolationStore {
 	// Just concatenate the slices, since order shouldn't be important
 	vs.Violations = append(vs.Violations, extra.Violations...)
 	vs.SkippedViolations = append(vs.SkippedViolations, extra.SkippedViolations...)
+	vs.PassedRules = append(vs.PassedRules, extra.PassedRules...)
 
 	// Add the scan summary
 	vs.Summary.LowCount += extra.Summary.LowCount

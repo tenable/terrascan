@@ -95,6 +95,8 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 		remoteType string
 		scanRules  []string
 		skipRules  []string
+		showPassed bool
+		configOnly bool
 		wantStatus int
 	}{
 		{
@@ -145,6 +147,17 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			skipRules:  []string{"AWS.CloudFront.Network Security.Low.0568"},
 			wantStatus: http.StatusOK,
 		},
+		{
+			name:       "test show passed rules and config only",
+			iacType:    testIacType,
+			iacVersion: testIacVersion,
+			cloudType:  testCloudType,
+			remoteURL:  validRepo,
+			remoteType: "git",
+			showPassed: true,
+			configOnly: true,
+			wantStatus: http.StatusOK,
+		},
 	}
 
 	for _, tt := range table {
@@ -161,6 +174,8 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 				RemoteType: tt.remoteType,
 				ScanRules:  tt.scanRules,
 				SkipRules:  tt.skipRules,
+				ShowPassed: tt.showPassed,
+				ConfigOnly: tt.configOnly,
 			}
 			reqBody, _ := json.Marshal(s)
 

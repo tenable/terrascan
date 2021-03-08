@@ -1,0 +1,15 @@
+Terrascan
+
+Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Code) files and returns the scan results.
+
+Usage:
+  terrascan server [flags]
+
+Flags:
+  -h, --help   help for server
+
+Global Flags:
+  -c, --config-path string   config file path
+  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
+  -x, --log-type string      log output type (console, json) (default "console")
+  -o, --output string        output type (human, json, yaml, xml, junit-xml) (default "human")

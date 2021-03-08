@@ -18,6 +18,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.8.2
 	github.com/hashicorp/terraform v0.14.4
 	github.com/iancoleman/strcase v0.1.3
+	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.12.1
@@ -32,7 +33,7 @@ require (
 	golang.org/x/mod v0.4.1 // indirect
 	golang.org/x/sys v0.0.0-20210218155724-8ebf48af031b
 	gopkg.in/src-d/go-git.v4 v4.13.1
-	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
 	honnef.co/go/tools v0.1.1 // indirect
 	sigs.k8s.io/kustomize/api v0.7.2
