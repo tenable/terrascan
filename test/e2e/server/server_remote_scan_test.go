@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package server_test
 
 import (
@@ -10,6 +26,7 @@ import (
 	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/policy"
 	serverUtils "github.com/accurics/terrascan/test/e2e/server"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -234,6 +251,32 @@ var _ = Describe("Server Remote Scan", func() {
 							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
 						})
 					})
+
+					When("scan_rules value is invalid", func() {
+						It("should receive a 400 bad request response", func() {
+							errMessage := "json: cannot unmarshal string into Go struct field scanRemoteRepoReq.scan_rules of type []string"
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = awsAmiRepoURL
+							bodyAttrs["scan_rules"] = "Rule.1"
+
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
+						})
+					})
+
+					When("skip_rules value is invalid", func() {
+						It("should receive a 400 bad request response", func() {
+							errMessage := "json: cannot unmarshal string into Go struct field scanRemoteRepoReq.skip_rules of type []string"
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = awsAmiRepoURL
+							bodyAttrs["skip_rules"] = "Rule.1"
+
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
+						})
+					})
 				})
 			})
 		})
@@ -284,6 +327,112 @@ var _ = Describe("Server Remote Scan", func() {
 				bodyAttrs["remote_url"] = "terraform-aws-modules/vpc/aws"
 
 				serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+			})
+		})
+
+		Context("rules filtering options for remote scan", func() {
+			requestURL := fmt.Sprintf("%s:%s/v1/terraform/v14/all/remote/dir/scan", host, port)
+			remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/resource_skipping/terraform"
+
+			When("scan_rules is used", func() {
+				It("should receive violations and 200 OK resopnse", func() {
+
+					bodyAttrs := make(map[string]interface{})
+					bodyAttrs["remote_type"] = "git"
+					bodyAttrs["remote_url"] = remoteRepoURL
+					bodyAttrs["scan_rules"] = []string{"AWS.RDS.DS.High.1041"}
+					responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+
+					var responseEngineOutput policy.EngineOutput
+					err := json.Unmarshal(responseBytes, &responseEngineOutput)
+					Expect(err).NotTo(HaveOccurred())
+
+					Expect(responseEngineOutput.ViolationStore.Summary.TotalPolicies).To(BeIdenticalTo(1))
+				})
+			})
+
+			When("skip_rules is used", func() {
+
+				It("should receive violations and 200 OK response", func() {
+					bodyAttrs := make(map[string]interface{})
+					bodyAttrs["remote_type"] = "git"
+					bodyAttrs["remote_url"] = remoteRepoURL
+					bodyAttrs["skip_rules"] = []string{"AWS.RDS.DataSecurity.High.0577"}
+					responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+
+					var responseEngineOutput policy.EngineOutput
+					err := json.Unmarshal(responseBytes, &responseEngineOutput)
+					Expect(err).NotTo(HaveOccurred())
+
+					// There are total 7 rules in the test policies directory, out of which 1 is skipped
+					Expect(responseEngineOutput.ViolationStore.Summary.TotalPolicies).To(BeIdenticalTo(6))
+				})
+			})
+
+			When("scan and skip rules is used", func() {
+				It("should receive violations and 200 OK response", func() {
+					bodyAttrs := make(map[string]interface{})
+					bodyAttrs["remote_type"] = "git"
+					bodyAttrs["remote_url"] = remoteRepoURL
+					bodyAttrs["scan_rules"] = []string{"AWS.RDS.DS.High.1041", "AWS.AWS RDS.NS.High.0101", "AWS.RDS.DataSecurity.High.0577"}
+					bodyAttrs["skip_rules"] = []string{"AWS.RDS.DataSecurity.High.0577"}
+					responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+
+					var responseEngineOutput policy.EngineOutput
+					err := json.Unmarshal(responseBytes, &responseEngineOutput)
+					Expect(err).NotTo(HaveOccurred())
+
+					// Total rules to be validated would be (scan_rules count -  skip_rules count)
+					Expect(responseEngineOutput.ViolationStore.Summary.TotalPolicies).To(BeIdenticalTo(2))
+				})
+			})
+
+			When("severity is used", func() {
+				When("severity is valid", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]interface{})
+						bodyAttrs["remote_type"] = "git"
+						bodyAttrs["remote_url"] = remoteRepoURL
+						bodyAttrs["severity"] = "HIGH"
+
+						serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+			})
+
+			Context("resource is skipped", func() {
+
+				resourceSkipGoldenRelPath := filepath.Join(goldenFilesRelPath, "resource_skipping")
+
+				When("tf file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]interface{})
+						bodyAttrs["remote_type"] = "git"
+						bodyAttrs["remote_url"] = remoteRepoURL
+
+						goldenFilePath, err := filepath.Abs(filepath.Join(resourceSkipGoldenRelPath, "terraform_file_resource_skipping.txt"))
+						Expect(err).NotTo(HaveOccurred())
+
+						respBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+						serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, respBytes)
+					})
+				})
+
+				When("k8s file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						requestURL := fmt.Sprintf("%s:%s/v1/k8s/v1/all/remote/dir/scan", host, port)
+						remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/resource_skipping/kubernetes"
+						bodyAttrs := make(map[string]interface{})
+						bodyAttrs["remote_type"] = "git"
+						bodyAttrs["remote_url"] = remoteRepoURL
+
+						goldenFilePath, err := filepath.Abs(filepath.Join(resourceSkipGoldenRelPath, "kubernetes_file_resource_skipping.txt"))
+						Expect(err).NotTo(HaveOccurred())
+
+						respBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+						serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, respBytes)
+					})
+				})
 			})
 		})
 	})

@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package server_test
 
 import (
@@ -240,6 +256,29 @@ var _ = Describe("Server File Scan", func() {
 						bodyAttrs["severity"] = "HIGH"
 
 						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+			})
+
+			Context("resource is skipped", func() {
+				resourceSkipIacRelPath := filepath.Join(iacRootRelPath, "resource_skipping")
+
+				When("tf file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						iacFilePath, err := filepath.Abs(filepath.Join(resourceSkipIacRelPath, "terraform", "main.tf"))
+						Expect(err).NotTo(HaveOccurred())
+
+						goldenFilePath, err := filepath.Abs(filepath.Join(goldenFilesRelPath, "resource_skipping", "terraform_file_resource_skipping.txt"))
+						Expect(err).NotTo(HaveOccurred())
+
+						respBytes := serverUtils.MakeFileScanRequest(iacFilePath, requestURL, nil, http.StatusOK)
+						serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, respBytes)
+					})
+				})
+
+				When("k8s file has resource skipped", func() {
+					It("should receive violations result with 200 OK response", func() {
+						Skip("add test case when https://github.com/accurics/terrascan/issues/584 is fixed")
 					})
 				})
 			})
