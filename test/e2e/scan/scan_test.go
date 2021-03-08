@@ -33,6 +33,10 @@ import (
 var (
 	session              *gexec.Session
 	terrascanBinaryPath  string
+	iacRootRelPath       = filepath.Join("..", "test_data", "iac")
+	awsIacRelPath        = filepath.Join(iacRootRelPath, "aws")
+	k8sIacRelPath        = filepath.Join(iacRootRelPath, "k8s")
+	policyRootRelPath    = filepath.Join("..", "test_data", "policies")
 	outWriter, errWriter io.Writer
 )
 
@@ -55,7 +59,7 @@ var _ = Describe("Scan", func() {
 	Describe("scan command is run with -h flag", func() {
 		It("should print help for scan and exit with status code 0", func() {
 			scanArgs := []string{scanUtils.ScanCommand, "-h"}
-			scanUtils.RunScanAndAssertGoldenOutput(terrascanBinaryPath, "../help/golden/help_scan.txt", helper.ExitCodeZero, true, outWriter, errWriter, scanArgs...)
+			scanUtils.RunScanAndAssertGoldenOutput(terrascanBinaryPath, filepath.Join("..", "help", "golden", "help_scan.txt"), helper.ExitCodeZero, true, outWriter, errWriter, scanArgs...)
 		})
 	})
 
@@ -66,7 +70,7 @@ var _ = Describe("Scan", func() {
 			scanArgs := []string{scanTypo}
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 			Eventually(session).Should(gexec.Exit(helper.ExitCodeOne))
-			goldenFileAbsPath, err := filepath.Abs("golden/scan_typo_help.txt")
+			goldenFileAbsPath, err := filepath.Abs(filepath.Join("golden", "scan_typo_help.txt"))
 			Expect(err).NotTo(HaveOccurred())
 			helper.CompareActualWithGolden(session, goldenFileAbsPath, false)
 		})
@@ -84,7 +88,7 @@ var _ = Describe("Scan", func() {
 
 			Context("tf files are present in the working directory", func() {
 				It("should scan the directory, return results and exit with status code 3", func() {
-					workDir, err := filepath.Abs("../test_data/iac/aws/aws_ami_violation")
+					workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
 					Expect(err).NotTo(HaveOccurred())
 
 					scanArgs := []string{scanUtils.ScanCommand}
@@ -95,11 +99,11 @@ var _ = Describe("Scan", func() {
 				When("tf file present in the dir has no violations", func() {
 					Context("when there are no violations, terrascan exits with status code 0", func() {
 						It("should scan the directory and exit with status code 0", func() {
-							workDir, err := filepath.Abs("../test_data/iac/aws/aws_db_instance_violation")
+							workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_db_instance_violation"))
 							Expect(err).NotTo(HaveOccurred())
 
 							// set a policy path that doesn't have any s3 bucket policies
-							policyDir, err := filepath.Abs("../test_data/policies/k8s")
+							policyDir, err := filepath.Abs(filepath.Join(policyRootRelPath, "k8s"))
 							Expect(err).NotTo(HaveOccurred())
 
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir}
@@ -139,7 +143,7 @@ var _ = Describe("Scan", func() {
 
 		Context("-d flag is supplied with a valid file path", func() {
 			It("should error out and exit with status code 1", func() {
-				validAbsFilePath, err := filepath.Abs("golden/scan_typo_help.txt")
+				validAbsFilePath, err := filepath.Abs(filepath.Join("golden", "scan_typo_help.txt"))
 				Expect(err).NotTo(HaveOccurred())
 
 				errString := fmt.Sprintf("input path '%s' is not a valid directory", validAbsFilePath)
@@ -220,7 +224,7 @@ var _ = Describe("Scan", func() {
 		Context("multiple policy paths can be supplied", func() {
 			When("one of the supplied policy path is invalid", func() {
 				It("should error out and exit with staus code 1", func() {
-					validPolicyPath, err := filepath.Abs("../test_data")
+					validPolicyPath, err := filepath.Abs(filepath.Join("..", "test_data"))
 					Expect(err).NotTo(HaveOccurred())
 					scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath, "-p", invalidPolicyPath}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
@@ -232,9 +236,11 @@ var _ = Describe("Scan", func() {
 
 			When("multiple valid policy paths are supplied", func() {
 				Context("workdir contains k8s files", func() {
-					validPolicyPath1, err1 := filepath.Abs("../test_data/policies/aws/aws_ami")
-					validPolicyPath2, err2 := filepath.Abs("../test_data/policies/aws/aws_db_instance")
-					workDirPath, err3 := filepath.Abs("../test_data/iac/k8s")
+					awsPolicyRelPath := filepath.Join(policyRootRelPath, "aws")
+					validPolicyPath1, err1 := filepath.Abs(filepath.Join(awsPolicyRelPath, "aws_ami"))
+					validPolicyPath2, err2 := filepath.Abs(filepath.Join(awsPolicyRelPath, "aws_db_instance"))
+					workDirPath, err3 := filepath.Abs(filepath.Join(policyRootRelPath, "k8s"))
+
 					It("should not error out", func() {
 						Expect(err1).NotTo(HaveOccurred())
 						Expect(err2).NotTo(HaveOccurred())

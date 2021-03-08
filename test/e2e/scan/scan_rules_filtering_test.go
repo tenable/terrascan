@@ -48,16 +48,17 @@ var _ = Describe("Scan command with rule filtering options", func() {
 	var policyDir, iacDir string
 	var err error
 
-	iacDir, err = filepath.Abs("../test_data/iac/aws/aws_db_instance_violation")
+	iacDir, err = filepath.Abs(filepath.Join(awsIacRelPath, "aws_db_instance_violation"))
 	It("should not error out while getting absolute path", func() {
 		Expect(err).NotTo(HaveOccurred())
 	})
 
-	policyDir, err = filepath.Abs("../test_data/policies/")
+	policyDir, err = filepath.Abs(policyRootRelPath)
 	It("should not error out while getting absolute path", func() {
 		Expect(err).NotTo(HaveOccurred())
 	})
 
+	ruleFilterGoldenRelPath := filepath.Join("golden", "rules_filtering")
 	Describe("rule filtering via command line options", func() {
 
 		Context("--scan-rules options is used", func() {
@@ -65,14 +66,14 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				It("should scan only the rules specified in --scan-rules option", func() {
 					scanRules := "AWS.RDS.DS.High.1041"
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--scan-rules", scanRules}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/scan_single_rule.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "scan_single_rule.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 			Context("multiple rules are specified via --scan-rules option", func() {
 				It("should scan only the rules specified in --scan-rules option", func() {
 					scanRules := "AWS.RDS.DS.High.1041,AWS.AWS RDS.NS.High.0101,AWS.RDS.DataSecurity.High.0577"
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--scan-rules", scanRules}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/scan_multiple_rules.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "scan_multiple_rules.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -82,14 +83,14 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				It("should skip the rule specified in --skip-rules option", func() {
 					skipRules := "AWS.RDS.DataSecurity.High.0577"
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--skip-rules", skipRules}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/skip_single_rule.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "skip_single_rule.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 			Context("multiple rules are specified via --skip-rules option", func() {
 				It("should skip the rules specified in --skip-rules option", func() {
 					skipRules := "AWS.RDS.DS.High.1041,AWS.RDS.DataSecurity.High.0414,AWS.RDS.DataSecurity.High.0577"
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--skip-rules", skipRules}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/skip_multiple_rules.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "skip_multiple_rules.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -100,7 +101,7 @@ var _ = Describe("Scan command with rule filtering options", func() {
 					scanRules := "AWS.RDS.DS.High.1041,AWS.AWS RDS.NS.High.0101,AWS.RDS.DataSecurity.High.0577"
 					skipRules := "AWS.RDS.DataSecurity.High.0577"
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "--skip-rules", skipRules, "--scan-rules", scanRules}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/scan_and_skip_rules.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "scan_and_skip_rules.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -118,7 +119,7 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			When("valid severity level is specified", func() {
 				oldIacDir := iacDir
 				JustBeforeEach(func() {
-					iacDir, err = filepath.Abs("../test_data/iac/aws/aws_ami_violation")
+					iacDir, err = filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
 				})
 
 				JustAfterEach(func() {
@@ -150,10 +151,10 @@ var _ = Describe("Scan command with rule filtering options", func() {
 		Context("config file is specified using -c flag", func() {
 			Context("both scan and skip rules are specified", func() {
 				It("should scan and skip the rules as specified with --scan-rules and --skip-rules option", func() {
-					configFileAbsPath, err := filepath.Abs("config/scan_and_skip_rules.toml")
+					configFileAbsPath, err := filepath.Abs(filepath.Join("config", "scan_and_skip_rules.toml"))
 					Expect(err).NotTo(HaveOccurred())
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json", "-c", configFileAbsPath}
-					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/rules_filtering/scan_and_skip_rules.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "scan_and_skip_rules.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
@@ -161,7 +162,7 @@ var _ = Describe("Scan command with rule filtering options", func() {
 		Context("config file is specified using TERRASCAN_CONFIG env variable", func() {
 			Context("both scan and skip rules are specified", func() {
 				JustBeforeEach(func() {
-					os.Setenv(terrascanConfigEnvName, "config/scan_and_skip_rules.toml")
+					os.Setenv(terrascanConfigEnvName, filepath.Join("config", "scan_and_skip_rules.toml"))
 				})
 				JustAfterEach(func() {
 					os.Setenv(terrascanConfigEnvName, "")
@@ -173,7 +174,7 @@ var _ = Describe("Scan command with rule filtering options", func() {
 
 			Context("invalid severity is specified in config file", func() {
 				It("should error out and exit with status code 1", func() {
-					configFileAbsPath, err := filepath.Abs("config/invalid_severity.toml")
+					configFileAbsPath, err := filepath.Abs(filepath.Join("config", "invalid_severity.toml"))
 					Expect(err).NotTo(HaveOccurred())
 
 					scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-c", configFileAbsPath}
@@ -184,24 +185,26 @@ var _ = Describe("Scan command with rule filtering options", func() {
 	})
 
 	Describe("resource specific rule skipping", func() {
+		resourceSkipGoldenRelPath := filepath.Join("golden", "resource_skipping")
+		resourceSkipIacRelPath := filepath.Join(iacRootRelPath, "resource_skipping")
 		Context("resource skipping in tf files", func() {
 			oldIacDir := iacDir
 			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/resource_skipping/terraform")
+				iacDir, err = filepath.Abs(filepath.Join(resourceSkipIacRelPath, "terraform"))
 			})
 			JustAfterEach(func() {
 				iacDir = oldIacDir
 			})
 			It("should display violations, skipped violations and exit with status code 3", func() {
 				scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/resource_skipping/terraform_file_resource_skipping.txt", helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourceSkipGoldenRelPath, "terraform_file_resource_skipping.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})
 
 		Context("resource skipping in k8s files", func() {
 			oldIacDir := iacDir
 			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/resource_skipping/kubernetes")
+				iacDir, err = filepath.Abs(filepath.Join(resourceSkipIacRelPath, "kubernetes"))
 			})
 			JustAfterEach(func() {
 				iacDir = oldIacDir
@@ -211,7 +214,7 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			// hence, the exit code is 0
 			It("should display skipped violations and exit with status code 0", func() {
 				scanArgs := []string{"-p", policyDir, "-d", iacDir, "-i", "k8s", "-o", "json"}
-				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, "golden/resource_skipping/kubernetes_file_resource_skipping.txt", helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourceSkipGoldenRelPath, "kubernetes_file_resource_skipping.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})
 	})

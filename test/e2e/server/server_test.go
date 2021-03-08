@@ -24,7 +24,16 @@ const (
 )
 
 var (
-	terrascanBinaryPath string
+	terrascanBinaryPath        string
+	iacRootRelPath             = filepath.Join("..", "test_data", "iac")
+	awsIacRelPath              = filepath.Join(iacRootRelPath, "aws")
+	policyRootRelPath          = filepath.Join("..", "test_data", "policies")
+	goldenFilesRelPath         = filepath.Join("..", "scan", "golden")
+	tfGoldenFilesRelPath       = filepath.Join(goldenFilesRelPath, "terraform_scans", "aws")
+	awsAmiGoldenRelPath        = filepath.Join(tfGoldenFilesRelPath, "aws_ami_violations")
+	awsDbInstanceGoldenRelPath = filepath.Join(tfGoldenFilesRelPath, "aws_db_instance_violations")
+	k8sGoldenRelPath           = filepath.Join(goldenFilesRelPath, "k8s_scans", "k8s")
+	// k8sIacRelPath       = filepath.Join(iacRootRelPath, "k8s")
 )
 
 var _ = Describe("Server", func() {
@@ -160,7 +169,7 @@ var _ = Describe("Server", func() {
 // createAndSetEnvConfigFile creates a config file with test policy path
 // and sets and env variable
 func createAndSetEnvConfigFile(configFileName string) {
-	var policyAbsPath, _ = filepath.Abs(filepath.Join("..", "test_data", "policies"))
+	var policyAbsPath, _ = filepath.Abs(policyRootRelPath)
 
 	// contents of the config file
 	configFileContents := fmt.Sprintf(`[policy]
@@ -169,8 +178,14 @@ rego_subdir = "%s"`, policyAbsPath, policyAbsPath)
 
 	// create config file in work directory
 	file, err := os.Create(configFileName)
-	Expect(err).NotTo(HaveOccurred())
+	if err != nil {
+		errMessage := fmt.Sprintf("config file creation failed, err: %v", err)
+		Fail(errMessage)
+	}
 	_, err = file.WriteString(configFileContents)
-	Expect(err).NotTo(HaveOccurred())
+	if err != nil {
+		errMessage := fmt.Sprintf("error while writing to config file, err: %v", err)
+		Fail(errMessage)
+	}
 	os.Setenv(terrascanConfigEnvName, configFileName)
 }

@@ -46,7 +46,7 @@ var _ = Describe("Server Remote Scan", func() {
 			When("remote repo violates aws_ami", func() {
 				It("should report violations", func() {
 
-					goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_ami_violations", "aws_ami_violation_json.txt"))
+					goldenFilePath, err := filepath.Abs(filepath.Join(awsAmiGoldenRelPath, "aws_ami_violation_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
 
 					bodyAttrs := make(map[string]interface{})
@@ -62,7 +62,7 @@ var _ = Describe("Server Remote Scan", func() {
 				It("should report violations", func() {
 					remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
 
-					goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_db_instance_violations", "aws_db_instance_json.txt"))
+					goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
 
 					bodyAttrs := make(map[string]interface{})
@@ -98,7 +98,7 @@ var _ = Describe("Server Remote Scan", func() {
 					It("should receive resource config response", func() {
 						remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
 
-						goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "terraform_scans", "aws", "aws_db_instance_violations", "aws_db_instance_json_show_passed.txt"))
+						goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json_show_passed.txt"))
 						Expect(err).NotTo(HaveOccurred())
 
 						bodyAttrs := make(map[string]interface{})
@@ -245,7 +245,7 @@ var _ = Describe("Server Remote Scan", func() {
 				It("should report violations", func() {
 					remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
 
-					goldenFilePath, err := filepath.Abs(filepath.Join("..", "scan", "golden", "k8s_scans", "k8s", "kubernetes_ingress_violations", "kubernetes_ingress_json.txt"))
+					goldenFilePath, err := filepath.Abs(filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_violations", "kubernetes_ingress_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
 
 					bodyAttrs := make(map[string]interface{})

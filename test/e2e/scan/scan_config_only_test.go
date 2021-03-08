@@ -41,7 +41,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 
 	var iacDir string
 	var err error
-	iacDir, err = filepath.Abs("../test_data/iac/aws/aws_ami_violation")
+	iacDir, err = filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
 
 	It("should not error out while getting absolute path", func() {
 		Expect(err).NotTo(HaveOccurred())
@@ -106,7 +106,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 
 		Context("for yaml files", func() {
 			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs("../test_data/iac/k8s/kubernetes_ingress_violation")
+				iacDir, err = filepath.Abs(filepath.Join(k8sIacRelPath, "kubernetes_ingress_violation"))
 			})
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {
