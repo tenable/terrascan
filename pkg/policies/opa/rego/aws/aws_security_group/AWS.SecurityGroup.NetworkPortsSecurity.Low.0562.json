@@ -1,0 +1,15 @@
+{
+    "name": "port3389OpenToInternet",
+    "file": "portOpenToInternet.rego",
+    "template_args": {
+        "from_port": 3389,
+        "name": "port3389OpenToInternet",
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "HIGH",
+    "description": "remote desktop port open to internet",
+    "reference_id": "AWS.SecurityGroup.NetworkPortsSecurity.Low.0562",
+    "category": "Network Ports Security",
+    "version": 2
+}

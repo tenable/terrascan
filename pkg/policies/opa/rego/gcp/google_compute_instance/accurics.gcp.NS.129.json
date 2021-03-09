@@ -1,0 +1,13 @@
+{
+    "name": "serialPortEnabled",
+    "file": "metadataDisabled.rego",
+    "template_args": {
+        "metaKey": "serial-port-enable",
+        "name": "serialPortEnabled"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure 'Enable connecting to serial ports' is not enabled for VM instances.",
+    "reference_id": "accurics.gcp.NS.129",
+    "category": "Network Security",
+    "version": 1
+}

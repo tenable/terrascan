@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort5900ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort5900ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 5900,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "VNC Server (TCP:5900) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.254",
+    "category": "Network Ports Security",
+    "version": 2
+}

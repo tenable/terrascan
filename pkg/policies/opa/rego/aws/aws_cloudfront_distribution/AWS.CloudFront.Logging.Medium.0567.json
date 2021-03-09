@@ -1,0 +1,12 @@
+{
+    "name": "cloudfrontNoLogging",
+    "file": "cloudfrontNoLogging.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN).",
+    "reference_id": "AWS.CloudFront.Logging.Medium.0567",
+    "category": "Logging",
+    "version": 2
+}

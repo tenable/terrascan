@@ -1,0 +1,10 @@
+{
+    "name": "awsConfigEncryptedVol",
+    "file": "awsConfigEncryptedVol.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure AWS Config Rule is enabled for Encrypted Volumes",
+    "reference_id": "AWS.Config.Encryption\u0026KeyManagement.Medium.0660",
+    "category": "Encryption \u0026 Key Management",
+    "version": 1
+}

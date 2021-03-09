@@ -1,0 +1,12 @@
+{
+    "name": "gaurdDutyDisabled",
+    "file": "gaurdDutyDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Amazon GuardDuty service is currently enabled in all regions in order to protect your AWS environment and infrastructure (AWS accounts and resources, IAM credentials, guest operating systems, applications, etc) against security threats. AWS GuardDuty is a managed threat detection service that continuously monitors your VPC flow logs, AWS CloudTrail event logs and DNS logs for malicious or unauthorized behavior. The service monitors for activity such as unusual API calls, potentially compromised EC2 instances or potentially unauthorized deployments that indicate a possible AWS account compromise. AWS GuardDuty operates entirely on Amazon Web Services infrastructure and does not affect the performance or reliability of your applications. The service does not require any software agents, sensors or network appliances.",
+    "reference_id": "AWS.GuardDuty Enabled.Security.Medium.0575",
+    "category": "Logging",
+    "version": 2
+}

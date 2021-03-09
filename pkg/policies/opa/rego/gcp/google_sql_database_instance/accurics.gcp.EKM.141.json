@@ -1,0 +1,10 @@
+{
+    "name": "checkRequireSSLEnabled",
+    "file": "checkDatabaseSettings.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that Cloud SQL database instance requires all incoming connections to use SSL",
+    "reference_id": "accurics.gcp.EKM.141",
+    "category": "Encryption \u0026 Key Management",
+    "version": 1
+}

@@ -1,0 +1,12 @@
+{
+    "name": "scanOnPushDisabled",
+    "file": "scanOnPushDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Unscanned images may contain vulnerabilities",
+    "reference_id": "AWS.ECR.DataSecurity.High.0578",
+    "category": "Data Security",
+    "version": 2
+}

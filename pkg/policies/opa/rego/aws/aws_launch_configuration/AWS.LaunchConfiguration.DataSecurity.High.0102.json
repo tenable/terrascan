@@ -1,0 +1,12 @@
+{
+    "name": "hardCodedKey",
+    "file": "hardCodedKey.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Avoid using base64 encoded private keys as part of config",
+    "reference_id": "AWS.LaunchConfiguration.DataSecurity.High.0102",
+    "category": "Data Security",
+    "version": 1
+}

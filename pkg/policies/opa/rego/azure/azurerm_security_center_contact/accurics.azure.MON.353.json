@@ -1,0 +1,10 @@
+{
+    "name": "emailAlertsEnabled",
+    "file": "emailAlertsEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that 'Send email notification for high severity alerts' is set to 'On'",
+    "reference_id": "accurics.azure.MON.353",
+    "category": "Monitoring",
+    "version": 1
+}

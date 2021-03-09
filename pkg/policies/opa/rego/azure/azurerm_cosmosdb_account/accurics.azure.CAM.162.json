@@ -1,0 +1,12 @@
+{
+    "name": "reme_noTags",
+    "file": "noTags.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Cosmos DB Account has an associated tag",
+    "reference_id": "accurics.azure.CAM.162",
+    "category": "Cloud Assets Management",
+    "version": 2
+}

@@ -13,6 +13,6 @@
     "severity": "LOW",
     "description": "Memcached SSL (UDP:11214) is exposed to small Private network",
     "reference_id": "accurics.azure.NPS.289",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

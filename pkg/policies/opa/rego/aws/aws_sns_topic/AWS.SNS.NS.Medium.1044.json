@@ -1,0 +1,12 @@
+{
+    "name": "snsPublicAccess",
+    "file": "snsPublicAccess.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure SNS Topic is Publicly Accessible For Subscription",
+    "reference_id": "AWS.SNS.NS.Medium.1044",
+    "category": "Network Security",
+    "version": 2
+}

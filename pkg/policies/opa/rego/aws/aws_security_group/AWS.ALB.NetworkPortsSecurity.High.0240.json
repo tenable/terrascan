@@ -1,0 +1,15 @@
+{
+    "name": "port11214AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port11214AlbNetworkPortSecurityPublicScope",
+        "portNumber": 11214,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Memcached SSL' (TCP:11214) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0240",
+    "category": "Network Ports Security",
+    "version": 2
+}

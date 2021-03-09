@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayName",
+    "file": "apiGatewayName.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable AWS CloudWatch Logs for APIs",
+    "reference_id": "AWS.API Gateway.Logging.Medium.0567",
+    "category": "Logging",
+    "version": 1
+}

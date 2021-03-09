@@ -1,0 +1,12 @@
+{
+    "name": "reme_logDisconnections",
+    "file": "logDisconnections.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.153",
+    "category": "Logging",
+    "version": 2
+}

@@ -1,0 +1,13 @@
+{
+    "name": "stackDriverLoggingEnabled",
+    "file": "stackDriverServiceDisabled.rego",
+    "template_args": {
+        "name": "stackDriverLoggingEnabled",
+        "service": "logging"
+    },
+    "severity": "HIGH",
+    "description": "Ensure Stackdriver Logging is enabled on Kubernetes Engine Clusters.",
+    "reference_id": "accurics.gcp.LOG.100",
+    "category": "Logging",
+    "version": 1
+}

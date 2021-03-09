@@ -1,0 +1,13 @@
+{
+    "name": "passwordRotateEvery90Days",
+    "file": "passwordRotateEvery90Days.rego",
+    "template_args": {
+        "name": "passwordRotateEvery90Days",
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "Reducing the password lifetime increases account resiliency against brute force login attempts",
+    "reference_id": "AWS.Iam.IAM.Low.0540",
+    "category": "IAM",
+    "version": 2
+}

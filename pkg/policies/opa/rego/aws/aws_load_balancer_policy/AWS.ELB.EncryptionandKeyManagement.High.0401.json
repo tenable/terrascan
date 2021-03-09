@@ -1,0 +1,16 @@
+{
+    "name": "elbSsLTsLProtocol",
+    "file": "elbSsLTsLProtocol.rego",
+    "template_args": {
+        "prefix": "",
+        "security_protocols": [
+            "Protocol-SSLv3",
+            "Protocol-TLSv1"
+        ]
+    },
+    "severity": "HIGH",
+    "description": "Using insecure ciphers for your ELB Predefined or Custom Security Policy, could make the SSL connection between the client and the load balancer vulnerable to exploits. TLS 1.0 was recommended to be disabled by PCI Council after June 30, 2016",
+    "reference_id": "AWS.ELB.EncryptionandKeyManagement.High.0401",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

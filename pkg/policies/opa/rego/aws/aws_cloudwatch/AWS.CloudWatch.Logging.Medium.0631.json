@@ -1,0 +1,10 @@
+{
+    "name": "awsCloudWatchRetentionPreiod",
+    "file": "awsCloudWatchRetentionPreiod.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "App-Tier CloudWatch Log Group Retention Period",
+    "reference_id": "AWS.CloudWatch.Logging.Medium.0631",
+    "category": "Logging",
+    "version": 2
+}

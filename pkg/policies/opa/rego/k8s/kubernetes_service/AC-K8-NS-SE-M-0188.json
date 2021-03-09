@@ -1,0 +1,14 @@
+{
+    "name": "ensurePrivateIP",
+    "file": "ensurePrivateIP.rego",
+    "template_args": {
+        "name": "ensurePrivateIP",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict the use of externalIPs",
+    "reference_id": "AC-K8-NS-SE-M-0188",
+    "category": "Network Security",
+    "version": 1
+}

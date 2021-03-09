@@ -1,0 +1,10 @@
+{
+    "name": "sqlAuditingRetention",
+    "file": "sqlAuditingRetention.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers.",
+    "reference_id": "accurics.azure.LOG.356",
+    "category": "Logging",
+    "version": 1
+}

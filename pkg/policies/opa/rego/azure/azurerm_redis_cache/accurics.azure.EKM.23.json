@@ -1,0 +1,12 @@
+{
+    "name": "reme_nonSslEnabled",
+    "file": "nonSslEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that the Redis Cache accepts only SSL connections",
+    "reference_id": "accurics.azure.EKM.23",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "reme_noSecurityGroupAssociated",
+    "file": "noSecurityGroupAssociated.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Azure Virtual Network subnet is configured with a Network Security Group",
+    "reference_id": "accurics.azure.NS.161",
+    "category": "Network Security",
+    "version": 2
+}

@@ -1,0 +1,14 @@
+{
+    "name": "reme_sqlPublicAccess",
+    "file": "checkPublicAccessNotAllow.rego",
+    "template_args": {
+        "isEntire": true,
+        "name": "sqlPublicAccess",
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server",
+    "reference_id": "accurics.azure.NS.5",
+    "category": "Network Security",
+    "version": 2
+}

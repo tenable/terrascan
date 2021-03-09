@@ -1,0 +1,13 @@
+{
+    "name": "cloudFormationStackPolicy",
+    "file": "cloudFormationNullCheck.rego",
+    "template_args": {
+        "name": "cloudFormationStackPolicy",
+        "property": "policy_url"
+    },
+    "severity": "MEDIUM",
+    "description": "AWS CloudFormation Stack Policy",
+    "reference_id": "AWS.CloudFormation.Medium.0604",
+    "category": " ",
+    "version": 1
+}

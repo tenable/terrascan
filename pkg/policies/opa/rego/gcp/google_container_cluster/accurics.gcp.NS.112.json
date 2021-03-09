@@ -1,0 +1,10 @@
+{
+    "name": "masterAuthEnabled",
+    "file": "masterAuthEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters.",
+    "reference_id": "accurics.gcp.NS.112",
+    "category": "Network Security",
+    "version": 1
+}

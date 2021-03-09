@@ -1,0 +1,12 @@
+{
+    "name": "reme_moreHostsAllowed",
+    "file": "moreHostsAllowed.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict Azure SQL Server accessibility to a minimal address range",
+    "reference_id": "accurics.azure.NS.169",
+    "category": "Network Security",
+    "version": 2
+}

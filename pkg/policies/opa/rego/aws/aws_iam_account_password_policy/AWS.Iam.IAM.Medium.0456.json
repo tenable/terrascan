@@ -1,0 +1,14 @@
+{
+    "name": "passwordRequireSymbol",
+    "file": "passwordPolicyRequirement.rego",
+    "template_args": {
+        "name": "passwordRequireSymbol",
+        "prefix": "",
+        "required_parameter": "require_symbols"
+    },
+    "severity": "MEDIUM",
+    "description": "Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
+    "reference_id": "AWS.Iam.IAM.Medium.0456",
+    "category": "IAM",
+    "version": 2
+}

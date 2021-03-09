@@ -1,0 +1,12 @@
+{
+    "name": "rdsHostsHigherThan256",
+    "file": "rdsHostsHigherThan256.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "RDS should not be open to a large scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment.",
+    "reference_id": "AWS.RDS.NetworkSecurity.High.0103",
+    "category": "Network Security",
+    "version": 2
+}

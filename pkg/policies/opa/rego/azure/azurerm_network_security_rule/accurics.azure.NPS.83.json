@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort138ExposedPublicEntireUdp",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort138ExposedPublicEntireUdp",
+        "numberOfHosts": 1,
+        "portNumber": 138,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "NetBIOS Datagram Service (UDP:138) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.83",
+    "category": "Network Ports Security",
+    "version": 2
+}

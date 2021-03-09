@@ -1,0 +1,15 @@
+{
+    "name": "port22OpenToInternet",
+    "file": "portOpenToInternet.rego",
+    "template_args": {
+        "from_port": 22,
+        "name": "port22OpenToInternet",
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "HIGH",
+    "description": "ssh port open to internet",
+    "reference_id": "AWS.SecurityGroup.NetworkPortsSecurity.Low.0560",
+    "category": "Network Ports Security",
+    "version": 2
+}

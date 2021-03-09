@@ -1,0 +1,12 @@
+{
+    "name": "defaultVpcExist",
+    "file": "defaultVpcExist.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Avoid creating resources in default VPC",
+    "reference_id": "AWS.VPC.Logging.Medium.0471",
+    "category": "Logging",
+    "version": 1
+}

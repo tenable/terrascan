@@ -1,0 +1,14 @@
+{
+    "name": "reme_sqlIngressAccess",
+    "file": "checkPublicAccessNotAllow.rego",
+    "template_args": {
+        "isEntire": false,
+        "name": "sqlIngressAccess",
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
+    "reference_id": "accurics.azure.NS.21",
+    "category": "Network Security",
+    "version": 2
+}

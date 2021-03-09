@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort3020ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort3020ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 3020,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "CIFS / SMB (TCP:3020) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.174",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,10 @@
+{
+    "name": "networkPolicyEnabled",
+    "file": "networkPolicyEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Network policy is enabled on Kubernetes Engine Clusters.",
+    "reference_id": "accurics.gcp.NS.103",
+    "category": "Network Security",
+    "version": 1
+}

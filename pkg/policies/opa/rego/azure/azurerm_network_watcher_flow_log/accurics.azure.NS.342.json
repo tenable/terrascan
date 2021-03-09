@@ -1,0 +1,12 @@
+{
+    "name": "reme_logRetensionGraterThan90Days",
+    "file": "networkWatcherCheck.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Network Security Group Flow Logs should be enabled and the retention period is set to greater than or equal to 90 days. Flow logs enable capturing information about IP traffic flowing in and out of network security groups. Logs can be used to check for anomalies and give insight into suspected breaches.",
+    "reference_id": "accurics.azure.NS.342",
+    "category": "Network Security",
+    "version": 1
+}

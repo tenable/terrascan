@@ -1,0 +1,14 @@
+{
+    "name": "allowGetActionFromAllPrncpls",
+    "file": "actionsFromAllPrincipals.rego",
+    "template_args": {
+        "Action": "s3:Get",
+        "name": "allowGetActionFromAllPrncpls",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion",
+    "reference_id": "AWS.IamPolicy.IAM.High.0373",
+    "category": "Identity and Access Management",
+    "version": 2
+}

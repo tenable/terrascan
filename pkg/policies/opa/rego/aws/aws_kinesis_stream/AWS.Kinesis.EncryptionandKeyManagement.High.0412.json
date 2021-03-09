@@ -1,0 +1,12 @@
+{
+    "name": "kinesisNotEncryptedWithKms",
+    "file": "aws_kinesis_stream.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Kinesis Streams and metadata are not protected",
+    "reference_id": "AWS.Kinesis.EncryptionandKeyManagement.High.0412",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

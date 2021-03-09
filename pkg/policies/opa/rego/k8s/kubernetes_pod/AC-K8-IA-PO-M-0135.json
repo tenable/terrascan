@@ -1,0 +1,14 @@
+{
+    "name": "appArmorProfile",
+    "file": "appArmorProfile.rego",
+    "template_args": {
+        "name": "appArmorProfile",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "AppArmor profile not set to default or custom profile will make the container vulnerable to kernel level threats",
+    "reference_id": "AC-K8-IA-PO-M-0135",
+    "category": "Identity and Access Management",
+    "version": 1
+}

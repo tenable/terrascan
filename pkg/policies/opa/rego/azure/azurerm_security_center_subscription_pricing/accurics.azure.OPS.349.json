@@ -1,0 +1,12 @@
+{
+    "name": "reme_securityCenterPrincingTier",
+    "file": "securityCenterPrincingTier.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that standard pricing tiers are selected",
+    "reference_id": "accurics.azure.OPS.349",
+    "category": "Operational Efficiency",
+    "version": 1
+}

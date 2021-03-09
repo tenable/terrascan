@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "VNC Listener (TCP:5500) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.116",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

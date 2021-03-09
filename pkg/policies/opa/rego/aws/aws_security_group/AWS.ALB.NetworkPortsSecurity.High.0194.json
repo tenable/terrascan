@@ -1,0 +1,15 @@
+{
+    "name": "port22AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port22AlbNetworkPortSecurityPublicScope",
+        "portNumber": 22,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "HIGH",
+    "description": "'SSH' (TCP:22) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0194",
+    "category": "Network Ports Security",
+    "version": 2
+}

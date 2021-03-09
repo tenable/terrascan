@@ -1,0 +1,12 @@
+{
+    "name": "sqsSseDisabled",
+    "file": "sqsSseDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that your Amazon Simple Queue Service (SQS) queues are protecting the contents of their messages using Server-Side Encryption (SSE). The SQS service uses an AWS KMS Customer Master Key (CMK) to generate data keys required for the encryption/decryption process of SQS messages. There is no additional charge for using SQS Server-Side Encryption, however, there is a charge for using AWS KMS",
+    "reference_id": "AWS.SQS.NetworkSecurity.High.0570",
+    "category": "Network Security",
+    "version": 2
+}

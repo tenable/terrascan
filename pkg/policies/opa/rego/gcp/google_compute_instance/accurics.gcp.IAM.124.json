@@ -1,0 +1,10 @@
+{
+    "name": "defaultServiceAccountUsed",
+    "file": "defaultServiceAccountUsed.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Instances may have been configured to use the default service account with full access to all Cloud APIs",
+    "reference_id": "accurics.gcp.IAM.124",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}

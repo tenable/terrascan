@@ -1,0 +1,12 @@
+{
+    "name": "cloudTrailLogNotEncrypted",
+    "file": "cloudTrailLogNotEncrypted.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Cloud Trail Log Not Enabled",
+    "reference_id": "AWS.CloudTrail.Logging.High.0399",
+    "category": "Logging",
+    "version": 2
+}

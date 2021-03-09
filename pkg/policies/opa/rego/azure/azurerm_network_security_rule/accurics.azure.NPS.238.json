@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort25ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort25ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 25,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "SMTP (TCP:25) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.238",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort3306ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort3306ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 3306,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "MySQL (TCP:3306) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.75",
+    "category": "Network Ports Security",
+    "version": 2
+}

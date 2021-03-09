@@ -1,0 +1,10 @@
+{
+    "name": "ecsServiceAdmin",
+    "file": "ecsServiceAdmin.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure there are no ECS services Admin roles",
+    "reference_id": "AWS.ECS.High.0436",
+    "category": "Identity and Access Management",
+    "version": 1
+}

@@ -1,0 +1,12 @@
+{
+    "name": "noRoute53RecordSet",
+    "file": "noRoute53RecordSet.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Route53HostedZone should have recordSets.",
+    "reference_id": "AWS.Route53HostedZone.DNSManagement.High.0422",
+    "category": "DNS Management",
+    "version": 2
+}

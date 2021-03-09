@@ -1,0 +1,12 @@
+{
+    "name": "reme_checkAuditEnabled",
+    "file": "checkAuditEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that 'Threat Detection' is enabled for Azure SQL Database",
+    "reference_id": "accurics.azure.MON.157",
+    "category": "Monitoring",
+    "version": 2
+}

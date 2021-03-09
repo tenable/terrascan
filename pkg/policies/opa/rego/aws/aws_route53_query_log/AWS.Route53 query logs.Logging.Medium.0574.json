@@ -1,0 +1,12 @@
+{
+    "name": "route53LoggingDisabled",
+    "file": "route53LoggingDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure CloudWatch logging is enabled for Route53 hosted zones.",
+    "reference_id": "AWS.Route53 query logs.Logging.Medium.0574",
+    "category": "Logging",
+    "version": 1
+}

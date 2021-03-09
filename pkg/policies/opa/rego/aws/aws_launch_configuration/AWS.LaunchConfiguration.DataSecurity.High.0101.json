@@ -1,0 +1,12 @@
+{
+    "name": "hardCodedShellScript",
+    "file": "hardCodedShellScript.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Avoid using base64 encoded shell script as part of config",
+    "reference_id": "AWS.LaunchConfiguration.DataSecurity.High.0101",
+    "category": "Data Security",
+    "version": 1
+}

@@ -1,0 +1,15 @@
+{
+    "name": "port2382AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port2382AlbNetworkPortSecurityPublicScope",
+        "portNumber": 2382,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'SQL Server Analysis Service browser' (TCP:2382) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0278",
+    "category": "Network Ports Security",
+    "version": 2
+}

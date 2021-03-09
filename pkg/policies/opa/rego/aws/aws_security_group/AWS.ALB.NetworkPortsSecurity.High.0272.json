@@ -1,0 +1,15 @@
+{
+    "name": "port3000AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port3000AlbNetworkPortSecurityPublicScope",
+        "portNumber": 3000,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Prevalent known internal port' (TCP:3000) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0272",
+    "category": "Network Ports Security",
+    "version": 2
+}

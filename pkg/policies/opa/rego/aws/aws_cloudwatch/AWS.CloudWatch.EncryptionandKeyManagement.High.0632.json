@@ -1,0 +1,10 @@
+{
+    "name": "logGroupNotEncryptedWithKms",
+    "file": "logGroupNotEncryptedWithKms.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "AWS CloudWatch log group is not encrypted with a KMS CMK",
+    "reference_id": "AWS.CloudWatch.EncryptionandKeyManagement.High.0632",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

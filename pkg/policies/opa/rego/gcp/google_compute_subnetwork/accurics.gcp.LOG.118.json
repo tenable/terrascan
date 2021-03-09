@@ -1,0 +1,10 @@
+{
+    "name": "vpcFlowLogEnabled",
+    "file": "vpcFlowLogEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network.",
+    "reference_id": "accurics.gcp.LOG.118",
+    "category": "Logging ",
+    "version": 1
+}

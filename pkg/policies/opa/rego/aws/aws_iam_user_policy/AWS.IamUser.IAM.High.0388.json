@@ -1,0 +1,12 @@
+{
+    "name": "rootUserNotContainMfaTypeVirtual",
+    "file": "rootUserNotContainMfaTypeVirtual.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Virtual MFA device is enabled for the \"root\" account",
+    "reference_id": "AWS.IamUser.IAM.High.0388",
+    "category": "Identity and Access Management",
+    "version": 1
+}

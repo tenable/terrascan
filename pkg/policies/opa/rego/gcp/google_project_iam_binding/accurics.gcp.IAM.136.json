@@ -1,0 +1,10 @@
+{
+    "name": "iamServiceAccountUsed",
+    "file": "iamServiceAccountUsed.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level.",
+    "reference_id": "accurics.gcp.IAM.136",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}
