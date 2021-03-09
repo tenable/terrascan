@@ -1,0 +1,10 @@
+{
+    "name": "weakCipherSuitesEnabled",
+    "file": "weakCipherSuitesEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites.",
+    "reference_id": "accurics.gcp.EKM.134",
+    "category": "Encryption \u0026 Key Management",
+    "version": 1
+}

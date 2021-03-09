@@ -1,0 +1,10 @@
+{
+    "name": "backupConfigEnabled",
+    "file": "backupConfigEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure all Cloud SQL database instance have backup configuration enabled.",
+    "reference_id": "accurics.gcp.BDR.105",
+    "category": "Backup \u0026 Disaster Recovery",
+    "version": 1
+}

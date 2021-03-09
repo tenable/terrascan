@@ -1,0 +1,10 @@
+{
+    "name": "cosNodeImageUsed",
+    "file": "cosNodeImageUsed.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image.",
+    "reference_id": "accurics.gcp.OPS.114",
+    "category": "Operational Efficiency",
+    "version": 1
+}

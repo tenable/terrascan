@@ -1,0 +1,10 @@
+{
+    "name": "legacyAuthEnabled",
+    "file": "legacyAuthEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters.",
+    "reference_id": "accurics.gcp.IAM.142",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}

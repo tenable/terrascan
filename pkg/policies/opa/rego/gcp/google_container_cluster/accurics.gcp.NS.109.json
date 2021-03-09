@@ -1,0 +1,10 @@
+{
+    "name": "gkeControlPlaneNotPublic",
+    "file": "gkeControlPlaneNotPublic.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure GKE Control Plane is not public.",
+    "reference_id": "accurics.gcp.NS.109",
+    "category": "Network Security",
+    "version": 1
+}

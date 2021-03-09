@@ -1,0 +1,10 @@
+{
+    "name": "checkNoPublicAccess",
+    "file": "checkNoPublicAccess.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that Cloud Storage bucket is not anonymously or publicly Accessible.",
+    "reference_id": "accurics.gcp.IAM.120",
+    "category": "Identity \u0026 Access Management",
+    "version": 1
+}

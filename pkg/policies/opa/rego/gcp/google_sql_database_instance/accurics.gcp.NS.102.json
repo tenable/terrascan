@@ -1,0 +1,10 @@
+{
+    "name": "checkNoPublicAccess",
+    "file": "checkDatabaseSettings.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that Cloud SQL database Instances are not open to the world.",
+    "reference_id": "accurics.gcp.NS.102",
+    "category": "Network Security",
+    "version": 1
+}

@@ -1,0 +1,10 @@
+{
+    "name": "checkRotation365Days",
+    "file": "checkRotation365Days.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Encryption keys are rotated within a period of 365 days.",
+    "reference_id": "accurics.gcp.EKM.007",
+    "category": "Encryption \u0026 Key Management",
+    "version": 1
+}

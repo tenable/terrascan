@@ -1,0 +1,10 @@
+{
+    "name": "autoCreateNetDisabled",
+    "file": "autoCreateNetDisabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that the default network does not exist in a project.",
+    "reference_id": "accurics.gcp.NS.119",
+    "category": "Network Security",
+    "version": 1
+}

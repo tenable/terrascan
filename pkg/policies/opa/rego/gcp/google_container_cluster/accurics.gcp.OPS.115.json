@@ -1,0 +1,10 @@
+{
+    "name": "ipAliasingEnabled",
+    "file": "ipAliasingEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Kubernetes Cluster is created with Alias IP ranges enabled",
+    "reference_id": "accurics.gcp.OPS.115",
+    "category": "Operational Efficiency",
+    "version": 1
+}

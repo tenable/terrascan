@@ -1,0 +1,13 @@
+{
+    "name": "autoNodeRepairEnabled",
+    "file": "autoNodePropDisabled.rego",
+    "template_args": {
+        "name": "autoNodeRepairEnabled",
+        "property": "auto_repair"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure 'Automatic node repair' is enabled for Kubernetes Clusters.",
+    "reference_id": "accurics.gcp.OPS.144",
+    "category": "Operational Efficiency",
+    "version": 1
+}
