@@ -1,0 +1,10 @@
+{
+    "name": "privateRepoEnabled",
+    "file": "privateRepoEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Repository is Not Private.",
+    "reference_id": "AC-GC-IA-GR-M-0001",
+    "category": "Identity and Access Management",
+    "version": 1
+}

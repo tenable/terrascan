@@ -1,0 +1,10 @@
+{
+    "name": "clusterLabelsEnabled",
+    "file": "clusterLabelsEnabled.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Kubernetes Clusters are configured with Labels.",
+    "reference_id": "AC-GC-CV-CC-H-0213",
+    "category": "Compliance Validation",
+    "version": 1
+}

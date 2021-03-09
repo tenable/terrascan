@@ -1,0 +1,10 @@
+{
+    "name": "checkRequireSSLEnabled",
+    "file": "checkDatabaseSettings.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure that Cloud SQL database instance requires all incoming connections to use SSL",
+    "reference_id": "AC-GC-IS-SQ-H-0229",
+    "category": "Infrastructure Security",
+    "version": 1
+}

@@ -1,0 +1,10 @@
+{
+    "name": "checkPubliclyAccessible",
+    "file": "checkPubliclyAccessible.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure that Cloud Storage bucket is not anonymously or publicly accessible.",
+    "reference_id": "AC-GC-IA-SI-M-0237",
+    "category": "Identity and Access Management",
+    "version": 1
+}

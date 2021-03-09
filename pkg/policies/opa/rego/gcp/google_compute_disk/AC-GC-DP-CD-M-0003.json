@@ -1,0 +1,10 @@
+{
+    "name": "vmEncryptedwithCsek",
+    "file": "vmEncryptedwithCsek.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) .",
+    "reference_id": "AC-GC-DP-CD-M-0003",
+    "category": "Data Protection",
+    "version": 1
+}

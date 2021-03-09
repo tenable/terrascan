@@ -1,0 +1,13 @@
+{
+    "name": "autoNodeUpgradeEnabled",
+    "file": "autoNodePropDisabled.rego",
+    "template_args": {
+        "name": "autoNodeUpgradeEnabled",
+        "property": "auto_upgrade"
+    },
+    "severity": "HIGH",
+    "description": "Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters.",
+    "reference_id": "AC-GC-SP-CN-H-0215",
+    "category": "Security Best Practices",
+    "version": 1
+}
