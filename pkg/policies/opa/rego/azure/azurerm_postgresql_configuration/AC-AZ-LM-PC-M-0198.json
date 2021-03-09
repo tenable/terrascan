@@ -1,0 +1,12 @@
+{
+    "name": "reme_connectionThrottling",
+    "file": "connectionThrottling.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "AC-AZ-LM-PC-M-0198",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

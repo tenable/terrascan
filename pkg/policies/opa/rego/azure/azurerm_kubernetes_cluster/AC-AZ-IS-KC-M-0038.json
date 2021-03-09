@@ -1,0 +1,10 @@
+{
+    "name": "networkPolicyEnabled",
+    "file": "networkPolicyEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure AKS cluster has Network Policy configured.",
+    "reference_id": "AC-AZ-IS-KC-M-0038",
+    "category": "Infrastructure Security",
+    "version": 1
+}

@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort2484ExposedPrivateWideUdp",
+  "file": "networkPortExposedPrivate.rego",
+  "template_args": {
+    "endLimit": 1,
+    "evalHosts": false,
+    "name": "networkPort2484ExposedPrivateWideUdp",
+    "numberOfHosts": 24,
+    "portNumber": 2484,
+    "prefix": "reme_",
+    "protocol": "UDP"
+  },
+  "severity": "Low",
+  "description": "Oracle DB SSL (UDP:2484) is exposed to wide Private network",
+  "reference_id": "AC-AZ-IS-NS-L-0149",
+  "category": "Infrastructure Security",
+  "version": 2
+}

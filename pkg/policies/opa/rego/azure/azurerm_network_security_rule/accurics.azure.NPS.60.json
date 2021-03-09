@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "MSSQL Server (TCP:1433) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.60",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

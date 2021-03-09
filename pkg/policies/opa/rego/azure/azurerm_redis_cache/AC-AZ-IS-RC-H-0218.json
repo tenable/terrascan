@@ -1,0 +1,14 @@
+{
+    "name": "reme_entirelyAccessible",
+    "file": "publiclyAccessible.rego",
+    "template_args": {
+        "isEntire": true,
+        "name": "entirelyAccessible",
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet",
+    "reference_id": "AC-AZ-IS-RC-H-0218",
+    "category": "Infrastructure Security",
+    "version": 2
+}

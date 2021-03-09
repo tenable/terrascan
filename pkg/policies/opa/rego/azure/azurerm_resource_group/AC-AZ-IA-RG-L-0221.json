@@ -1,0 +1,12 @@
+{
+    "name": "reme_resourceGroupLock",
+    "file": "resourceGroupLock.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "LOW",
+    "description": "Ensure that Azure Resource Group has resource lock enabled",
+    "reference_id": "AC-AZ-IA-RG-L-0221",
+    "category": "Identity and Access Management",
+    "version": 2
+}

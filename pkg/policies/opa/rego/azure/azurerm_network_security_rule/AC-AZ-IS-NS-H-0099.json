@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort135ExposedPublicEntire",
+  "file": "networkPortExposedPublic.rego",
+  "template_args": {
+    "endLimit": 0,
+    "evalHosts": true,
+    "name": "networkPort135ExposedPublicEntire",
+    "numberOfHosts": 1,
+    "portNumber": 135,
+    "prefix": "reme_",
+    "protocol": "TCP"
+  },
+  "severity": "High",
+  "description": "MSSQL Debugger (TCP:135) is exposed to entire Public network",
+  "reference_id": "AC-AZ-IS-NS-H-0099",
+  "category": "Infrastructure Security",
+  "version": 2
+}

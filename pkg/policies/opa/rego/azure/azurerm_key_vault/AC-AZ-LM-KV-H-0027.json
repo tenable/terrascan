@@ -1,0 +1,12 @@
+{
+    "name": "reme_keyVaultAuditLoggingEnabled",
+    "file": "keyVaultAuditLoggingEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that logging for Azure KeyVault is 'Enabled'",
+    "reference_id": "AC-AZ-LM-KV-H-0027",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

@@ -1,0 +1,18 @@
+{
+  "name": "reme_networkPort445ExposedPublicEntire",
+  "file": "networkPortExposedPublic.rego",
+  "template_args": {
+    "endLimit": 0,
+    "evalHosts": true,
+    "name": "networkPort445ExposedPublicEntire",
+    "numberOfHosts": 1,
+    "portNumber": 445,
+    "prefix": "reme_",
+    "protocol": "TCP"
+  },
+  "severity": "High",
+  "description": "Microsoft-DS (TCP:445) is exposed to entire Public network",
+  "reference_id": "AC-AZ-IS-NS-H-0117",
+  "category": "Infrastructure Security",
+  "version": 2
+}
