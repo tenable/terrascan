@@ -1,0 +1,12 @@
+{
+    "name": "reme_appGatewayWAFEnabled",
+    "file": "appGatewayWAFEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Azure Application Gateway Web application firewall (WAF) is enabled",
+    "reference_id": "accurics.azure.NS.147",
+    "category": "Network Security",
+    "version": 2
+}

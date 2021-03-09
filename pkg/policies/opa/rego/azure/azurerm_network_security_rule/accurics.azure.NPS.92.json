@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "POP3 (TCP:110) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.92",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

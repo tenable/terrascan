@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "VNC Server (TCP:5900) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.253",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

@@ -1,0 +1,12 @@
+{
+    "name": "reme_sqlServerPredictableAccount",
+    "file": "sqlServerPredictableAccount.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Avoid using names like 'Admin' for an Azure SQL Server admin account login",
+    "reference_id": "accurics.azure.IAM.138",
+    "category": "Identity and Access Management",
+    "version": 2
+}

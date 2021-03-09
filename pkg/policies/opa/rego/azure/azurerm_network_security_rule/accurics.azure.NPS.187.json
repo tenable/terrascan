@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "LDAP SSL (TCP:636) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.187",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

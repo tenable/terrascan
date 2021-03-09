@@ -1,0 +1,12 @@
+{
+    "name": "reme_resourceGroupLock",
+    "file": "resourceGroupLock.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "LOW",
+    "description": "Ensure that Azure Resource Group has resource lock enabled",
+    "reference_id": "accurics.azure.NS.272",
+    "category": "Network Security",
+    "version": 2
+}

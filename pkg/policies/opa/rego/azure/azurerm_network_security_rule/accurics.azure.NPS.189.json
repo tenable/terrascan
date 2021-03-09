@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "MSSQL Admin (TCP:1434) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.189",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

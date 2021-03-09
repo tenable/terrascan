@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Puppet Master (TCP:8140) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.100",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

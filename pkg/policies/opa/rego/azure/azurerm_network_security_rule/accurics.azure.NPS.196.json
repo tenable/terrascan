@@ -1,0 +1,18 @@
+{
+    "name": "reme_networkPort1433ExposedPrivateWide",
+    "file": "networkPortExposedPrivate.rego",
+    "template_args": {
+        "endLimit": 1,
+        "evalHosts": false,
+        "name": "networkPort1433ExposedPrivateWide",
+        "numberOfHosts": 24,
+        "portNumber": 1433,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "MEDIUM",
+    "description": "MSSQL Server (TCP:1433) is exposed to wide Private network",
+    "reference_id": "accurics.azure.NPS.196",
+    "category": "Network Ports Security",
+    "version": 2
+}

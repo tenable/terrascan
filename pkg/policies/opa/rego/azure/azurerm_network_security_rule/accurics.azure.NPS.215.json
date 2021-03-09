@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "NetBIOS Datagram Service (TCP:138) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.215",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

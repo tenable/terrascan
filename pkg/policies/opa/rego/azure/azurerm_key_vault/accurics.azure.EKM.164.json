@@ -1,0 +1,12 @@
+{
+    "name": "reme_keyVaultSoftDeleteEnabled",
+    "file": "keyVaultSoftDeleteEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure the key vault is recoverable - enable \"Soft Delete\" setting for a Key Vault",
+    "reference_id": "accurics.azure.EKM.164",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

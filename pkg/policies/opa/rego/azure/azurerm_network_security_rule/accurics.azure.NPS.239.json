@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "SNMP (UDP:161) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.239",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

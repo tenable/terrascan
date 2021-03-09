@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "SQL Server Analysis (TCP:2383) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.243",
-    "category": "Infrastructure Security",
+    "category": "Network Ports Security",
     "version": 2
 }

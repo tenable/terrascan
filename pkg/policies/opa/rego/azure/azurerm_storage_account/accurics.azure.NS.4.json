@@ -1,0 +1,12 @@
+{
+    "name": "reme_storageAccountOpenToPublic",
+    "file": "storageAccountOpenToPublic.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure default network access rule for Storage Accounts is not open to public",
+    "reference_id": "accurics.azure.NS.4",
+    "category": "Network Security",
+    "version": 2
+}

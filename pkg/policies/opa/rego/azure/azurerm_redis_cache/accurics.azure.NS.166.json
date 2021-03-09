@@ -1,0 +1,12 @@
+{
+    "name": "reme_allowLessHosts",
+    "file": "allowLessHosts.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs",
+    "reference_id": "accurics.azure.NS.166",
+    "category": "Network Security",
+    "version": 2
+}

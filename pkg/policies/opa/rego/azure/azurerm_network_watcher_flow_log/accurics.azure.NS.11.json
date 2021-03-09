@@ -1,0 +1,12 @@
+{
+    "name": "reme_networkWatcherEnabled",
+    "file": "networkWatcherCheck.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure.",
+    "reference_id": "accurics.azure.NS.11",
+    "category": "Network Security",
+    "version": 1
+}

@@ -1,0 +1,12 @@
+{
+    "name": "reme_storageAccountTrustedMicrosoftServicesEnabled",
+    "file": "storageAccountTrustedMicrosoftServicesEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access",
+    "reference_id": "accurics.azure.NS.2",
+    "category": "Network Security",
+    "version": 2
+}

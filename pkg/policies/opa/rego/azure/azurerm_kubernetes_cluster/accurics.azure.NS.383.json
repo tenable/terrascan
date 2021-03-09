@@ -1,0 +1,10 @@
+{
+    "name": "kubeDashboardDisabled",
+    "file": "kubeDashboardDisabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure Kube Dashboard is disabled",
+    "reference_id": "accurics.azure.NS.383",
+    "category": "Network Security",
+    "version": 1
+}

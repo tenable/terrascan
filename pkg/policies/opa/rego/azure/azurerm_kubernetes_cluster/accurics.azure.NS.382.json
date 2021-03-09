@@ -1,0 +1,10 @@
+{
+    "name": "networkPolicyEnabled",
+    "file": "networkPolicyEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure AKS cluster has Network Policy configured.",
+    "reference_id": "accurics.azure.NS.382",
+    "category": "Network Security",
+    "version": 1
+}

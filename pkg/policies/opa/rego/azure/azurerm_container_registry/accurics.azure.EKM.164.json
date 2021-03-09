@@ -1,0 +1,12 @@
+{
+    "name": "reme_containerRegistryAdminEnabled",
+    "file": "containerRegistryAdminEnabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that admin user is disabled for Container Registry",
+    "reference_id": "accurics.azure.EKM.164",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

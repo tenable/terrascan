@@ -1,0 +1,12 @@
+{
+    "name": "reme_geoRedundancyDisabled",
+    "file": "geoRedundancyDisabled.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that Geo Redundant Backups is enabled on PostgreSQL",
+    "reference_id": "accurics.azure.BDR.163",
+    "category": "Backup and Disaster Recovery",
+    "version": 2
+}

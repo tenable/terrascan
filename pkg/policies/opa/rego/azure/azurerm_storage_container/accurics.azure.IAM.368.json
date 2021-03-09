@@ -1,0 +1,12 @@
+{
+    "name": "reme_checkStorageContainerAccess",
+    "file": "checkStorageContainerAccess.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary.",
+    "reference_id": "accurics.azure.IAM.368",
+    "category": "Identity and Access Management",
+    "version": 1
+}
