@@ -1,0 +1,16 @@
+{
+    "name": "containerHasAllowedCapabilities",
+    "file": "containerHasAllowedCapabilities.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerHasAllowedCapabilities",
+        "prefix": "",
+        "resource_type": "kubernetes_replication_controller",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Pod has extra capabilities allowed",
+    "reference_id": "AC-K8-IA-PK-M-0087",
+    "category": "Identity and Access Management",
+    "version": 1
+}

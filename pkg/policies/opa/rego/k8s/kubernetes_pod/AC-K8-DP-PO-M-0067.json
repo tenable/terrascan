@@ -1,0 +1,14 @@
+{
+    "name": "kubeDashboardEnabled",
+    "file": "kubeDashboardEnabled.rego",
+    "template_args": {
+        "name": "kubeDashboardEnabled",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Kubernetes Dashboard Is Not Deployed",
+    "reference_id": "AC-K8-DP-PO-M-0067",
+    "category": "Data Protection",
+    "version": 1
+}

@@ -1,0 +1,16 @@
+{
+    "name": "containerUsesSecretsInEnvironmentVar",
+    "file": "containerUsesSecretsInEnvironmentVar.rego",
+    "template_args": {
+        "is_init": true,
+        "name": "containerUsesSecretsInEnvironmentVar",
+        "prefix": "",
+        "resource_type": "kubernetes_deployment",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Container uses secrets in environment variables",
+    "reference_id": "AC-K8-DP-PO-H-0067",
+    "category": "Data Protection",
+    "version": 1
+}

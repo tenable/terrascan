@@ -1,0 +1,14 @@
+{
+    "name": "priviledgedContainersEnabled",
+    "file": "priviledgedContainersEnabled.rego",
+    "template_args": {
+        "name": "priviledgedContainersEnabled",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Minimize the admission of privileged containers",
+    "reference_id": "AC-K8-IA-PO-H-0046",
+    "category": "Identity and Access Management",
+    "version": 1
+}

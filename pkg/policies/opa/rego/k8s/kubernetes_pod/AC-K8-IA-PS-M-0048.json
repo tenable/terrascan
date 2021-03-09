@@ -1,0 +1,15 @@
+{
+    "name": "netRawCapabilityUsed",
+    "file": "capabilityUsed.rego",
+    "template_args": {
+        "attribute": "requiredDropCapabilities",
+        "name": "netRawCapabilityUsed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Minimize the admission of containers with the NET_RAW capability",
+    "reference_id": "AC-K8-IA-PS-M-0048",
+    "category": "Identity and Access Management",
+    "version": 1
+}
