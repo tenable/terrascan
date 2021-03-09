@@ -1,0 +1,14 @@
+{
+    "name": "passwordRequireUpperCase",
+    "file": "passwordPolicyRequirement.rego",
+    "template_args": {
+        "name": "passwordRequireUpperCase",
+        "prefix": "",
+        "required_parameter": "require_uppercase_characters"
+    },
+    "severity": "MEDIUM",
+    "description": "Upper case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
+    "reference_id": "AC-AW-CV-IA-M-0128",
+    "category": "Compliance Validation",
+    "version": 2
+}

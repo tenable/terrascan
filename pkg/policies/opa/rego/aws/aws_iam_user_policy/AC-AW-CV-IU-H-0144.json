@@ -1,0 +1,12 @@
+{
+    "name": "userWithPassNotContainMfaActive",
+    "file": "passAndMFA.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "It is recommended that MFA be enabled for all accounts that have a console password. Enabling MFA provides increased security for console access as it requires the authenticating principal to possess a device that emits a time-sensitive key and have knowledge of a credential",
+    "reference_id": "AC-AW-CV-IU-H-0144",
+    "category": "Compliance Validation",
+    "version": 1
+}

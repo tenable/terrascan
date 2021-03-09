@@ -1,0 +1,12 @@
+{
+    "name": "rdsIsPublic",
+    "file": "rdsIsPublic.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "RDS should not be defined with public interface. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment.",
+    "reference_id": "AC-AW-IS-DS-H-0066",
+    "category": "Infrastructure Security",
+    "version": 2
+}

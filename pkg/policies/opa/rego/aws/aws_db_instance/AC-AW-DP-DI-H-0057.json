@@ -1,0 +1,12 @@
+{
+    "name": "rdsCAExpired",
+    "file": "rdsCAExpired.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Certificate used in RDS instance is updated",
+    "reference_id": "AC-AW-DP-DI-H-0057",
+    "category": "Data Protection",
+    "version": 2
+}

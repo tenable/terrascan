@@ -1,0 +1,10 @@
+{
+    "name": "awsMqLoggingEnabled",
+    "file": "awsMqLoggingEnabled.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable AWS MQ Log Exports",
+    "reference_id": "AC-AW-LM-MQ-M-0167",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

@@ -1,0 +1,12 @@
+{
+    "name": "rootUserNotContainMfaTypeVirtual",
+    "file": "rootUserNotContainMfaTypeVirtual.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Virtual MFA device is enabled for the \"root\" account",
+    "reference_id": "AC-AW-CV-IU-H-0142",
+    "category": "Compliance Validation",
+    "version": 1
+}

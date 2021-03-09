@@ -1,0 +1,12 @@
+{
+    "name": "redshiftAuditLogs",
+    "file": "redshiftAuditLogs.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure audit logging is enabled for Redshift clusters for security and troubleshooting purposes.",
+    "reference_id": "AC-AW-LM-RC-M-0193",
+    "category": "Logging and Monitoring",
+    "version": 2
+}

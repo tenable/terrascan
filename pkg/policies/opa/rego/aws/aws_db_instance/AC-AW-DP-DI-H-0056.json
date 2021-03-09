@@ -1,0 +1,12 @@
+{
+    "name": "rdsAutoMinorVersionUpgradeEnabled",
+    "file": "rdsAutoMinorVersionUpgradeEnabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
+    "reference_id": "AC-AW-DP-DI-H-0056",
+    "category": "Data Protection",
+    "version": 2
+}

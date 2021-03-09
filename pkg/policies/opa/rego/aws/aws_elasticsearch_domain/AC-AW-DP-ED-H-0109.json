@@ -1,0 +1,10 @@
+{
+    "name": "elastiSearchEncryptAtRest",
+    "file": "elastiSearchEncryptAtRest.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Enable AWS ElasticSearch Encryption At Rest",
+    "reference_id": "AC-AW-DP-ED-H-0109",
+    "category": "Data Protection",
+    "version": 1
+}

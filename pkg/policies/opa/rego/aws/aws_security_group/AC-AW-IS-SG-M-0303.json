@@ -1,0 +1,15 @@
+{
+    "name": "port2383AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port2383AlbNetworkPortSecurityPublicScope",
+        "portNumber": 2383,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'SQL Server Analysis Services' (TCP:2383) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0303",
+    "category": "Infrastructure Security",
+    "version": 2
+}

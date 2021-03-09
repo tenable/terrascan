@@ -1,0 +1,15 @@
+{
+    "name": "port138AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port138AlbNetworkPortSecurityPublicScope",
+        "portNumber": 138,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'NetBIOS Datagram Service' (TCP:138) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0291",
+    "category": "Infrastructure Security",
+    "version": 2
+}

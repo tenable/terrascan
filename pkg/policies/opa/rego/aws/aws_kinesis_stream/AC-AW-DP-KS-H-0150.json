@@ -1,0 +1,12 @@
+{
+    "name": "kinesisNotEncryptedWithKms",
+    "file": "aws_kinesis_stream.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Kinesis Streams and metadata are not protected",
+    "reference_id": "AC-AW-DP-KS-H-0150",
+    "category": "Data Protection",
+    "version": 2
+}

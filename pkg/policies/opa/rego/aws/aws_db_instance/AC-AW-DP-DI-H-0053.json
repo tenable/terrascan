@@ -1,0 +1,12 @@
+{
+    "name": "rdsIamAuthEnabled",
+    "file": "rdsIamAuthEnabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that your RDS database has IAM Authentication enabled.",
+    "reference_id": "AC-AW-DP-DI-H-0053",
+    "category": "Data Protection",
+    "version": 2
+}

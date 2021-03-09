@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewaySslCertificate",
+    "file": "apiGatewaySslCertificate.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable SSL Client Certificate",
+    "reference_id": "AC-AW-IS-AS-M-0013",
+    "category": "Infrastructure Security",
+    "version": 1
+}

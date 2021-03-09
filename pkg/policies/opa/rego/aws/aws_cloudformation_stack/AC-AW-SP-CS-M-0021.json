@@ -1,0 +1,13 @@
+{
+    "name": "cloudFormationStackNotifs",
+    "file": "cloudFormationNullCheck.rego",
+    "template_args": {
+        "name": "cloudFormationStackNotifs",
+        "property": "notification_arns"
+    },
+    "severity": "MEDIUM",
+    "description": "Enable AWS CloudFormation Stack Notifications",
+    "reference_id": "AC-AW-SP-CS-M-0021",
+    "category": "Security Best Practices",
+    "version": 1
+}

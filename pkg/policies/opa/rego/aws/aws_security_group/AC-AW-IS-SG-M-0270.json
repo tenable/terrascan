@@ -1,0 +1,16 @@
+{
+    "name": "port4505AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port4505AlbNetworkPortSecurityPublicScope",
+        "numberOfHosts": -1,
+        "portNumber": 4505,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'SaltStack Master' (TCP:4505) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0270",
+    "category": "Infrastructure Security",
+    "version": 2
+}

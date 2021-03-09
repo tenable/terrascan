@@ -1,0 +1,12 @@
+{
+    "name": "scanOnPushDisabled",
+    "file": "scanOnPushDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Unscanned images may contain vulnerabilities",
+    "reference_id": "AC-AW-CA-ER-M-0083",
+    "category": "Configuration and Vulnerability Analysis",
+    "version": 2
+}

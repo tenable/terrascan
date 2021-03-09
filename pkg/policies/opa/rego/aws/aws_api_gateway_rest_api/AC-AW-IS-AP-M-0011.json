@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayEndpointConfig",
+    "file": "apiGatewayEndpointConfig.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "API Gateway Private Endpoints",
+    "reference_id": "AC-AW-IS-AP-M-0011",
+    "category": "Infrastructure Security",
+    "version": 1
+}

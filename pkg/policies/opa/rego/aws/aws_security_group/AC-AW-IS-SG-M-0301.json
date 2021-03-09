@@ -1,0 +1,15 @@
+{
+    "name": "port161UdpAlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port161UdpAlbNetworkPortSecurityPublicScope",
+        "portNumber": 161,
+        "prefix": "",
+        "protocol": "udp"
+    },
+    "severity": "MEDIUM",
+    "description": "'SNMP' (UDP:161) is accessible by a CIDR block range",
+    "reference_id": "AC-AW-IS-SG-M-0301",
+    "category": "Infrastructure Security",
+    "version": 2
+}
