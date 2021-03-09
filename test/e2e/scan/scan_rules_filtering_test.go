@@ -217,7 +217,11 @@ var _ = Describe("Scan command with rule filtering options", func() {
 
 			Context("invalid category is specified in config file", func() {
 				It("should error out and exit with status code 3", func() {
-					Skip("skipping this test due to https://github.com/accurics/terrascan/issues/594, should be implemented when fixed")
+					configFileAbsPath, err := filepath.Abs(filepath.Join("config", "invalid_category.toml"))
+					Expect(err).NotTo(HaveOccurred())
+
+					scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-c", configFileAbsPath}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, categoryIncorrectError, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})
