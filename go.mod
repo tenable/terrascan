@@ -16,7 +16,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl/v2 v2.8.2
-	github.com/hashicorp/terraform v0.14.4
+	github.com/hashicorp/terraform v0.14.7
 	github.com/iancoleman/strcase v0.1.3
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
