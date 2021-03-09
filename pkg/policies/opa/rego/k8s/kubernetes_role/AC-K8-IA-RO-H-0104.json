@@ -1,0 +1,14 @@
+{
+    "name": "defaultServiceAccountUsed",
+    "file": "defaultServiceAccountUsed.rego",
+    "template_args": {
+        "name": "defaultServiceAccountUsed",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that default service accounts are not actively used",
+    "reference_id": "AC-K8-IA-RO-H-0104",
+    "category": "Identity and Access Management",
+    "version": 1
+}

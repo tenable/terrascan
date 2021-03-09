@@ -1,0 +1,14 @@
+{
+    "name": "tillerServiceDeleted",
+    "file": "tillerServiceDeleted.rego",
+    "template_args": {
+        "name": "tillerServiceDeleted",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that the Tiller Service (Helm v2) is deleted",
+    "reference_id": "AC-K8-NS-SE-M-0185",
+    "category": "Network Security",
+    "version": 1
+}
