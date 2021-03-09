@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
 	"strings"
 
@@ -63,12 +64,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	// fileExtension will include the period. (eg ".yaml")
+	fileExtension := path.Ext(handler.Filename)
+
 	zap.S().Debugf("uploaded file: %+v", handler.Filename)
+	zap.S().Debugf("uploaded file extension: %+v", fileExtension)
 	zap.S().Debugf("file size: %+v", handler.Size)
 	zap.S().Debugf("MIME header: %+v", handler.Header)
 
 	// Create a temporary file within temp directory
-	tempFile, err := ioutil.TempFile("", "terrascan-*.tf")
+	tempFileTemplate := fmt.Sprintf("terrascan-*%s", fileExtension)
+	tempFile, err := ioutil.TempFile("", tempFileTemplate)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to create temp file. error: '%v'", err)
 		zap.S().Error(errMsg)

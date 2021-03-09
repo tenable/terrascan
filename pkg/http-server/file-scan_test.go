@@ -233,6 +233,22 @@ func TestUpload(t *testing.T) {
 			invalidShowPassed: true,
 			wantStatus:        http.StatusBadRequest,
 		},
+		{
+			name:       "scan valid kubernetes yaml",
+			path:       "../iac-providers/kubernetes/v1/testdata/yaml-extension2/test_pod.yml",
+			param:      testParamName,
+			iacType:    "k8s",
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "scan valid tfplan json",
+			path:       "../iac-providers/tfplan/v1/testdata/valid-tfplan.json",
+			param:      testParamName,
+			iacType:    "tfplan",
+			cloudType:  testCloudType,
+			wantStatus: http.StatusOK,
+		},
 	}
 
 	for _, tt := range table {
