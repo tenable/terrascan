@@ -1,0 +1,12 @@
+{
+    "name": "noPasswordPolicyEnabled",
+    "file": "noPasswordPolicyEnabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Password policies are, in part, used to enforce password complexity requirements. IAM password policies can be used to ensure password are comprised of different character sets, have minimal length, rotation and history restrictions",
+    "reference_id": "AWS.Iam.IAM.High.0391",
+    "category": "Identity and Access Management",
+    "version": 2
+}

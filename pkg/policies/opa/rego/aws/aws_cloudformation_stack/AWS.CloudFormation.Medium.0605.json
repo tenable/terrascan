@@ -1,0 +1,10 @@
+{
+    "name": "cloudFormationTerminationProtection",
+    "file": "cloudFormationTerminationProtection.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable AWS CloudFormation Stack Termination Protection",
+    "reference_id": "AWS.CloudFormation.Medium.0605",
+    "category": " ",
+    "version": 1
+}

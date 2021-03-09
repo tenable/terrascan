@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayTracing",
+    "file": "apiGatewayTracing.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Enable Active Tracing",
+    "reference_id": "AWS.API Gateway.Logging.Medium.0571",
+    "category": "Logging",
+    "version": 2
+}

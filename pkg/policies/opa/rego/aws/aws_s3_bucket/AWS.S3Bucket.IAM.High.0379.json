@@ -1,0 +1,14 @@
+{
+    "name": "allUsersWriteAccess",
+    "file": "s3AclGrants.rego",
+    "template_args": {
+        "access": "public-read-write",
+        "name": "allUsersWriteAccess",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion",
+    "reference_id": "AWS.S3Bucket.IAM.High.0379",
+    "category": "IAM",
+    "version": 2
+}

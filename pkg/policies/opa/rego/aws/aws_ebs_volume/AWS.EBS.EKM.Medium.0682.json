@@ -1,0 +1,13 @@
+{
+    "name": "ebsSnapshotDisabled",
+    "file": "ebsSnapshot.rego",
+    "template_args": {
+        "name": "ebsSnapshotDisabled",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Enable AWS EBS Snapshot Encryption",
+    "reference_id": "AWS.EBS.EKM.Medium.0682",
+    "category": "Encryption and Key Management",
+    "version": 1
+}

@@ -1,0 +1,14 @@
+{
+    "name": "containerDefinitionContainsPASSWORD",
+    "file": "containerDefinitionContainsSensitiveInfo.rego",
+    "template_args": {
+        "keyword": "PASSWORD",
+        "name": "containerDefinitionContainsPASSWORD",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Sensitive Information Disclosure",
+    "reference_id": "AWS.LaunchConfiguration.DataSecurity.High.0101",
+    "category": "Data Security",
+    "version": 1
+}

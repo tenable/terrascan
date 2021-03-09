@@ -1,0 +1,12 @@
+{
+    "name": "kmsKeyExposedPolicy",
+    "file": "kmsKeyExposedPolicy.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Identify any publicly accessible AWS Key Management Service master keys and update their access policy in order to stop any unsigned requests made to these resources.",
+    "reference_id": "AWS.KMS.NetworkSecurity.High.0566",
+    "category": "Network Security",
+    "version": 2
+}

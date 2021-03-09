@@ -1,0 +1,14 @@
+{
+    "name": "noMemcachedInElastiCache",
+    "file": "noMemcachedInElastiCache.rego",
+    "template_args": {
+        "elasticache_engine": "memcached",
+        "name": "noMemcachedInElastiCache",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "ElastiCache for Memcached is not in use in AWS PCI DSS environments",
+    "reference_id": "AWS.ElastiCache.DataSecurity.High.0424",
+    "category": "Data Security",
+    "version": 2
+}

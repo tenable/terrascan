@@ -1,0 +1,10 @@
+{
+    "name": "awsMqPubliclyAccessible",
+    "file": "awsMqPubliclyAccessible.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Publicly Accessible MQ Brokers",
+    "reference_id": "AWS.ElasticSearch.NetworkSecurity.Medium.0887",
+    "category": "Network Security",
+    "version": 1
+}

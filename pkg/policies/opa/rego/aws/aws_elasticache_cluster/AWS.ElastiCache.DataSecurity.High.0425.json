@@ -1,0 +1,19 @@
+{
+    "name": "redisVersionCompliance",
+    "file": "redisVersionCompliance.rego",
+    "template_args": {
+        "allowed_versions": [
+            "3.2.6",
+            "3.2.10",
+            "4.0.10",
+            "5.0.0"
+        ],
+        "engine": "redis",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "ElastiCache for Redis version is not compliant with AWS PCI DSS requirements",
+    "reference_id": "AWS.ElastiCache.DataSecurity.High.0425",
+    "category": "Data Security",
+    "version": 2
+}

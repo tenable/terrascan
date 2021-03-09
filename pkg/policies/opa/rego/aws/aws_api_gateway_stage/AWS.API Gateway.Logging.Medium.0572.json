@@ -1,0 +1,12 @@
+{
+    "name": "apiGatewayLogging",
+    "file": "apiGatewayLogging.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that AWS CloudWatch logs are enabled for all your APIs created with Amazon API Gateway service in order to track and analyze execution behavior at the API stage level.",
+    "reference_id": "AWS.API Gateway.Logging.Medium.0572",
+    "category": "Logging",
+    "version": 2
+}

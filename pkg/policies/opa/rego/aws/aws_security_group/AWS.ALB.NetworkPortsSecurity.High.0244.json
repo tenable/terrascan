@@ -1,0 +1,15 @@
+{
+    "name": "port11214UdpAlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port11214UdpAlbNetworkPortSecurityPublicScope",
+        "portNumber": 11214,
+        "prefix": "",
+        "protocol": "udp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Memcached SSL' (UDP:11214) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0244",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "ecrRepoIsPublic",
+    "file": "ecrRepoIsPublic.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Identify any exposed Amazon ECR image repositories available within your AWS account and update their permissions in order to protect against unauthorized access. Amazon Elastic Container Registry (ECR) is a managed Docker registry service that makes it easy for DevOps teams to store, manage and deploy Docker container images. An ECR repository is a collection of Docker images available on AWS cloud.",
+    "reference_id": "AWS.ECR.DataSecurity.High.0579",
+    "category": "Data Security",
+    "version": 2
+}

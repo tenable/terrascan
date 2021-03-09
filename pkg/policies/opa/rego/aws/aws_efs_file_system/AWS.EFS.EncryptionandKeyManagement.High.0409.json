@@ -1,0 +1,13 @@
+{
+    "name": "efsEncryptedFalse",
+    "file": "efsEncryptedFalse.rego",
+    "template_args": {
+        "name": "efsEncryptedFalse",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization.",
+    "reference_id": "AWS.EFS.EncryptionandKeyManagement.High.0409",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

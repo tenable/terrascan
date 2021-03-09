@@ -1,0 +1,13 @@
+{
+    "name": "awsCloudFormationInUse",
+    "file": "cloudFormationNullCheck.rego",
+    "template_args": {
+        "name": "awsCloudFormationInUse",
+        "property": "template_url"
+    },
+    "severity": "MEDIUM",
+    "description": "AWS CloudFormation Not In Use",
+    "reference_id": "AWS.CloudFormation.Medium.0599",
+    "category": " ",
+    "version": 1
+}

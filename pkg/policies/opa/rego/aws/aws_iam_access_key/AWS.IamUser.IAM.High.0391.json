@@ -1,0 +1,12 @@
+{
+    "name": "programmaticAccessCreation",
+    "file": "programmaticAccessCreation.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that there are no exposed Amazon IAM access keys in order to protect your AWS resources against unapproved access",
+    "reference_id": "AWS.IamUser.IAM.High.0391",
+    "category": "Identity and Access Management",
+    "version": 2
+}

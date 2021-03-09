@@ -1,0 +1,10 @@
+{
+    "name": "apiGatewayEndpointConfig",
+    "file": "apiGatewayEndpointConfig.rego",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "API Gateway Private Endpoints",
+    "reference_id": "AWS.APIGateway.Network Security.Medium.0570",
+    "category": "Network Security",
+    "version": 1
+}

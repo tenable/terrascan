@@ -1,0 +1,15 @@
+{
+    "name": "port8000AlbNetworkPortSecurityPublicScope",
+    "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "template_args": {
+        "name": "port8000AlbNetworkPortSecurityPublicScope",
+        "portNumber": 8000,
+        "prefix": "",
+        "protocol": "tcp"
+    },
+    "severity": "MEDIUM",
+    "description": "'Known internal web port' (TCP:8000) is accessible by a CIDR block range",
+    "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0226",
+    "category": "Network Ports Security",
+    "version": 2
+}

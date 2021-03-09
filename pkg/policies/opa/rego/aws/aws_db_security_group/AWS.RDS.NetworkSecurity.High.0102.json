@@ -1,0 +1,12 @@
+{
+    "name": "rdsScopeIsPublic",
+    "file": "rdsScopeIsPublic.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "RDS should not be open to a public scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment.",
+    "reference_id": "AWS.RDS.NetworkSecurity.High.0102",
+    "category": "Network Security",
+    "version": 2
+}

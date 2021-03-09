@@ -1,0 +1,12 @@
+{
+    "name": "ebsDefaultEncryption",
+    "file": "ebsDefaultEncryption.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that the AWS EBS that hold sensitive and critical data is encrypted by default to fulfill compliance requirements for data-at-rest encryption.",
+    "reference_id": "AWS.EBS.DataSecurity.High.0580",
+    "category": "Data Security",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "scpFullAccess",
+    "file": "scpFullAccess.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that All Features is enabled within your Amazon Organizations to achieve full control over the use of AWS services and actions across multiple AWS accounts using Service Control Policies (SCPs).",
+    "reference_id": "AWS.Organizations.IAM.MEDIUM.0590",
+    "category": "IAM",
+    "version": 2
+}

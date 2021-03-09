@@ -1,0 +1,12 @@
+{
+    "name": "allowActionsFromAllPrincipals",
+    "file": "allowActionsFromAllPrincipals.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion",
+    "reference_id": "AWS.S3Bucket.IAM.High.0371",
+    "category": "Identity and Access Management",
+    "version": 2
+}

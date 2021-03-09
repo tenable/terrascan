@@ -1,0 +1,12 @@
+{
+    "name": "portWideOpenToPublic",
+    "file": "portWideOpenToPublic.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "It is recommended that no security group allows unrestricted ingress access",
+    "reference_id": "AWS.SecurityGroup.NPS.High.1045",
+    "category": "Network Ports Security",
+    "version": 2
+}

@@ -1,0 +1,13 @@
+{
+    "name": "efsEncryptedWithNoKms",
+    "file": "efsEncryptedWithNoKms.rego",
+    "template_args": {
+        "name": "efsEncryptedWithNoKms",
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization.",
+    "reference_id": "AWS.EFS.EncryptionandKeyManagement.High.0410",
+    "category": "Encryption and Key Management",
+    "version": 2
+}

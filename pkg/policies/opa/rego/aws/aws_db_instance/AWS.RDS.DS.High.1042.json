@@ -1,0 +1,12 @@
+{
+    "name": "rdsCAExpired",
+    "file": "rdsCAExpired.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Certificate used in RDS instance is updated",
+    "reference_id": "AWS.RDS.DS.High.1042",
+    "category": "Data Security",
+    "version": 2
+}

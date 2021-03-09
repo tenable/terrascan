@@ -1,0 +1,12 @@
+{
+    "name": "amiSharedToMultipleAccounts",
+    "file": "amiSharedToMultipleAccounts.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Limit access to AWS AMIs",
+    "reference_id": "AWS.AMI.NS.Medium.1040",
+    "category": "Network Security",
+    "version": 2
+}

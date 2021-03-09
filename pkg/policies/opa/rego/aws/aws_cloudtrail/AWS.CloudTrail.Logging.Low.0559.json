@@ -1,0 +1,12 @@
+{
+    "name": "reme_enableSNSTopic",
+    "file": "enableSNSTopic.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure appropriate subscribers to each SNS topic",
+    "reference_id": "AWS.CloudTrail.Logging.Low.0559",
+    "category": "Logging",
+    "version": 1
+}

@@ -1,0 +1,12 @@
+{
+    "name": "elbLbProtocolNotSecured",
+    "file": "elbLbProtocolNotSecured.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "AWS ELB incoming traffic not encrypted",
+    "reference_id": "AWS.ELB.NetworkPortsSecurity.Low.0563",
+    "category": "Network Ports Security",
+    "version": 2
+}

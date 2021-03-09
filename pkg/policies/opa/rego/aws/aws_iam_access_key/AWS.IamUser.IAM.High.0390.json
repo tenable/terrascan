@@ -1,0 +1,12 @@
+{
+    "name": "noAccessKeyForRootAccount",
+    "file": "noAccessKeyForRootAccount.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "The root account is the most privileged user in an AWS account. AWS Access Keys provide programmatic access to a given AWS account. It is recommended that all access keys associated with the root account be removed. Removing access keys associated with the root account limits vectors by which the account can be compromised. Additionally, removing the root access keys encourages the creation and use of role based accounts that are least privileged.",
+    "reference_id": "AWS.IamUser.IAM.High.0390",
+    "category": "Identity and Access Management",
+    "version": 2
+}

@@ -1,0 +1,13 @@
+{
+    "name": "cloudFormationStackNotifs",
+    "file": "cloudFormationNullCheck.rego",
+    "template_args": {
+        "name": "cloudFormationStackNotifs",
+        "property": "notification_arns"
+    },
+    "severity": "MEDIUM",
+    "description": "Enable AWS CloudFormation Stack Notifications",
+    "reference_id": "AWS.CloudFormation.Medium.0603",
+    "category": " ",
+    "version": 1
+}
