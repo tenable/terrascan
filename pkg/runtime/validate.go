@@ -28,14 +28,16 @@ import (
 )
 
 var (
-	errEmptyIacPath         = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
-	errDirNotExists         = fmt.Errorf("directory does not exist")
-	errFileNotExists        = fmt.Errorf("file does not exist")
-	errNotValidFile         = fmt.Errorf("not a valid file")
-	errNotValidDir          = fmt.Errorf("not a valid directory")
-	errIacNotSupported      = fmt.Errorf("iac type or version not supported")
-	errCloudNotSupported    = fmt.Errorf("cloud type not supported")
-	errSeverityNotSupported = fmt.Errorf("severity level not supported")
+	errEmptyIacPath           = fmt.Errorf("empty iac path, either use '-f' or '-d' option")
+	errDirNotExists           = fmt.Errorf("directory does not exist")
+	errFileNotExists          = fmt.Errorf("file does not exist")
+	errNotValidFile           = fmt.Errorf("not a valid file")
+	errNotValidDir            = fmt.Errorf("not a valid directory")
+	errIacNotSupported        = fmt.Errorf("iac type or version not supported")
+	errCloudNotSupported      = fmt.Errorf("cloud type not supported")
+	errSeverityNotSupported   = fmt.Errorf("severity level not supported")
+	errCategoryNotSupported   = "category not supported : %v"
+	errCategoriesNotSupported = "categories not supported : %v"
 )
 
 // ValidateInputs validates the inputs to the executor object
@@ -120,6 +122,18 @@ func (e *Executor) ValidateInputs() error {
 		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
 	}
 	zap.S().Debugf("using policy path %v", e.policyPath)
+
+	if len(e.categories) > 0 {
+		if isValid, invalidInputs := utils.ValidateCategoryInput(e.categories); !isValid {
+
+			if len(invalidInputs) == 1 {
+				return fmt.Errorf(errCategoryNotSupported, invalidInputs)
+			}
+
+			return fmt.Errorf(errCategoriesNotSupported, invalidInputs)
+		}
+	}
+	zap.S().Debugf("using categories %v", e.categories)
 
 	if len(e.severity) > 0 && !utils.ValidateSeverityInput(e.severity) {
 		return errSeverityNotSupported

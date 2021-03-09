@@ -44,7 +44,6 @@ func TestNewNotifier(t *testing.T) {
 }
 
 func TestNewNotifiers(t *testing.T) {
-
 	table := []struct {
 		name       string
 		configFile string

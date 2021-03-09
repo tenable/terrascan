@@ -13,6 +13,7 @@ type args struct {
 	policyPath string
 	scanRules  []string
 	skipRules  []string
+	categories []string
 	severity   string
 }
 
@@ -165,13 +166,37 @@ func TestFilterRules(t *testing.T) {
 			assert:      true,
 			regoMapSize: 7,
 		},
+		{
+			name: "both scan and skip rules supplied, with desired category : COMPLIANCE VALIDATION",
+			args: args{
+				policyPath: testPolicyPath,
+				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
+				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
+				categories: []string{"COMPLIANCE VALIDATION"},
+			},
+			regoDataMap: getTestRegoDataMapCVCategory(50),
+			assert:      true,
+			regoMapSize: 7,
+		},
+		{
+			name: "both scan and skip rules supplied, with desired category : DATA PROTECTION",
+			args: args{
+				policyPath: testPolicyPath,
+				scanRules:  []string{"Rule.6", "Rule.7", "Rule.8", "Rule.15", "Rule.31", "Rule.32", "Rule.40", "Rule.41", "Rule.42"},
+				skipRules:  []string{"Rule.31", "Rule.32", "Rule.38"},
+				categories: []string{"DATA PROTECTION"},
+			},
+			regoDataMap: getTestRegoDataMapDPCategory(50),
+			assert:      true,
+			regoMapSize: 7,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			e := &Engine{
 				regoDataMap: tt.regoDataMap,
 			}
-			e.FilterRules(tt.args.policyPath, tt.args.scanRules, tt.args.skipRules, tt.args.severity)
+			e.FilterRules(tt.args.policyPath, tt.args.scanRules, tt.args.skipRules, tt.args.categories, tt.args.severity)
 			if tt.assert {
 				if len(e.regoDataMap) != tt.regoMapSize {
 					t.Errorf("filterRules(): expected regoDataMap size = %d, got = %d", tt.regoMapSize, len(e.regoDataMap))
@@ -286,7 +311,7 @@ func TestFilterRulesWithEquallyDividedSeverity(t *testing.T) {
 			e := &Engine{
 				regoDataMap: tt.regoDataMap,
 			}
-			e.FilterRules(tt.args.policyPath, tt.args.scanRules, tt.args.skipRules, tt.args.severity)
+			e.FilterRules(tt.args.policyPath, tt.args.scanRules, tt.args.skipRules, tt.args.categories, tt.args.severity)
 			if tt.assert {
 				if len(e.regoDataMap) != tt.regoMapSize {
 					t.Errorf("filterRules(): expected regoDataMap size = %d, got = %d", tt.regoMapSize, len(e.regoDataMap))
@@ -340,6 +365,15 @@ func getTestRegoDataMapWithSeverity(size int, severity string) map[string]*RegoD
 	return testRegoDataMap
 }
 
+func getTestRegoDataMapWithCategory(size int, category string) map[string]*RegoData {
+	testRegoDataMap := getTestRegoDataMap(size)
+
+	for _, regoData := range testRegoDataMap {
+		regoData.Metadata.Category = category
+	}
+	return testRegoDataMap
+}
+
 // helper func to generate test rego data map of given size with high severity
 func getTestRegoDataMapHighSeverity(size int) map[string]*RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.HighSeverity)
@@ -353,4 +387,12 @@ func getTestRegoDataMapMediumSeverity(size int) map[string]*RegoData {
 // helper func to generate test rego data map of given size with low severity
 func getTestRegoDataMapLowSeverity(size int) map[string]*RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.LowSeverity)
+}
+
+func getTestRegoDataMapCVCategory(size int) map[string]*RegoData {
+	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[1])
+}
+
+func getTestRegoDataMapDPCategory(size int) map[string]*RegoData {
+	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[7])
 }

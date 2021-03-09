@@ -252,6 +252,19 @@ var _ = Describe("Server Remote Scan", func() {
 						})
 					})
 
+					When("category value is invalid", func() {
+						It("should receive a 400 bad request response", func() {
+							errMessage := "json: cannot unmarshal number into Go struct field scanRemoteRepoReq.categories of type []string"
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = awsAmiRepoURL
+							bodyAttrs["categories"] = 4
+
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
+						})
+					})
+
 					When("scan_rules value is invalid", func() {
 						It("should receive a 400 bad request response", func() {
 							errMessage := "json: cannot unmarshal string into Go struct field scanRemoteRepoReq.scan_rules of type []string"
@@ -394,6 +407,19 @@ var _ = Describe("Server Remote Scan", func() {
 						bodyAttrs["remote_type"] = "git"
 						bodyAttrs["remote_url"] = remoteRepoURL
 						bodyAttrs["severity"] = "HIGH"
+
+						serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+			})
+
+			When("categories are used", func() {
+				When("categories are valid", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]interface{})
+						bodyAttrs["remote_type"] = "git"
+						bodyAttrs["remote_url"] = remoteRepoURL
+						bodyAttrs["categories"] = []string{"DATA PROTECTION", "compliance validation"}
 
 						serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
 					})
