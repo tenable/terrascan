@@ -1,0 +1,12 @@
+{
+    "name": "reme_checkGuestUser",
+    "file": "checkGuestUser.rego",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that there are no guest users",
+    "reference_id": "accurics.azure.IAM.388",
+    "category": "Identity and Access Management",
+    "version": 1
+}
