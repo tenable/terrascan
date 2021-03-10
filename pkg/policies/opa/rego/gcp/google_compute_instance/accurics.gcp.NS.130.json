@@ -9,6 +9,6 @@
     "severity": "MEDIUM",
     "description": "Ensure IP forwarding is not enabled on Instances.",
     "reference_id": "accurics.gcp.NS.130",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

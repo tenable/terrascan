@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network.",
     "reference_id": "accurics.gcp.LOG.118",
-    "category": "Logging ",
+    "category": "Logging and Monitoring",
     "version": 1
 }

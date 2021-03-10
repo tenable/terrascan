@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure Encryption keys are rotated within a period of 365 days.",
     "reference_id": "accurics.gcp.EKM.007",
-    "category": "Encryption \u0026 Key Management",
+    "category": "Security Best Practices",
     "version": 1
 }

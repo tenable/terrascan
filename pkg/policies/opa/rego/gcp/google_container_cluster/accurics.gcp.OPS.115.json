@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure Kubernetes Cluster is created with Alias IP ranges enabled",
     "reference_id": "accurics.gcp.OPS.115",
-    "category": "Operational Efficiency",
+    "category": "Compliance Validation",
     "version": 1
 }
