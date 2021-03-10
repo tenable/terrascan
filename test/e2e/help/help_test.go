@@ -16,7 +16,6 @@
 package help_test
 
 import (
-	"fmt"
 	"io"
 	"path/filepath"
 
@@ -55,7 +54,6 @@ var _ = Describe("Help", func() {
 	Describe("terrascan is run without any command", func() {
 		It("should print all supported commands and exit with status code 0", func() {
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter)
-			fmt.Println(filepath.Join("golden", "help_command.txt"))
 			helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeZero, filepath.Join("golden", "help_command.txt"), true)
 		})
 	})
