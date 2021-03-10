@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image.",
     "reference_id": "accurics.gcp.OPS.114",
-    "category": "Operational Efficiency",
+    "category": "Compliance Validation",
     "version": 1
 }

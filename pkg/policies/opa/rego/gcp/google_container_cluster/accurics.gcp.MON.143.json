@@ -8,6 +8,6 @@
     "severity": "HIGH",
     "description": "Ensure Stackdriver Monitoring is enabled on Kubernetes Engine Clusters.",
     "reference_id": "accurics.gcp.MON.143",
-    "category": "Monitoring",
+    "category": "Logging and Monitoring",
     "version": 1
 }

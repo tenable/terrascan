@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure all Cloud SQL database instance have backup configuration enabled.",
     "reference_id": "accurics.gcp.BDR.105",
-    "category": "Backup \u0026 Disaster Recovery",
+    "category": "Resilience",
     "version": 1
 }

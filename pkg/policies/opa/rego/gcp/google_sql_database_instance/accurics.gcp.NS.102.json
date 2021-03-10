@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure that Cloud SQL database Instances are not open to the world.",
     "reference_id": "accurics.gcp.NS.102",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }
