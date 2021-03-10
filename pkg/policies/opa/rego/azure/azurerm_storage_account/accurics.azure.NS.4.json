@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure default network access rule for Storage Accounts is not open to public",
     "reference_id": "accurics.azure.NS.4",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

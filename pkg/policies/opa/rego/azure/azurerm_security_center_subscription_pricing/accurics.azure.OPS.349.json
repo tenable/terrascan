@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that standard pricing tiers are selected",
     "reference_id": "accurics.azure.OPS.349",
-    "category": "Operational Efficiency",
+    "category": "Security Best Practices",
     "version": 1
 }

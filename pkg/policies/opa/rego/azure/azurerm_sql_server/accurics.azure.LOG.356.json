@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers.",
     "reference_id": "accurics.azure.LOG.356",
-    "category": "Logging",
+    "category": "Compliance Validation",
     "version": 1
 }

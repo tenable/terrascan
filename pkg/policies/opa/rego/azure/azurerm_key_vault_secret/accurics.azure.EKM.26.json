@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure that the expiration date is set on all secrets",
     "reference_id": "accurics.azure.EKM.26",
-    "category": "Key Management",
+    "category": "Data Protection",
     "version": 2
 }

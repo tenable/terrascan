@@ -8,6 +8,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers.",
     "reference_id": "accurics.azure.LOG.357",
-    "category": "Monitoring",
+    "category": "Logging and Monitoring",
     "version": 1
 }

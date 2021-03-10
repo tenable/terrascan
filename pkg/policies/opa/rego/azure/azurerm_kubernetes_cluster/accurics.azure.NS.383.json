@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure Kube Dashboard is disabled",
     "reference_id": "accurics.azure.NS.383",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

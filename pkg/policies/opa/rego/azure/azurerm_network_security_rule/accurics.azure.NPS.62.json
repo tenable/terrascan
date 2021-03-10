@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Memcached SSL (TCP:11214) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.62",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

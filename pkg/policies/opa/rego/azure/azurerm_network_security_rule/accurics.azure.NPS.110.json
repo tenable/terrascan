@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "SaltStack Master (TCP:4505) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.110",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }
