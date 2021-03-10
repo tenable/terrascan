@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure that your RDS database has IAM Authentication enabled.",
     "reference_id": "AWS.RDS.DataSecurity.High.0577",
-    "category": "Data Security",
+    "category": "Data Protection",
     "version": 2
 }

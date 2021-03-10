@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS CloudWatch Logs for APIs",
-    "reference_id": "AWS.API Gateway.Logging.Medium.0567",
-    "category": "Logging",
+    "reference_id": "AWS.APIGateway.Logging.Medium.0567",
+    "category": "Logging and Monitoring",
     "version": 1
 }

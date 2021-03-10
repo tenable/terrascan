@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Ensure appropriate subscribers to each SNS topic",
     "reference_id": "AWS.CloudTrail.Logging.Low.0559",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 1
 }

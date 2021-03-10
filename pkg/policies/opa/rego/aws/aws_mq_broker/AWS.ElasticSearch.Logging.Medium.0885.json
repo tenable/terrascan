@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Enable AWS MQ Log Exports",
     "reference_id": "AWS.ElasticSearch.Logging.Medium.0885",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 1
 }

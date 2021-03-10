@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure Virtual MFA device is enabled for the \"root\" account",
     "reference_id": "AWS.IamUser.IAM.High.0388",
-    "category": "Identity and Access Management",
+    "category": "Compliance Validation",
     "version": 1
 }

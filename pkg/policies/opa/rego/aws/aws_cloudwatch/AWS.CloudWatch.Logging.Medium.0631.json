@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "App-Tier CloudWatch Log Group Retention Period",
     "reference_id": "AWS.CloudWatch.Logging.Medium.0631",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

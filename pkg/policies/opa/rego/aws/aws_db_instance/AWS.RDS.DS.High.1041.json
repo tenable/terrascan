@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
     "reference_id": "AWS.RDS.DS.High.1041",
-    "category": "Data Security",
+    "category": "Data Protection",
     "version": 2
 }

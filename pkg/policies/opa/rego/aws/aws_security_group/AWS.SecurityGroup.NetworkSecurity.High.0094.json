@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": " It is recommended that no security group allows unrestricted ingress access",
     "reference_id": "AWS.SecurityGroup.NetworkSecurity.High.0094",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

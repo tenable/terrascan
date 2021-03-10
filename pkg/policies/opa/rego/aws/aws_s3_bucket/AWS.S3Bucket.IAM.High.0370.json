@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites",
     "reference_id": "AWS.S3Bucket.IAM.High.0370",
-    "category": "IAM",
+    "category": "Resilience",
     "version": 2
 }

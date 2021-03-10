@@ -10,6 +10,6 @@
     "severity": "MEDIUM",
     "description": "'Oracle DB SSL' (TCP:2484) is accessible by a CIDR block range",
     "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0264",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

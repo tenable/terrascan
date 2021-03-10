@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure AWS Config is enabled in all regions",
     "reference_id": "AWS.Config.Logging.HIGH.0590",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }
