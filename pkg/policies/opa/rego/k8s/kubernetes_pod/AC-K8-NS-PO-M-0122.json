@@ -1,14 +1,14 @@
 {
+  "name": "securityContextUsed",
+  "file": "securityContextUsed.rego",
+  "template_args": {
     "name": "securityContextUsed",
-    "file": "securityContextUsed.rego",
-    "template_args": {
-        "name": "securityContextUsed",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "Apply Security Context to Your Pods and Containers",
-    "reference_id": "AC-K8-NS-PO-M-0122",
-    "category": "Network Security",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "Apply Security Context to Your Pods and Containers",
+  "reference_id": "AC-K8-NS-PO-M-0122",
+  "category": "Infrastructure Security",
+  "version": 1
 }

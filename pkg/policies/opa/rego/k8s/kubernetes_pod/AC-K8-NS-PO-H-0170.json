@@ -1,14 +1,14 @@
 {
+  "name": "capSysAdminUsed",
+  "file": "capSysAdminUsed.rego",
+  "template_args": {
     "name": "capSysAdminUsed",
-    "file": "capSysAdminUsed.rego",
-    "template_args": {
-        "name": "capSysAdminUsed",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "HIGH",
-    "description": "Do Not Use CAP_SYS_ADMIN Linux Capability",
-    "reference_id": "AC-K8-NS-PO-H-0170",
-    "category": "Network Security",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "HIGH",
+  "description": "Do Not Use CAP_SYS_ADMIN Linux Capability",
+  "reference_id": "AC-K8-NS-PO-H-0170",
+  "category": "Infrastructure Security",
+  "version": 1
 }
