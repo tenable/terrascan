@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Cloud Trail Log Not Enabled",
     "reference_id": "AWS.CloudTrail.Logging.High.0399",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

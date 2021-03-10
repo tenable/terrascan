@@ -8,6 +8,6 @@
     "severity": "MEDIUM",
     "description": "AWS CloudFormation Not In Use",
     "reference_id": "AWS.CloudFormation.Medium.0599",
-    "category": " ",
+    "category": "Security Best Practices",
     "version": 1
 }

@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Identify any publicly accessible AWS Key Management Service master keys and update their access policy in order to stop any unsigned requests made to these resources.",
     "reference_id": "AWS.KMS.NetworkSecurity.High.0566",
-    "category": "Network Security",
+    "category": "Identity and Access Management",
     "version": 2
 }

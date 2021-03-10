@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Enable Active Tracing",
     "reference_id": "AWS.API Gateway.Logging.Medium.0571",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

@@ -10,6 +10,6 @@
     "severity": "HIGH",
     "description": "ssh port open to internet",
     "reference_id": "AWS.SecurityGroup.NetworkPortsSecurity.Low.0560",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

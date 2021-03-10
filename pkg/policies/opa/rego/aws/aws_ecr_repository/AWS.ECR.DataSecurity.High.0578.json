@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Unscanned images may contain vulnerabilities",
     "reference_id": "AWS.ECR.DataSecurity.High.0578",
-    "category": "Data Security",
+    "category": "Configuration and Vulnerability Analysis",
     "version": 2
 }

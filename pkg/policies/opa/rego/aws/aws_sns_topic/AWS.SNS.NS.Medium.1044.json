@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Ensure SNS Topic is Publicly Accessible For Subscription",
     "reference_id": "AWS.SNS.NS.Medium.1044",
-    "category": "Network Security",
+    "category": "Compliance Validation",
     "version": 2
 }
