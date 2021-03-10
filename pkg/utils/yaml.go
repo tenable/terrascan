@@ -103,7 +103,7 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 	dec := yaml.NewDecoder(bytes.NewReader(byteArray))
 
 	if dec == nil {
-		err := fmt.Errorf("Error cretaing yaml decoder in ScanIacDocumentsFromYaml()")
+		err := fmt.Errorf("error cretaing yaml decoder in ScanIacDocumentsFromYaml()")
 		return iacDocumentList, err
 	}
 
