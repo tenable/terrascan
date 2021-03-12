@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure that DNSSEC is enabled for Cloud DNS.",
     "reference_id": "accurics.gcp.NS.107",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

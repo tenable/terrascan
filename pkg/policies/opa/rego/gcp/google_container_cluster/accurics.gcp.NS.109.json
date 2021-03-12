@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure GKE Control Plane is not public.",
     "reference_id": "accurics.gcp.NS.109",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

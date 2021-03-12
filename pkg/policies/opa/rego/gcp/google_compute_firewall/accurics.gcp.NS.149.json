@@ -8,6 +8,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that SSH access is restricted from the internet",
     "reference_id": "accurics.gcp.NS.149",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

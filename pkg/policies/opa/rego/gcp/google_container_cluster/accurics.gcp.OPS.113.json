@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure Kubernetes Clusters are configured with Labels.",
     "reference_id": "accurics.gcp.OPS.113",
-    "category": "Operational Efficiency",
+    "category": "Compliance Validation",
     "version": 1
 }

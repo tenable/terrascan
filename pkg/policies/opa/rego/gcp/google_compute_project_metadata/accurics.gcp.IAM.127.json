@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure oslogin is enabled for a Project",
     "reference_id": "accurics.gcp.IAM.127",
-    "category": "Access Control",
+    "category": "Identity and Access Management",
     "version": 1
 }

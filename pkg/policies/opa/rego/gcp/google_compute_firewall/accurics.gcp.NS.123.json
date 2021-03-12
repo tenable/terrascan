@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure Google compute firewall ingress does not allow unrestricted rdp access.",
     "reference_id": "accurics.gcp.NS.123",
-    "category": "Network Security ",
+    "category": "Infrastructure Security ",
     "version": 1
 }
