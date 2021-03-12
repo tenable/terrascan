@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "NetBIOS Name Service (UDP:137) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.79",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

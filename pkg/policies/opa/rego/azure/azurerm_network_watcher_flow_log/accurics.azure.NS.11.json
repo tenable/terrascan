@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure.",
     "reference_id": "accurics.azure.NS.11",
-    "category": "Network Security",
+    "category": "Logging and Monitoring",
     "version": 1
 }

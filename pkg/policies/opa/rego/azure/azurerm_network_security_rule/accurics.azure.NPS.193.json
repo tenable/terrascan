@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "MSSQL Debugger (TCP:135) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.193",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

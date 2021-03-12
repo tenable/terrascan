@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that 'Auditing' is set to 'On' for SQL servers",
     "reference_id": "accurics.azure.MON.354",
-    "category": "Monitoring",
+    "category": "Logging and Monitoring",
     "version": 1
 }

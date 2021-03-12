@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "Mongo Web Portal (TCP:27018) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.207",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

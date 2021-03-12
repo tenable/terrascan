@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Telnet (TCP:23) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.115",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

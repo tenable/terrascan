@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "PostgreSQL (UDP:5432) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.97",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }
