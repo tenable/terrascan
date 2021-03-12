@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Limit access to AWS AMIs",
     "reference_id": "AWS.AMI.NS.Medium.1040",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

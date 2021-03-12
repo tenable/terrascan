@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Publicly Accessible MQ Brokers",
     "reference_id": "AWS.ElasticSearch.NetworkSecurity.Medium.0887",
-    "category": "Network Security",
+    "category": "Security Best Practices",
     "version": 1
 }

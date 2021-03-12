@@ -7,6 +7,6 @@
     "severity": "Low",
     "description": "Lambda function doesn't not include a VPC configuration.",
     "reference_id": "AWS.LambdaFunction.Logging.0472",
-    "category": "Logging",
+    "category": "Infrastructure Security",
     "version": 2
 }

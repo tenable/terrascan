@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "AWS ElastiCache Multi-AZ",
     "reference_id": "AWS.ElastiCache.HighAvailability.Medium.0757",
-    "category": "High Availability",
+    "category": "Resilience",
     "version": 1
 }

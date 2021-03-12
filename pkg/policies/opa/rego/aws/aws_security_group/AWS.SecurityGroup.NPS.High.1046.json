@@ -46,6 +46,6 @@
     "severity": "HIGH",
     "description": "Unknown Port is exposed to the entire internet",
     "reference_id": "AWS.SecurityGroup.NPS.High.1046",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Avoid creating resources in default VPC",
     "reference_id": "AWS.VPC.Logging.Medium.0471",
-    "category": "Logging",
+    "category": "Security Best Practices",
     "version": 1
 }
