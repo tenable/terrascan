@@ -28,12 +28,12 @@ import (
 )
 
 // Start initializes api routes and starts http server
-func Start() {
+func Start(configFile string, certFile string, privateKeyFile string) {
 	// create a new API server
 	server := NewAPIServer()
 
 	// get all routes
-	routes := server.Routes()
+	routes := server.Routes(configFile)
 
 	serverPort := os.Getenv(TerrascanServerPort)
 	if serverPort == "" {
@@ -41,11 +41,11 @@ func Start() {
 	}
 
 	// register routes and start the http server
-	server.start(routes, serverPort)
+	server.start(routes, certFile, privateKeyFile)
 }
 
 // start http server
-func (g *APIServer) start(routes []*Route, port string) {
+func (g *APIServer) start(routes []*Route, certFile string, privateKeyFile string) {
 
 	var (
 		err    error
@@ -61,6 +61,17 @@ func (g *APIServer) start(routes []*Route, port string) {
 		router.Methods(v.verb).Path(v.path).HandlerFunc(v.fn)
 	}
 
+	// Add a route for all static templates / assets. Currently used for the Webhook logs views
+	// go/terrascan/asset is the path where the assets files are located inside the docker container
+	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("/go/terrascan/assets"))))
+
+	var port = GatewayDefaultPort
+
+	// In case a certificate file is specified, we run the server with a different port
+	if certFile != "" {
+		port = TLSGatewayDefaultPort
+	}
+
 	// start http server
 	server := &http.Server{
 		Addr:    ":" + port,
@@ -68,7 +79,13 @@ func (g *APIServer) start(routes []*Route, port string) {
 	}
 
 	go func() {
-		err = server.ListenAndServe()
+		var err error
+		if certFile != "" {
+			// In case a certificate file is specified, the server support TLS
+			err = server.ListenAndServeTLS(certFile, privateKeyFile)
+		} else {
+			err = server.ListenAndServe()
+		}
 		if err != nil && err != http.ErrServerClosed {
 			logger.Fatal(err)
 		}

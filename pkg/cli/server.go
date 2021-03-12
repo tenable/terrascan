@@ -21,6 +21,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	// CertFile Certificate file path, required in order to enable secure HTTP server
+	CertFile string
+
+	// PrivateKeyFile Private key file path, required in order to enable secure HTTP server
+	PrivateKeyFile string
+)
+
 var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Run Terrascan as an API server",
@@ -35,9 +43,11 @@ Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Cod
 }
 
 func server(cmd *cobra.Command, args []string) {
-	httpserver.Start()
+	httpserver.Start(ConfigFile, CertFile, PrivateKeyFile)
 }
 
 func init() {
+	rootCmd.PersistentFlags().StringVarP(&PrivateKeyFile, "key-path", "", "", "private key file path")
+	rootCmd.PersistentFlags().StringVarP(&CertFile, "cert-path", "", "", "certificate file path")
 	RegisterCommand(rootCmd, serverCmd)
 }

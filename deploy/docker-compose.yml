@@ -4,3 +4,4 @@ services:
     image: accurics/terrascan:${TAG:-latest}
     ports:
       - 9010:9010
+      - 443:9443

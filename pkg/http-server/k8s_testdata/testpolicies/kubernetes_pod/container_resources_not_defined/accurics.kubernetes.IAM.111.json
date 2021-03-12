@@ -1,0 +1,16 @@
+{
+    "name": "containerResourcesNotDefined",
+    "file": "containerResourcesNotDefined.rego",
+    "template_args": {
+        "is_init": false,
+        "name": "containerResourcesNotDefined",
+        "prefix": "",
+        "resource_type": "kubernetes_replication_controller",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Container does not have resource limitations defined",
+    "reference_id": "accurics.kubernetes.IAM.111",
+    "category": "Identity and Access Management",
+    "version": 1
+}

@@ -1,0 +1,27 @@
+{
+  "apiVersion": "admission.k8s.io/v1",
+  "kind": "AdmissionReview",
+  "request": {
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2021-02-16T19:16:01Z",
+        "labels": {
+          "run": "nginx"
+        },
+        "name": "nginx",
+        "namespace": "default",
+        "resourceVersion": "17561",
+        "selfLink": "/api/v1/namespaces/default/pods/nginx",
+        "uid": "7a269efe-d951-49b6-a3af-e1a265cb9efe"
+      },
+      "spec": {
+        "containers": [
+        ]
+      }
+    },
+    "operation": "CREATE"
+  }
+}

@@ -20,6 +20,9 @@ const (
 	// GatewayDefaultPort - default port at which the http server listens
 	GatewayDefaultPort = "9010"
 
+	// GatewayDefaultPort - default port at which the https server listens
+	TLSGatewayDefaultPort = "9443"
+
 	// APIVersion - default api version for REST endpoints
 	APIVersion = "v1"
 

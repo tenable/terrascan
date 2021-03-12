@@ -54,7 +54,7 @@ func Run(isNonInitCmd bool) error {
 		return err
 	}
 
-	zap.S().Debug("intialized successfully")
+	zap.S().Debug("initialized successfully")
 	return nil
 }
 
