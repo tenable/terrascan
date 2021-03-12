@@ -1,19 +1,19 @@
 {
+  "name": "alwaysPullImages",
+  "file": "commandCheck.rego",
+  "template_args": {
+    "argument": "--enable-admission-plugins",
     "name": "alwaysPullImages",
-    "file": "commandCheck.rego",
-    "template_args": {
-        "argument": "--enable-admission-plugins",
-        "name": "alwaysPullImages",
-        "negation": "",
-        "optional": "",
-        "param": "AlwaysPullImages",
-        "prefix": "",
-        "presence": "not",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "AlwaysPullImages plugin is not set",
-    "reference_id": "AC-K8-OE-PK-M-0034",
-    "category": "Operational Efficiency",
-    "version": 1
+    "negation": "",
+    "optional": "",
+    "param": "AlwaysPullImages",
+    "prefix": "",
+    "presence": "not",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "AlwaysPullImages plugin is not set",
+  "reference_id": "AC-K8-OE-PK-M-0034",
+  "category": "Compliance Validation",
+  "version": 1
 }
