@@ -203,7 +203,7 @@ func TestUWebhooks(t *testing.T) {
 			res := httptest.NewRecorder()
 			// new api handler
 			h := &APIHandler{test: true, configFile: tt.configFile}
-			h.scanIncomingWebhook(res, req)
+			h.validateK8SWebhook(res, req)
 
 			if res.Code != tt.wantStatus {
 				t.Errorf("incorrect status code, got: '%v', want: '%v', error: '%v'", res.Code, tt.wantStatus, res.Body)

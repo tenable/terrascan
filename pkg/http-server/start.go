@@ -36,6 +36,11 @@ func Start(port, configFile, certFile, privateKeyFile string) {
 	// get all routes
 	routes := server.Routes(configFile)
 
+	// get port
+	if os.Getenv(TerrascanServerPort) != "" {
+		port = os.Getenv(TerrascanServerPort)
+	}
+
 	// register routes and start the http server
 	server.start(routes, port, certFile, privateKeyFile)
 }

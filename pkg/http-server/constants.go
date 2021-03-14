@@ -22,4 +22,7 @@ const (
 
 	// APIVersion - default api version for REST endpoints
 	APIVersion = "v1"
+
+	// TerrascanServerPort allows user to configure server at a port other than default
+	TerrascanServerPort = "TERRASCAN_SERVER_PORT"
 )
