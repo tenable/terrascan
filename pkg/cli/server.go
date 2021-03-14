@@ -22,6 +22,9 @@ import (
 )
 
 var (
+	// Port at which API server will listen
+	Port string
+
 	// CertFile Certificate file path, required in order to enable secure HTTP server
 	CertFile string
 
@@ -43,11 +46,12 @@ Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Cod
 }
 
 func server(cmd *cobra.Command, args []string) {
-	httpserver.Start(ConfigFile, CertFile, PrivateKeyFile)
+	httpserver.Start(Port, ConfigFile, CertFile, PrivateKeyFile)
 }
 
 func init() {
 	serverCmd.Flags().StringVarP(&PrivateKeyFile, "key-path", "", "", "private key file path")
 	serverCmd.Flags().StringVarP(&CertFile, "cert-path", "", "", "certificate file path")
+	serverCmd.Flags().StringVarP(&Port, "port", "p", httpserver.GatewayDefaultPort, "server port")
 	RegisterCommand(rootCmd, serverCmd)
 }
