@@ -1,9 +1,10 @@
 package httpserver
 
 import (
+	"testing"
+
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/results"
-	"testing"
 )
 
 func TestDenyRuleMatcher(t *testing.T) {

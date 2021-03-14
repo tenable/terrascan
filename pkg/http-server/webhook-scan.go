@@ -19,23 +19,21 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/runtime"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	runtimeK8s "k8s.io/apimachinery/pkg/runtime"
-
-	"k8s.io/apimachinery/pkg/runtime/serializer"
-
 	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+
 	v1 "k8s.io/api/admission/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	runtimeK8s "k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/serializer"
 )
 
 // validateK8SWebhook handles the incoming validating admission webhook from kubernetes API server

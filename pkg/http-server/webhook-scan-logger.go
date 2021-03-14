@@ -2,9 +2,10 @@ package httpserver
 
 import (
 	"database/sql"
-	"go.uber.org/zap"
 	"os"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type WebhookScanLogger struct {
