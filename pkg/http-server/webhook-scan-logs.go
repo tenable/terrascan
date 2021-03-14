@@ -63,15 +63,8 @@ type webhookDisplayedShowLog struct {
 }
 
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
+
 	// Return an HTML page including all the logs history
-
-	params := mux.Vars(r)
-
-	apiKey := params["apiKey"]
-	if !g.validateAuthorization(apiKey, w) {
-		return
-	}
-
 	logger := WebhookScanLogger{
 		test: g.test,
 	}
@@ -92,7 +85,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		logsData = append(logsData, webhookDisplayedIndexScanLog{
 			CreatedAt: log.CreatedAt,
 			Status:    g.getLogStatus(log),
-			LogUrl:    g.getLogPath(r.Host, apiKey, log.UID),
+			LogUrl:    g.getLogPath(r.Host, log.UID),
 			Reasoning: g.getLogReasoning(log),
 			Request:   g.getLogRequest(log),
 		})
@@ -105,10 +98,6 @@ func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 	// Return an HTML page including the selected log
 
 	params := mux.Vars(r)
-
-	if !g.validateAuthorization(params["apiKey"], w) {
-		return
-	}
 
 	var uid = params["uid"]
 	if len(uid) < 1 {
@@ -147,9 +136,9 @@ func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, displayedScanLog)
 }
 
-func (g *APIHandler) getLogPath(host string, apiKey string, logUID string) string {
+func (g *APIHandler) getLogPath(host, logUID string) string {
 	// Use this as the link to show the a specific log
-	return fmt.Sprintf("https://%v/k8s/webhooks/%v/logs/%v", host, apiKey, logUID)
+	return fmt.Sprintf("https://%v/k8s/webhooks/logs/%v", host, logUID)
 }
 
 func (g *APIHandler) getLogStatus(log webhookScanLog) string {

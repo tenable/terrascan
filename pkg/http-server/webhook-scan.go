@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"time"
 
 	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
+	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
@@ -38,13 +38,22 @@ import (
 func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) {
 
 	var (
-		currentTime = time.Now()
-		params      = mux.Vars(r)
-		apiKey      = params["apiKey"]
+		currentTime       = time.Now()
+		params            = mux.Vars(r)
+		apiKey            = params["apiKey"]
+		validatingWebhook = admissionWebhook.NewValidatingWebhook(g.configFile)
 	)
 
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
-	if !g.validateAuthorization(apiKey, w) {
+	if err := validatingWebhook.Authorize(apiKey); err != nil {
+		switch err {
+		case admissionWebhook.ErrAPIKeyMissing:
+			apiErrorResponse(w, err.Error(), http.StatusBadRequest)
+		case admissionwebhook.ErrAPIKeyEnvNotSet:
+			apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
+		case admissionWebhook.ErrUnAuthorized:
+			apiErrorResponse(w, err.Error(), http.StatusUnauthorized)
+		}
 		return
 	}
 
@@ -57,9 +66,6 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	}
 
 	zap.S().Debugf("scanning configuration webhook request: %+v", string(payload))
-
-	// create a new validating webhook processor
-	validatingWebhook := admissionWebhook.NewValidatingWebhook(g.configFile)
 
 	// decode incoming admission review request
 	requestedAdmissionReview, err := validatingWebhook.DecodeAdmissionReviewRequest(payload)
@@ -75,7 +81,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	logPath := g.getLogPath(r.Host, apiKey, string(requestedAdmissionReview.Request.UID))
+	logPath := g.getLogPath(r.Host, string(requestedAdmissionReview.Request.UID))
 
 	// Log the request in the DB
 	err = g.logWebhook(*output, string(requestedAdmissionReview.Request.UID), payload, denyViolations, currentTime, allowed)
@@ -86,32 +92,6 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 
 	// Send the correct response according to the result
 	g.sendResponseAdmissionReview(w, requestedAdmissionReview, allowed, output, logPath)
-}
-
-func (g *APIHandler) validateAuthorization(apiKey string, w http.ResponseWriter) bool {
-	if len(apiKey) < 1 {
-		msg := "apiKey is missing"
-		zap.S().Error(msg)
-		apiErrorResponse(w, msg, http.StatusBadRequest)
-		return false
-	}
-
-	saveAPIKey := os.Getenv("K8S_WEBHOOK_API_KEY")
-	if len(saveAPIKey) < 1 {
-		msg := "K8S_WEBHOOK_API_KEY environment variable MUST be declared"
-		zap.S().Error(msg)
-		apiErrorResponse(w, msg, http.StatusInternalServerError)
-		return false
-	}
-
-	if apiKey != saveAPIKey {
-		msg := "Invalid apiKey"
-		zap.S().Error(msg)
-		apiErrorResponse(w, msg, http.StatusUnauthorized)
-		return false
-	}
-
-	return true
 }
 
 func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,

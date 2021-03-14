@@ -43,6 +43,37 @@ func NewValidatingWebhook(configFile string) *ValidatingWebhook {
 	return &ValidatingWebhook{configFile: configFile}
 }
 
+var (
+	ErrAPIKeyMissing   = fmt.Errorf("apiKey is missing in validating admission webhook url")
+	ErrAPIKeyEnvNotSet = fmt.Errorf("variable K8S_WEBHOOK_API_KEY not set in terrascan server environment")
+	ErrUnAuthorized    = fmt.Errorf("invalid API key in validating admission webhook url")
+)
+
+// Authorize checks if the incoming webhooks have valid apiKey
+func (w *ValidatingWebhook) Authorize(apiKey string) error {
+
+	// check if key exists in API request
+	if len(apiKey) < 1 {
+		zap.S().Error(ErrAPIKeyMissing)
+		return ErrAPIKeyMissing
+	}
+
+	// API key not set in terrascan env
+	saveAPIKey := os.Getenv("K8S_WEBHOOK_API_KEY")
+	if len(saveAPIKey) < 1 {
+		zap.S().Error(ErrAPIKeyEnvNotSet)
+		return ErrAPIKeyEnvNotSet
+	}
+
+	// invalid api key
+	if apiKey != saveAPIKey {
+		zap.S().Error(ErrUnAuthorized)
+		return ErrUnAuthorized
+	}
+
+	return nil
+}
+
 // DecodeAdmissionReviewRequest reads the incoming admission request body,
 // decodes it and returns an AdmissionReviewRequest struct
 func (w *ValidatingWebhook) DecodeAdmissionReviewRequest(payload []byte) (admissionv1.AdmissionReview, error) {
