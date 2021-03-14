@@ -24,7 +24,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/config"
+	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
@@ -32,16 +32,16 @@ import (
 
 	v1 "k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	runtimeK8s "k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/serializer"
 )
 
 // validateK8SWebhook handles the incoming validating admission webhook from kubernetes API server
 func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) {
-	currentTime := time.Now()
 
-	params := mux.Vars(r)
-	apiKey := params["apiKey"]
+	var (
+		currentTime = time.Now()
+		params      = mux.Vars(r)
+		apiKey      = params["apiKey"]
+	)
 
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
 	if !g.validateAuthorization(apiKey, w) {
@@ -49,57 +49,43 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Read the request into byte array
-	bytesRequestAdmissionReview, err := ioutil.ReadAll(r.Body)
+	payload, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		msg := fmt.Sprintf("Failed to read admission review: '%v'", err)
+		msg := fmt.Sprintf("failed to read validating admission webhook body, error: '%v'", err)
 		apiErrorResponse(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	zap.S().Debugf("scanning configuration webhook request: %+v", string(bytesRequestAdmissionReview))
+	zap.S().Debugf("scanning configuration webhook request: %+v", string(payload))
 
-	// Unmarshal the byte array into a v1.AdmissionReview object
-	requestedAdmissionReview, err := g.deserializeAdmissionReviewRequest(bytesRequestAdmissionReview)
+	// create a new validating webhook processor
+	validatingWebhook := admissionWebhook.NewValidatingWebhook(g.configFile)
+
+	// decode incoming admission review request
+	requestedAdmissionReview, err := validatingWebhook.DecodeAdmissionReviewRequest(payload)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
-	if len(requestedAdmissionReview.Request.Object.Raw) < 1 {
-		g.sendResponseAdmissionReview(w, *requestedAdmissionReview, true, nil, "")
-		return
-	}
-
-	// Save the object into a temp file for the policy engines
-	tempFile, err := g.writeObjectToTempFile(requestedAdmissionReview.Request.Object.Raw)
-	defer os.Remove(tempFile.Name())
+	// process the admission review request
+	output, allowed, denyViolations, err := validatingWebhook.ProcessWebhook(requestedAdmissionReview)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Run the policy engines
-	output, err := g.executeEngines(*tempFile)
-	if err != nil {
-		apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Calculate if there are anydeny violations
-	denyViolations, err := g.getDenyViolations(*output)
-	allowed := len(denyViolations) < 1
 	logPath := g.getLogPath(r.Host, apiKey, string(requestedAdmissionReview.Request.UID))
 
 	// Log the request in the DB
-	err = g.logWebhook(*output, string(requestedAdmissionReview.Request.UID), bytesRequestAdmissionReview, denyViolations, currentTime, allowed)
+	err = g.logWebhook(*output, string(requestedAdmissionReview.Request.UID), payload, denyViolations, currentTime, allowed)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Send the correct response according to the result
-	g.sendResponseAdmissionReview(w, *requestedAdmissionReview, allowed, output, logPath)
+	g.sendResponseAdmissionReview(w, requestedAdmissionReview, allowed, output, logPath)
 }
 
 func (g *APIHandler) validateAuthorization(apiKey string, w http.ResponseWriter) bool {
@@ -110,15 +96,15 @@ func (g *APIHandler) validateAuthorization(apiKey string, w http.ResponseWriter)
 		return false
 	}
 
-	savedApiKey := os.Getenv("K8S_WEBHOOK_API_KEY")
-	if len(savedApiKey) < 1 {
+	saveAPIKey := os.Getenv("K8S_WEBHOOK_API_KEY")
+	if len(saveAPIKey) < 1 {
 		msg := "K8S_WEBHOOK_API_KEY environment variable MUST be declared"
 		zap.S().Error(msg)
 		apiErrorResponse(w, msg, http.StatusInternalServerError)
 		return false
 	}
 
-	if apiKey != savedApiKey {
+	if apiKey != saveAPIKey {
 		msg := "Invalid apiKey"
 		zap.S().Error(msg)
 		apiErrorResponse(w, msg, http.StatusUnauthorized)
@@ -126,78 +112,6 @@ func (g *APIHandler) validateAuthorization(apiKey string, w http.ResponseWriter)
 	}
 
 	return true
-}
-
-func (g *APIHandler) getDeniedViolations(violations results.ViolationStore, denyRules config.K8sDenyRules) []*results.Violation {
-	// Check whether one of the violations matches the deny violations configuration
-
-	var denyViolations []*results.Violation
-
-	denyRuleMatcher := webhookDenyRuleMatcher{}
-
-	for _, violation := range violations.Violations {
-		if denyRuleMatcher.match(*violation, denyRules) {
-			denyViolations = append(denyViolations, violation)
-		}
-	}
-
-	return denyViolations
-}
-
-func (g *APIHandler) writeObjectToTempFile(objectBytes []byte) (*os.File, error) {
-	tempFile, err := ioutil.TempFile("", "terrascan-*.json")
-	if err != nil {
-		zap.S().Errorf("failed to create temp file: '%v'", err)
-		return nil, err
-	}
-
-	zap.S().Debugf("created temp config file at '%s'", tempFile.Name())
-
-	_, err = tempFile.Write(objectBytes)
-	if err != nil {
-		zap.S().Errorf("failed to write object to temp file: '%v'", err)
-		return nil, err
-	}
-
-	return tempFile, nil
-}
-
-func (g *APIHandler) executeEngines(tempFile os.File) (*runtime.Output, error) {
-	var executor *runtime.Executor
-	var err error
-	if g.test {
-		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			tempFile.Name(), "", g.configFile, []string{"./k8s_testdata/testpolicies"}, []string{}, []string{}, []string{}, "")
-	} else {
-		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			tempFile.Name(), "", g.configFile, []string{}, []string{}, []string{}, []string{}, "")
-	}
-
-	if err != nil {
-		zap.S().Errorf("failed to create runtime executer: '%v'", err)
-		return nil, err
-	}
-
-	result, err := executor.Execute()
-	if err != nil {
-		zap.S().Error("failed to scan resource object. error: '%v'", err)
-		return nil, err
-	}
-
-	return &result, nil
-}
-
-func (g *APIHandler) getDenyViolations(output runtime.Output) ([]*results.Violation, error) {
-	// Calcualte the deny violations according to the configuration specified in the config file
-	configReader, err := config.NewTerrascanConfigReader(g.configFile)
-	if err != nil {
-		zap.S().Errorf("error loading config file: '%v'", err)
-		return nil, err
-	}
-
-	denyViolations := g.getDeniedViolations(*output.Violations.ViolationStore, configReader.GetK8sDenyRules())
-
-	return denyViolations, nil
 }
 
 func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
@@ -273,26 +187,4 @@ func (g *APIHandler) logWebhook(output runtime.Output,
 	}
 
 	return nil
-}
-
-func (g *APIHandler) deserializeAdmissionReviewRequest(bytesAdmissionReview []byte) (*v1.AdmissionReview, error) {
-	var scheme = runtimeK8s.NewScheme()
-	v1.AddToScheme(scheme)
-
-	var codecs = serializer.NewCodecFactory(scheme)
-	deserializer := codecs.UniversalDeserializer()
-
-	obj, _, err := deserializer.Decode(bytesAdmissionReview, nil, nil)
-	if err != nil {
-		zap.S().Errorf("Request could not be decoded: %v", err)
-		return nil, err
-	}
-
-	requestedAdmissionReview, ok := obj.(*v1.AdmissionReview)
-	if !ok {
-		zap.S().Errorf("Failed to deserialize request body to v1.AdmissionReview. Obj: %v", obj)
-		return nil, err
-	}
-
-	return requestedAdmissionReview, nil
 }
