@@ -36,10 +36,10 @@ func (g *APIServer) Routes(configFile string) []*Route {
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/remote/dir/scan"), fn: h.scanRemoteRepo},
 
-		// K8s Webhook Routes
+		// k8s webhook Routes
 		{verb: "GET", path: "/k8s/webhooks/{apiKey}/logs", fn: h.getLogs},
 		{verb: "GET", path: "/k8s/webhooks/{apiKey}/logs/{uid}", fn: h.getLogByUID},
-		{verb: "POST", path: versionedPath("/k8s/webhooks/{apiKey}/scan"), fn: h.scanIncomingWebhook},
+		{verb: "POST", path: versionedPath("/k8s/webhooks/{apiKey}/scan/validate"), fn: h.validateK8SWebhook},
 	}
 
 	return routes

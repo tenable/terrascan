@@ -19,6 +19,7 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
@@ -27,16 +28,18 @@ import (
 
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 
-	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 	"io/ioutil"
-	v1 "k8s.io/api/admission/v1"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+	v1 "k8s.io/api/admission/v1"
 )
 
-func (g *APIHandler) scanIncomingWebhook(w http.ResponseWriter, r *http.Request) {
+// validateK8SWebhook handles the incoming validating admission webhook from kubernetes API server
+func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) {
 	currentTime := time.Now()
 
 	params := mux.Vars(r)
