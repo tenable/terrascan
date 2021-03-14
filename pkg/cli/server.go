@@ -47,7 +47,7 @@ func server(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&PrivateKeyFile, "key-path", "", "", "private key file path")
-	rootCmd.PersistentFlags().StringVarP(&CertFile, "cert-path", "", "", "certificate file path")
+	serverCmd.Flags().StringVarP(&PrivateKeyFile, "key-path", "", "", "private key file path")
+	serverCmd.Flags().StringVarP(&CertFile, "cert-path", "", "", "certificate file path")
 	RegisterCommand(rootCmd, serverCmd)
 }

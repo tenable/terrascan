@@ -23,10 +23,13 @@ import (
 var (
 	// LogLevel Logging level (debug, info, warn, error, panic, fatal)
 	LogLevel string
+
 	// LogType Logging output type (console, json)
 	LogType string
+
 	// OutputType Violation output type (human, json, yaml, xml)
 	OutputType string
+
 	// ConfigFile Config file path
 	ConfigFile string
 )

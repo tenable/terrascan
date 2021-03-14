@@ -19,13 +19,14 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"net/http"
+	"time"
+
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"go.uber.org/zap"
-	"html/template"
-	"net/http"
-	"time"
 )
 
 type webhookDisplayedViolation struct {
@@ -218,8 +219,6 @@ func (g *APIHandler) getLogReasoning(log webhookScanLog) string {
 
 		return string(encoded)
 	}
-
-	return ""
 }
 
 func (g *APIHandler) getLogRequest(log webhookScanLog) string {
