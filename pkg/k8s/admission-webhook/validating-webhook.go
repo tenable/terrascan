@@ -39,8 +39,8 @@ type ValidatingWebhook struct {
 }
 
 // NewValidatingWebhook returns a new, empty ValidatingWebhook struct
-func NewValidatingWebhook(configFile string) *ValidatingWebhook {
-	return &ValidatingWebhook{configFile: configFile}
+func NewValidatingWebhook(configFile string) AdmissionWebhook {
+	return ValidatingWebhook{configFile: configFile}
 }
 
 var (
@@ -50,7 +50,7 @@ var (
 )
 
 // Authorize checks if the incoming webhooks have valid apiKey
-func (w *ValidatingWebhook) Authorize(apiKey string) error {
+func (w ValidatingWebhook) Authorize(apiKey string) error {
 
 	// check if key exists in API request
 	if len(apiKey) < 1 {
@@ -76,7 +76,7 @@ func (w *ValidatingWebhook) Authorize(apiKey string) error {
 
 // DecodeAdmissionReviewRequest reads the incoming admission request body,
 // decodes it and returns an AdmissionReviewRequest struct
-func (w *ValidatingWebhook) DecodeAdmissionReviewRequest(payload []byte) (admissionv1.AdmissionReview, error) {
+func (w ValidatingWebhook) DecodeAdmissionReviewRequest(payload []byte) (admissionv1.AdmissionReview, error) {
 
 	var (
 		scheme                   = runtimeK8s.NewScheme()
@@ -99,7 +99,7 @@ func (w *ValidatingWebhook) DecodeAdmissionReviewRequest(payload []byte) (admiss
 
 // ProcessWebhook processes the incoming AdmissionReview and creates
 // a response
-func (w *ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (output *runtime.Output, allowed bool, denyViolations []*results.Violation, err error) {
+func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (output *runtime.Output, allowed bool, denyViolations []*results.Violation, err error) {
 
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
 	if len(review.Request.Object.Raw) < 1 {
@@ -131,7 +131,7 @@ func (w *ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (
 	return output, allowed, denyViolations, nil
 }
 
-func (w *ValidatingWebhook) executeEngines(tempFile os.File) (*runtime.Output, error) {
+func (w ValidatingWebhook) executeEngines(tempFile os.File) (*runtime.Output, error) {
 	var executor *runtime.Executor
 	var err error
 
@@ -152,7 +152,7 @@ func (w *ValidatingWebhook) executeEngines(tempFile os.File) (*runtime.Output, e
 	return &result, nil
 }
 
-func (w *ValidatingWebhook) getDenyViolations(output runtime.Output) ([]*results.Violation, error) {
+func (w ValidatingWebhook) getDenyViolations(output runtime.Output) ([]*results.Violation, error) {
 
 	// Calcualte the deny violations according to the configuration specified in the config file
 	configReader, err := config.NewTerrascanConfigReader(w.configFile)
@@ -166,7 +166,7 @@ func (w *ValidatingWebhook) getDenyViolations(output runtime.Output) ([]*results
 	return denyViolations, nil
 }
 
-func (w *ValidatingWebhook) getDeniedViolations(violations results.ViolationStore, denyRules config.K8sDenyRules) []*results.Violation {
+func (w ValidatingWebhook) getDeniedViolations(violations results.ViolationStore, denyRules config.K8sDenyRules) []*results.Violation {
 	// Check whether one of the violations matches the deny violations configuration
 
 	var denyViolations []*results.Violation
@@ -210,7 +210,7 @@ func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules co
 	return false
 }
 
-func (w *ValidatingWebhook) writeObjectToTempFile(objectBytes []byte) (*os.File, error) {
+func (w ValidatingWebhook) writeObjectToTempFile(objectBytes []byte) (*os.File, error) {
 	tempFile, err := ioutil.TempFile("", "terrascan-*.json")
 	if err != nil {
 		zap.S().Errorf("failed to create temp file: '%v'", err)
