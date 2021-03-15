@@ -192,7 +192,7 @@ func TestUWebhooks(t *testing.T) {
 			if len(tt.apiKey) > 0 {
 				url = fmt.Sprintf("/v1/k8s/webhooks/%v/scan", tt.apiKey)
 			} else {
-				url = fmt.Sprintf("/v1/k8s/webhooks/scan")
+				url = "/v1/k8s/webhooks/scan"
 			}
 
 			req := httptest.NewRequest("POST", url, bytes.NewReader(byteValue))

@@ -198,7 +198,8 @@ type webhookDenyRuleMatcher struct {
 
 // This class should check if one of the violations found is relevant for the specified K8s deny rules
 func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules config.K8sDenyRules) bool {
-	if &denyRules == nil {
+
+	if denyRules.DeniedSeverity == "" && len(denyRules.Categories) == 0 {
 		return false
 	}
 
