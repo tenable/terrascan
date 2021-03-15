@@ -43,9 +43,16 @@ func NewValidatingWebhook(configFile string) AdmissionWebhook {
 }
 
 var (
-	ErrAPIKeyMissing        = fmt.Errorf("apiKey is missing in validating admission webhook url")
-	ErrAPIKeyEnvNotSet      = fmt.Errorf("variable K8S_WEBHOOK_API_KEY not set in terrascan server environment")
-	ErrUnauthorized         = fmt.Errorf("invalid API key in validating admission webhook url")
+	// ErrAPIKeyMissing indicates that API key is missing in webhook request
+	ErrAPIKeyMissing = fmt.Errorf("apiKey is missing in validating admission webhook url")
+
+	// ErrAPIKeyEnvNotSet indicates K8S_WEBHOOK_API_KEY is not set in terrascan server env
+	ErrAPIKeyEnvNotSet = fmt.Errorf("variable K8S_WEBHOOK_API_KEY not set in terrascan server environment")
+
+	// ErrUnauthorized means user is not authorized to make this call
+	ErrUnauthorized = fmt.Errorf("invalid API key in validating admission webhook url")
+
+	// ErrEmptyAdmissionReview empty admission review request
 	ErrEmptyAdmissionReview = fmt.Errorf("empty admission review request")
 )
 

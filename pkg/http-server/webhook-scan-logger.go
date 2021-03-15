@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// WebhookScanLogger handles the logic to push scan logs to db
 type WebhookScanLogger struct {
 	test bool
 }
@@ -95,7 +96,7 @@ func (g *WebhookScanLogger) fetchLogs() ([]webhookScanLog, error) {
 	return result, nil
 }
 
-func (g *WebhookScanLogger) fetchLogById(logUID string) (*webhookScanLog, error) {
+func (g *WebhookScanLogger) fetchLogByID(logUID string) (*webhookScanLog, error) {
 	// Fetch a specific log by its request UID
 
 	db, err := g.getDbHandler()
@@ -185,10 +186,9 @@ func (g *WebhookScanLogger) getDbHandler() (*sql.DB, error) {
 func (g *WebhookScanLogger) dbFilePath() string {
 	if g.test {
 		return "./" + dbFileName
-	} else {
-		// This is where the DB file should be located in the container (It is going to be saved in the host machine volume)
-		return "/data/k8s-admission-review-logs.db"
 	}
+	// This is where the DB file should be located in the container (It is going to be saved in the host machine volume)
+	return "/data/k8s-admission-review-logs.db"
 }
 
 // Used for Tests only - clear the DB file after the tests are done

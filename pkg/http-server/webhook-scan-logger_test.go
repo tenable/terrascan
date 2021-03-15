@@ -41,13 +41,13 @@ func TestLogs(t *testing.T) {
 			t.Errorf("A new log should be returned. Got: '%v' logs", len(fetchedLogs))
 		}
 
-		myFetchLog, err := logger.fetchLogById(log.UID)
+		myFetchLog, err := logger.fetchLogByID(log.UID)
 		if err != nil {
 			t.Errorf("Got error")
 		}
 
 		if len(myFetchLog.UID) < 1 {
-			t.Errorf("Log with ID: '%v' is not returned by fetchLogById", log.UID)
+			t.Errorf("Log with ID: '%v' is not returned by fetchLogByID", log.UID)
 		}
 
 		if myFetchLog.UID != log.UID {

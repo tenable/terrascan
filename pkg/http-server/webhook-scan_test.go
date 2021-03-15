@@ -16,15 +16,15 @@ import (
 
 func TestUWebhooks(t *testing.T) {
 	testFilePath := "./k8s_testdata/testconfig.json"
-	testApiKey := "Test-API-KEY"
-	testEnvApiKey := "Test-API-KEY"
+	testAPIKey := "Test-API-KEY"
+	testEnvAPIKey := "Test-API-KEY"
 	testConfigFile := ""
 
 	table := []struct {
 		name               string
 		contentRequestPath string
 		apiKey             string
-		envApiKey          string
+		envAPIKey          string
 		wantStatus         int
 		configFile         string
 		warnings           bool
@@ -36,55 +36,55 @@ func TestUWebhooks(t *testing.T) {
 			name:               "missing api key",
 			contentRequestPath: testFilePath,
 			apiKey:             "",
-			envApiKey:          testEnvApiKey,
+			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusBadRequest,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "missing K8S_WEBHOOK_API_KEY",
 			contentRequestPath: testFilePath,
-			apiKey:             testApiKey,
-			envApiKey:          "",
+			apiKey:             testAPIKey,
+			envAPIKey:          "",
 			wantStatus:         http.StatusInternalServerError,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "invalid api key",
 			contentRequestPath: testFilePath,
-			apiKey:             testApiKey,
-			envApiKey:          "Invalid API KEY",
+			apiKey:             testAPIKey,
+			envAPIKey:          "Invalid API KEY",
 			wantStatus:         http.StatusUnauthorized,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "invalid api key",
 			contentRequestPath: testFilePath,
-			apiKey:             testApiKey,
-			envApiKey:          "Invalid API KEY",
+			apiKey:             testAPIKey,
+			envAPIKey:          "Invalid API KEY",
 			wantStatus:         http.StatusUnauthorized,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "invalid request json content",
 			contentRequestPath: "./k8s_testdata/invalid.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusBadRequest,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "empty request json content",
 			contentRequestPath: "./k8s_testdata/empty.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusBadRequest,
 			configFile:         testConfigFile,
 		},
 		{
 			name:               "request with empty object",
 			contentRequestPath: "./k8s_testdata/empty_object.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusOK,
 			configFile:         testConfigFile,
 			warnings:           false,
@@ -93,8 +93,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "safe request object",
 			contentRequestPath: testFilePath,
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusOK,
 			configFile:         testConfigFile,
 			warnings:           false,
@@ -103,8 +103,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object without config",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         testConfigFile,
 			warnings:           true,
 			allowed:            true,
@@ -113,8 +113,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object with config that make it safe",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         "./k8s_testdata/config-specific-rule.toml",
 			warnings:           false,
 			allowed:            true,
@@ -123,8 +123,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object with config that just removes some of the violations",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         "./k8s_testdata/config-medium-severity.toml",
 			warnings:           true,
 			allowed:            true,
@@ -133,8 +133,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object with denied severity",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         "./k8s_testdata/config-deny-high.toml",
 			warnings:           false,
 			allowed:            false,
@@ -145,8 +145,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object with denied categories",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         "./k8s_testdata/config-deny-category.toml",
 			warnings:           false,
 			allowed:            false,
@@ -157,8 +157,8 @@ func TestUWebhooks(t *testing.T) {
 		{
 			name:               "risky request object with denied categories that does not exist",
 			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
-			apiKey:             testApiKey,
-			envApiKey:          testEnvApiKey,
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
 			configFile:         "./k8s_testdata/config-deny-non-existing-category.toml",
 			warnings:           true,
 			allowed:            true,
@@ -168,7 +168,7 @@ func TestUWebhooks(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Setenv("K8S_WEBHOOK_API_KEY", tt.envApiKey)
+			os.Setenv("K8S_WEBHOOK_API_KEY", tt.envAPIKey)
 
 			// test file to upload
 			path := tt.contentRequestPath

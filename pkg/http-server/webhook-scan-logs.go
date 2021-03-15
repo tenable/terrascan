@@ -25,6 +25,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
+	// importing sqlite driver
 	_ "github.com/mattn/go-sqlite3"
 	"go.uber.org/zap"
 )
@@ -47,7 +48,7 @@ type webhookDisplayedRequest struct {
 
 type webhookDisplayedIndexScanLog struct {
 	CreatedAt time.Time
-	LogUrl    string
+	LogURL    string
 	Status    string
 	Request   string
 	Reasoning string
@@ -85,7 +86,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		logsData = append(logsData, webhookDisplayedIndexScanLog{
 			CreatedAt: log.CreatedAt,
 			Status:    g.getLogStatus(log),
-			LogUrl:    g.getLogPath(r.Host, log.UID),
+			LogURL:    g.getLogPath(r.Host, log.UID),
 			Reasoning: g.getLogReasoning(log),
 			Request:   g.getLogRequest(log),
 		})
@@ -109,7 +110,7 @@ func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 		test: g.test,
 	}
 
-	log, err := logger.fetchLogById(uid)
+	log, err := logger.fetchLogByID(uid)
 	if err != nil {
 		errMsg := fmt.Sprintf("error reading logs from DB: '%v'", err)
 		zap.S().Error(errMsg)
@@ -190,24 +191,23 @@ func (g *APIHandler) getLogReasoning(log webhookScanLog) string {
 
 	if len(violations) < 1 {
 		return ""
-	} else {
-		for _, v := range violations {
-			result = append(result, webhookDisplayedViolation{
-				Category:    v.Category,
-				Description: v.Description,
-				RuleName:    v.RuleName,
-				Severity:    v.Severity,
-			})
-		}
-
-		encoded, err := json.Marshal(result)
-		if err != nil {
-			zap.S().Errorf("failed to serialize violations: '%v'", err)
-			return ""
-		}
-
-		return string(encoded)
 	}
+	for _, v := range violations {
+		result = append(result, webhookDisplayedViolation{
+			Category:    v.Category,
+			Description: v.Description,
+			RuleName:    v.RuleName,
+			Severity:    v.Severity,
+		})
+	}
+
+	encoded, err := json.Marshal(result)
+	if err != nil {
+		zap.S().Errorf("failed to serialize violations: '%v'", err)
+		return ""
+	}
+
+	return string(encoded)
 }
 
 func (g *APIHandler) getLogRequest(log webhookScanLog) string {

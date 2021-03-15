@@ -63,7 +63,7 @@ type Rules struct {
 	SkipRules []string `toml:"skip-rules,omitempty"`
 }
 
-// K8s deny rules in the terrascan config file
+// K8sDenyRules deny rules in the terrascan config file
 type K8sDenyRules struct {
 	DeniedSeverity string   `toml:"denied-severity,omitempty"`
 	Categories     []string `toml:"denied-categories,omitempty"`
