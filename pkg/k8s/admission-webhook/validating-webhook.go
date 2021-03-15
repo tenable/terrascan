@@ -43,9 +43,10 @@ func NewValidatingWebhook(configFile string) AdmissionWebhook {
 }
 
 var (
-	ErrAPIKeyMissing   = fmt.Errorf("apiKey is missing in validating admission webhook url")
-	ErrAPIKeyEnvNotSet = fmt.Errorf("variable K8S_WEBHOOK_API_KEY not set in terrascan server environment")
-	ErrUnauthorized    = fmt.Errorf("invalid API key in validating admission webhook url")
+	ErrAPIKeyMissing        = fmt.Errorf("apiKey is missing in validating admission webhook url")
+	ErrAPIKeyEnvNotSet      = fmt.Errorf("variable K8S_WEBHOOK_API_KEY not set in terrascan server environment")
+	ErrUnauthorized         = fmt.Errorf("invalid API key in validating admission webhook url")
+	ErrEmptyAdmissionReview = fmt.Errorf("empty admission review request")
 )
 
 // Authorize checks if the incoming webhooks have valid apiKey
@@ -102,8 +103,8 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (o
 
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
 	if len(review.Request.Object.Raw) < 1 {
-		zap.S().Info("recieved empty validating admission review request", zap.Any("admission review object", review))
-		return output, true, denyViolations, nil
+		zap.S().Info(ErrEmptyAdmissionReview, zap.Any("admission review object", review))
+		return output, true, denyViolations, ErrEmptyAdmissionReview
 	}
 
 	// Save the object into a temp file for the policy engines

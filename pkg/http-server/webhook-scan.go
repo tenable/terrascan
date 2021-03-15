@@ -72,10 +72,18 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	if requestedAdmissionReview.Request == nil {
+		apiErrorResponse(w, "empty validating admission review request", http.StatusBadRequest)
+		return
+	}
 
 	// process the admission review request
 	output, allowed, denyViolations, err := validatingWebhook.ProcessWebhook(requestedAdmissionReview)
 	if err != nil {
+		if err == admissionWebhook.ErrEmptyAdmissionReview {
+			g.sendResponseAdmissionReview(w, requestedAdmissionReview, true, output, "")
+			return
+		}
 		apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -106,15 +114,17 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
 		Allowed: allowed,
 	}
 
-	// Means we ran the engines and we have results
-	if allowed {
-		if len(output.Violations.ViolationStore.Violations) > 0 {
-			// In case there are no denial violations, just return the log URL as a warning
-			responseAdmissionReview.Response.Warnings = []string{logPath}
+	if output.Violations.ViolationStore != nil {
+		// Means we ran the engines and we have results
+		if allowed {
+			if len(output.Violations.ViolationStore.Violations) > 0 {
+				// In case there are no denial violations, just return the log URL as a warning
+				responseAdmissionReview.Response.Warnings = []string{logPath}
+			}
+		} else {
+			// In case the request was denied, return 403 and the log URL as an error message
+			responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
 		}
-	} else {
-		// In case the request was denied, return 403 and the log URL as an error message
-		responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
 	}
 
 	respBytes, err := json.Marshal(responseAdmissionReview)
@@ -125,7 +135,6 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
 	}
 
 	zap.S().Debugf("Response result: %+v", string(respBytes))
-
 	apiResponse(w, string(respBytes), http.StatusOK)
 }
 
