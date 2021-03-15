@@ -24,7 +24,6 @@ import (
 	"time"
 
 	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
-	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
@@ -49,26 +48,26 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 		switch err {
 		case admissionWebhook.ErrAPIKeyMissing:
 			apiErrorResponse(w, err.Error(), http.StatusBadRequest)
-		case admissionwebhook.ErrAPIKeyEnvNotSet:
-			apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
-		case admissionWebhook.ErrUnAuthorized:
+		case admissionWebhook.ErrUnauthorized:
 			apiErrorResponse(w, err.Error(), http.StatusUnauthorized)
+		default:
+			apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
 
 	// Read the request into byte array
-	payload, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		msg := fmt.Sprintf("failed to read validating admission webhook body, error: '%v'", err)
+		msg := fmt.Sprintf("failed to read validating admission webhook request body, error: '%v'", err)
 		apiErrorResponse(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	zap.S().Debugf("scanning configuration webhook request: %+v", string(payload))
+	zap.S().Debugf("scanning configuration webhook request: %+v", string(body))
 
 	// decode incoming admission review request
-	requestedAdmissionReview, err := validatingWebhook.DecodeAdmissionReviewRequest(payload)
+	requestedAdmissionReview, err := validatingWebhook.DecodeAdmissionReviewRequest(body)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
@@ -84,7 +83,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	logPath := g.getLogPath(r.Host, string(requestedAdmissionReview.Request.UID))
 
 	// Log the request in the DB
-	err = g.logWebhook(*output, string(requestedAdmissionReview.Request.UID), payload, denyViolations, currentTime, allowed)
+	err = g.logWebhook(output, string(requestedAdmissionReview.Request.UID), body, denyViolations, currentTime, allowed)
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -97,7 +96,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
 	requestedAdmissionReview v1.AdmissionReview,
 	allowed bool,
-	output *runtime.Output,
+	output runtime.Output,
 	logPath string) {
 	responseAdmissionReview := &v1.AdmissionReview{}
 	responseAdmissionReview.SetGroupVersionKind(requestedAdmissionReview.GroupVersionKind())
@@ -107,17 +106,15 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
 		Allowed: allowed,
 	}
 
-	if output != nil {
-		// Means we ran the engines and we have results
-		if allowed {
-			if len(output.Violations.ViolationStore.Violations) > 0 {
-				// In case there are no denial violations, just return the log URL as a warning
-				responseAdmissionReview.Response.Warnings = []string{logPath}
-			}
-		} else {
-			// In case the request was denied, return 403 and the log URL as an error message
-			responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
+	// Means we ran the engines and we have results
+	if allowed {
+		if len(output.Violations.ViolationStore.Violations) > 0 {
+			// In case there are no denial violations, just return the log URL as a warning
+			responseAdmissionReview.Response.Warnings = []string{logPath}
 		}
+	} else {
+		// In case the request was denied, return 403 and the log URL as an error message
+		responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
 	}
 
 	respBytes, err := json.Marshal(responseAdmissionReview)
@@ -135,7 +132,7 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter,
 func (g *APIHandler) logWebhook(output runtime.Output,
 	uid string,
 	bytesAdmissionReview []byte,
-	denyViolations []*results.Violation,
+	denyViolations []results.Violation,
 	currentTime time.Time,
 	allowed bool) error {
 	var deniedViolationsEncoded string

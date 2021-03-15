@@ -35,5 +35,5 @@ type AdmissionWebhook interface {
 
 	// ProcessWebhook processes the incoming AdmissionReview and creates
 	// a AdmissionResponse
-	ProcessWebhook(review admissionv1.AdmissionReview) (*runtime.Output, bool, []*results.Violation, error)
+	ProcessWebhook(review admissionv1.AdmissionReview) (runtime.Output, bool, []results.Violation, error)
 }
