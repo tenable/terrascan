@@ -50,7 +50,7 @@ var defaultIacType = make(map[supportedCloudType]supportedIacType)
 var defaultIacVersion = make(map[supportedCloudType]supportedIacVersion)
 
 var (
-	basePolicyPath = config.GetPolicyBasePath()
+	basePolicyPath = config.GetPolicyRepoPath()
 )
 
 func registerActualCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion, isIndirect bool, getPolicyPaths func() []string) {

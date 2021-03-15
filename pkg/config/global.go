@@ -32,8 +32,8 @@ const (
 )
 
 var (
-	policyRepoPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
-	policyBasePath = filepath.Join(policyRepoPath, "pkg", "policies", "opa", "rego")
+	policyBasePath = filepath.Join(utils.GetHomeDir(), ".terrascan")
+	policyRepoPath = filepath.Join(policyBasePath, "pkg", "policies", "opa", "rego")
 )
 
 func init() {
