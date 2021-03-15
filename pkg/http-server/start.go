@@ -37,7 +37,7 @@ func Start(port, configFile, certFile, privateKeyFile string) {
 	routes := server.Routes(configFile)
 
 	// get port
-	if os.Getenv(TerrascanServerPort) != "" {
+	if port == GatewayDefaultPort && os.Getenv(TerrascanServerPort) != "" {
 		port = os.Getenv(TerrascanServerPort)
 	}
 
