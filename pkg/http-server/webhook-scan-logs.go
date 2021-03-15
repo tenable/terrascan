@@ -25,9 +25,10 @@ import (
 
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+
 	// importing sqlite driver
 	_ "github.com/mattn/go-sqlite3"
-	"go.uber.org/zap"
 )
 
 type webhookDisplayedViolation struct {
