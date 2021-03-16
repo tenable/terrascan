@@ -38,6 +38,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 
 			var configData output.AllResourceConfigs
 			if configData, err = k.LoadIacFile(file); err != nil {
+				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
 				continue
 			}
 
