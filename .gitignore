@@ -23,9 +23,6 @@ docs/_build/
 #vscode
 .vscode/
 
-#GoLand
-.idea
-
 /updatedFiles
 
 # Go binar
