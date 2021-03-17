@@ -158,9 +158,11 @@ var _ = Describe("Init", func() {
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
 			})
-			It("should error out and exit with status code 1", func() {
-				session = initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeOne)
-				helper.ContainsErrorSubString(session, "invalid/path: no such file or directory")
+			// The current behavior of terrascan is that, in case of init command, even if the value of
+			// rego_subdir is an invalid/non-existant directory, the init is successful and repoURL will be
+			// cloned at the base path (either default or based on config file)
+			It("should not error out and exit with status code 0", func() {
+				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 			})
 		})
 		When("the config file has invalid path", func() {
@@ -169,7 +171,11 @@ var _ = Describe("Init", func() {
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
+				//remove the cloned repo at "invalid/path", (refer to 'path' in "config/invalid_path.toml")
+				os.RemoveAll("invalid")
 			})
+			// The current behavior of terrascan is that, when init command is being run with an invalid/
+			// non-existant base path, the specified path gets created and repoURL is cloned at that location
 			It("should download policies and exit with status code 0", func() {
 				initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
 			})
@@ -181,15 +187,16 @@ var _ = Describe("Init", func() {
 				})
 				JustAfterEach(func() {
 					os.Setenv(terrascanConfigEnvName, "")
+					//remove the cloned repo at "valid/path", (refer to 'path' in "config/valid_config.toml")
+					os.RemoveAll("valid")
 				})
 				It("init should download the repo provided in the config file", func() {
 					initUtil.RunInitCommand(terrascanBinaryPath, outWriter, errWriter, helper.ExitCodeZero)
-				})
-				Context("Kai Monkey git repo is downloaded", func() {
-					It("should validate Kai Monkey repo in the policy path", func() {
-						repo := initUtil.OpenGitRepo(defaultPolicyRepoPath)
-						initUtil.ValidateGitRepo(repo, kaiMoneyGitURL)
-					})
+					basePathInValidConfig := "valid/path"
+					// Kai Monkey git repo is downloaded
+					// validate Kai Monkey repo in the repo path
+					repo := initUtil.OpenGitRepo(basePathInValidConfig)
+					initUtil.ValidateGitRepo(repo, kaiMoneyGitURL)
 				})
 			})
 		})

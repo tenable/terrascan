@@ -1,3 +1,4 @@
 [policy]
 repo_url = "https://github.com/accurics/KaiMonkey.git"
 branch = "master"
+path = "valid/path"

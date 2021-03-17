@@ -29,11 +29,11 @@ import (
 )
 
 var (
-	policyRepoPath = config.GetPolicyRepoPath()
-	policyBasePath = config.GetPolicyBasePath()
-	repoURL        = config.GetPolicyRepoURL()
-	branch         = config.GetPolicyBranch()
-	noConnectionErr = fmt.Errorf("could not connect to github.com")
+	policyRepoPath  = config.GetPolicyRepoPath()
+	policyBasePath  = config.GetPolicyBasePath()
+	repoURL         = config.GetPolicyRepoURL()
+	branch          = config.GetPolicyBranch()
+	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
 
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
@@ -50,7 +50,7 @@ func Run(isScanCmd bool) error {
 	}
 
 	if !connected(terrascanReadmeURL) {
-		return noConnectionErr
+		return errNoConnection
 	}
 
 	// download policies
