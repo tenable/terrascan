@@ -19,8 +19,9 @@
 package cli
 
 import (
-	"golang.org/x/sys/windows"
 	"os"
+
+	"golang.org/x/sys/windows"
 )
 
 // In order for colored output to work on Windows, we need to explicitly

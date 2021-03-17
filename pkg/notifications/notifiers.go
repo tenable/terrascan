@@ -29,7 +29,7 @@ var (
 	errNotifierNotSupported   = fmt.Errorf("notifier not supported")
 	errNotifierTypeNotPresent = fmt.Errorf("notifier type not present in toml config")
 	// ErrNotificationNotPresent error is caused when there isn't any notification present in the config
-	ErrNotificationNotPresent = fmt.Errorf("no notification present")
+	ErrNotificationNotPresent = fmt.Errorf("no notification specified in the config")
 )
 
 // NewNotifier returns a new notifier
@@ -54,7 +54,6 @@ func NewNotifiers() ([]Notifier, error) {
 	// get config for 'notifications'
 	notifications := config.GetNotifications()
 	if len(notifications) == 0 {
-		zap.S().Debug("no notification detected from config")
 		return notifiers, ErrNotificationNotPresent
 	}
 

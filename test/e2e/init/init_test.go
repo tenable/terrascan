@@ -17,6 +17,7 @@
 package init_test
 
 import (
+	"fmt"
 	"github.com/accurics/terrascan/pkg/utils"
 	initUtil "github.com/accurics/terrascan/test/e2e/init"
 	"github.com/accurics/terrascan/test/helper"
@@ -41,8 +42,8 @@ var (
 
 	testPolicyRepoPath = filepath.Join(utils.GetHomeDir(), ".terrascan-test")
 	testRegoSubDirPath = filepath.Join(testPolicyRepoPath, "pkg", "policies", "opa", "rego")
-	warnNoBasePath     = "policy rego_subdir specified in configfile config/relative_rego_subdir.toml, but base path not specified."
-	warnNoSubDirPath   = "policy base path specified in configfile config/home_prefixed_path.toml, but rego_subdir path not specified."
+	warnNoBasePath     = fmt.Sprintf("policy rego_subdir specified in configfile '%s', but base path not specified. applying default base path value", filepath.Join("config", "relative_rego_subdir.toml"))
+	warnNoSubDirPath   = fmt.Sprintf("policy base path specified in configfile '%s', but rego_subdir path not specified. applying default rego_subdir value", filepath.Join("config", "home_prefixed_path.toml"))
 )
 
 var _ = Describe("Init", func() {
@@ -126,7 +127,6 @@ var _ = Describe("Init", func() {
 	Describe("terrascan init is run with -c flag", func() {
 
 		Context("config file has valid policy repo and branch data", func() {
-
 			It("should download policies as per the policy config in the config file", func() {
 				configFile := filepath.Join("config", "valid_repo.toml")
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "init", "-c", configFile)
@@ -138,6 +138,7 @@ var _ = Describe("Init", func() {
 					repo := initUtil.OpenGitRepo(defaultPolicyRepoPath)
 					initUtil.ValidateGitRepo(repo, kaiMoneyGitURL)
 				})
+				os.RemoveAll(defaultPolicyRepoPath)
 			})
 
 		})
@@ -253,8 +254,6 @@ var _ = Describe("Init", func() {
 			})
 			JustAfterEach(func() {
 				os.Setenv(terrascanConfigEnvName, "")
-				//remove the cloned repo at "invalid/path", (refer to 'path' in "config/invalid_path.toml")
-				os.RemoveAll("invalid")
 			})
 
 			// The current behavior of terrascan is that, when init command is being run with an invalid/

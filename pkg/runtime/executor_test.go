@@ -18,12 +18,13 @@ package runtime
 
 import (
 	"fmt"
+	"reflect"
+	"testing"
+
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
-	"reflect"
-	"testing"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"

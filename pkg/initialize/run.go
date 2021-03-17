@@ -38,14 +38,9 @@ const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/te
 func Run(isNonInitCmd bool) error {
 	zap.S().Debug("initializing terrascan")
 
-	zap.S().Debugf("rego subdir path : %s", config.GetPolicyRepoPath())
 	// check if policy paths exist
 	if path, err := os.Stat(config.GetPolicyRepoPath()); err == nil && path.IsDir() {
-
-		zap.S().Debug("EXISTS AND IS A DIR")
 		if isNonInitCmd {
-			zap.S().Debug("IS NON INIT")
-
 			return nil
 		}
 	}
@@ -67,14 +62,13 @@ func Run(isNonInitCmd bool) error {
 func DownloadPolicies() error {
 
 	policyBasePath := config.GetPolicyBasePath()
-	policyRepoPath := config.GetPolicyRepoPath()
 	repoURL := config.GetPolicyRepoURL()
 	branch := config.GetPolicyBranch()
 
 	zap.S().Debug("downloading policies")
 
 	zap.S().Debugf("base directory path : %s", policyBasePath)
-	zap.S().Debugf("policy directory path : %s", policyRepoPath)
+	zap.S().Debugf("policy directory path : %s", config.GetPolicyRepoPath())
 	zap.S().Debugf("policy repo url : %s", repoURL)
 	zap.S().Debugf("policy repo git branch : %s", branch)
 

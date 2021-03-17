@@ -28,6 +28,9 @@ const (
 	defaultPolicyBranch  = "master"
 )
 
+// ConfigEnvvarName env variable
+const ConfigEnvvarName = "TERRASCAN_CONFIG"
+
 var (
 	defaultPolicyRepoPath = filepath.Join("pkg", "policies", "opa", "rego")
 	defaultBasePolicyPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
@@ -57,11 +60,11 @@ func LoadGlobalConfig(configFile string) error {
 	}
 
 	if len(configReader.getPolicyConfig().BasePath) > 0 && len(configReader.getPolicyConfig().RepoPath) == 0 {
-		zap.S().Warnf("policy base path specified in configfile %s, but rego_subdir path not specified.", configFile)
+		zap.S().Warnf("policy base path specified in configfile '%s', but rego_subdir path not specified. applying default rego_subdir value '%s'", configFile, GetPolicyRepoPath())
 	}
 
 	if len(configReader.getPolicyConfig().RepoPath) > 0 && len(configReader.getPolicyConfig().BasePath) == 0 {
-		zap.S().Warnf("policy rego_subdir specified in configfile %s, but base path not specified.", configFile)
+		zap.S().Warnf("policy rego_subdir specified in configfile '%s', but base path not specified. applying default base path value '%s'", configFile, GetPolicyBasePath())
 	}
 
 	if len(configReader.getPolicyConfig().BasePath) > 0 {
