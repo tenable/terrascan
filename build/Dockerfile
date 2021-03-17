@@ -24,7 +24,7 @@ FROM alpine:3.12.0
 # create non root user
 RUN addgroup --gid 101 terrascan && \
     adduser -S --uid 101 --ingroup terrascan terrascan && \
-    apk add --no-cache git
+    apk add --no-cache git openssh
 
 # run as non root user
 USER terrascan
