@@ -154,7 +154,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, categories, severity)
+			tempFile.Name(), "", "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity)
 	}
 	if err != nil {
 		zap.S().Error(err)
@@ -194,19 +194,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	apiResponse(w, string(j), http.StatusOK)
 }
 
-// getPolicyPathFromEnv reads the TERRASCAN_CONFIG env variable (if present) and returns the policy path
-func getPolicyPathFromEnv() []string {
-	policyPath := []string{}
-
-	// read policy path from TERRASCAN_CONFIG env variable
-	terrascanConfigFile := os.Getenv("TERRASCAN_CONFIG")
-	if terrascanConfigFile != "" {
-		terrascanConfigReader, err := config.NewTerrascanConfigReader(terrascanConfigFile)
-		if err != nil {
-			zap.S().Errorf("error while reading config file, %s; err %v", terrascanConfigFile, err)
-		} else {
-			policyPath = append(policyPath, terrascanConfigReader.GetPolicyConfig().RepoPath)
-		}
-	}
-	return policyPath
+// getPolicyPathFromConfig returns the policy path from config
+func getPolicyPathFromConfig() []string {
+	return []string{config.GetPolicyRepoPath()}
 }

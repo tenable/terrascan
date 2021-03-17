@@ -1,2 +1,0 @@
-[policy]
-rego_subdir = "invalid/path"

@@ -17,6 +17,7 @@
 package policy
 
 import (
+	"path/filepath"
 	"sort"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -49,10 +50,6 @@ var defaultIacType = make(map[supportedCloudType]supportedIacType)
 // defaultIacVersion map of default IaC version for a given policy/cloud provider
 var defaultIacVersion = make(map[supportedCloudType]supportedIacVersion)
 
-var (
-	basePolicyPath = config.GetPolicyRepoPath()
-)
-
 func registerActualCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion, isIndirect bool, getPolicyPaths func() []string) {
 	if isIndirect {
 		supportedCloudProvider[cloudType] = cloudProviderType{
@@ -77,7 +74,9 @@ func RegisterIndirectCloudProvider(cloudType supportedCloudType, iacTypeDefault 
 
 // RegisterCloudProvider registers a cloud provider with terrascan
 func RegisterCloudProvider(cloudType supportedCloudType, iacTypeDefault supportedIacType, iacVersionDefault supportedIacVersion) {
-	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, false, func() []string { return []string{basePolicyPath + "/" + string(cloudType)} })
+	registerActualCloudProvider(cloudType, iacTypeDefault, iacVersionDefault, false, func() []string {
+		return []string{filepath.Join(config.GetPolicyRepoPath(), string(cloudType))}
+	})
 }
 
 // IsCloudProviderSupported returns whether a cloud provider is supported in terrascan
@@ -102,9 +101,11 @@ func GetDefaultPolicyPaths(cloudTypes []string) []string {
 	}
 
 	for _, x := range names {
-		paths := (supportedCloudProvider[supportedCloudType(x)]).policyPaths()
+		def := supportedCloudProvider[supportedCloudType(x)]
+		paths := def.policyPaths()
 		providers = append(providers, paths...)
 	}
+
 	return providers
 }
 

@@ -103,13 +103,6 @@ func (e *Executor) ValidateInputs() error {
 		e.iacVersion = IacProvider.GetDefaultIacVersion(e.iacType)
 	}
 
-	// check if IaC type is supported
-	if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
-		zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
-		return errIacNotSupported
-	}
-	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
-
 	// check if cloud type is supported
 	for _, ct := range e.cloudType {
 		if !policy.IsCloudProviderSupported(ct) {
@@ -118,10 +111,19 @@ func (e *Executor) ValidateInputs() error {
 		}
 	}
 	zap.S().Debugf("cloud type '%s' is supported", strings.Join(e.cloudType, ","))
+
 	if len(e.policyPath) == 0 {
 		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
 	}
+
 	zap.S().Debugf("using policy path %v", e.policyPath)
+
+	// check if IaC type is supported
+	if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
+		zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
+		return errIacNotSupported
+	}
+	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 
 	if len(e.categories) > 0 {
 		if isValid, invalidInputs := utils.ValidateCategoryInput(e.categories); !isValid {

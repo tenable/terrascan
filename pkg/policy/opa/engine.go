@@ -40,7 +40,8 @@ import (
 )
 
 var (
-	errInitFailed = fmt.Errorf("failed to initialize OPA policy engine")
+	// ErrInitFailed error
+	ErrInitFailed = fmt.Errorf("failed to initialize OPA policy engine")
 )
 
 // NewEngine returns a new OPA policy engine
@@ -246,7 +247,7 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules, categories []stri
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
 		zap.S().Error("error loading rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return errInitFailed
+		return ErrInitFailed
 	}
 
 	// before compiling the rego files, filter the rules based on scan and skip rules, and severity level supplied
@@ -258,7 +259,7 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules, categories []stri
 	err := e.CompileRegoFiles()
 	if err != nil {
 		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return errInitFailed
+		return ErrInitFailed
 	}
 
 	// initialize ViolationStore

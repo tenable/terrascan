@@ -17,7 +17,6 @@
 package config
 
 import (
-	"os"
 	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/utils"
@@ -25,79 +24,136 @@ import (
 )
 
 const (
-	policyRepoURL    = "https://github.com/accurics/terrascan.git"
-	policyBranch     = "master"
-	configEnvvarName = "TERRASCAN_CONFIG"
-	policyConfigKey  = "policy"
+	defaultPolicyRepoURL = "https://github.com/accurics/terrascan.git"
+	defaultPolicyBranch  = "master"
 )
 
 var (
-	policyBasePath = filepath.Join(utils.GetHomeDir(), ".terrascan")
-	policyRepoPath = filepath.Join(policyBasePath, "pkg", "policies", "opa", "rego")
+	defaultPolicyRepoPath = filepath.Join("pkg", "policies", "opa", "rego")
+	defaultBasePolicyPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
 )
-
-func init() {
-	// If the user specifies a config file in TERRASCAN_CONFIG,
-	// overwrite the defaults with the values from that file.
-	// Retain the defaults for members not specified in the file.
-	if err := LoadGlobalConfig(os.Getenv(configEnvvarName)); err != nil {
-		zap.S().Error("error while loading global config", zap.Error(err))
-	}
-}
 
 // LoadGlobalConfig loads policy configuration from specified configFile
 // into var Global.Policy.  Members of Global.Policy that are not specified
 // in configFile will get default values
 func LoadGlobalConfig(configFile string) error {
 	// Start with the defaults
-	Global.Policy = Policy{
-		BasePath: policyBasePath,
-		RepoPath: policyRepoPath,
-		RepoURL:  policyRepoURL,
-		Branch:   policyBranch,
+	global.Policy = Policy{
+		BasePath: defaultBasePolicyPath,
+		RepoPath: defaultPolicyRepoPath,
+		RepoURL:  defaultPolicyRepoURL,
+		Branch:   defaultPolicyBranch,
 	}
 
-	if configFile == "" {
-		zap.S().Debug("global config env variable is not specified")
-		return nil
-	}
+	var configReader *TerrascanConfigReader
+	var err error
 
-	configReader, err := NewTerrascanConfigReader(configFile)
-	if err != nil {
+	if configReader, err = NewTerrascanConfigReader(configFile); err != nil {
 		return err
 	}
 
-	if len(configReader.GetPolicyConfig().BasePath) > 0 {
-		Global.Policy.BasePath = configReader.GetPolicyConfig().BasePath
+	if configFile != "" {
+		zap.S().Debugf("loading global config from: %s", configFile)
 	}
-	if len(configReader.GetPolicyConfig().RepoPath) > 0 {
-		Global.Policy.RepoPath = configReader.GetPolicyConfig().RepoPath
+
+	if len(configReader.getPolicyConfig().BasePath) > 0 && len(configReader.getPolicyConfig().RepoPath) == 0 {
+		zap.S().Warnf("policy base path specified in configfile %s, but rego_subdir path not specified.", configFile)
 	}
-	if len(configReader.GetPolicyConfig().RepoURL) > 0 {
-		Global.Policy.RepoURL = configReader.GetPolicyConfig().RepoURL
+
+	if len(configReader.getPolicyConfig().RepoPath) > 0 && len(configReader.getPolicyConfig().BasePath) == 0 {
+		zap.S().Warnf("policy rego_subdir specified in configfile %s, but base path not specified.", configFile)
 	}
-	if len(configReader.GetPolicyConfig().Branch) > 0 {
-		Global.Policy.Branch = configReader.GetPolicyConfig().Branch
+
+	if len(configReader.getPolicyConfig().BasePath) > 0 {
+		global.BasePath = configReader.getPolicyConfig().BasePath
 	}
+
+	if len(configReader.getPolicyConfig().RepoPath) > 0 {
+		global.RepoPath = configReader.getPolicyConfig().RepoPath
+	}
+
+	absolutePolicyBasePath, absolutePolicyRepoPath, err := utils.GetAbsPolicyConfigPaths(GetPolicyBasePath(), GetPolicyRepoPath())
+	if err != nil {
+		zap.S().Error("error processing provided policy paths", zap.Error(err))
+		return err
+	}
+
+	global.Policy.BasePath = absolutePolicyBasePath
+	global.Policy.RepoPath = absolutePolicyRepoPath
+
+	if len(configReader.getPolicyConfig().RepoURL) > 0 {
+		global.Policy.RepoURL = configReader.getPolicyConfig().RepoURL
+	}
+	if len(configReader.getPolicyConfig().Branch) > 0 {
+		global.Policy.Branch = configReader.getPolicyConfig().Branch
+	}
+
+	if len(configReader.getRules().ScanRules) > 0 {
+		global.Rules.ScanRules = configReader.getRules().ScanRules
+	}
+
+	if len(configReader.getRules().SkipRules) > 0 {
+		global.Rules.SkipRules = configReader.getRules().SkipRules
+	}
+
+	if len(configReader.getSeverity().Level) > 0 {
+		global.Severity.Level = configReader.getSeverity().Level
+	}
+
+	if len(configReader.getNotifications()) > 0 {
+		global.Notifications = configReader.getNotifications()
+	}
+
+	if len(configReader.getCategory().List) > 0 {
+		global.Category.List = configReader.getCategory().List
+	}
+
+	zap.S().Debugf("global config loaded")
+
 	return nil
 }
 
-// GetPolicyBasePath returns policy base path as set in global config
+// GetPolicyBasePath returns the configured policy base path
 func GetPolicyBasePath() string {
-	return Global.Policy.BasePath
+	return global.Policy.BasePath
 }
 
-// GetPolicyRepoPath return path to the policies repo locally downloaded
+// GetPolicyRepoPath return the configured path to the policies repo locally downloaded
 func GetPolicyRepoPath() string {
-	return Global.Policy.RepoPath
+	return global.Policy.RepoPath
 }
 
-// GetPolicyRepoURL returns policy repo url
+// GetPolicyRepoURL returns the configured policy repo url
 func GetPolicyRepoURL() string {
-	return Global.Policy.RepoURL
+	return global.Policy.RepoURL
 }
 
-// GetPolicyBranch returns policy repo url
+// GetPolicyBranch returns the configured policy repo url
 func GetPolicyBranch() string {
-	return Global.Policy.Branch
+	return global.Policy.Branch
+}
+
+// GetScanRules returns the configured scan rules
+func GetScanRules() []string {
+	return global.Rules.ScanRules
+}
+
+// GetSkipRules returns the configured skips rules
+func GetSkipRules() []string {
+	return global.Rules.SkipRules
+}
+
+// GetSeverityLevel returns the configured severity level
+func GetSeverityLevel() string {
+	return global.Severity.Level
+}
+
+// GetCategoryList returns the configured list of category of violations
+func GetCategoryList() []string {
+	return global.Category.List
+}
+
+// GetNotifications returns the configured notifier map
+func GetNotifications() map[string]Notifier {
+	return global.Notifications
 }
