@@ -29,10 +29,10 @@ import (
 )
 
 var (
-	policyRepoPath = config.GetPolicyRepoPath()
-	policyBasePath = config.GetPolicyBasePath()
-	repoURL        = config.GetPolicyRepoURL()
-	branch         = config.GetPolicyBranch()
+	policyRepoPath  = config.GetPolicyRepoPath()
+	policyBasePath  = config.GetPolicyBasePath()
+	repoURL         = config.GetPolicyRepoURL()
+	branch          = config.GetPolicyBranch()
 	noConnectionErr = fmt.Errorf("could not connect to github.com")
 )
 
