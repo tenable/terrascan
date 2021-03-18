@@ -72,7 +72,12 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// The templates are saved in the docker in this location
-	t, _ := template.ParseFiles("/go/terrascan/index.html")
+	t, err := template.ParseFiles("/go/terrascan/index.html")
+	if err != nil {
+		errMsg := fmt.Sprintf("failed to parse index.html file; error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
+	}
 
 	logs, err := logger.fetchLogs()
 	if err != nil {
@@ -93,7 +98,12 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	t.Execute(w, logsData)
+	if err := t.Execute(w, logsData); err != nil {
+		errMsg := fmt.Sprintf("failed to execute html template; error: '%v'", err)
+		zap.S().Error(errMsg)
+		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
+		return
+	}
 }
 
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
