@@ -30,9 +30,8 @@ require (
 	github.com/spf13/cobra v1.1.1
 	github.com/zclconf/go-cty v1.7.1
 	go.uber.org/zap v1.16.0
-	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/mod v0.4.2 // indirect
-	golang.org/x/sys v0.0.0-20210319071255-635bc2c9138d
+	golang.org/x/sys v0.0.0-20210316164454-77fc1eacc6aa
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
