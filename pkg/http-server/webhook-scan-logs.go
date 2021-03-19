@@ -23,12 +23,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
-
-	// importing sqlite driver
-	_ "github.com/mattn/go-sqlite3"
 )
 
 type webhookDisplayedViolation struct {
@@ -67,9 +65,7 @@ type webhookDisplayedShowLog struct {
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 
 	// Return an HTML page including all the logs history
-	logger := WebhookScanLogger{
-		test: g.test,
-	}
+	logger := dblogs.NewWebhookScanLogger()
 
 	// The templates are saved in the docker in this location
 	t, err := template.ParseFiles("/go/terrascan/index.html")
@@ -79,7 +75,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 	}
 
-	logs, err := logger.fetchLogs()
+	logs, err := logger.FetchLogs()
 	if err != nil {
 		errMsg := fmt.Sprintf("error reading logs from DB: '%v'", err)
 		zap.S().Error(errMsg)
@@ -107,21 +103,20 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
+
 	// Return an HTML page including the selected log
+	var (
+		params = mux.Vars(r)
+		uid    = params["uid"]
+		logger = dblogs.NewWebhookScanLogger()
+	)
 
-	params := mux.Vars(r)
-
-	var uid = params["uid"]
 	if len(uid) < 1 {
 		apiErrorResponse(w, "Log UID is missing", http.StatusBadRequest)
 		return
 	}
 
-	logger := WebhookScanLogger{
-		test: g.test,
-	}
-
-	log, err := logger.fetchLogByID(uid)
+	log, err := logger.FetchLogByID(uid)
 	if err != nil {
 		errMsg := fmt.Sprintf("error reading logs from DB: '%v'", err)
 		zap.S().Error(errMsg)
@@ -153,7 +148,7 @@ func (g *APIHandler) getLogPath(host, logUID string) string {
 	return fmt.Sprintf("https://%v/k8s/webhooks/logs/%v", host, logUID)
 }
 
-func (g *APIHandler) getLogStatus(log webhookScanLog) string {
+func (g *APIHandler) getLogStatus(log dblogs.WebhookScanLog) string {
 	// Calculate a log status:
 	// 1. !Allowed -> Rejected
 	// 2. Allowed -> if there are violations -> Allowed with Warnings. Otherwise -> Allowed
@@ -174,7 +169,7 @@ func (g *APIHandler) getLogStatus(log webhookScanLog) string {
 	return "Allowed"
 }
 
-func (g *APIHandler) getLogReasoning(log webhookScanLog) string {
+func (g *APIHandler) getLogReasoning(log dblogs.WebhookScanLog) string {
 	// Reasoning:
 	// - In case the request is denied (rejected), show the violations that cause the denial.
 	// - Otherwise, if there are violations, show the full violations list was found
@@ -221,7 +216,7 @@ func (g *APIHandler) getLogReasoning(log webhookScanLog) string {
 	return string(encoded)
 }
 
-func (g *APIHandler) getLogRequest(log webhookScanLog) string {
+func (g *APIHandler) getLogRequest(log dblogs.WebhookScanLog) string {
 	var review webhookDisplayedReview
 
 	err := json.Unmarshal([]byte(log.Request), &review)

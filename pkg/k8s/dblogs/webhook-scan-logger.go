@@ -1,4 +1,20 @@
-package httpserver
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+package dblogs
 
 import (
 	"database/sql"
@@ -6,14 +22,18 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+
+	// importing sqlite driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // WebhookScanLogger handles the logic to push scan logs to db
 type WebhookScanLogger struct {
-	test bool
+	Test bool
 }
 
-type webhookScanLog struct {
+// WebhookScanLog database model for log records
+type WebhookScanLog struct {
 	UID                string
 	Request            string
 	Allowed            bool
@@ -25,7 +45,13 @@ type webhookScanLog struct {
 // The file name where the DB is stored. Currently we use an SQLite DB
 var dbFileName = "k8s-admission-review-logs.db"
 
-func (g *WebhookScanLogger) log(webhookScanLog webhookScanLog) error {
+// NewWebhookScanLogger returns a new WebhookScanLogger struct
+func NewWebhookScanLogger() *WebhookScanLogger {
+	return &WebhookScanLogger{}
+}
+
+// Log creates a new db record for the admission request
+func (g *WebhookScanLogger) Log(WebhookScanLog WebhookScanLog) error {
 	// Insert a new Log record to the DB
 
 	db, err := g.getDbHandler()
@@ -42,12 +68,12 @@ func (g *WebhookScanLogger) log(webhookScanLog webhookScanLog) error {
 		zap.S().Errorf("failed preparing SQL statement. error: '%v'", err)
 		return err
 	}
-	_, err = statement.Exec(webhookScanLog.UID,
-		webhookScanLog.Request,
-		webhookScanLog.Allowed,
-		webhookScanLog.ViolationsSummary,
-		webhookScanLog.DeniableViolations,
-		webhookScanLog.CreatedAt)
+	_, err = statement.Exec(WebhookScanLog.UID,
+		WebhookScanLog.Request,
+		WebhookScanLog.Allowed,
+		WebhookScanLog.ViolationsSummary,
+		WebhookScanLog.DeniableViolations,
+		WebhookScanLog.CreatedAt)
 	if err != nil {
 		zap.S().Errorf("failed to insert a new log. error: '%v'", err)
 		return err
@@ -56,7 +82,8 @@ func (g *WebhookScanLogger) log(webhookScanLog webhookScanLog) error {
 	return nil
 }
 
-func (g *WebhookScanLogger) fetchLogs() ([]webhookScanLog, error) {
+// FetchLogs retrieves all the logs from the database
+func (g *WebhookScanLogger) FetchLogs() ([]WebhookScanLog, error) {
 	// Fetch the entire logs in the DB, ordered by created_at DESC (the most updated will be at the top)
 
 	db, err := g.getDbHandler()
@@ -71,7 +98,7 @@ func (g *WebhookScanLogger) fetchLogs() ([]webhookScanLog, error) {
 		return nil, err
 	}
 
-	var result []webhookScanLog
+	var result []WebhookScanLog
 	defer row.Close()
 	for row.Next() {
 		var id int
@@ -83,7 +110,7 @@ func (g *WebhookScanLogger) fetchLogs() ([]webhookScanLog, error) {
 		var createdAt time.Time
 		row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt)
 
-		result = append(result, webhookScanLog{
+		result = append(result, WebhookScanLog{
 			UID:                uid,
 			Request:            request,
 			Allowed:            allowed,
@@ -96,7 +123,8 @@ func (g *WebhookScanLogger) fetchLogs() ([]webhookScanLog, error) {
 	return result, nil
 }
 
-func (g *WebhookScanLogger) fetchLogByID(logUID string) (*webhookScanLog, error) {
+// FetchLogByID retreives a single record based on request ID from the database
+func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error) {
 	// Fetch a specific log by its request UID
 
 	db, err := g.getDbHandler()
@@ -122,7 +150,7 @@ func (g *WebhookScanLogger) fetchLogByID(logUID string) (*webhookScanLog, error)
 		var createdAt time.Time
 		row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt)
 
-		return &webhookScanLog{
+		return &WebhookScanLog{
 			UID:                uid,
 			Request:            request,
 			Allowed:            allowed,
@@ -132,7 +160,7 @@ func (g *WebhookScanLogger) fetchLogByID(logUID string) (*webhookScanLog, error)
 		}, nil
 	}
 
-	return &webhookScanLog{}, nil
+	return &WebhookScanLog{}, nil
 }
 
 func (g *WebhookScanLogger) initDBIfNeeded() error {
@@ -184,14 +212,14 @@ func (g *WebhookScanLogger) getDbHandler() (*sql.DB, error) {
 }
 
 func (g *WebhookScanLogger) dbFilePath() string {
-	if g.test {
+	if g.Test {
 		return "./" + dbFileName
 	}
 	// This is where the DB file should be located in the container (It is going to be saved in the host machine volume)
 	return "/data/k8s-admission-review-logs.db"
 }
 
-// Used for Tests only - clear the DB file after the tests are done
-func (g *WebhookScanLogger) clearDbFilePath() {
+// ClearDbFilePath used for Tests only - clear the DB file after the tests are done
+func (g *WebhookScanLogger) ClearDbFilePath() {
 	os.Remove(g.dbFilePath())
 }

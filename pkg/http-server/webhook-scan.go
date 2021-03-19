@@ -24,6 +24,7 @@ import (
 	"time"
 
 	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
+	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
@@ -155,11 +156,11 @@ func (g *APIHandler) logWebhook(output runtime.Output,
 
 	encodedViolationsSummary, _ := json.Marshal(output.Violations.ViolationStore)
 
-	logger := WebhookScanLogger{
-		test: g.test,
+	logger := dblogs.WebhookScanLogger{
+		Test: g.test,
 	}
 
-	err := logger.log(webhookScanLog{
+	err := logger.Log(dblogs.WebhookScanLog{
 		UID:                uid,
 		Request:            string(bytesAdmissionReview),
 		Allowed:            allowed,

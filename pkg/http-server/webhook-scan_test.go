@@ -10,6 +10,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/gorilla/mux"
 	v1 "k8s.io/api/admission/v1"
 )
@@ -178,10 +179,11 @@ func TestUWebhooks(t *testing.T) {
 				return
 			}
 			defer jsonFile.Close()
-			logger := WebhookScanLogger{
-				test: true,
+
+			logger := dblogs.WebhookScanLogger{
+				Test: true,
 			}
-			defer logger.clearDbFilePath()
+			defer logger.ClearDbFilePath()
 
 			byteValue, _ := ioutil.ReadAll(jsonFile)
 
