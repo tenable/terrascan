@@ -30,7 +30,6 @@ import (
 	"go.uber.org/zap"
 
 	admissionv1 "k8s.io/api/admission/v1"
-	v1 "k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeK8s "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -118,7 +117,7 @@ func (w ValidatingWebhook) DecodeAdmissionReviewRequest(requestBody []byte) (adm
 
 // ProcessWebhook processes the incoming AdmissionReview and creates
 // a response
-func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*v1.AdmissionReview, error) {
+func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*admissionv1.AdmissionReview, error) {
 
 	var (
 		output         runtime.Output
@@ -264,17 +263,17 @@ func (w ValidatingWebhook) logWebhook(output runtime.Output,
 // createAdmissionResponse creates a admission review response which is sent
 // to calling kubernetes API server
 func (w ValidatingWebhook) createResponseAdmissionReview(
-	requestedAdmissionReview v1.AdmissionReview,
+	requestedAdmissionReview admissionv1.AdmissionReview,
 	allowed bool,
 	output runtime.Output,
-	logPath string) *v1.AdmissionReview {
+	logPath string) *admissionv1.AdmissionReview {
 
 	// create an admission review request to be sent as response
-	responseAdmissionReview := &v1.AdmissionReview{}
+	responseAdmissionReview := &admissionv1.AdmissionReview{}
 	responseAdmissionReview.SetGroupVersionKind(requestedAdmissionReview.GroupVersionKind())
 
 	// populate admission response
-	responseAdmissionReview.Response = &v1.AdmissionResponse{
+	responseAdmissionReview.Response = &admissionv1.AdmissionResponse{
 		UID:     requestedAdmissionReview.Request.UID,
 		Allowed: allowed,
 	}

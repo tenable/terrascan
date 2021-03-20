@@ -18,7 +18,6 @@ package admissionwebhook
 
 import (
 	admissionv1 "k8s.io/api/admission/v1"
-	v1 "k8s.io/api/admission/v1"
 )
 
 // AdmissionWebhook interface needs to be implemented by all k8s admission
@@ -34,5 +33,5 @@ type AdmissionWebhook interface {
 
 	// ProcessWebhook processes the incoming AdmissionReview and creates
 	// a AdmissionResponse
-	ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*v1.AdmissionReview, error)
+	ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*admissionv1.AdmissionReview, error)
 }
