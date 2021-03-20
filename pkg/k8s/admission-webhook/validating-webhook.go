@@ -17,15 +17,21 @@
 package admissionwebhook
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
+
 	admissionv1 "k8s.io/api/admission/v1"
+	v1 "k8s.io/api/admission/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeK8s "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 )
@@ -34,12 +40,17 @@ import (
 // the kubernetes API server and decides whether the admission request from
 // the kubernetes client should be allowed or not
 type ValidatingWebhook struct {
-	configFile string
+	configFile  string
+	requestBody []byte
+	dblogger    *dblogs.WebhookScanLogger
 }
 
 // NewValidatingWebhook returns a new, empty ValidatingWebhook struct
 func NewValidatingWebhook(configFile string) AdmissionWebhook {
-	return ValidatingWebhook{configFile: configFile}
+	return ValidatingWebhook{
+		configFile: configFile,
+		dblogger:   dblogs.NewWebhookScanLogger(),
+	}
 }
 
 var (
@@ -91,6 +102,7 @@ func (w ValidatingWebhook) DecodeAdmissionReviewRequest(requestBody []byte) (adm
 		deserializer             = codecs.UniversalDeserializer()
 		requestedAdmissionReview admissionv1.AdmissionReview
 	)
+	w.requestBody = requestBody
 	admissionv1.AddToScheme(scheme)
 
 	// decode incoming admission request
@@ -106,12 +118,19 @@ func (w ValidatingWebhook) DecodeAdmissionReviewRequest(requestBody []byte) (adm
 
 // ProcessWebhook processes the incoming AdmissionReview and creates
 // a response
-func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (output runtime.Output, allowed bool, denyViolations []results.Violation, err error) {
+func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*v1.AdmissionReview, error) {
+
+	var (
+		output         runtime.Output
+		denyViolations []results.Violation
+		logURL         = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
+		allowed        = false
+	)
 
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
 	if len(review.Request.Object.Raw) < 1 {
 		zap.S().Info(ErrEmptyAdmissionReview, zap.Any("admission review object", review))
-		return output, true, denyViolations, ErrEmptyAdmissionReview
+		return w.createResponseAdmissionReview(review, true, output, logURL), ErrEmptyAdmissionReview
 	}
 
 	// Save the object into a temp file for the policy engines
@@ -120,7 +139,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (o
 	if err != nil {
 		msg := "failed to create temp file for validating admission review request"
 		zap.S().Error(msg, zap.Error(err))
-		return output, true, denyViolations, fmt.Errorf("%s; error: %w", msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
 	}
 
 	// Run the policy engines
@@ -128,14 +147,26 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview) (o
 	if err != nil {
 		msg := "failed to evaluate terrascan policies"
 		zap.S().Errorf(msg, zap.Error(err))
-		return output, allowed, denyViolations, fmt.Errorf("%s; error: %w", msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
 	}
 
 	// Calculate if there are anydeny violations
 	denyViolations, err = w.getDenyViolations(output)
+	if err != nil {
+		msg := "failed to figure out denied violations"
+		zap.S().Errorf(msg, zap.Error(err))
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
+	}
 	allowed = len(denyViolations) < 1
 
-	return output, allowed, denyViolations, nil
+	// Log the request in the DB
+	err = w.logWebhook(output, string(review.Request.UID), denyViolations, allowed)
+	if err != nil {
+		msg := "failed to log validating admission review request into database"
+		zap.S().Error(msg, zap.Error(err))
+	}
+
+	return w.createResponseAdmissionReview(review, allowed, output, logURL), nil
 }
 
 func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) {
@@ -191,6 +222,77 @@ func (w ValidatingWebhook) getDeniedViolations(violations results.ViolationStore
 	}
 
 	return denyViolations
+}
+
+func (w ValidatingWebhook) logWebhook(output runtime.Output,
+	uid string,
+	denyViolations []results.Violation,
+	allowed bool) error {
+
+	var (
+		currentTime             = time.Now()
+		deniedViolationsEncoded string
+	)
+
+	// encode denied violations into a string
+	if len(denyViolations) < 1 {
+		deniedViolationsEncoded = ""
+	} else {
+		d, _ := json.Marshal(denyViolations)
+		deniedViolationsEncoded = string(d)
+	}
+
+	encodedViolationsSummary, _ := json.Marshal(output.Violations.ViolationStore)
+
+	// insert the webhook log into db
+	err := w.dblogger.Log(dblogs.WebhookScanLog{
+		UID:                uid,
+		Request:            string(w.requestBody),
+		Allowed:            allowed,
+		DeniableViolations: deniedViolationsEncoded,
+		ViolationsSummary:  string(encodedViolationsSummary),
+		CreatedAt:          currentTime,
+	})
+	if err != nil {
+		zap.S().Error("error logging scan result: '%v'", err)
+		return err
+	}
+
+	return nil
+}
+
+// createAdmissionResponse creates a admission review response which is sent
+// to calling kubernetes API server
+func (w ValidatingWebhook) createResponseAdmissionReview(
+	requestedAdmissionReview v1.AdmissionReview,
+	allowed bool,
+	output runtime.Output,
+	logPath string) *v1.AdmissionReview {
+
+	// create an admission review request to be sent as response
+	responseAdmissionReview := &v1.AdmissionReview{}
+	responseAdmissionReview.SetGroupVersionKind(requestedAdmissionReview.GroupVersionKind())
+
+	// populate admission response
+	responseAdmissionReview.Response = &v1.AdmissionResponse{
+		UID:     requestedAdmissionReview.Request.UID,
+		Allowed: allowed,
+	}
+
+	if output.Violations.ViolationStore != nil {
+		// Means we ran the engines and we have results
+		if allowed {
+			if len(output.Violations.ViolationStore.Violations) > 0 {
+				// In case there are no denial violations, just return the log URL as a warning
+				responseAdmissionReview.Response.Warnings = []string{logPath}
+			}
+		} else {
+			// In case the request was denied, return 403 and the log URL as an error message
+			responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
+		}
+	}
+
+	return responseAdmissionReview
 }
 
 type webhookDenyRuleMatcher struct {

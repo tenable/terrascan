@@ -17,9 +17,8 @@
 package admissionwebhook
 
 import (
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/runtime"
 	admissionv1 "k8s.io/api/admission/v1"
+	v1 "k8s.io/api/admission/v1"
 )
 
 // AdmissionWebhook interface needs to be implemented by all k8s admission
@@ -35,5 +34,5 @@ type AdmissionWebhook interface {
 
 	// ProcessWebhook processes the incoming AdmissionReview and creates
 	// a AdmissionResponse
-	ProcessWebhook(review admissionv1.AdmissionReview) (runtime.Output, bool, []results.Violation, error)
+	ProcessWebhook(review admissionv1.AdmissionReview, serverURL string) (*v1.AdmissionReview, error)
 }

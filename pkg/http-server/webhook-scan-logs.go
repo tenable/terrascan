@@ -88,7 +88,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		logsData = append(logsData, webhookDisplayedIndexScanLog{
 			CreatedAt: log.CreatedAt,
 			Status:    g.getLogStatus(log),
-			LogURL:    g.getLogPath(r.Host, log.UID),
+			LogURL:    logger.GetLogURL(r.Host, log.UID),
 			Reasoning: g.getLogReasoning(log),
 			Request:   g.getLogRequest(log),
 		})
@@ -141,11 +141,6 @@ func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("/go/terrascan/show.html")
 
 	t.Execute(w, displayedScanLog)
-}
-
-func (g *APIHandler) getLogPath(host, logUID string) string {
-	// Use this as the link to show the a specific log
-	return fmt.Sprintf("https://%v/k8s/webhooks/logs/%v", host, logUID)
 }
 
 func (g *APIHandler) getLogStatus(log dblogs.WebhookScanLog) string {

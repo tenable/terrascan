@@ -18,6 +18,7 @@ package dblogs
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"time"
 
@@ -161,6 +162,12 @@ func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error)
 	}
 
 	return &WebhookScanLog{}, nil
+}
+
+// GetLogURL returns a url to the UI page for reviewing the validating admission request log
+func (g *WebhookScanLogger) GetLogURL(host, logUID string) string {
+	// Use this as the link to show the a specific log
+	return fmt.Sprintf("https://%v/k8s/webhooks/logs/%v", host, logUID)
 }
 
 func (g *WebhookScanLogger) initDBIfNeeded() error {
