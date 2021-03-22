@@ -29,22 +29,18 @@ import (
 )
 
 var (
-	policyRepoPath  = config.GetPolicyRepoPath()
-	policyBasePath  = config.GetPolicyBasePath()
-	repoURL         = config.GetPolicyRepoURL()
-	branch          = config.GetPolicyBranch()
 	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
 
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
 
 // Run initializes terrascan if not done already
-func Run(isScanCmd bool) error {
+func Run(isNonInitCmd bool) error {
 	zap.S().Debug("initializing terrascan")
 
 	// check if policy paths exist
-	if path, err := os.Stat(policyRepoPath); err == nil && path.IsDir() {
-		if isScanCmd {
+	if path, err := os.Stat(config.GetPolicyRepoPath()); err == nil && path.IsDir() {
+		if isNonInitCmd {
 			return nil
 		}
 	}
@@ -64,10 +60,15 @@ func Run(isScanCmd bool) error {
 
 // DownloadPolicies clones the policies to a local folder
 func DownloadPolicies() error {
+
+	policyBasePath := config.GetPolicyBasePath()
+	repoURL := config.GetPolicyRepoURL()
+	branch := config.GetPolicyBranch()
+
 	zap.S().Debug("downloading policies")
 
 	zap.S().Debugf("base directory path : %s", policyBasePath)
-	zap.S().Debugf("policy directory path : %s", policyRepoPath)
+	zap.S().Debugf("policy directory path : %s", config.GetPolicyRepoPath())
 	zap.S().Debugf("policy repo url : %s", repoURL)
 	zap.S().Debugf("policy repo git branch : %s", branch)
 
@@ -79,6 +80,7 @@ func DownloadPolicies() error {
 	r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
 		URL: repoURL,
 	})
+
 	if err != nil {
 		return fmt.Errorf("failed to download policies. error: '%v'", err)
 	}

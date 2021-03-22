@@ -17,7 +17,7 @@
 package config
 
 // Global initalizes GlobalConfig struct
-var Global *TerrascanConfig = &TerrascanConfig{}
+var global *TerrascanConfig = &TerrascanConfig{}
 
 // TerrascanConfig struct defines global variables/configurations across terrascan
 type TerrascanConfig struct {
@@ -40,8 +40,9 @@ type Severity struct {
 
 // Policy struct defines policy specific configurations
 type Policy struct {
-	// policy local path
+	// policy repo local path
 	BasePath string `toml:"path,omitempty"`
+	// local filepath where repository containing policies is cached at
 	RepoPath string `toml:"rego_subdir,omitempty"`
 
 	// policy git url and branch

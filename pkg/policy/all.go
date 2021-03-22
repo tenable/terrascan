@@ -23,5 +23,7 @@ const (
 
 func init() {
 	// Register all as a cloud provider with terrascan
-	RegisterIndirectCloudProvider("all", defaultAllIacType, defaultAllIacVersion, func() []string { return SupportedPolicyTypes(false) })
+	RegisterIndirectCloudProvider("all", defaultAllIacType, defaultAllIacVersion, func() []string {
+		return SupportedPolicyTypes(false)
+	})
 }

@@ -1,3 +1,5 @@
+// +build windows
+
 /*
     Copyright (C) 2020 Accurics, Inc.
 
@@ -14,13 +16,12 @@
     limitations under the License.
 */
 
-// +build windows
-
 package cli
 
 import (
-	"golang.org/x/sys/windows"
 	"os"
+
+	"golang.org/x/sys/windows"
 )
 
 // In order for colored output to work on Windows, we need to explicitly

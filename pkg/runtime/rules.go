@@ -2,39 +2,26 @@ package runtime
 
 import (
 	"github.com/accurics/terrascan/pkg/config"
-	"go.uber.org/zap"
 )
 
 // read the config file and update scan and skip rules
-func (e *Executor) initRuleSetFromConfigFile() error {
-	if e.configFile == "" {
-		return nil
-	}
-
-	configReader, err := config.NewTerrascanConfigReader(e.configFile)
-	if err != nil {
-		zap.S().Error("error loading config file", zap.Error(err))
-		return err
-	}
+func (e *Executor) loadRuleSetFromConfig() error {
 
 	// append scan rules
-	if len(configReader.GetRules().ScanRules) > 0 {
-		e.scanRules = append(e.scanRules, configReader.GetRules().ScanRules...)
+	if len(config.GetScanRules()) > 0 {
+		e.scanRules = append(e.scanRules, config.GetScanRules()...)
 	}
 
 	// append skip rules
-	if len(configReader.GetRules().SkipRules) > 0 {
-		e.skipRules = append(e.skipRules, configReader.GetRules().SkipRules...)
+	if len(config.GetSkipRules()) > 0 {
+		e.skipRules = append(e.skipRules, config.GetSkipRules()...)
 	}
 
-	// specify category of violations to be reported
-	if len(configReader.GetCategory().List) > 0 {
-		e.categories = configReader.GetCategory().List
-	}
+	e.categories = config.GetCategoryList()
 
 	// specify severity of violations to be reported
-	if len(configReader.GetSeverity().Level) > 0 {
-		e.severity = configReader.GetSeverity().Level
+	if len(config.GetSeverityLevel()) > 0 {
+		e.severity = config.GetSeverityLevel()
 	}
 
 	return nil

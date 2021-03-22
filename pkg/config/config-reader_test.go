@@ -29,8 +29,8 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		},
 	}
 	testPolicy := Policy{
-		BasePath: "custom-path",
 		RepoPath: "rego-subdir",
+		BasePath: "custom-path",
 		RepoURL:  "https://repository/url",
 		Branch:   "branch-name",
 	}
@@ -167,8 +167,8 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 				t.Errorf("NewTerrascanConfigReader() = got %v, want %v", got, tt.want)
 			}
 			if tt.assertGetters {
-				if !reflect.DeepEqual(got.GetPolicyConfig(), tt.Policy) || !reflect.DeepEqual(got.GetNotifications(), tt.notifications) || !reflect.DeepEqual(got.GetRules(), tt.Rules) {
-					t.Errorf("NewTerrascanConfigReader() = got config: %v, notifications: %v, rules: %v want config: %v, notifications: %v, rules: %v", got.GetPolicyConfig(), got.GetNotifications(), got.GetRules(), tt.Policy, tt.notifications, tt.Rules)
+				if !reflect.DeepEqual(got.getPolicyConfig(), tt.Policy) || !reflect.DeepEqual(got.getNotifications(), tt.notifications) || !reflect.DeepEqual(got.getRules(), tt.Rules) {
+					t.Errorf("NewTerrascanConfigReader() = got config: %v, notifications: %v, rules: %v want config: %v, notifications: %v, rules: %v", got.getPolicyConfig(), got.getNotifications(), got.getRules(), tt.Policy, tt.notifications, tt.Rules)
 				}
 			}
 		})

@@ -1,5 +1,3 @@
 [policy]
-repo_url = "https://github.com/accurics/terrascan.git"
-branch = "master"
 path = "~/.terrascan-test"
 rego_subdir = "pkg/policies/opa/rego"

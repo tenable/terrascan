@@ -25,6 +25,7 @@ import (
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/logging"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 // RegisterCommand Registers a new command under the base command
@@ -43,8 +44,17 @@ func Execute() {
 	cobra.OnInitialize(func() {
 		// Set up the logger
 		logging.Init(LogType, LogLevel)
+
+		if len(ConfigFile) == 0 {
+			ConfigFile = os.Getenv(config.ConfigEnvvarName)
+			zap.S().Debugf("%s:%s", config.ConfigEnvvarName, os.Getenv(config.ConfigEnvvarName))
+		}
+
 		// Make sure we load the global config from the specified config file
-		config.LoadGlobalConfig(ConfigFile)
+		if err := config.LoadGlobalConfig(ConfigFile); err != nil {
+			zap.S().Error("error while loading global config", zap.Error(err))
+			os.Exit(1)
+		}
 	})
 
 	// parse the flags but hack around to avoid exiting with error code 2 on help

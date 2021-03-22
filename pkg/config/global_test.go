@@ -18,10 +18,14 @@ package config
 
 import (
 	"testing"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestLoadGlobalConfig(t *testing.T) {
 	testConfigFile := "./testdata/terrascan-config.toml"
+	absDefaultBasePolicyPath, absDefaultPolicyRepoPath, _ := utils.GetAbsPolicyConfigPaths(defaultBasePolicyPath, defaultPolicyRepoPath)
+	absCustomPath, absRegoSubdirPath, _ := utils.GetAbsPolicyConfigPaths("custom-path", "rego-subdir")
 
 	type args struct {
 		configFile string
@@ -41,10 +45,10 @@ func TestLoadGlobalConfig(t *testing.T) {
 			args: args{
 				configFile: "",
 			},
-			policyBasePath: policyBasePath,
-			policyRepoPath: policyRepoPath,
-			repoURL:        policyRepoURL,
-			branchName:     policyBranch,
+			policyBasePath: absDefaultBasePolicyPath,
+			policyRepoPath: absDefaultPolicyRepoPath,
+			repoURL:        defaultPolicyRepoURL,
+			branchName:     defaultPolicyBranch,
 		},
 		{
 			name: "global config file specified but doesn't exist",
@@ -52,18 +56,18 @@ func TestLoadGlobalConfig(t *testing.T) {
 				configFile: "test.toml",
 			},
 			wantErr:        true,
-			policyBasePath: policyBasePath,
-			policyRepoPath: policyRepoPath,
-			repoURL:        policyRepoURL,
-			branchName:     policyBranch,
+			policyBasePath: defaultBasePolicyPath,
+			policyRepoPath: defaultPolicyRepoPath,
+			repoURL:        defaultPolicyRepoURL,
+			branchName:     defaultPolicyBranch,
 		},
 		{
 			name: "valid global config file specified",
 			args: args{
 				configFile: testConfigFile,
 			},
-			policyBasePath: "custom-path",
-			policyRepoPath: "rego-subdir",
+			policyBasePath: absCustomPath,
+			policyRepoPath: absRegoSubdirPath,
 			repoURL:        "https://repository/url",
 			branchName:     "branch-name",
 		},
