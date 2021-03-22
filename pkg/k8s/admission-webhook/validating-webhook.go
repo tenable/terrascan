@@ -268,6 +268,8 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	output runtime.Output,
 	logPath string) *admissionv1.AdmissionReview {
 
+	errMsg := fmt.Sprintf("For more details please visit %q", logPath)
+
 	// create an admission review request to be sent as response
 	responseAdmissionReview := &admissionv1.AdmissionReview{}
 	responseAdmissionReview.SetGroupVersionKind(requestedAdmissionReview.GroupVersionKind())
@@ -283,11 +285,11 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 		if allowed {
 			if len(output.Violations.ViolationStore.Violations) > 0 {
 				// In case there are no denial violations, just return the log URL as a warning
-				responseAdmissionReview.Response.Warnings = []string{logPath}
+				responseAdmissionReview.Response.Warnings = []string{errMsg}
 			}
 		} else {
 			// In case the request was denied, return 403 and the log URL as an error message
-			responseAdmissionReview.Response.Result = &metav1.Status{Message: logPath, Code: 403}
+			responseAdmissionReview.Response.Result = &metav1.Status{Message: errMsg, Code: 403}
 		}
 	}
 
