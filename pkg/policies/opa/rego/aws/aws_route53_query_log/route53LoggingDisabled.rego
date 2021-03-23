@@ -13,6 +13,7 @@ package accurics
   # if it has a VPC associated, it's a private DNS zone, so this rule cannot apply because it would require
   # configuring an invalid logging resources (given the above)
   not vpc_exists
+  not input.aws_route53_query_log
 }
 
 # Look for statically-defined VPC
