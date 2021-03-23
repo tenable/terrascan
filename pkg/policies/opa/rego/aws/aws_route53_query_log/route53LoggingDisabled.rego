@@ -2,9 +2,6 @@ package accurics
 
 {{.prefix}}route53LoggingDisabled[route.id] {
   route := input.aws_route53_zone[_]
-  vpc := route.config.dynamic[_].vpc
-  not input.aws_route53_query_log
-
   # From https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_query_log
   # There are restrictions on the configuration of query logging.
   # Notably, the CloudWatch log group must be in the us-east-1 region,
@@ -15,7 +12,17 @@ package accurics
 
   # if it has a VPC associated, it's a private DNS zone, so this rule cannot apply because it would require
   # configuring an invalid logging resources (given the above)
-  not vpc
+  not vpc_exists
+}
+
+# Look for statically-defined VPC
+vpc_exists = ns {
+    ns := input.aws_route53_zone[_].config.vpc
+}
+
+# Also check for VPCs defined in dynamic blocks
+vpc_exists = ns {
+    ns := input.aws_route53_zone[_].config.dynamic[_].vpc
 }
 
 {{.prefix}}route53LoggingDisabled[route.id] {
