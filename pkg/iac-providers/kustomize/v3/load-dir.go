@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	errorFromKustomize = fmt.Errorf("error from kustomization")
+	kustomizeErrMessage = "error from kustomization. error : %v"
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
@@ -91,11 +91,11 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 // LoadKustomize loads up a 'kustomized' directory and returns a returns a list of IacDocuments
 func LoadKustomize(basepath, filename string) ([]*utils.IacDocument, error) {
 	fSys := filesys.MakeFsOnDisk()
-	k := krusty.MakeKustomizer(fSys, krusty.MakeDefaultOptions())
+	k := krusty.MakeKustomizer(krusty.MakeDefaultOptions())
 
-	m, err := k.Run(basepath)
+	m, err := k.Run(fSys, basepath)
 	if err != nil {
-		return nil, errorFromKustomize
+		return nil, fmt.Errorf(kustomizeErrMessage, err)
 	}
 
 	yaml, err := m.AsYaml()
