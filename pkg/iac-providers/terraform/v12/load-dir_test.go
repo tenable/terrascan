@@ -20,23 +20,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestLoadIacDir(t *testing.T) {
-	testErrorString1 := `failed to load terraform config dir './testdata'. error from terraform:
-testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`
-	testErrorString2 := `failed to load terraform config dir './testdata/multiple-required-providers'. error from terraform:
-testdata/multiple-required-providers/b.tf:2,3-21: Duplicate required providers configuration; A module may have only one required providers configuration. The required providers were previously configured at testdata/multiple-required-providers/a.tf:2,3-21.
-`
+	testErrorString1 := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:
+%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`, testDataDir, emptyTfFilePath, emptyTfFilePath)
+
+	multipleProvidersDir := filepath.Join(testDataDir, "multiple-required-providers")
+
+	testErrorString2 := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:
+%s:2,3-21: Duplicate required providers configuration; A module may have only one required providers configuration. The required providers were previously configured at %s:2,3-21.
+`, multipleProvidersDir, filepath.Join(multipleProvidersDir, "b.tf"), filepath.Join(multipleProvidersDir, "a.tf"))
+
 	testDirPath1 := "not-there"
-	testDirPath2 := "./testdata/testfile"
+
+	testDirPath2 := filepath.Join(testDataDir, "testfile")
+
 	invalidDirErrStringTemplate := "directory '%s' has no terraform config files"
 
 	table := []struct {
@@ -60,19 +68,19 @@ testdata/multiple-required-providers/b.tf:2,3-21: Duplicate required providers c
 		},
 		{
 			name:    "incorrect module structure",
-			dirPath: "./testdata/invalid-moduleconfigs",
+			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv12:   TfV12{},
 			wantErr: fmt.Errorf("failed to build terraform allResourcesConfig"),
 		},
 		{
 			name:    "load invalid config dir",
-			dirPath: "./testdata",
+			dirPath: testDataDir,
 			tfv12:   TfV12{},
 			wantErr: fmt.Errorf(testErrorString1),
 		},
 		{
 			name:    "load invalid config dir",
-			dirPath: "./testdata/multiple-required-providers",
+			dirPath: multipleProvidersDir,
 			tfv12:   TfV12{},
 			wantErr: fmt.Errorf(testErrorString2),
 		},
@@ -96,29 +104,29 @@ testdata/multiple-required-providers/b.tf:2,3-21: Duplicate required providers c
 	}{
 		{
 			name:        "config1",
-			tfConfigDir: "./testdata/tfconfigs",
-			tfJSONFile:  "testdata/tfjson/fullconfig.json",
+			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
+			tfJSONFile:  filepath.Join(tfJsonDir, "fullconfig.json"),
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
 		{
 			name:        "module directory",
-			tfConfigDir: "./testdata/moduleconfigs",
-			tfJSONFile:  "./testdata/tfjson/moduleconfigs.json",
+			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
+			tfJSONFile:  filepath.Join(tfJsonDir, "moduleconfigs.json"),
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
 		{
 			name:        "nested module directory",
-			tfConfigDir: "./testdata/deep-modules",
-			tfJSONFile:  "./testdata/tfjson/deep-modules.json",
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
+			tfJSONFile:  filepath.Join(tfJsonDir, "deep-modules.json"),
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
 		{
 			name:        "variables of list type",
-			tfConfigDir: "./testdata/list-type-vars-test",
-			tfJSONFile:  "./testdata/tfjson/list-vars-test.json",
+			tfConfigDir: filepath.Join(testDataDir, "list-type-vars-test"),
+			tfJSONFile:  filepath.Join(tfJsonDir, "list-vars-test.json"),
 			tfv12:       TfV12{},
 			wantErr:     nil,
 		},
@@ -135,6 +143,10 @@ testdata/multiple-required-providers/b.tf:2,3-21: Duplicate required providers c
 
 			// Read the expected value and unmarshal into want
 			contents, _ := ioutil.ReadFile(tt.tfJSONFile)
+			if utils.IsWindowsPlatform() {
+				contents = utils.ReplaceWinNewLineBytes(contents)
+			}
+
 			err := json.Unmarshal(contents, &want)
 			if err != nil {
 				t.Errorf("unexpected error unmarshalling want: %v", err)

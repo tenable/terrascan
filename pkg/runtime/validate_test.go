@@ -18,6 +18,7 @@ package runtime
 
 import (
 	"fmt"
+	"path/filepath"
 	"reflect"
 	"testing"
 )
@@ -32,7 +33,7 @@ func TestValidateInputs(t *testing.T) {
 		{
 			name: "valid filePath",
 			executor: Executor{
-				filePath:   "./testdata/testfile",
+				filePath:   filepath.Join(testDataDir, "testfile"),
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
@@ -44,7 +45,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "valid dirPath",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
@@ -54,7 +55,7 @@ func TestValidateInputs(t *testing.T) {
 		{
 			name: "valid filePath",
 			executor: Executor{
-				filePath:   "./testdata/testfile",
+				filePath:   filepath.Join(testDataDir, "testfile"),
 				dirPath:    "",
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
@@ -67,7 +68,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "valid dirPath",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
@@ -79,7 +80,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "valid dirPath",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
@@ -99,14 +100,14 @@ func TestValidateInputs(t *testing.T) {
 		{
 			name: "filepath does not exist",
 			executor: Executor{
-				filePath: "./testdata/notthere",
+				filePath: filepath.Join(testDataDir, "notthere"),
 			},
 			wantErr: errFileNotExists,
 		},
 		{
 			name: "directory does not exist",
 			executor: Executor{
-				dirPath: "./testdata/notthere",
+				dirPath: filepath.Join(testDataDir, "notthere"),
 			},
 			wantErr: errDirNotExists,
 		},
@@ -114,7 +115,7 @@ func TestValidateInputs(t *testing.T) {
 			// should error out in validations if -f option is not a file
 			name: "valid directory passed as file path",
 			executor: Executor{
-				filePath: "./testdata/testdir",
+				filePath: testDir,
 			},
 			wantErr: errNotValidFile,
 		},
@@ -122,7 +123,7 @@ func TestValidateInputs(t *testing.T) {
 			// should error out in validations if -d option is not a dir
 			name: "valid directory passed as file path",
 			executor: Executor{
-				dirPath: "./testdata/testdir/testfile",
+				dirPath: filepath.Join(testDir, "testfile"),
 			},
 			wantErr: errNotValidDir,
 		},
@@ -130,7 +131,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "invalid iac type",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "notthere",
 				iacVersion: "v14",
@@ -141,7 +142,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "invalid iac version",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "notthere",
@@ -152,7 +153,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "invalid severity",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
@@ -164,7 +165,7 @@ func TestValidateInputs(t *testing.T) {
 			name: "invalid category",
 			executor: Executor{
 				filePath:   "",
-				dirPath:    "./testdata/testdir",
+				dirPath:    testDir,
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",

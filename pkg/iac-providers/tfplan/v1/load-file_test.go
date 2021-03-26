@@ -21,13 +21,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 	"reflect"
+	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestLoadIacFile(t *testing.T) {
+
+	invalidFilePathErr := os.PathError{Op: "open", Path: "not-there", Err: syscall.ENOENT}
 
 	table := []struct {
 		name     string
@@ -40,23 +46,23 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfplan:   TFPlan{},
-			wantErr:  fmt.Errorf("failed to read tfplan JSON file. error: 'open not-there: no such file or directory'"),
+			wantErr:  fmt.Errorf("failed to read tfplan JSON file. error: '%s'", invalidFilePathErr.Error()),
 		},
 		{
 			name:     "invalid json",
-			filePath: "./testdata/invalid-json.json",
+			filePath: filepath.Join("testdata", "invalid-json.json"),
 			tfplan:   TFPlan{},
 			wantErr:  fmt.Errorf("invalid terraform json file; error: 'failed to decode tfplan json. error: 'invalid character 'I' looking for beginning of value''"),
 		},
 		{
 			name:     "invalid tfplan json",
-			filePath: "./testdata/invalid-tfplan.json",
+			filePath: filepath.Join("testdata", "invalid-tfplan.json"),
 			tfplan:   TFPlan{},
 			wantErr:  fmt.Errorf("invalid terraform json file; error: 'terraform format version shoule be '0.1''"),
 		},
 		{
 			name:     "valid tfplan json",
-			filePath: "./testdata/valid-tfplan.json",
+			filePath: filepath.Join("testdata", "valid-tfplan.json"),
 			tfplan:   TFPlan{},
 			wantErr:  nil,
 		},
@@ -74,8 +80,8 @@ func TestLoadIacFile(t *testing.T) {
 	t.Run("validate tfplan iac output", func(t *testing.T) {
 		var (
 			tfplan             = TFPlan{}
-			tfplanFile         = "./testdata/valid-tfplan.json"
-			tfplanOutput       = "./testdata/valid-tfplan-resource-config.json"
+			tfplanFile         = filepath.Join("testdata", "valid-tfplan.json")
+			tfplanOutput       = filepath.Join("testdata", "valid-tfplan-resource-config.json")
 			wantErr      error = nil
 		)
 
@@ -87,6 +93,9 @@ func TestLoadIacFile(t *testing.T) {
 		gotBytes, _ := json.MarshalIndent(got, "", "  ")
 		gotBytes = append(gotBytes, []byte{'\n'}...)
 		wantBytes, _ := ioutil.ReadFile(tfplanOutput)
+		if utils.IsWindowsPlatform() {
+			wantBytes = utils.ReplaceWinNewLineBytes(wantBytes)
+		}
 		if !reflect.DeepEqual(bytes.TrimSpace(gotBytes), bytes.TrimSpace(wantBytes)) {
 			t.Errorf("unexpected error; got '%v', want: '%v'", string(gotBytes), string(wantBytes))
 		}

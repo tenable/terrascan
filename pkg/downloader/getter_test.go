@@ -174,7 +174,7 @@ func TestDownload(t *testing.T) {
 		},
 		{
 			name:          "valid url, non existing repo",
-			URL:           "github.com/testuser/testrepo",
+			URL:           "https://:@github.com/testuser/testrepo",
 			dest:          someDest,
 			wantDest:      "",
 			skipErrAssert: true,
