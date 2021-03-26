@@ -5,6 +5,6 @@
     "severity": "HIGH",
     "description": "Ensure Kubernetes Cluster is created with Private cluster enabled.",
     "reference_id": "accurics.gcp.NS.117",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

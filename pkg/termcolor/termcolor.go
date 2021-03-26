@@ -1,10 +1,11 @@
 package termcolor
 
 import (
-	"go.uber.org/zap"
 	"math"
 	"strconv"
 	"strings"
+
+	"go.uber.org/zap"
 )
 
 var (

@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "MSSQL Browser (UDP:1434) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.57",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

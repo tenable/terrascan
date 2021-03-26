@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Oracle DB SSL (UDP:2484) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.90",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

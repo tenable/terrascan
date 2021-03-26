@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that 'OS disk' are encrypted",
     "reference_id": "accurics.azure.EKM.156",
-    "category": "Encryption and Key Management",
+    "category": "Data Protection",
     "version": 2
 }

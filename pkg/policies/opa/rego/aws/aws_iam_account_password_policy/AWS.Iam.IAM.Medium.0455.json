@@ -9,6 +9,6 @@
     "severity": "MEDIUM",
     "description": "Number not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
     "reference_id": "AWS.Iam.IAM.Medium.0455",
-    "category": "IAM",
+    "category": "Compliance Validation",
     "version": 2
 }

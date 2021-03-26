@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "Memcached SSL (TCP:11215) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.200",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

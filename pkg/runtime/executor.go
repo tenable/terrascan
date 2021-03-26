@@ -39,11 +39,12 @@ type Executor struct {
 	iacProvider   iacProvider.IacProvider
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
+	categories    []string
 	severity      string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules []string, severity string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -55,7 +56,7 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 	}
 
 	// read config file and update scan and skip rules
-	if err := e.initRuleSetFromConfigFile(); err != nil {
+	if err := e.loadRuleSetFromConfig(); err != nil {
 		zap.S().Error("error initialising scan and skip rules", zap.Error(err))
 		return nil, err
 	}
@@ -70,6 +71,10 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 
 	if len(severity) > 0 {
 		e.severity = severity
+	}
+
+	if len(categories) > 0 {
+		e.categories = categories
 	}
 
 	// initialize executor
@@ -97,11 +102,11 @@ func (e *Executor) Init() error {
 	}
 
 	// create new notifiers
-	e.notifiers, err = notifications.NewNotifiers(e.configFile)
+	e.notifiers, err = notifications.NewNotifiers()
 	if err != nil {
 		zap.S().Debug("failed to create notifier(s).", zap.Error(err))
 		// do not return an error if a key is not present in the config file
-		if err != notifications.ErrTomlKeyNotPresent {
+		if err != notifications.ErrNotificationNotPresent {
 			zap.S().Error("failed to create notifier(s).", zap.Error(err))
 			return err
 		}
@@ -117,7 +122,7 @@ func (e *Executor) Init() error {
 		}
 
 		// initialize the engine
-		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.severity); err != nil {
+		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.categories, e.severity); err != nil {
 			zap.S().Errorf("%s", err)
 			return err
 		}

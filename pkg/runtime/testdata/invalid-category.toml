@@ -1,0 +1,6 @@
+[category]
+list = [
+    category.1,
+    category.2,
+]
+# string value has to be "wrapped" in quotes

@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Enable SSL Client Certificate",
     "reference_id": "AWS.API Gateway.Network Security.Medium.0565",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

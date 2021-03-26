@@ -31,6 +31,7 @@ import (
 var (
 	terrascanConfigEnvName      string = "TERRASCAN_CONFIG"
 	severityLevelIncorrectError string = "severity level not supported"
+	categoryIncorrectError      string = "category not supported"
 )
 
 var _ = Describe("Scan command with rule filtering options", func() {
@@ -145,6 +146,38 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				})
 			})
 		})
+
+		Context("category is specified", func() {
+			When("category specified is invalid", func() {
+				It("should error out and exit with status code 1", func() {
+					scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--categories", "test"}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
+					helper.ContainsErrorSubString(session, categoryIncorrectError)
+				})
+			})
+
+			When("valid category is specified", func() {
+				oldIacDir := iacDir
+				JustAfterEach(func() {
+					iacDir, err = filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				})
+
+				JustAfterEach(func() {
+					iacDir = oldIacDir
+				})
+				Context("category specified is 'COMPLIANCE VALIDATION'", func() {
+					Context("iac file has violations with only 'DATA PROTECTION' category", func() {
+						It("should not report any violation and exit with status code 0", func() {
+							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--categories", "COMPLIANCE VALIDATION"}
+							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+						})
+					})
+				})
+			})
+		})
+
 	})
 
 	Describe("rule filtering via config file", func() {
@@ -179,6 +212,16 @@ var _ = Describe("Scan command with rule filtering options", func() {
 
 					scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-c", configFileAbsPath}
 					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, severityLevelIncorrectError, outWriter, errWriter, scanArgs...)
+				})
+			})
+
+			Context("invalid category is specified in config file", func() {
+				It("should error out and exit with status code 3", func() {
+					configFileAbsPath, err := filepath.Abs(filepath.Join("config", "invalid_category.toml"))
+					Expect(err).NotTo(HaveOccurred())
+
+					scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-c", configFileAbsPath}
+					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, categoryIncorrectError, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})

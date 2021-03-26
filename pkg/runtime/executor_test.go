@@ -21,13 +21,14 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/config"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
-	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
+
+	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 )
@@ -57,11 +58,11 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string, scanRules, skipRules []string, severity string) error {
+func (m MockPolicyEngine) Init(input string, scanRules, skipRules, categories []string, severity string) error {
 	return m.err
 }
 
-func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules []string, severity string) {
+func (m MockPolicyEngine) FilterRules(input string, scanRules, skipRules, categories []string, severity string) {
 	/*
 		This method does nothing. Required to fullfil the Engine interface contract
 	*/
@@ -174,7 +175,6 @@ func TestExecute(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-
 	table := []struct {
 		name            string
 		executor        Executor
@@ -253,32 +253,20 @@ func TestInit(t *testing.T) {
 			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
-	}
-
-	for _, tt := range table {
-		t.Run(tt.name, func(t *testing.T) {
-			gotErr := tt.executor.Init()
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
-			}
-			if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
-				t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
-			}
-			for i, notifier := range tt.executor.notifiers {
-				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
-					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
-				}
-			}
-		})
-	}
-
-	table = []struct {
-		name            string
-		executor        Executor
-		wantErr         error
-		wantIacProvider iacProvider.IacProvider
-		wantNotifiers   []notifications.Notifier
-	}{
+		{
+			name: "config file with invalid category",
+			executor: Executor{
+				filePath:   "./testdata/testfile",
+				dirPath:    "",
+				cloudType:  []string{"aws"},
+				iacType:    "terraform",
+				iacVersion: "v14",
+				configFile: "./testdata/invalid-category.toml",
+				policyPath: []string{"./testdata/notthere"},
+			},
+			wantErr:         fmt.Errorf("(3, 5): no value can start with c"),
+			wantIacProvider: &tfv14.TfV14{},
+		},
 		{
 			name: "valid filePath",
 			executor: Executor{
@@ -353,17 +341,27 @@ func TestInit(t *testing.T) {
 	}
 
 	for _, tt := range table {
+
 		t.Run(tt.name, func(t *testing.T) {
-			gotErr := tt.executor.Init()
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
-			}
-			if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
-				t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
-			}
-			for i, notifier := range tt.executor.notifiers {
-				if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
-					t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+			configErr := config.LoadGlobalConfig(tt.executor.configFile)
+			if configErr != nil {
+				if !reflect.DeepEqual(configErr, tt.wantErr) {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", configErr, tt.wantErr)
+				}
+			} else {
+				gotErr := tt.executor.Init()
+				if !reflect.DeepEqual(gotErr, tt.wantErr) {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+				if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
+					t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
+				}
+				if len(tt.wantNotifiers) > 0 {
+					for i, notifier := range tt.executor.notifiers {
+						if !reflect.DeepEqual(reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i])) {
+							t.Errorf("got: '%v', want: '%v'", reflect.TypeOf(notifier), reflect.TypeOf(tt.wantNotifiers[i]))
+						}
+					}
 				}
 			}
 		})
@@ -377,6 +375,7 @@ type flagSet struct {
 	dirPath    string
 	policyPath []string
 	cloudType  []string
+	categories []string
 	severity   string
 	scanRules  []string
 	skipRules  []string
@@ -384,13 +383,14 @@ type flagSet struct {
 
 func TestNewExecutor(t *testing.T) {
 	table := []struct {
-		name          string
-		wantErr       error
-		configfile    string
-		flags         flagSet
-		wantScanRules []string
-		wantSkipRules []string
-		wantSeverity  string
+		name           string
+		wantErr        error
+		configfile     string
+		flags          flagSet
+		wantScanRules  []string
+		wantSkipRules  []string
+		wantSeverity   string
+		wantCategories []string
 	}{
 		{
 			name:       "values passed through flag should override configfile value",
@@ -410,7 +410,8 @@ func TestNewExecutor(t *testing.T) {
 			wantSkipRules: []string{
 				"accurics.kubernetes.IAM.109",
 			},
-			wantSeverity: "high",
+			wantSeverity:   "high",
+			wantCategories: []string{"IDENTITY AND ACCESS MANAGEMENT", "RESILIENCE"},
 		},
 		{
 			name:       "skipRules passed through flag should override configfile value",
@@ -429,7 +430,8 @@ func TestNewExecutor(t *testing.T) {
 			wantSkipRules: []string{
 				"accurics.kubernetes.IAM.109",
 			},
-			wantSeverity: "low",
+			wantSeverity:   "low",
+			wantCategories: []string{"IDENTITY AND ACCESS MANAGEMENT", "RESILIENCE"},
 		},
 		{
 			name:       "scanRules passed through flag should override configfile value",
@@ -450,10 +452,11 @@ func TestNewExecutor(t *testing.T) {
 				"accurics.kubernetes.OPS.461",
 				"accurics.kubernetes.IAM.109",
 			},
-			wantSeverity: "low",
+			wantSeverity:   "low",
+			wantCategories: []string{"IDENTITY AND ACCESS MANAGEMENT", "RESILIENCE"},
 		},
 		{
-			name:       "severity passed through flag should override configfile value",
+			name:       "severity and categories passed through flag should override configfile value",
 			configfile: "./testdata/scan-skip-rules-low-severity.toml",
 			wantErr:    nil,
 			flags: flagSet{
@@ -461,6 +464,7 @@ func TestNewExecutor(t *testing.T) {
 				dirPath:    "./testdata/testdir",
 				policyPath: []string{"./testdata/testpolicies"},
 				cloudType:  []string{"aws"},
+				categories: []string{"DATA PROTECTION"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -472,7 +476,8 @@ func TestNewExecutor(t *testing.T) {
 				"accurics.kubernetes.OPS.461",
 				"accurics.kubernetes.IAM.109",
 			},
-			wantSeverity: "medium",
+			wantSeverity:   "medium",
+			wantCategories: []string{"DATA PROTECTION"},
 		},
 		{
 			name:       "configfile value will be used if no flags are passed",
@@ -493,19 +498,40 @@ func TestNewExecutor(t *testing.T) {
 				"accurics.kubernetes.OPS.461",
 				"accurics.kubernetes.IAM.109",
 			},
-			wantSeverity: "low",
+			wantSeverity:   "low",
+			wantCategories: []string{"IDENTITY AND ACCESS MANAGEMENT", "RESILIENCE"},
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.configfile, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.severity)
+			config.LoadGlobalConfig(tt.configfile)
+
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.configfile, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)
+				t.Errorf("\n\n")
 			}
-			if utils.IsSliceEqual(gotExecutor.scanRules, tt.wantScanRules) && utils.IsSliceEqual(gotExecutor.skipRules, tt.wantSkipRules) && gotExecutor.severity != tt.wantSeverity {
-				t.Errorf("got: 'scanRules = %v, skipRules = %v, severity = %s', want: 'scanRules = %v, skipRules = %v, severity = %s'", gotExecutor.scanRules, gotExecutor.skipRules, gotExecutor.severity, tt.wantScanRules, tt.wantSkipRules, tt.wantSeverity)
+
+			if !utils.IsSliceEqual(gotExecutor.scanRules, tt.wantScanRules) {
+				t.Errorf("Mismatch in scanRules => got: '%v', want: '%v'", gotExecutor.scanRules, tt.wantScanRules)
+				t.Errorf("\n\n")
+			}
+
+			if !utils.IsSliceEqual(gotExecutor.skipRules, tt.wantSkipRules) {
+				t.Errorf("Mismatch in skipRules => got: '%v', want: '%v'", gotExecutor.skipRules, tt.wantSkipRules)
+				t.Errorf("\n\n")
+			}
+
+			if gotExecutor.severity != tt.wantSeverity {
+				t.Errorf("Mismatch in severity => got: '%v', want: '%v'", gotExecutor.severity, tt.wantSeverity)
+				t.Errorf("\n\n")
+			}
+
+			if !utils.IsSliceEqual(gotExecutor.categories, tt.wantCategories) {
+				t.Errorf("Mismatch in categories => got: '%v', want: '%v'", gotExecutor.categories, tt.wantCategories)
+				t.Errorf("\n\n")
 			}
 		})
 	}

@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "CIFS / SMB (TCP:3020) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.39",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

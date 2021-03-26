@@ -18,7 +18,7 @@ package initialize
 
 import (
 	"fmt"
-	"io/ioutil"
+	"net/http"
 	"os"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -29,21 +29,24 @@ import (
 )
 
 var (
-	basePath       = config.GetPolicyRepoPath()
-	basePolicyPath = config.GetPolicyBasePath()
-	repoURL        = config.GetPolicyRepoURL()
-	branch         = config.GetPolicyBranch()
+	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
 
+const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
+
 // Run initializes terrascan if not done already
-func Run(isScanCmd bool) error {
+func Run(isNonInitCmd bool) error {
 	zap.S().Debug("initializing terrascan")
 
 	// check if policy paths exist
-	if path, err := os.Stat(basePolicyPath); err == nil && path.IsDir() {
-		if isScanCmd {
+	if path, err := os.Stat(config.GetPolicyRepoPath()); err == nil && path.IsDir() {
+		if isNonInitCmd {
 			return nil
 		}
+	}
+
+	if !connected(terrascanReadmeURL) {
+		return errNoConnection
 	}
 
 	// download policies
@@ -57,21 +60,27 @@ func Run(isScanCmd bool) error {
 
 // DownloadPolicies clones the policies to a local folder
 func DownloadPolicies() error {
+
+	policyBasePath := config.GetPolicyBasePath()
+	repoURL := config.GetPolicyRepoURL()
+	branch := config.GetPolicyBranch()
+
 	zap.S().Debug("downloading policies")
 
-	tempPath, err := ioutil.TempDir("", "terrascan-")
-	if err != nil {
-		return fmt.Errorf("failed to create temporary directory. error: '%v'", err)
-	}
+	zap.S().Debugf("base directory path : %s", policyBasePath)
+	zap.S().Debugf("policy directory path : %s", config.GetPolicyRepoPath())
+	zap.S().Debugf("policy repo url : %s", repoURL)
+	zap.S().Debugf("policy repo git branch : %s", branch)
 
-	defer os.RemoveAll(tempPath)
+	os.RemoveAll(policyBasePath)
 
-	zap.S().Debugf("cloning terrascan repo at %s", tempPath)
+	zap.S().Debugf("cloning terrascan repo at %s", policyBasePath)
 
 	// clone the repo
-	r, err := git.PlainClone(tempPath, false, &git.CloneOptions{
+	r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
 		URL: repoURL,
 	})
+
 	if err != nil {
 		return fmt.Errorf("failed to download policies. error: '%v'", err)
 	}
@@ -99,15 +108,10 @@ func DownloadPolicies() error {
 		return fmt.Errorf("failed to checkout git branch '%v'. error: '%v'", branch, err)
 	}
 
-	// cleaning the existing cached policies at basePath
-	if err = os.RemoveAll(basePath); err != nil {
-		return fmt.Errorf("failed to clean up the directory '%s'. error: '%v'", basePath, err)
-	}
-
-	// move the freshly cloned repo from tempPath to basePath
-	if err = os.Rename(tempPath, basePath); err != nil {
-		return fmt.Errorf("failed to install policies to '%s'. error: '%v'", basePath, err)
-	}
-
 	return nil
+}
+
+func connected(url string) bool {
+	_, err := http.Get(url)
+	return err == nil
 }

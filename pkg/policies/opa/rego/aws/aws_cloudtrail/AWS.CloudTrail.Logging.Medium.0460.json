@@ -7,6 +7,6 @@
     "severity": "MEDIUM",
     "description": "Cloud Trail Multi Region not enabled",
     "reference_id": "AWS.CloudTrail.Logging.Medium.0460",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

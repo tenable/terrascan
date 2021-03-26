@@ -1,9 +1,10 @@
 package cli
 
 import (
-	"github.com/accurics/terrascan/pkg/termcolor"
 	"io"
 	"os"
+
+	"github.com/accurics/terrascan/pkg/termcolor"
 )
 
 // NewOutputWriter gets a new io.Writer based on os.Stdout.

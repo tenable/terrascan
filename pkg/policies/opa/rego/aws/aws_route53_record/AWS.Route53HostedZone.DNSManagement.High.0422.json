@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Route53HostedZone should have recordSets.",
     "reference_id": "AWS.Route53HostedZone.DNSManagement.High.0422",
-    "category": "DNS Management",
+    "category": "Logging and Monitoring",
     "version": 2
 }

@@ -69,6 +69,18 @@ var (
 	sourceRegexPattern = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)\/(.+)["]*`)
 )
 
+// ValidateExitCode validates the exit code of a gexec.Session
+func ValidateExitCode(session *gexec.Session, timeout, exitCode int) {
+	gomega.Eventually(session, timeout).Should(gexec.Exit(exitCode))
+}
+
+// ValidateDirectoryExists validates that a directory exists at the provided path
+func ValidateDirectoryExists(path string) {
+	_, err := os.Stat(path)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+	gomega.Expect(path).To(gomega.BeADirectory())
+}
+
 // CompareActualWithGolden compares actual string with contents of golden file path passed as parameter
 func CompareActualWithGolden(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) {
 	sessionBytes, fileBytes := GetByteData(session, goldenFileAbsPath, isStdOut)

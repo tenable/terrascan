@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
 	"strings"
 
@@ -45,6 +46,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules  = []string{}
 		configOnly = false
 		showPassed = false
+		categories = []string{}
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -62,12 +64,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	// fileExtension will include the period. (eg ".yaml")
+	fileExtension := path.Ext(handler.Filename)
+
 	zap.S().Debugf("uploaded file: %+v", handler.Filename)
+	zap.S().Debugf("uploaded file extension: %+v", fileExtension)
 	zap.S().Debugf("file size: %+v", handler.Size)
 	zap.S().Debugf("MIME header: %+v", handler.Header)
 
 	// Create a temporary file within temp directory
-	tempFile, err := ioutil.TempFile("", "terrascan-*.tf")
+	tempFileTemplate := fmt.Sprintf("terrascan-*%s", fileExtension)
+	tempFile, err := ioutil.TempFile("", tempFileTemplate)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to create temp file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -93,6 +100,9 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// scan and skip rules are comma separated rule id's in the request body
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
+
+	// categories is the list categories of violations that the user want to get informed about: low, medium or high
+	categoriesValue := r.FormValue("categories")
 
 	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
 	severity := r.FormValue("severity")
@@ -129,6 +139,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		skipRules = strings.Split(skipRulesValue, ",")
 	}
 
+	if categoriesValue != "" {
+		categories = strings.Split(categoriesValue, ",")
+	}
+
 	if severity != "" {
 		severity = utils.EnsureUpperCaseTrimmed(severity)
 	}
@@ -137,10 +151,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, severity)
+			tempFile.Name(), "", "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", "", getPolicyPathFromEnv(), scanRules, skipRules, severity)
+			tempFile.Name(), "", "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity)
 	}
 	if err != nil {
 		zap.S().Error(err)
@@ -180,19 +194,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	apiResponse(w, string(j), http.StatusOK)
 }
 
-// getPolicyPathFromEnv reads the TERRASCAN_CONFIG env variable (if present) and returns the policy path
-func getPolicyPathFromEnv() []string {
-	policyPath := []string{}
-
-	// read policy path from TERRASCAN_CONFIG env variable
-	terrascanConfigFile := os.Getenv("TERRASCAN_CONFIG")
-	if terrascanConfigFile != "" {
-		terrascanConfigReader, err := config.NewTerrascanConfigReader(terrascanConfigFile)
-		if err != nil {
-			zap.S().Errorf("error while reading config file, %s; err %v", terrascanConfigFile, err)
-		} else {
-			policyPath = append(policyPath, terrascanConfigReader.GetPolicyConfig().RepoPath)
-		}
-	}
-	return policyPath
+// getPolicyPathFromConfig returns the policy path from config
+func getPolicyPathFromConfig() []string {
+	return []string{config.GetPolicyRepoPath()}
 }

@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Enable AWS CloudFormation Stack Termination Protection",
     "reference_id": "AWS.CloudFormation.Medium.0605",
-    "category": " ",
+    "category": "Security Best Practices",
     "version": 1
 }

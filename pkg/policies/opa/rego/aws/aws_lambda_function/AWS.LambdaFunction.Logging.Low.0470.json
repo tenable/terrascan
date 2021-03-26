@@ -7,6 +7,6 @@
     "severity": "LOW",
     "description": "Lambda tracing is not enabled.",
     "reference_id": "AWS.LambdaFunction.Logging.0470",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 2
 }

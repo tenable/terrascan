@@ -25,15 +25,11 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	notificationsConfigKey = "notifications"
-)
-
 var (
 	errNotifierNotSupported   = fmt.Errorf("notifier not supported")
 	errNotifierTypeNotPresent = fmt.Errorf("notifier type not present in toml config")
-	// ErrTomlKeyNotPresent will be returned when config file does not have notificationsConfigKey
-	ErrTomlKeyNotPresent = fmt.Errorf("key not present in toml config")
+	// ErrNotificationNotPresent error is caused when there isn't any notification present in the config
+	ErrNotificationNotPresent = fmt.Errorf("no notification specified in the config")
 )
 
 // NewNotifier returns a new notifier
@@ -51,25 +47,14 @@ func NewNotifier(notifierType string) (notifier Notifier, err error) {
 }
 
 // NewNotifiers returns a list of notifiers configured in the config file
-func NewNotifiers(configFile string) ([]Notifier, error) {
+func NewNotifiers() ([]Notifier, error) {
 
 	var notifiers []Notifier
 
-	if configFile == "" {
-		zap.S().Debug("no config file specified")
-		return notifiers, nil
-	}
-
-	configReader, err := config.NewTerrascanConfigReader(configFile)
-	if err != nil || configReader == nil {
-		return notifiers, err
-	}
-
 	// get config for 'notifications'
-	notifications := configReader.GetNotifications()
-	if notifications == nil {
-		zap.S().Debug("key '%s' not present in toml config", notificationsConfigKey)
-		return notifiers, ErrTomlKeyNotPresent
+	notifications := config.GetNotifications()
+	if len(notifications) == 0 {
+		return notifiers, ErrNotificationNotPresent
 	}
 
 	// create notifiers

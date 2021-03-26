@@ -9,6 +9,6 @@
     "severity": "HIGH",
     "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet",
     "reference_id": "accurics.azure.NS.30",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

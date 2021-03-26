@@ -9,6 +9,6 @@
     "severity": "HIGH",
     "description": "ElastiCache for Memcached is not in use in AWS PCI DSS environments",
     "reference_id": "AWS.ElastiCache.DataSecurity.High.0424",
-    "category": "Data Security",
+    "category": "Compliance Validation",
     "version": 2
 }

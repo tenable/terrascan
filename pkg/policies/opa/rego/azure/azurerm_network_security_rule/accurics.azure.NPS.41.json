@@ -13,6 +13,6 @@
     "severity": "HIGH",
     "description": "Cassandra (TCP:7001) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.41",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

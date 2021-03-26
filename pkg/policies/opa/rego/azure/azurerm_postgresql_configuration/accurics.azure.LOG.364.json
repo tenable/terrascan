@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server",
     "reference_id": "accurics.azure.LOG.364",
-    "category": "Logging",
+    "category": "Logging and Monitoring",
     "version": 1
 }

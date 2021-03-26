@@ -1,7 +1,6 @@
 package notifications
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -44,7 +43,6 @@ func TestNewNotifier(t *testing.T) {
 }
 
 func TestNewNotifiers(t *testing.T) {
-
 	table := []struct {
 		name       string
 		configFile string
@@ -53,17 +51,17 @@ func TestNewNotifiers(t *testing.T) {
 		{
 			name:       "config not present",
 			configFile: "notthere",
-			wantErr:    config.ErrNotPresent,
+			wantErr:    ErrNotificationNotPresent,
 		},
 		{
 			name:       "invalid toml",
 			configFile: "testdata/invalid.toml",
-			wantErr:    fmt.Errorf("(1, 3): was expecting token =, but got \"am\" instead"),
+			wantErr:    ErrNotificationNotPresent,
 		},
 		{
 			name:       "key not present",
 			configFile: "testdata/nokey.toml",
-			wantErr:    ErrTomlKeyNotPresent,
+			wantErr:    ErrNotificationNotPresent,
 		},
 		{
 			name:       "invalid notifier",
@@ -93,7 +91,8 @@ func TestNewNotifiers(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := NewNotifiers(tt.configFile)
+			config.LoadGlobalConfig(tt.configFile)
+			_, gotErr := NewNotifiers()
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("incorrect error; got: '%v', want: '%v'", gotErr, tt.wantErr)
 			}

@@ -31,9 +31,7 @@ import (
 	"time"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-
 	"github.com/accurics/terrascan/pkg/policy"
-
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/open-policy-agent/opa/ast"
@@ -42,7 +40,8 @@ import (
 )
 
 var (
-	errInitFailed = fmt.Errorf("failed to initialize OPA policy engine")
+	// ErrInitFailed error
+	ErrInitFailed = fmt.Errorf("failed to initialize OPA policy engine")
 )
 
 // NewEngine returns a new OPA policy engine
@@ -243,16 +242,16 @@ func (e *Engine) CompileRegoFiles() error {
 
 // Init initializes the Opa engine
 // Handles loading all rules, filtering, compiling, and preparing for evaluation
-func (e *Engine) Init(policyPath string, scanRules, skipRules []string, severity string) error {
+func (e *Engine) Init(policyPath string, scanRules, skipRules, categories []string, severity string) error {
 	e.context = context.Background()
 
 	if err := e.LoadRegoFiles(policyPath); err != nil {
 		zap.S().Error("error loading rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return errInitFailed
+		return ErrInitFailed
 	}
 
 	// before compiling the rego files, filter the rules based on scan and skip rules, and severity level supplied
-	e.FilterRules(policyPath, scanRules, skipRules, severity)
+	e.FilterRules(policyPath, scanRules, skipRules, categories, severity)
 
 	// update the rule count
 	e.stats.ruleCount = len(e.regoDataMap)
@@ -260,7 +259,7 @@ func (e *Engine) Init(policyPath string, scanRules, skipRules []string, severity
 	err := e.CompileRegoFiles()
 	if err != nil {
 		zap.S().Error("error compiling rego files", zap.String("policy path", policyPath), zap.Error(err))
-		return errInitFailed
+		return ErrInitFailed
 	}
 
 	// initialize ViolationStore
@@ -437,8 +436,8 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	return e.results, nil
 }
 
-// FilterRules will apply the scan and skip rules, and severity level
-func (e *Engine) FilterRules(policyPath string, scanRules, skipRules []string, severity string) {
+// FilterRules will apply the scan and skip rules, severity level and categories
+func (e *Engine) FilterRules(policyPath string, scanRules, skipRules, categories []string, severity string) {
 	// apply scan rules
 	if len(scanRules) > 0 {
 		e.filterScanRules(policyPath, scanRules)
@@ -449,6 +448,12 @@ func (e *Engine) FilterRules(policyPath string, scanRules, skipRules []string, s
 		e.filterSkipRules(policyPath, skipRules)
 	}
 
+	// apply categories
+	if len(categories) > 0 {
+		e.filterByCategories(policyPath, categories)
+	}
+
+	// apply severity
 	if len(severity) > 0 {
 		e.filterBySeverity(policyPath, severity)
 	}
@@ -488,8 +493,25 @@ func (e *Engine) filterSkipRules(policyPath string, skipRules []string) {
 	}
 }
 
-func (e *Engine) filterBySeverity(policyPath, severity string) {
+func (e *Engine) filterByCategories(policyPath string, categories []string) {
 
+	// temporary map to store data from original rego data map
+	tempMap := make(map[string]*RegoData)
+	for ruleID, regoData := range e.regoDataMap {
+
+		if utils.CheckCategory(regoData.Metadata.Category, categories) {
+			tempMap[ruleID] = regoData
+		}
+	}
+	if len(tempMap) == 0 {
+		zap.S().Debugf("policy path: %s, doesn't have any rule matching the categories : %v", policyPath, categories)
+	}
+
+	// the regoDataMap should only contain regoData for required minimum severity level
+	e.regoDataMap = tempMap
+}
+
+func (e *Engine) filterBySeverity(policyPath string, severity string) {
 	// temporary map to store data from original rego data map
 	tempMap := make(map[string]*RegoData)
 	for ruleID, regoData := range e.regoDataMap {

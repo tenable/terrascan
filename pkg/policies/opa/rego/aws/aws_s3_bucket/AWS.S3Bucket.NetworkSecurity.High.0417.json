@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure that there are not any static websites being hosted on buckets you aren't aware of",
     "reference_id": "AWS.S3Bucket.NetworkSecurity.High.0417",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

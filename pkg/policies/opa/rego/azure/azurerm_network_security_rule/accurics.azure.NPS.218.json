@@ -13,6 +13,6 @@
     "severity": "MEDIUM",
     "description": "NetBIOS Datagram Service (UDP:138) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.218",
-    "category": "Network Ports Security",
+    "category": "Infrastructure Security",
     "version": 2
 }

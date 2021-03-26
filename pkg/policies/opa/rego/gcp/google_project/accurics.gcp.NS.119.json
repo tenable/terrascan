@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that the default network does not exist in a project.",
     "reference_id": "accurics.gcp.NS.119",
-    "category": "Network Security",
+    "category": "Infrastructure Security",
     "version": 1
 }

@@ -8,6 +8,6 @@
     "severity": "MEDIUM",
     "description": "Enable AWS CloudFormation Stack Notifications",
     "reference_id": "AWS.CloudFormation.Medium.0603",
-    "category": " ",
+    "category": "Security Best Practices",
     "version": 1
 }

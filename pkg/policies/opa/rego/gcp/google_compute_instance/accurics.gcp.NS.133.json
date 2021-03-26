@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure Compute instances are launched with Shielded VM enabled.",
     "reference_id": "accurics.gcp.NS.133",
-    "category": "Network Security ",
+    "category": "Infrastructure Security ",
     "version": 1
 }

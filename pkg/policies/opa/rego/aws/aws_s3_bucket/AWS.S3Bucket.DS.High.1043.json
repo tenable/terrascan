@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "S3 bucket Access is allowed to all AWS Account Users.",
     "reference_id": "AWS.S3Bucket.DS.High.1043",
-    "category": "S3",
+    "category": "Identity and Access Management",
     "version": 2
 }

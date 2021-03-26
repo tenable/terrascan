@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/results"
@@ -38,6 +39,9 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
+	// set default config values before policy download
+	config.LoadGlobalConfig("")
+
 	// to download the policies for Run test
 	// downloads the policies at $HOME/.terrascan
 	initial(nil, nil, false)
@@ -45,7 +49,8 @@ func setup() {
 
 func shutdown() {
 	// remove the downloaded policies
-	os.RemoveAll(filepath.Join(utils.GetHomeDir(), ".terrascan"))
+	os.RemoveAll(config.GetPolicyBasePath())
+	// cleanup the loaded config values
 }
 
 func TestRun(t *testing.T) {
@@ -222,6 +227,7 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
+			config.LoadGlobalConfig(tt.scanOptions.configFile)
 			err := tt.scanOptions.Run()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)

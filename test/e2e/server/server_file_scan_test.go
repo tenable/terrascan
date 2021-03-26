@@ -260,6 +260,57 @@ var _ = Describe("Server File Scan", func() {
 				})
 			})
 
+			When("category is used", func() {
+				awsAmiIacFilePath, _ := filepath.Abs(filepath.Join(awsAmiViolationRelPath, "main.tf"))
+
+				When("category is invalid", func() {
+					It("should receive a 400 bad request", func() {
+						bodyAttrs := make(map[string]string)
+						bodyAttrs["categories"] = "Wrong caTeGory "
+
+						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusBadRequest)
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("category not supported"))
+					})
+				})
+
+				When("multiple categories are sent but some of them are invalid", func() {
+					It("should receive a 400 bad request", func() {
+						bodyAttrs := make(map[string]string)
+						bodyAttrs["categories"] = " dATa pROtECtION, IDENTITY is Acess Management "
+
+						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusBadRequest)
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("category not supported"))
+					})
+				})
+
+				When("category is valid", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]string)
+						bodyAttrs["categories"] = "DATA PROTECTION"
+
+						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+
+				When("category is wrongly formatted but valid", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]string)
+						bodyAttrs["categories"] = " dATa pROtECtION "
+
+						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+
+				When("multiple categories are sent and all of them are valid", func() {
+					It("should receive violations result with 200 OK response", func() {
+						bodyAttrs := make(map[string]string)
+						bodyAttrs["categories"] = " dATa pROtECtION, IDENTITY and Access Management "
+
+						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusOK)
+					})
+				})
+			})
+
 			Context("resource is skipped", func() {
 				resourceSkipIacRelPath := filepath.Join(iacRootRelPath, "resource_skipping")
 

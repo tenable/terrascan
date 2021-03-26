@@ -7,6 +7,6 @@
     "severity": "HIGH",
     "description": "Ensure Hardware MFA device is enabled for the \"root\" account",
     "reference_id": "AWS.IamUser.IAM.High.0387",
-    "category": "Identity and Access Management",
+    "category": "Compliance Validation",
     "version": 1
 }

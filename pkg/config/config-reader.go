@@ -27,7 +27,7 @@ import (
 
 var (
 	// ErrTomlLoadConfig indicates error: Failed to load toml config
-	errTomlLoadConfig = fmt.Errorf("failed to load toml config")
+	ErrTomlLoadConfig = fmt.Errorf("failed to load toml config")
 	// ErrNotPresent indicates error: Config file not present
 	ErrNotPresent = fmt.Errorf("config file not present")
 )
@@ -59,7 +59,7 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		zap.S().Error("error loading config file", zap.Error(err))
-		return configReader, errTomlLoadConfig
+		return configReader, ErrTomlLoadConfig
 	}
 
 	if err = toml.Unmarshal(data, &configReader.config); err != nil {
@@ -69,21 +69,26 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 }
 
 // GetPolicyConfig will return the policy config from the terrascan config file
-func (r TerrascanConfigReader) GetPolicyConfig() Policy {
+func (r TerrascanConfigReader) getPolicyConfig() Policy {
 	return r.config.Policy
 }
 
 // GetNotifications will return the notifiers specified in the terrascan config file
-func (r TerrascanConfigReader) GetNotifications() map[string]Notifier {
+func (r TerrascanConfigReader) getNotifications() map[string]Notifier {
 	return r.config.Notifications
 }
 
 // GetRules will return the rules specified in the terrascan config file
-func (r TerrascanConfigReader) GetRules() Rules {
+func (r TerrascanConfigReader) getRules() Rules {
 	return r.config.Rules
 }
 
+// GetCategory will return the category specified in the terrascan config file
+func (r TerrascanConfigReader) getCategory() Category {
+	return r.config.Category
+}
+
 // GetSeverity will return the level of severity specified in the terrascan config file
-func (r TerrascanConfigReader) GetSeverity() Severity {
+func (r TerrascanConfigReader) getSeverity() Severity {
 	return r.config.Severity
 }

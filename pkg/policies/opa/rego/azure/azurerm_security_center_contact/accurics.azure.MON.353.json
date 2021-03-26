@@ -5,6 +5,6 @@
     "severity": "MEDIUM",
     "description": "Ensure that 'Send email notification for high severity alerts' is set to 'On'",
     "reference_id": "accurics.azure.MON.353",
-    "category": "Monitoring",
+    "category": "Logging and Monitoring",
     "version": 1
 }

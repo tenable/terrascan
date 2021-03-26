@@ -1,0 +1,3 @@
+[policy]
+path = "~/.terrascan-test"
+rego_subdir = "pkg/policies/opa/rego"

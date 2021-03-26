@@ -170,7 +170,8 @@ var _ = Describe("Server", func() {
 
 					Context("server is stopped", func() {
 						It("should gracefully exit", func() {
-							session.Terminate()
+							session.Interrupt()
+							Eventually(session).Should(gexec.Exit(helper.ExitCodeZero))
 							_, err := serverUtils.MakeHTTPRequest(http.MethodGet, healthCheckURL)
 							Expect(err).To(HaveOccurred())
 						})

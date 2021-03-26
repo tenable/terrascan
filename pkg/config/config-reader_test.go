@@ -29,8 +29,8 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		},
 	}
 	testPolicy := Policy{
-		BasePath: "custom-path",
 		RepoPath: "rego-subdir",
+		BasePath: "custom-path",
 		RepoURL:  "https://repository/url",
 		Branch:   "branch-name",
 	}
@@ -39,6 +39,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		SkipRules: []string{"rule.1"},
 	}
 
+	categoryList := Category{List: []string{"category.1", "category.2"}}
 	highSeverity := Severity{Level: "high"}
 
 	type args struct {
@@ -132,6 +133,28 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 			Policy: testPolicy,
 			Rules:  testRules,
 		},
+		{
+			name: "valid toml config file with all fields and categories defined",
+			args: args{
+				fileName: "testdata/terrascan-config-category.toml",
+			},
+			want: &TerrascanConfigReader{
+				config: TerrascanConfig{
+					Policy: testPolicy,
+					Notifications: map[string]Notifier{
+						"webhook1": testNotifier,
+					},
+					Rules:    testRules,
+					Category: categoryList,
+				},
+			},
+			assertGetters: true,
+			notifications: map[string]Notifier{
+				"webhook1": testNotifier,
+			},
+			Policy: testPolicy,
+			Rules:  testRules,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -144,8 +167,8 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 				t.Errorf("NewTerrascanConfigReader() = got %v, want %v", got, tt.want)
 			}
 			if tt.assertGetters {
-				if !reflect.DeepEqual(got.GetPolicyConfig(), tt.Policy) || !reflect.DeepEqual(got.GetNotifications(), tt.notifications) || !reflect.DeepEqual(got.GetRules(), tt.Rules) {
-					t.Errorf("NewTerrascanConfigReader() = got config: %v, notifications: %v, rules: %v want config: %v, notifications: %v, rules: %v", got.GetPolicyConfig(), got.GetNotifications(), got.GetRules(), tt.Policy, tt.notifications, tt.Rules)
+				if !reflect.DeepEqual(got.getPolicyConfig(), tt.Policy) || !reflect.DeepEqual(got.getNotifications(), tt.notifications) || !reflect.DeepEqual(got.getRules(), tt.Rules) {
+					t.Errorf("NewTerrascanConfigReader() = got config: %v, notifications: %v, rules: %v want config: %v, notifications: %v, rules: %v", got.getPolicyConfig(), got.getNotifications(), got.getRules(), tt.Policy, tt.notifications, tt.Rules)
 				}
 			}
 		})
