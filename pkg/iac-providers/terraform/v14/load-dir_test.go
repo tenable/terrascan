@@ -82,7 +82,7 @@ func TestLoadIacDir(t *testing.T) {
 		})
 	}
 
-	tfJsonDir := filepath.Join(testDataDir, "tfjson")
+	tfJSONDir := filepath.Join(testDataDir, "tfjson")
 
 	table2 := []struct {
 		name        string
@@ -94,21 +94,21 @@ func TestLoadIacDir(t *testing.T) {
 		{
 			name:        "config1",
 			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
-			tfJSONFile:  filepath.Join(tfJsonDir, "fullconfig.json"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "module directory",
 			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
-			tfJSONFile:  filepath.Join(tfJsonDir, "moduleconfigs.json"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "nested module directory",
 			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
-			tfJSONFile:  filepath.Join(tfJsonDir, "deep-modules.json"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},

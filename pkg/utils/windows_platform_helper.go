@@ -21,6 +21,7 @@ func ReplaceWinNewLineString(input string) string {
 	return strings.ReplaceAll(input, "\r\n", "\n")
 }
 
+// ReplaceCarriageReturnBytes replaces windows new lines characters in a string
 func ReplaceCarriageReturnBytes(input []byte) []byte {
 	return bytes.ReplaceAll(input, []byte("\\r\\n"), []byte("\\n"))
 }

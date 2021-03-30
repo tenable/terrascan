@@ -32,7 +32,7 @@ import (
 var testDataDir = "testdata"
 var emptyTfFilePath = filepath.Join(testDataDir, "empty.tf")
 var nonEmptyTfFilePath = filepath.Join(testDataDir, "destroy-provisioners", "main.tf")
-var tfJsonDir = filepath.Join(testDataDir, "tfjson")
+var tfJSONDir = filepath.Join(testDataDir, "tfjson")
 
 func TestLoadIacFile(t *testing.T) {
 
@@ -107,14 +107,14 @@ References to other resources during the destroy phase can cause dependency cycl
 		{
 			name:         "config1",
 			tfConfigFile: filepath.Join(testDataDir, "tfconfigs", "config1.tf"),
-			tfJSONFile:   filepath.Join(tfJsonDir, "config1.json"),
+			tfJSONFile:   filepath.Join(tfJSONDir, "config1.json"),
 			tfv12:        TfV12{},
 			wantErr:      nil,
 		},
 		{
 			name:         "dummyconfig",
 			tfConfigFile: filepath.Join(testDataDir, "dummyconfig", "dummyconfig.tf"),
-			tfJSONFile:   filepath.Join(tfJsonDir, "dummyconfig.json"),
+			tfJSONFile:   filepath.Join(tfJSONDir, "dummyconfig.json"),
 			tfv12:        TfV12{},
 			wantErr:      nil,
 		},
