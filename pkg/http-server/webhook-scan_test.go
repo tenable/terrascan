@@ -235,7 +235,8 @@ func TestUWebhooks(t *testing.T) {
 						logPath = response.Response.Result.Message
 					}
 
-					expectedLogPath := fmt.Sprintf("https://%v/k8s/webhooks/logs/705ab4f5-6393-11e8-b7cc-42010a800002", req.Host)
+					subLogPath := fmt.Sprintf("https://%v/k8s/webhooks/logs/705ab4f5-6393-11e8-b7cc-42010a800002", req.Host)
+					expectedLogPath := fmt.Sprintf("For more details please visit %q", subLogPath)
 
 					if logPath != expectedLogPath {
 						t.Errorf("Mismach Log path. Got: %v, expected: %v", logPath, expectedLogPath)

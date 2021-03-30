@@ -18,6 +18,7 @@ package admissionwebhook
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
 	"time"
@@ -176,9 +177,13 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 		result   runtime.Output
 	)
 
-	executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-		filePath, "", w.configFile, []string{}, []string{}, []string{}, []string{}, "")
-
+	if flag.Lookup("test.v") != nil {
+		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
+			filePath, "", w.configFile, []string{"../policies/opa/rego/k8s"}, []string{}, []string{}, []string{}, "")
+	} else {
+		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
+			filePath, "", w.configFile, []string{}, []string{}, []string{}, []string{}, "")
+	}
 	if err != nil {
 		zap.S().Errorf("failed to create runtime executer: '%v'", err)
 		return result, err
