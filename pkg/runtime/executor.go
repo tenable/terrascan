@@ -17,6 +17,7 @@
 package runtime
 
 import (
+	"reflect"
 	"sort"
 
 	"go.uber.org/zap"
@@ -44,10 +45,11 @@ type Executor struct {
 	notifiers     []notifications.Notifier
 	categories    []string
 	severity      string
+	nonRecursive  bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
 	e = &Executor{
 		filePath:     filePath,
 		dirPath:      dirPath,
@@ -56,6 +58,7 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		iacType:      iacType,
 		iacVersion:   iacVersion,
 		iacProviders: make([]iacProvider.IacProvider, 0),
+		nonRecursive: nonRecursive,
 	}
 
 	// read config file and update scan and skip rules
@@ -112,6 +115,13 @@ func (e *Executor) Init() error {
 				zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
 				return err
 			}
+
+			// if the iac provider is terraform and non recursive scan is true,
+			// set the struct field 'NonRecursiveScan' to true
+			if ip == "terraform" && e.nonRecursive {
+				iacP = makeNonRecursiveTrue(iacP)
+			}
+
 			e.iacProviders = append(e.iacProviders, iacP)
 		}
 	} else {
@@ -119,6 +129,12 @@ func (e *Executor) Init() error {
 		if err != nil {
 			zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
 			return err
+		}
+
+		// if the iac provider is terraform and non recursive scan is true,
+		// set the struct field 'NonRecursiveScan' to true
+		if e.iacType == "terraform" && e.nonRecursive {
+			iacP = makeNonRecursiveTrue(iacP)
 		}
 		e.iacProviders = append(e.iacProviders, iacP)
 	}
@@ -289,4 +305,13 @@ func implementsSubFolderScan(iacType string) bool {
 		}
 	}
 	return false
+}
+
+// makeNonRecursiveTrue sets the 'NonRecursiveScan' field to true
+// only terraform iac provider should be passed to this function, else it will panic
+func makeNonRecursiveTrue(iacP iacProvider.IacProvider) iacProvider.IacProvider {
+	terraformIacP := reflect.ValueOf(&iacP).Elem()
+	// modify the field 'NonRecursiveScan' in the struct
+	reflect.ValueOf(terraformIacP.Interface()).Elem().FieldByName("NonRecursiveScan").SetBool(true)
+	return iacP
 }

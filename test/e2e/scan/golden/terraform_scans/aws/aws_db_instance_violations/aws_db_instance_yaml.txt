@@ -8,6 +8,7 @@ results:
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 39
         - rule_name: rdsAutoMinorVersionUpgradeEnabled
           description: RDS Instance Auto Minor Version Upgrade flag disabled
@@ -17,6 +18,7 @@ results:
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 39
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -26,6 +28,7 @@ results:
           resource_name: PtShGgAdi6
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 82
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -35,6 +38,7 @@ results:
           resource_name: PtShGgAdi4
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 55
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -44,6 +48,7 @@ results:
           resource_name: PtShGgAdi5
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 69
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -53,6 +58,7 @@ results:
           resource_name: PtShGgAdi1
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 10
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -62,6 +68,7 @@ results:
           resource_name: PtShGgAdi2
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 25
         - rule_name: rdsHasStorageEncrypted
           description: Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.
@@ -71,6 +78,7 @@ results:
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 39
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -80,6 +88,7 @@ results:
           resource_name: PtShGgAdi6
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 82
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -89,6 +98,7 @@ results:
           resource_name: PtShGgAdi4
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 55
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -98,6 +108,7 @@ results:
           resource_name: PtShGgAdi5
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 69
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -107,6 +118,7 @@ results:
           resource_name: PtShGgAdi2
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 25
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -116,6 +128,7 @@ results:
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 39
         - rule_name: rdsIamAuthEnabled
           description: Ensure that your RDS database has IAM Authentication enabled.
@@ -125,6 +138,7 @@ results:
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
           file: main.tf
+          root_path: ./
           line: 39
     skipped_violations: []
     scan_summary:

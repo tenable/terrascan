@@ -77,7 +77,7 @@ var _ = Describe("Scan", func() {
 		})
 	})
 
-	Describe("scan command is run without any flags", func() {
+	Describe("scan command is run", func() {
 		Context("when no iac type is provided, terrascan scans with all iac providers", func() {
 			Context("no tf files are present in the working directory", func() {
 				It("scan the directory and display results", func() {
@@ -85,21 +85,25 @@ var _ = Describe("Scan", func() {
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
 				})
-				Context("iac loading errors would be displayed in the output", func() {
+				Context("iac loading errors would be displayed in the output, output type is json", func() {
 					It("scan the directory and display results", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-p", policyRootRelPath}
 						// these errors would come from terraform, helm, and kustomize iac providers
-						errString1 := "has no terraform config files"
-						errString2 := "kustomization.y(a)ml file not found in the directory"
-						errString3 := "no helm charts found in directory"
+						errString1 := "kustomization.y(a)ml file not found in the directory"
+						errString2 := "no helm charts found in directory"
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 						helper.ContainsDirScanErrorSubString(session, errString1)
 						helper.ContainsDirScanErrorSubString(session, errString2)
-						helper.ContainsDirScanErrorSubString(session, errString3)
+					})
+				})
+				When("iac type is terraform and --non-recursive flag is used", func() {
+					It("should error out if no terraform files are present in working directory", func() {
+						scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "--non-recursive"}
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 					})
 				})
 			})
-
 			Context("tf files are present in the working directory", func() {
 				It("should scan the directory, return results and exit with status code 3", func() {
 					workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))

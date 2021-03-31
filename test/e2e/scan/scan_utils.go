@@ -33,7 +33,7 @@ const (
 	ScanTimeout int = 3
 
 	// RemoteScanTimeout is default scan command remote execution timeout
-	RemoteScanTimeout int = 20
+	RemoteScanTimeout int = 30
 )
 
 // RunScanAndAssertGoldenOutputRegex runs the scan command with supplied paramters and compares actual and golden output

@@ -35,15 +35,16 @@ import (
 
 // scanRemoteRepoReq contains request body for remote repository scanning
 type scanRemoteRepoReq struct {
-	RemoteType string   `json:"remote_type"`
-	RemoteURL  string   `json:"remote_url"`
-	ConfigOnly bool     `json:"config_only"`
-	ScanRules  []string `json:"scan_rules"`
-	SkipRules  []string `json:"skip_rules"`
-	Categories []string `json:"categories"`
-	Severity   string   `json:"severity"`
-	ShowPassed bool     `json:"show_passed"`
-	d          downloader.Downloader
+	RemoteType   string   `json:"remote_type"`
+	RemoteURL    string   `json:"remote_url"`
+	ConfigOnly   bool     `json:"config_only"`
+	ScanRules    []string `json:"scan_rules"`
+	SkipRules    []string `json:"skip_rules"`
+	Categories   []string `json:"categories"`
+	Severity     string   `json:"severity"`
+	ShowPassed   bool     `json:"show_passed"`
+	NonRecursive bool     `json:"non_recursive"`
+	d            downloader.Downloader
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -126,7 +127,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity)
+		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive)
 	if err != nil {
 		zap.S().Error(err)
 		return output, isAdmissionDenied, err

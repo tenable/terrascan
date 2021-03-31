@@ -92,6 +92,9 @@ type ScanOptions struct {
 
 	// showPassedRules indicates whether to display passed rules or not
 	showPassedRules bool
+
+	// nonRecursive enables recursive scan for the terraform iac provider
+	nonRecursive bool
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -176,7 +179,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity)
+		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive)
 	if err != nil {
 		return err
 	}

@@ -20,8 +20,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
+	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -48,6 +50,11 @@ func TestLoadIacDir(t *testing.T) {
 
 	invalidDirErrStringTemplate := "directory '%s' has no terraform config files"
 
+	pathErr := &os.PathError{Op: "lstat", Path: "not-there", Err: syscall.ENOENT}
+	if utils.IsWindowsPlatform() {
+		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
+	}
+
 	table := []struct {
 		name    string
 		dirPath string
@@ -58,32 +65,62 @@ func TestLoadIacDir(t *testing.T) {
 		{
 			name:    "invalid dirPath",
 			dirPath: testDirPath1,
-			tfv12:   TfV12{},
+			tfv12:   TfV12{true},
 			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
+		},
+		{
+			name:    "invalid dirPath recursive",
+			dirPath: testDirPath1,
+			tfv12:   TfV12{false},
+			wantErr: pathErr,
 		},
 		{
 			name:    "empty config",
 			dirPath: testDirPath2,
-			tfv12:   TfV12{},
+			tfv12:   TfV12{true},
 			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
+		},
+		{
+			name:    "empty config recursive",
+			dirPath: testDirPath2,
+			tfv12:   TfV12{false},
+			wantErr: nil,
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
-			tfv12:   TfV12{},
+			tfv12:   TfV12{true},
 			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
+		},
+		{
+			name:    "incorrect module structure recursive",
+			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
+			tfv12:   TfV12{false},
+			wantErr: nil,
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: testDataDir,
-			tfv12:   TfV12{},
+			tfv12:   TfV12{true},
 			wantErr: multierror.Append(fmt.Errorf(testErrorString1)),
+		},
+		{
+			name:    "load invalid config dir recursive",
+			dirPath: testDataDir,
+			tfv12:   TfV12{false},
+			wantErr: nil,
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: multipleProvidersDir,
-			tfv12:   TfV12{},
+			tfv12:   TfV12{true},
 			wantErr: multierror.Append(fmt.Errorf(testErrorString2)),
+		},
+		{
+			name:    "load invalid config dir recursive",
+			dirPath: multipleProvidersDir,
+			tfv12:   TfV12{false},
+			wantErr: nil,
 		},
 	}
 
@@ -109,28 +146,51 @@ func TestLoadIacDir(t *testing.T) {
 			name:        "config1",
 			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
-			tfv12:       TfV12{},
+			tfv12:       TfV12{true},
 			wantErr:     nilMultiErr,
+		},
+		{
+			name:        "config1 recursive",
+			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
+			// no change in the output expected as the config dir doesn't contain subfolder
+			tfJSONFile: filepath.Join(tfJSONDir, "fullconfig.json"),
+			tfv12:      TfV12{false},
+			wantErr:    nil,
 		},
 		{
 			name:        "module directory",
 			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
-			tfv12:       TfV12{},
+			tfv12:       TfV12{true},
 			wantErr:     nilMultiErr,
+		},
+		{
+			name:        "module directory recursive",
+			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
+			// no change in the output expected as the config dir doesn't contain subfolder
+			tfJSONFile: filepath.Join(tfJSONDir, "moduleconfigs.json"),
+			tfv12:      TfV12{false},
+			wantErr:    nil,
 		},
 		{
 			name:        "nested module directory",
 			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
-			tfv12:       TfV12{},
+			tfv12:       TfV12{true},
 			wantErr:     nilMultiErr,
+		},
+		{
+			name:        "nested module directory recursive",
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules-recursive.json"),
+			tfv12:       TfV12{false},
+			wantErr:     nil,
 		},
 		{
 			name:        "variables of list type",
 			tfConfigDir: filepath.Join(testDataDir, "list-type-vars-test"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "list-vars-test.json"),
-			tfv12:       TfV12{},
+			tfv12:       TfV12{true},
 			wantErr:     nilMultiErr,
 		},
 	}

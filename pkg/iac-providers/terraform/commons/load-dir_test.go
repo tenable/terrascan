@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/downloader"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 )
@@ -116,6 +117,95 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("processTerraformRegistrySource() got = %v, want = %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsConfigPresent(t *testing.T) {
+
+	testResourceConfing := output.ResourceConfig{
+		ID:     "A",
+		Name:   "nameA",
+		Source: "sourceA",
+		Config: map[string]string{
+			"key1": "value1",
+			"key2": "value2",
+		},
+	}
+
+	testResources := []output.ResourceConfig{
+		testResourceConfing,
+		{
+			ID:     "B",
+			Name:   "nameB",
+			Source: "sourceB",
+			Config: map[string]string{
+				"key3": "value3",
+				"key4": "value4",
+			},
+		},
+		{
+			ID:     "C",
+			Name:   "nameC",
+			Source: "sourceC",
+			Config: map[string]string{
+				"key5": "value5",
+				"key6": "value6",
+			},
+		},
+	}
+
+	type args struct {
+		resources      []output.ResourceConfig
+		resourceConfig output.ResourceConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "when resource config is present",
+			args: args{
+				resources:      testResources,
+				resourceConfig: testResourceConfing,
+			},
+			want: true,
+		},
+		{
+			name: "when resource config is not present",
+			args: args{
+				resources: testResources,
+				resourceConfig: output.ResourceConfig{
+					ID:     "testID",
+					Name:   "testName",
+					Source: "testSource",
+				},
+			},
+			want: false,
+		},
+		{
+			name: "when only name and source is same but Config is not",
+			args: args{
+				resources: testResources,
+				resourceConfig: output.ResourceConfig{
+					ID:     "C",
+					Name:   "nameC",
+					Source: "sourceC",
+					Config: map[string]string{
+						"key5": "value5",
+						"k":    "v",
+					},
+				},
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isConfigPresent(tt.args.resources, tt.args.resourceConfig); got != tt.want {
+				t.Errorf("isConfigPresent() = %v, want %v", got, tt.want)
 			}
 		})
 	}

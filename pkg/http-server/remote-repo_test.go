@@ -92,17 +92,18 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 	testCloudType := "aws"
 
 	table := []struct {
-		name       string
-		iacType    string
-		iacVersion string
-		cloudType  string
-		remoteURL  string
-		remoteType string
-		scanRules  []string
-		skipRules  []string
-		showPassed bool
-		configOnly bool
-		wantStatus int
+		name         string
+		iacType      string
+		iacVersion   string
+		cloudType    string
+		remoteURL    string
+		remoteType   string
+		scanRules    []string
+		skipRules    []string
+		showPassed   bool
+		configOnly   bool
+		nonRecursive bool
+		wantStatus   int
 	}{
 		{
 			name:       "empty url and type",
@@ -141,6 +142,16 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			wantStatus: http.StatusOK,
 		},
 		{
+			name:         "iac type terraform with non-recursive scan",
+			iacType:      testIacType,
+			iacVersion:   testIacVersion,
+			cloudType:    testCloudType,
+			remoteURL:    validRepo,
+			remoteType:   "git",
+			nonRecursive: true,
+			wantStatus:   http.StatusOK,
+		},
+		{
 			name:       "valid url and type with scan and skip rules",
 			iacType:    testIacType,
 			iacVersion: testIacVersion,
@@ -175,12 +186,13 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 
 			// request body
 			s := scanRemoteRepoReq{
-				RemoteURL:  tt.remoteURL,
-				RemoteType: tt.remoteType,
-				ScanRules:  tt.scanRules,
-				SkipRules:  tt.skipRules,
-				ShowPassed: tt.showPassed,
-				ConfigOnly: tt.configOnly,
+				RemoteURL:    tt.remoteURL,
+				RemoteType:   tt.remoteType,
+				ScanRules:    tt.scanRules,
+				SkipRules:    tt.skipRules,
+				ShowPassed:   tt.showPassed,
+				ConfigOnly:   tt.configOnly,
+				NonRecursive: tt.nonRecursive,
 			}
 			reqBody, _ := json.Marshal(s)
 

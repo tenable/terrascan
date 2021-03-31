@@ -20,12 +20,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
@@ -36,8 +35,7 @@ import (
 
 var (
 	// ErrBuildTFConfigDir error
-	ErrBuildTFConfigDir                   = fmt.Errorf("failed to build terraform allResourcesConfig")
-	errIacLoadDirs      *multierror.Error = nil
+	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
 // ModuleConfig contains the *hclConfigs.Config for every module in the
@@ -52,73 +50,175 @@ type ModuleConfig struct {
 // LoadIacDir starts traversing from the given rootDir and traverses through
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
-func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func LoadIacDir(absRootDir string, nonRecursiveScan bool) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	// create a new config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
-
-	// check if the directory has any tf config files (.tf or .tf.json)
-	if !parser.IsConfigDir(absRootDir) {
-		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", absRootDir)
-		zap.S().Debug(errMessage)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMessage})
-	}
-
-	// load root config directory
-	rootMod, diags := parser.LoadConfigDir(absRootDir)
-	if diags.HasErrors() {
-		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", absRootDir, getErrorMessagesFromDiagnostics(diags))
-		zap.S().Debug(errMessage)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMessage})
-	}
 
 	// create a new downloader to install remote modules
 	r := downloader.NewRemoteDownloader()
 	defer r.CleanUp()
 
-	// using the BuildConfig and ModuleWalkerFunc to traverse through all
-	// descendant modules from the root module and create a unified
-	// configuration of type *configs.Config
-	// Note: currently, only Local paths are supported for Module Sources
-	versionI := 0
-	unified, diags := hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
-		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
+	if nonRecursiveScan {
+		return loadDirNonRecursive(absRootDir, parser, r)
+	}
 
-			// figure out path sub module directory, if it's remote then download it locally
-			var pathToModule string
-			if downloader.IsLocalSourceAddr(req.SourceAddr) {
+	// Walk the file path and find all directories
+	dirList, err := utils.FindAllDirectories(absRootDir)
+	if err != nil {
+		return nil, err
+	}
+	dirList = utils.FilterHiddenDirectories(dirList, absRootDir)
 
-				pathToModule = processLocalSource(req)
-				zap.S().Debugf("processing local module %q", pathToModule)
-			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
-				// temp dir to download the remote repo
-				tempDir := generateTempDir()
+	return loadDirRecursive(dirList, absRootDir, parser, r)
+}
 
-				pathToModule, err = processTerraformRegistrySource(req, tempDir, r)
+func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Parser, r downloader.ModuleDownloader) (output.AllResourceConfigs, error) {
+
+	// initialize normalized output
+	allResourcesConfig := make(map[string][]output.ResourceConfig)
+
+	for _, dir := range dirList {
+		// check if the directory has any tf config files (.tf or .tf.json)
+		if !parser.IsConfigDir(dir) {
+			// log a debug message and continue with other directories
+			errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
+			zap.S().Debug(errMessage)
+			continue
+		}
+
+		// load current config directory
+		rootMod, diags := parser.LoadConfigDir(dir)
+		if diags.HasErrors() {
+			// log a debug message and continue with other directories
+			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
+			zap.S().Debug(errMessage)
+			continue
+		}
+
+		// get unified config for the current directory
+		unified, diags := buildUnifiedConfig(rootMod, parser, dir, r)
+
+		if diags.HasErrors() {
+			// log a warn message in this case because there are errors in
+			// loading the config dir, and continue with other directories
+			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
+			zap.S().Warnf(errMessage)
+			continue
+		}
+
+		/*
+			The "unified" config created from BuildConfig in the previous step
+			represents a tree structure with rootDir module being at its root and
+			all the sub modules being its children, and these children can have
+			more children and so on...
+
+			Now, using BFS we traverse through all the submodules using the classic
+			approach of using a queue data structure
+		*/
+
+		// queue of for BFS, add root module config to it
+		root := &ModuleConfig{Config: unified.Root}
+		configsQ := []*ModuleConfig{root}
+
+		// using BFS traverse through all modules in the unified config tree
+		zap.S().Debug("traversing through all modules in config tree")
+		for len(configsQ) > 0 {
+
+			// pop first element from the queue
+			current := configsQ[0]
+			configsQ = configsQ[1:]
+
+			// reference resolver
+			r := NewRefResolver(current.Config, current.ParentModuleCall)
+
+			// traverse through all current's resources
+			for _, managedResource := range current.Config.Module.ManagedResources {
+
+				// create output.ResourceConfig from hclConfigs.Resource
+				resourceConfig, err := CreateResourceConfig(managedResource)
 				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					continue
 				}
-			} else {
-				// temp dir to download the remote repo
-				tempDir := generateTempDir()
 
-				// Download remote module
-				pathToModule, err = r.DownloadModule(req.SourceAddr, tempDir)
+				// resolve references
+				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
+
+				// source file path
+				resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					continue
+				}
+
+				// tf plan directory relative path
+				planRoot, err := filepath.Rel(absRootDir, dir)
+				if err != nil {
+					continue
+				}
+				if absRootDir == dir {
+					planRoot = fmt.Sprintf(".%s", string(os.PathSeparator))
+				}
+				resourceConfig.PlanRoot = planRoot
+
+				// append to normalized output
+				if _, present := allResourcesConfig[resourceConfig.Type]; !present {
+					allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
+				} else {
+					resources := allResourcesConfig[resourceConfig.Type]
+					if !isConfigPresent(resources, resourceConfig) {
+						allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
+					}
 				}
 			}
 
-			// load sub module directory
-			subMod, diags := parser.LoadConfigDir(pathToModule)
-			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))
-			versionI++
-			return subMod, version, diags
-		},
-	))
+			// add all current's children to the queue
+			for childName, childModule := range current.Config.Children {
+				childModuleConfig := &ModuleConfig{
+					Config:           childModule,
+					ParentModuleCall: current.Config.Module.ModuleCalls[childName],
+				}
+				configsQ = append(configsQ, childModuleConfig)
+			}
+		}
+	}
+
+	// successful
+	return allResourcesConfig, nil
+}
+
+// loadDirNonRecursive has duplicate code
+// this function will be removed when we deprecate non recursive scan
+func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.ModuleDownloader) (output.AllResourceConfigs, error) {
+
+	// initialize normalized output
+	allResourcesConfig := make(map[string][]output.ResourceConfig)
+
+	// check if the directory has any tf config files (.tf or .tf.json)
+	if !parser.IsConfigDir(dir) {
+		// log a debug message and continue with other directories
+		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
+		zap.S().Debug(errMessage)
+		return nil, fmt.Errorf(errMessage)
+	}
+
+	// load current config directory
+	rootMod, diags := parser.LoadConfigDir(dir)
 	if diags.HasErrors() {
-		zap.S().Errorf("failed to build unified config. errors:\n%+v\n", diags)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: ErrBuildTFConfigDir.Error()})
+		// log a debug message and continue with other directories
+		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
+		zap.S().Debug(errMessage)
+		return nil, fmt.Errorf(errMessage)
+	}
+
+	// get unified config for the current directory
+	unified, diags := buildUnifiedConfig(rootMod, parser, dir, r)
+
+	if diags.HasErrors() {
+		// log a warn message in this case because there are errors in
+		// loading the config dir, and continue with other directories
+		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
+		zap.S().Warnf(errMessage)
+		return nil, ErrBuildTFConfigDir
 	}
 
 	/*
@@ -134,9 +234,6 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	// queue of for BFS, add root module config to it
 	root := &ModuleConfig{Config: unified.Root}
 	configsQ := []*ModuleConfig{root}
-
-	// initialize normalized output
-	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	// using BFS traverse through all modules in the unified config tree
 	zap.S().Debug("traversing through all modules in config tree")
@@ -155,25 +252,29 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 			// create output.ResourceConfig from hclConfigs.Resource
 			resourceConfig, err := CreateResourceConfig(managedResource)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to create ResourceConfig. err: %v", err)
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMsg})
+				return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 			}
 
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 			// source file path
-			resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
+			resourceConfig.Source, err = filepath.Rel(dir, resourceConfig.Source)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to get resource: %s", err)
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMsg})
+				return allResourcesConfig, fmt.Errorf("failed to get resource's filepath: %s", err)
 			}
+
+			// add tf plan directory relative path
+			resourceConfig.PlanRoot = fmt.Sprintf(".%s", string(os.PathSeparator))
 
 			// append to normalized output
 			if _, present := allResourcesConfig[resourceConfig.Type]; !present {
 				allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
 			} else {
-				allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
+				resources := allResourcesConfig[resourceConfig.Type]
+				if !isConfigPresent(resources, resourceConfig) {
+					allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
+				}
 			}
 		}
 
@@ -188,7 +289,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	}
 
 	// successful
-	return allResourcesConfig, errIacLoadDirs
+	return allResourcesConfig, nil
 }
 
 func generateTempDir() string {
@@ -220,4 +321,61 @@ func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, tempDir strin
 	}
 
 	return pathToModule, nil
+}
+
+// buildUnifiedConfig builds a unified config from *hclConfigs.Module object specified for a dir
+func buildUnifiedConfig(rootMod *hclConfigs.Module, parser *hclConfigs.Parser, dir string, r downloader.ModuleDownloader) (*hclConfigs.Config, hcl.Diagnostics) {
+	// using the BuildConfig and ModuleWalkerFunc to traverse through all
+	// descendant modules from the root module and create a unified
+	// configuration of type *configs.Config
+	versionI := 0
+	return hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
+		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
+
+			// figure out path sub module directory, if it's remote then download it locally
+			var pathToModule string
+			var err error
+			if downloader.IsLocalSourceAddr(req.SourceAddr) {
+
+				pathToModule = processLocalSource(req)
+				zap.S().Debugf("processing local module %q", pathToModule)
+			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
+				// temp dir to download the remote repo
+				tempDir := generateTempDir()
+
+				pathToModule, err = processTerraformRegistrySource(req, tempDir, r)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				}
+			} else {
+				// temp dir to download the remote repo
+				tempDir := generateTempDir()
+
+				// Download remote module
+				pathToModule, err = r.DownloadModule(req.SourceAddr, tempDir)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				}
+			}
+
+			// load sub module directory
+			subMod, diags := parser.LoadConfigDir(pathToModule)
+			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))
+			versionI++
+			return subMod, version, diags
+		},
+	))
+}
+
+// isConfigPresent checks whether a resource is already present in the list of configs or not
+// the equality of a resource is based on name, source and config of the resource
+func isConfigPresent(resources []output.ResourceConfig, resourceConfig output.ResourceConfig) bool {
+	for _, resource := range resources {
+		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
+			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
+				return true
+			}
+		}
+	}
+	return false
 }

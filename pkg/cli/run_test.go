@@ -95,6 +95,16 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "terraform run with --non-recursive flag",
+			scanOptions: &ScanOptions{
+				policyType:   []string{"all"},
+				iacDirPath:   testDataDir,
+				outputType:   "json",
+				nonRecursive: true,
+			},
+			wantErr: true,
+		},
+		{
 			name: "normal k8s run",
 			scanOptions: &ScanOptions{
 				policyType: []string{"k8s"},
