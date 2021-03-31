@@ -29,6 +29,8 @@ RUN addgroup --gid 101 terrascan && \
 # run as non root user
 USER terrascan
 
+ENV PATH /go/bin:$PATH
+
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
