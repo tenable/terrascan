@@ -22,7 +22,6 @@ type HelmV3 struct{}
 type helmChartData map[string]interface{}
 
 const (
-	defaultChartName   = "terrascan"
 	helmValuesFilename = "values.yaml"
 	helmTemplateDir    = "templates"
 	helmTestDir        = "tests"

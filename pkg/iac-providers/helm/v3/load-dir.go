@@ -149,6 +149,8 @@ func (h *HelmV3) createHelmChartResource(chartPath string, chartData map[string]
 // renderChart renders a helm chart with the given template files and values
 // returns and IaC document for each rendered file
 func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateDir string, templateFiles []*string, valueMap map[string]interface{}) ([]*utils.IacDocument, error) {
+	const defaultNamespaceName = "default"
+
 	iacDocuments := make([]*utils.IacDocument, 0)
 	logger := zap.S().With("helm chart path", chartPath)
 
@@ -195,8 +197,8 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 
 	// create rendered values
 	options := chartutil.ReleaseOptions{
-		Name:      defaultChartName,
-		Namespace: chartName + "-namespace",
+		Name:      chartName,
+		Namespace: defaultNamespaceName,
 	}
 
 	v, err := chartutil.ToRenderValues(c, valueMap, options, nil)
