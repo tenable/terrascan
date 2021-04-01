@@ -99,7 +99,9 @@ var jsonTree = (function() {
          * @param Parent {Function} - a parent constructor
          */
         inherits : (function() {
-            var F = function() {};
+            var F = function() {
+                // This is intentional
+            };
 
             return function(Child, Parent) {
                 F.prototype = Parent.prototype;
@@ -220,16 +222,13 @@ var jsonTree = (function() {
         var self = this,
             el = document.createElement('li'),
             labelEl,
-            template = function(label, val) {
-                var str = '\
-                    <span class="jsontree_label-wrapper">\
-                        <span class="jsontree_label">"' +
-                            label +
-                        '"</span> : \
-                    </span>\
-                    <span class="jsontree_value-wrapper">\
-                        <span class="jsontree_value jsontree_value_' + self.type + '">' +
-                            val +
+            template = function(datalabel, value) {
+                    var str = '<span class="jsontree_label-wrapper">'+
+                        '<span class="jsontree_label">"' + datalabel +
+                        '"</span> : </span>' +
+                        '<span class="jsontree_value-wrapper">' +
+                        '<span class="jsontree_value jsontree_value_' + self.type + '">' +
+                            value +
                         '</span>' +
                         (!isLast ? ',' : '') +
                     '</span>';
@@ -440,26 +439,24 @@ var jsonTree = (function() {
 
         var self = this,
             el = document.createElement('li'),
-            template = function(label, sym) {
+            template = function(datalabel, sym) {
                 var comma = (!isLast) ? ',' : '',
-                    str = '\
-                        <div class="jsontree_value-wrapper">\
-                            <div class="jsontree_value jsontree_value_' + self.type + '">\
-                                <b>' + sym[0] + '</b>\
-                                <span class="jsontree_show-more">&hellip;</span>\
-                                <ul class="jsontree_child-nodes"></ul>\
-                                <b>' + sym[1] + '</b>' +
+                    str = '<div class="jsontree_value-wrapper">' +
+                            '<div class="jsontree_value jsontree_value_' + self.type + '">' +
+                                '<b>' + sym[0] + '</b>' +
+                                '<span class="jsontree_show-more">&hellip;</span>' + 
+                                '<ul class="jsontree_child-nodes"></ul>' +
+                                '<b>' + sym[1] + '</b>' +
                             '</div>' + comma +
                         '</div>';
 
-                if (label !== null) {
-                    str = '\
-                        <span class="jsontree_label-wrapper">\
-                            <span class="jsontree_label">' +
+                if (datalabel !== null) {
+                    str = '<span class="jsontree_label-wrapper">' +
+                            '<span class="jsontree_label">' +
                                 '<span class="jsontree_expand-button"></span>' +
-                                '"' + label +
-                            '"</span> : \
-                        </span>' + str;
+                                '"' + datalabel +
+                            '"</span> : ' +
+                        '</span>' + str;
                 }
 
                 return str;
@@ -513,8 +510,8 @@ var jsonTree = (function() {
         self.childNodes = childNodes;
         self.childNodesUl = childNodesUl;
 
-        utils.forEachNode(val, function(label, node, isLast) {
-            self.addChild(new Node(label, node, isLast));
+        utils.forEachNode(val, function(datalabel, node, isLastNode) {
+            self.addChild(new Node(datalabel, node, isLastNode));
         });
 
         self.isEmpty = !Boolean(childNodes.length);
