@@ -19,6 +19,7 @@ package admissionwebhook
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -85,17 +86,17 @@ func TestDecodeAdmissionReviewRequest(t *testing.T) {
 	}{
 		{
 			name:        "empty review request",
-			requestFile: "testdata/empty.json",
+			requestFile: filepath.Join("testdata", "empty.json"),
 			wantErr:     false,
 		},
 		{
 			name:        "invalid review request",
-			requestFile: "testdata/invalid.json",
+			requestFile: filepath.Join("testdata", "invalid.json"),
 			wantErr:     true,
 		},
 		{
 			name:        "valid review request",
-			requestFile: "testdata/valid.json",
+			requestFile: filepath.Join("testdata", "valid.json"),
 			wantErr:     false,
 		},
 	}

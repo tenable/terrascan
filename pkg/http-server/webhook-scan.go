@@ -89,6 +89,7 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter, admissio
 		msg := fmt.Sprintf("failed to serialize admission review response: %v", err)
 		zap.S().Error(msg)
 		apiErrorResponse(w, msg, http.StatusInternalServerError)
+		return
 	}
 
 	zap.S().Debugf("Response result: %+v", string(respBytes))

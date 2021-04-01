@@ -73,6 +73,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 		errMsg := fmt.Sprintf("failed to parse index.html file; error: '%v'", err)
 		zap.S().Error(errMsg)
 		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
+		return
 	}
 
 	logs, err := logger.FetchLogs()
@@ -154,7 +155,7 @@ func (g *APIHandler) getLogStatus(log dblogs.WebhookScanLog) string {
 	var violationStore results.ViolationStore
 	err := json.Unmarshal([]byte(log.ViolationsSummary), &violationStore)
 	if err != nil {
-		zap.S().Errorf("Failed to ..")
+		zap.S().Errorf("failed to decode violation results", zap.Error(err))
 	}
 
 	if len(violationStore.Violations) > 0 {

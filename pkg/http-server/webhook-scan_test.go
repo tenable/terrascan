@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
@@ -16,7 +17,7 @@ import (
 )
 
 func TestUWebhooks(t *testing.T) {
-	testFilePath := "./k8s_testdata/testconfig.json"
+	testFilePath := filepath.Join("k8s_testdata", "testconfig.json")
 	testAPIKey := "Test-API-KEY"
 	testEnvAPIKey := "Test-API-KEY"
 	testConfigFile := ""

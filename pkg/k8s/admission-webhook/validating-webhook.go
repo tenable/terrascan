@@ -21,6 +21,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -65,6 +66,9 @@ var (
 
 	// ErrEmptyAdmissionReview empty admission review request
 	ErrEmptyAdmissionReview = fmt.Errorf("empty admission review request")
+
+	// test policies path
+	testPoliciesPath = filepath.Join("../", "policies", "opa", "rego", "k8s")
 )
 
 // Authorize checks if the incoming webhooks have valid apiKey
@@ -179,7 +183,7 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 
 	if flag.Lookup("test.v") != nil {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			filePath, "", w.configFile, []string{"../policies/opa/rego/k8s"}, []string{}, []string{}, []string{}, "")
+			filePath, "", w.configFile, []string{testPoliciesPath}, []string{}, []string{}, []string{}, "")
 	} else {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
 			filePath, "", w.configFile, []string{}, []string{}, []string{}, []string{}, "")
