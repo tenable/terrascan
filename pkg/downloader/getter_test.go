@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	fuzztest "git.fuzzbuzz.io/fuzz/testing"
 )
 
 var (
@@ -138,6 +140,16 @@ func TestGetURLSubDir(t *testing.T) {
 			t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
 		}
 	}
+}
+
+func TestFuzzGetURLSubDir(t *testing.T) {
+	f := fuzztest.NewChecker(t)
+	fuzztest.Check(f, FuzzGetURLSubDir, fuzztest.Test{
+		f.String("remoteURL"): "github.com/accurics/terrascan",
+		f.String("destPath"):  someDest,
+	})
+	numFuzzIterations := 100
+	fuzztest.Randomize(f, FuzzGetURLSubDir, uint(numFuzzIterations))
 }
 
 func TestDownload(t *testing.T) {
