@@ -1,7 +1,7 @@
 // Replace all json-objects elements to be a JSON tree
 let jsonElements = document.getElementsByClassName("json-object")
-for (var i = 0; i < jsonElements.length; i++) {
-  let element = jsonElements[i]
+for (let val of jsonElements) {
+  let element = val;
   if (element.innerText.length < 1) {
     continue
   }

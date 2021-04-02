@@ -223,7 +223,7 @@ var jsonTree = (function() {
             el = document.createElement('li'),
             labelEl,
             template = function(datalabel, value) {
-                    var str = '<span class="jsontree_label-wrapper">'+
+                    return  '<span class="jsontree_label-wrapper">'+
                         '<span class="jsontree_label">"' + datalabel +
                         '"</span> : </span>' +
                         '<span class="jsontree_value-wrapper">' +
@@ -232,8 +232,6 @@ var jsonTree = (function() {
                         '</span>' +
                         (!isLast ? ',' : '') +
                     '</span>';
-
-                return str;
             };
 
         self.label = label;
@@ -255,7 +253,6 @@ var jsonTree = (function() {
             if (e.shiftKey) {
                 document.getSelection().removeAllRanges();
                 alert(self.getJSONPath());
-                return;
             }
         }, false);
     }

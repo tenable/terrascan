@@ -129,6 +129,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 		denyViolations []results.Violation
 		logURL         = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
 		allowed        = false
+		errMsg         = "%s; error: %w"
 	)
 
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
@@ -143,7 +144,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to create temp file for validating admission review request"
 		zap.S().Error(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
 	}
 
 	// Run the policy engines
@@ -151,7 +152,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to evaluate terrascan policies"
 		zap.S().Errorf(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
 	}
 
 	// Calculate if there are anydeny violations
@@ -159,7 +160,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to figure out denied violations"
 		zap.S().Errorf(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf("%s; error: %w", msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
 	}
 	allowed = len(denyViolations) < 1
 

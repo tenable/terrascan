@@ -508,10 +508,10 @@
     return function (mom) {
       var output = '',
         i;
-      for (i = 0; i < length; i++) {
-        output += isFunction(array[i])
-          ? array[i].call(mom, formatVar)
-          : array[i];
+      for (j = 0; j < length; j++) {
+        output += isFunction(array[j])
+          ? array[j].call(mom, formatVar)
+          : array[j];
       }
       return output;
     };
@@ -1080,7 +1080,7 @@
       // test the regex
       if (
         strict &&
-        format === 'MMMM' &&
+        format == 'MMMM' &&
         this._longMonthsParse[i].test(monthName)
       ) {
         return i;
@@ -1695,14 +1695,14 @@
       }
       if (
         strict &&
-        format === 'ddd' &&
+        format == 'ddd' &&
         this._shortWeekdaysParse[i].test(weekdayName)
       ) {
         return i;
       }
       if (
         strict &&
-        format === 'dd' &&
+        format == 'dd' &&
         this._minWeekdaysParse[i].test(weekdayName)
       ) {
         return i;
@@ -2265,25 +2265,26 @@
       a = m._a;
 
     if (a && getParsingFlags(m).overflow === -2) {
-      overflow =
-        a[MONTH] < 0 || a[MONTH] > 11
-          ? MONTH
-          : a[DATE] < 1 || a[DATE] > daysInMonth(a[YEAR], a[MONTH])
-          ? DATE
-          : a[HOUR] < 0 ||
-          a[HOUR] > 24 ||
-          (a[HOUR] === 24 &&
-            (a[MINUTE] !== 0 ||
-              a[SECOND] !== 0 ||
-              a[MILLISECOND] !== 0))
-            ? HOUR
-            : a[MINUTE] < 0 || a[MINUTE] > 59
-              ? MINUTE
-              : a[SECOND] < 0 || a[SECOND] > 59
-                ? SECOND
-                : a[MILLISECOND] < 0 || a[MILLISECOND] > 999
-                  ? MILLISECOND
-                  : -1;
+      if (a[MONTH] < 0 || a[MONTH] > 11) {
+        overflow = MONTH;
+      } else if (a[DATE] < 1 || a[DATE] > daysInMonth(a[YEAR], a[MONTH])) {
+        overflow = DATE;
+      } else if (a[HOUR] < 0 ||
+        a[HOUR] > 24 ||
+        (a[HOUR] === 24 &&
+          (a[MINUTE] !== 0 ||
+            a[SECOND] !== 0 ||
+            a[MILLISECOND] !== 0))) {
+              overflow = HOUR;
+      } else if (a[MINUTE] < 0 || a[MINUTE] > 59) {
+        overflow = MINUTE;
+      } else if (a[SECOND] < 0 || a[SECOND] > 59) {
+        overflow = SECOND;
+      } else if (a[MILLISECOND] < 0 || a[MILLISECOND] > 999) {
+        overflow = MILLISECOND;
+      } else {
+        overflow = -1;
+      }
 
       if (
         getParsingFlags(m)._overflowDayOfYear &&
@@ -5378,11 +5379,7 @@
 
   var milliseconds = makeGetter('milliseconds'),
     seconds = makeGetter('seconds'),
-    minutes = makeGetter('minutes'),
-    hours = makeGetter('hours'),
-    days = makeGetter('days'),
-    months = makeGetter('months'),
-    years = makeGetter('years');
+    hours = makeGetter('hours');
 
   function weeks() {
     return absFloor(this.days() / 7);
