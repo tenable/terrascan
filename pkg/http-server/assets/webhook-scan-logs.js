@@ -14,8 +14,8 @@ for (var i = 0; i < jsonElements.length; i++) {
 
 // Replace all time-object elements to be in the 'DD/MM/YYYY hh:mm:ss A' format of moment.js
 let timeElements = document.getElementsByClassName("time-object")
-for (var i = 0; i < timeElements.length; i++) {
-  let element = timeElements[i]
+for (let val of timeElements) {
+  let element = val;
   let elapsedTimeUntilNow = Date.now() - new Date(element.innerText)
   if (elapsedTimeUntilNow / 1000 < 120) {
     // In case elapsed less than 2 minutes, show "A few seconds ago"
@@ -28,8 +28,8 @@ for (var i = 0; i < timeElements.length; i++) {
 
 // Change the colors of the review status
 let statusElements = document.getElementsByClassName("review-status")
-for (var i = 0; i < statusElements.length; i++) {
-  let element = statusElements[i]
+for (let val of statusElements) {
+  let element = val;
   switch (element.innerText) {
     case "Allowed":
       element.classList.add("allowed")
