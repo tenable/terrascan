@@ -29,7 +29,7 @@ Run Terrascan docker image in your server using the following command:
 `<API_KEY>` is a key used for authentication between your K8s environment and  the Terrascan server. Generate your preferred key and use it here.
 
 `<DATA_PATH>` is a directory path in your server where both the certificate and the private key .pem files are stored.
-In addition, this directory is used to write save the webhook logs. (An SQLite file)
+In addition, this directory is used to save the webhook logs. (An SQLite file)
 
 You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection.
 
