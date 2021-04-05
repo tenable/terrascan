@@ -74,7 +74,7 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 
 	go func() {
 		var err error
-		if certFile != "" {
+		if certFile != "" && privateKeyFile != "" {
 			// In case a certificate file is specified, the server support TLS
 			err = server.ListenAndServeTLS(certFile, privateKeyFile)
 		} else {
