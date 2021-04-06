@@ -15,11 +15,11 @@ In this guide, we'll demonstrate how Terrascan can be configured to:
 Your Terrascan instance has the following requirements for being able to scan K8s configurations.
 
 1. Be accessible via HTTPS. Make sure your cloud firewall is configured to allow this.
-1. Have a valid SSL certificate for the served domain name. To do that, choose one of our suggested methods:
-  1. Use a subdomain of your choosing (e.g dev-terrascan-k8s.accurics.com) and create a valid certificate for this subdomain through your SSL certificate provider. [Let's Encrypt](https://letsencrypt.org/) is a free, simple to use certificate authority you can use.
-  1. Use a reverse-proxy to serve SSL requests; for example, use Cloudflare Flexible to get a certificate by a trusted-CA to your [self-signed certificate](https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs).
-  1. Generate a self-signed certificate and have your K8s cluster trust it. To add a trusted CA to ca-pemstore, as demonstrated in [paraspatidar's blog post](https://medium.com/@paraspatidar/add-ssl-tls-certificate-or-pem-file-to-kubernetes-pod-s-trusted-root-ca-store-7bed5cd683d).
-1. Use the Terrascan docker as demonstrated in this document, or run it from the sources.
+2. Have a valid SSL certificate for the served domain name. To do that, choose one of our suggested methods:
+    - Use a subdomain of your choosing (e.g dev-terrascan-k8s.accurics.com) and create a valid certificate for this subdomain through your SSL certificate provider. [Let's Encrypt](https://letsencrypt.org/) is a free, simple to use certificate authority you can use.
+    - Use a reverse-proxy to serve SSL requests; for example, use Cloudflare Flexible to get a certificate by a trusted-CA to your [self-signed certificate](https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs).
+    - Generate a self-signed certificate and have your K8s cluster trust it. To add a trusted CA to ca-pemstore, as demonstrated in [paraspatidar's blog post](https://medium.com/@paraspatidar/add-ssl-tls-certificate-or-pem-file-to-kubernetes-pod-s-trusted-root-ca-store-7bed5cd683d).
+3. Use the Terrascan docker as demonstrated in this document, or run it from the sources.
 
 ### Run Terrascan webhook service
 Run Terrascan docker image in your server using the following command:
