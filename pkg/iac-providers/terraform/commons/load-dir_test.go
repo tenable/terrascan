@@ -18,9 +18,11 @@ package commons
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/downloader"
+	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 )
 
@@ -28,28 +30,19 @@ import (
 var (
 	testLocalSourceAddr  = "./someModule"
 	testRemoteSourceAddr = "terraform-aws-modules/eks/aws"
+	testDirPath          = filepath.Join("root", "test")
+	testFileNamePath     = filepath.Join(testDirPath, "main.tf")
 
 	testModuleReqA = &hclConfigs.ModuleRequest{
 		SourceAddr: testLocalSourceAddr,
-		Parent: &hclConfigs.Config{
-			SourceAddr: "./eks/aws",
-		},
-	}
-
-	testModuleReqB = &hclConfigs.ModuleRequest{
-		SourceAddr: testLocalSourceAddr,
-		Parent: &hclConfigs.Config{
-			SourceAddr: testRemoteSourceAddr,
-		},
+		CallRange:  hcl.Range{Filename: testFileNamePath},
 	}
 )
 
 func TestProcessLocalSource(t *testing.T) {
 
 	type args struct {
-		req            *hclConfigs.ModuleRequest
-		remoteModPaths map[string]string
-		absRootDir     string
+		req *hclConfigs.ModuleRequest
 	}
 	tests := []struct {
 		name string
@@ -59,25 +52,14 @@ func TestProcessLocalSource(t *testing.T) {
 		{
 			name: "no remote module",
 			args: args{
-				req:        testModuleReqA,
-				absRootDir: "/home/somedir",
+				req: testModuleReqA,
 			},
-			want: "/home/somedir/eks/aws/someModule",
-		},
-		{
-			name: "with remote module",
-			args: args{
-				req: testModuleReqB,
-				remoteModPaths: map[string]string{
-					testRemoteSourceAddr: "/var/temp/testDir",
-				},
-			},
-			want: "/var/temp/testDir/someModule",
+			want: filepath.Join(testDirPath, "someModule"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := processLocalSource(tt.args.req, tt.args.remoteModPaths, tt.args.absRootDir); got != tt.want {
+			if got := processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
 		})
@@ -127,7 +109,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			got, err := processTerraformRegistrySource(tt.args.req, tt.args.remoteModPaths, tt.args.tempDir, tt.args.m)
+			got, err := processTerraformRegistrySource(tt.args.req, tt.args.tempDir, tt.args.m)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
 				return

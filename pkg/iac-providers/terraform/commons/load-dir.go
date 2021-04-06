@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -51,9 +50,6 @@ type ModuleConfig struct {
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
 func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs, err error) {
-
-	// map to hold the download paths of remote modules
-	remoteModPaths := make(map[string]string)
 
 	// create a new config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
@@ -89,13 +85,13 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 			var pathToModule string
 			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 
-				pathToModule = processLocalSource(req, remoteModPaths, absRootDir)
+				pathToModule = processLocalSource(req)
 				zap.S().Debugf("processing local module %q", pathToModule)
 			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
 				// temp dir to download the remote repo
 				tempDir := generateTempDir()
 
-				pathToModule, err = processTerraformRegistrySource(req, remoteModPaths, tempDir, r)
+				pathToModule, err = processTerraformRegistrySource(req, tempDir, r)
 				if err != nil {
 					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
 				}
@@ -194,35 +190,21 @@ func generateTempDir() string {
 	return filepath.Join(os.TempDir(), utils.GenRandomString(6))
 }
 
-func processLocalSource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, absRootDir string) string {
+func processLocalSource(req *hclConfigs.ModuleRequest) string {
 	// determine the absolute path from root module to the sub module
-	// since we start at the end of the path, we need to assemble
-	// the parts in reverse order
 
-	pathToModule := req.SourceAddr
-	for p := req.Parent; p != nil; p = p.Parent {
-		pathToModule = filepath.Join(p.SourceAddr, pathToModule)
-	}
+	// while building the unified config, recursive calls are made for all the paths resolved,
+	// the source address in a tf file is relative while this func is called, hence, we get the
+	// path of caller dir, and join the source address of current module request to get the path to module
 
-	// check if pathToModule consists of a remote module downloaded
-	// if yes, then update the module path, with the remote module
-	// download path
-	keyFound := false
-	for remoteSourceAddr, downloadPath := range remoteModPaths {
-		if strings.Contains(pathToModule, remoteSourceAddr) {
-			pathToModule = strings.Replace(pathToModule, remoteSourceAddr, "", 1)
-			pathToModule = filepath.Join(downloadPath, pathToModule)
-			keyFound = true
-			break
-		}
-	}
-	if !keyFound {
-		pathToModule = filepath.Join(absRootDir, pathToModule)
-	}
-	return pathToModule
+	// get the caller dir path
+	callDirPath := filepath.Join(req.CallRange.Filename, "..")
+
+	// join source address to the caller dir
+	return filepath.Join(callDirPath, req.SourceAddr)
 }
 
-func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, remoteModPaths map[string]string, tempDir string, m downloader.ModuleDownloader) (string, error) {
+func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, tempDir string, m downloader.ModuleDownloader) (string, error) {
 	// regsrc.ParseModuleSource func returns a terraform registry module source
 	// error check is not required as the source address is already validated
 	module, _ := regsrc.ParseModuleSource(req.SourceAddr)
@@ -232,7 +214,5 @@ func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, remoteModPath
 		return pathToModule, err
 	}
 
-	// add the entry of remote module's source address to the map
-	remoteModPaths[req.SourceAddr] = pathToModule
 	return pathToModule, nil
 }
