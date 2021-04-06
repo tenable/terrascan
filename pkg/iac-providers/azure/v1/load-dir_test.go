@@ -17,21 +17,42 @@
 package azurev1
 
 import (
+	"fmt"
+	"os"
 	"reflect"
+	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 func TestLoadIacDir(t *testing.T) {
-
 	table := []struct {
 		name    string
 		dirPath string
 		arm     ARM
 		want    output.AllResourceConfigs
 		wantErr error
-	}{}
+	}{
+		{
+			name:    "empty config",
+			dirPath: "./testdata/testfile",
+			arm:     ARM{},
+			wantErr: fmt.Errorf("no directories found for path ./testdata/testfile"),
+		},
+		{
+			name:    "load invalid config dir",
+			dirPath: "./testdata",
+			arm:     ARM{},
+			wantErr: nil,
+		},
+		{
+			name:    "invalid dirPath",
+			dirPath: "not-there",
+			arm:     ARM{},
+			wantErr: &os.PathError{Err: syscall.ENOENT, Op: "lstat", Path: "not-there"},
+		},
+	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {

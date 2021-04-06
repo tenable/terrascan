@@ -17,10 +17,38 @@
 package azurev1
 
 import (
+	"path/filepath"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
+	"go.uber.org/zap"
 )
 
 // LoadIacDir loads all ARM template files in the current directory.
 func (a *ARM) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
-	return nil, nil
+	allResourcesConfig := make(map[string][]output.ResourceConfig)
+
+	fileMap, err := utils.FindFilesBySuffix(absRootDir, ARMFileExtensions())
+	if err != nil {
+		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
+		return allResourcesConfig, err
+	}
+
+	for fileDir, files := range fileMap {
+		for i := range files {
+			file := filepath.Join(fileDir, *files[i])
+
+			var configData output.AllResourceConfigs
+			if configData, err = a.LoadIacFile(file); err != nil {
+				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
+				continue
+			}
+
+			for key := range configData {
+				allResourcesConfig[key] = append(allResourcesConfig[key], configData[key]...)
+			}
+		}
+	}
+
+	return allResourcesConfig, nil
 }
