@@ -198,7 +198,7 @@ func processLocalSource(req *hclConfigs.ModuleRequest) string {
 	// path of caller dir, and join the source address of current module request to get the path to module
 
 	// get the caller dir path
-	callDirPath := filepath.Join(req.CallRange.Filename, "..")
+	callDirPath := filepath.Dir(req.CallRange.Filename)
 
 	// join source address to the caller dir
 	return filepath.Join(callDirPath, req.SourceAddr)
