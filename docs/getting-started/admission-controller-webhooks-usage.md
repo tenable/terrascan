@@ -53,6 +53,7 @@ You can specify the following configurations:
 *  **scan-rules** - one or more rules to scan
 *  **skip-rules** - one or more rules to skip while scanning
 *  **severity** - the minimal level of severity of the policies to be scanned
+*  **category** - the list of type of categories of the policies to be scanned
 
 
 * **k8s-deny-rules** - specify the rules that should cause a rejection of the admission request
