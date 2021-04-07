@@ -18,6 +18,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.8.2
 	github.com/hashicorp/terraform v0.14.4
 	github.com/iancoleman/strcase v0.1.3
+	github.com/infracloudio/mapper v0.0.0-20210407092435-3f8024290a2f // indirect
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0

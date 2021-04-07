@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package azurev1
+package armv1
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ import (
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
-func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	var iacDocuments []*utils.IacDocument
@@ -64,7 +64,7 @@ func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 	return allResourcesConfig, nil
 }
 
-func (*ARM) getFileType(file string) string {
+func (*ARMV1) getFileType(file string) string {
 	if strings.HasSuffix(file, JSONExtension) {
 		return JSONExtension
 	}
