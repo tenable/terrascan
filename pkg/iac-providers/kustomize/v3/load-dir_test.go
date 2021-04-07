@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strings"
 	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 )
+
+const kustomizeErrPrefix = "error from kustomization."
 
 func TestLoadIacDir(t *testing.T) {
 
@@ -102,11 +105,12 @@ func TestLoadKustomize(t *testing.T) {
 	kustomizeYml := "kustomization.yml"
 
 	table := []struct {
-		name     string
-		basepath string
-		filename string
-		want     output.AllResourceConfigs
-		wantErr  error
+		name        string
+		basepath    string
+		filename    string
+		want        output.AllResourceConfigs
+		wantErr     error
+		checkPrefix bool
 	}{
 		{
 			name:     "simple-deployment",
@@ -151,23 +155,29 @@ func TestLoadKustomize(t *testing.T) {
 			wantErr:  nil,
 		},
 		{
-			name:     "erroneous-pod",
-			basepath: "./testdata/erroneous-pod",
-			filename: kustomizeYaml,
-			wantErr:  errorFromKustomize,
+			name:        "erroneous-pod",
+			basepath:    "./testdata/erroneous-pod",
+			filename:    kustomizeYaml,
+			wantErr:     fmt.Errorf(kustomizeErrPrefix),
+			checkPrefix: true,
 		},
 		{
-			name:     "erroneous-deployment",
-			basepath: "./testdata/erroneous-deployment/",
-			filename: kustomizeYaml,
-			wantErr:  errorFromKustomize,
+			name:        "erroneous-deployment",
+			basepath:    "./testdata/erroneous-deployment/",
+			filename:    kustomizeYaml,
+			wantErr:     fmt.Errorf(kustomizeErrPrefix),
+			checkPrefix: true,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := LoadKustomize(tt.basepath, tt.filename)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if tt.checkPrefix {
+				if tt.wantErr != nil && !strings.HasPrefix(gotErr.Error(), tt.wantErr.Error()) {
+					t.Errorf("unexpected error; gotErr: '%v', expected prefix: '%v'", gotErr, tt.wantErr.Error())
+				}
+			} else if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
