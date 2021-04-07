@@ -47,10 +47,11 @@ type ValidatingWebhook struct {
 }
 
 // NewValidatingWebhook returns a new, empty ValidatingWebhook struct
-func NewValidatingWebhook(configFile string) AdmissionWebhook {
+func NewValidatingWebhook(configFile string, body []byte) AdmissionWebhook {
 	return ValidatingWebhook{
-		configFile: configFile,
-		dblogger:   dblogs.NewWebhookScanLogger(),
+		configFile:  configFile,
+		dblogger:    dblogs.NewWebhookScanLogger(),
+		requestBody: body,
 	}
 }
 
@@ -106,7 +107,6 @@ func (w ValidatingWebhook) DecodeAdmissionReviewRequest(requestBody []byte) (adm
 		deserializer             = codecs.UniversalDeserializer()
 		requestedAdmissionReview admissionv1.AdmissionReview
 	)
-	w.requestBody = requestBody
 	admissionv1.AddToScheme(scheme)
 
 	// decode incoming admission request

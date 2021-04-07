@@ -33,11 +33,20 @@ import (
 func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) {
 
 	var (
-		params            = mux.Vars(r)
-		apiKey            = params["apiKey"]
-		validatingWebhook = admissionWebhook.NewValidatingWebhook(g.configFile)
+		params = mux.Vars(r)
+		apiKey = params["apiKey"]
 	)
 
+	// Read the request into byte array
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		msg := fmt.Sprintf("failed to read validating admission webhook request body, error: '%v'", err)
+		apiErrorResponse(w, msg, http.StatusBadRequest)
+		return
+	}
+	zap.S().Debugf("scanning configuration webhook request: %+v", string(body))
+
+	validatingWebhook := admissionWebhook.NewValidatingWebhook(g.configFile, body)
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
 	if err := validatingWebhook.Authorize(apiKey); err != nil {
 		switch err {
@@ -50,16 +59,6 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 		}
 		return
 	}
-
-	// Read the request into byte array
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		msg := fmt.Sprintf("failed to read validating admission webhook request body, error: '%v'", err)
-		apiErrorResponse(w, msg, http.StatusBadRequest)
-		return
-	}
-
-	zap.S().Debugf("scanning configuration webhook request: %+v", string(body))
 
 	// decode incoming admission review request
 	requestedAdmissionReview, err := validatingWebhook.DecodeAdmissionReviewRequest(body)
@@ -92,6 +91,6 @@ func (g *APIHandler) sendResponseAdmissionReview(w http.ResponseWriter, admissio
 		return
 	}
 
-	zap.S().Debugf("Response result: %+v", string(respBytes))
+	zap.S().Debugf("response result: %+v", string(respBytes))
 	apiResponse(w, string(respBytes), http.StatusOK)
 }

@@ -175,14 +175,14 @@ func (g *APIHandler) getLogReasoning(log dblogs.WebhookScanLog) string {
 	if !log.Allowed {
 		err := json.Unmarshal([]byte(log.DeniableViolations), &violations)
 		if err != nil {
-			zap.S().Errorf("Failed to deserialize deniable violations summary. Error: %v", err.Error())
+			zap.S().Errorf("failed to deserialize deniable violations summary. Error: %v", err.Error())
 			return ""
 		}
 	} else {
 		var violationStore results.ViolationStore
 		err := json.Unmarshal([]byte(log.ViolationsSummary), &violationStore)
 		if err != nil {
-			zap.S().Errorf("Failed to deserialize violations summary. Error: %v", err.Error())
+			zap.S().Errorf("failed to deserialize violations summary. Error: %v", err.Error())
 			return ""
 		}
 
@@ -218,13 +218,13 @@ func (g *APIHandler) getLogRequest(log dblogs.WebhookScanLog) string {
 	err := json.Unmarshal([]byte(log.Request), &review)
 
 	if err != nil {
-		zap.S().Errorf("Failed to deserialize request. Error: %v", err.Error())
+		zap.S().Errorf("failed to deserialize request. Error: %v", err.Error())
 		return "{}"
 	}
 
 	result, err := json.Marshal(review.Request)
 	if err != nil {
-		zap.S().Errorf("Failed to serialize request. Error: %v", err.Error())
+		zap.S().Errorf("failed to serialize request. Error: %v", err.Error())
 		return "{}"
 	}
 
