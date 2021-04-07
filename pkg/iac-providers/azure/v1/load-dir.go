@@ -19,9 +19,10 @@ package azurev1
 import (
 	"path/filepath"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
-	"go.uber.org/zap"
 )
 
 // LoadIacDir loads all ARM template files in the current directory.

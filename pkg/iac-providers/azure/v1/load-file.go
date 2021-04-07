@@ -17,11 +17,56 @@
 package azurev1
 
 import (
+	"fmt"
+	"strings"
+
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-	return nil, nil
+	allResourcesConfig = make(map[string][]output.ResourceConfig)
+
+	var iacDocuments []*utils.IacDocument
+
+	fileExt := a.getFileType(absFilePath)
+	switch fileExt {
+	case JSONExtension:
+		iacDocuments, err = utils.LoadJSON(absFilePath)
+	default:
+		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
+		return allResourcesConfig, fmt.Errorf("unknown file extension for file %s", absFilePath)
+	}
+	if err != nil {
+		zap.S().Debug("failed to load file", zap.String("file", absFilePath))
+		return allResourcesConfig, err
+	}
+
+	for _, doc := range iacDocuments {
+		var config *output.ResourceConfig = &output.ResourceConfig{}
+
+		// TODO: make required calls to mapper API
+
+		if err != nil {
+			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
+			continue
+		}
+
+		config.Line = doc.StartLine
+		config.Source = absFilePath
+
+		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
+	}
+	return allResourcesConfig, nil
+}
+
+func (*ARM) getFileType(file string) string {
+	if strings.HasSuffix(file, JSONExtension) {
+		return JSONExtension
+	}
+	return UnknownExtension
 }
