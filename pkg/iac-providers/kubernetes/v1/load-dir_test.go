@@ -19,11 +19,13 @@ package k8sv1
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestLoadIacDir(t *testing.T) {
@@ -88,4 +90,47 @@ func TestLoadIacDir(t *testing.T) {
 		})
 	}
 
+}
+
+func TestUpdateSourcePaths(t *testing.T) {
+	dir1, dir2 := "Dir1", "Dir2"
+	sourcePath1 := filepath.Join(dir1, dir2, "filename.yaml")
+	sourcePath2 := filepath.Join(dir1, "someDir", "test.yaml")
+
+	testResourceConfigs := []output.ResourceConfig{
+		{
+			Source: sourcePath1,
+		},
+		{
+			Source: sourcePath2,
+		},
+	}
+
+	type args struct {
+		absRootDir      string
+		resourceConfigs []output.ResourceConfig
+	}
+	tests := []struct {
+		name                 string
+		expectedSourceValues []string
+		args                 args
+	}{
+		{
+			name:                 "test1",
+			expectedSourceValues: []string{filepath.Join(dir2, "filename.yaml"), filepath.Join("someDir", "test.yaml")},
+			args: args{
+				absRootDir:      dir1,
+				resourceConfigs: testResourceConfigs,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			updateSourcePaths(tt.args.absRootDir, tt.args.resourceConfigs)
+			updatedSourceValues := []string{tt.args.resourceConfigs[0].Source, tt.args.resourceConfigs[1].Source}
+			if !utils.IsSliceEqual(tt.expectedSourceValues, updatedSourceValues) {
+				t.Errorf("expected source values %v, got %v", tt.expectedSourceValues, updatedSourceValues)
+			}
+		})
+	}
 }
