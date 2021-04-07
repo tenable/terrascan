@@ -18,6 +18,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.8.2
 	github.com/hashicorp/terraform v0.14.4
 	github.com/iancoleman/strcase v0.1.3
+	github.com/infracloudio/mapper v0.0.0-20210408044842-59a6ef388668 // indirect
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0
@@ -32,7 +33,6 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4
-	golang.org/x/tools v0.1.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0

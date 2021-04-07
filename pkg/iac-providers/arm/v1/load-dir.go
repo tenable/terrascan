@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package azurev1
+package armv1
 
 import (
 	"path/filepath"
@@ -26,7 +26,7 @@ import (
 )
 
 // LoadIacDir loads all ARM template files in the current directory.
-func (a *ARM) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
+func (a *ARMV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, ARMFileExtensions())

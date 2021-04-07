@@ -14,10 +14,10 @@
     limitations under the License.
 */
 
-package azurev1
+package armv1
 
-// ARM struct implements the IacProvider interface
-type ARM struct{}
+// ARMV1 struct implements the IacProvider interface
+type ARMV1 struct{}
 
 const (
 	// JSONExtension json

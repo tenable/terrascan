@@ -19,18 +19,18 @@ package iacprovider
 import (
 	"reflect"
 
-	azurev1 "github.com/accurics/terrascan/pkg/iac-providers/azure/v1"
+	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
 )
 
 // terraform specific constants
 const (
-	azure                  supportedIacType    = "azure"
-	azureV1                supportedIacVersion = "v1"
-	azureDefaultIacVersion                     = azureV1
+	arm                  supportedIacType    = "arm"
+	armV1                supportedIacVersion = "v1"
+	armDefaultIacVersion                     = armV1
 )
 
-// register azure as an IaC provider with terrascan
+// register arm as an IaC provider with terrascan
 func init() {
 	// register iac provider
-	RegisterIacProvider(azure, azureV1, azureDefaultIacVersion, reflect.TypeOf(azurev1.ARM{}))
+	RegisterIacProvider(arm, armV1, armDefaultIacVersion, reflect.TypeOf(armv1.ARMV1{}))
 }

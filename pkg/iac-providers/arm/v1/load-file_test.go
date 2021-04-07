@@ -14,53 +14,33 @@
     limitations under the License.
 */
 
-package azurev1
+package armv1
 
 import (
-	"fmt"
-	"os"
 	"reflect"
-	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
-func TestLoadIacDir(t *testing.T) {
+func TestLoadIacFile(t *testing.T) {
 	table := []struct {
-		name    string
-		dirPath string
-		arm     ARM
-		want    output.AllResourceConfigs
-		wantErr error
-	}{
-		{
-			name:    "empty config",
-			dirPath: "./testdata/testfile",
-			arm:     ARM{},
-			wantErr: fmt.Errorf("no directories found for path ./testdata/testfile"),
-		},
-		{
-			name:    "load invalid config dir",
-			dirPath: "./testdata",
-			arm:     ARM{},
-			wantErr: nil,
-		},
-		{
-			name:    "invalid dirPath",
-			dirPath: "not-there",
-			arm:     ARM{},
-			wantErr: &os.PathError{Err: syscall.ENOENT, Op: "lstat", Path: "not-there"},
-		},
-	}
+		name     string
+		filePath string
+		armv1    ARMV1
+		typeOnly bool
+		want     output.AllResourceConfigs
+		wantErr  error
+	}{}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.arm.LoadIacDir(tt.dirPath)
+			_, gotErr := tt.armv1.LoadIacFile(tt.filePath)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", reflect.TypeOf(gotErr), reflect.TypeOf(tt.wantErr))
 			}
 		})
 	}
-
 }

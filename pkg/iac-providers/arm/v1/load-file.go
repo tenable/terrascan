@@ -14,10 +14,11 @@
     limitations under the License.
 */
 
-package azurev1
+package armv1
 
 import (
 	"fmt"
+	"github.com/infracloudio/mapper"
 	"strings"
 
 	"go.uber.org/zap"
@@ -28,7 +29,7 @@ import (
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
-func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	var iacDocuments []*utils.IacDocument
@@ -50,6 +51,8 @@ func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 		var config *output.ResourceConfig = &output.ResourceConfig{}
 
 		// TODO: make required calls to mapper API
+		m := mapper.NewMapper("arm")
+		err := m.Validate(doc.Data)
 
 		if err != nil {
 			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
@@ -64,7 +67,7 @@ func (a *ARM) LoadIacFile(absFilePath string) (allResourcesConfig output.AllReso
 	return allResourcesConfig, nil
 }
 
-func (*ARM) getFileType(file string) string {
+func (*ARMV1) getFileType(file string) string {
 	if strings.HasSuffix(file, JSONExtension) {
 		return JSONExtension
 	}
