@@ -92,7 +92,7 @@ func TestLoadIacDir(t *testing.T) {
 
 }
 
-func TestUpdateSourcePaths(t *testing.T) {
+func TestMakeSourcePathRelative(t *testing.T) {
 	dir1, dir2 := "Dir1", "Dir2"
 	sourcePath1 := filepath.Join(dir1, dir2, "filename.yaml")
 	sourcePath2 := filepath.Join(dir1, "someDir", "test.yaml")
@@ -116,7 +116,7 @@ func TestUpdateSourcePaths(t *testing.T) {
 		args                 args
 	}{
 		{
-			name:                 "test1",
+			name:                 "test to verify path becomes relative",
 			expectedSourceValues: []string{filepath.Join(dir2, "filename.yaml"), filepath.Join("someDir", "test.yaml")},
 			args: args{
 				absRootDir:      dir1,
@@ -126,7 +126,7 @@ func TestUpdateSourcePaths(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			updateSourcePaths(tt.args.absRootDir, tt.args.resourceConfigs)
+			makeSourcePathRelative(tt.args.absRootDir, tt.args.resourceConfigs)
 			updatedSourceValues := []string{tt.args.resourceConfigs[0].Source, tt.args.resourceConfigs[1].Source}
 			if !utils.IsSliceEqual(tt.expectedSourceValues, updatedSourceValues) {
 				t.Errorf("expected source values %v, got %v", tt.expectedSourceValues, updatedSourceValues)

@@ -45,7 +45,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 			for key := range configData {
 				// the source path formed for each resources is absolute, which should be relative
 				resourceConfigs := configData[key]
-				updateSourcePaths(absRootDir, resourceConfigs)
+				makeSourcePathRelative(absRootDir, resourceConfigs)
 
 				allResourcesConfig[key] = append(allResourcesConfig[key], configData[key]...)
 			}
@@ -55,8 +55,8 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 	return allResourcesConfig, nil
 }
 
-// updateSourcePaths modifies the source path of each resource from absolute to relative path
-func updateSourcePaths(absRootDir string, resourceConfigs []output.ResourceConfig) {
+// makeSourcePathRelative modifies the source path of each resource from absolute to relative path
+func makeSourcePathRelative(absRootDir string, resourceConfigs []output.ResourceConfig) {
 	for i := range resourceConfigs {
 		r := &resourceConfigs[i]
 		var err error
