@@ -180,13 +180,7 @@ var _ = Describe("Scan Command using remote types", func() {
 			})
 
 			When("terraform registry remote url has a version", func() {
-				oldRemoteURL := remoteURL
-				JustBeforeEach(func() {
-					remoteURL = "terraform-aws-modules/vpc/aws:2.22.0"
-				})
-				JustAfterEach(func() {
-					remoteURL = oldRemoteURL
-				})
+				remoteURL = "terraform-aws-modules/vpc/aws:2.22.0"
 				It("should download the remote registry and generate scan results", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
@@ -195,14 +189,30 @@ var _ = Describe("Scan Command using remote types", func() {
 				})
 			})
 
+			Context("remote modules has reference to its local modules", func() {
+				When("remote type is terraform registry and remote url has a subdirectory", func() {
+					remoteURL := "terraform-aws-modules/security-group/aws//modules/http-80"
+					It("should download the remote registry and generate scan results", func() {
+						scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						// has a OR condition because we don't know if there would be violations or not
+						Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))
+					})
+				})
+
+				When("remote type is git and remote url has a subdirectory", func() {
+					remoteURL := "github.com/terraform-aws-modules/terraform-aws-security-group//modules/http-80"
+					It("should download the remote registry and generate scan results", func() {
+						scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						// has a OR condition because we don't know if there would be violations or not
+						Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))
+					})
+				})
+			})
+
 			When("terraform registry remote url has a invalid version", func() {
-				oldRemoteURL := remoteURL
-				JustBeforeEach(func() {
-					remoteURL = "terraform-aws-modules/vpc/aws:blah"
-				})
-				JustAfterEach(func() {
-					remoteURL = oldRemoteURL
-				})
+				remoteURL := "terraform-aws-modules/vpc/aws:blah"
 				It("should error out and exit with status code 1", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
