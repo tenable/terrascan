@@ -17,7 +17,6 @@
 package cli
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -230,14 +229,6 @@ func TestRun(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			if utils.IsWindowsPlatform() {
-				if tt.name == "normal k8s run with successful output" ||
-					tt.name == "normal k8s run with successful output for junit-xml with passed tests" ||
-					tt.name == "config-only flag k8s" {
-					t.Skip(fmt.Sprintf("Skipping %s, failing on windows due to kustomize issue", tt.name))
-				}
-			}
-
 			config.LoadGlobalConfig(tt.scanOptions.configFile)
 
 			err := tt.scanOptions.Run()
