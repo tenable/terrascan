@@ -24,7 +24,7 @@ Your Terrascan instance has the following requirements for being able to scan K8
 ### Run Terrascan webhook service
 Run Terrascan docker image in your server using the following command:
  ```bash
-  sudo docker run -p 443:9443 -v <DATA_PATH>:/data -u root -e K8S_WEBHOOK_API_KEY=<API_KEY>> accurics/terrascan server --cert-path /data/cert.pem --key-path /data/key.pem
+  sudo docker run -p 443:9443 -v <DATA_PATH>:/data -u root -e K8S_WEBHOOK_API_KEY=<API_KEY> accurics/terrascan server --cert-path /data/cert.pem --key-path /data/key.pem -c /data/config.toml
  ```
 `<API_KEY>` is a key used for authentication between your K8s environment and  the Terrascan server. Generate your preferred key and use it here.
 
@@ -33,7 +33,7 @@ In addition, this directory is used to save the webhook logs. (An SQLite file)
 
 You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection.
 
-A config file example: ```my_terrscan_config.toml```
+A config file example: ```config.toml```
   ```bash
 [severity]
 level = "medium"
@@ -59,11 +59,6 @@ You can specify the following configurations:
 * **k8s-deny-rules** - specify the rules that should cause a rejection of the admission request
   *  **denied-categories** - one or more policy categories that are not allowed in the detected violations
   *  **denied-severity** - the minimal level of severity that should cause a rejection
-
-In order to use a configuration file, add it as a command line argument:
-
-```<terrascan> -c /data/my_terrscan_config.toml```
-
 
 ### Configure K8s to send webhooks
 Configure a new ```ValidatingWebhookConfiguration``` in your Kubernetes environment and specify your Terrascan server endpoint.
