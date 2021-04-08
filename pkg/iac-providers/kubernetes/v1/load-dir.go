@@ -43,10 +43,34 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 			}
 
 			for key := range configData {
+				// the source path formed for each resources is absolute, which should be relative
+				resourceConfigs := configData[key]
+				makeSourcePathRelative(absRootDir, resourceConfigs)
+
 				allResourcesConfig[key] = append(allResourcesConfig[key], configData[key]...)
 			}
 		}
 	}
 
 	return allResourcesConfig, nil
+}
+
+// makeSourcePathRelative modifies the source path of each resource from absolute to relative path
+func makeSourcePathRelative(absRootDir string, resourceConfigs []output.ResourceConfig) {
+	for i := range resourceConfigs {
+		r := &resourceConfigs[i]
+		var err error
+
+		oldSource := r.Source
+
+		// update the source path
+		r.Source, err = filepath.Rel(absRootDir, r.Source)
+
+		// though this error should never occur, but, if occurs for some reason, assign the old value of source back
+		if err != nil {
+			r.Source = oldSource
+			zap.S().Debug("error while getting the relative path for", zap.String("IAC file", oldSource), zap.Error(err))
+			continue
+		}
+	}
 }
