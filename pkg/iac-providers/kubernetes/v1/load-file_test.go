@@ -17,11 +17,15 @@
 package k8sv1
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
+
+var testDataDir = "testdata"
+var fileTestDataDir = filepath.Join(testDataDir, "file-test-data")
 
 func TestLoadIacFile(t *testing.T) {
 
@@ -36,39 +40,39 @@ func TestLoadIacFile(t *testing.T) {
 		{
 			// file is skipped if no kind is specified or bad
 			name:     "empty config file",
-			filePath: "./testdata/file-test-data/empty-file.yaml",
+			filePath: filepath.Join(fileTestDataDir, "empty-file.yaml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
 		{
 			name:     "yaml with multiple documents",
-			filePath: "./testdata/yaml-with-multiple-documents/test_pod.yaml",
+			filePath: filepath.Join(testDataDir, "yaml-with-multiple-documents", "test_pod.yaml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
 		{
 			name:     "pod with the yml extension",
-			filePath: "./testdata/yaml-extension2/test_pod.yml",
+			filePath: filepath.Join(testDataDir, "yaml-extension2", "test_pod.yml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
 		{
 			// file is skipped if no kind is specified or bad
 			name:     "yaml with no kind",
-			filePath: "./testdata/file-test-data/test_no_kind.yml",
+			filePath: filepath.Join(fileTestDataDir, "test_no_kind.yml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
 		{
 			// file is skipped if no kind is specified or bad
 			name:     "yaml with bad kind",
-			filePath: "./testdata/file-test-data/test_bad_kind.yml",
+			filePath: filepath.Join(fileTestDataDir, "test_bad_kind.yml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},
 		{
 			name:     "file with skip rules in annotations",
-			filePath: "./testdata/file-test-data/test_pod_skip_rules.yaml",
+			filePath: filepath.Join(fileTestDataDir, "test_pod_skip_rules.yaml"),
 			k8sV1:    K8sV1{},
 			wantErr:  nil,
 		},

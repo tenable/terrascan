@@ -23,6 +23,8 @@ import (
 	"testing"
 )
 
+var testDataDir = "testdata"
+
 func TestGetAbsPath(t *testing.T) {
 
 	table := []struct {
@@ -51,7 +53,7 @@ func TestGetAbsPath(t *testing.T) {
 		},
 		{
 			name:    "testdata dir",
-			path:    "./testdata",
+			path:    testDataDir,
 			want:    filepath.Join(os.Getenv("PWD"), "testdata"),
 			wantErr: nil,
 		},
@@ -80,14 +82,14 @@ func TestFindAllDirectories(t *testing.T) {
 	}{
 		{
 			name:     "happy path",
-			basePath: "./testdata",
-			want:     []string{"./testdata", "testdata/emptydir", "testdata/testdir1", "testdata/testdir2"},
+			basePath: testDataDir,
+			want:     []string{testDataDir, filepath.Join(testDataDir, "emptydir"), filepath.Join(testDataDir, "testdir1"), filepath.Join(testDataDir, "testdir2")},
 			wantErr:  nil,
 		},
 		{
 			name:     "empty dir",
-			basePath: "./testdata/emptydir",
-			want:     []string{"./testdata/emptydir"},
+			basePath: filepath.Join(testDataDir, "emptydir"),
+			want:     []string{filepath.Join(testDataDir, "emptydir")},
 			wantErr:  nil,
 		},
 	}
@@ -105,7 +107,7 @@ func TestFindAllDirectories(t *testing.T) {
 	}
 
 	t.Run("invalid dir", func(t *testing.T) {
-		basePath := "./testdata/nothere"
+		basePath := filepath.Join(testDataDir, "nothere")
 		_, gotErr := FindAllDirectories(basePath)
 		if gotErr == nil {
 			t.Errorf("got no error; error expected")

@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/utils"
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -207,9 +208,14 @@ var _ = Describe("Scan", func() {
 	})
 
 	Describe("scan is run with -p (policy path) flag", func() {
-		invalidPolicyPath := "path/policy/invalid"
+		invalidPolicyPath := filepath.Join("path", "policy", "invalid")
 		errString1 := "failed to initialize OPA policy engine"
-		errString2 := fmt.Sprintf("%s: no such file or directory", invalidPolicyPath)
+		var errString2 string
+		if utils.IsWindowsPlatform() {
+			errString2 = fmt.Sprintf("%s: The system cannot find the path specified", invalidPolicyPath)
+		} else {
+			errString2 = fmt.Sprintf("%s: no such file or directory", invalidPolicyPath)
+		}
 
 		When("supplied policy path doesn't exist", func() {
 			It("should error out and exit with status code 1", func() {

@@ -1,6 +1,7 @@
 package notifications
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 
@@ -43,6 +44,9 @@ func TestNewNotifier(t *testing.T) {
 }
 
 func TestNewNotifiers(t *testing.T) {
+
+	testDataDir := "testdata"
+
 	table := []struct {
 		name       string
 		configFile string
@@ -55,32 +59,32 @@ func TestNewNotifiers(t *testing.T) {
 		},
 		{
 			name:       "invalid toml",
-			configFile: "testdata/invalid.toml",
+			configFile: filepath.Join(testDataDir, "invalid.toml"),
 			wantErr:    ErrNotificationNotPresent,
 		},
 		{
 			name:       "key not present",
-			configFile: "testdata/nokey.toml",
+			configFile: filepath.Join(testDataDir, "nokey.toml"),
 			wantErr:    ErrNotificationNotPresent,
 		},
 		{
 			name:       "invalid notifier",
-			configFile: "testdata/invalid-notifier-type.toml",
+			configFile: filepath.Join(testDataDir, "invalid-notifier-type.toml"),
 			wantErr:    errNotifierNotSupported,
 		},
 		{
 			name:       "empty notifier config",
-			configFile: "testdata/empty-notifier-config.toml",
+			configFile: filepath.Join(testDataDir, "empty-notifier-config.toml"),
 			wantErr:    errNotifierTypeNotPresent,
 		},
 		{
 			name:       "invalid notifier config",
-			configFile: "testdata/invalid-notifier-config.toml",
+			configFile: filepath.Join(testDataDir, "invalid-notifier-config.toml"),
 			wantErr:    webhook.ErrNilConfigData,
 		},
 		{
 			name:       "valid multiple notifier config",
-			configFile: "testdata/valid-notifier-config.toml",
+			configFile: filepath.Join(testDataDir, "valid-notifier-config.toml"),
 			wantErr:    nil,
 		},
 		{

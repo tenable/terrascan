@@ -53,16 +53,18 @@ func shutdown() {
 	// cleanup the loaded config values
 }
 
+var testDataDir = "testdata"
+var runTestDir = filepath.Join(testDataDir, "run-test")
+
 func TestRun(t *testing.T) {
 	// disable terraform logs when TF_LOG env variable is not set
 	if os.Getenv("TF_LOG") == "" {
 		log.SetOutput(ioutil.Discard)
 	}
 
-	testDirPath := "testdata/run-test"
-	kustomizeTestDirPath := filepath.Join(testDirPath, "kustomize-test")
-	testTerraformFilePath := filepath.Join(testDirPath, "config-only.tf")
-	testRemoteModuleFilePath := filepath.Join(testDirPath, "remote-modules.tf")
+	kustomizeTestDirPath := filepath.Join(runTestDir, "kustomize-test")
+	testTerraformFilePath := filepath.Join(runTestDir, "config-only.tf")
+	testRemoteModuleFilePath := filepath.Join(runTestDir, "remote-modules.tf")
 
 	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
@@ -79,7 +81,7 @@ func TestRun(t *testing.T) {
 			scanOptions: &ScanOptions{
 				// policy type terraform is not supported, error expected
 				policyType: []string{"terraform"},
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 			},
 			wantErr: true,
 		},
@@ -87,7 +89,7 @@ func TestRun(t *testing.T) {
 			name: "normal terraform run with successful output",
 			scanOptions: &ScanOptions{
 				policyType: []string{"all"},
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 				outputType: "json",
 			},
 		},
@@ -96,7 +98,7 @@ func TestRun(t *testing.T) {
 			scanOptions: &ScanOptions{
 				policyType: []string{"k8s"},
 				// kustomization.y(a)ml file not present under the dir path, error expected
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 			},
 			wantErr: true,
 		},
@@ -171,7 +173,7 @@ func TestRun(t *testing.T) {
 			name: "run with skip rules",
 			scanOptions: &ScanOptions{
 				policyType: []string{"all"},
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 				outputType: "json",
 				skipRules:  ruleSlice,
 			},
@@ -180,7 +182,7 @@ func TestRun(t *testing.T) {
 			name: "run with scan rules",
 			scanOptions: &ScanOptions{
 				policyType: []string{"all"},
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 				outputType: "yaml",
 				scanRules:  ruleSlice,
 			},
@@ -189,9 +191,9 @@ func TestRun(t *testing.T) {
 			name: "config file with rules",
 			scanOptions: &ScanOptions{
 				policyType: []string{"all"},
-				iacDirPath: testDirPath,
+				iacDirPath: runTestDir,
 				outputType: "yaml",
-				configFile: "testdata/configFile.toml",
+				configFile: filepath.Join(testDataDir, "configFile.toml"),
 			},
 		},
 		{
@@ -200,7 +202,7 @@ func TestRun(t *testing.T) {
 				policyType:  []string{"all"},
 				iacFilePath: testRemoteModuleFilePath,
 				outputType:  "human",
-				configFile:  "testdata/configFile.toml",
+				configFile:  filepath.Join(testDataDir, "configFile.toml"),
 			},
 		},
 		{
@@ -228,6 +230,7 @@ func TestRun(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.scanOptions.configFile)
+
 			err := tt.scanOptions.Run()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ScanOptions.Run() error = %v, wantErr %v", err, tt.wantErr)
@@ -513,7 +516,7 @@ func TestScanOptionsScan(t *testing.T) {
 			name: "failure in run",
 			fields: fields{
 				policyType: []string{"terraform"},
-				iacDirPath: "testdata/run-test",
+				iacDirPath: runTestDir,
 			},
 			wantErr: true,
 		},
@@ -521,7 +524,7 @@ func TestScanOptionsScan(t *testing.T) {
 			name: "successful scan",
 			fields: fields{
 				policyType: []string{"all"},
-				iacDirPath: "testdata/run-test",
+				iacDirPath: runTestDir,
 				outputType: "json",
 			},
 		},

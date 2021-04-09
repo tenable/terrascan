@@ -20,23 +20,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func TestLoadIacDir(t *testing.T) {
 
-	testErrorMessage := `failed to load terraform config dir './testdata'. error from terraform:
-testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`
+	testErrorMessage := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:
+%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`, testDataDir, emptyTfFilePath, emptyTfFilePath)
 
 	testDirPath1 := "not-there"
-	testDirPath2 := "./testdata/testfile"
+	testDirPath2 := filepath.Join(testDataDir, "testfile")
 	invalidDirErrStringTemplate := "directory '%s' has no terraform config files"
+
 	table := []struct {
 		name    string
 		dirPath string
@@ -58,13 +61,13 @@ testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not e
 		},
 		{
 			name:    "incorrect module structure",
-			dirPath: "./testdata/invalid-moduleconfigs",
+			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
 			wantErr: fmt.Errorf("failed to build terraform allResourcesConfig"),
 		},
 		{
 			name:    "load invalid config dir",
-			dirPath: "./testdata",
+			dirPath: testDataDir,
 			tfv14:   TfV14{},
 			wantErr: fmt.Errorf(testErrorMessage),
 		},
@@ -79,6 +82,8 @@ testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not e
 		})
 	}
 
+	tfJSONDir := filepath.Join(testDataDir, "tfjson")
+
 	table2 := []struct {
 		name        string
 		tfConfigDir string
@@ -88,22 +93,22 @@ testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not e
 	}{
 		{
 			name:        "config1",
-			tfConfigDir: "./testdata/tfconfigs",
-			tfJSONFile:  "testdata/tfjson/fullconfig.json",
+			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "module directory",
-			tfConfigDir: "./testdata/moduleconfigs",
-			tfJSONFile:  "./testdata/tfjson/moduleconfigs.json",
+			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
 		{
 			name:        "nested module directory",
-			tfConfigDir: "./testdata/deep-modules",
-			tfJSONFile:  "./testdata/tfjson/deep-modules.json",
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
@@ -120,6 +125,10 @@ testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not e
 
 			// Read the expected value and unmarshal into want
 			contents, _ := ioutil.ReadFile(tt.tfJSONFile)
+			if utils.IsWindowsPlatform() {
+				contents = utils.ReplaceWinNewLineBytes(contents)
+			}
+
 			err := json.Unmarshal(contents, &want)
 			if err != nil {
 				t.Errorf("unexpected error unmarshalling want: %v", err)
