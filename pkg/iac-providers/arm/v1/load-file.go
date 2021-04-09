@@ -48,16 +48,21 @@ func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 	}
 
 	for _, doc := range iacDocuments {
-		var config *output.ResourceConfig = &output.ResourceConfig{}
-
-		// TODO: make required calls to mapper API
+		var config *output.ResourceConfig
 		m := mapper.NewMapper("arm")
-		err := m.Validate(doc.Data)
-
+		config, err = m.Map(doc)
 		if err != nil {
 			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
 			continue
 		}
+		//TODO Remove below block when testing is done
+		//fmt.Println("+++++++++++++++++++++++++++++++++++++++")
+		//indent, err := json.MarshalIndent(config, "", "    ")
+		//if err != nil {
+		//	fmt.Println(err)
+		//}
+		//fmt.Println(string(indent))
+		//fmt.Println("+++++++++++++++++++++++++++++++++++++++")
 
 		config.Line = doc.StartLine
 		config.Source = absFilePath

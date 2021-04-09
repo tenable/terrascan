@@ -596,6 +596,14 @@ github.com/infracloudio/mapper v0.0.0-20210407092435-3f8024290a2f h1:0sv6/Fwr/Tb
 github.com/infracloudio/mapper v0.0.0-20210407092435-3f8024290a2f/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
 github.com/infracloudio/mapper v0.0.0-20210408044842-59a6ef388668 h1:idTA46GMVYnGC/T+QtY+HDoxmw0cwUOex+6opswUK8s=
 github.com/infracloudio/mapper v0.0.0-20210408044842-59a6ef388668/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
+github.com/infracloudio/mapper v0.0.0-20210409061231-005167a97e91 h1:WcpCqOUW1z+KlbVqEaIVJLm0Bz+gYDxwreoD//MAMPs=
+github.com/infracloudio/mapper v0.0.0-20210409061231-005167a97e91/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
+github.com/infracloudio/mapper v0.0.0-20210409070713-f68234c786a9 h1:DqafeH/uoPt8BLi0PIQ94r/YcOdqGWo0sRtZ0BG61y0=
+github.com/infracloudio/mapper v0.0.0-20210409070713-f68234c786a9/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
+github.com/infracloudio/mapper v0.0.0-20210409073310-82a304a654f1 h1:9gMRymjmQMvy7AB5Hm5/sBkvHEslibCWz3dQQGVCftI=
+github.com/infracloudio/mapper v0.0.0-20210409073310-82a304a654f1/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
+github.com/infracloudio/mapper v0.0.0-20210409074241-77fc639bd9b5 h1:klBpa1oz3rpfWZxRp8W9DGjNpQ50jZ/KUAgCN8PgbMM=
+github.com/infracloudio/mapper v0.0.0-20210409074241-77fc639bd9b5/go.mod h1:ro/X0l7o0NTqyjKWM9EoVnRBJYJryZOuMkFJRru7mDg=
 github.com/itchyny/astgen-go v0.0.0-20210113000433-0da0671862a3 h1:l7vogWrq+zj8v5t/G69/eT13nAGs2H7cq+CI2nlnKdk=
 github.com/itchyny/astgen-go v0.0.0-20210113000433-0da0671862a3/go.mod h1:296z3W7Xsrp2mlIY88ruDKscuvrkL6zXCNRtaYVshzw=
 github.com/itchyny/go-flags v1.5.0/go.mod h1:lenkYuCobuxLBAd/HGFE4LRoW8D3B6iXRQfWYJ+MNbA=
