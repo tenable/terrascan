@@ -12,7 +12,7 @@ Through this method, you will modify or create a custom workflow for atlantis so
 
 **Requirements**
 * The atlantis server must have TCP connectivity to where the terrascan server is running.
-* The `curl` command needs to be installed on the system so the `terrascan-remote-scan.sh` script can make the scan request.
+* The `curl` command needs to be installed on the system so the `terrascan-remote-scan.sh` script can make the scan request. Atlantis's [docker image](https://hub.docker.com/r/runatlantis/atlantis/) has curl preinstalled. 
 
 ### Workflow
 Next, you will need to modify your workflow to call `terrascan-remote-scan.sh` during the plan stage. In the plan below, the first three `run: terraform` commands are the default for an atlantis workflow; the fourth `run terrascan-remote-scan.sh` is where the terrascan scan is requested. The `terrascan-remote-scan.sh` script can be found under the `scripts` directory in this project; you will need to copy it to a location where it can be executed by the atlantis server. If the `terrascan-remote-scan.sh` script is not in the directory where the atlantis server command is being run to, you will have to specify the path to the script.
@@ -34,7 +34,7 @@ workflows:
 (the variables `$WORKSPACE` and `$PLANFILE` referenced in the above yaml are populated by atlantis)
 
 ### Script configuration
-Next, the `terrascan-remote-scan.sh` script will need to be modified for your environment. In the script with your favorite editor, review the following six settings near the top of the file:
+Next, the `terrascan-remote-scan.sh` script will need to be modified for your environment. The script is [located here](https://github.com/accurics/terrascan/tree/master/scripts). Open the script with your favorite editor and review the following six settings near the top of the file:
 
 ```
 TERRASCAN_SERVER=192.168.1.55
@@ -51,7 +51,8 @@ Descriptions of these settings are as follows:
 * `IAC`, `IAC_VERSION`, and `CLOUD_PROVIDER` are terrascan options. Descriptions and valid values can be found by running `terrascan scan -h`.
 
 ### Running atlantis
-When the atlantis server is run, the [server-side repo configuration](https://www.runatlantis.io/docs/server-side-repo-config.html) must be specified, as in the following command:
+Run atlantis with your terrascan-workflow.yaml as a [server-side repo configuration](https://www.runatlantis.io/docs/server-side-repo-config.html). This can depend on how you choose to [deploy atlantis](https://www.runatlantis.io/docs/deployment.html#deployment-2). 
+If running the atlantis binary directly, note the following command:
 
 ```bash
 $ atlantis server \
@@ -64,13 +65,13 @@ $ atlantis server \
 ```
 (the variables in the example above must be set separately using `export` or similar shell methods)
 
-Additionally, before the first pull reqeust is processed, terrascan must be running in `server` mode:
+Additionally, before the first pull request is processed, terrascan must be running in `server` mode:
 
 ```
 terrascan server
 ```
 
-Once the systems are running, when atlantis is called via pull request, a comment/command of `atlantis plan` etc, terrascan will be called as part of the atlantis plan. Scan results will be placed in a comment on the pull request, and if issues are found the test will be marked as failed.
+Once the systems are running, when atlantis is called via pull request, or a comment of `atlantis plan`, terrascan will be called as part of the atlantis plan flow. Scan results will be placed in a comment on the pull request, and if issues are found the test will be marked as failed.
 
 ## Custom Atlantis Contaier
 (coming soon...)
