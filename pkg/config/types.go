@@ -26,6 +26,7 @@ type TerrascanConfig struct {
 	Rules         `toml:"rules,omitempty"`
 	Category      `toml:"category,omitempty"`
 	Severity      `toml:"severity,omitempty"`
+	K8sDenyRules  `toml:"k8s-deny-rules,omitempty"`
 }
 
 // Category defines the categories of violations that you want to be reported
@@ -60,4 +61,10 @@ type Notifier struct {
 type Rules struct {
 	ScanRules []string `toml:"scan-rules,omitempty"`
 	SkipRules []string `toml:"skip-rules,omitempty"`
+}
+
+// K8sDenyRules deny rules in the terrascan config file
+type K8sDenyRules struct {
+	DeniedSeverity string   `toml:"denied-severity,omitempty"`
+	Categories     []string `toml:"denied-categories,omitempty"`
 }

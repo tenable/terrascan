@@ -6,7 +6,10 @@ Usage:
   terrascan server [flags]
 
 Flags:
-  -h, --help   help for server
+      --cert-path string   certificate file path
+  -h, --help               help for server
+      --key-path string    private key file path
+  -p, --port string        server port (default "9010")
 
 Global Flags:
   -c, --config-path string   config file path

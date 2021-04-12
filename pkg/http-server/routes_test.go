@@ -8,7 +8,7 @@ func TestRoutes(t *testing.T) {
 	t.Run("health route check", func(t *testing.T) {
 		var (
 			server = NewAPIServer()
-			got    = server.Routes()
+			got    = server.Routes("")
 			passed = false
 		)
 

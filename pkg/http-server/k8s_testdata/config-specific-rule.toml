@@ -1,0 +1,5 @@
+[rules]
+    scan-rules = [
+        "AWS.S3Bucket.DS.High.1043",
+        "accurics.kubernetes.IAM.107"
+    ]

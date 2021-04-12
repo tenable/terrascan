@@ -1,0 +1,5 @@
+[k8s-deny-rules]
+  denied-categories = [
+      "Identity and Access Management",
+      "Network Security",
+  ]

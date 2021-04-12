@@ -1,0 +1,5 @@
+[severity]
+level = "medium"
+
+[k8s-deny-rules]
+  denied-severity = "high"

@@ -29,13 +29,19 @@ type Route struct {
 
 // Routes returns a slice of routes of API endpoints to be registered with
 // http server
-func (g *APIServer) Routes() []*Route {
-	h := NewAPIHandler()
+func (g *APIServer) Routes(configFile string) []*Route {
+	h := NewAPIHandler(configFile)
 	routes := []*Route{
 		{verb: "GET", path: "/health", fn: h.Health},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/remote/dir/scan"), fn: h.scanRemoteRepo},
+
+		// k8s webhook Routes
+		{verb: "GET", path: "/k8s/webhooks/logs", fn: h.getLogs},
+		{verb: "GET", path: "/k8s/webhooks/logs/{uid}", fn: h.getLogByUID},
+		{verb: "POST", path: versionedPath("/k8s/webhooks/{apiKey}/scan/validate"), fn: h.validateK8SWebhook},
 	}
+
 	return routes
 }
 
