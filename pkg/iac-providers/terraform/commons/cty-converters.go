@@ -64,7 +64,7 @@ func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 	var val []interface{}
 	var allErrs error
 
-	if ctyVal.Type().IsListType() {
+	if ctyVal.Type().IsListType() || ctyVal.Type().IsTupleType() || ctyVal.Type().IsSetType() {
 		for _, v := range ctyVal.AsValueSlice() {
 			for _, converter := range ctyNativeConverterFuncs {
 				resolved, err := converter(v)
@@ -87,6 +87,10 @@ func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 // then for every key value of this map, tries to convert the cty.Value into
 // native golang value and create a new map[string]interface{}
 func ctyToMap(ctyVal cty.Value) (interface{}, error) {
+
+	if !(ctyVal.Type().IsMapType() || ctyVal.Type().IsObjectType()) {
+		return nil, fmt.Errorf("not map type")
+	}
 
 	var (
 		ctyValMap = ctyVal.AsValueMap() // map[string]cty.Value
