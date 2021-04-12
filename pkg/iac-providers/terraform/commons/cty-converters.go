@@ -18,7 +18,6 @@ package commons
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/zclconf/go-cty/cty"
@@ -27,8 +26,8 @@ import (
 
 // list of available cty to golang type converters
 var (
-	ctyConverterFuncs       = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool, ctyToSlice, ctyToMap}
-	ctyNativeConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToBool}
+	ctyConverterFuncs       = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToFloat, ctyToBool, ctyToSlice, ctyToMap}
+	ctyNativeConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToFloat, ctyToBool}
 )
 
 // ctyToStr tries to convert the given cty.Value into golang string type
@@ -41,6 +40,13 @@ func ctyToStr(ctyVal cty.Value) (interface{}, error) {
 // ctyToInt tries to convert the given cty.Value into golang int type
 func ctyToInt(ctyVal cty.Value) (interface{}, error) {
 	var val int
+	err := gocty.FromCtyValue(ctyVal, &val)
+	return val, err
+}
+
+// ctyToFloat tries to convert the given cty.Value into golang float type
+func ctyToFloat(ctyVal cty.Value) (interface{}, error) {
+	var val float64
 	err := gocty.FromCtyValue(ctyVal, &val)
 	return val, err
 }
@@ -58,7 +64,7 @@ func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 	var val []interface{}
 	var allErrs error
 
-	if strings.Contains(ctyVal.Type().FriendlyName(), "list") {
+	if ctyVal.Type().IsListType() {
 		for _, v := range ctyVal.AsValueSlice() {
 			for _, converter := range ctyNativeConverterFuncs {
 				resolved, err := converter(v)
