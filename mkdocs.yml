@@ -38,9 +38,12 @@ extra:
 # Navigation
 nav:
   - Home: index.md
-  - Getting Started:
-    - Quickstart: getting-started/quickstart.md
-    - Usage: getting-started/usage.md
+  - Getting Started: getting-started.md
+  - Usage: usage.md
+  - Integrations: 
+    - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
+    - Atlantis: integrations/atalantis-integration.md
+    - Github, Argo, and More: integrations/cicd.md
   - Architecture: architecture.md
   - Policies:
     - Policy Reference: policies.md
@@ -50,7 +53,6 @@ nav:
     - GitHub: policies/github.md
     - Kubernetes: policies/k8s.md
   # - Educational Resources: learning.md
-  - CI/CD Integration: cicd.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - About: about.md
