@@ -2,12 +2,14 @@
 
 ## Overview
 Terrascan can be integrated with K8s [admissions webhooks](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/).
-It can be used as one of the validating webhooks to be used and scan new configurations.
+Admission controllers help you control what resources are created on a kubernetes cluster. By using terrascan as an admission controller, resources violating security policies can be blocked from getting created in a kubernetes cluster.
 
-In this guide, we'll demonstrate how Terrascan can be configured to:
-* Scan configuration changes policies when an object is being created or updated
-* Allow / reject the request in case a violation is detected
-
+Steps to configure terrascan as an admission controller:
+- SSL certificates: You can use valid SSL certificates or create self signed certificates and have your kubernetes cluster trust it.
+- Create terrascan config file
+- Run terrascan in server mode
+- Make sure terrascan is accessible via HTTPS from the kubernetes API server.
+- Configure a ValidatingWebhookConfiguration resource in kubernetes cluster pointing to the terrascan server
 
 ## Installation Guide
 
@@ -21,7 +23,7 @@ Your Terrascan instance has the following requirements for being able to scan K8
     - Generate a self-signed certificate and have your K8s cluster trust it. To add a trusted CA to ca-pemstore, as demonstrated in [paraspatidar's blog post](https://medium.com/@paraspatidar/add-ssl-tls-certificate-or-pem-file-to-kubernetes-pod-s-trusted-root-ca-store-7bed5cd683d).
 3. Use the Terrascan docker as demonstrated in this document, or run it from the sources.
 
-### Run Terrascan webhook service
+### Run Terrascan in Server Mode
 Run Terrascan docker image in your server using the following command:
  ```bash
   sudo docker run -p 443:9443 -v <DATA_PATH>:/data -u root -e K8S_WEBHOOK_API_KEY=<API_KEY> accurics/terrascan server --cert-path /data/cert.pem --key-path /data/key.pem -c /data/config.toml
@@ -31,7 +33,7 @@ Run Terrascan docker image in your server using the following command:
 `<DATA_PATH>` is a directory path in your server where both the certificate and the private key .pem files are stored.
 In addition, this directory is used to save the webhook logs. (An SQLite file)
 
-You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection.
+You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection. Policies below the [severity] level will be ignored. Policies below the [k8s-deny-rules] denied-severity will be logged and displayed by terrascan, but will not lead to a rejected admission response to the k8s API server.
 
 A config file example: ```config.toml```
   ```bash
@@ -60,7 +62,7 @@ You can specify the following configurations:
   *  **denied-categories** - one or more policy categories that are not allowed in the detected violations
   *  **denied-severity** - the minimal level of severity that should cause a rejection
 
-### Configure K8s to send webhooks
+### Configure a ValidatingWebhookConfiguration Resource in Kubernetes Cluster
 Configure a new ```ValidatingWebhookConfiguration``` in your Kubernetes environment and specify your Terrascan server endpoint.
 
 Example:
