@@ -15,8 +15,10 @@ require (
 	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/go-version v1.2.1
+	github.com/hashicorp/hcl v1.0.0
 	github.com/hashicorp/hcl/v2 v2.8.2
 	github.com/hashicorp/terraform v0.14.4
+	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/iancoleman/strcase v0.1.3
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
@@ -32,7 +34,6 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/sys v0.0.0-20210324051608-47abb6519492
-	golang.org/x/tools v0.1.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
