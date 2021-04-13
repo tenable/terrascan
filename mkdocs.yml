@@ -42,7 +42,7 @@ nav:
   - Usage: usage.md
   - Integrations:
     - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
-    - Atlantis: integrations/atalantis-integration.md
+    - Atlantis: integrations/atlantis-integration.md
     - Github, Argo, and More: integrations/cicd.md
   - Architecture: architecture.md
   - Policies:
