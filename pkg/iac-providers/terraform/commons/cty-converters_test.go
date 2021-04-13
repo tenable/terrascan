@@ -503,3 +503,206 @@ func TestCtyToMap(t *testing.T) {
 		})
 	}
 }
+
+func TestConvertPrimitiveType(t *testing.T) {
+	intCtyVal := cty.NumberIntVal(-10)
+	floatCtyVal := cty.NumberFloatVal(3.141)
+	unsignedIntCtyVal := cty.NumberUIntVal(44)
+	stringCtyVal := cty.StringVal("Peter Parker")
+	boolCtyVal := cty.BoolVal(true)
+	nonPrimitiveCtyVal := cty.ListVal([]cty.Value{cty.StringVal("test")})
+
+	type args struct {
+		ctyVal cty.Value
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    interface{}
+		wantErr bool
+	}{
+		{
+			name: "signed int input",
+			args: args{
+				ctyVal: intCtyVal,
+			},
+			want: -10,
+		},
+		{
+			name: "float input",
+			args: args{
+				ctyVal: floatCtyVal,
+			},
+			want: 3.141,
+		},
+		{
+			name: "unsigned int input",
+			args: args{
+				ctyVal: unsignedIntCtyVal,
+			},
+			want: 44,
+		},
+		{
+			name: "string input",
+			args: args{
+				ctyVal: stringCtyVal,
+			},
+			want: "Peter Parker",
+		},
+		{
+			name: "boolean input",
+			args: args{
+				ctyVal: boolCtyVal,
+			},
+			want: true,
+		},
+		{
+			name: "non primitive input",
+			args: args{
+				ctyVal: nonPrimitiveCtyVal,
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := convertPrimitiveType(tt.args.ctyVal)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("convertPrimitiveType() got error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("convertPrimitiveType() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConvertComplexType(t *testing.T) {
+
+	nonComplexCtyVal := cty.NumberIntVal(5)
+	complexListCtyVal := cty.ListVal([]cty.Value{
+		cty.ObjectVal(map[string]cty.Value{
+			"application": cty.StringVal("app1"),
+			"port":        cty.NumberIntVal(9010),
+		}),
+		cty.ObjectVal(map[string]cty.Value{
+			"application": cty.StringVal("app2"),
+			"port":        cty.NumberIntVal(8000),
+		}),
+	})
+	complexMapCtyVal := cty.MapVal(map[string]cty.Value{
+		"first": cty.ObjectVal(map[string]cty.Value{
+			"name": cty.StringVal("Thor"),
+			"ID":   cty.NumberIntVal(1),
+		}),
+		"second": cty.ObjectVal(map[string]cty.Value{
+			"name": cty.StringVal("Spiderman"),
+			"ID":   cty.NumberIntVal(2),
+		}),
+	})
+
+	type args struct {
+		ctyVal cty.Value
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    interface{}
+		wantErr bool
+	}{
+		{
+			name: "non complex input",
+			args: args{
+				ctyVal: nonComplexCtyVal,
+			},
+			wantErr: true,
+		},
+		{
+			name: "list of objects input",
+			args: args{
+				ctyVal: complexListCtyVal,
+			},
+			want: []interface{}{
+				map[string]interface{}{
+					"application": "app1",
+					"port":        9010,
+				},
+				map[string]interface{}{
+					"application": "app2",
+					"port":        8000,
+				},
+			},
+		},
+		{
+			name: "map of objects input",
+			args: args{
+				ctyVal: complexMapCtyVal,
+			},
+			want: map[string]interface{}{
+				"first": map[string]interface{}{
+					"name": "Thor",
+					"ID":   1,
+				},
+				"second": map[string]interface{}{
+					"name": "Spiderman",
+					"ID":   2,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := convertComplexType(tt.args.ctyVal)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("convertComplexType() got error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("convertComplexType() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConvertCtyToGoNative(t *testing.T) {
+	primitiveCtyVal := cty.StringVal("primitive")
+	complexCtyVal := cty.ListVal([]cty.Value{cty.BoolVal(false)})
+
+	type args struct {
+		ctyVal cty.Value
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    interface{}
+		wantErr bool
+	}{
+		{
+			name: "primitive cty input",
+			args: args{
+				ctyVal: primitiveCtyVal,
+			},
+			want: "primitive",
+		},
+		{
+			name: "complex cty input",
+			args: args{
+				ctyVal: complexCtyVal,
+			},
+			want: []interface{}{false},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := convertCtyToGoNative(tt.args.ctyVal)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("convertCtyToGoNative() got error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("convertCtyToGoNative() want = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

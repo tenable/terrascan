@@ -24,9 +24,8 @@ import (
 	"github.com/zclconf/go-cty/cty/gocty"
 )
 
-// list of available cty to golang type converters
+// list of available primitive cty to golang type converters
 var (
-	ctyConverterFuncs       = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToFloat, ctyToBool, ctyToSlice, ctyToMap}
 	ctyNativeConverterFuncs = []func(cty.Value) (interface{}, error){ctyToStr, ctyToInt, ctyToFloat, ctyToBool}
 )
 
@@ -66,14 +65,12 @@ func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 
 	if ctyVal.Type().IsListType() || ctyVal.Type().IsTupleType() || ctyVal.Type().IsSetType() {
 		for _, v := range ctyVal.AsValueSlice() {
-			for _, converter := range ctyNativeConverterFuncs {
-				resolved, err := converter(v)
-				if err == nil {
-					val = append(val, resolved)
-					break
-				}
+			nativeVal, err := convertCtyToGoNative(v)
+			if err != nil {
 				allErrs = errors.Wrap(allErrs, err.Error())
+				continue
 			}
+			val = append(val, nativeVal)
 		}
 		if allErrs != nil {
 			return nil, allErrs
@@ -107,14 +104,12 @@ func ctyToMap(ctyVal cty.Value) (interface{}, error) {
 	// golang value
 	for k, v := range ctyValMap {
 		// convert cty.Value to native golang type based on cty.Type
-		for _, converter := range ctyNativeConverterFuncs {
-			resolved, err := converter(v)
-			if err == nil {
-				val[k] = resolved
-				break
-			}
+		nativeVal, err := convertCtyToGoNative(v)
+		if err != nil {
 			allErrs = errors.Wrap(allErrs, err.Error())
+			continue
 		}
+		val[k] = nativeVal
 	}
 	if allErrs != nil {
 		return nil, allErrs
@@ -122,4 +117,30 @@ func ctyToMap(ctyVal cty.Value) (interface{}, error) {
 
 	// hopefully successful!
 	return val, nil
+}
+
+// convertCtyToGoNative converts a cty.Value to its go native type
+func convertCtyToGoNative(ctyVal cty.Value) (interface{}, error) {
+	if ctyVal.Type().IsPrimitiveType() {
+		return convertPrimitiveType(ctyVal)
+	}
+	return convertComplexType(ctyVal)
+}
+
+// convertPrimitiveType converts a primitive cty.Value to its go native type
+func convertPrimitiveType(ctyVal cty.Value) (interface{}, error) {
+	for _, converter := range ctyNativeConverterFuncs {
+		if val, err := converter(ctyVal); err == nil {
+			return val, err
+		}
+	}
+	return nil, fmt.Errorf("ctyVal could not be resolved to native go type")
+}
+
+// convertPrimitiveType converts a complex cty.Value (list, tuple, set, map, object) to its go native type
+func convertComplexType(ctyVal cty.Value) (interface{}, error) {
+	if ctyVal.Type().IsListType() || ctyVal.Type().IsTupleType() || ctyVal.Type().IsSetType() {
+		return ctyToSlice(ctyVal)
+	}
+	return ctyToMap(ctyVal)
 }
