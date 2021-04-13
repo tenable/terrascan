@@ -112,6 +112,13 @@ func TestLoadIacDir(t *testing.T) {
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
+		{
+			name:        "complex variables",
+			tfConfigDir: filepath.Join(testDataDir, "complex-variables"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "complex-variables.json"),
+			tfv14:       TfV14{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {

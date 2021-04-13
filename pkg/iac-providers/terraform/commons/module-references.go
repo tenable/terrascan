@@ -93,22 +93,23 @@ func (r *RefResolver) ResolveModuleRef(moduleRef string,
 
 	// default value is of cty.Value type, convert it to native golang type
 	// based on cty.Type, determine golang type
-	for _, converter := range ctyConverterFuncs {
-		if val, err := converter(hclVar.Default); err == nil {
-			zap.S().Debugf("resolved module variable ref: '%v', value: '%v'", moduleRef, val)
-
-			// replace the variable reference string with actual value
-			if reflect.TypeOf(val).Kind() == reflect.String {
-				valStr := val.(string)
-				resolvedVal := strings.Replace(moduleRef, moduleExpr, valStr, 1)
-				zap.S().Debugf("resolved str module value ref: '%v', value: '%v'", moduleRef, resolvedVal)
-				return r.ResolveStrRef(resolvedVal)
-			}
-			zap.S().Debugf("resolved module value ref: '%v', value: '%v'", moduleRef, val)
-			return val
-		}
+	val, err := convertCtyToGoNative(hclVar.Default)
+	if err != nil {
+		zap.S().Debugf(err.Error())
+		zap.S().Debugf("failed to convert cty.Value '%v' to golang native value", hclVar.Default.GoString())
+		return moduleRef
 	}
-	zap.S().Debugf("failed to convert cty.Value '%v' to golang native value", hclVar.Default.GoString())
+	zap.S().Debugf("resolved variable ref '%v', value: '%v'", moduleRef, val)
 
-	return moduleRef
+	if reflect.TypeOf(val).Kind() == reflect.String {
+		valStr := val.(string)
+		resolvedVal := strings.Replace(moduleRef, moduleExpr, valStr, 1)
+		if moduleRef == resolvedVal {
+			zap.S().Debugf("resolved str variable ref refers to self: '%v'", moduleRef)
+			return moduleRef
+		}
+		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", moduleRef, resolvedVal)
+		return r.ResolveStrRef(resolvedVal)
+	}
+	return val
 }
