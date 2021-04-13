@@ -40,7 +40,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Usage: usage.md
-  - Integrations: 
+  - Integrations:
     - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
     - Atlantis: integrations/atalantis-integration.md
     - Github, Argo, and More: integrations/cicd.md
@@ -74,6 +74,11 @@ google_analytics:
 plugins:
   - diagrams
   - search
+  - redirects:
+      redirect_maps:
+        'getting-started/quickstart.md': 'getting-started.md'
+        'getting-started/usage.md': 'usage.md'
+        'cicd.md': 'integrations/cicd.md'
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
