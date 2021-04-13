@@ -1,6 +1,6 @@
 GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -v -ldflags "-w -s"
-ENV_SETTINGS := CGO_ENABLED=0
+ENV_SETTINGS := CGO_ENABLED=1
 
 BUILD_DIR = ./bin
 BINARY_NAME = terrascan

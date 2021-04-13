@@ -8,7 +8,7 @@ import (
 
 func TestHealth(t *testing.T) {
 
-	handler := NewAPIHandler()
+	handler := NewAPIHandler("")
 
 	t.Run("test health api", func(t *testing.T) {
 		var (

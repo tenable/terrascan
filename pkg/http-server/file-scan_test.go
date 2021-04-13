@@ -17,7 +17,7 @@ import (
 )
 
 func TestUpload(t *testing.T) {
-	testFilePath := "./testdata/testconfig.tf"
+	testFilePath := filepath.Join("testdata", "testconfig.tf")
 	testIacType := "terraform"
 	testIacVersion := "v14"
 	testCloudType := "aws"
@@ -96,7 +96,7 @@ func TestUpload(t *testing.T) {
 		},
 		{
 			name:       "invalid file config",
-			path:       "./testdata/invalid.tf",
+			path:       filepath.Join("testdata", "invalid.tf"),
 			param:      testParamName,
 			iacType:    testIacType,
 			iacVersion: testIacVersion,
@@ -106,7 +106,7 @@ func TestUpload(t *testing.T) {
 		},
 		{
 			name:       "empty file config",
-			path:       "./testdata/empty.tf",
+			path:       filepath.Join("testdata", "empty.tf"),
 			param:      testParamName,
 			iacType:    testIacType,
 			iacVersion: testIacVersion,
@@ -235,7 +235,7 @@ func TestUpload(t *testing.T) {
 		},
 		{
 			name:       "scan valid kubernetes yaml",
-			path:       "../iac-providers/kubernetes/v1/testdata/yaml-extension2/test_pod.yml",
+			path:       filepath.Join("..", "iac-providers", "kubernetes", "v1", "testdata", "yaml-extension2", "test_pod.yml"),
 			param:      testParamName,
 			iacType:    "k8s",
 			cloudType:  testCloudType,
@@ -243,7 +243,7 @@ func TestUpload(t *testing.T) {
 		},
 		{
 			name:       "scan valid tfplan json",
-			path:       "../iac-providers/tfplan/v1/testdata/valid-tfplan.json",
+			path:       filepath.Join("..", "iac-providers", "tfplan", "v1", "testdata", "valid-tfplan.json"),
 			param:      testParamName,
 			iacType:    "tfplan",
 			cloudType:  testCloudType,

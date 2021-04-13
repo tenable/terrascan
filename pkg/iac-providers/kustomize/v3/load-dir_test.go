@@ -3,6 +3,7 @@ package kustomizev3
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"syscall"
@@ -13,6 +14,9 @@ import (
 )
 
 const kustomizeErrPrefix = "error from kustomization."
+
+var testDataDir = "testdata"
+var multibasesDir = filepath.Join(testDataDir, "multibases")
 
 func TestLoadIacDir(t *testing.T) {
 
@@ -33,53 +37,53 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:          "simple-deployment",
-			dirPath:       "./testdata/simple-deployment",
+			dirPath:       filepath.Join(testDataDir, "simple-deployment"),
 			kustomize:     KustomizeV3{},
 			resourceCount: 4,
 		},
 		{
 			name:          "multibases",
-			dirPath:       "./testdata/multibases/base",
+			dirPath:       filepath.Join(multibasesDir, "base"),
 			kustomize:     KustomizeV3{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
-			dirPath:       "./testdata/multibases/dev",
+			dirPath:       filepath.Join(multibasesDir, "dev"),
 			kustomize:     KustomizeV3{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
-			dirPath:       "./testdata/multibases/prod",
+			dirPath:       filepath.Join(multibasesDir, "prod"),
 			kustomize:     KustomizeV3{},
 			resourceCount: 2,
 		},
 
 		{
 			name:          "multibases",
-			dirPath:       "./testdata/multibases/stage",
+			dirPath:       filepath.Join(multibasesDir, "stage"),
 			kustomize:     KustomizeV3{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
-			dirPath:       "./testdata/multibases",
+			dirPath:       multibasesDir,
 			kustomize:     KustomizeV3{},
 			resourceCount: 4,
 		},
 		{
 			name:          "no-kustomize-directory",
-			dirPath:       "./testdata/no-kustomizefile",
+			dirPath:       filepath.Join(testDataDir, "no-kustomizefile"),
 			kustomize:     KustomizeV3{},
-			wantErr:       fmt.Errorf("kustomization.y(a)ml file not found in the directory ./testdata/no-kustomizefile"),
+			wantErr:       fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", filepath.Join(testDataDir, "no-kustomizefile")),
 			resourceCount: 0,
 		},
 		{
 			name:          "kustomize-file-empty",
-			dirPath:       "./testdata/kustomize-file-empty",
+			dirPath:       filepath.Join(testDataDir, "kustomize-file-empty"),
 			kustomize:     KustomizeV3{},
-			wantErr:       fmt.Errorf("unable to read the kustomization file in the directory ./testdata/kustomize-file-empty, error: yaml file is empty"),
+			wantErr:       fmt.Errorf("unable to read the kustomization file in the directory %s, error: yaml file is empty", filepath.Join(testDataDir, "kustomize-file-empty")),
 			resourceCount: 0,
 		},
 	}
@@ -114,56 +118,56 @@ func TestLoadKustomize(t *testing.T) {
 	}{
 		{
 			name:     "simple-deployment",
-			basepath: "./testdata/simple-deployment",
+			basepath: filepath.Join(testDataDir, "simple-deployment"),
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases",
-			basepath: "./testdata/multibases",
+			basepath: multibasesDir,
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases/base",
-			basepath: "./testdata/multibases/base",
+			basepath: filepath.Join(multibasesDir, "base"),
 			filename: kustomizeYml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases/dev",
-			basepath: "./testdata/multibases/dev",
+			basepath: filepath.Join(multibasesDir, "dev"),
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases/prod",
-			basepath: "./testdata/multibases/prod",
+			basepath: filepath.Join(multibasesDir, "prod"),
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases/stage",
-			basepath: "./testdata/multibases/stage",
+			basepath: filepath.Join(multibasesDir, "stage"),
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:     "multibases/zero-violation-base",
-			basepath: "./testdata/multibases/zero-violation-base",
+			basepath: filepath.Join(multibasesDir, "zero-violation-base"),
 			filename: kustomizeYaml,
 			wantErr:  nil,
 		},
 		{
 			name:        "erroneous-pod",
-			basepath:    "./testdata/erroneous-pod",
+			basepath:    filepath.Join(testDataDir, "erroneous-pod"),
 			filename:    kustomizeYaml,
 			wantErr:     fmt.Errorf(kustomizeErrPrefix),
 			checkPrefix: true,
 		},
 		{
 			name:        "erroneous-deployment",
-			basepath:    "./testdata/erroneous-deployment/",
+			basepath:    filepath.Join(testDataDir, "erroneous-deployment/"),
 			filename:    kustomizeYaml,
 			wantErr:     fmt.Errorf(kustomizeErrPrefix),
 			checkPrefix: true,

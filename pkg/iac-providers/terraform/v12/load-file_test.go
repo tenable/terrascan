@@ -21,32 +21,40 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
+
+var testDataDir = "testdata"
+var emptyTfFilePath = filepath.Join(testDataDir, "empty.tf")
+var nonEmptyTfFilePath = filepath.Join(testDataDir, "destroy-provisioners", "main.tf")
+var tfJSONDir = filepath.Join(testDataDir, "tfjson")
 
 func TestLoadIacFile(t *testing.T) {
 
 	testErrorString1 := `error occured while loading config file 'not-there'. error:
 <nil>: Failed to read file; The file "not-there" could not be read.
 `
-	testErrorString2 := `failed to load config file './testdata/empty.tf'. error:
-./testdata/empty.tf:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-./testdata/empty.tf:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`
-	testErrorString3 := `failed to load config file './testdata/destroy-provisioners/main.tf'. error:
-./testdata/destroy-provisioners/main.tf:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
+	testErrorString2 := fmt.Sprintf(`failed to load config file '%s'. error:
+%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
+%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
+`, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
+
+	testErrorString3 := fmt.Sprintf(`failed to load config file '%s'. error:
+%s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
-./testdata/destroy-provisioners/main.tf:42,15-35: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
+%s:42,15-35: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
-./testdata/destroy-provisioners/main.tf:39,14-24: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
+%s:39,14-24: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
-`
+`, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath)
 
 	table := []struct {
 		name     string
@@ -63,18 +71,18 @@ References to other resources during the destroy phase can cause dependency cycl
 		},
 		{
 			name:     "empty config",
-			filePath: "./testdata/testfile",
+			filePath: filepath.Join(testDataDir, "testfile"),
 			tfv12:    TfV12{},
 		},
 		{
 			name:     "invalid config",
-			filePath: "./testdata/empty.tf",
+			filePath: emptyTfFilePath,
 			tfv12:    TfV12{},
 			wantErr:  fmt.Errorf(testErrorString2),
 		},
 		{
 			name:     "destroy-provisioners",
-			filePath: "./testdata/destroy-provisioners/main.tf",
+			filePath: nonEmptyTfFilePath,
 			tfv12:    TfV12{},
 			wantErr:  fmt.Errorf(testErrorString3),
 		},
@@ -98,15 +106,15 @@ References to other resources during the destroy phase can cause dependency cycl
 	}{
 		{
 			name:         "config1",
-			tfConfigFile: "./testdata/tfconfigs/config1.tf",
-			tfJSONFile:   "./testdata/tfjson/config1.json",
+			tfConfigFile: filepath.Join(testDataDir, "tfconfigs", "config1.tf"),
+			tfJSONFile:   filepath.Join(tfJSONDir, "config1.json"),
 			tfv12:        TfV12{},
 			wantErr:      nil,
 		},
 		{
 			name:         "dummyconfig",
-			tfConfigFile: "./testdata/dummyconfig/dummyconfig.tf",
-			tfJSONFile:   "./testdata/tfjson/dummyconfig.json",
+			tfConfigFile: filepath.Join(testDataDir, "dummyconfig", "dummyconfig.tf"),
+			tfJSONFile:   filepath.Join(tfJSONDir, "dummyconfig.json"),
 			tfv12:        TfV12{},
 			wantErr:      nil,
 		},
@@ -122,6 +130,12 @@ References to other resources during the destroy phase can cause dependency cycl
 			gotBytes, _ := json.MarshalIndent(got, "", "  ")
 			gotBytes = append(gotBytes, []byte{'\n'}...)
 			wantBytes, _ := ioutil.ReadFile(tt.tfJSONFile)
+
+			if utils.IsWindowsPlatform() {
+				gotBytes = utils.ReplaceCarriageReturnBytes(gotBytes)
+				wantBytes = utils.ReplaceWinNewLineBytes(wantBytes)
+			}
+
 			if !reflect.DeepEqual(bytes.TrimSpace(gotBytes), bytes.TrimSpace(wantBytes)) {
 				t.Errorf("unexpected error; got '%v', want: '%v'", string(gotBytes), string(wantBytes))
 			}

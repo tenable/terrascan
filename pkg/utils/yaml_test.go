@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 )
@@ -11,8 +12,8 @@ func TestReadYamlFile(t *testing.T) {
 		path  string
 		empty bool
 	}{
-		{path: "./testdata/empty.yaml", empty: true},
-		{path: "./testdata/pod.yaml"},
+		{path: filepath.Join(testDataDir, "empty.yaml"), empty: true},
+		{path: filepath.Join(testDataDir, "pod.yaml")},
 	}
 
 	for _, tt := range table {

@@ -3,13 +3,14 @@ FROM golang:alpine AS builder
 
 ARG GOOS_VAL=linux
 ARG GOARCH_VAL=amd64
-ARG CGO_ENABLED_VAL=0
+ARG CGO_ENABLED_VAL=1
 
 WORKDIR $GOPATH/src/terrascan
 
 # download go dependencies
 COPY go.mod go.sum ./
 RUN go mod download
+RUN apk add -U build-base
 
 # copy terrascan source
 COPY . .
@@ -33,6 +34,10 @@ ENV PATH /go/bin:$PATH
 
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
+
+# Copy webhooks UI templates & assets
+COPY ./pkg/http-server/templates /go/terrascan
+COPY ./pkg/http-server/assets /go/terrascan/assets
 
 EXPOSE 9010
 
