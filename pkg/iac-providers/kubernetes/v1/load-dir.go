@@ -8,6 +8,11 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
+)
+
+var (
+	errIacLoadDirs *multierror.Error = nil
 )
 
 func (*K8sV1) getFileType(file string) string {
@@ -29,7 +34,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, K8sFileExtensions())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, err)
 	}
 
 	for fileDir, files := range fileMap {
@@ -39,6 +44,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 			var configData output.AllResourceConfigs
 			if configData, err = k.LoadIacFile(file); err != nil {
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
+				errIacLoadDirs = multierror.Append(errIacLoadDirs, err)
 				continue
 			}
 
@@ -52,7 +58,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error)
 		}
 	}
 
-	return allResourcesConfig, nil
+	return allResourcesConfig, errIacLoadDirs
 }
 
 // makeSourcePathRelative modifies the source path of each resource from absolute to relative path

@@ -95,12 +95,18 @@ func (e *Executor) ValidateInputs() error {
 
 	// set default iac type/version if not already set
 	if e.iacType == "" {
-		// TODO: handle more than cloudType[0]
-		e.iacType = policy.GetDefaultIacType(e.cloudType[0])
+		if e.dirPath != "" {
+			e.iacType = "all"
+		} else {
+			// TODO: handle more than cloudType[0]
+			e.iacType = policy.GetDefaultIacType(e.cloudType[0])
+		}
 	}
 
 	if e.iacVersion == "" {
-		e.iacVersion = IacProvider.GetDefaultIacVersion(e.iacType)
+		if e.iacType != "all" {
+			e.iacVersion = IacProvider.GetDefaultIacVersion(e.iacType)
+		}
 	}
 
 	// check if cloud type is supported
@@ -119,11 +125,13 @@ func (e *Executor) ValidateInputs() error {
 	zap.S().Debugf("using policy path %v", e.policyPath)
 
 	// check if IaC type is supported
-	if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
-		zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
-		return errIacNotSupported
+	if e.iacType != "all" {
+		if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
+			zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
+			return errIacNotSupported
+		}
+		zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 	}
-	zap.S().Debugf("iac type '%s', version '%s' is supported", e.iacType, e.iacVersion)
 
 	if len(e.categories) > 0 {
 		if isValid, invalidInputs := utils.ValidateCategoryInput(e.categories); !isValid {

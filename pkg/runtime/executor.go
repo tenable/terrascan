@@ -20,9 +20,11 @@ import (
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/hashicorp/go-multierror"
 )
 
 // Executor object
@@ -35,7 +37,7 @@ type Executor struct {
 	iacVersion    string
 	scanRules     []string
 	skipRules     []string
-	iacProvider   iacProvider.IacProvider
+	iacProviders  []iacProvider.IacProvider
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
 	categories    []string
@@ -45,12 +47,13 @@ type Executor struct {
 // NewExecutor creates a runtime object
 func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
 	e = &Executor{
-		filePath:   filePath,
-		dirPath:    dirPath,
-		policyPath: policyPath,
-		cloudType:  cloudType,
-		iacType:    iacType,
-		iacVersion: iacVersion,
+		filePath:     filePath,
+		dirPath:      dirPath,
+		policyPath:   policyPath,
+		cloudType:    cloudType,
+		iacType:      iacType,
+		iacVersion:   iacVersion,
+		iacProviders: make([]iacProvider.IacProvider, 0),
 	}
 
 	// read config file and update scan and skip rules
@@ -92,11 +95,27 @@ func (e *Executor) Init() error {
 		return err
 	}
 
-	// create new IacProvider
-	e.iacProvider, err = iacProvider.NewIacProvider(e.iacType, e.iacVersion)
-	if err != nil {
-		zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
-		return err
+	// create new IacProviders
+	if e.iacType == "all" {
+		for _, ip := range iacProvider.SupportedIacProviders() {
+			if ip == "tfplan" {
+				continue
+			}
+			defaultIacVersion := iacProvider.GetDefaultIacVersion(ip)
+			iacP, err := iacProvider.NewIacProvider(ip, defaultIacVersion)
+			if err != nil {
+				zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
+				return err
+			}
+			e.iacProviders = append(e.iacProviders, iacP)
+		}
+	} else {
+		iacP, err := iacProvider.NewIacProvider(e.iacType, e.iacVersion)
+		if err != nil {
+			zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
+			return err
+		}
+		e.iacProviders = append(e.iacProviders, iacP)
 	}
 
 	// create new notifiers
@@ -134,16 +153,33 @@ func (e *Executor) Init() error {
 // Execute validates the inputs, processes the IaC, creates json output
 func (e *Executor) Execute() (results Output, err error) {
 
+	var merr *multierror.Error
+	resourceConfig := make(output.AllResourceConfigs)
 	// create results output from Iac
-	if e.filePath != "" {
-		results.ResourceConfig, err = e.iacProvider.LoadIacFile(e.filePath)
-	} else {
-		results.ResourceConfig, err = e.iacProvider.LoadIacDir(e.dirPath)
-	}
-	if err != nil {
-		return results, err
+	for _, iacP := range e.iacProviders {
+		var err error
+		var rc output.AllResourceConfigs
+		if e.filePath != "" {
+			rc, err = iacP.LoadIacFile(e.filePath)
+		} else {
+			rc, err = iacP.LoadIacDir(e.dirPath)
+		}
+		if err != nil {
+			merr = multierror.Append(merr, err)
+		}
+
+		for key := range rc {
+			resourceConfig[key] = append(resourceConfig[key], rc[key]...)
+		}
 	}
 
+	if len(e.iacProviders) == 1 && !(e.iacType == "k8s" || e.iacType == "helm") {
+		if err := merr.ErrorOrNil(); err != nil {
+			return results, err
+		}
+	}
+
+	results.ResourceConfig = resourceConfig
 	// evaluate policies
 	results.Violations = policy.EngineOutput{}
 	violations := results.Violations.AsViolationStore()

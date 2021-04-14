@@ -100,8 +100,8 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacDir error",
 			executor: Executor{
-				dirPath:     "./testdata/testdir",
-				iacProvider: MockIacProvider{err: errMockLoadIacDir},
+				dirPath:      "./testdata/testdir",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
 			},
 			wantErr: errMockLoadIacDir,
 		},
@@ -109,7 +109,7 @@ func TestExecute(t *testing.T) {
 			name: "test LoadIacDir no error",
 			executor: Executor{
 				dirPath:       "./testdata/testdir",
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
@@ -117,8 +117,8 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacFile error",
 			executor: Executor{
-				filePath:    "./testdata/testfile",
-				iacProvider: MockIacProvider{err: errMockLoadIacFile},
+				filePath:     "./testdata/testfile",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacFile}},
 			},
 			wantErr: errMockLoadIacFile,
 		},
@@ -126,7 +126,7 @@ func TestExecute(t *testing.T) {
 			name: "test LoadIacFile no error",
 			executor: Executor{
 				filePath:      "./testdata/testfile",
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
 			wantErr: nil,
@@ -134,7 +134,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test SendNofitications no error",
 			executor: Executor{
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
@@ -143,7 +143,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test SendNofitications mock error",
 			executor: Executor{
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
@@ -152,7 +152,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test policy enginer no error",
 			executor: Executor{
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
@@ -161,7 +161,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test policy engine error",
 			executor: Executor{
-				iacProvider:   MockIacProvider{err: nil},
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: errMockPolicyEngine}},
 			},
@@ -359,8 +359,8 @@ func TestInit(t *testing.T) {
 				if !reflect.DeepEqual(gotErr, tt.wantErr) {
 					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 				}
-				if !reflect.DeepEqual(tt.executor.iacProvider, tt.wantIacProvider) {
-					t.Errorf("got: '%v', want: '%v'", tt.executor.iacProvider, tt.wantIacProvider)
+				if !reflect.DeepEqual(tt.executor.iacProviders, tt.wantIacProvider) {
+					t.Errorf("got: '%v', want: '%v'", tt.executor.iacProviders, tt.wantIacProvider)
 				}
 				if len(tt.wantNotifiers) > 0 {
 					for i, notifier := range tt.executor.notifiers {
