@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/accurics/terrascan/pkg/config"
+	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
@@ -64,6 +65,25 @@ type webhookDisplayedShowLog struct {
 }
 
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
+
+	var (
+		params = mux.Vars(r)
+		apiKey = params["apiKey"]
+	)
+
+	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
+	validatingWebhook := admissionWebhook.NewValidatingWebhook(g.configFile, []byte(""))
+	if err := validatingWebhook.Authorize(apiKey); err != nil {
+		switch err {
+		case admissionWebhook.ErrAPIKeyMissing:
+			apiErrorResponse(w, err.Error(), http.StatusBadRequest)
+		case admissionWebhook.ErrUnauthorized:
+			apiErrorResponse(w, err.Error(), http.StatusUnauthorized)
+		default:
+			apiErrorResponse(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
 
 	// Return an HTML page including all the logs history
 	logger := dblogs.NewWebhookScanLogger()
