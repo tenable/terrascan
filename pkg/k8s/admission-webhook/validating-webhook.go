@@ -212,12 +212,12 @@ func (w ValidatingWebhook) getDenyViolations(output runtime.Output) ([]results.V
 		return nil, err
 	}
 
-	denyViolations := w.getDeniedViolations(*output.Violations.ViolationStore, configReader.GetK8sDenyRules())
+	denyViolations := w.getDeniedViolations(*output.Violations.ViolationStore, configReader.GetK8sAdmissionControl())
 
 	return denyViolations, nil
 }
 
-func (w ValidatingWebhook) getDeniedViolations(violations results.ViolationStore, denyRules config.K8sDenyRules) []results.Violation {
+func (w ValidatingWebhook) getDeniedViolations(violations results.ViolationStore, denyRules config.K8sAdmissionControl) []results.Violation {
 	// Check whether one of the violations matches the deny violations configuration
 
 	var denyViolations []results.Violation
@@ -310,7 +310,7 @@ type webhookDenyRuleMatcher struct {
 }
 
 // This class should check if one of the violations found is relevant for the specified K8s deny rules
-func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules config.K8sDenyRules) bool {
+func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules config.K8sAdmissionControl) bool {
 
 	if denyRules.DeniedSeverity == "" && len(denyRules.Categories) == 0 {
 		return false
