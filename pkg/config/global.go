@@ -111,6 +111,8 @@ func LoadGlobalConfig(configFile string) error {
 		global.Category.List = configReader.getCategory().List
 	}
 
+	global.K8sAdmissionControl = configReader.GetK8sAdmissionControl()
+
 	zap.S().Debugf("global config loaded")
 
 	return nil
@@ -159,4 +161,9 @@ func GetCategoryList() []string {
 // GetNotifications returns the configured notifier map
 func GetNotifications() map[string]Notifier {
 	return global.Notifications
+}
+
+// GetK8sAdmissionControl returns kubernetes admission control configuration
+func GetK8sAdmissionControl() K8sAdmissionControl {
+	return global.K8sAdmissionControl
 }

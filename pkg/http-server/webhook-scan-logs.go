@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
@@ -214,6 +215,10 @@ func (g *APIHandler) getLogReasoning(log dblogs.WebhookScanLog) string {
 
 func (g *APIHandler) getLogRequest(log dblogs.WebhookScanLog) string {
 	var review webhookDisplayedReview
+
+	if !config.GetK8sAdmissionControl().SaveRequests {
+		return "{}"
+	}
 
 	err := json.Unmarshal([]byte(log.Request), &review)
 

@@ -67,4 +67,5 @@ type Rules struct {
 type K8sAdmissionControl struct {
 	DeniedSeverity string   `toml:"denied-severity,omitempty"`
 	Categories     []string `toml:"denied-categories,omitempty"`
+	SaveRequests   bool     `toml:"save-requests,omitempty"`
 }

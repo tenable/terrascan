@@ -241,6 +241,7 @@ func (w ValidatingWebhook) logWebhook(output runtime.Output,
 	var (
 		currentTime             = time.Now()
 		deniedViolationsEncoded string
+		requestBody             string
 	)
 
 	// encode denied violations into a string
@@ -253,10 +254,14 @@ func (w ValidatingWebhook) logWebhook(output runtime.Output,
 
 	encodedViolationsSummary, _ := json.Marshal(output.Violations.ViolationStore)
 
+	if config.GetK8sAdmissionControl().SaveRequests {
+		requestBody = string(w.requestBody)
+	}
+
 	// insert the webhook log into db
 	err := w.dblogger.Log(dblogs.WebhookScanLog{
 		UID:                uid,
-		Request:            string(w.requestBody),
+		Request:            requestBody,
 		Allowed:            allowed,
 		DeniableViolations: deniedViolationsEncoded,
 		ViolationsSummary:  string(encodedViolationsSummary),
