@@ -1,5 +1,5 @@
 [severity]
 level = "medium"
 
-[k8s-deny-rules]
+[k8s-admission-control]
   denied-severity = "high"
