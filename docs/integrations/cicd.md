@@ -60,7 +60,7 @@ terrascan:
 Terrascan can be configured as an Argo CD job during the application sync process using [resource hooks](https://argoproj.github.io/argo-cd/user-guide/resource_hooks). The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations. 
 
 
-![picture](img/terrascan-argo-cd-pipeline.png)
+![picture](../img/terrascan-argo-cd-pipeline.png)
 
 Adding the Terrascan job consists of two steps:
 
@@ -118,7 +118,7 @@ For non-public repositories, the private key needs to be added as a kubernetes s
 
 Configuring the job to delete only after the specified time see `ttlSecondsAfterFinished` will allow users to check for violations in the User Interface, the alternative is through **notifications**.
 
-![picture](img/terrascan-argo-cd-resource-hook-logs.png)
+![picture](../img/terrascan-argo-cd-resource-hook-logs.png)
 
 ### Step 2: Create Terrascan container
 
