@@ -97,7 +97,7 @@ func buildDiscoServices(b []byte) (*disco.Disco, error) {
 
 	hostCredentialMap := convertCredentialMapToHostMap(result.Credentials)
 	if hostCredentialMap == nil {
-		return nil, fmt.Errorf("Error converting credential map to host map")
+		return nil, fmt.Errorf("error converting credential map to host map")
 	}
 	credSource := auth.StaticCredentialsSource(hostCredentialMap)
 	services := disco.NewWithCredentialsSource(credSource)
