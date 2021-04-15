@@ -544,7 +544,7 @@ func TestGetVersionToDownload(t *testing.T) {
 }
 
 func TestAuthenticatedRegistryClient(t *testing.T) {
-	testDirPath := "testdata/run-test"
+	testDirPath := filepath.Join("testdata", "run-test")
 
 	tests := []struct {
 		name     string
@@ -557,6 +557,10 @@ func TestAuthenticatedRegistryClient(t *testing.T) {
 		{
 			name:     "invalid terraformrc file",
 			filename: "badterraformrc",
+		},
+		{
+			name:     "invalid terraformrc file",
+			filename: "nonexistantfile",
 		},
 	}
 	for _, tt := range tests {
@@ -606,4 +610,33 @@ func TestBuildDiscoServices(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestConvertCredentialMapToHostMap(t *testing.T) {
+	tests := []struct {
+		name          string
+		credentialMap map[string]map[string]interface{}
+		wantNilResult bool
+	}{
+		{
+			name:          "nil credentialMap",
+			credentialMap: nil,
+			wantNilResult: true,
+		},
+		{
+			name:          "empty credentialMap",
+			credentialMap: make(map[string]map[string]interface{}),
+			wantNilResult: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hostMap := convertCredentialMapToHostMap(tt.credentialMap)
+			if (hostMap == nil) != tt.wantNilResult {
+				t.Errorf("convertCredentialMapToHostMap() error: got nil result %v, wantNilResult %v", hostMap == nil, tt.wantNilResult)
+				return
+			}
+		})
+	}
+
 }

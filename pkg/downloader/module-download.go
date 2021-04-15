@@ -56,7 +56,7 @@ func newTerraformRegistryClient() terraformRegistryClient {
 		return registry.NewClient(nil, nil)
 	}
 	// TODO: Need to add support for Windows %APPDIR%/terraform.rc
-	terraformrc := filepath.Join(homedir, "/.terraformrc")
+	terraformrc := filepath.Join(homedir, ".terraformrc")
 
 	if _, err := os.Stat(terraformrc); os.IsNotExist(err) {
 		return registry.NewClient(nil, nil)
@@ -97,7 +97,7 @@ func buildDiscoServices(b []byte) (*disco.Disco, error) {
 
 	hostCredentialMap := convertCredentialMapToHostMap(result.Credentials)
 	if hostCredentialMap == nil {
-		return nil, err
+		return nil, fmt.Errorf("Error converting credential map to host map")
 	}
 	credSource := auth.StaticCredentialsSource(hostCredentialMap)
 	services := disco.NewWithCredentialsSource(credSource)
