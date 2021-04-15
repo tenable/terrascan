@@ -542,3 +542,101 @@ func TestGetVersionToDownload(t *testing.T) {
 		})
 	}
 }
+
+func TestAuthenticatedRegistryClient(t *testing.T) {
+	testDirPath := filepath.Join("testdata", "run-test")
+
+	tests := []struct {
+		name     string
+		filename string
+	}{
+		{
+			name:     "valid terraformrc file",
+			filename: "terraformrc",
+		},
+		{
+			name:     "invalid terraformrc file",
+			filename: "badterraformrc",
+		},
+		{
+			name:     "invalid terraformrc file",
+			filename: "nonexistantfile",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testRCFilePath := filepath.Join(testDirPath, tt.filename)
+			got := NewAuthenticatedRegistryClient(testRCFilePath)
+			if got == nil {
+				t.Errorf("NewAuthenticatedRegistryClient(%s) = nil, expected terraformRegistryClient", testRCFilePath)
+			}
+		})
+	}
+}
+
+func TestBuildDiscoServices(t *testing.T) {
+	testDirPath := "testdata"
+
+	tests := []struct {
+		name     string
+		filename string
+		wantErr  bool
+	}{
+		{
+			name:     "valid terraformrc file to parse",
+			filename: "terraformrc",
+			wantErr:  false,
+		},
+		{
+			name:     "invalid terraformrc file to parse",
+			filename: "badterraformrc",
+			wantErr:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testRCFilePath := filepath.Join(testDirPath, tt.filename)
+			b, err := ioutil.ReadFile(testRCFilePath)
+			if err != nil {
+				t.Errorf("Error reading %s: %s", testRCFilePath, err)
+				return
+			}
+
+			_, err = buildDiscoServices(b)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("buildDiscoServices() error: %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
+	}
+}
+
+func TestConvertCredentialMapToHostMap(t *testing.T) {
+	tests := []struct {
+		name          string
+		credentialMap map[string]map[string]interface{}
+		wantNilResult bool
+	}{
+		{
+			name:          "nil credentialMap",
+			credentialMap: nil,
+			wantNilResult: true,
+		},
+		{
+			name:          "empty credentialMap",
+			credentialMap: make(map[string]map[string]interface{}),
+			wantNilResult: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hostMap := convertCredentialMapToHostMap(tt.credentialMap)
+			if (hostMap == nil) != tt.wantNilResult {
+				t.Errorf("convertCredentialMapToHostMap() error: got nil result %v, wantNilResult %v", hostMap == nil, tt.wantNilResult)
+				return
+			}
+		})
+	}
+
+}

@@ -18,10 +18,17 @@ package downloader
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-version"
+	"github.com/hashicorp/hcl"
+	svchost "github.com/hashicorp/terraform-svchost"
+	"github.com/hashicorp/terraform-svchost/auth"
+	"github.com/hashicorp/terraform-svchost/disco"
+	"github.com/hashicorp/terraform/command/cliconfig"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry"
 	"github.com/hashicorp/terraform/registry/regsrc"
@@ -43,7 +50,71 @@ func newRemoteModuleInstaller() *remoteModuleInstaller {
 func newTerraformRegistryClient() terraformRegistryClient {
 	// get terraform registry client.
 	// terraform registry client provides methods for querying the terraform module registry
-	return registry.NewClient(nil, nil)
+	// if terraformrc file is found, attempt to load credentials from it
+	homedir := utils.GetHomeDir()
+	if len(homedir) == 0 {
+		return registry.NewClient(nil, nil)
+	}
+	// TODO: Need to add support for Windows %APPDIR%/terraform.rc
+	terraformrc := filepath.Join(homedir, ".terraformrc")
+
+	if _, err := os.Stat(terraformrc); os.IsNotExist(err) {
+		return registry.NewClient(nil, nil)
+	}
+	zap.S().Debugf("Found terraform rc file at %s, attempting to parse", terraformrc)
+
+	return NewAuthenticatedRegistryClient(terraformrc)
+}
+
+// NewAuthenticatedRegistryClient parses the contents of a terraformrc file and builds an authenticated
+// registry client using the credentials found in the rcfile
+func NewAuthenticatedRegistryClient(rcFile string) terraformRegistryClient {
+	b, err := ioutil.ReadFile(rcFile)
+	if err != nil {
+		zap.S().Infof("Error reading %s: %s", rcFile, err)
+		return registry.NewClient(nil, nil)
+	}
+
+	services, err := buildDiscoServices(b)
+	if err != nil {
+		zap.S().Infof("Error building terraform credentials %s: %s", rcFile, err)
+		return registry.NewClient(nil, nil)
+	}
+	return registry.NewClient(services, nil)
+}
+
+// buildDiscoServices builds terraform services struct for later authentication to a terraform registry
+func buildDiscoServices(b []byte) (*disco.Disco, error) {
+	obj, err := hcl.Parse(string(b))
+	if err != nil {
+		return nil, err
+	}
+
+	result := &cliconfig.Config{}
+	if err := hcl.DecodeObject(&result, obj); err != nil {
+		return nil, err
+	}
+
+	hostCredentialMap := convertCredentialMapToHostMap(result.Credentials)
+	if hostCredentialMap == nil {
+		return nil, fmt.Errorf("error converting credential map to host map")
+	}
+	credSource := auth.StaticCredentialsSource(hostCredentialMap)
+	services := disco.NewWithCredentialsSource(credSource)
+	return services, nil
+}
+
+// convertCredentialMapToHostMap converts map key to pass to terraform auth builder
+func convertCredentialMapToHostMap(credentialMap map[string]map[string]interface{}) map[svchost.Hostname]map[string]interface{} {
+	hostMap := make(map[svchost.Hostname]map[string]interface{})
+	if credentialMap == nil {
+		return nil
+	}
+
+	for k := range credentialMap {
+		hostMap[svchost.Hostname(k)] = credentialMap[k]
+	}
+	return hostMap
 }
 
 // DownloadModule retrieves the package referenced in the given address
@@ -110,7 +181,7 @@ func (r *remoteModuleInstaller) DownloadRemoteModule(requiredVersion hclConfigs.
 		if registry.IsModuleNotFound(err) {
 			zap.S().Errorf("module: %s, not be found at registry: %s", module.String(), module.Host().Display())
 		} else {
-			zap.S().Errorf("error while fetching available modules for module: %s, at registry: %s", module.String(), module.Host().Display())
+			zap.S().Errorf("error while fetching available modules for module: %s, at registry: %s. Error: %s", module.String(), module.Host().Display(), err.Error())
 		}
 		return "", err
 	}

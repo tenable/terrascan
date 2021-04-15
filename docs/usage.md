@@ -139,6 +139,9 @@ $ terrascan scan -t aws -r git -u git@github.com:accurics/KaiMonkey.git//terrafo
 
 The URLs for the remote should follow similar naming as the source argument for modules in Terraform. More details [here](https://www.terraform.io/docs/modules/sources.html).
 
+#### Private terraform module repositories
+When scanning terraform code, terrascan will check for the presence of `~/.terraformrc`. If the file is found, and it contains credential information to authenticate to a private terraform module registry, terrascan will attempt to use the credentials when authenticating to the private repository. For more details on the format of this file, please see Terraform's [config file documentation](https://www.terraform.io/docs/cli/config/config-file.html).
+
 #### Helm
 
 Helm chart can be scanned by specifying "helm" on the -i flag as follows:
