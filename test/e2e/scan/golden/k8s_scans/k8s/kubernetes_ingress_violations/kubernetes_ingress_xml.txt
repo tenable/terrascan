@@ -1,4 +1,5 @@
 <results>
+  <directory_scan_errors></directory_scan_errors>
   <passed_rules></passed_rules>
   <violations>
     <violation rule_name="noHttps" description="TLS disabled can affect the confidentiality of the data in transit" rule_id="AC-K8-NS-IN-H-0020" severity="HIGH" category="Network Security" resource_name="ingress-demo-disallowed" resource_type="kubernetes_ingress" file="config.yaml" line="1"></violation>

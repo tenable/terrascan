@@ -201,6 +201,11 @@ func ContainsErrorSubString(session *gexec.Session, errSubString string) {
 	gomega.Expect(string(session.Wait().Err.Contents())).Should(gomega.ContainSubstring(errSubString))
 }
 
+// ContainsDirScanErrorSubString will assert if dir error substring is part of scan output
+func ContainsDirScanErrorSubString(session *gexec.Session, errSubString string) {
+	gomega.Expect(string(session.Wait().Out.Contents())).Should(gomega.ContainSubstring(errSubString))
+}
+
 // DoesNotContainsErrorSubString will assert that a string is not part of the error output
 func DoesNotContainsErrorSubString(session *gexec.Session, errSubString string) {
 	gomega.Expect(string(session.Wait().Err.Contents())).ShouldNot(gomega.ContainSubstring(errSubString))

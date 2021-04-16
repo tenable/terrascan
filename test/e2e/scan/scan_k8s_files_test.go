@@ -48,12 +48,13 @@ var _ = Describe("Scan is run for k8s files", func() {
 			Expect(err2).NotTo(HaveOccurred())
 		})
 
-		Context("iac type k8s is not default", func() {
+		Context("iac type k8s will be part of all iac", func() {
 			When("k8s files are scanned but iac type is not specified", func() {
-				It("should print error related to terraform files not being present", func() {
-					errString := "has no terraform config files"
+				It("should scan will all iac and display violations", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir}
-					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+					// exit code is 3 because iac files in directory has violations
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeThree)
 				})
 			})
 		})

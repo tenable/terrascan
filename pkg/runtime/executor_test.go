@@ -104,7 +104,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacDir error",
 			executor: Executor{
-				dirPath:      "./testdata/testdir",
+				dirPath:      testDir,
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
 			},
 			wantErr: multierror.Append(errMockLoadIacDir),
@@ -112,7 +112,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacDir no error",
 			executor: Executor{
-				dirPath:       "./testdata/testdir",
+				dirPath:       testDir,
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},
@@ -121,7 +121,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacFile error",
 			executor: Executor{
-				filePath:     "./testdata/testfile",
+				filePath:     filepath.Join(testDataDir, "testfile"),
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacFile}},
 			},
 			wantErr: multierror.Append(errMockLoadIacFile),
@@ -129,7 +129,7 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacFile no error",
 			executor: Executor{
-				filePath:      "./testdata/testfile",
+				filePath:      filepath.Join(testDataDir, "testfile"),
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
 			},

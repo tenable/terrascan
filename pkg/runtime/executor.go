@@ -18,6 +18,7 @@ package runtime
 
 import (
 	"reflect"
+	"sort"
 
 	"go.uber.org/zap"
 
@@ -100,9 +101,12 @@ func (e *Executor) Init() error {
 	// create new IacProviders
 	if e.iacType == "all" {
 		for _, ip := range iacProvider.SupportedIacProviders() {
+			// skip tfplan because it doesn't support directory scanning
 			if ip == "tfplan" {
 				continue
 			}
+
+			// initialize iac providers with default versions
 			defaultIacVersion := iacProvider.GetDefaultIacVersion(ip)
 			iacP, err := iacProvider.NewIacProvider(ip, defaultIacVersion)
 			if err != nil {
@@ -170,14 +174,10 @@ func (e *Executor) Execute() (results Output, err error) {
 			merr = multierror.Append(merr, err)
 		}
 
-		// deduplication
+		// deduplication of resources
 		if len(resourceConfig) > 0 {
 			for key, r := range rc {
-				for _, v := range r {
-					if !isConfigPresent(resourceConfig[key], v) {
-						resourceConfig[key] = append(resourceConfig[key], v)
-					}
-				}
+				updateResourceConfigs(key, r, resourceConfig)
 			}
 		} else {
 			for key := range rc {
@@ -186,13 +186,16 @@ func (e *Executor) Execute() (results Output, err error) {
 		}
 	}
 
-	if len(e.iacProviders) == 1 && !(e.iacType == "k8s" || e.iacType == "helm") {
+	// for the iac providers that don't implement sub folder scanning
+	// return the error (existing behavior)
+	if !implementsSubFolderScan(e.iacType) {
 		if err := merr.ErrorOrNil(); err != nil {
 			return results, err
 		}
 	}
 
 	results.ResourceConfig = resourceConfig
+
 	// evaluate policies
 	results.Violations = policy.EngineOutput{}
 	violations := results.Violations.AsViolationStore()
@@ -219,14 +222,25 @@ func (e *Executor) Execute() (results Output, err error) {
 		return results, err
 	}
 
-	if e.iacType == "all" {
-		if err := merr.ErrorOrNil(); err != nil {
-			results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
-		}
+	// we want to display the dir scan errors with all the iac providers
+	// that support sub folder scanning, which includes 'all' iac scan
+	if err := merr.ErrorOrNil(); err != nil {
+		// sort multi errors
+		sort.Sort(merr)
+		results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
 	}
 
 	// successful
 	return results, nil
+}
+
+// updateResourceConfigs adds a resource of given type if it is not present in allResources
+func updateResourceConfigs(resourceType string, resources []output.ResourceConfig, allResources output.AllResourceConfigs) {
+	for _, res := range resources {
+		if !isConfigPresent(allResources[resourceType], res) {
+			allResources[resourceType] = append(allResources[resourceType], res)
+		}
+	}
 }
 
 // isConfigPresent checks whether a resource is already present in the list of configs or not
@@ -237,6 +251,20 @@ func isConfigPresent(resources []output.ResourceConfig, resourceConfig output.Re
 			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
 				return true
 			}
+		}
+	}
+	return false
+}
+
+// implementsSubFolderScan checks if given iac type supports sub folder scanning
+func implementsSubFolderScan(iacType string) bool {
+	// iac providers that support sub folder scanning
+	// this needs be updated when other iac providers implement
+	// sub folder scanning
+	iacWithSubFolderScan := []string{"all", "k8s", "helm"}
+	for _, v := range iacWithSubFolderScan {
+		if v == iacType {
+			return true
 		}
 	}
 	return false

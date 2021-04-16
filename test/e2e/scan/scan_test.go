@@ -78,12 +78,29 @@ var _ = Describe("Scan", func() {
 	})
 
 	Describe("scan command is run without any flags", func() {
-		Context("by default, terrascan will scan for terraform files in the working directory", func() {
+		Context("when no iac type is provided, terrascan scans with all iac providers", func() {
 			Context("no tf files are present in the working directory", func() {
-				It("should error out as no terraform files are present in working directory", func() {
-					scanArgs := []string{scanUtils.ScanCommand}
-					errString := "has no terraform config files"
-					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
+				When("log level is not set to debug", func() {
+					It("scan the directory and display results", func() {
+						scanArgs := []string{scanUtils.ScanCommand}
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
+					})
+				})
+				Context("iac loading errors would be displayed in the output, when log level is debug", func() {
+					When("log level is set to debug", func() {
+						It("scan the directory and display results", func() {
+							scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-l", "debug"}
+							// these errors would come from terraform, helm, and kustomize iac providers
+							errString1 := "has no terraform config files"
+							errString2 := "kustomization.y(a)ml file not found in the directory"
+							errString3 := "no helm charts found in directory"
+							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+							helper.ContainsDirScanErrorSubString(session, errString1)
+							helper.ContainsDirScanErrorSubString(session, errString2)
+							helper.ContainsDirScanErrorSubString(session, errString3)
+						})
+					})
 				})
 			})
 
@@ -175,10 +192,11 @@ var _ = Describe("Scan", func() {
 		})
 
 		When("--iac-version flag is supplied invalid version", func() {
-			Context("default iac type is terraform", func() {
+			Context("default iac type is all and --iac-version would be ignored", func() {
 				It("should error out and exit with status code 1", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "--iac-version", "test"}
-					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
 				})
 			})
 		})
@@ -253,12 +271,13 @@ var _ = Describe("Scan", func() {
 						Expect(err3).NotTo(HaveOccurred())
 					})
 
-					Context("default iac type is terraform", func() {
-						It("should scan with the policies and exit with status code 1", func() {
+					Context("default iac type is all", func() {
+						It("should scan with the policies and exit with status code 0", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2}
 							session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
-							// exits with status code 1, because the work dir has k8s iac file and default iac type is terraform
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
+							// exits with status code 0, because all iac scan should display results
+							// and the directory doesn't have iac files for violations
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 						})
 					})
 

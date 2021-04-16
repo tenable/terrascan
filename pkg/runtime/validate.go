@@ -94,6 +94,7 @@ func (e *Executor) ValidateInputs() error {
 	}
 
 	// set default iac type/version if not already set
+	// when iac type is not provided and -d option is used, all iac providers would be used for scanning
 	if e.iacType == "" {
 		if e.dirPath != "" {
 			e.iacType = "all"
@@ -104,6 +105,7 @@ func (e *Executor) ValidateInputs() error {
 	}
 
 	if e.iacVersion == "" {
+		// ignore a version provided, when iacType resolves to 'all'
 		if e.iacType != "all" {
 			e.iacVersion = IacProvider.GetDefaultIacVersion(e.iacType)
 		}
@@ -125,6 +127,7 @@ func (e *Executor) ValidateInputs() error {
 	zap.S().Debugf("using policy path %v", e.policyPath)
 
 	// check if IaC type is supported
+	// check is not required when it is 'all', iac providers with default version would be created later
 	if e.iacType != "all" {
 		if !IacProvider.IsIacSupported(e.iacType, e.iacVersion) {
 			zap.S().Errorf("iac type '%s', version '%s' not supported", e.iacType, e.iacVersion)
