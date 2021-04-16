@@ -17,6 +17,7 @@
 package results
 
 import (
+	"errors"
 	"time"
 )
 
@@ -48,6 +49,7 @@ type PassedRule struct {
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
+	DirScanErrors     []DirScanErr  `json:"errors,omitempty" yaml:"errors,omitempty" xml:"errors>errMsg,omitempty"`
 	PassedRules       []*PassedRule `json:"passed_rules,omitempty" yaml:"passed_rules,omitempty" xml:"passed_rules>passed_rule,omitempty"`
 	Violations        []*Violation  `json:"violations" yaml:"violations" xml:"violations>violation"`
 	SkippedViolations []*Violation  `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
@@ -67,6 +69,17 @@ type ScanSummary struct {
 	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
 	// field TotalTime is added for junit-xml output
 	TotalTime int64 `json:"-" yaml:"-" xml:"-"`
+}
+
+// DirScanErr holds details for an error that occurred while iac providers scans a directory
+type DirScanErr struct {
+	IacType    string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
+	Directory  string `json:"directory" yaml:"directory" xml:"directory"`
+	ErrMessage string `json:"errMsg" yaml:"errMsg" xml:"errMsg"`
+}
+
+func (l DirScanErr) Error() string {
+	return l.ErrMessage
 }
 
 // Add adds two ViolationStores
@@ -92,4 +105,17 @@ func (vs *ViolationStore) AddSummary(iacType, iacResourcePath string) {
 	vs.Summary.IacType = iacType
 	vs.Summary.ResourcePath = iacResourcePath
 	vs.Summary.Timestamp = time.Now().UTC().String()
+}
+
+// AddLoadDirErrors will update the summary with directory loading errors
+func (vs *ViolationStore) AddLoadDirErrors(errs []error) {
+
+	if len(errs) > 0 {
+		for _, err := range errs {
+			loadDirError := &DirScanErr{}
+			if errors.As(err, loadDirError) {
+				vs.DirScanErrors = append(vs.DirScanErrors, *loadDirError)
+			}
+		}
+	}
 }

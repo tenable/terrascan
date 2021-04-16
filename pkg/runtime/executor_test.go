@@ -23,9 +23,13 @@ import (
 	"testing"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
+	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
+	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
+	"github.com/hashicorp/go-multierror"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -103,7 +107,7 @@ func TestExecute(t *testing.T) {
 				dirPath:      "./testdata/testdir",
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
 			},
-			wantErr: errMockLoadIacDir,
+			wantErr: multierror.Append(errMockLoadIacDir),
 		},
 		{
 			name: "test LoadIacDir no error",
@@ -120,7 +124,7 @@ func TestExecute(t *testing.T) {
 				filePath:     "./testdata/testfile",
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacFile}},
 			},
-			wantErr: errMockLoadIacFile,
+			wantErr: multierror.Append(errMockLoadIacFile),
 		},
 		{
 			name: "test LoadIacFile no error",
@@ -185,7 +189,7 @@ func TestInit(t *testing.T) {
 		executor        Executor
 		wantErr         error
 		configFile      string
-		wantIacProvider iacProvider.IacProvider
+		wantIacProvider []iacProvider.IacProvider
 		wantNotifiers   []notifications.Notifier
 	}{
 		{
@@ -199,7 +203,29 @@ func TestInit(t *testing.T) {
 				policyPath: []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
+			wantNotifiers:   []notifications.Notifier{},
+		},
+		{
+			name: "empty iac type with -d flag",
+			executor: Executor{
+				dirPath:    testDataDir,
+				cloudType:  []string{"aws"},
+				policyPath: []string{testPoliciesDir},
+			},
+			wantErr:         nil,
+			wantIacProvider: []iacProvider.IacProvider{&helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv14.TfV14{}},
+			wantNotifiers:   []notifications.Notifier{},
+		},
+		{
+			name: "empty iac type with -f flag",
+			executor: Executor{
+				filePath:   filepath.Join(testDataDir, "testfile"),
+				cloudType:  []string{"aws"},
+				policyPath: []string{testPoliciesDir},
+			},
+			wantErr:         nil,
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -214,7 +240,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -228,7 +254,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -242,7 +268,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 		},
 		{
 			name: "invalid policy path",
@@ -256,7 +282,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -271,7 +297,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-category.toml"),
 			wantErr:         fmt.Errorf("(3, 5): no value can start with c"),
-			wantIacProvider: &tfv14.TfV14{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 		},
 		{
 			name: "valid filePath",
@@ -284,7 +310,7 @@ func TestInit(t *testing.T) {
 				policyPath: []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -299,7 +325,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -313,7 +339,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 		{
@@ -327,7 +353,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 		},
 		{
 			name: "invalid policy path",
@@ -341,7 +367,7 @@ func TestInit(t *testing.T) {
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
-			wantIacProvider: &tfv12.TfV12{},
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 	}

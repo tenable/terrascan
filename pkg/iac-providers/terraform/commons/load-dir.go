@@ -23,6 +23,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
@@ -60,7 +61,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	if !parser.IsConfigDir(absRootDir) {
 		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", absRootDir)
 		zap.S().Debug(errMessage)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMessage})
 	}
 
 	// load root config directory
@@ -68,7 +69,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	if diags.HasErrors() {
 		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", absRootDir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMessage})
 	}
 
 	// create a new downloader to install remote modules
@@ -117,7 +118,7 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 	))
 	if diags.HasErrors() {
 		zap.S().Errorf("failed to build unified config. errors:\n%+v\n", diags)
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, ErrBuildTFConfigDir)
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: ErrBuildTFConfigDir.Error()})
 	}
 
 	/*
@@ -154,7 +155,8 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 			// create output.ResourceConfig from hclConfigs.Resource
 			resourceConfig, err := CreateResourceConfig(managedResource)
 			if err != nil {
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to create ResourceConfig"))
+				errMsg := fmt.Sprintf("failed to create ResourceConfig. err: %v", err)
+				return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMsg})
 			}
 
 			// resolve references
@@ -163,7 +165,8 @@ func LoadIacDir(absRootDir string) (allResourcesConfig output.AllResourceConfigs
 			// source file path
 			resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 			if err != nil {
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to get resource: %s", err))
+				errMsg := fmt.Sprintf("failed to get resource: %s", err)
+				return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: absRootDir, ErrMessage: errMsg})
 			}
 
 			// append to normalized output

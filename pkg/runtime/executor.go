@@ -17,6 +17,8 @@
 package runtime
 
 import (
+	"reflect"
+
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
@@ -155,7 +157,7 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	var merr *multierror.Error
 	resourceConfig := make(output.AllResourceConfigs)
-	// create results output from Iac
+	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		var err error
 		var rc output.AllResourceConfigs
@@ -168,8 +170,19 @@ func (e *Executor) Execute() (results Output, err error) {
 			merr = multierror.Append(merr, err)
 		}
 
-		for key := range rc {
-			resourceConfig[key] = append(resourceConfig[key], rc[key]...)
+		// deduplication
+		if len(resourceConfig) > 0 {
+			for key, r := range rc {
+				for _, v := range r {
+					if !isConfigPresent(resourceConfig[key], v) {
+						resourceConfig[key] = append(resourceConfig[key], v)
+					}
+				}
+			}
+		} else {
+			for key := range rc {
+				resourceConfig[key] = append(resourceConfig[key], rc[key]...)
+			}
 		}
 	}
 
@@ -206,6 +219,25 @@ func (e *Executor) Execute() (results Output, err error) {
 		return results, err
 	}
 
+	if e.iacType == "all" {
+		if err := merr.ErrorOrNil(); err != nil {
+			results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
+		}
+	}
+
 	// successful
 	return results, nil
+}
+
+// isConfigPresent checks whether a resource is already present in the list of configs or not
+// the equality of a resource is based on name, source and config of the resource
+func isConfigPresent(resources []output.ResourceConfig, resourceConfig output.ResourceConfig) bool {
+	for _, resource := range resources {
+		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
+			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
+				return true
+			}
+		}
+	}
+	return false
 }

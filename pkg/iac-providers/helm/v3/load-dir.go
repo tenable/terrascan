@@ -25,6 +25,7 @@ import (
 
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
@@ -50,12 +51,13 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, h.getHelmChartFilenames())
 	if err != nil {
 		zap.S().Debug("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, err)
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	if len(fileMap) == 0 {
+		errMsg := fmt.Sprintf("no helm charts found in directory %s", absRootDir)
 		zap.S().Debug(zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("no helm charts found in directory %s", absRootDir))
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
 	// fileDir now contains the chart path
@@ -70,8 +72,9 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var chartMap helmChartData
 		iacDocuments, chartMap, err = h.loadChart(chartPath)
 		if err != nil && err != errSkipTestDir {
+			errMsg := fmt.Sprintf("error occurred while loading chart. err: %v", err)
 			logger.Debug("error occurred while loading chart", zap.Error(err))
-			errIacLoadDirs = multierror.Append(errIacLoadDirs, err)
+			errIacLoadDirs = multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
 			continue
 		}
 
@@ -81,8 +84,9 @@ func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error
 		var config *output.ResourceConfig
 		config, err = h.createHelmChartResource(chartPath, chartMap)
 		if err != nil {
+			errMsg := fmt.Sprintf("failed to create helm chart resource. err: %v", err)
 			logger.Error("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
-			errIacLoadDirs = multierror.Append(errIacLoadDirs, err)
+			errIacLoadDirs = multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
 			continue
 		}
 

@@ -225,6 +225,10 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
+	if LogLevel != "debug" {
+		results.Violations.ViolationStore.DirScanErrors = nil
+	}
+
 	outputWriter := NewOutputWriter(s.UseColors)
 
 	if s.configOnly {

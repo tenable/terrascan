@@ -27,6 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 )
 
 func TestLoadIacDir(t *testing.T) {
@@ -51,37 +52,38 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid dirPath",
 			dirPath: testDirPath1,
 			tfv14:   TfV14{},
-			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath1),
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
 		},
 		{
 			name:    "empty config",
 			dirPath: testDirPath2,
 			tfv14:   TfV14{},
-			wantErr: fmt.Errorf(invalidDirErrStringTemplate, testDirPath2),
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
 		},
 		{
 			name:    "incorrect module structure",
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
-			wantErr: fmt.Errorf("failed to build terraform allResourcesConfig"),
+			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
 		},
 		{
 			name:    "load invalid config dir",
 			dirPath: testDataDir,
 			tfv14:   TfV14{},
-			wantErr: fmt.Errorf(testErrorMessage),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)),
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			if gotErr.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
 	}
 
+	var nilMultiErr *multierror.Error = nil
 	tfJSONDir := filepath.Join(testDataDir, "tfjson")
 
 	table2 := []struct {
@@ -96,28 +98,28 @@ func TestLoadIacDir(t *testing.T) {
 			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
 			tfv14:       TfV14{},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 		{
 			name:        "module directory",
 			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
 			tfv14:       TfV14{},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 		{
 			name:        "nested module directory",
 			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
 			tfv14:       TfV14{},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 		{
 			name:        "complex variables",
 			tfConfigDir: filepath.Join(testDataDir, "complex-variables"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "complex-variables.json"),
 			tfv14:       TfV14{},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 		{
 			name:        "recursive loop while resolving variables",
