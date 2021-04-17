@@ -124,7 +124,8 @@ func TestExecute(t *testing.T) {
 				filePath:     filepath.Join(testDataDir, "testfile"),
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacFile}},
 			},
-			wantErr: multierror.Append(errMockLoadIacFile),
+			// iac file load doesn't return go-multierror
+			wantErr: errMockLoadIacFile,
 		},
 		{
 			name: "test LoadIacFile no error",

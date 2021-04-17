@@ -161,28 +161,43 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	var merr *multierror.Error
 	resourceConfig := make(output.AllResourceConfigs)
-	// create results output from Iac provider[s]
-	for _, iacP := range e.iacProviders {
-		var err error
-		var rc output.AllResourceConfigs
-		if e.filePath != "" {
-			rc, err = iacP.LoadIacFile(e.filePath)
-		} else {
-			rc, err = iacP.LoadIacDir(e.dirPath)
-		}
-		if err != nil {
-			merr = multierror.Append(merr, err)
+
+	// when dir path has value, only then it will 'all iac' scan
+	// when file path has value, we will go with the only iac provider in the list
+	if e.dirPath != "" {
+
+		// channel for directory scan response
+		scanRespChan := make(chan dirScanResp)
+
+		// create results output from Iac provider[s]
+		for _, iacP := range e.iacProviders {
+			go func(ip iacProvider.IacProvider) {
+				rc, err := ip.LoadIacDir(e.dirPath)
+				scanRespChan <- dirScanResp{err, rc}
+			}(iacP)
 		}
 
-		// deduplication of resources
-		if len(resourceConfig) > 0 {
-			for key, r := range rc {
-				updateResourceConfigs(key, r, resourceConfig)
+		for i := 0; i < len(e.iacProviders); i++ {
+			sr := <-scanRespChan
+			merr = multierror.Append(merr, sr.err)
+			// deduplication of resources
+			if len(resourceConfig) > 0 {
+				for key, r := range sr.rc {
+					updateResourceConfigs(key, r, resourceConfig)
+				}
+			} else {
+				for key := range sr.rc {
+					resourceConfig[key] = append(resourceConfig[key], sr.rc[key]...)
+				}
 			}
-		} else {
-			for key := range rc {
-				resourceConfig[key] = append(resourceConfig[key], rc[key]...)
-			}
+		}
+
+	} else {
+		// create results output from Iac provider
+		// iac providers will contain one element
+		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath)
+		if err != nil {
+			return results, err
 		}
 	}
 
@@ -199,12 +214,23 @@ func (e *Executor) Execute() (results Output, err error) {
 	// evaluate policies
 	results.Violations = policy.EngineOutput{}
 	violations := results.Violations.AsViolationStore()
+
+	// channel for engine evaluation result
+	evalResultChan := make(chan engineEvalResult)
+
 	for _, engine := range e.policyEngines {
-		output, err := engine.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
-		if err != nil {
-			return results, err
+		go func(eng policy.Engine) {
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+			evalResultChan <- engineEvalResult{err, output}
+		}(engine)
+	}
+
+	for i := 0; i < len(e.policyEngines); i++ {
+		evalR := <-evalResultChan
+		if evalR.err != nil {
+			return results, evalR.err
 		}
-		violations = violations.Add(output.AsViolationStore())
+		violations = violations.Add(evalR.output.AsViolationStore())
 	}
 
 	results.Violations = policy.EngineOutputFromViolationStore(&violations)
