@@ -90,7 +90,7 @@ var _ = Describe("Scan", func() {
 				Context("iac loading errors would be displayed in the output, when log level is debug", func() {
 					When("log level is set to debug", func() {
 						It("scan the directory and display results", func() {
-							scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-l", "debug"}
+							scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-l", "debug", "-p", policyRootRelPath}
 							// these errors would come from terraform, helm, and kustomize iac providers
 							errString1 := "has no terraform config files"
 							errString2 := "kustomization.y(a)ml file not found in the directory"
