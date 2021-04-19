@@ -33,7 +33,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 		ruleSeverity   string
 		ruleCategory   string
 		ruleName       string
-		k8sDenyRules   config.K8sDenyRules
+		k8sDenyRules   config.K8sAdmissionControl
 		expectedResult bool
 	}{
 		{
@@ -48,7 +48,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{DeniedSeverity: testMediumSeverity},
+			k8sDenyRules:   config.K8sAdmissionControl{DeniedSeverity: testMediumSeverity},
 			expectedResult: true,
 		},
 
@@ -57,7 +57,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{DeniedSeverity: "LOW"},
+			k8sDenyRules:   config.K8sAdmissionControl{DeniedSeverity: "LOW"},
 			expectedResult: true,
 		},
 		{
@@ -65,7 +65,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{DeniedSeverity: "High"},
+			k8sDenyRules:   config.K8sAdmissionControl{DeniedSeverity: "High"},
 			expectedResult: false,
 		},
 		{
@@ -73,7 +73,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{Categories: []string{"WRONG!"}},
+			k8sDenyRules:   config.K8sAdmissionControl{Categories: []string{"WRONG!"}},
 			expectedResult: false,
 		},
 
@@ -82,7 +82,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{Categories: []string{"WRONG!", testCategory}},
+			k8sDenyRules:   config.K8sAdmissionControl{Categories: []string{"WRONG!", testCategory}},
 			expectedResult: true,
 		},
 		{
@@ -90,7 +90,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 			ruleSeverity:   testMediumSeverity,
 			ruleCategory:   testCategory,
 			ruleName:       testRuleName,
-			k8sDenyRules:   config.K8sDenyRules{Categories: []string{"WRONG!", testCategory}, DeniedSeverity: "HIGH"},
+			k8sDenyRules:   config.K8sAdmissionControl{Categories: []string{"WRONG!", testCategory}, DeniedSeverity: "HIGH"},
 			expectedResult: true,
 		},
 	}

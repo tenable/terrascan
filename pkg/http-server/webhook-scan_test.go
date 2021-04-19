@@ -217,15 +217,15 @@ func TestUWebhooks(t *testing.T) {
 
 			if res.Code == http.StatusOK {
 				if tt.warnings && response.Response.Warnings == nil {
-					t.Errorf("Expected warnings but received None")
+					t.Errorf("expected warnings but received None")
 				}
 
 				if tt.allowed != response.Response.Allowed {
-					t.Errorf("Mismach in allowed. Got: %v, expected: %v", response.Response.Allowed, tt.allowed)
+					t.Errorf("mismatch in allowed. Got: %v, expected: %v", response.Response.Allowed, tt.allowed)
 				}
 
 				if tt.statusCode != 0 && tt.statusCode != response.Response.Result.Code {
-					t.Errorf("Mismach Statud code Got: %v, expected: %v", response.Response.Result.Code, tt.statusCode)
+					t.Errorf("mismatch Status code Got: %v, expected: %v", response.Response.Result.Code, tt.statusCode)
 				}
 
 				if tt.warnings || tt.statusMessage {
@@ -240,7 +240,7 @@ func TestUWebhooks(t *testing.T) {
 					expectedLogPath := fmt.Sprintf("For more details please visit %q", subLogPath)
 
 					if logPath != expectedLogPath {
-						t.Errorf("Mismach Log path. Got: %v, expected: %v", logPath, expectedLogPath)
+						t.Errorf("mismatch Log path. Got: %v, expected: %v", logPath, expectedLogPath)
 					}
 				}
 			}

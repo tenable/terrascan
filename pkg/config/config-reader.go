@@ -93,7 +93,7 @@ func (r TerrascanConfigReader) getSeverity() Severity {
 	return r.config.Severity
 }
 
-// GetK8sDenyRules will return the k8s deny rules specified in the terrascan config file
-func (r TerrascanConfigReader) GetK8sDenyRules() K8sDenyRules {
-	return r.config.K8sDenyRules
+// GetK8sAdmissionControl will return the k8s deny rules specified in the terrascan config file
+func (r TerrascanConfigReader) GetK8sAdmissionControl() K8sAdmissionControl {
+	return r.config.K8sAdmissionControl
 }

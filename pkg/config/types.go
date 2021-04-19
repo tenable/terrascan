@@ -21,12 +21,12 @@ var global *TerrascanConfig = &TerrascanConfig{}
 
 // TerrascanConfig struct defines global variables/configurations across terrascan
 type TerrascanConfig struct {
-	Policy        `toml:"policy,omitempty"`
-	Notifications map[string]Notifier `toml:"notifications,omitempty"`
-	Rules         `toml:"rules,omitempty"`
-	Category      `toml:"category,omitempty"`
-	Severity      `toml:"severity,omitempty"`
-	K8sDenyRules  `toml:"k8s-deny-rules,omitempty"`
+	Policy              `toml:"policy,omitempty"`
+	Notifications       map[string]Notifier `toml:"notifications,omitempty"`
+	Rules               `toml:"rules,omitempty"`
+	Category            `toml:"category,omitempty"`
+	Severity            `toml:"severity,omitempty"`
+	K8sAdmissionControl `toml:"k8s-admission-control,omitempty"`
 }
 
 // Category defines the categories of violations that you want to be reported
@@ -63,8 +63,9 @@ type Rules struct {
 	SkipRules []string `toml:"skip-rules,omitempty"`
 }
 
-// K8sDenyRules deny rules in the terrascan config file
-type K8sDenyRules struct {
+// K8sAdmissionControl deny rules in the terrascan config file
+type K8sAdmissionControl struct {
 	DeniedSeverity string   `toml:"denied-severity,omitempty"`
 	Categories     []string `toml:"denied-categories,omitempty"`
+	SaveRequests   bool     `toml:"save-requests,omitempty"`
 }
