@@ -35,7 +35,7 @@ Run Terrascan docker image in your server using the following command:
 `<DATA_PATH>` is a directory path in your server where both the certificate and the private key .pem files are stored.
 In addition, this directory is used to save the webhook logs. (An SQLite file)
 
-You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection. Policies below the [severity] level will be ignored. Policies below the [k8s-deny-rules] denied-severity will be logged and displayed by terrascan, but will not lead to a rejected admission response to the k8s API server.
+You can specify a config file that specifies which policies to use in the scan and which violations should lead to rejection. Policies below the [severity] level will be ignored. Policies below the [k8s-admission-control] denied-severity will be logged and displayed by terrascan, but will not lead to a rejected admission response to the k8s API server.
 
 A config file example: ```config.toml```
 
@@ -47,7 +47,7 @@ A config file example: ```config.toml```
           "accurics.kubernetes.IAM.107"
       ]
 
-  [k8s-deny-rules]
+  [k8s-admission-control]
     denied-categories = [
         "Network Ports Security"
     ]
@@ -61,7 +61,7 @@ You can specify the following configurations:
 *  **category** - the list of type of categories of the policies to be scanned
 
 
-* **k8s-deny-rules** - specify the rules that should cause a rejection of the admission request
+* **k8s-admission-control** - specify the rules that should cause a rejection of the admission request
   *  **denied-categories** - one or more policy categories that are not allowed in the detected violations
   *  **denied-severity** - the minimal level of severity that should cause a rejection
 
