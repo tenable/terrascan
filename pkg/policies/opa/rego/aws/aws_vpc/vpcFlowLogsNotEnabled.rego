@@ -41,9 +41,3 @@ vpc_mapping[vpc_id] = flow_vpc_id {
     flow_vpc_id := input.aws_vpc[j].config.id
     vpc_id := input.aws_flow_log[i].config.vpc_id
 }
-
-no_flow_log[vpc_id] {
-  x:=input.aws_flow_log[i].config.vpc_id
-    not vpc_mapping[x]
-    vpc_id = x
-}
