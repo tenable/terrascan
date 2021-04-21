@@ -119,6 +119,13 @@ func TestLoadIacDir(t *testing.T) {
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
+		{
+			name:        "recursive loop while resolving variables",
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop.json"),
+			tfv14:       TfV14{},
+			wantErr:     nil,
+		},
 	}
 
 	for _, tt := range table2 {
