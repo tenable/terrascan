@@ -176,7 +176,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.configFile, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity)
+		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity)
 	if err != nil {
 		return err
 	}
