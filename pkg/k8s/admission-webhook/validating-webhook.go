@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -127,15 +128,21 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	var (
 		output         runtime.Output
 		denyViolations []results.Violation
-		logURL         = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
+		logMsg         = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
 		allowed        = false
 		errMsg         = "%s; error: %w"
 	)
 
+	// when admission controller webhook runs in blind mode, request and response are not logged
+	// instead we return back a part of the actual violation
+	if config.GetK8sAdmissionControl().BlindMode {
+		logMsg = ""
+	}
+
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
 	if len(review.Request.Object.Raw) < 1 {
 		zap.S().Info(ErrEmptyAdmissionReview, zap.Any("admission review object", review))
-		return w.createResponseAdmissionReview(review, true, output, logURL), ErrEmptyAdmissionReview
+		return w.createResponseAdmissionReview(review, true, output, logMsg), ErrEmptyAdmissionReview
 	}
 
 	// Save the object into a temp file for the policy engines
@@ -144,7 +151,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to create temp file for validating admission review request"
 		zap.S().Error(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logMsg), fmt.Errorf(errMsg, msg, err)
 	}
 
 	// Run the policy engines
@@ -152,7 +159,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to evaluate terrascan policies"
 		zap.S().Errorf(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logMsg), fmt.Errorf(errMsg, msg, err)
 	}
 
 	// Calculate if there are anydeny violations
@@ -160,18 +167,20 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	if err != nil {
 		msg := "failed to figure out denied violations"
 		zap.S().Errorf(msg, zap.Error(err))
-		return w.createResponseAdmissionReview(review, allowed, output, logURL), fmt.Errorf(errMsg, msg, err)
+		return w.createResponseAdmissionReview(review, allowed, output, logMsg), fmt.Errorf(errMsg, msg, err)
 	}
 	allowed = len(denyViolations) < 1
 
 	// Log the request in the DB
-	err = w.logWebhook(output, string(review.Request.UID), denyViolations, allowed)
-	if err != nil {
-		msg := "failed to log validating admission review request into database"
-		zap.S().Error(msg, zap.Error(err))
+	if !config.GetK8sAdmissionControl().BlindMode {
+		err = w.logWebhook(output, string(review.Request.UID), denyViolations, allowed)
+		if err != nil {
+			msg := "failed to log validating admission review request into database"
+			zap.S().Error(msg, zap.Error(err))
+		}
 	}
 
-	return w.createResponseAdmissionReview(review, allowed, output, logURL), nil
+	return w.createResponseAdmissionReview(review, allowed, output, logMsg), nil
 }
 
 func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) {
@@ -281,9 +290,9 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	requestedAdmissionReview admissionv1.AdmissionReview,
 	allowed bool,
 	output runtime.Output,
-	logPath string) *admissionv1.AdmissionReview {
+	logMsg string) *admissionv1.AdmissionReview {
 
-	errMsg := fmt.Sprintf("For more details please visit %q", logPath)
+	errMsgs := []string{fmt.Sprintf("For more details please visit %q", logMsg)}
 
 	// create an admission review request to be sent as response
 	responseAdmissionReview := &admissionv1.AdmissionReview{}
@@ -296,15 +305,19 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	}
 
 	if output.Violations.ViolationStore != nil {
+		if config.GetK8sAdmissionControl().BlindMode {
+			errMsgs = w.buildErrors(output.Violations.ViolationStore.Violations)
+		}
+
 		// Means we ran the engines and we have results
 		if allowed {
 			if len(output.Violations.ViolationStore.Violations) > 0 {
 				// In case there are no denial violations, just return the log URL as a warning
-				responseAdmissionReview.Response.Warnings = []string{errMsg}
+				responseAdmissionReview.Response.Warnings = errMsgs
 			}
 		} else {
 			// In case the request was denied, return 403 and the log URL as an error message
-			responseAdmissionReview.Response.Result = &metav1.Status{Message: errMsg, Code: 403}
+			responseAdmissionReview.Response.Result = &metav1.Status{Message: strings.Join(errMsgs, "\n"), Code: 403}
 		}
 	}
 
@@ -338,4 +351,16 @@ func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules co
 	}
 
 	return false
+}
+
+// buildErrors build a list of error messages from all the violations
+func (v ValidatingWebhook) buildErrors(violations []*results.Violation) []string {
+	errMsgs := make([]string, 0)
+	if len(violations) > 0 {
+		for _, v := range violations {
+			out, _ := json.Marshal(v)
+			errMsgs = append(errMsgs, string(out))
+		}
+	}
+	return errMsgs
 }

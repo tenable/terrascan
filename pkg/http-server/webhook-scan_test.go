@@ -17,7 +17,8 @@ import (
 )
 
 func TestUWebhooks(t *testing.T) {
-	testFilePath := filepath.Join("k8s_testdata", "testconfig.json")
+	k8sTestData := "k8s_testdata"
+	testFilePath := filepath.Join(k8sTestData, "testconfig.json")
 	testAPIKey := "Test-API-KEY"
 	testEnvAPIKey := "Test-API-KEY"
 	testConfigFile := ""
@@ -68,7 +69,7 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "invalid request json content",
-			contentRequestPath: "./k8s_testdata/invalid.json",
+			contentRequestPath: filepath.Join(k8sTestData, "invalid.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusBadRequest,
@@ -76,7 +77,7 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "empty request json content",
-			contentRequestPath: "./k8s_testdata/empty.json",
+			contentRequestPath: filepath.Join(k8sTestData, "empty.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusBadRequest,
@@ -84,7 +85,7 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "request with empty object",
-			contentRequestPath: "./k8s_testdata/empty_object.json",
+			contentRequestPath: filepath.Join(k8sTestData, "empty_object.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
 			wantStatus:         http.StatusOK,
@@ -104,7 +105,7 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "risky request object without config",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
 			configFile:         testConfigFile,
@@ -114,30 +115,30 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "risky request object with config that make it safe",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
-			configFile:         "./k8s_testdata/config-specific-rule.toml",
+			configFile:         filepath.Join(k8sTestData, "config-specific-rule.toml"),
 			warnings:           false,
 			allowed:            true,
 			wantStatus:         http.StatusOK,
 		},
 		{
 			name:               "risky request object with config that just removes some of the violations",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
-			configFile:         "./k8s_testdata/config-medium-severity.toml",
+			configFile:         filepath.Join(k8sTestData, "config-medium-severity.toml"),
 			warnings:           true,
 			allowed:            true,
 			wantStatus:         http.StatusOK,
 		},
 		{
 			name:               "risky request object with denied severity",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
-			configFile:         "./k8s_testdata/config-deny-high.toml",
+			configFile:         filepath.Join(k8sTestData, "config-deny-high.toml"),
 			warnings:           false,
 			allowed:            false,
 			statusCode:         403,
@@ -146,10 +147,10 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "risky request object with denied categories",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
-			configFile:         "./k8s_testdata/config-deny-category.toml",
+			configFile:         filepath.Join(k8sTestData, "config-deny-category.toml"),
 			warnings:           false,
 			allowed:            false,
 			statusCode:         403,
@@ -158,10 +159,10 @@ func TestUWebhooks(t *testing.T) {
 		},
 		{
 			name:               "risky request object with denied categories that does not exist",
-			contentRequestPath: "./k8s_testdata/risky_testconfig.json",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
 			apiKey:             testAPIKey,
 			envAPIKey:          testEnvAPIKey,
-			configFile:         "./k8s_testdata/config-deny-non-existing-category.toml",
+			configFile:         filepath.Join(k8sTestData, "config-deny-non-existing-category.toml"),
 			warnings:           true,
 			allowed:            true,
 			wantStatus:         http.StatusOK,

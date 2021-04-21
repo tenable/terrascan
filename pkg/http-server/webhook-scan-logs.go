@@ -31,6 +31,9 @@ import (
 	"go.uber.org/zap"
 )
 
+// ErrBlindMode would be the error returned back when log endpoint is hit while blind mode is on
+var ErrBlindMode = fmt.Errorf("logging not supported in blind mode")
+
 type webhookDisplayedViolation struct {
 	RuleName    string `json:"rule_name"`
 	Category    string `json:"category"`
@@ -65,6 +68,11 @@ type webhookDisplayedShowLog struct {
 }
 
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
+
+	if config.GetK8sAdmissionControl().BlindMode {
+		apiErrorResponse(w, ErrBlindMode.Error(), http.StatusBadRequest)
+		return
+	}
 
 	var (
 		params = mux.Vars(r)
@@ -125,6 +133,11 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
+
+	if config.GetK8sAdmissionControl().BlindMode {
+		apiErrorResponse(w, ErrBlindMode.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Return an HTML page including the selected log
 	var (
