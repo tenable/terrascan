@@ -317,7 +317,7 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 			}
 		} else {
 			// In case the request was denied, return 403 and the log URL as an error message
-			responseAdmissionReview.Response.Result = &metav1.Status{Message: strings.Join(errMsgs, "\n"), Code: 403}
+			responseAdmissionReview.Response.Result = &metav1.Status{Message: "\n" + strings.Join(errMsgs, "\n"), Code: 403}
 		}
 	}
 
@@ -354,10 +354,12 @@ func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules co
 }
 
 // buildErrors build a list of error messages from all the violations
-func (v ValidatingWebhook) buildErrors(violations []*results.Violation) []string {
+func (w ValidatingWebhook) buildErrors(violations []*results.Violation) []string {
 	errMsgs := make([]string, 0)
 	if len(violations) > 0 {
 		for _, v := range violations {
+			// make the 'file' field blank, because it is a temporary file and would confuse the user
+			v.File = ""
 			out, _ := json.Marshal(v)
 			errMsgs = append(errMsgs, string(out))
 		}

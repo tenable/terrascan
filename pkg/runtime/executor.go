@@ -33,7 +33,6 @@ type Executor struct {
 	cloudType     []string
 	iacType       string
 	iacVersion    string
-	configFile    string
 	scanRules     []string
 	skipRules     []string
 	iacProvider   iacProvider.IacProvider

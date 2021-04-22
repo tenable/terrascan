@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
@@ -232,9 +233,9 @@ func TestUWebhooks(t *testing.T) {
 				if tt.warnings || tt.statusMessage {
 					var logPath string
 					if tt.warnings {
-						logPath = response.Response.Warnings[0]
+						logPath = strings.TrimSpace(response.Response.Warnings[0])
 					} else if tt.statusMessage {
-						logPath = response.Response.Result.Message
+						logPath = strings.TrimSpace(response.Response.Result.Message)
 					}
 
 					subLogPath := fmt.Sprintf("https://%v/k8s/webhooks/logs/705ab4f5-6393-11e8-b7cc-42010a800002", req.Host)

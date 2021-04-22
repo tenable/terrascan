@@ -33,7 +33,7 @@ type Violation struct {
 	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
-	File         string      `json:"file" yaml:"file" xml:"file,attr"`
+	File         string      `json:"file,omitempty" yaml:"file,omitempty" xml:"file,attr,omitempty"`
 	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
 }
 
