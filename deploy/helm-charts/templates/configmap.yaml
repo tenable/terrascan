@@ -1,0 +1,11 @@
+{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- if $globconfig }}
+kind: ConfigMap
+version: v1
+metadata:
+  name: {{ .Values.config_name }}
+  namespace: {{ .Release.Namespace }}
+data:
+  terrascan-config: |-
+    {{ .Files.Get "../data/config.toml" | b64enc }}
+{{- end }}

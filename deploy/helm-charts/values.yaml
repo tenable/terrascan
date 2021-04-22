@@ -1,0 +1,5 @@
+terrascan_key: terrakey
+use_debug: true
+secret_name: certs
+config_name: config
+name: terrahook

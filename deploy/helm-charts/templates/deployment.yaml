@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          args:
+            - clone
+            - --single-branch
+            - --branch=master
+            - https://github.com/accurics/terrascan.git
+            - /data
+          volumeMounts:
+            - mountPath: /data
+              name: terrascan-data-sync
+      containers:
+        - name: terrascan-server
+          image: devanggaur7/terrascan:webhook
+          command:
+            - terrascan
+          args:
+            - "server"
+            - "--cert-path"
+            - "/etc/certs/cert"
+            - "--key-path"
+            - "/etc/certs/key"
+{{- if .Values.use_debug }}
+            - "-l"
+            - "debug"
+{{- end }}
+{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- if $globconfig }}
+            - "-c"
+            - "/etc/config/terrascan-config"
+{{- end }}
+          env:
+            - name: "K8S_WEBHOOK_API_KEY"
+              value: {{ .Values.terrascan_key}}
+          volumeMounts:
+            - name: cert-volume
+              mountPath: /etc/certs
+{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- if $globconfig }}
+            - name: config-volume
+              mountPath: /etc/config
+{{- end }}
+            - name: terrascan-data-sync
+              mountPath: /home/terrascan/.terrascan
+
+      volumes:
+        - name: cert-volume
+          secret:
+            secretName: certs
+{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- if $globconfig }}
+        - name: config-volume
+          configMap:
+            configMapName: {{ .Values.configname }}
+{{- end }}
+        - name: terrascan-data-sync
+          emptyDir: {}
