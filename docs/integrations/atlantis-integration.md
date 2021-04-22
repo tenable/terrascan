@@ -11,7 +11,6 @@ In either scenario, the configuration of Atlantis is a diverse topic which will 
 Through this method, you will modify or create a custom workflow for atlantis so your repositories will be scanned by terrascan as part of the pull request automation.
 
 **Requirements**
-
 * The atlantis server must have TCP connectivity to where the terrascan server is running.
 * The `curl` command needs to be installed on the system so the `terrascan-remote-scan.sh` script can make the scan request. Atlantis's [docker image](https://hub.docker.com/r/runatlantis/atlantis/) has curl preinstalled.
 
@@ -74,6 +73,32 @@ terrascan server
 
 Once the systems are running, when atlantis is called via pull request, or a comment of `atlantis plan`, terrascan will be called as part of the atlantis plan flow. Scan results will be placed in a comment on the pull request, and if issues are found the test will be marked as failed.
 
-## Custom Atlantis Contaier
-(coming soon...)
+## Custom Atlantis Container
 
+### Usage
+
+To use our container image:
+```
+docker pull accurics/terrascan_atlantis
+```
+
+To build your own container image:
+```
+docker build ./atlantis -t <image_name>
+```
+
+Running the container:
+
+```
+docker run -e AWS_ACCESS_KEY_ID=<value> -e AWS_SECRET_ACCESS_KEY=<value> -e AWS_REGION=<value>  -p 4141:4141 --user=atlantis -v <pwd>/data/:/etc/terrascan/ <image-name> server --gh-user=<GH_USER> --gh-token=<GH_PersonalAccessToken> --repo-allowlist=<gh_repo> --gh-webhook-secret=<webhook-secret> -c /etc/terrascan/config.toml
+```
+
+PS: You need to provide all the environment variables that terraform requires to operate with your respective cloud providers.
+
+The server command is same as in [atlantis docs](https://www.runatlantis.io/docs/), except for an additional `-c` flag,
+which is used to pass in the toml config filepath for terrascan.
+
+Another way to provide the toml config filepath would be the TERRASCAN_CONFIG environment variable.
+
+The default workflow.yaml file used is the `atlantis/workflow.yaml` in this repo. You're allowed to override on your own
+by using the `--repo-config` flag. To trigger the terrascan scan, make sure you include a step to execute `atlantis/terrascan.sh`  in your workflow file.
