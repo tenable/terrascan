@@ -47,7 +47,7 @@ spec:
 {{- end }}
           env:
             - name: "K8S_WEBHOOK_API_KEY"
-              value: {{ .Values.terrascan_key}}
+              value: {{ .Values.terrascan_api_key}}
           volumeMounts:
             - name: cert-volume
               mountPath: /etc/certs
