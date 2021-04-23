@@ -1,7 +1,12 @@
 # Helm chart for deploying terrascan in server mode
 
 This chart deploys terrascan as a server within your kubernetes cluster. By default it runs just terrascan by itself, but 
-user creates namespace and secrets
+user creates namespace and secrets.
+
+In server mode, terrascan will act both as an API server for
+performing remote scans of IAC, as well as a validating admission
+webook for a Kubernetes cluster. Further details can be found in
+the [main documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/).
 
 ## Usage
 ### Set up TLS certificates
