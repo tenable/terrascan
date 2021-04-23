@@ -52,7 +52,6 @@ This chart is a WIP - we intend to add the following functionality in the near f
  - [x] Storage support - volume for db
  - [ ] Support more load balancer types
  - [ ] Support for ingress
- - [.] moar docs
  - [ ] Flag for UI enable/disable
  - [ ] Publish to Artifact hub
  - [ ] Support TLS certificate/key in existing secrets
