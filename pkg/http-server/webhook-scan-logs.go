@@ -31,8 +31,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// ErrBlindMode would be the error returned back when log endpoint is hit while blind mode is on
-var ErrBlindMode = fmt.Errorf("logging not supported in blind mode")
+// ErrNotDashBoardMode would be the error returned back when log endpoint
+// is hit while the dashboard mode is disabled
+var ErrNotDashBoardMode = fmt.Errorf("logging not supported in blind mode")
 
 type webhookDisplayedViolation struct {
 	RuleName    string `json:"rule_name"`
@@ -69,8 +70,8 @@ type webhookDisplayedShowLog struct {
 
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 
-	if config.GetK8sAdmissionControl().BlindMode {
-		apiErrorResponse(w, ErrBlindMode.Error(), http.StatusBadRequest)
+	if !config.GetK8sAdmissionControl().Dashboard {
+		apiErrorResponse(w, ErrNotDashBoardMode.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -134,8 +135,8 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 
-	if config.GetK8sAdmissionControl().BlindMode {
-		apiErrorResponse(w, ErrBlindMode.Error(), http.StatusBadRequest)
+	if !config.GetK8sAdmissionControl().Dashboard {
+		apiErrorResponse(w, ErrNotDashBoardMode.Error(), http.StatusBadRequest)
 		return
 	}
 

@@ -128,15 +128,15 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	var (
 		output         runtime.Output
 		denyViolations []results.Violation
-		logMsg         = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
+		logMsg         string
 		allowed        = false
 		errMsg         = "%s; error: %w"
 	)
 
-	// when admission controller webhook runs in blind mode, request and response are not logged
-	// instead we return back a part of the actual violation
-	if config.GetK8sAdmissionControl().BlindMode {
-		logMsg = ""
+	// when admission controller webhook runs in dashboard mode, request and response are logged
+	// to database and we the url where the logs would be available to the user
+	if config.GetK8sAdmissionControl().Dashboard {
+		logMsg = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
 	}
 
 	// In case the object is nil => an operation of DELETE happened, just return 'allow' since there is nothing to check
@@ -172,7 +172,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	allowed = len(denyViolations) < 1
 
 	// Log the request in the DB
-	if !config.GetK8sAdmissionControl().BlindMode {
+	if config.GetK8sAdmissionControl().Dashboard {
 		err = w.logWebhook(output, string(review.Request.UID), denyViolations, allowed)
 		if err != nil {
 			msg := "failed to log validating admission review request into database"
@@ -292,6 +292,8 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	output runtime.Output,
 	logMsg string) *admissionv1.AdmissionReview {
 
+	// for dashboard mode, we display user a log endpoint where user can access the
+	// admission request(provided requests are logged) and violation details
 	errMsgs := []string{fmt.Sprintf("For more details please visit %q", logMsg)}
 
 	// create an admission review request to be sent as response
@@ -305,7 +307,7 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	}
 
 	if output.Violations.ViolationStore != nil {
-		if config.GetK8sAdmissionControl().BlindMode {
+		if !config.GetK8sAdmissionControl().Dashboard {
 			errMsgs = w.buildErrors(output.Violations.ViolationStore.Violations)
 		}
 
