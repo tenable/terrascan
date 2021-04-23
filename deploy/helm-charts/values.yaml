@@ -1,5 +1,5 @@
 terrascan_api_key: terrakey
-terrascan_container_image: devanggaur7/terrascan:webhook
+terrascan_container_image: accurics/terrascan:latest
 use_debug: true
 secret_name: certs
 config_name: config
