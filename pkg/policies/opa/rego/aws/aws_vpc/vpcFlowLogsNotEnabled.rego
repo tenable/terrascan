@@ -29,15 +29,12 @@ flowLogExist(vpc, vpc_input) = exists {
 	flow_log_vpcs_set[vpc.name]
     exists = true
 } else = exists {
-  	x:=vpc[i]
-    flow_log_vpcs_set := { vpc_id | vpc_mapping[x.id]; vpc_id := x.id}
-    flow_log_vpcs_set[x.id]
-    exists = true
-}
-
-vpc_mapping[vpc_id] = flow_vpc_id {
-    input.aws_flow_log[i].type == "aws_flow_log"
-    input.aws_flow_log[i].config.vpc_id == input.aws_vpc[j].config.id
-    flow_vpc_id := input.aws_vpc[j].config.id
-    vpc_id := input.aws_flow_log[i].config.vpc_id
+  	  	x:=vpc[i]
+        flow_log_vpcs_set := { vpc_id |
+        input.aws_flow_log[k].type == "aws_flow_log"
+        input.aws_flow_log[k].config.vpc_id == input.aws_vpc[j].config.id
+        flow_vpc_id := input.aws_vpc[j].config.id
+        vpc_id := input.aws_flow_log[k].config.vpc_id}
+        flow_log_vpcs_set[x.id]
+        exists = true
 }
