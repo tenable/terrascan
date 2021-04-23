@@ -17,7 +17,7 @@
 package version
 
 // Terrascan The Terrascan version
-const Terrascan = "v1.4.0"
+const Terrascan = "v1.5.0"
 
 // Get returns the terrascan version
 func Get() string {
