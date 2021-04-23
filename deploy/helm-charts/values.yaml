@@ -1,5 +1,10 @@
 terrascan_api_key: terrakey
+terrascan_container_image: devanggaur7/terrascan:webhook
 use_debug: true
 secret_name: certs
 config_name: config
 name: terrahook
+persistence:
+  enabled: false
+  existingclaim: pvcClaimName
+

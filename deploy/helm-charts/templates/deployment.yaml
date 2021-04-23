@@ -27,7 +27,7 @@ spec:
               name: terrascan-data-sync
       containers:
         - name: terrascan-server
-          image: devanggaur7/terrascan:webhook
+          image: {{ .Values.terrascan_container_image }}
           command:
             - terrascan
           args:
@@ -69,5 +69,12 @@ spec:
           configMap:
             configMapName: {{ .Values.configname }}
 {{- end }}
+{{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: terrascan-data-sync
+          persistentVolumeClaim:
+{{- with .Values.persistence.existingClaim }}
+            claimName: {{ tpl . $ }}
+{{- else }}
         - name: terrascan-data-sync
           emptyDir: {}
+{{- end }}
