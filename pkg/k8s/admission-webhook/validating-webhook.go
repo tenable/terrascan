@@ -134,7 +134,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 	)
 
 	// when admission controller webhook runs in dashboard mode, request and response are logged
-	// to database and we the url where the logs would be available to the user
+	// to database and we would display the url where the logs would be available to the user
 	if config.GetK8sAdmissionControl().Dashboard {
 		logMsg = w.dblogger.GetLogURL(serverURL, string(review.Request.UID))
 	}
@@ -360,8 +360,9 @@ func (w ValidatingWebhook) buildErrors(violations []*results.Violation) []string
 	errMsgs := make([]string, 0)
 	if len(violations) > 0 {
 		for _, v := range violations {
-			// make the 'file' field blank, because it is a temporary file and would confuse the user
+			// make the 'file' and 'line number' field blank, because it is a temporary file and would confuse the user
 			v.File = ""
+			v.LineNumber = 0
 			out, _ := json.Marshal(v)
 			errMsgs = append(errMsgs, string(out))
 		}

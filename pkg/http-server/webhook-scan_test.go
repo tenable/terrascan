@@ -229,6 +229,7 @@ func TestUWebhooks(t *testing.T) {
 					t.Errorf("mismatch Status code Got: %v, expected: %v", response.Response.Result.Code, tt.statusCode)
 				}
 
+				// TODO: this needs to improved and more tests added after the config file changes
 				// commenting the log message check for now, it can be fixed later
 				// making the blind mode default has changed the log message output
 

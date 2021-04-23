@@ -34,7 +34,7 @@ type Violation struct {
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
 	File         string      `json:"file,omitempty" yaml:"file,omitempty" xml:"file,attr,omitempty"`
-	LineNumber   int         `json:"line" yaml:"line" xml:"line,attr"`
+	LineNumber   int         `json:"line,omitempty" yaml:"line,omitempty" xml:"line,attr,omitempty"`
 }
 
 // PassedRule contains information of a passed rule

@@ -31,9 +31,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// ErrNotDashBoardMode would be the error returned back when log endpoint
+// ErrDashboardDisabled would be the error returned back when log endpoint
 // is hit while the dashboard mode is disabled
-var ErrNotDashBoardMode = fmt.Errorf("logging not supported in blind mode")
+var ErrDashboardDisabled = fmt.Errorf("set 'dashboard=true' in terrascan config file to enable database logs")
 
 type webhookDisplayedViolation struct {
 	RuleName    string `json:"rule_name"`
@@ -71,7 +71,7 @@ type webhookDisplayedShowLog struct {
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 
 	if !config.GetK8sAdmissionControl().Dashboard {
-		apiErrorResponse(w, ErrNotDashBoardMode.Error(), http.StatusBadRequest)
+		apiErrorResponse(w, ErrDashboardDisabled.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -136,7 +136,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 
 	if !config.GetK8sAdmissionControl().Dashboard {
-		apiErrorResponse(w, ErrNotDashBoardMode.Error(), http.StatusBadRequest)
+		apiErrorResponse(w, ErrDashboardDisabled.Error(), http.StatusBadRequest)
 		return
 	}
 
