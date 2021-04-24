@@ -28,13 +28,9 @@ Terrascan's supports multiple ways to install, including [brew](https://github.c
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.4.0/terrascan_1.4.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
-$ tar -xvf terrascan.tar.gz
-  x CHANGELOG.md
-  x LICENSE
-  x README.md
-  x terrascan
-$ install terrascan /usr/local/bin
+$ curl -L "$(curl -s https://api.github.com/repos/accurics/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
+$ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
+$ install terrascan /usr/local/bin && rm terrascan
 $ terrascan
 ```
 ### Step 2: Run
