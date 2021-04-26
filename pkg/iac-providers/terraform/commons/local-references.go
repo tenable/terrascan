@@ -89,6 +89,14 @@ func (r *RefResolver) ResolveLocalRef(localRef string) interface{} {
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
 		resolvedVal := strings.Replace(localRef, localExpr, valStr, 1)
+		// when the resolved reference value, contains the value resolved for the
+		// expression, we would need to return the value resolved for the expression
+		// to break the recursion.
+		// We cannot send 'localExpr', as it would again form a non breaking recursion call
+		if localRef != localExpr && strings.Contains(resolvedVal, valStr) {
+			zap.S().Debugf("resolved local variable ref refers to self: '%v'", valStr)
+			return valStr
+		}
 		zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, resolvedVal)
 		return r.ResolveStrRef(resolvedVal)
 	}

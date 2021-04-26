@@ -121,8 +121,15 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:        "recursive loop while resolving variables",
-			tfConfigDir: filepath.Join(testDataDir, "recursive-loop"),
-			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop.json"),
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop-variables"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop-variables.json"),
+			tfv14:       TfV14{},
+			wantErr:     nil,
+		},
+		{
+			name:        "recursive loop while resolving locals",
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop-locals"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop-locals.json"),
 			tfv14:       TfV14{},
 			wantErr:     nil,
 		},
