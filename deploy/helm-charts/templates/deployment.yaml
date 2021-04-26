@@ -74,6 +74,7 @@ spec:
           persistentVolumeClaim:
 {{- with .Values.persistence.existingClaim }}
             claimName: {{ tpl . $ }}
+{{- end }}
 {{- else }}
         - name: terrascan-data-sync
           emptyDir: {}

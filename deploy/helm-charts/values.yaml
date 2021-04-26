@@ -1,5 +1,5 @@
 terrascan_api_key: terrakey
-terrascan_container_image: accurics/terrascan:latest
+terrascan_container_image: accurics/terrascan:1.5.0
 use_debug: true
 secret_name: certs
 config_name: config
@@ -7,4 +7,21 @@ name: terrahook
 persistence:
   enabled: false
   existingclaim: pvcClaimName
-
+webhook:
+  mode: true
+  name: www.terrahook.com
+  failurePolicy: fail
+  sideEffects: None
+  admissionReviewVersions:
+    - "v1"
+    - "v1beta1"
+  apiGroups:
+    - "apps"
+    - ""
+  resources:
+    - "deployments"
+    - "pods"
+  apiVersions:
+    - "*"
+  operations:
+    - CREATE
