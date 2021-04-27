@@ -33,7 +33,6 @@ type Executor struct {
 	cloudType     []string
 	iacType       string
 	iacVersion    string
-	configFile    string
 	scanRules     []string
 	skipRules     []string
 	iacProvider   iacProvider.IacProvider
@@ -44,7 +43,7 @@ type Executor struct {
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath, configFile string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:   filePath,
 		dirPath:    dirPath,
@@ -52,7 +51,6 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		cloudType:  cloudType,
 		iacType:    iacType,
 		iacVersion: iacVersion,
-		configFile: configFile,
 	}
 
 	// read config file and update scan and skip rules

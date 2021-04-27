@@ -92,6 +92,13 @@ func TestYAMLSeverityIsColorized(t *testing.T) {
 	testSeverity("HIGH")
 	testSeverity("MEDIUM")
 	testSeverity("LOW")
+	testSeverity("Medium")
+	testSeverity("MedIUM")
+	testSeverity("low")
+	testSeverity("Low")
+	testSeverity("high")
+	testSeverity("High")
+
 }
 func TestYAMLResourceNameIsColorized(t *testing.T) {
 	verifyLineWithStringIsColorized("resource_name", yamlData.String(), t)

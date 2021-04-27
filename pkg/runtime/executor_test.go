@@ -184,6 +184,7 @@ func TestInit(t *testing.T) {
 		name            string
 		executor        Executor
 		wantErr         error
+		configFile      string
 		wantIacProvider iacProvider.IacProvider
 		wantNotifiers   []notifications.Notifier
 	}{
@@ -209,9 +210,9 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
-				configFile: filepath.Join(testDataDir, "webhook.toml"),
 				policyPath: []string{testPoliciesDir},
 			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
 			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -224,8 +225,8 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
-				configFile: filepath.Join(testDataDir, "invalid-notifier.toml"),
 			},
+			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
 			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -238,8 +239,8 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
-				configFile: filepath.Join(testDataDir, "does-not-exist"),
 			},
+			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
 			wantIacProvider: &tfv14.TfV14{},
 		},
@@ -251,9 +252,9 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
-				configFile: filepath.Join(testDataDir, "webhook.toml"),
 				policyPath: []string{filepath.Join(testDataDir, "notthere")},
 			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
 			wantIacProvider: &tfv14.TfV14{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -266,9 +267,9 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v14",
-				configFile: filepath.Join(testDataDir, "invalid-category.toml"),
 				policyPath: []string{filepath.Join(testDataDir, "notthere")},
 			},
+			configFile:      filepath.Join(testDataDir, "invalid-category.toml"),
 			wantErr:         fmt.Errorf("(3, 5): no value can start with c"),
 			wantIacProvider: &tfv14.TfV14{},
 		},
@@ -294,9 +295,9 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
-				configFile: filepath.Join(testDataDir, "webhook.toml"),
 				policyPath: []string{testPoliciesDir},
 			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
 			wantIacProvider: &tfv12.TfV12{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -309,8 +310,8 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
-				configFile: filepath.Join(testDataDir, "invalid-notifier.toml"),
 			},
+			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
 			wantIacProvider: &tfv12.TfV12{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -323,8 +324,8 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
-				configFile: filepath.Join(testDataDir, "does-not-exist"),
 			},
+			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
 			wantIacProvider: &tfv12.TfV12{},
 		},
@@ -336,9 +337,9 @@ func TestInit(t *testing.T) {
 				cloudType:  []string{"aws"},
 				iacType:    "terraform",
 				iacVersion: "v12",
-				configFile: filepath.Join(testDataDir, "webhook.toml"),
 				policyPath: []string{filepath.Join(testDataDir, "notthere")},
 			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
 			wantIacProvider: &tfv12.TfV12{},
 			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
@@ -348,7 +349,7 @@ func TestInit(t *testing.T) {
 	for _, tt := range table {
 
 		t.Run(tt.name, func(t *testing.T) {
-			configErr := config.LoadGlobalConfig(tt.executor.configFile)
+			configErr := config.LoadGlobalConfig(tt.configFile)
 			if configErr != nil {
 				if !reflect.DeepEqual(configErr, tt.wantErr) {
 					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", configErr, tt.wantErr)
@@ -512,7 +513,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.configfile, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)
