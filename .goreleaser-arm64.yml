@@ -10,7 +10,7 @@ builds:
   - binary: terrascan
     id: terrascan_linux_arm64
     main: ./cmd/terrascan/main.go
-    ldflags: -s -w
+    ldflags: -s -w -extldflags=-static
     env:
       - CGO_ENABLED=1
       - CC=aarch64-linux-gnu-gcc

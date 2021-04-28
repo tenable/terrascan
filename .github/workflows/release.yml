@@ -15,10 +15,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run Main GoReleaser
-        run: docker run -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -v $GITHUB_WORKSPACE:/go/src/github.com/jlk/terrascan-release-test -w /go/src/github.com/jlk/terrascan-release-test neilotoole/xcgo bash -c "apt update; apt install -y gcc-multilib; goreleaser release --rm-dist -f .goreleaser.yml"
+        run: docker run -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -v $GITHUB_WORKSPACE:/go/src/github.com/accurics/terrascan -w /go/src/github.com/accurics/terrascan neilotoole/xcgo bash -c "apt update; apt install -y gcc-multilib; goreleaser release --rm-dist -f .goreleaser.yml"
 # arm64 build disabled for now while we work through some package conflicts between gcc-multilib and gcc-aarch64-linux-gnu
 #      - name: Run GoReleaser for arm64
-#        run: docker run -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -v $GITHUB_WORKSPACE:/go/src/github.com/jlk/terrascan-release-test -w /go/src/github.com/jlk/terrascan-release-test neilotoole/xcgo bash -c "apt update; apt install -y gcc-aarch64-linux-gnu; rm -rf /go/src/github.com/jlk/terrascan-release-test/dist ; goreleaser release --rm-dist -f .goreleaser-arm64.yml"
+#        run: docker run -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -v $GITHUB_WORKSPACE:/go/src/github.com/accurics/terrascan -w /go/src/github.com/accurics/terrascan neilotoole/xcgo bash -c "apt update; apt install -y gcc-aarch64-linux-gnu; rm -rf /go/src/github.com/accurics/terrascan/dist ; goreleaser release --rm-dist -f .goreleaser-arm64.yml"
 
   # push image to Docker Hub
   push:

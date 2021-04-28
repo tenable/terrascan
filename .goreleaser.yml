@@ -10,7 +10,7 @@ builds:
   - binary: terrascan
     id: terrascan_linux_amd64
     main: ./cmd/terrascan/main.go
-    ldflags: -s -w
+    ldflags: -s -w -extldflags=-static
     env:
       - CGO_ENABLED=1
     flags:
@@ -25,7 +25,7 @@ builds:
   - binary: terrascan
     id: terrascan_linux_386
     main: ./cmd/terrascan/main.go
-    ldflags: -s -w
+    ldflags: -s -w -extldflags=-static
     env:
       - CGO_ENABLED=1
     flags:
