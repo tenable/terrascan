@@ -56,6 +56,7 @@ var _ = Describe("Server File Scan", func() {
 		})
 
 		awsDbInsViolationRelPath := filepath.Join(awsIacRelPath, "aws_db_instance_violation")
+		k8sIngressViolationRelPath := filepath.Join(k8sIacRelPath, "kubernetes_ingress_violation")
 		awsAmiViolationRelPath := filepath.Join(awsIacRelPath, "aws_ami_violation")
 
 		Context("terraform file scan", func() {
@@ -181,8 +182,16 @@ var _ = Describe("Server File Scan", func() {
 		})
 
 		Context("k8s file scan", func() {
+			requestURL := fmt.Sprintf("%s:%s/v1/k8s/v1/all/local/file/scan", host, port)
 			It("should return violations successfully", func() {
-				Skip("add test case when https://github.com/accurics/terrascan/issues/584 is fixed")
+				iacFilePath, err := filepath.Abs(filepath.Join(k8sIngressViolationRelPath, "config.yaml"))
+				Expect(err).NotTo(HaveOccurred())
+
+				goldenFilePath, err := filepath.Abs(filepath.Join(k8sIngressViolationGoldenRelPath, "kubernetes_ingress_json.txt"))
+				Expect(err).NotTo(HaveOccurred())
+
+				responseBytes := serverUtils.MakeFileScanRequest(iacFilePath, requestURL, nil, http.StatusOK)
+				serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, responseBytes)
 			})
 		})
 
@@ -328,8 +337,16 @@ var _ = Describe("Server File Scan", func() {
 				})
 
 				When("k8s file has resource skipped", func() {
+					k8sRequestURL := fmt.Sprintf("%s:%s/v1/k8s/v1/all/local/file/scan", host, port)
 					It("should receive violations result with 200 OK response", func() {
-						Skip("add test case when https://github.com/accurics/terrascan/issues/584 is fixed")
+						iacFilePath, err := filepath.Abs(filepath.Join(resourceSkipIacRelPath, "kubernetes", "config.yaml"))
+						Expect(err).NotTo(HaveOccurred())
+
+						goldenFilePath, err := filepath.Abs(filepath.Join(goldenFilesRelPath, "resource_skipping", "kubernetes_file_resource_skipping.txt"))
+						Expect(err).NotTo(HaveOccurred())
+
+						respBytes := serverUtils.MakeFileScanRequest(iacFilePath, k8sRequestURL, nil, http.StatusOK)
+						serverUtils.CompareResponseAndGoldenOutput(goldenFilePath, respBytes)
 					})
 				})
 			})
