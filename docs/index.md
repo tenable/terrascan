@@ -4,7 +4,7 @@
 
 Terrascan documentation is composed of the following major sections:
 
-* [Getting Started](getting-started/quickstart.md): Tutorial on how to install and quickly get started with Terrascan.
+* [Getting Started](getting-started.md): Tutorial on how to install and quickly get started with Terrascan.
 * [Architecture](architecture.md): Explains the pluggable architecture powering Terrascan.
 * [Policies](policies.md): Explains policies, how to write them, and reference for all policies/rules included by default.
 
