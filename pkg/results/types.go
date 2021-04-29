@@ -49,7 +49,7 @@ type PassedRule struct {
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	DirScanErrors     []DirScanErr  `json:"directory_scan_errors,omitempty" yaml:"directory_scan_errors,omitempty" xml:"directory_scan_errors>directory_scan_error,omitempty"`
+	DirScanErrors     []DirScanErr  `json:"scan_errors,omitempty" yaml:"scan_errors,omitempty" xml:"scan_errors>scan_error,omitempty"`
 	PassedRules       []*PassedRule `json:"passed_rules,omitempty" yaml:"passed_rules,omitempty" xml:"passed_rules>passed_rule,omitempty"`
 	Violations        []*Violation  `json:"violations" yaml:"violations" xml:"violations>violation"`
 	SkippedViolations []*Violation  `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`

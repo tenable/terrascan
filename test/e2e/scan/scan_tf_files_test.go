@@ -110,35 +110,35 @@ var _ = Describe("Scan is run for terraform files", func() {
 				})
 			})
 
-			When("when output type is json", func() {
+			When("output type is json", func() {
 				It("should display violations in json format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is json and all iac scan is used", func() {
+			When("output type is json and all iac scan is used", func() {
 				It("should display violations in json format, and should have iac type as 'all'", func() {
 					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_all.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is yaml", func() {
+			When("output type is yaml", func() {
 				It("should display violations in yaml format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "yaml"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_yaml.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is xml", func() {
+			When("output type is xml", func() {
 				It("should display violations in xml format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "xml"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_xml.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is junit-xml", func() {
+			When("output type is junit-xml", func() {
 				It("should display violations in junit-xml format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "junit-xml"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_junit_xml.txt"), helper.ExitCodeThree, true, true, outWriter, errWriter, scanArgs...)

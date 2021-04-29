@@ -126,7 +126,7 @@ func TestLoadIacDir(t *testing.T) {
 			tfConfigDir: filepath.Join(testDataDir, "recursive-loop"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop.json"),
 			tfv14:       TfV14{},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 	}
 

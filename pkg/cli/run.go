@@ -225,11 +225,6 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
-	// display directory scan errors only when log level is debug
-	if LogLevel != "debug" {
-		results.Violations.ViolationStore.DirScanErrors = nil
-	}
-
 	outputWriter := NewOutputWriter(s.UseColors)
 
 	if s.configOnly {

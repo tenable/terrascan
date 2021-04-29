@@ -1,5 +1,17 @@
 {
   "results": {
+    "scan_errors": [
+      {
+        "iac_type": "kustomize",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "kustomization.y(a)ml file not found in the directory /Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      },
+      {
+        "iac_type": "helm",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "no helm charts found in directory /Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      }
+    ],
     "violations": [
       {
         "rule_name": "amiNotEncrypted",
