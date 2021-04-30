@@ -71,6 +71,9 @@ func (e *Executor) ValidateInputs() error {
 			return errNotValidFile
 		}
 
+		// the default value of dirPath is '.', make it empty
+		e.dirPath = ""
+
 		zap.S().Debugf("file '%s' exists", e.filePath)
 	} else {
 		// if directory, check if directory exists
