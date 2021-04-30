@@ -48,6 +48,9 @@ type AllResourceConfigs map[string][]ResourceConfig
 
 // FindResourceByID Finds a given resource within the resource map and returns a reference to that resource
 func (a AllResourceConfigs) FindResourceByID(resourceID string) (*ResourceConfig, error) {
+	if len(a) == 0 {
+		return nil, fmt.Errorf("AllResourceConfigs is nil or doesn't contain any resource type")
+	}
 	resTypeName := strings.Split(resourceID, ".")
 	if len(resTypeName) < 2 {
 		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
@@ -75,6 +78,9 @@ func (a AllResourceConfigs) FindResourceByID(resourceID string) (*ResourceConfig
 
 // FindAllResourcesByID Finds all resources within the resource map
 func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*ResourceConfig, error) {
+	if len(a) == 0 {
+		return nil, fmt.Errorf("AllResourceConfigs is nil or doesn't contain any resource type")
+	}
 	resTypeName := strings.Split(resourceID, ".")
 	if len(resTypeName) < 2 {
 		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
@@ -82,7 +88,6 @@ func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*Resource
 
 	resourceType := resTypeName[0]
 
-	// found := false
 	resources := make([]*ResourceConfig, 0)
 	resourceTypeList := a[resourceType]
 	for i := range resourceTypeList {
@@ -99,6 +104,10 @@ func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*Resource
 // `len(resourceMapping)` does not give the count of the resources but only gives out the total number of
 // the type of resources inside the object.
 func (a AllResourceConfigs) GetResourceCount() (count int) {
+	// handles nil map
+	if len(a) == 0 {
+		return 0
+	}
 	count = 0
 	for _, list := range a {
 		count = count + len(list)
@@ -108,6 +117,13 @@ func (a AllResourceConfigs) GetResourceCount() (count int) {
 
 // UpdateResourceConfigs adds a resource of given type if it is not present in allResources
 func (a AllResourceConfigs) UpdateResourceConfigs(resourceType string, resources []ResourceConfig) {
+	if _, ok := a[resourceType]; !ok {
+		if len(a) == 0 {
+			a = make(AllResourceConfigs)
+		}
+		a[resourceType] = resources
+		return
+	}
 	for _, res := range resources {
 		if !IsConfigPresent(a[resourceType], res) {
 			a[resourceType] = append(a[resourceType], res)
