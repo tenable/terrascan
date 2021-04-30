@@ -16,6 +16,12 @@
 
 package output
 
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
+
 // ResourceConfig describes a resource present in IaC
 type ResourceConfig struct {
 	ID     string      `json:"id"`
@@ -38,3 +44,64 @@ type SkipRule struct {
 
 // AllResourceConfigs is a list/slice of resource configs present in IaC
 type AllResourceConfigs map[string][]ResourceConfig
+
+// FindResourceByID Finds a given resource within the resource map and returns a reference to that resource
+func (a AllResourceConfigs) FindResourceByID(resourceID string) (*ResourceConfig, error) {
+	resTypeName := strings.Split(resourceID, ".")
+	if len(resTypeName) < 2 {
+		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
+	}
+
+	resourceType := resTypeName[0]
+
+	found := false
+	var resource ResourceConfig
+	resourceTypeList := a[resourceType]
+	for i := range resourceTypeList {
+		if resourceTypeList[i].ID == resourceID {
+			resource = resourceTypeList[i]
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return nil, nil
+	}
+
+	return &resource, nil
+}
+
+// GetResourceCount gives out the total number of resources present in a output.ResourceConfig object.
+// Since the ResourceConfig mapping stores resources in lists which can be located resourceMapping[Type],
+// `len(resourceMapping)` does not give the count of the resources but only gives out the total number of
+// the type of resources inside the object.
+func (a AllResourceConfigs) GetResourceCount() (count int) {
+	count = 0
+	for _, list := range a {
+		count = count + len(list)
+	}
+	return
+}
+
+// UpdateResourceConfigs adds a resource of given type if it is not present in allResources
+func (a AllResourceConfigs) UpdateResourceConfigs(resourceType string, resources []ResourceConfig) {
+	for _, res := range resources {
+		if !IsConfigPresent(a[resourceType], res) {
+			a[resourceType] = append(a[resourceType], res)
+		}
+	}
+}
+
+// IsConfigPresent checks whether a resource is already present in the list of configs or not.
+// The equality of a resource is based on name, source and config of the resource.
+func IsConfigPresent(resources []ResourceConfig, resourceConfig ResourceConfig) bool {
+	for _, resource := range resources {
+		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
+			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
+				return true
+			}
+		}
+	}
+	return false
+}
