@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -104,7 +103,7 @@ func TestLoadIacDir(t *testing.T) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
-			resCount := utils.GetResourceCount(resourceMap)
+			resCount := resourceMap.GetResourceCount()
 			if resCount != tt.resourceCount {
 				t.Errorf("resource count (%d) does not match expected (%d)", resCount, tt.resourceCount)
 			}

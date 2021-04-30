@@ -26,7 +26,6 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -238,7 +237,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 		// deduplication of resources
 		if len(resourceConfig) > 0 {
 			for key, r := range sr.rc {
-				utils.UpdateResourceConfigs(key, r, resourceConfig)
+				resourceConfig.UpdateResourceConfigs(key, r)
 			}
 		} else {
 			for key := range sr.rc {
