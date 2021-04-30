@@ -11,7 +11,7 @@ replace (
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.0
-	github.com/hashicorp/go-cleanhttp v0.5.1
+	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-retryablehttp v0.6.6
