@@ -80,26 +80,22 @@ var _ = Describe("Scan", func() {
 	Describe("scan command is run without any flags", func() {
 		Context("when no iac type is provided, terrascan scans with all iac providers", func() {
 			Context("no tf files are present in the working directory", func() {
-				When("log level is not set to debug", func() {
-					It("scan the directory and display results", func() {
-						scanArgs := []string{scanUtils.ScanCommand}
-						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-						helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
-					})
+				It("scan the directory and display results", func() {
+					scanArgs := []string{scanUtils.ScanCommand}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
 				})
-				Context("iac loading errors would be displayed in the output, when log level is debug", func() {
-					When("log level is set to debug", func() {
-						It("scan the directory and display results", func() {
-							scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-l", "debug", "-p", policyRootRelPath}
-							// these errors would come from terraform, helm, and kustomize iac providers
-							errString1 := "has no terraform config files"
-							errString2 := "kustomization.y(a)ml file not found in the directory"
-							errString3 := "no helm charts found in directory"
-							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-							helper.ContainsDirScanErrorSubString(session, errString1)
-							helper.ContainsDirScanErrorSubString(session, errString2)
-							helper.ContainsDirScanErrorSubString(session, errString3)
-						})
+				Context("iac loading errors would be displayed in the output", func() {
+					It("scan the directory and display results", func() {
+						scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-p", policyRootRelPath}
+						// these errors would come from terraform, helm, and kustomize iac providers
+						errString1 := "has no terraform config files"
+						errString2 := "kustomization.y(a)ml file not found in the directory"
+						errString3 := "no helm charts found in directory"
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						helper.ContainsDirScanErrorSubString(session, errString1)
+						helper.ContainsDirScanErrorSubString(session, errString2)
+						helper.ContainsDirScanErrorSubString(session, errString3)
 					})
 				})
 			})

@@ -17,7 +17,6 @@
 package runtime
 
 import (
-	"reflect"
 	"sort"
 
 	"go.uber.org/zap"
@@ -27,6 +26,7 @@ import (
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -160,38 +160,13 @@ func (e *Executor) Init() error {
 func (e *Executor) Execute() (results Output, err error) {
 
 	var merr *multierror.Error
-	resourceConfig := make(output.AllResourceConfigs)
+	var resourceConfig output.AllResourceConfigs
 
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
 	if e.dirPath != "" {
-
-		// channel for directory scan response
-		scanRespChan := make(chan dirScanResp)
-
-		// create results output from Iac provider[s]
-		for _, iacP := range e.iacProviders {
-			go func(ip iacProvider.IacProvider) {
-				rc, err := ip.LoadIacDir(e.dirPath)
-				scanRespChan <- dirScanResp{err, rc}
-			}(iacP)
-		}
-
-		for i := 0; i < len(e.iacProviders); i++ {
-			sr := <-scanRespChan
-			merr = multierror.Append(merr, sr.err)
-			// deduplication of resources
-			if len(resourceConfig) > 0 {
-				for key, r := range sr.rc {
-					updateResourceConfigs(key, r, resourceConfig)
-				}
-			} else {
-				for key := range sr.rc {
-					resourceConfig[key] = append(resourceConfig[key], sr.rc[key]...)
-				}
-			}
-		}
-
+		// get all resource configs in the directory
+		resourceConfig, merr = e.getResourceConfigs()
 	} else {
 		// create results output from Iac provider
 		// iac providers will contain one element
@@ -202,38 +177,19 @@ func (e *Executor) Execute() (results Output, err error) {
 	}
 
 	// for the iac providers that don't implement sub folder scanning
-	// return the error (existing behavior)
+	// return the error to the caller
 	if !implementsSubFolderScan(e.iacType) {
 		if err := merr.ErrorOrNil(); err != nil {
 			return results, err
 		}
 	}
 
+	// update results with resource config
 	results.ResourceConfig = resourceConfig
 
-	// evaluate policies
-	results.Violations = policy.EngineOutput{}
-	violations := results.Violations.AsViolationStore()
-
-	// channel for engine evaluation result
-	evalResultChan := make(chan engineEvalResult)
-
-	for _, engine := range e.policyEngines {
-		go func(eng policy.Engine) {
-			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
-			evalResultChan <- engineEvalResult{err, output}
-		}(engine)
+	if err := e.findViolations(&results); err != nil {
+		return results, err
 	}
-
-	for i := 0; i < len(e.policyEngines); i++ {
-		evalR := <-evalResultChan
-		if evalR.err != nil {
-			return results, evalR.err
-		}
-		violations = violations.Add(evalR.output.AsViolationStore())
-	}
-
-	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 
 	resourcePath := e.filePath
 	if resourcePath == "" {
@@ -260,26 +216,66 @@ func (e *Executor) Execute() (results Output, err error) {
 	return results, nil
 }
 
-// updateResourceConfigs adds a resource of given type if it is not present in allResources
-func updateResourceConfigs(resourceType string, resources []output.ResourceConfig, allResources output.AllResourceConfigs) {
-	for _, res := range resources {
-		if !isConfigPresent(allResources[resourceType], res) {
-			allResources[resourceType] = append(allResources[resourceType], res)
-		}
-	}
-}
+// getResourceConfigs is a helper method to get all resource configs
+func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.Error) {
+	var merr *multierror.Error
+	resourceConfig := make(output.AllResourceConfigs)
 
-// isConfigPresent checks whether a resource is already present in the list of configs or not
-// the equality of a resource is based on name, source and config of the resource
-func isConfigPresent(resources []output.ResourceConfig, resourceConfig output.ResourceConfig) bool {
-	for _, resource := range resources {
-		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
-			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
-				return true
+	// channel for directory scan response
+	scanRespChan := make(chan dirScanResp)
+
+	// create results output from Iac provider[s]
+	for _, iacP := range e.iacProviders {
+		go func(ip iacProvider.IacProvider) {
+			rc, err := ip.LoadIacDir(e.dirPath)
+			scanRespChan <- dirScanResp{err, rc}
+		}(iacP)
+	}
+
+	for i := 0; i < len(e.iacProviders); i++ {
+		sr := <-scanRespChan
+		merr = multierror.Append(merr, sr.err)
+		// deduplication of resources
+		if len(resourceConfig) > 0 {
+			for key, r := range sr.rc {
+				utils.UpdateResourceConfigs(key, r, resourceConfig)
+			}
+		} else {
+			for key := range sr.rc {
+				resourceConfig[key] = append(resourceConfig[key], sr.rc[key]...)
 			}
 		}
 	}
-	return false
+
+	return resourceConfig, merr
+}
+
+// findViolations is a helper method to find all violations in the resource config
+func (e *Executor) findViolations(results *Output) error {
+	// evaluate policies
+	results.Violations = policy.EngineOutput{}
+	violations := results.Violations.AsViolationStore()
+
+	// channel for engine evaluation result
+	evalResultChan := make(chan engineEvalResult)
+
+	for _, engine := range e.policyEngines {
+		go func(eng policy.Engine) {
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+			evalResultChan <- engineEvalResult{err, output}
+		}(engine)
+	}
+
+	for i := 0; i < len(e.policyEngines); i++ {
+		evalR := <-evalResultChan
+		if evalR.err != nil {
+			return evalR.err
+		}
+		violations = violations.Add(evalR.output.AsViolationStore())
+	}
+
+	results.Violations = policy.EngineOutputFromViolationStore(&violations)
+	return nil
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning

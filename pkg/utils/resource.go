@@ -18,6 +18,7 @@ package utils
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -60,4 +61,26 @@ func GetResourceCount(resourceMapping map[string][]output.ResourceConfig) (count
 		count = count + len(list)
 	}
 	return
+}
+
+// UpdateResourceConfigs adds a resource of given type if it is not present in allResources
+func UpdateResourceConfigs(resourceType string, resources []output.ResourceConfig, allResources output.AllResourceConfigs) {
+	for _, res := range resources {
+		if !IsConfigPresent(allResources[resourceType], res) {
+			allResources[resourceType] = append(allResources[resourceType], res)
+		}
+	}
+}
+
+// IsConfigPresent checks whether a resource is already present in the list of configs or not.
+// The equality of a resource is based on name, source and config of the resource.
+func IsConfigPresent(resources []output.ResourceConfig, resourceConfig output.ResourceConfig) bool {
+	for _, resource := range resources {
+		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
+			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
+				return true
+			}
+		}
+	}
+	return false
 }
