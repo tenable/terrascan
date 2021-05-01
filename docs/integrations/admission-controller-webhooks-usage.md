@@ -55,15 +55,14 @@ A config file example: ```config.toml```
 ```
 
 You can specify the following configurations:
+
 *  **scan-rules** - one or more rules to scan
 *  **skip-rules** - one or more rules to skip while scanning
 *  **severity** - the minimal level of severity of the policies to be scanned
 *  **category** - the list of type of categories of the policies to be scanned
-
-
 * **k8s-admission-control** - specify the rules that should cause a rejection of the admission request
-  *  **denied-categories** - one or more policy categories that are not allowed in the detected violations
-  *  **denied-severity** - the minimal level of severity that should cause a rejection
+*  **denied-categories** - one or more policy categories that are not allowed in the detected violations
+*  **denied-severity** - the minimal level of severity that should cause a rejection
 
 ### Configure a ValidatingWebhookConfiguration Resource in Kubernetes Cluster
 Configure a new ```ValidatingWebhookConfiguration``` in your Kubernetes environment and specify your Terrascan server endpoint.
