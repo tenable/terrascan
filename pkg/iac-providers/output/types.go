@@ -73,6 +73,27 @@ func (a AllResourceConfigs) FindResourceByID(resourceID string) (*ResourceConfig
 	return &resource, nil
 }
 
+// FindAllResourcesByID Finds all resources within the resource map
+func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*ResourceConfig, error) {
+	resTypeName := strings.Split(resourceID, ".")
+	if len(resTypeName) < 2 {
+		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
+	}
+
+	resourceType := resTypeName[0]
+
+	// found := false
+	resources := make([]*ResourceConfig, 0)
+	resourceTypeList := a[resourceType]
+	for i := range resourceTypeList {
+		if resourceTypeList[i].ID == resourceID {
+			resources = append(resources, &resourceTypeList[i])
+		}
+	}
+
+	return resources, nil
+}
+
 // GetResourceCount gives out the total number of resources present in a output.ResourceConfig object.
 // Since the ResourceConfig mapping stores resources in lists which can be located resourceMapping[Type],
 // `len(resourceMapping)` does not give the count of the resources but only gives out the total number of

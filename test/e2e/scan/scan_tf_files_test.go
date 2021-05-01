@@ -209,7 +209,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 			When("output type is json", func() {
 				It("should display violations in json format", func() {
 					iacDir := filepath.Join(iacRootRelPath, "terraform_recursive")
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
+					scanArgs := []string{"-i", "terraform", "-p", policyDir, "-d", iacDir, "-o", "json"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_recursive.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})

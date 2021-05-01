@@ -97,6 +97,7 @@ func TestRun(t *testing.T) {
 		{
 			name: "terraform run with --non-recursive flag",
 			scanOptions: &ScanOptions{
+				iacType:      "terraform",
 				policyType:   []string{"all"},
 				iacDirPath:   testDataDir,
 				outputType:   "json",

@@ -25,6 +25,7 @@ import (
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
@@ -35,7 +36,8 @@ import (
 
 var (
 	// ErrBuildTFConfigDir error
-	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
+	ErrBuildTFConfigDir                   = fmt.Errorf("failed to build terraform allResourcesConfig")
+	errIacLoadDirs      *multierror.Error = nil
 )
 
 // ModuleConfig contains the *hclConfigs.Config for every module in the
@@ -66,7 +68,7 @@ func LoadIacDir(absRootDir string, nonRecursiveScan bool) (allResourcesConfig ou
 	// Walk the file path and find all directories
 	dirList, err := utils.FindAllDirectories(absRootDir)
 	if err != nil {
-		return nil, err
+		return nil, multierror.Append(errIacLoadDirs, err)
 	}
 	dirList = utils.FilterHiddenDirectories(dirList, absRootDir)
 
@@ -84,6 +86,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
 			zap.S().Debug(errMessage)
+			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
 			continue
 		}
 
@@ -93,6 +96,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
 			zap.S().Debug(errMessage)
+			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
 			continue
 		}
 
@@ -104,6 +108,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 			// loading the config dir, and continue with other directories
 			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
 			zap.S().Warnf(errMessage)
+			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
 			continue
 		}
 
@@ -138,6 +143,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 				// create output.ResourceConfig from hclConfigs.Resource
 				resourceConfig, err := CreateResourceConfig(managedResource)
 				if err != nil {
+					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
 					continue
 				}
 
@@ -147,12 +153,14 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 				// source file path
 				resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 				if err != nil {
+					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
 					continue
 				}
 
 				// tf plan directory relative path
 				planRoot, err := filepath.Rel(absRootDir, dir)
 				if err != nil {
+					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
 					continue
 				}
 				if absRootDir == dir {
@@ -183,7 +191,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 	}
 
 	// successful
-	return allResourcesConfig, nil
+	return allResourcesConfig, errIacLoadDirs
 }
 
 // loadDirNonRecursive has duplicate code
@@ -198,7 +206,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 		// log a debug message and continue with other directories
 		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
 		zap.S().Debug(errMessage)
-		return nil, fmt.Errorf(errMessage)
+		return nil, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
 	}
 
 	// load current config directory
@@ -207,7 +215,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 		// log a debug message and continue with other directories
 		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
-		return nil, fmt.Errorf(errMessage)
+		return nil, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
 	}
 
 	// get unified config for the current directory
@@ -218,7 +226,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 		// loading the config dir, and continue with other directories
 		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
 		zap.S().Warnf(errMessage)
-		return nil, ErrBuildTFConfigDir
+		return nil, multierror.Append(errIacLoadDirs, ErrBuildTFConfigDir)
 	}
 
 	/*
@@ -252,7 +260,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 			// create output.ResourceConfig from hclConfigs.Resource
 			resourceConfig, err := CreateResourceConfig(managedResource)
 			if err != nil {
-				return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
+				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to create ResourceConfig"))
 			}
 
 			// resolve references
@@ -261,7 +269,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 			// source file path
 			resourceConfig.Source, err = filepath.Rel(dir, resourceConfig.Source)
 			if err != nil {
-				return allResourcesConfig, fmt.Errorf("failed to get resource's filepath: %s", err)
+				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to get resource's filepath: %s", err))
 			}
 
 			// add tf plan directory relative path
@@ -289,7 +297,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 	}
 
 	// successful
-	return allResourcesConfig, nil
+	return allResourcesConfig, errIacLoadDirs
 }
 
 func generateTempDir() string {

@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
 	"syscall"
 	"testing"
 
@@ -33,6 +32,8 @@ import (
 )
 
 func TestLoadIacDir(t *testing.T) {
+	var nilMultiErr *multierror.Error = nil
+
 	testErrorString1 := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
@@ -72,7 +73,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid dirPath recursive",
 			dirPath: testDirPath1,
 			tfv12:   TfV12{false},
-			wantErr: pathErr,
+			wantErr: multierror.Append(pathErr),
 		},
 		{
 			name:    "empty config",
@@ -84,7 +85,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "empty config recursive",
 			dirPath: testDirPath2,
 			tfv12:   TfV12{false},
-			wantErr: nil,
+			wantErr: nilMultiErr,
 		},
 		{
 			name:    "incorrect module structure",
@@ -96,7 +97,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "incorrect module structure recursive",
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv12:   TfV12{false},
-			wantErr: nil,
+			wantErr: nilMultiErr,
 		},
 		{
 			name:    "load invalid config dir",
@@ -108,7 +109,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv12:   TfV12{false},
-			wantErr: nil,
+			wantErr: nilMultiErr,
 		},
 		{
 			name:    "load invalid config dir",
@@ -120,20 +121,26 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "load invalid config dir recursive",
 			dirPath: multipleProvidersDir,
 			tfv12:   TfV12{false},
-			wantErr: nil,
+			wantErr: nilMultiErr,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath)
-			if gotErr.Error() != tt.wantErr.Error() {
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nilMultiErr {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
 	}
-
-	var nilMultiErr *multierror.Error = nil
 
 	table2 := []struct {
 		name        string
@@ -155,7 +162,7 @@ func TestLoadIacDir(t *testing.T) {
 			// no change in the output expected as the config dir doesn't contain subfolder
 			tfJSONFile: filepath.Join(tfJSONDir, "fullconfig.json"),
 			tfv12:      TfV12{false},
-			wantErr:    nil,
+			wantErr:    nilMultiErr,
 		},
 		{
 			name:        "module directory",
@@ -170,7 +177,7 @@ func TestLoadIacDir(t *testing.T) {
 			// no change in the output expected as the config dir doesn't contain subfolder
 			tfJSONFile: filepath.Join(tfJSONDir, "moduleconfigs.json"),
 			tfv12:      TfV12{false},
-			wantErr:    nil,
+			wantErr:    nilMultiErr,
 		},
 		{
 			name:        "nested module directory",
@@ -184,7 +191,7 @@ func TestLoadIacDir(t *testing.T) {
 			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules-recursive.json"),
 			tfv12:       TfV12{false},
-			wantErr:     nil,
+			wantErr:     nilMultiErr,
 		},
 		{
 			name:        "variables of list type",
@@ -198,7 +205,15 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
 			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nilMultiErr {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 

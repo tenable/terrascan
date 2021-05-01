@@ -390,7 +390,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 			}
 
 			// Locate the resource details within the input map
-			resources, err := engineInput.InputData.FindResourcesByID(resourceID)
+			resources, err := engineInput.InputData.FindAllResourcesByID(resourceID)
 			if err != nil {
 				zap.S().Error(err)
 				continue
