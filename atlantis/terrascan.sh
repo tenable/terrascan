@@ -15,10 +15,22 @@
 #!/bin/bash
 
 terrascan scan -i tfplan --iac-version v1 -f ${PLANFILE}.json -l error > output
+exitcode=$?
 
-#Formatting- create Terrascan block:
-sed -i '1s/^/<details><Summary>Terrascan Scan Results<\/Summary>\n\n```diff\n/' output
-#Close up original block
-sed -i '1s/^/```\n<\/details>\n/' output
+if [[ ! $exitcode -eq 0 ]]; then
+    echo
+    echo '- Terrascan identified IAC policy violations:'
+    echo
+    echo 'Scan Results:'
+    cat output
+    echo
+    echo '```'
+    echo '</details>'
+    echo '<p><strong>Further atlantis details below:</strong></p>'
+    echo '<details>'
+    echo
+    echo '```diff'
+    echo
+fi
 
-cat output
+exit $exitcode

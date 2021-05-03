@@ -72,12 +72,10 @@ to_exec=""
 
 lookup_repo_config_flag $@
 
-if [[ $flag != "true" ]] && [[ "$@" == *"atlantis"* ]] && [[ "$@" == *"server"* ]] && [[ -f /etc/atlantis/terrascan_workflow.yaml ]]; then
-    echo "using the default repo-config"
+if [[ $flag != "true" ]] && [[ "$@" == *"atlantis"* ]] && [[ "$@" == *"server"* ]] && [[ -f /etc/atlantis/workflow.yaml ]]; then
     to_exec="$@ --repo-config=/etc/atlantis/workflow.yaml"
 else
     to_exec="$@"
 fi
 
-echo "executing command : $to_exec"
 exec $to_exec

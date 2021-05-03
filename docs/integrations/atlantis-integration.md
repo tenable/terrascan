@@ -75,30 +75,46 @@ Once the systems are running, when atlantis is called via pull request, or a com
 
 ## Custom Atlantis Container
 
+We have come up with a custom container built on top of the official atlantis container image, that will allow users to
+run IaC scans with terrascan, besides the usual atlantis usage. There's a default atlantis workflow setup inside in the
+container to be used. Users may also override that default workflow using the --repo-config flag.
+
 ### Usage
 
-To use our container image:
+On the code repository's end, usage is exactly the same as atlantis, you comment `atlantis plan` and `atlantis plan` on
+your Pull Requests to trigger the custom atlantis-terrascan workflow.
+
+##### To use our container image:
 ```
 docker pull accurics/terrascan_atlantis
 ```
 
-To build your own container image:
+##### To build your own container image:
 ```
 docker build ./atlantis -t <image_name>
 ```
 
-Running the container:
+###### Running the container:
 
+```bash
+docker run \
+--env-file=<.env-file> \
+-p 4141:4141 \
+-v <pwd>/config_data/:/etc/terrascan/ \
+accurics/terrascan_atlantis server \
+--gh-user="$USERNAME" --gh-token="$TOKEN" --gh-webhook-secret="$SECRET" \
+--repo-allowlist="$REPO_ALLOWLIST" \
+-c /etc/terrascan/config.toml
 ```
-docker run -e AWS_ACCESS_KEY_ID=<value> -e AWS_SECRET_ACCESS_KEY=<value> -e AWS_REGION=<value>  -p 4141:4141 --user=atlantis -v <pwd>/data/:/etc/terrascan/ <image-name> server --gh-user=<GH_USER> --gh-token=<GH_PersonalAccessToken> --repo-allowlist=<gh_repo> --gh-webhook-secret=<webhook-secret> -c /etc/terrascan/config.toml
-```
 
-PS: You need to provide all the environment variables that terraform requires to operate with your respective cloud providers.
-
-The server command is same as in [atlantis docs](https://www.runatlantis.io/docs/), except for an additional `-c` flag,
-which is used to pass in the toml config filepath for terrascan.
-
+The syntax of the atlantis server command here is same as in [atlantis docs](https://www.runatlantis.io/docs/),
+except for an optional `-c` flag which can be used to pass in the toml config filepath for terrascan.
 Another way to provide the toml config filepath would be the TERRASCAN_CONFIG environment variable.
 
-The default workflow.yaml file used is the `atlantis/workflow.yaml` in this repo. You're allowed to override on your own
-by using the `--repo-config` flag. To trigger the terrascan scan, make sure you include a step to execute `atlantis/terrascan.sh`  in your workflow file.
+You need to provide all the environment variables that terraform requires to operate with your respective cloud providers.
+It's a good practice to use a [specific tag](https://hub.docker.com/r/accurics/terrascan_atlantis/tags) of the container
+image rather than the latest tag.
+
+The default workflow.yaml file used is the `atlantis/workflow.yaml` in this repo. You can override the default workflow
+using the `--repo-config` flag. It will be up to you how you want to trigger `terrascan` for your usage. You can do
+something along the lines of `atlantis/workflow.yaml` and `atlantis/terrascan.sh` itself.

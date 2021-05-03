@@ -30,7 +30,7 @@ function fetch_configfile() {
             else
                 eval var='$'$(( count + 1 ))
                 eval config_file="$var"
-                copy=$(echo "$@" | sed "s/-c//")
+                copy=$(echo "$@" | sed "s/ -c//")
                 copy=${copy/$config_file}
             fi
         fi
