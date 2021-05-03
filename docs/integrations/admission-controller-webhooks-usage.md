@@ -2,14 +2,14 @@
 
 ## Overview
 Terrascan can be integrated with K8s [admissions webhooks](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/).
-Admission controllers help you control what resources are created on a kubernetes cluster. By using terrascan as an admission controller, resources violating security policies can be blocked from getting created in a kubernetes cluster.
+Admission controllers help you control what resources are created on a kubernetes cluster. By using terrascan as an admission controller, resources violating security policies can be blocked from getting created in a kubernetes cluster. [Please check our blog](https://www.accurics.com/blog/terrascan-blog/kubernetes-security-terrascan-validating-admission-controller/) for more details and instructions!
 
 Steps to configure terrascan as an admission controller:
 - SSL certificates: You can use valid SSL certificates or create self signed certificates and have your kubernetes cluster trust it.
 - Create terrascan config file
 - Run terrascan in server mode
 - Make sure terrascan is accessible via HTTPS from the kubernetes API server.
-- Configure a ValidatingWebhookConfiguration resource in kubernetes cluster pointing to the terrascan server
+- Configure a [ValidatingWebhookConfiguration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#validatingwebhookconfiguration-v1-admissionregistration-k8s-io) resource in kubernetes cluster pointing to the terrascan server
 
 ## Installation Guide
 
@@ -52,17 +52,21 @@ A config file example: ```config.toml```
         "Network Ports Security"
     ]
     denied-severity = "high"
+    dashboard=true
 ```
 
 You can specify the following configurations:
 
 *  **scan-rules** - one or more rules to scan
 *  **skip-rules** - one or more rules to skip while scanning
-*  **severity** - the minimal level of severity of the policies to be scanned
-*  **category** - the list of type of categories of the policies to be scanned
-* **k8s-admission-control** - specify the rules that should cause a rejection of the admission request
-*  **denied-categories** - one or more policy categories that are not allowed in the detected violations
-*  **denied-severity** - the minimal level of severity that should cause a rejection
+*  **severity** - the minimal level of severity of the policies to be scanned and displayed. Options are high, medium and low
+*  **category** - the list of type of categories of the policies to be scanned and displayed
+
+**k8s-admission-control** - Config options for K8s Admission Controllers and GitOps workflows:
+
+*  **denied-severity** - Violations of this or higher severity will cause and admission rejection. Lower severity violations will be warnings. Options are high, medium. and low
+*  **denied-categories** - violations from these policy categories will lead to an admission rejection. Policy violations of other categories will lead to warnings.
+*  **dashboard=true** - enable the `/logs` endpoint to  log and graphically display admission requests and violations. Default is `false`
 
 ### Configure a ValidatingWebhookConfiguration Resource in Kubernetes Cluster
 Configure a new ```ValidatingWebhookConfiguration``` in your Kubernetes environment and specify your Terrascan server endpoint.
