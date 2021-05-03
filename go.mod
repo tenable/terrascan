@@ -27,7 +27,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.12.1
 	github.com/onsi/gomega v1.10.5
-	github.com/open-policy-agent/opa v0.22.0
+	github.com/open-policy-agent/opa v0.28.0
 	github.com/pelletier/go-toml v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.5.1
