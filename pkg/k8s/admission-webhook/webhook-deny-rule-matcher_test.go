@@ -95,7 +95,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 		},
 	}
 
-	var denyRuleMatcher = webhookDenyRuleMatcher{}
+	var denyRuleMatcher = WebhookDenyRuleMatcher{}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
@@ -106,7 +106,7 @@ func TestDenyRuleMatcher(t *testing.T) {
 				Category: tt.ruleCategory,
 			}
 
-			result := denyRuleMatcher.match(violation, tt.k8sDenyRules)
+			result := denyRuleMatcher.Match(violation, tt.k8sDenyRules)
 			if result != tt.expectedResult {
 				t.Errorf("Expected: %v, Got: %v", tt.expectedResult, result)
 			}

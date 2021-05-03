@@ -24,7 +24,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/downloader"
+	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
@@ -69,11 +71,12 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 	// scan remote repo
 	s.d = downloader.NewDownloader()
 	var results interface{}
+	var isAdmissionDenied bool
 	if g.test {
-		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{"./testdata/testpolicies"})
+		results, isAdmissionDenied, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, []string{"./testdata/testpolicies"})
 
 	} else {
-		results, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, getPolicyPathFromConfig())
+		results, isAdmissionDenied, err = s.ScanRemoteRepo(iacType, iacVersion, cloudType, getPolicyPathFromConfig())
 	}
 	if err != nil {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
@@ -90,17 +93,23 @@ func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// return with results
+	// if result contain violations denied by admission controller return 403 status code
+	if isAdmissionDenied {
+		apiResponse(w, string(j), http.StatusForbidden)
+		return
+	}
 	apiResponse(w, string(j), http.StatusOK)
 }
 
 // ScanRemoteRepo is the actual method where a remote repo is downloaded and
 // scanned for violations
-func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType []string, policyPath []string) (interface{}, error) {
+func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType []string, policyPath []string) (interface{}, bool, error) {
 
 	// return params
 	var (
-		output interface{}
-		err    error
+		output            interface{}
+		err               error
+		isAdmissionDenied bool
 	)
 
 	// temp destination directory to download remote repo
@@ -112,7 +121,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to download remote repo. error: '%v'", err)
 		zap.S().Error(errMsg)
-		return output, err
+		return output, isAdmissionDenied, err
 	}
 
 	// create a new runtime executor for scanning the remote repo
@@ -120,7 +129,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity)
 	if err != nil {
 		zap.S().Error(err)
-		return output, err
+		return output, isAdmissionDenied, err
 	}
 
 	// evaluate policies IaC for violations
@@ -128,7 +137,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
-		return output, err
+		return output, isAdmissionDenied, err
 	}
 
 	if !s.ShowPassed {
@@ -139,9 +148,21 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	if s.ConfigOnly {
 		output = results.ResourceConfig
 	} else {
+		isAdmissionDenied = hasK8sAdmissionDeniedViolations(results)
 		output = results.Violations
 	}
 
 	// succesful
-	return output, nil
+	return output, isAdmissionDenied, nil
+}
+
+// hasK8sAdmissionDeniedViolations checks if violations have denied by k8s admission controller
+func hasK8sAdmissionDeniedViolations(o runtime.Output) bool {
+	denyRuleMatcher := admissionwebhook.WebhookDenyRuleMatcher{}
+	for _, v := range o.Violations.ViolationStore.Violations {
+		if denyRuleMatcher.Match(*v, config.GetK8sAdmissionControl()) {
+			return true
+		}
+	}
+	return false
 }
