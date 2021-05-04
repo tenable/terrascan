@@ -24,7 +24,7 @@ spec:
            memory: "256Mi"
        env:
          - name: SERVICE_NAME
-           value: terra-controller-service.default.svc
+           value: <Name of service exposed for terrascan controller pod>
          - name: REMOTE_URL
            value: <YOUR PRIVATE REPOSITORY PATH>
        args:

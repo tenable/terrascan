@@ -3,7 +3,7 @@
 FROM alpine:3.12.0
 
 #curl to send request to terrascan validating webhook
-RUN apk add --no-cache curl && 
+RUN apk add --no-cache curl 
 
 WORKDIR /home/terrascan
 

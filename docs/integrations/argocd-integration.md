@@ -137,7 +137,7 @@ fi
  
 For non-public repositories, the private key, known_hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
  
-```sh 
+```
  kubectl create secret generic github-secret \
    --from-file=ssh-privatekey= < path to your private key > \
     --from-file=ssh-publickey=< path to your public key >
@@ -174,7 +174,7 @@ You can use the already deployed terrascan’s k8s admission controller webhook 
 To configure, follow below steps
 
 
-#### Step 1: Configure terrascan admission controller webhook deployment yaml file with required keys and volumes.
+#### Step 1: Configure terrascan admission controller webhook deployment yaml file with required keys and volumes and service to expose the controller pod.
 
 ```yaml
 apiVersion: apps/v1
@@ -250,6 +250,20 @@ template:
         configMap:
           name: known-hosts-config
 ```            
+Service example
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: terra-controller-service
+spec:
+  selector:
+    app: terrascan-admission-webhook
+  ports:
+  - port: 443
+    targetPort: 443
+```
 
 For non-public repositories, the private key, known hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
   
@@ -373,7 +387,7 @@ template:
           memory: "256Mi"
       env:
         - name: SERVICE_NAME
-          value: terra-controller-service.default.svc
+          value: <Name of service exposed for terrascan controller pod>
         - name: REMOTE_URL
           value: <YOUR PRIVATE REPOSITORY PATH>
       args:

@@ -15,6 +15,10 @@
 #    limitations under the License.
 ###
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 TERRASCAN_SERVER="https://${SERVICE_NAME}"
 IAC="k8s"
 IAC_VERSION="v1"
