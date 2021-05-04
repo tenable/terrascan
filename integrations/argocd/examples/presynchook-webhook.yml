@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+ generateName: terrascan-hook-
+ namespace: test
+ annotations:
+   argocd.argoproj.io/hook: PreSync            
+spec:
+ ttlSecondsAfterFinished: 3600
+ template:
+   spec:
+     securityContext:
+       seccompProfile:
+         type: RuntimeDefault
+     containers:
+     - name: terrascan-argocd
+       image: <CUSTOME PRESYNC HOOK IMAGE FROM>
+       resources:
+         requests:
+           cpu: "1"
+           memory: "256Mi"
+         limits:
+           cpu: "1"
+           memory: "256Mi"
+       env:
+         - name: SERVICE_NAME
+           value: terra-controller-service.default.svc
+         - name: REMOTE_URL
+           value: <YOUR PRIVATE REPOSITORY PATH>
+       args:
+       - sh
+       - /home/terrascan/bin/terrascan-remote-scan.sh
+       securityContext:
+         seccompProfile:
+           type: RuntimeDefault
+         allowPrivilegeEscalation: false
+         readOnlyRootFilesystem: true
+         runAsNonRoot: true
+         runAsUser: 101
+       livenessProbe:
+         exec:
+           command:
+           - cat
+           - /home/terrascan/bin/terrascan-remote-scan.sh
+         periodSeconds: 10
+         initialDelaySeconds: 10
+       readinessProbe:
+         exec:
+           command:
+           - cat
+           - /home/terrascan/bin/terrascan-remote-scan.sh
+         periodSeconds: 10
+         initialDelaySeconds: 10
+     restartPolicy: Never
+ backoffLimit: 1
+ 
