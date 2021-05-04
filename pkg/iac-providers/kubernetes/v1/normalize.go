@@ -163,7 +163,7 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 		skipRules := make([]output.SkipRule, 0)
 		err := json.Unmarshal([]byte(rules), &skipRules)
 		if err != nil {
-			zap.S().Debugf("terrascanSkip rules '%s' cannot be unmarshalled to json", rules)
+			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
 			return nil
 		}
 		return skipRules
