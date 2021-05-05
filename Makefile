@@ -19,6 +19,10 @@ help:
 	@echo "docker-push\n\tpush terrascan docker image"
 	@echo "docker-push-latest\n\tpush terrascan docker image with latest tag"
 	@echo "docker-push-latest-tag\n\tpush terrascan docker image with latest release tag"
+	@echo "docker-atlantis-build\n\tbuild terrascan_atlantis docker image"
+	@echo "docker-atlantis-push\n\tpush terrascan_atlantis docker image"
+	@echo "docker-atlantis-push-latest\n\tpush terrascan_atlantis docker image with latest tag"
+	@echo "docker-atlantis-push-latest-tag\n\tpush terrascan_atlantis docker image with latest release tag"
 	@echo "gofmt\n\tvalidate gofmt"
 	@echo "golint\n\tvalidate golint"
 	@echo "gomodverify\n\tverify go modules"
@@ -104,3 +108,19 @@ docker-push-latest:
 # push release tag terrascan docker image
 docker-push-latest-tag:
 	./scripts/docker-push-latest-tag.sh
+
+# build terrascan_atlantis docker image
+atlantis-docker-build:
+	./scripts/atlantis/docker-build.sh
+
+# push terrascan_atlantis docker image
+atlantis-docker-push:
+	./scripts/atlantis/docker-push.sh
+
+# push latest terrascan_atlantis docker image
+atlantis-docker-push-latest:
+	./scripts/atlantis/docker-push-latest.sh
+
+# push release tag terrascan_atlantis docker image
+atlantis-docker-push-latest-tag:
+	./scripts/atlantis/docker-push-latest-tag.sh
