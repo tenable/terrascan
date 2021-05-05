@@ -1,0 +1,6 @@
+resources:
+  - ../server
+  - validating-webhook.yaml
+
+commonAnnotations:
+  terrascan-webhook: terrascan-validating-hook.terrascan.svc

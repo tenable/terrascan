@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: terrascan-validating-hook.terrascan.svc
+webhooks:
+  - name: terrascan-validating-hook.terrascan.svc
+    rules:
+    - apiGroups:
+      - ""
+      apiVersions:
+        - v1
+      operations:
+        - CREATE
+        - UPDATE
+      resources:
+        - pods
+        - services
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        name: terrascan-server
+        namespace: <TERRASCAN_NAMESPACE>
+        path: /v1/k8s/webhooks/<TERRASCAN_SERVER_KEY_PLACEHOLDER>/scan/validate
+      caBundle: <CA_BUNDLE_PLACEHOLDER>
+    admissionReviewVersions: ["v1", "v1beta1"]
