@@ -171,7 +171,7 @@ Example ssh config file
 Once the presynchook yaml file is completely configured, add this file to your repository folder for which Argo CD pipeline is configured.
 
 
-### 2. Use Terrascan Admission Webhook from PreSyncHook
+### 2. Use PreSyncHook to trigger the Terrascan Server Service
 ___
 You can use the already deployed terrascan’s k8s admission controller webhook to scan the remote repository from Argo CD PreSync hook.
 To configure, follow below steps
