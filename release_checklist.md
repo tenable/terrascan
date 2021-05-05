@@ -5,7 +5,7 @@ This file provides a guideline on steps that need to be taken to properly releas
 The following command will kick off both unit tests and end-to-end tests. These tests should finish clean before a release is made:
 
 ```
-make test
+make cicd
 ```
 
 ### Bump version in source code
