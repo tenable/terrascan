@@ -1,0 +1,12 @@
+{
+    "name": "noNodeToNodeEncryptionDomain",
+    "file": "noNodeToNodeEncryptionDomain.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Elasticsearch domains being created are set to be encrypted node-to-node",
+    "reference_id": "AC_AWS_045",
+    "category": "Infrastructure Security",
+    "version": 2
+}

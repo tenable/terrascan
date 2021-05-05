@@ -1,0 +1,12 @@
+{
+    "name": "notEncryptedSageMaker",
+    "file": "notEncryptedSageMaker.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure SageMaker Instance is Encrypted",
+    "reference_id": "AC_AWS_035",
+    "category": "Data Protection",
+    "version": 2
+}

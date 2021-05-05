@@ -1,0 +1,12 @@
+{
+    "name": "athenaDatabaseEncrypted",
+    "file": "athenaDatabaseEncrypted.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Athena Database is encrypted at rest",
+    "reference_id": "AC_AWS_016",
+    "category": "Data Protection",
+    "version": 2
+}

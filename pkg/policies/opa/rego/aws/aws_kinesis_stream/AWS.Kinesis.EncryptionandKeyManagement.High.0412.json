@@ -5,7 +5,7 @@
         "prefix": ""
     },
     "severity": "HIGH",
-    "description": "Kinesis Streams and metadata are not protected",
+    "description": "Ensure Kinesis Stream is encrypted",
     "reference_id": "AWS.Kinesis.EncryptionandKeyManagement.High.0412",
     "category": "Data Protection",
     "version": 2
