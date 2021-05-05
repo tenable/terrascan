@@ -1,6 +1,6 @@
 ##### PRE-REQUISITE
 
-1. Make sure your replace `<TERRASCAN_NAMESPACE>` placeholder with your target namespace where to want to deploy the
+1. Make sure you replace `<TERRASCAN_NAMESPACE>` placeholder with your target namespace where you to want to deploy the
 terrascan server. The string replacement will be required in the `server/kustomization.yaml`,  `webhook/validating-webhook.yaml`
 and the `certs/domain.cnf` file that is generated in step 1 of `Generating TLS Certificates` section.
 
@@ -59,7 +59,7 @@ and the `certs/domain.cnf` file that is generated in step 1 of `Generating TLS C
 ### Deploying Terrascan Server
 
 1. Generate your TLS certificate files and place them in the `server/certs/` directory as `server.key` and `server.crt`.
-   Please refer to the `Generating TLS Certificates` section down below.
+   Please refer to the `Generating TLS Certificates` section above.
 
 2. Place your terrascan `config.toml` in the `server/config/` directory or edit the existing one.
 
