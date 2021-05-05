@@ -173,7 +173,7 @@ Once the presynchook yaml file is completely configured, add this file to your r
 
 ### 2. Use PreSyncHook to trigger the Terrascan Server Service
 ___
-You can use the already deployed terrascan’s k8s admission controller webhook to scan the remote repository from Argo CD PreSync hook.
+You can use the already deployed terrascan server service in k8s cluster to scan the remote repository from Argo CD PreSync hook.
 To configure, follow below steps
 
 
