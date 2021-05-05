@@ -17,9 +17,9 @@ spec:
          configMap:
            name: slack-notifications
        #add all required ssh keys need to clone your repos
-       - name: ssh-keys-github
+       - name: ssh-key-secret
          secret:
-           secretName: github-secret
+           secretName: ssh-key-secret
        #add a secret for git config file   
        - name: ssh-config
          secret:
@@ -41,7 +41,7 @@ spec:
        command: ["/bin/sh", "-c"]
        args:
        - >
-         cp /etc/github-secret/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
+         cp /etc/secret-volume/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
          cp /etc/ssh-config-secret/ssh-config /home/terrascan/.ssh/config &&
          cp /etc/ssh-known-hosts-secret/ssh-known-hosts /home/terrascan/.ssh/known_hosts &&
          chmod -R 400 /home/terrascan/.ssh/* &&
@@ -68,8 +68,8 @@ spec:
          periodSeconds: 10 
        #if want to use private repo
        volumeMounts:
-         - mountPath: /etc/github-secret
-           name: ssh-keys-github
+         - mountPath: /etc/secret-volume
+           name: ssh-key-secret
            readOnly: true
          - mountPath: /etc/ssh-config-secret
            name: ssh-config

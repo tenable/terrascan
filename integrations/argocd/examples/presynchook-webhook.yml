@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
  generateName: terrascan-hook-
- namespace: test
+ namespace: <YOU APPLICATION NAMESPACE>
  annotations:
    argocd.argoproj.io/hook: PreSync            
 spec:
