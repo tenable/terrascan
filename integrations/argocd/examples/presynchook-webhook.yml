@@ -14,7 +14,7 @@ spec:
          type: RuntimeDefault
      containers:
      - name: terrascan-argocd
-       image: <CUSTOME PRESYNC HOOK IMAGE FROM>
+       image: <CUSTOME PRESYNC HOOK IMAGE>
        resources:
          requests:
            cpu: "1"
@@ -27,6 +27,14 @@ spec:
            value: <Name of service exposed for terrascan controller pod>
          - name: REMOTE_URL
            value: <YOUR PRIVATE REPOSITORY PATH>
+         - name: IAC_TYPE
+           value: <IAC TYPE YOU WANT SCAN> # If not provided default value is 'k8s'
+         - name: IAC_VERSION
+           value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1' 
+         - name: CLOUD_PROVIDER
+           value: <TYPE OF CLOUD PROVIDER> #If not provided default value is 'all'
+         - name: REMOTE_TYPE
+           value: <TYPE OF REMOTE> #If not provided default value is 'git'       
        args:
        - sh
        - /home/terrascan/bin/terrascan-remote-scan.sh

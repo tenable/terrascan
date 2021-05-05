@@ -14,8 +14,8 @@ spec:
      # if you want to add slack notification script add one more volume here
      Volumes:
        - name: notification-scripts
-         hostPath:
-           path: <PATH TO YOUR SCRIPT>
+         configMap:
+           name: slack-notifications
        #add all required ssh keys need to clone your repos
        - name: ssh-keys-github
          secret:

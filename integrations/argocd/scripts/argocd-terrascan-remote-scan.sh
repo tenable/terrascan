@@ -20,10 +20,10 @@ set -o nounset
 set -o pipefail
 
 TERRASCAN_SERVER="https://${SERVICE_NAME}"
-IAC="k8s"
-IAC_VERSION="v1"
-CLOUD_PROVIDER="all"
-REMOTE_TYPE="git"
+IAC=${IAC_TYPE:-"k8s"}
+IAC_VERSION=${IAC_VERSION:-"v1"}
+CLOUD_PROVIDER=${CLOUD_PROVIDER:-"all"}
+REMOTE_TYPE=${REMOTE_TYPE:-"git"}
 
 SCAN_URL="${TERRASCAN_SERVER}/v1/${IAC}/${IAC_VERSION}/${CLOUD_PROVIDER}/remote/dir/scan"
 
@@ -39,6 +39,10 @@ echo "$RESPONSE"
 # get http status code from response
 HTTP_STATUS=$(printf '%s\n' "$RESPONSE" | tail -n1)
 
-if [ "$HTTP_STATUS" -ne 200 ]; then
+if [ "$HTTP_STATUS" -eq 403 ]; then
     exit 3
+elif [ "$HTTP_STATUS" -eq 200 ]; then
+    exit 0
+else
+    exit 1
 fi

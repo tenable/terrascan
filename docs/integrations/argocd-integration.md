@@ -29,11 +29,11 @@ spec:
      securityContext:
        seccompProfile:
          type: RuntimeDefault
-     # if you want to add slack notification script add one more volume here
      Volumes:
+       #add a configmap for the slack notification scripts
        - name: notification-scripts
-         hostPath:
-           path: <PATH TO YOUR SCRIPT>
+         configMap:
+           name: slack-notifications
        #add all required ssh keys need to clone your repos
        - name: ssh-keys-github
          secret:
@@ -146,9 +146,12 @@ For non-public repositories, the private key, known_hosts and ssh config needs t
 Config-map: 
 
 ``` 
-  kubectl  create configmap ssh-known-hosts --from-file=
-   < path to you known hosts file >
+  kubectl  create configmap ssh-known-hosts --from-file=< path to your known hosts file >
 ```   
+
+``` 
+  kubectl  create configmap slack-notifications --from-file=< path to your notification script >
+```
  
 ssh config secret
 
@@ -214,8 +217,12 @@ template:
         - name: K8S_WEBHOOK_API_KEY
           value: yoursecretapikey
       volumeMounts:
-        - mountPath: /data
-          name: certspath
+        - mountPath: /data/certs
+          name: terrascan-certs-secret  
+          readOnly: true
+        - mountPath: /data/config
+          name: terrascan-config
+          readOnly: true
         - mountPath: /etc/github-secret
           name: ssh-keys-github
           readOnly: true
@@ -232,11 +239,8 @@ template:
           cp /etc/ssh-config-secret/ssh-config /home/terrascan/.ssh/config &&
           cp /etc/ssh-known-hosts-secret/ssh-known-hosts /home/terrascan/.ssh/known_hosts &&
           chmod -R 400 /home/terrascan/.ssh/* &&
-          terrascan server --cert-path /data/server.crt --key-path /data/server.key -p 443 -l debug -c /data/config.toml
+          terrascan server --cert-path /data/certs/server.crt --key-path /data/certs/server.key -p 443 -l debug -c /data/config/config.toml
     volumes:
-      - name: certspath
-        hostPath:
-          path: <YOUR CERTIFICATE FOLDER PATH>
       #add all required ssh keys need to clone your repos
       - name: ssh-keys-github
         secret:
@@ -249,6 +253,14 @@ template:
       - name: ssh-known-hosts
         configMap:
           name: known-hosts-config
+      #add a configmap for the terrascan config.toml file    
+      - name: terrascan-config
+        configMap:
+          name: terrascan-config 
+      #add a secret for the tls certificates        
+      - name: terrascan-certs-secret
+        secret:
+          secretName: terrascan-certs-secret    
 ```            
 Service example
 
@@ -273,12 +285,21 @@ kubectl create secret generic github-secret \
   --from-file=ssh-publickey=< path to your public key >
 ``` 
 
+```
+kubectl create secret generic terrascan-certs-secret \
+  --from-file= < path to your .key file > \
+  --from-file= < path to your .crt file >
+``` 
+
 Config-map: 
 
 ``` 
-kubectl create configmap ssh-known-hosts --from-file=< path to you known hosts file >
+kubectl create configmap ssh-known-hosts --from-file=< path to your known hosts file >
 ``` 
 
+```
+kubectl create configmap terrascan-config  --from-file=<path to your config.toml file >
+```
 ssh config secret
 
 ``` 
@@ -331,11 +352,16 @@ terrascan-remote-scan script
 
 ```sh
 #!/bin/sh
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 TERRASCAN_SERVER="https://${SERVICE_NAME}"
-IAC="k8s"
-IAC_VERSION="v1"
-CLOUD_PROVIDER="all"
-REMOTE_TYPE="git"
+IAC=${IAC_TYPE:-"k8s"}
+IAC_VERSION=${IAC_VERSION:-"v1"}
+CLOUD_PROVIDER=${CLOUD_PROVIDER:-"all"}
+REMOTE_TYPE=${REMOTE_TYPE:-"git"}
 
 SCAN_URL="${TERRASCAN_SERVER}/v1/${IAC}/${IAC_VERSION}/${CLOUD_PROVIDER}/remote/dir/scan"
 
@@ -350,8 +376,12 @@ echo "$RESPONSE"
 
 HTTP_STATUS=$(printf '%s\n' "$RESPONSE" | tail -n1)
 
-if [ "$HTTP_STATUS" -ne 200 ]; then
-  exit 3
+if [ "$HTTP_STATUS" -eq 403 ]; then
+    exit 3
+elif [ "$HTTP_STATUS" -eq 200 ]; then
+    exit 0
+else
+    exit 1
 fi
 ```
 
@@ -365,7 +395,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
 generateName: terrascan-hook-
-namespace: test
+namespace: <YOUR APP NAMESPACE>
 annotations:
   argocd.argoproj.io/hook: PreSync            
 spec:
@@ -377,7 +407,7 @@ template:
         type: RuntimeDefault
     containers:
     - name: terrascan-argocd
-      image: <IMAGE FROM STEP 2>
+      image: <IMAGE FROM STEP TWO>
       resources:
         requests:
           cpu: "1"
@@ -390,6 +420,14 @@ template:
           value: <Name of service exposed for terrascan controller pod>
         - name: REMOTE_URL
           value: <YOUR PRIVATE REPOSITORY PATH>
+        - name: IAC_TYPE
+          value: <IAC TYPE YOU WANT SCAN> # If not provided default value is 'k8s'
+        - name: IAC_VERSION
+          value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1' 
+        - name: CLOUD_PROVIDER
+          value: <TYPE OF CLOUD PROVIDER> #If not provided default value is 'all'
+        - name: REMOTE_TYPE
+          value: <TYPE OF REMOTE> #If not provided default value is 'git'         
       args:
       - sh
       - /home/terrascan/bin/terrascan-remote-scan.sh
