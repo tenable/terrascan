@@ -6,7 +6,9 @@ import (
 
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 	"sigs.k8s.io/kustomize/api/filesys"
 	"sigs.k8s.io/kustomize/api/krusty"
@@ -17,7 +19,8 @@ const (
 )
 
 var (
-	kustomizeErrMessage = "error from kustomization. error : %v"
+	kustomizeErrMessage                   = "error from kustomization. error : %v"
+	errIacLoadDirs      *multierror.Error = nil
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
@@ -28,17 +31,19 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	files, err := utils.FindFilesBySuffixInDir(absRootDir, KustomizeFileNames())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	if len(files) == 0 {
+		errMsg := fmt.Sprintf("kustomization.y(a)ml file not found in the directory %s", absRootDir)
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", absRootDir)
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
 	if len(files) > 1 {
+		errMsg := fmt.Sprintf("multiple kustomization.y(a)ml found in the directory %s", absRootDir)
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, fmt.Errorf("multiple kustomization.y(a)ml found in the directory %s", absRootDir)
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
 	kustomizeFileName := *files[0]
@@ -47,7 +52,7 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	if err != nil {
 		err = fmt.Errorf("unable to read the kustomization file in the directory %s, error: %v", absRootDir, err)
 		zap.S().Error("error while reading the file", kustomizeFileName, zap.Error(err))
-		return allResourcesConfig, err
+		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	// ResourceConfig representing the kustomization.y(a)ml file
@@ -65,8 +70,9 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 	// obtaining list of IacDocuments from the target working directory
 	iacDocuments, err := LoadKustomize(absRootDir, kustomizeFileName)
 	if err != nil {
+		errMsg := fmt.Sprintf("error occurred while loading kustomize directory '%s'. err: %v", absRootDir, err)
 		zap.S().Error("error occurred while loading kustomize directory", zap.String("kustomize directory", absRootDir), zap.Error(err))
-		return nil, err
+		return nil, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
 	for _, doc := range iacDocuments {
@@ -85,7 +91,7 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, 
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 
-	return allResourcesConfig, nil
+	return allResourcesConfig, errIacLoadDirs
 }
 
 // LoadKustomize loads up a 'kustomized' directory and returns a returns a list of IacDocuments

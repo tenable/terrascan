@@ -29,6 +29,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 )
 
 var testDataDir = "testdata"
@@ -64,14 +65,14 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "bad directory",
 			dirPath:       filepath.Join(testDataDir, "bad-dir"),
 			helmv3:        HelmV3{},
-			wantErr:       invalidDirErr,
+			wantErr:       multierror.Append(invalidDirErr),
 			resourceCount: 0,
 		},
 		{
 			name:          "no helm charts in directory",
 			dirPath:       filepath.Join(testDataDir, "no-helm-charts"),
 			helmv3:        HelmV3{},
-			wantErr:       fmt.Errorf("no helm charts found in directory %s", filepath.Join(testDataDir, "no-helm-charts")),
+			wantErr:       multierror.Append(fmt.Errorf("no helm charts found in directory %s", filepath.Join(testDataDir, "no-helm-charts"))),
 			resourceCount: 0,
 		},
 	}
@@ -79,7 +80,15 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nil {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 

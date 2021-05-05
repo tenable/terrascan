@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 )
 
 const kustomizeErrPrefix = "error from kustomization."
@@ -32,7 +32,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "invalid dirPath",
 			dirPath:       "not-there",
 			kustomize:     KustomizeV3{},
-			wantErr:       &os.PathError{Err: syscall.ENOENT, Op: "open", Path: "not-there"},
+			wantErr:       multierror.Append(&os.PathError{Err: syscall.ENOENT, Op: "open", Path: "not-there"}),
 			resourceCount: 0,
 		},
 		{
@@ -76,14 +76,14 @@ func TestLoadIacDir(t *testing.T) {
 			name:          "no-kustomize-directory",
 			dirPath:       filepath.Join(testDataDir, "no-kustomizefile"),
 			kustomize:     KustomizeV3{},
-			wantErr:       fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", filepath.Join(testDataDir, "no-kustomizefile")),
+			wantErr:       multierror.Append(fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", filepath.Join(testDataDir, "no-kustomizefile"))),
 			resourceCount: 0,
 		},
 		{
 			name:          "kustomize-file-empty",
 			dirPath:       filepath.Join(testDataDir, "kustomize-file-empty"),
 			kustomize:     KustomizeV3{},
-			wantErr:       fmt.Errorf("unable to read the kustomization file in the directory %s, error: yaml file is empty", filepath.Join(testDataDir, "kustomize-file-empty")),
+			wantErr:       multierror.Append(fmt.Errorf("unable to read the kustomization file in the directory %s, error: yaml file is empty", filepath.Join(testDataDir, "kustomize-file-empty"))),
 			resourceCount: 0,
 		},
 	}
@@ -91,11 +91,19 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			resourceMap, gotErr := tt.kustomize.LoadIacDir(tt.dirPath)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nil {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
-			resCount := utils.GetResourceCount(resourceMap)
+			resCount := resourceMap.GetResourceCount()
 			if resCount != tt.resourceCount {
 				t.Errorf("resource count (%d) does not match expected (%d)", resCount, tt.resourceCount)
 			}

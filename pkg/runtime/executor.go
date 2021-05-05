@@ -17,12 +17,16 @@
 package runtime
 
 import (
+	"sort"
+
 	"go.uber.org/zap"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
 	opa "github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/hashicorp/go-multierror"
 )
 
 // Executor object
@@ -35,7 +39,7 @@ type Executor struct {
 	iacVersion    string
 	scanRules     []string
 	skipRules     []string
-	iacProvider   iacProvider.IacProvider
+	iacProviders  []iacProvider.IacProvider
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
 	categories    []string
@@ -45,12 +49,13 @@ type Executor struct {
 // NewExecutor creates a runtime object
 func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
 	e = &Executor{
-		filePath:   filePath,
-		dirPath:    dirPath,
-		policyPath: policyPath,
-		cloudType:  cloudType,
-		iacType:    iacType,
-		iacVersion: iacVersion,
+		filePath:     filePath,
+		dirPath:      dirPath,
+		policyPath:   policyPath,
+		cloudType:    cloudType,
+		iacType:      iacType,
+		iacVersion:   iacVersion,
+		iacProviders: make([]iacProvider.IacProvider, 0),
 	}
 
 	// read config file and update scan and skip rules
@@ -92,11 +97,30 @@ func (e *Executor) Init() error {
 		return err
 	}
 
-	// create new IacProvider
-	e.iacProvider, err = iacProvider.NewIacProvider(e.iacType, e.iacVersion)
-	if err != nil {
-		zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
-		return err
+	// create new IacProviders
+	if e.iacType == "all" {
+		for _, ip := range iacProvider.SupportedIacProviders() {
+			// skip tfplan because it doesn't support directory scanning
+			if ip == "tfplan" {
+				continue
+			}
+
+			// initialize iac providers with default versions
+			defaultIacVersion := iacProvider.GetDefaultIacVersion(ip)
+			iacP, err := iacProvider.NewIacProvider(ip, defaultIacVersion)
+			if err != nil {
+				zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
+				return err
+			}
+			e.iacProviders = append(e.iacProviders, iacP)
+		}
+	} else {
+		iacP, err := iacProvider.NewIacProvider(e.iacType, e.iacVersion)
+		if err != nil {
+			zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
+			return err
+		}
+		e.iacProviders = append(e.iacProviders, iacP)
 	}
 
 	// create new notifiers
@@ -134,28 +158,37 @@ func (e *Executor) Init() error {
 // Execute validates the inputs, processes the IaC, creates json output
 func (e *Executor) Execute() (results Output, err error) {
 
-	// create results output from Iac
-	if e.filePath != "" {
-		results.ResourceConfig, err = e.iacProvider.LoadIacFile(e.filePath)
-	} else {
-		results.ResourceConfig, err = e.iacProvider.LoadIacDir(e.dirPath)
-	}
-	if err != nil {
-		return results, err
-	}
+	var merr *multierror.Error
+	var resourceConfig output.AllResourceConfigs
 
-	// evaluate policies
-	results.Violations = policy.EngineOutput{}
-	violations := results.Violations.AsViolationStore()
-	for _, engine := range e.policyEngines {
-		output, err := engine.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+	// when dir path has value, only then it will 'all iac' scan
+	// when file path has value, we will go with the only iac provider in the list
+	if e.dirPath != "" {
+		// get all resource configs in the directory
+		resourceConfig, merr = e.getResourceConfigs()
+	} else {
+		// create results output from Iac provider
+		// iac providers will contain one element
+		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath)
 		if err != nil {
 			return results, err
 		}
-		violations = violations.Add(output.AsViolationStore())
 	}
 
-	results.Violations = policy.EngineOutputFromViolationStore(&violations)
+	// for the iac providers that don't implement sub folder scanning
+	// return the error to the caller
+	if !implementsSubFolderScan(e.iacType) {
+		if err := merr.ErrorOrNil(); err != nil {
+			return results, err
+		}
+	}
+
+	// update results with resource config
+	results.ResourceConfig = resourceConfig
+
+	if err := e.findViolations(&results); err != nil {
+		return results, err
+	}
 
 	resourcePath := e.filePath
 	if resourcePath == "" {
@@ -170,6 +203,90 @@ func (e *Executor) Execute() (results Output, err error) {
 		return results, err
 	}
 
+	// we want to display the dir scan errors with all the iac providers
+	// that support sub folder scanning, which includes 'all' iac scan
+	if err := merr.ErrorOrNil(); err != nil {
+		// sort multi errors
+		sort.Sort(merr)
+		results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
+	}
+
 	// successful
 	return results, nil
+}
+
+// getResourceConfigs is a helper method to get all resource configs
+func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.Error) {
+	var merr *multierror.Error
+	resourceConfig := make(output.AllResourceConfigs)
+
+	// channel for directory scan response
+	scanRespChan := make(chan dirScanResp)
+
+	// create results output from Iac provider[s]
+	for _, iacP := range e.iacProviders {
+		go func(ip iacProvider.IacProvider) {
+			rc, err := ip.LoadIacDir(e.dirPath)
+			scanRespChan <- dirScanResp{err, rc}
+		}(iacP)
+	}
+
+	for i := 0; i < len(e.iacProviders); i++ {
+		sr := <-scanRespChan
+		merr = multierror.Append(merr, sr.err)
+		// deduplication of resources
+		if len(resourceConfig) > 0 {
+			for key, r := range sr.rc {
+				resourceConfig.UpdateResourceConfigs(key, r)
+			}
+		} else {
+			for key := range sr.rc {
+				resourceConfig[key] = append(resourceConfig[key], sr.rc[key]...)
+			}
+		}
+	}
+
+	return resourceConfig, merr
+}
+
+// findViolations is a helper method to find all violations in the resource config
+func (e *Executor) findViolations(results *Output) error {
+	// evaluate policies
+	results.Violations = policy.EngineOutput{}
+	violations := results.Violations.AsViolationStore()
+
+	// channel for engine evaluation result
+	evalResultChan := make(chan engineEvalResult)
+
+	for _, engine := range e.policyEngines {
+		go func(eng policy.Engine) {
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+			evalResultChan <- engineEvalResult{err, output}
+		}(engine)
+	}
+
+	for i := 0; i < len(e.policyEngines); i++ {
+		evalR := <-evalResultChan
+		if evalR.err != nil {
+			return evalR.err
+		}
+		violations = violations.Add(evalR.output.AsViolationStore())
+	}
+
+	results.Violations = policy.EngineOutputFromViolationStore(&violations)
+	return nil
+}
+
+// implementsSubFolderScan checks if given iac type supports sub folder scanning
+func implementsSubFolderScan(iacType string) bool {
+	// iac providers that support sub folder scanning
+	// this needs be updated when other iac providers implement
+	// sub folder scanning
+	iacWithSubFolderScan := []string{"all", "k8s", "helm"}
+	for _, v := range iacWithSubFolderScan {
+		if v == iacType {
+			return true
+		}
+	}
+	return false
 }
