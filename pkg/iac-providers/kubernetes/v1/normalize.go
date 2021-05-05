@@ -159,47 +159,16 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 		return nil
 	}
 
-	skipRules := make([]output.SkipRule, 0)
-	if rules, ok := skipRulesFromAnnotations.([]interface{}); ok {
-		for _, rule := range rules {
-			if value, ok := rule.(map[string]interface{}); ok {
-				skipRule := getSkipRuleObject(value)
-				if skipRule != nil {
-					skipRules = append(skipRules, *skipRule)
-				}
-			} else {
-				zap.S().Debugf("each rule in %s must be of map type", terrascanSkip)
-			}
-		}
-	} else {
-		zap.S().Debugf("%s must be an array of {rule: ruleID, comment: reason for skipping}", terrascanSkip)
-	}
-
-	return skipRules
-}
-
-func getSkipRuleObject(m map[string]interface{}) *output.SkipRule {
-	var skipRule output.SkipRule
-	var rule, comment interface{}
-	var ok bool
-
-	// get rule, if rule not found return nil
-	if rule, ok = m[terrascanSkipRule]; ok {
-		if _, ok = rule.(string); ok {
-			skipRule.Rule = rule.(string)
-		} else {
+	if rules, ok := skipRulesFromAnnotations.(string); ok {
+		skipRules := make([]output.SkipRule, 0)
+		err := json.Unmarshal([]byte(rules), &skipRules)
+		if err != nil {
+			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
 			return nil
 		}
-	} else {
-		return nil
+		return skipRules
 	}
 
-	// get comment
-	if comment, ok = m[terrascanSkipComment]; ok {
-		if _, ok = comment.(string); ok {
-			skipRule.Comment = comment.(string)
-		}
-	}
-
-	return &skipRule
+	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
+	return nil
 }

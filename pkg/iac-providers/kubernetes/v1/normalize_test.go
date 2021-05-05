@@ -17,6 +17,7 @@
 package k8sv1
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -55,9 +56,8 @@ kind: Pod
 metadata:
   name: myapp-pod
   annotations:
-    terrascanSkip:
-      - rule: accurics.kubernetes.IAM.109
-        comment: reason to skip the rule
+    terrascanSkip: |
+      [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
     - name: myapp-container
@@ -68,9 +68,8 @@ kind: CRD
 metadata:
   generateName: myapp-pod-prefix-
   annotations:
-    terrascanSkip:
-      - rule: accurics.kubernetes.IAM.109
-        comment: reason to skip the rule
+    terrascanSkip: |
+      [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
     - name: myapp-container
@@ -125,10 +124,7 @@ func TestK8sV1ExtractResource(t *testing.T) {
 				Metadata: k8sMetadata{
 					Name: "myapp-pod",
 					Annotations: map[string]interface{}{
-						terrascanSkip: []interface{}{map[string]interface{}{
-							"rule":    "accurics.kubernetes.IAM.109",
-							"comment": "reason to skip the rule",
-						}},
+						terrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 					},
 				},
 			},
@@ -228,10 +224,7 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "Pod",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							terrascanSkip: []interface{}{map[string]interface{}{
-								"rule":    testRule,
-								"comment": testComment,
-							}},
+							terrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 						},
 						"name": "myapp-pod",
 					},
@@ -265,10 +258,7 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "CRD",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							terrascanSkip: []interface{}{map[string]interface{}{
-								"rule":    testRule,
-								"comment": testComment,
-							}},
+							terrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 						},
 						"generateName": "myapp-pod-prefix-",
 					},
@@ -341,7 +331,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 					terrascanSkip: "test",
 				},
 			},
-			want: []output.SkipRule{},
+			want: nil,
 		},
 		{
 			name: "annotations with invalid SkipRule object",
@@ -350,26 +340,22 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 					terrascanSkip: []interface{}{1},
 				},
 			},
-			want: []output.SkipRule{},
+			want: nil,
 		},
 		{
 			name: "annotations with invalid terrascanSkipRules rule value",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkip: []interface{}{map[string]interface{}{
-						terrascanSkipRule: 1,
-					}},
+					terrascanSkip: fmt.Sprintf(`{"%s":%d}`, terrascanSkipRule, 1),
 				},
 			},
-			want: []output.SkipRule{},
+			want: nil,
 		},
 		{
 			name: "annotations with one terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkip: []interface{}{map[string]interface{}{
-						terrascanSkipRule: testRuleA,
-					}},
+					terrascanSkip: fmt.Sprintf(`[{"%s":"%s"}]`, terrascanSkipRule, testRuleA),
 				},
 			},
 			want: []output.SkipRule{
@@ -382,19 +368,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with multiple terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkip: []interface{}{
-						map[string]interface{}{
-							terrascanSkipRule:    testRuleA,
-							terrascanSkipComment: testCommentA,
-						},
-						map[string]interface{}{
-							terrascanSkipRule:    testRuleB,
-							terrascanSkipComment: testCommentB,
-						},
-						map[string]interface{}{
-							terrascanSkipRule:    testRuleC,
-							terrascanSkipComment: testCommentC,
-						}},
+					terrascanSkip: fmt.Sprintf(`[{"rule":"%s","comment":"%s"}, {"rule":"%s","comment":"%s"}, {"rule":"%s","comment":"%s"}]`, testRuleA, testCommentA, testRuleB, testCommentB, testRuleC, testCommentC),
 				},
 			},
 			want: []output.SkipRule{
@@ -416,23 +390,16 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 			name: "annotations with invalid rule key in terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkip: []interface{}{
-						map[string]interface{}{
-							"skip-rule":          testRuleA,
-							terrascanSkipComment: testCommentA,
-						}},
+					terrascanSkip: fmt.Sprintf(`[{"skip":"%s","comment":"%s"}]`, testRuleA, testCommentA),
 				},
 			},
-			want: []output.SkipRule{},
+			want: []output.SkipRule{{Comment: testCommentA}},
 		},
 		{
 			name: "annotations with no comment key in terrascanSkipRules",
 			args: args{
 				annotations: map[string]interface{}{
-					terrascanSkip: []interface{}{
-						map[string]interface{}{
-							terrascanSkipRule: testRuleA,
-						}},
+					terrascanSkip: fmt.Sprintf(`[{"rule":"%s"}]`, testRuleA),
 				},
 			},
 			want: []output.SkipRule{testSkipRule},

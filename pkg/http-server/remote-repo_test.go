@@ -6,10 +6,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"reflect"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/downloader"
+	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
 )
 
@@ -69,7 +74,7 @@ func TestScanRemoteRepo(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			gotOutput, gotErr := tt.s.ScanRemoteRepo(tt.iacType, tt.iacVersion, tt.cloudType, []string{})
+			gotOutput, _, gotErr := tt.s.ScanRemoteRepo(tt.iacType, tt.iacVersion, tt.cloudType, []string{})
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("error got: '%v', want: '%v'", gotErr, tt.wantErr)
 			}
@@ -199,6 +204,61 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 
 			if res.Code != tt.wantStatus {
 				t.Errorf("incorrect status code, got: '%v', want: '%v', error: '%v'", res.Code, http.StatusOK, res.Body)
+			}
+		})
+	}
+}
+
+func TestHasK8sAdmissionDeniedViolations(t *testing.T) {
+	k8sTestData := "k8s_testdata"
+	configFileWithCategoryDenied := filepath.Join(k8sTestData, "config-deny-category.toml")
+
+	type args struct {
+		o runtime.Output
+	}
+	tests := []struct {
+		name      string
+		args      args
+		want      bool
+		conigFile string
+	}{
+		{
+			name: "result with no violations",
+			args: args{
+				o: runtime.Output{
+					Violations: policy.EngineOutput{
+						ViolationStore: &results.ViolationStore{},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "result contains denied violations",
+			args: args{
+				o: runtime.Output{
+					Violations: policy.EngineOutput{
+						ViolationStore: &results.ViolationStore{
+							Violations: []*results.Violation{
+								{
+									Category: "Identity and Access Management",
+								},
+							},
+						},
+					},
+				},
+			},
+			want:      true,
+			conigFile: configFileWithCategoryDenied,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := config.LoadGlobalConfig(tt.conigFile); err != nil {
+				t.Errorf("error while loading the config file '%s'", tt.conigFile)
+			}
+			if got := hasK8sAdmissionDeniedViolations(tt.args.o); got != tt.want {
+				t.Errorf("hasK8sAdmissionDeniedViolations() = %v, want %v", got, tt.want)
 			}
 		})
 	}

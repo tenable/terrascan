@@ -231,10 +231,10 @@ func (w ValidatingWebhook) getDeniedViolations(violations results.ViolationStore
 
 	var denyViolations []results.Violation
 
-	denyRuleMatcher := webhookDenyRuleMatcher{}
+	denyRuleMatcher := WebhookDenyRuleMatcher{}
 
 	for _, violation := range violations.Violations {
-		if denyRuleMatcher.match(*violation, denyRules) {
+		if denyRuleMatcher.Match(*violation, denyRules) {
 			denyViolations = append(denyViolations, *violation)
 		}
 	}
@@ -326,11 +326,12 @@ func (w ValidatingWebhook) createResponseAdmissionReview(
 	return responseAdmissionReview
 }
 
-type webhookDenyRuleMatcher struct {
+// WebhookDenyRuleMatcher helps in matching violated rules with k8s denied admission control rules
+type WebhookDenyRuleMatcher struct {
 }
 
-// This class should check if one of the violations found is relevant for the specified K8s deny rules
-func (g *webhookDenyRuleMatcher) match(violation results.Violation, denyRules config.K8sAdmissionControl) bool {
+// Match should check if one of the violations found is relevant for the specified K8s deny rules
+func (g *WebhookDenyRuleMatcher) Match(violation results.Violation, denyRules config.K8sAdmissionControl) bool {
 
 	if denyRules.DeniedSeverity == "" && len(denyRules.Categories) == 0 {
 		return false
