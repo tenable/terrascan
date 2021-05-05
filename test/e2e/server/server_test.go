@@ -42,15 +42,17 @@ const (
 )
 
 var (
-	terrascanBinaryPath        string
-	iacRootRelPath             = filepath.Join("..", "test_data", "iac")
-	awsIacRelPath              = filepath.Join(iacRootRelPath, "aws")
-	policyRootRelPath          = filepath.Join("..", "test_data", "policies")
-	goldenFilesRelPath         = filepath.Join("..", "scan", "golden")
-	tfGoldenFilesRelPath       = filepath.Join(goldenFilesRelPath, "terraform_scans", "aws")
-	awsAmiGoldenRelPath        = filepath.Join(tfGoldenFilesRelPath, "aws_ami_violations")
-	awsDbInstanceGoldenRelPath = filepath.Join(tfGoldenFilesRelPath, "aws_db_instance_violations")
-	k8sGoldenRelPath           = filepath.Join(goldenFilesRelPath, "k8s_scans", "k8s")
+	terrascanBinaryPath              string
+	iacRootRelPath                   = filepath.Join("..", "test_data", "iac")
+	awsIacRelPath                    = filepath.Join(iacRootRelPath, "aws")
+	policyRootRelPath                = filepath.Join("..", "test_data", "policies")
+	goldenFilesRelPath               = filepath.Join("..", "scan", "golden")
+	tfGoldenFilesRelPath             = filepath.Join(goldenFilesRelPath, "terraform_scans", "aws")
+	awsAmiGoldenRelPath              = filepath.Join(tfGoldenFilesRelPath, "aws_ami_violations")
+	awsDbInstanceGoldenRelPath       = filepath.Join(tfGoldenFilesRelPath, "aws_db_instance_violations")
+	k8sIacRelPath                    = filepath.Join(iacRootRelPath, "k8s")
+	k8sGoldenRelPath                 = filepath.Join(goldenFilesRelPath, "k8s_scans", "k8s")
+	k8sIngressViolationGoldenRelPath = filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_violations")
 )
 
 var _ = Describe("Server", func() {

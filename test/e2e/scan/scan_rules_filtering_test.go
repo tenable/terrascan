@@ -201,7 +201,8 @@ var _ = Describe("Scan command with rule filtering options", func() {
 					os.Setenv(terrascanConfigEnvName, "")
 				})
 				It("should scan and skip the rules as specified with --scan-rules and --skip-rules option", func() {
-					Skip("skipping this test due to https://github.com/accurics/terrascan/issues/570, should be implemented when fixed")
+					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(ruleFilterGoldenRelPath, "scan_and_skip_rules.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
