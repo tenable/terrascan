@@ -59,7 +59,7 @@ func getVarName(varRef string) (string, string) {
 }
 
 // ResolveVarRef returns the variable value as configured in IaC config in module
-func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
+func (r *RefResolver) ResolveVarRef(varRef, callerRef string) interface{} {
 
 	// get variable name from varRef
 	varName, varExpr := getVarName(varRef)
@@ -94,8 +94,11 @@ func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
 			zap.S().Debugf("resolved str variable ref refers to self: '%v'", varRef)
 			return varRef
 		}
-		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, resolvedVal)
-		return r.ResolveStrRef(resolvedVal)
+		if callerRef != "" && strings.Contains(resolvedVal, callerRef) {
+			zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
+			return resolvedVal
+		}
+		return r.ResolveStrRef(resolvedVal, varRef)
 	}
 	return val
 }
@@ -104,7 +107,7 @@ func (r *RefResolver) ResolveVarRef(varRef string) interface{} {
 // ModuleCall from parent module. The resolved value can be an absolute value
 // (string, int, bool etc.) or it can also be another reference, which may
 // need further resolution
-func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface{} {
+func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef, callerRef string) interface{} {
 
 	zap.S().Debugf("resolving variable ref %q in parent module call", varRef)
 
@@ -152,8 +155,11 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef string) interface
 			zap.S().Debugf("resolved str variable ref refers to self: '%v'", varRef)
 			return resolvedVal
 		}
-		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
-		return r.ResolveStrRef(resolvedVal)
+		if callerRef != "" && strings.Contains(resolvedVal, callerRef) {
+			zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", varRef, string(resolvedVal))
+			return resolvedVal
+		}
+		return r.ResolveStrRef(resolvedVal, varRef)
 	}
 
 	// return extracted value

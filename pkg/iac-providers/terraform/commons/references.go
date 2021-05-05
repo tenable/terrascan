@@ -67,7 +67,7 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 
 			// case 1: config value is a string; in resource config, refs
 			// are of the type string
-			config[k] = r.ResolveStrRef(v.(string))
+			config[k] = r.ResolveStrRef(v.(string), "")
 
 		case vType == "tfv12.jsonObj" && vKind == reflect.Map:
 
@@ -86,7 +86,7 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 			// references
 			if len(sConfig) > 0 && reflect.TypeOf(sConfig[0]).Kind() == reflect.String {
 				for i, c := range sConfig {
-					sConfig[i] = r.ResolveStrRef(c.(string))
+					sConfig[i] = r.ResolveStrRef(c.(string), "")
 				}
 				config[k] = sConfig
 			}
@@ -115,23 +115,23 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 // ResolveStrRef tries to resolve a string reference. Reference can be a
 // variable "${var.foo}", cross module variable "${module.foo.bar}", local
 // value "${local.foo}"
-func (r *RefResolver) ResolveStrRef(ref string) interface{} {
+func (r *RefResolver) ResolveStrRef(ref, callerRef string) interface{} {
 
 	switch {
 	case isModuleRef(ref):
 
 		// resolve cross module references
-		return r.ResolveModuleRef(ref, r.Config.Children)
+		return r.ResolveModuleRef(ref, callerRef, r.Config.Children)
 
 	case isLocalRef(ref):
 
 		// resolve local value references
-		return r.ResolveLocalRef(ref)
+		return r.ResolveLocalRef(ref, callerRef)
 
 	case isLookupRef(ref):
 
 		// resolve lookup references
-		return r.ResolveLookupRef(ref)
+		return r.ResolveLookupRef(ref, callerRef)
 
 	case isVarRef(ref):
 
@@ -144,7 +144,7 @@ func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 		*/
 
 		// 1. resolve variables initialized in parent module call
-		val := r.ResolveVarRefFromParentModuleCall(ref)
+		val := r.ResolveVarRefFromParentModuleCall(ref, callerRef)
 
 		if reflect.TypeOf(val).Kind() == reflect.String {
 
@@ -163,17 +163,17 @@ func (r *RefResolver) ResolveStrRef(ref string) interface{} {
 			case isVarRef(valStr):
 
 				// resolve variable reference
-				return r.ResolveVarRef(valStr)
+				return r.ResolveVarRef(valStr, ref)
 
 			case isModuleRef(valStr):
 
 				// resolve cross module reference in parent module
-				return r.ResolveModuleRef(valStr, r.Config.Parent.Children)
+				return r.ResolveModuleRef(valStr, ref, r.Config.Parent.Children)
 
 			case isRef(valStr):
 
 				// some other reference
-				return r.ResolveStrRef(valStr)
+				return r.ResolveStrRef(valStr, ref)
 			}
 		}
 

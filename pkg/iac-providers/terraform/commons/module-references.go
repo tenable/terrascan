@@ -59,7 +59,7 @@ func getModuleVarName(moduleRef string) (string, string, string) {
 }
 
 // ResolveModuleRef tries to resolve cross module references
-func (r *RefResolver) ResolveModuleRef(moduleRef string,
+func (r *RefResolver) ResolveModuleRef(moduleRef, callerRef string,
 	children map[string]*hclConfigs.Config) interface{} {
 
 	// get module and variable name
@@ -108,8 +108,11 @@ func (r *RefResolver) ResolveModuleRef(moduleRef string,
 			zap.S().Debugf("resolved str variable ref refers to self: '%v'", moduleRef)
 			return moduleRef
 		}
-		zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", moduleRef, resolvedVal)
-		return r.ResolveStrRef(resolvedVal)
+		if callerRef != "" && strings.Contains(resolvedVal, callerRef) {
+			zap.S().Debugf("resolved str variable ref: '%v', value: '%v'", moduleRef, resolvedVal)
+			return resolvedVal
+		}
+		return r.ResolveStrRef(resolvedVal, moduleRef)
 	}
 	return val
 }
