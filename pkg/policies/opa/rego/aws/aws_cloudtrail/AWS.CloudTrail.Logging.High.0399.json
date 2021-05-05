@@ -5,7 +5,7 @@
         "prefix": ""
     },
     "severity": "HIGH",
-    "description": "Cloud Trail Log Not Enabled",
+    "description": "Ensure CloudTrail logs are encrypted using KMS",
     "reference_id": "AWS.CloudTrail.Logging.High.0399",
     "category": "Logging and Monitoring",
     "version": 2

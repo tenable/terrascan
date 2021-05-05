@@ -1,8 +1,11 @@
 package accurics
 
-{{.prefix}}kinesisNotEncryptedWithKms[retVal] {
+{{.prefix}}kinesisNotEncryptedWithKms[stream.id] {
     stream = input.aws_kinesis_stream[_]
     stream.config.kms_key_id == null
-    traverse = ""
-    retVal := { "Id": stream.id, "ReplaceType": "edit", "CodeType": "attribute", "Traverse": traverse, "Attribute": "kms_key_id", "AttributeDataType": "string", "Expected": "<kms_key_id>", "Actual": null }
+}
+
+{{.prefix}}kinesisNotEncryptedWithKms[stream.id] {
+    stream = input.aws_kinesis_stream[_]
+    object.get(stream.config, "encryption_type", "undefined") == ["NONE", "undefined"][_]
 }

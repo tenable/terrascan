@@ -1,0 +1,12 @@
+{
+    "name": "targetGroupUsingHttp",
+    "file": "targetGroupUsingHttp.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Target Group use HTTPs to ensure end to end encryption",
+    "reference_id": "AC_AWS_042",
+    "category": "Infrastructure Security",
+    "version": 2
+}

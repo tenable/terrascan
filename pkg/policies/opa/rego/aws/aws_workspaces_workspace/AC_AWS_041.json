@@ -1,0 +1,14 @@
+{
+    "name": "workspaceUserEncryptionCheck",
+    "file": "workspaceEncryptionCheck.rego",
+    "template_args": {
+        "prefix": "",
+        "name": "workspaceUserEncryptionCheck",
+        "attribute_name": "user_volume_encryption_enabled"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure user volume for Workspaces is Encrypted",
+    "reference_id": "AC_AWS_041",
+    "category": "Data Protection",
+    "version": 2
+}

@@ -1,0 +1,12 @@
+{
+    "name": "notEncryptedObject",
+    "file": "notEncryptedObject.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure S3 object is Encrypted",
+    "reference_id": "AC_AWS_034",
+    "category": "Data Protection",
+    "version": 2
+}
