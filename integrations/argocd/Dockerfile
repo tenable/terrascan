@@ -13,9 +13,8 @@ COPY scripts/argocd-terrascan-remote-scan.sh  bin/terrascan-remote-scan.sh
 
 # create non root user
 RUN addgroup --gid 101 terrascan && \
-    adduser -S --uid 101 --ingroup terrascan terrascan 
-
-RUN chown -R terrascan:terrascan bin && \
+    adduser -S --uid 101 --ingroup terrascan terrascan && \ 
+    chown -R terrascan:terrascan bin && \
     chmod u+x bin/terrascan-remote-scan.sh
 
 USER terrascan

@@ -35,9 +35,9 @@ spec:
          configMap:
            name: slack-notifications
        #add all required ssh keys need to clone your repos
-       - name: ssh-keys-github
+       - name: ssh-key-secret
          secret:
-           secretName: github-secret
+           secretName: ssh-key-secret
        #add a secret for git config file   
        - name: ssh-config
          secret:
@@ -59,7 +59,7 @@ spec:
        command: ["/bin/sh", "-c"]
        args:
        - >
-         cp /etc/github-secret/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
+         cp /etc/secret-volume/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
          cp /etc/ssh-config-secret/ssh-config /home/terrascan/.ssh/config &&
          cp /etc/ssh-known-hosts-secret/ssh-known-hosts /home/terrascan/.ssh/known_hosts &&
          chmod -R 400 /home/terrascan/.ssh/* &&
@@ -86,8 +86,8 @@ spec:
          periodSeconds: 10 
        #if want to use private repo
        volumeMounts:
-         - mountPath: /etc/github-secret
-           name: ssh-keys-github
+         - mountPath: /etc/secret-volume
+           name: ssh-key-secret
            readOnly: true
          - mountPath: /etc/ssh-config-secret
            name: ssh-config
@@ -138,7 +138,7 @@ fi
 For non-public repositories, the private key, known_hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
  
 ```
- kubectl create secret generic github-secret \
+ kubectl create secret generic ssh-key-secret \
    --from-file=ssh-privatekey= < path to your private key > \
     --from-file=ssh-publickey=< path to your public key >
 ```
@@ -171,7 +171,7 @@ Example ssh config file
 Once the presynchook yaml file is completely configured, add this file to your repository folder for which Argo CD pipeline is configured.
 
 
-### 2. Use Terrascan Admission Webhook from PreSyncHook
+### 2. Use Terrascan Server from PreSyncHook
 ___
 You can use the already deployed terrascan’s k8s admission controller webhook to scan the remote repository from Argo CD PreSync hook.
 To configure, follow below steps
@@ -183,22 +183,22 @@ To configure, follow below steps
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: terra-controller-webhook
+name: terrascan-server
 labels:
-  app: terrascan-admission-webhook
+  app: terrascan
 spec:
 replicas: 1
 selector:
   matchLabels:
-    app: terrascan-admission-webhook
+    app: terrascan
 template:
   metadata:
     labels:
-      app: terrascan-admission-webhook
+      app: terrascan
   spec:
     containers:
-    - name: terrascan-admission-webhook
-      image: <TERRASCAN IMAGE>
+    - name: terrascan
+      image: <TERRASCAN LATEST IMAGE>
       resources:
         limits:
           memory: "256Mi"
@@ -223,8 +223,8 @@ template:
         - mountPath: /data/config
           name: terrascan-config
           readOnly: true
-        - mountPath: /etc/github-secret
-          name: ssh-keys-github
+        - mountPath: /etc/secret-volume
+          name: ssh-key-secret
           readOnly: true
         - mountPath: /etc/ssh-config-secret
           name: ssh-config
@@ -235,16 +235,16 @@ template:
       command: ["/bin/sh", "-c"]
       args:
         - >
-          cp /etc/github-secret/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
+          cp /etc/secret-volume/ssh-private-key /home/terrascan/.ssh/id_ed25519_github &&
           cp /etc/ssh-config-secret/ssh-config /home/terrascan/.ssh/config &&
           cp /etc/ssh-known-hosts-secret/ssh-known-hosts /home/terrascan/.ssh/known_hosts &&
           chmod -R 400 /home/terrascan/.ssh/* &&
           terrascan server --cert-path /data/certs/server.crt --key-path /data/certs/server.key -p 443 -l debug -c /data/config/config.toml
     volumes:
       #add all required ssh keys need to clone your repos
-      - name: ssh-keys-github
+      - name: ssh-key-secret
         secret:
-          secretName: github-secret
+          secretName: ssh-key-secret
       #add a secret for git config file   
       - name: ssh-config
         secret:
@@ -268,10 +268,10 @@ Service example
 apiVersion: v1
 kind: Service
 metadata:
-  name: terra-controller-service
+  name: terrascan-service
 spec:
   selector:
-    app: terrascan-admission-webhook
+    app: terrascan
   ports:
   - port: 443
     targetPort: 443
@@ -280,7 +280,7 @@ spec:
 For non-public repositories, the private key, known hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
   
 ```
-kubectl create secret generic github-secret \
+kubectl create secret generic ssh-key-secret \
   --from-file=ssh-privatekey= < path to your private key > \
   --from-file=ssh-publickey=< path to your public key >
 ``` 
@@ -338,9 +338,8 @@ COPY scripts/argocd-terrascan-remote-scan.sh  bin/terrascan-remote-scan.sh
 
 # create non root user
 RUN addgroup --gid 101 terrascan && \
-  adduser -S --uid 101 --ingroup terrascan terrascan
-
-RUN chown -R terrascan:terrascan bin && \
+  adduser -S --uid 101 --ingroup terrascan terrascan && \
+  chown -R terrascan:terrascan bin && \
   chmod u+x bin/terrascan-remote-scan.sh
 
 USER terrascan
@@ -354,8 +353,7 @@ terrascan-remote-scan script
 #!/bin/sh
 
 set -o errexit
-set -o nounset
-set -o pipefail
+
 
 TERRASCAN_SERVER="https://${SERVICE_NAME}"
 IAC=${IAC_TYPE:-"k8s"}
@@ -363,7 +361,21 @@ IAC_VERSION=${IAC_VERSION:-"v1"}
 CLOUD_PROVIDER=${CLOUD_PROVIDER:-"all"}
 REMOTE_TYPE=${REMOTE_TYPE:-"git"}
 
+if [ -z ${SERVICE_NAME} ]; then 
+    echo "Service Name Not set" 
+    exit 6
+fi
+
+if [ -z ${REMOTE_URL} ]; then
+    echo "Remote URL Not set"
+    exit 6
+fi
+
 SCAN_URL="${TERRASCAN_SERVER}/v1/${IAC}/${IAC_VERSION}/${CLOUD_PROVIDER}/remote/dir/scan"
+
+echo "Connecting to the service: ${SERVICE_NAME} to scan the remote url: ${REMOTE_URL} \
+  with configurations { IAC type: ${IAC}, IAC version: ${IAC_VERSION},  remote type: ${REMOTE_TYPE} , cloud provider: ${CLOUD_PROVIDER}}"
+
 
 RESPONSE=$(curl -s -w \\n%{http_code} --location -k  --request POST "$SCAN_URL" \
 --header 'Content-Type: application/json' \
