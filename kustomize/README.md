@@ -1,11 +1,25 @@
 ##### PRE-REQUISITE
+1. Make sure you have required access on the kubernetes cluster to create and update the following resources:
 
-1. Make sure you replace `<TERRASCAN_NAMESPACE>` placeholder with your target namespace where you to want to deploy the
-terrascan server. The string replacement will be required in the `server/kustomization.yaml`,  `webhook/validating-webhook.yaml`
-and the `certs/domain.cnf` file that is generated in step 1 of `Generating TLS Certificates` section.
+  - Secrets
+  - Configmaps
+  - Deployments
+  - Services
+  - ValidatingWebhookConfiguration (only if you're aiming to deploy the webhook as well)
 
+  If it is not a production level cluster, you probably do have the required access.
 
-2. Generate SSH keys and copy `~/.ssh/config`, `~/.ssh/known-hosts` and `~/.ssh/<generated_private_key>` to `server/.ssh/` directory.
+2. Make sure you have `kubectl`, `kustomize` and `openssh` installed on your local machine.
+
+3. Make sure you replace `<TERRASCAN_NAMESPACE>` placeholder with your target namespace where you to want to deploy the
+terrascan server. The string replacement will be required in the following files:
+
+  - `server/kustomization.yaml`
+  - `certs/domain.cnf` (that is generated in step 1 of `Generating TLS Certificates` section)
+  - `webhook/kustomization.yaml` (only if you're aiming to deploy the webhook as well)
+  - `webhook/validating-webhook.yaml` (only if you're aiming to deploy the webhook as well)
+
+4. Generate SSH keys and copy `~/.ssh/config`, `~/.ssh/known-hosts` and `~/.ssh/<generated_private_key>` to `server/.ssh/` directory.
    replace `<SSH_KEY_NAME>` with your private ssh key's name in `server/kustomization.yaml` and setup the generated public ssh key on
    your respective code repository hosting service, like github or bitbucket.
 
@@ -109,6 +123,7 @@ and the `certs/domain.cnf` file that is generated in step 1 of `Generating TLS C
   $CA_BUNDLE=(cat server/certs/server.crt | base64)
   sed s/<CA_BUNDLE_PLACEHOLDER>/$CA_BUNDLE/g webhook/validating-webhook.yaml
   ```
+
 4. In the `webhook/validating-webhook.yaml` file, set the `webhooks.rules` section as per your requirement. By default,
    we have setup a rule to block possibly all the resources from being created or updated. This might not be correct for
    your use case, refer the kubernetes admission webhook docs for the same.
