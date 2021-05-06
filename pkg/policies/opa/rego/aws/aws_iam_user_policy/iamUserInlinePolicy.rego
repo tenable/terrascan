@@ -11,13 +11,13 @@ package accurics
 }
 
 checkUserHasPolicyAttached(policy_user, iam_user) = true {
-    name = iam_user[_].name
+    iam_username = iam_user[_].name
     split_val := split(policy_user, ".")
     policy_user_name =split_val[1]
-    policy_user_name == name
+    policy_user_name == iam_username
 }
 
 checkUserHasPolicy(policy_user, iam_user) = true {
-    name = iam_user[_].name
-    policy_user == name
+    iam_username = iam_user[_].name
+    policy_user == iam_username
 }
