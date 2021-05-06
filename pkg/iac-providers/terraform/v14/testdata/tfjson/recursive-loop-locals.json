@@ -1,0 +1,15 @@
+{
+  "aws_iam_user": [
+    {
+      "id": "aws_iam_user.lb",
+      "name": "lb",
+      "source": "dummy/main.tf",
+      "line": 13,
+      "type": "aws_iam_user",
+      "config": {
+        "name": "${lower(${local.foo} != null ? var.bar : var.foo)}"
+      },
+      "skip_rules": null
+    }
+  ]
+}

@@ -56,13 +56,13 @@ func getLookupName(lookupRef string) (string, string, string) {
 }
 
 // ResolveLookupRef returns the lookup value as configured in IaC config in module
-func (r *RefResolver) ResolveLookupRef(lookupRef string) interface{} {
+func (r *RefResolver) ResolveLookupRef(lookupRef, callerRef string) interface{} {
 
 	// get lookup name from lookupRef
 	table, key, _ := getLookupName(lookupRef)
 
 	// resolve key, if it is a reference
-	resolvedKey := r.ResolveStrRef(key)
+	resolvedKey := r.ResolveStrRef(key, callerRef)
 
 	// check if key is still an unresolved reference
 	if reflect.TypeOf(resolvedKey).Kind() == reflect.String && isRef(resolvedKey.(string)) {
@@ -71,7 +71,7 @@ func (r *RefResolver) ResolveLookupRef(lookupRef string) interface{} {
 	}
 
 	// resolve table, if it is a ref
-	lookup := r.ResolveStrRef(table)
+	lookup := r.ResolveStrRef(table, callerRef)
 
 	// check if lookup is a map
 	if reflect.TypeOf(lookup).String() != "map[string]interface {}" {

@@ -58,7 +58,7 @@ func getLocalName(localRef string) (string, string) {
 }
 
 // ResolveLocalRef returns the local value as configured in IaC config in module
-func (r *RefResolver) ResolveLocalRef(localRef string) interface{} {
+func (r *RefResolver) ResolveLocalRef(localRef, callerRef string) interface{} {
 
 	// get local name from localRef
 	localName, localExpr := getLocalName(localRef)
@@ -89,8 +89,11 @@ func (r *RefResolver) ResolveLocalRef(localRef string) interface{} {
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
 		resolvedVal := strings.Replace(localRef, localExpr, valStr, 1)
-		zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, resolvedVal)
-		return r.ResolveStrRef(resolvedVal)
+		if callerRef != "" && strings.Contains(resolvedVal, callerRef) {
+			zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, resolvedVal)
+			return resolvedVal
+		}
+		return r.ResolveStrRef(resolvedVal, localRef)
 	}
 
 	// return extracted value

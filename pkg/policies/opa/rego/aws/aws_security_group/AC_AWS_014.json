@@ -1,0 +1,12 @@
+{
+    "name": "noRuleDescription",
+    "file": "noRuleDescription.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure every security group rule ingress/egress should have a description to ease the process of Auditing",
+    "reference_id": "AC_AWS_014",
+    "category": "Security Best Practices",
+    "version": 2
+}

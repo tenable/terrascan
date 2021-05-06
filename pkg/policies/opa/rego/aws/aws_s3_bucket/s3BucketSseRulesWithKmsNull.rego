@@ -28,3 +28,8 @@ check_empty(key) {
 check_empty(key) {
 	key == ""
 }
+
+{{.prefix}}s3BucketSseRulesWithKmsNull[bucket.id] {
+    bucket := input.aws_s3_bucket[_]
+    object.get(bucket.config, "server_side_encryption_configuration", "undefined") == ["undefined", []][_]
+}
