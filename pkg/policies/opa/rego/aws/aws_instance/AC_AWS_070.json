@@ -1,0 +1,12 @@
+{
+    "name": "detailedMonitoringEnabledInstance",
+    "file": "detailedMonitoringEnabledInstance.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that detailed monitoring is enabled for EC2 instances.",
+    "reference_id": "AC_AWS_070",
+    "category": "Logging and Monitoring",
+    "version": 1
+}
