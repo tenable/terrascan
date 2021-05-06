@@ -29,7 +29,7 @@ spec:
      securityContext:
        seccompProfile:
          type: RuntimeDefault
-     Volumes:
+     volumes:
        #add a configmap for the slack notification scripts
        - name: notification-scripts
          configMap:
@@ -68,7 +68,6 @@ spec:
          seccompProfile:
            type: RuntimeDefault
          allowPrivilegeEscalation: false
-         readOnlyRootFilesystem: true
          runAsNonRoot: true
          runAsUser: 101
        livenessProbe:
