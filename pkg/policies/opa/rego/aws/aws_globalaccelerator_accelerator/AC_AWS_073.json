@@ -1,0 +1,12 @@
+{
+    "name": "globalAccFlowLogsDisabled",
+    "file": "globalAccFlowLogsDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure Global Accelerator accelerator has flow logs enabled.",
+    "reference_id": "AC_AWS_073",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

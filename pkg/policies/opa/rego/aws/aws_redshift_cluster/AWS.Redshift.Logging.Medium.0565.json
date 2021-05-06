@@ -5,8 +5,8 @@
         "prefix": ""
     },
     "severity": "MEDIUM",
-    "description": "Ensure audit logging is enabled for Redshift clusters for security and troubleshooting purposes.",
+    "description": "Ensure AWS Redshift cluster instances have logging enabled.",
     "reference_id": "AWS.Redshift.Logging.Medium.0565",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 1
 }
