@@ -1,0 +1,12 @@
+{
+    "name": "ecrNoSecurePolicyAttached",
+    "file": "ecrNoSecurePolicyAttached.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure ECR repository has policy attached.",
+    "reference_id": "AC_AWS_058",
+    "category": "Identity and Access Management",
+    "version": 1
+}
