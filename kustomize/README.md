@@ -109,8 +109,16 @@ and the `certs/domain.cnf` file that is generated in step 1 of `Generating TLS C
   $CA_BUNDLE=(cat server/certs/server.crt | base64)
   sed s/<CA_BUNDLE_PLACEHOLDER>/$CA_BUNDLE/g webhook/validating-webhook.yaml
   ```
+4. In the `webhook/validating-webhook.yaml` file, set the `webhooks.rules` section as per your requirement. By default,
+   we have setup a rule to block possibly all the resources from being created or updated. This might not be correct for
+   your use case, refer the kubernetes admission webhook docs for the same.
 
-4. Deploy.
+   The following command might help as well.
+  ```bash
+  kubectl explain ValidatingWebhookConfiguration.webhooks.rules
+  ```
+
+5. Deploy.
 
    Note: Before running the command, please verify once that the `server/kustomization.yaml` & `webhook/kustomization.yaml`
          are set with the desired parameters.

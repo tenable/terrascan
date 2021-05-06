@@ -3,4 +3,4 @@ resources:
   - validating-webhook.yaml
 
 commonAnnotations:
-  terrascan-webhook: terrascan-validating-hook.terrascan.svc
+  terrascan-webhook: terrascan-validating-hook.<TERRASCAN_NAMESPACE>.svc
