@@ -50,6 +50,7 @@ type scanRemoteRepoReq struct {
 // scanRemoteRepo downloads the remote Iac repository and scans it for
 // violations
 func (g *APIHandler) scanRemoteRepo(w http.ResponseWriter, r *http.Request) {
+	zap.S().Info("handle: remote repository scan request")
 
 	// get url params
 	params := mux.Vars(r)

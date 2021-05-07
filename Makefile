@@ -91,6 +91,14 @@ unit-tests:
 e2e-tests: build
 	./scripts/run-e2e.sh
 
+# run e2e validating webhook
+e2e-validating-webhook: build
+	./scripts/e2e-validating-webhook.sh
+
+# install kind
+install-kind: 
+	./scripts/install-kind.sh
+
 # build terrascan docker image
 docker-build:
 	./scripts/docker-build.sh
