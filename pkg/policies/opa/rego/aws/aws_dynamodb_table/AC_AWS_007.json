@@ -1,0 +1,12 @@
+{
+    "name": "dynamoderecovery_enabled",
+    "file": "dynamodb_without_recovery_enabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Point In Time Recovery is enabled for DynamoDB Tables",
+    "reference_id": "AC_AWS_007",
+    "category": "Resilience",
+    "version": 2
+}
