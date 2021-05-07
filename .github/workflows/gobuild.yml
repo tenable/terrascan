@@ -32,6 +32,12 @@ jobs:
 
     - name: Run e2e tests
       run: make e2e-tests
+    
+    - name: install kind and kubectl
+      run: make install-kind-kubectl
+
+    - name: Run e2e validating webhook
+      run: make e2e-validating-webhook
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
