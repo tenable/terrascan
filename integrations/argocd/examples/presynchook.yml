@@ -12,7 +12,7 @@ spec:
        seccompProfile:
          type: RuntimeDefault
      # if you want to add slack notification script add one more volume here
-     Volumes:
+     volumes:
        - name: notification-scripts
          configMap:
            name: slack-notifications
@@ -50,7 +50,6 @@ spec:
          seccompProfile:
            type: RuntimeDefault
          allowPrivilegeEscalation: false
-         readOnlyRootFilesystem: true
          runAsNonRoot: true
          runAsUser: 101
        livenessProbe:
