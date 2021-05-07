@@ -4,6 +4,7 @@
       "id": "aws_iam_user.lb",
       "name": "lb",
       "source": "dummy/main.tf",
+      "plan_root": "./",
       "line": 13,
       "type": "aws_iam_user",
       "config": {
