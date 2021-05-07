@@ -24,7 +24,7 @@ var (
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
-func (k *KustomizeV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
+func (k *KustomizeV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 

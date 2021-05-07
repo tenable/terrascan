@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/mitchellh/go-homedir"
 	"go.uber.org/zap"
 )
@@ -16,4 +19,9 @@ func GetHomeDir() (terrascanDir string) {
 	}
 
 	return
+}
+
+// GenerateTempDir generates a temporary directory
+func GenerateTempDir() string {
+	return filepath.Join(os.TempDir(), GenRandomString(6))
 }

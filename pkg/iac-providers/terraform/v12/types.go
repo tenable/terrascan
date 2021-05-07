@@ -17,7 +17,4 @@
 package tfv12
 
 // TfV12 struct implements the IacProvider interface
-type TfV12 struct {
-	// NonRecursiveScan flag is used for recursive scanning of subfolders
-	NonRecursiveScan bool
-}
+type TfV12 struct{}

@@ -17,7 +17,6 @@
 package runtime
 
 import (
-	"reflect"
 	"sort"
 
 	"go.uber.org/zap"
@@ -116,12 +115,6 @@ func (e *Executor) Init() error {
 				return err
 			}
 
-			// if the iac provider is terraform and non recursive scan is true,
-			// set the struct field 'NonRecursiveScan' to true
-			if ip == "terraform" && e.nonRecursive {
-				iacP = makeNonRecursiveTrue(iacP)
-			}
-
 			e.iacProviders = append(e.iacProviders, iacP)
 		}
 	} else {
@@ -131,11 +124,6 @@ func (e *Executor) Init() error {
 			return err
 		}
 
-		// if the iac provider is terraform and non recursive scan is true,
-		// set the struct field 'NonRecursiveScan' to true
-		if e.iacType == "terraform" && e.nonRecursive {
-			iacP = makeNonRecursiveTrue(iacP)
-		}
 		e.iacProviders = append(e.iacProviders, iacP)
 	}
 
@@ -193,7 +181,7 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	// for the iac providers that don't implement sub folder scanning
 	// return the error to the caller
-	if !implementsSubFolderScan(e.iacType) {
+	if !implementsSubFolderScan(e.iacType, e.nonRecursive) {
 		if err := merr.ErrorOrNil(); err != nil {
 			return results, err
 		}
@@ -242,7 +230,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath)
+			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}
@@ -294,24 +282,19 @@ func (e *Executor) findViolations(results *Output) error {
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning
-func implementsSubFolderScan(iacType string) bool {
+func implementsSubFolderScan(iacType string, nonRecursive bool) bool {
 	// iac providers that support sub folder scanning
 	// this needs be updated when other iac providers implement
 	// sub folder scanning
-	iacWithSubFolderScan := []string{"all", "k8s", "helm"}
+	if nonRecursive && iacType == "terraform" {
+		return false
+	}
+
+	iacWithSubFolderScan := []string{"all", "k8s", "helm", "terraform"}
 	for _, v := range iacWithSubFolderScan {
 		if v == iacType {
 			return true
 		}
 	}
 	return false
-}
-
-// makeNonRecursiveTrue sets the 'NonRecursiveScan' field to true
-// only terraform iac provider should be passed to this function, else it will panic
-func makeNonRecursiveTrue(iacP iacProvider.IacProvider) iacProvider.IacProvider {
-	terraformIacP := reflect.ValueOf(&iacP).Elem()
-	// modify the field 'NonRecursiveScan' in the struct
-	reflect.ValueOf(terraformIacP.Interface()).Elem().FieldByName("NonRecursiveScan").SetBool(true)
-	return iacP
 }

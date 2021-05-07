@@ -68,6 +68,6 @@ func init() {
 	scanCmd.Flags().StringVar(&scanOptions.severity, "severity", "", "minimum severity level of the policy violations to be reported by terrascan")
 	scanCmd.Flags().StringSliceVarP(&scanOptions.categories, "categories", "", []string{}, "list of categories of violations to be reported by terrascan (example: --categories=\"category1,category2\")")
 	scanCmd.Flags().BoolVarP(&scanOptions.showPassedRules, "show-passed", "", false, "display passed rules, along with violations")
-	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "will scan specified directory and modules used in it")
+	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "recursively scans directories and modules")
 	RegisterCommand(rootCmd, scanCmd)
 }

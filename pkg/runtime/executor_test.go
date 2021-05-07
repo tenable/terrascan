@@ -54,7 +54,7 @@ type MockIacProvider struct {
 	err    error
 }
 
-func (m MockIacProvider) LoadIacDir(dir string) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacDir(dir string, nonRecursive bool) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 

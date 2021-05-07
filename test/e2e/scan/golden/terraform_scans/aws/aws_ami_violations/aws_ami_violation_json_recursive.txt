@@ -1,5 +1,17 @@
 {
   "results": {
+    "scan_errors": [
+      {
+        "iac_type": "terraform",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive",
+        "errMsg": "directory '/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive' has no terraform config files"
+      },
+      {
+        "iac_type": "terraform",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive/subFolder1",
+        "errMsg": "directory '/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive/subFolder1' has no terraform config files"
+      }
+    ],
     "violations": [
       {
         "rule_name": "amiNotEncrypted",

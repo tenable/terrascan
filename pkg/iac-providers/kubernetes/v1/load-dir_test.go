@@ -88,7 +88,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.k8sV1.LoadIacDir(tt.dirPath)
+			_, gotErr := tt.k8sV1.LoadIacDir(tt.dirPath, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

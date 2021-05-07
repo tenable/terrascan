@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
@@ -36,8 +36,7 @@ import (
 
 var (
 	// ErrBuildTFConfigDir error
-	ErrBuildTFConfigDir                   = fmt.Errorf("failed to build terraform allResourcesConfig")
-	errIacLoadDirs      *multierror.Error = nil
+	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
 // ModuleConfig contains the *hclConfigs.Config for every module in the
@@ -49,66 +48,80 @@ type ModuleConfig struct {
 	ParentModuleCall *hclConfigs.ModuleCall
 }
 
+// TerraformDirectoryLoader implements terraform directory loading
+type TerraformDirectoryLoader struct {
+	absRootDir       string
+	nonRecursive     bool
+	remoteDownloader downloader.ModuleDownloader
+	parser           *hclConfigs.Parser
+	errIacLoadDirs   *multierror.Error
+}
+
+// NewTerraformDirectoryLoader creates a new terraformDirectoryLoader
+func NewTerraformDirectoryLoader(rootDirectory string, nonRecursive bool) TerraformDirectoryLoader {
+	return TerraformDirectoryLoader{
+		absRootDir:       rootDirectory,
+		nonRecursive:     nonRecursive,
+		remoteDownloader: downloader.NewRemoteDownloader(),
+		parser:           hclConfigs.NewParser(afero.NewOsFs()),
+	}
+}
+
 // LoadIacDir starts traversing from the given rootDir and traverses through
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
-func LoadIacDir(absRootDir string, nonRecursiveScan bool) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (t TerraformDirectoryLoader) LoadIacDir() (allResourcesConfig output.AllResourceConfigs, err error) {
 
-	// create a new config parser
-	parser := hclConfigs.NewParser(afero.NewOsFs())
+	defer t.remoteDownloader.CleanUp()
 
-	// create a new downloader to install remote modules
-	r := downloader.NewRemoteDownloader()
-	defer r.CleanUp()
-
-	if nonRecursiveScan {
-		return loadDirNonRecursive(absRootDir, parser, r)
+	if t.nonRecursive {
+		return t.loadDirNonRecursive()
 	}
 
 	// Walk the file path and find all directories
-	dirList, err := utils.FindAllDirectories(absRootDir)
+	dirList, err := utils.FindAllDirectories(t.absRootDir)
 	if err != nil {
-		return nil, multierror.Append(errIacLoadDirs, err)
+		return nil, multierror.Append(t.errIacLoadDirs, err)
 	}
-	dirList = utils.FilterHiddenDirectories(dirList, absRootDir)
+	dirList = utils.FilterHiddenDirectories(dirList, t.absRootDir)
 
-	return loadDirRecursive(dirList, absRootDir, parser, r)
+	return t.loadDirRecursive(dirList)
 }
 
-func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Parser, r downloader.ModuleDownloader) (output.AllResourceConfigs, error) {
+func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.AllResourceConfigs, error) {
 
 	// initialize normalized output
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	for _, dir := range dirList {
 		// check if the directory has any tf config files (.tf or .tf.json)
-		if !parser.IsConfigDir(dir) {
+		if !t.parser.IsConfigDir(dir) {
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
 			zap.S().Debug(errMessage)
-			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+			t.addError(errMessage, dir)
 			continue
 		}
 
 		// load current config directory
-		rootMod, diags := parser.LoadConfigDir(dir)
+		rootMod, diags := t.parser.LoadConfigDir(dir)
 		if diags.HasErrors() {
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
 			zap.S().Debug(errMessage)
-			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+			t.addError(errMessage, dir)
 			continue
 		}
 
 		// get unified config for the current directory
-		unified, diags := buildUnifiedConfig(rootMod, parser, dir, r)
+		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 
 		if diags.HasErrors() {
 			// log a warn message in this case because there are errors in
 			// loading the config dir, and continue with other directories
 			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
 			zap.S().Warnf(errMessage)
-			multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+			t.addError(errMessage, dir)
 			continue
 		}
 
@@ -143,7 +156,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 				// create output.ResourceConfig from hclConfigs.Resource
 				resourceConfig, err := CreateResourceConfig(managedResource)
 				if err != nil {
-					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
+					t.addError(err.Error(), dir)
 					continue
 				}
 
@@ -151,19 +164,19 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 				// source file path
-				resourceConfig.Source, err = filepath.Rel(absRootDir, resourceConfig.Source)
+				resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
 				if err != nil {
-					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
+					t.addError(err.Error(), dir)
 					continue
 				}
 
 				// tf plan directory relative path
-				planRoot, err := filepath.Rel(absRootDir, dir)
+				planRoot, err := filepath.Rel(t.absRootDir, dir)
 				if err != nil {
-					multierror.Append(errIacLoadDirs, fmt.Errorf(err.Error()))
+					t.addError(err.Error(), dir)
 					continue
 				}
-				if absRootDir == dir {
+				if t.absRootDir == dir {
 					planRoot = fmt.Sprintf(".%s", string(os.PathSeparator))
 				}
 				resourceConfig.PlanRoot = planRoot
@@ -173,7 +186,7 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 					allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
 				} else {
 					resources := allResourcesConfig[resourceConfig.Type]
-					if !isConfigPresent(resources, resourceConfig) {
+					if !output.IsConfigPresent(resources, resourceConfig) {
 						allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 					}
 				}
@@ -191,42 +204,42 @@ func loadDirRecursive(dirList []string, absRootDir string, parser *hclConfigs.Pa
 	}
 
 	// successful
-	return allResourcesConfig, errIacLoadDirs
+	return allResourcesConfig, t.errIacLoadDirs
 }
 
 // loadDirNonRecursive has duplicate code
 // this function will be removed when we deprecate non recursive scan
-func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.ModuleDownloader) (output.AllResourceConfigs, error) {
+func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfigs, error) {
 
 	// initialize normalized output
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	// check if the directory has any tf config files (.tf or .tf.json)
-	if !parser.IsConfigDir(dir) {
+	if !t.parser.IsConfigDir(t.absRootDir) {
 		// log a debug message and continue with other directories
-		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
+		errMessage := fmt.Sprintf("directory '%s' has no terraform config files", t.absRootDir)
 		zap.S().Debug(errMessage)
-		return nil, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
 
 	// load current config directory
-	rootMod, diags := parser.LoadConfigDir(dir)
+	rootMod, diags := t.parser.LoadConfigDir(t.absRootDir)
 	if diags.HasErrors() {
 		// log a debug message and continue with other directories
-		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
+		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", t.absRootDir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
-		return nil, multierror.Append(errIacLoadDirs, fmt.Errorf(errMessage))
+		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
 
 	// get unified config for the current directory
-	unified, diags := buildUnifiedConfig(rootMod, parser, dir, r)
+	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
 	if diags.HasErrors() {
 		// log a warn message in this case because there are errors in
 		// loading the config dir, and continue with other directories
 		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
 		zap.S().Warnf(errMessage)
-		return nil, multierror.Append(errIacLoadDirs, ErrBuildTFConfigDir)
+		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: ErrBuildTFConfigDir.Error()})
 	}
 
 	/*
@@ -260,16 +273,17 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 			// create output.ResourceConfig from hclConfigs.Resource
 			resourceConfig, err := CreateResourceConfig(managedResource)
 			if err != nil {
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to create ResourceConfig"))
+				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: "failed to create ResourceConfig"})
 			}
 
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 			// source file path
-			resourceConfig.Source, err = filepath.Rel(dir, resourceConfig.Source)
+			resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
 			if err != nil {
-				return allResourcesConfig, multierror.Append(errIacLoadDirs, fmt.Errorf("failed to get resource's filepath: %s", err))
+				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
+				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 			}
 
 			// add tf plan directory relative path
@@ -280,7 +294,7 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 				allResourcesConfig[resourceConfig.Type] = []output.ResourceConfig{resourceConfig}
 			} else {
 				resources := allResourcesConfig[resourceConfig.Type]
-				if !isConfigPresent(resources, resourceConfig) {
+				if !output.IsConfigPresent(resources, resourceConfig) {
 					allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 				}
 			}
@@ -297,14 +311,59 @@ func loadDirNonRecursive(dir string, parser *hclConfigs.Parser, r downloader.Mod
 	}
 
 	// successful
-	return allResourcesConfig, errIacLoadDirs
+	return allResourcesConfig, t.errIacLoadDirs
 }
 
-func generateTempDir() string {
-	return filepath.Join(os.TempDir(), utils.GenRandomString(6))
+// buildUnifiedConfig builds a unified config from *hclConfigs.Module object specified for a dir
+func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module, dir string) (*hclConfigs.Config, hcl.Diagnostics) {
+	// using the BuildConfig and ModuleWalkerFunc to traverse through all
+	// descendant modules from the root module and create a unified
+	// configuration of type *configs.Config
+	versionI := 0
+	return hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
+		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
+
+			// figure out path sub module directory, if it's remote then download it locally
+			var pathToModule string
+			var err error
+			if downloader.IsLocalSourceAddr(req.SourceAddr) {
+
+				pathToModule = t.processLocalSource(req)
+				zap.S().Debugf("processing local module %q", pathToModule)
+			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
+				// temp dir to download the remote repo
+				tempDir := utils.GenerateTempDir()
+
+				pathToModule, err = t.processTerraformRegistrySource(req, tempDir)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				}
+			} else {
+				// temp dir to download the remote repo
+				tempDir := utils.GenerateTempDir()
+
+				// Download remote module
+				pathToModule, err = t.remoteDownloader.DownloadModule(req.SourceAddr, tempDir)
+				if err != nil {
+					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+				}
+			}
+
+			// load sub module directory
+			subMod, diags := t.parser.LoadConfigDir(pathToModule)
+			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))
+			versionI++
+			return subMod, version, diags
+		},
+	))
 }
 
-func processLocalSource(req *hclConfigs.ModuleRequest) string {
+// addError adds error load dir errors
+func (t *TerraformDirectoryLoader) addError(errMessage, directory string) {
+	t.errIacLoadDirs = multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: directory, ErrMessage: errMessage})
+}
+
+func (t TerraformDirectoryLoader) processLocalSource(req *hclConfigs.ModuleRequest) string {
 	// determine the absolute path from root module to the sub module
 
 	// while building the unified config, recursive calls are made for all the paths resolved,
@@ -318,72 +377,15 @@ func processLocalSource(req *hclConfigs.ModuleRequest) string {
 	return filepath.Join(callDirPath, req.SourceAddr)
 }
 
-func processTerraformRegistrySource(req *hclConfigs.ModuleRequest, tempDir string, m downloader.ModuleDownloader) (string, error) {
+func (t TerraformDirectoryLoader) processTerraformRegistrySource(req *hclConfigs.ModuleRequest, tempDir string) (string, error) {
 	// regsrc.ParseModuleSource func returns a terraform registry module source
 	// error check is not required as the source address is already validated
 	module, _ := regsrc.ParseModuleSource(req.SourceAddr)
 
-	pathToModule, err := m.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
+	pathToModule, err := t.remoteDownloader.DownloadRemoteModule(req.VersionConstraint, tempDir, module)
 	if err != nil {
 		return pathToModule, err
 	}
 
 	return pathToModule, nil
-}
-
-// buildUnifiedConfig builds a unified config from *hclConfigs.Module object specified for a dir
-func buildUnifiedConfig(rootMod *hclConfigs.Module, parser *hclConfigs.Parser, dir string, r downloader.ModuleDownloader) (*hclConfigs.Config, hcl.Diagnostics) {
-	// using the BuildConfig and ModuleWalkerFunc to traverse through all
-	// descendant modules from the root module and create a unified
-	// configuration of type *configs.Config
-	versionI := 0
-	return hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
-		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
-
-			// figure out path sub module directory, if it's remote then download it locally
-			var pathToModule string
-			var err error
-			if downloader.IsLocalSourceAddr(req.SourceAddr) {
-
-				pathToModule = processLocalSource(req)
-				zap.S().Debugf("processing local module %q", pathToModule)
-			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
-				// temp dir to download the remote repo
-				tempDir := generateTempDir()
-
-				pathToModule, err = processTerraformRegistrySource(req, tempDir, r)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
-				}
-			} else {
-				// temp dir to download the remote repo
-				tempDir := generateTempDir()
-
-				// Download remote module
-				pathToModule, err = r.DownloadModule(req.SourceAddr, tempDir)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
-				}
-			}
-
-			// load sub module directory
-			subMod, diags := parser.LoadConfigDir(pathToModule)
-			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))
-			versionI++
-			return subMod, version, diags
-		},
-	))
-}
-
-// isConfigPresent checks whether a resource is already present in the list of configs or not
-// the equality of a resource is based on name, source and config of the resource
-func isConfigPresent(resources []output.ResourceConfig, resourceConfig output.ResourceConfig) bool {
-	for _, resource := range resources {
-		if resource.Name == resourceConfig.Name && resource.Source == resourceConfig.Source {
-			if reflect.DeepEqual(resource.Config, resourceConfig.Config) {
-				return true
-			}
-		}
-	}
-	return false
 }
