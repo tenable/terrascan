@@ -1,0 +1,12 @@
+{
+    "name": "esDomainInsecurePolicy",
+    "file": "esDomainInsecurePolicy.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Elasticsearch domains do not have wildcard policies.",
+    "reference_id": "AC_AWS_060",
+    "category": "Identity and Access Management",
+    "version": 1
+}

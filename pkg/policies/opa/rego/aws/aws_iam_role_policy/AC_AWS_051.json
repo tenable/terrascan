@@ -1,0 +1,12 @@
+{
+    "name": "iamRolePolicyWithPrivildegeEscalation",
+    "file": "iamRolePolicyWithPrivildegeEscalation.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure IAM roles do not have any policies attached that may cause priviledge escalation.",
+    "reference_id": "AC_AWS_051",
+    "category": "Identity and Access Management",
+    "version": 1
+}

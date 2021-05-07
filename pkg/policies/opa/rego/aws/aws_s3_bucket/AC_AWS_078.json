@@ -1,0 +1,12 @@
+{
+    "name": "s3BucketAccessLoggingDisabled",
+    "file": "s3BucketAccessLoggingDisabled.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure S3 buckets have access logging enabled.",
+    "reference_id": "AC_AWS_078",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

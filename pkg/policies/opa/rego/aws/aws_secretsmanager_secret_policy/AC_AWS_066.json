@@ -1,0 +1,12 @@
+{
+    "name": "secretManagerPolicyNotSecret",
+    "file": "secretManagerPolicyNotSecret.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure secrets manager do not wildcard policies attached",
+    "reference_id": "AC_AWS_066",
+    "category": "Identity and Access Management",
+    "version": 1
+}
