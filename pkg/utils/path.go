@@ -126,3 +126,30 @@ func FindFilesBySuffixInDir(basePath string, suffixes []string) ([]*string, erro
 func AddFileExtension(file, ext string) string {
 	return fmt.Sprintf("%v.%v", file, ext)
 }
+
+// FilterHiddenDirectories filters hidden directories from a list of directories
+// TODO: filtering hidden directories on windows
+func FilterHiddenDirectories(dirList []string, rootDir string) []string {
+	filteredDirs := make([]string, 0)
+	for _, d := range dirList {
+		// we need to find a hidden folder in a specific root directory
+		dirName := strings.Replace(d, rootDir, "", 1)
+
+		// get all directory names in a path
+		dirNames := strings.Split(dirName, string(os.PathSeparator))
+
+		hasHiddenFolder := false
+		for _, n := range dirNames {
+			// on unix based systems, hidden folder names start with a '.' character
+			if strings.HasPrefix(n, ".") {
+				hasHiddenFolder = true
+				break
+			}
+		}
+
+		if !hasHiddenFolder {
+			filteredDirs = append(filteredDirs, d)
+		}
+	}
+	return filteredDirs
+}

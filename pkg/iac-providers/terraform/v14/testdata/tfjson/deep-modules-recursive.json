@@ -1,0 +1,56 @@
+{
+  "aws_s3_bucket": [
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "source": "modules/m1/main.tf",
+      "plan_root": "./",
+      "line": 20,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "${module.m3.fullbucketname}",
+        "policy": "${module.m2.fullbucketpolicy}"
+      },
+      "skip_rules": null
+    },
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "source": "modules/m4/main.tf",
+      "plan_root": "./",
+      "line": 11,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "tf-test-project-2",
+        "policy": "${module.m4a.fullbucketpolicy}"
+      },
+      "skip_rules": null
+    },
+    {
+      "id": "aws_s3_bucket.bucket4a",
+      "name": "bucket4a",
+      "source": "modules/m4/modules/m4a/main.tf",
+      "plan_root": "./",
+      "line": 20,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "${module.m4c.fullbucketname}",
+        "policy": "${module.m4b.fullbucketpolicy}"
+      },
+      "skip_rules": null
+    },
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "source": "modules/m4/main.tf",
+      "plan_root": "modules/m4",
+      "line": 11,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "asdfasdf",
+        "policy": "${module.m4a.fullbucketpolicy}"
+      },
+      "skip_rules": null
+    }
+  ]
+}

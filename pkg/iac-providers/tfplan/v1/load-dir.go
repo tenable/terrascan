@@ -28,6 +28,6 @@ var (
 
 // LoadIacDir is not supported for tfplan IacType. Terraform plan should always
 // be a file and not a directory
-func (k *TFPlan) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
+func (k *TFPlan) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
 	return output.AllResourceConfigs{}, errIacDirNotSupport
 }

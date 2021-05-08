@@ -4,6 +4,7 @@
       "id": "aws_instance.instance_playground",
       "name": "instance_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 77,
       "type": "aws_instance",
       "config": {
@@ -38,7 +39,8 @@
         "vpc_security_group_ids": [
           "${aws_security_group.sg_playground.id}"
         ]
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_internet_gateway": [
@@ -46,6 +48,7 @@
       "id": "aws_internet_gateway.igw_playground",
       "name": "igw_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 14,
       "type": "aws_internet_gateway",
       "config": {
@@ -53,7 +56,8 @@
           "Environment": "${var.environment_tag}"
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_key_pair": [
@@ -61,12 +65,14 @@
       "id": "aws_key_pair.ec2key_playground",
       "name": "ec2key_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 72,
       "type": "aws_key_pair",
       "config": {
         "key_name": "testKey",
         "public_key": "${file(var.public_key_path)}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_route_table": [
@@ -74,6 +80,7 @@
       "id": "aws_route_table.rtb_public_playground",
       "name": "rtb_public_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 30,
       "type": "aws_route_table",
       "config": {
@@ -87,7 +94,8 @@
           "Environment": "${var.environment_tag}"
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_route_table_association": [
@@ -95,12 +103,14 @@
       "id": "aws_route_table_association.rta_subnet_public_playground",
       "name": "rta_subnet_public_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 41,
       "type": "aws_route_table_association",
       "config": {
         "route_table_id": "${aws_route_table.rtb_public_playground.id}",
         "subnet_id": "${aws_subnet.subnet_public_playground.id}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_security_group": [
@@ -108,6 +118,7 @@
       "id": "aws_security_group.sg_playground",
       "name": "sg_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 46,
       "type": "aws_security_group",
       "config": {
@@ -144,7 +155,8 @@
           "Environment": "${var.environment_tag}"
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_subnet": [
@@ -152,6 +164,7 @@
       "id": "aws_subnet.subnet_public_playground",
       "name": "subnet_public_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 21,
       "type": "aws_subnet",
       "config": {
@@ -161,7 +174,8 @@
           "Environment": "${var.environment_tag}"
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
-      }
+      },
+      "skip_rules": null
     }
   ],
   "aws_vpc": [
@@ -169,6 +183,7 @@
       "id": "aws_vpc.vpc_playground",
       "name": "vpc_playground",
       "source": "config1.tf",
+      "plan_root": "./",
       "line": 5,
       "type": "aws_vpc",
       "config": {
@@ -178,7 +193,8 @@
         "tags": {
           "Environment": "${var.environment_tag}"
         }
-      }
+      },
+      "skip_rules": null
     }
   ]
 }

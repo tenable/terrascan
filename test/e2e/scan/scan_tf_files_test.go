@@ -117,10 +117,12 @@ var _ = Describe("Scan is run for terraform files", func() {
 				})
 			})
 
-			When("output type is json and all iac scan is used", func() {
-				It("should display violations in json format, and should have iac type as 'all'", func() {
-					scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_all.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			When("output type is json and no iac type is specified", func() {
+				Context("when iac type is not specified and a directory is specified, it will be scanned will all iac providers", func() {
+					It("should display violations in json format, and should have iac type as 'all'", func() {
+						scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
+						scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_all.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					})
 				})
 			})
 
@@ -174,31 +176,41 @@ var _ = Describe("Scan is run for terraform files", func() {
 				policyDir, err = filepath.Abs(policyRootRelPath)
 			})
 
-			When("when output type is json", func() {
+			When("output type is json", func() {
 				It("should display violations in json format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
 					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(tfAwsDBInstanceGoldenRelPath, "aws_db_instance_json.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is yaml", func() {
+			When("output type is yaml", func() {
 				It("should display violations in yaml format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "yaml"}
 					scanUtils.RunScanAndAssertYAMLOutput(terrascanBinaryPath, filepath.Join(tfAwsDBInstanceGoldenRelPath, "aws_db_instance_yaml.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when output type is xml", func() {
+			When("output type is xml", func() {
 				It("should display violations in xml format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "xml"}
 					scanUtils.RunScanAndAssertXMLOutput(terrascanBinaryPath, filepath.Join(tfAwsDBInstanceGoldenRelPath, "aws_db_instance_xml.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
-			When("when --show-passed option is used", func() {
+			When("--show-passed option is used", func() {
 				It("should display passed rules in the output", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json", "--show-passed"}
 					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(tfAwsDBInstanceGoldenRelPath, "aws_db_instance_json_show_passed.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				})
+			})
+		})
+
+		Context("when --non-recursive flag is not used, all sub folders will be scanned in the specified directory", func() {
+			When("output type is json", func() {
+				It("should display violations in json format", func() {
+					iacDir := filepath.Join(iacRootRelPath, "terraform_recursive")
+					scanArgs := []string{"-i", "terraform", "-p", policyDir, "-d", iacDir, "-o", "json"}
+					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_recursive.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})

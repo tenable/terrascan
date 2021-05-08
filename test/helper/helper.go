@@ -54,6 +54,9 @@ var (
 	// fileFolderPattern is regex for 'file/folder' attribute in violations output
 	fileFolderPattern = regexp.MustCompile(`["]*[fF]ile[\/_][fF]older["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
+	// planRootPattern is regex for 'file/folder' attribute in violations output
+	planRootPattern = regexp.MustCompile(`["]*[pP]lan[\/_][rR]oot["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
+
 	// filePattern is regex for 'file' attribute in violations output
 	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
@@ -161,6 +164,9 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 
 		sessionOutput = errMsgPattern.ReplaceAllString(sessionOutput, "")
 		fileContents = errMsgPattern.ReplaceAllString(fileContents, "")
+
+		sessionOutput = planRootPattern.ReplaceAllString(sessionOutput, "")
+		fileContents = planRootPattern.ReplaceAllString(fileContents, "")
 	}
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
@@ -297,8 +303,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 1. sort actual and golden violations and remove "file" attribute
 	sort.Sort(actualViolations)
 	sort.Sort(expectedViolations)
-	removeFileFromViolations(actualViolations)
-	removeFileFromViolations(expectedViolations)
+	removeFileAndRoothFromViolations(actualViolations)
+	removeFileAndRoothFromViolations(expectedViolations)
 
 	actualSkippedViolations = sessionEngineOutput.ViolationStore.SkippedViolations
 	expectedSkippedViolations = fileDataEngineOutput.ViolationStore.SkippedViolations
@@ -306,8 +312,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 2. sort actual and golden skipped violations and remove "file" attribute
 	sort.Sort(actualSkippedViolations)
 	sort.Sort(expectedSkippedViolations)
-	removeFileFromViolations(actualSkippedViolations)
-	removeFileFromViolations(expectedSkippedViolations)
+	removeFileAndRoothFromViolations(actualSkippedViolations)
+	removeFileAndRoothFromViolations(expectedSkippedViolations)
 
 	actualPassedRules = sessionEngineOutput.ViolationStore.PassedRules
 	expectedPassedRules = fileDataEngineOutput.ViolationStore.PassedRules
@@ -337,11 +343,12 @@ func removeTimestampAndResourcePath(summary *results.ScanSummary) {
 	summary.ResourcePath = ""
 }
 
-// removeFileFromViolations is helper func to make file in violations blank
-func removeFileFromViolations(v violations) {
+// removeFileAndRoothFromViolations is helper func to make file in violations blank
+func removeFileAndRoothFromViolations(v violations) {
 	vs := []*results.Violation(v)
 
 	for _, violation := range vs {
 		violation.File = ""
+		violation.PlanRoot = ""
 	}
 }

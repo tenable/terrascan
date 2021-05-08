@@ -2,6 +2,7 @@ Violation Details -
     
 	Description    :	Enable AWS AMI Encryption
 	File           :	main.tf
+	Plan Root      :	./
 	Line           :	5
 	Severity       :	MEDIUM
 	

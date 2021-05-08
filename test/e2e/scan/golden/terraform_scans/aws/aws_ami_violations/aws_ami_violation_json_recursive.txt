@@ -1,0 +1,41 @@
+{
+  "results": {
+    "scan_errors": [
+      {
+        "iac_type": "terraform",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive",
+        "errMsg": "directory '/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive' has no terraform config files"
+      },
+      {
+        "iac_type": "terraform",
+        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive/subFolder1",
+        "errMsg": "directory '/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive/subFolder1' has no terraform config files"
+      }
+    ],
+    "violations": [
+      {
+        "rule_name": "amiNotEncrypted",
+        "description": "Enable AWS AMI Encryption",
+        "rule_id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+        "severity": "MEDIUM",
+        "category": "Encryption \u0026 KeyManagement",
+        "resource_name": "awsAmiEncrypted",
+        "resource_type": "aws_ami",
+        "file": "subFolder1/subFolder2/main.tf",
+        "plan_root": "subFolder1/subFolder2",
+        "line": 5
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/terraform_recursive",
+      "iac_type": "terraform",
+      "scanned_at": "2021-04-18 12:45:51.597994 +0000 UTC",
+      "policies_validated": 7,
+      "violated_policies": 1,
+      "low": 0,
+      "medium": 1,
+      "high": 0
+    }
+  }
+}

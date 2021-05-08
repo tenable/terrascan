@@ -4,6 +4,7 @@
         "id": "complex_var_resource.complex",
         "name": "complex",
         "source": "main.tf",
+        "plan_root": "./",
         "line": 1,
         "type": "complex_var_resource",
         "config": {

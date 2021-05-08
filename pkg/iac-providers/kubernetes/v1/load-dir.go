@@ -29,7 +29,7 @@ func (*K8sV1) getFileType(file string) string {
 }
 
 // LoadIacDir loads all k8s files in the current directory
-func (k *K8sV1) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
+func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 

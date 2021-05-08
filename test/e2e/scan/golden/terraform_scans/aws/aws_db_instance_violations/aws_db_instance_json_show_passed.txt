@@ -33,6 +33,7 @@
         "resource_name": "PtShGgAdi6",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 82
       },
       {
@@ -44,6 +45,7 @@
         "resource_name": "PtShGgAdi2",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 25
       },
       {
@@ -55,6 +57,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       },
       {
@@ -66,6 +69,7 @@
         "resource_name": "PtShGgAdi1",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 10
       },
       {
@@ -77,6 +81,7 @@
         "resource_name": "PtShGgAdi4",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 55
       },
       {
@@ -88,6 +93,7 @@
         "resource_name": "PtShGgAdi5",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 69
       },
       {
@@ -99,6 +105,7 @@
         "resource_name": "PtShGgAdi2",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 25
       },
       {
@@ -110,6 +117,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       },
       {
@@ -121,6 +129,7 @@
         "resource_name": "PtShGgAdi6",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 82
       },
       {
@@ -132,6 +141,7 @@
         "resource_name": "PtShGgAdi4",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 55
       },
       {
@@ -143,6 +153,7 @@
         "resource_name": "PtShGgAdi5",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 69
       },
       {
@@ -154,6 +165,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       },
       {
@@ -165,6 +177,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       },
       {
@@ -176,6 +189,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       }
     ],

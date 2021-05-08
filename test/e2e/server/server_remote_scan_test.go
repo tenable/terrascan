@@ -143,6 +143,32 @@ var _ = Describe("Server Remote Scan", func() {
 					})
 				})
 
+				When("non_recursive attribute is present in body", func() {
+					Context("remote url contains terraform files", func() {
+						It("should receive 200 OK response", func() {
+
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = awsAmiRepoURL
+							bodyAttrs["non_recursive"] = true
+
+							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusOK)
+						})
+					})
+
+					Context("remote url doesn't not contain terraform files", func() {
+						It("should receive 400 bad request response", func() {
+
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = "https://github.com/accurics/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
+							bodyAttrs["non_recursive"] = true
+
+							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+						})
+					})
+				})
+
 				Context("remote_type or remote_url is not present in the request", func() {
 					errMessage := "remote url or destination dir path cannot be empty"
 
@@ -233,6 +259,19 @@ var _ = Describe("Server Remote Scan", func() {
 							bodyAttrs["remote_type"] = "git"
 							bodyAttrs["remote_url"] = awsAmiRepoURL
 							bodyAttrs["show_passed"] = "invalid"
+
+							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
+							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))
+						})
+					})
+
+					When("non_recursive value is invalid", func() {
+						It("should receive a 400 bad request response", func() {
+							errMessage := "json: cannot unmarshal string into Go struct field scanRemoteRepoReq.non_recursive of type bool"
+							bodyAttrs := make(map[string]interface{})
+							bodyAttrs["remote_type"] = "git"
+							bodyAttrs["remote_url"] = awsAmiRepoURL
+							bodyAttrs["non_recursive"] = "invalid"
 
 							responseBytes := serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
 							Expect(string(bytes.TrimSpace(responseBytes))).To(Equal(errMessage))

@@ -59,6 +59,7 @@ var defaultColorPatterns = map[FieldSpec]FieldStyle{
 	{`[rR]esource[_\s][nN]ame`, defaultValuePattern}:      {"", "Fg#0ff|Bold"},
 	{`[rR]esource[_\s][tT]ype`, defaultValuePattern}:      {"", "Fg#0cc"},
 	{"[fF]ile", defaultValuePattern}:                      {"", "Fg#00768B|Bold"},
+	{`[rR]oot[_\s][pP]ath`, defaultValuePattern}:          {"", "Fg#00768B|Bold"},
 	{"[lL]ow", `\d+`}:                                     {"Fg#cc0", "Fg#cc0"},
 	{"[mM]edium", `\d+`}:                                  {"Fg#c84", "Fg#c84"},
 	{"[hH]igh", `\d+`}:                                    {"Fg#f00", "Fg#f00"},

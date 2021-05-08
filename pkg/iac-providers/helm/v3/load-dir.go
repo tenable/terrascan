@@ -43,7 +43,7 @@ var (
 )
 
 // LoadIacDir loads all helm charts under the specified directory
-func (h *HelmV3) LoadIacDir(absRootDir string) (output.AllResourceConfigs, error) {
+func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 

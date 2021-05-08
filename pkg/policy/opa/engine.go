@@ -297,6 +297,7 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 		ResourceType: resource.Type,
 		ResourceData: resource.Config,
 		File:         resource.Source,
+		PlanRoot:     resource.PlanRoot,
 		LineNumber:   resource.Line,
 	}
 
@@ -389,40 +390,44 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 			}
 
 			// Locate the resource details within the input map
-			var resource *output.ResourceConfig
-			resource, err = engineInput.InputData.FindResourceByID(resourceID)
+			resources, err := engineInput.InputData.FindAllResourcesByID(resourceID)
 			if err != nil {
 				zap.S().Error(err)
 				continue
 			}
 
-			// add to skipped violations if rule is skipped for resource
-			if len(resource.SkipRules) > 0 {
-				found := false
-				var skipComment string
-				for _, rule := range resource.SkipRules {
-					if strings.EqualFold(k, rule.Rule) {
-						found = true
-						skipComment = rule.Comment
-						break
-					}
-				}
-				if found {
-					e.reportViolation(e.regoDataMap[k], resource, true, skipComment)
-					zap.S().Debugf("rule: %s skipped for resource: %s", k, resource.Name)
-					continue
-				}
-			}
-
-			if resource == nil {
+			if len(resources) == 0 {
 				zap.S().Warn("resource was not found", zap.String("resource id", resourceID))
 				continue
 			}
 
-			zap.S().Debug("violation found for rule with rego", zap.String("rego", string("\n")+string(e.regoDataMap[k].RawRego)+string("\n")))
+			for _, resource := range resources {
+				// add to skipped violations if rule is skipped for resource
+				if len(resource.SkipRules) > 0 {
+					found := false
+					var skipComment string
+					for _, rule := range resource.SkipRules {
+						if strings.EqualFold(k, rule.Rule) {
+							found = true
+							skipComment = rule.Comment
+							break
+						}
+					}
+					if found {
+						// report skipped
+						e.reportViolation(e.regoDataMap[k], resource, true, skipComment)
+						zap.S().Debugf("rule: %s skipped for resource: %s", k, resource.Name)
+					} else {
+						// Report the violation
+						e.reportViolation(e.regoDataMap[k], resource, false, "")
+					}
+				} else {
+					// Report the violation
+					e.reportViolation(e.regoDataMap[k], resource, false, "")
+				}
+			}
 
-			// Report the violation
-			e.reportViolation(e.regoDataMap[k], resource, false, "")
+			zap.S().Debug("violation found for rule with rego", zap.String("rego", string("\n")+string(e.regoDataMap[k].RawRego)+string("\n")))
 		}
 	}
 

@@ -44,10 +44,11 @@ type Executor struct {
 	notifiers     []notifications.Notifier
 	categories    []string
 	severity      string
+	nonRecursive  bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
 	e = &Executor{
 		filePath:     filePath,
 		dirPath:      dirPath,
@@ -56,6 +57,7 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 		iacType:      iacType,
 		iacVersion:   iacVersion,
 		iacProviders: make([]iacProvider.IacProvider, 0),
+		nonRecursive: nonRecursive,
 	}
 
 	// read config file and update scan and skip rules
@@ -112,6 +114,7 @@ func (e *Executor) Init() error {
 				zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
 				return err
 			}
+
 			e.iacProviders = append(e.iacProviders, iacP)
 		}
 	} else {
@@ -120,6 +123,7 @@ func (e *Executor) Init() error {
 			zap.S().Errorf("failed to create a new IacProvider for iacType '%s'. error: '%s'", e.iacType, err)
 			return err
 		}
+
 		e.iacProviders = append(e.iacProviders, iacP)
 	}
 
@@ -177,7 +181,7 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	// for the iac providers that don't implement sub folder scanning
 	// return the error to the caller
-	if !implementsSubFolderScan(e.iacType) {
+	if !implementsSubFolderScan(e.iacType, e.nonRecursive) {
 		if err := merr.ErrorOrNil(); err != nil {
 			return results, err
 		}
@@ -226,7 +230,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath)
+			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}
@@ -278,11 +282,15 @@ func (e *Executor) findViolations(results *Output) error {
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning
-func implementsSubFolderScan(iacType string) bool {
+func implementsSubFolderScan(iacType string, nonRecursive bool) bool {
 	// iac providers that support sub folder scanning
 	// this needs be updated when other iac providers implement
 	// sub folder scanning
-	iacWithSubFolderScan := []string{"all", "k8s", "helm"}
+	if nonRecursive && iacType == "terraform" {
+		return false
+	}
+
+	iacWithSubFolderScan := []string{"all", "k8s", "helm", "terraform"}
 	for _, v := range iacWithSubFolderScan {
 		if v == iacType {
 			return true

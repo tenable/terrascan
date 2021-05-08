@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/downloader"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 )
@@ -59,7 +60,8 @@ func TestProcessLocalSource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := processLocalSource(tt.args.req); got != tt.want {
+			dl := NewTerraformDirectoryLoader("", false)
+			if got := dl.processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
 		})
@@ -67,7 +69,7 @@ func TestProcessLocalSource(t *testing.T) {
 }
 
 func TestProcessTerraformRegistrySource(t *testing.T) {
-	testTempDir := generateTempDir()
+	testTempDir := utils.GenerateTempDir()
 
 	type args struct {
 		req            *hclConfigs.ModuleRequest
@@ -88,7 +90,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 					SourceAddr: "test.com/test/eks/aws",
 				},
 				remoteModPaths: make(map[string]string),
-				tempDir:        generateTempDir(),
+				tempDir:        utils.GenerateTempDir(),
 				m:              downloader.NewRemoteDownloader(),
 			},
 			wantErr: true,
@@ -109,7 +111,8 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			got, err := processTerraformRegistrySource(tt.args.req, tt.args.tempDir, tt.args.m)
+			dl := NewTerraformDirectoryLoader("", false)
+			got, err := dl.processTerraformRegistrySource(tt.args.req, tt.args.tempDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
 				return

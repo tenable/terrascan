@@ -4,6 +4,7 @@
       "id": "aws_instance.app",
       "name": "app",
       "source": "main.tf",
+      "plan_root": "./",
       "line": 5,
       "type": "aws_instance",
       "config": {

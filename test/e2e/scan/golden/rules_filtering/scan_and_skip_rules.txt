@@ -10,6 +10,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       },
       {
@@ -21,6 +22,7 @@
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "file": "main.tf",
+        "root_path": "./",
         "line": 39
       }
     ],

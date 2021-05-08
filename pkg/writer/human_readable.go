@@ -94,15 +94,22 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 }
 
 func defaultViolations(v results.Violation, isSkipped bool) string {
-	out := fmt.Sprintf("%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%d\n\t%-15v:\t%s\n\t",
+	part := fmt.Sprintf("%-15v:\t%s\n\t%-15v:\t%s\n\t",
 		"Description", v.Description,
-		"File", v.File,
+		"File", v.File)
+	if v.PlanRoot != "" {
+		planRoot := fmt.Sprintf("%-15v:\t%s\n\t", "Plan Root", v.PlanRoot)
+		part = part + planRoot
+	}
+	out := fmt.Sprintf("%-15v:\t%d\n\t%-15v:\t%s\n\t",
 		"Line", v.LineNumber,
 		"Severity", v.Severity)
 	if isSkipped {
 		skipComment := fmt.Sprintf("%-15v:\t%s\n\t", "Skip Comment", v.Comment)
 		out = out + skipComment
 	}
+	out = part + out
+
 	return out
 }
 
