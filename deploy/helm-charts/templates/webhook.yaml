@@ -1,0 +1,40 @@
+{{- if .Values.webhook.mode }}
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ .Values.name }}
+webhooks:
+  - name: {{ .Values.webhook.name }}
+    admissionReviewVersions:
+    {{- range .Values.webhook.admissionReviewVersions }}
+      - {{ . | printf "%s" }}
+    {{ end }}
+    failurePolicy: {{ .Values.webhook.failurePolicy }}
+    sideEffects: {{ .Values.webhook.sideEffects }}
+    clientConfig:
+      service:
+        name: {{ .Values.name }}
+        namespace: {{ .Release.Namespace }}
+        path: {{ .Values.terrascan_api_key | printf "/v1/k8s/webhooks/%s/scan/validate" }}
+{{- $globcaBundle := .Files.Glob "../data/server.crt" }}
+{{- if $globcaBundle }}
+      caBundle: {{ $globcaBundle | b64enc }}
+{{- end }}
+    rules:
+      - apiGroups:
+        {{- range .Values.webhook.apiGroups }}
+          - {{ . -}}
+        {{- end }}
+        resources:
+        {{- range .Values.webhook.resources }}
+          - {{ . -}}
+        {{- end }}
+        apiVersions:
+        {{- range .Values.webhook.apiVersions }}
+          - {{ . -}}
+        {{- end }}
+        operations:
+        {{- range .Values.webhook.operations }}
+          - {{ . -}}
+        {{- end }}
+{{- end }}
