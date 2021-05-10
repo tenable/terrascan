@@ -1,8 +1,8 @@
 terrascan_api_key: terrakey
 terrascan_container_image: accurics/terrascan:1.5.0
 use_debug: true
-secret_name: terrascan_certs
-config_name: terrascan_config
+secret_name: terrascancerts
+config_name: terrascanconfig
 name: terrahook
 persistence:
   enabled: false
