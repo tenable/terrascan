@@ -1,39 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: terrascan-server
+  name: terrascan
 spec:
-  replicas: 1
   template:
     spec:
       containers:
-      - name: terrascan-1-5
-        image: patilpankaj212/terrascan:argocdint
-        imagePullPolicy: IfNotPresent
-        resources:
-          limits:
-            memory: "256Mi"
-            cpu: "0.5"
-        ports:
-          - containerPort: 9010
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          httpGet:
-            path: /health
-            port: 9010
-            scheme: HTTPS
-        env:
-          - name: K8S_WEBHOOK_API_KEY
-            value: <TERRASCAN_SERVER_KEY_PLACEHOLDER>
+      - name: terrascan-server
         volumeMounts:
-          - mountPath: /data/certs
-            name: terrascan-certs-secret
-            readOnly: true
-          - mountPath: /data/config
-            name: terrascan-config
-            readOnly: true
           - mountPath: /etc/ssh-key-secret
             name: ssh-keys
             readOnly: true
@@ -43,7 +17,6 @@ spec:
           - mountPath: /etc/ssh-known-hosts-secret
             name: ssh-known-hosts
             readOnly: true
-        command: ["/bin/sh", "-c"]
         args:
         - >
           cp /etc/ssh-key-secret/private-key /home/terrascan/.ssh/id_ed25519_github &&
@@ -52,14 +25,6 @@ spec:
           chmod -R 400 /home/terrascan/.ssh/* &&
           terrascan server --cert-path /data/certs/server.crt --key-path /data/certs/server.key -l debug -c /data/config/config.toml
       volumes:
-        #add a configmap for the terrascan config.toml file
-        - name: terrascan-config
-          configMap:
-            name: terrascan-config
-        #add a secret for the tls certificates
-        - name: terrascan-certs-secret
-          secret:
-            secretName: terrascan-certs-secret
         #add a configmap for the ssh known_hosts file
         - name: ssh-known-hosts
           configMap:

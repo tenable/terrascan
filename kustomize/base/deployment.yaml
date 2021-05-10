@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terrascan
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: terrascan-server
+        image: devanggaur7/terrascan:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "0.5"
+        ports:
+        - containerPort: 9010
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          httpGet:
+            path: /health
+            port: 9010
+            scheme: HTTPS
+        volumeMounts:
+            - mountPath: /data/config
+              name: terrascan-config
+              readOnly: true
+        command: ["/bin/sh", "-c"]
+        args:
+        - >
+          terrascan server -l debug -c /data/config/config.toml
+      volumes:
+        #add a configmap for the terrascan config.toml file
+        - name: terrascan-config
+          configMap:
+            name: terrascan-config

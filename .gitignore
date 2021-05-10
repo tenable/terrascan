@@ -25,7 +25,10 @@ docs/_build/
 
 /updatedFiles
 
-# Go binar
+kustomize/server/certs/
+kustomize/server-remote-repo-scan/.ssh/
+
+# Go binary
 /bin
 
 .DS_Store

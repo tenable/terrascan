@@ -1,7 +1,8 @@
 [k8s-admission-control]
-# denied-severity = "medium"
+denied-severity = "medium"
 
-[policy]
+[severity]
+level = "low"
 
 [rules]
 skip-rules = [

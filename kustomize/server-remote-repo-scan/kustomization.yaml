@@ -1,0 +1,20 @@
+resources:
+  - ../server-tls
+
+namespace: <TERRASCAN_NAMESPACE>
+
+configMapGenerator:
+  - name: ssh-known-hosts-config
+    files:
+      - known-hosts=.ssh/known_hosts
+
+secretGenerator:
+  - name: ssh-key-secret
+    files:
+      - private-key=.ssh/github2
+  - name: ssh-config-secret
+    files:
+      - config=.ssh/config
+
+patchesStrategicMerge:
+  - deployment-ssh-config.yaml

@@ -1,30 +1,8 @@
 resources:
-  - deployment.yaml
+  - ../base
   - service.yaml
 
 namespace: <TERRASCAN_NAMESPACE>
 
 commonLabels:
   app: terrascan
-
-configMapGenerator:
-  - name: terrascan-config
-    files:
-      - configfile=config/config.toml
-  - name: ssh-known-hosts-config
-    files:
-      - known-hosts=.ssh/known_hosts
-
-secretGenerator:
-  - name: ssh-key-secret
-    files:
-      - private-key=.ssh/<SSH_KEY_NAME>
-
-  - name: terrascan-certs-secret
-    files:
-      - server.key=certs/server.key
-      - server.crt=certs/server.crt
-
-  - name: ssh-config-secret
-    files:
-      - config=.ssh/config
