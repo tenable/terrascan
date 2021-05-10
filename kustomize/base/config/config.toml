@@ -1,20 +1,3 @@
 [k8s-admission-control]
-denied-severity = "medium"
+denied-severity = "high"
 
-[severity]
-level = "low"
-
-[rules]
-skip-rules = [
-#    "AC-K8-IA-PO-M-0140",
-#    "AC-K8-OE-PO-L-0129",
-#    "AC-K8-OE-PO-L-0130",
-#    "AC-K8-NS-PO-M-0182",
-#    "AC-K8-IA-PO-H-0168",
-#    "AC-K8-CA-PO-H-0165",
-#    "AC-K8-OE-PK-M-0157",
-#    "AC-K8-OE-PK-M-0034",
-#    "AC-K8-IA-PO-M-0135",
-#    "AC-K8-OE-PK-M-0155",
-#    "AC-K8-IA-PO-M-0141",
-]
