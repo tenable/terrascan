@@ -2,14 +2,13 @@ terrascan_api_key: terrakey
 terrascan_container_image: accurics/terrascan:1.5.0
 use_debug: true
 secret_name: terrascan_certs
-ca_bundle: {{ .Files.Get "data/ca.crt" | b64enc }}
 config_name: terrascan_config
 name: terrahook
 persistence:
   enabled: false
   existingclaim: terrascanPvc
 webhook:
-  mode: true
+  mode: false
   name: www.terrahook.com
   failurePolicy: fail
   sideEffects: None

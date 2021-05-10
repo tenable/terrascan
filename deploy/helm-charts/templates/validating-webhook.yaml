@@ -16,7 +16,10 @@ webhooks:
         name: {{ .Values.name }}
         namespace: {{ .Release.Namespace }}
         path: {{ .Values.terrascan_api_key | printf "/v1/k8s/webhooks/%s/scan/validate" }}
-      caBundle: {{ .Values.ca_bundle }}
+{{- $globcaBundle := .Files.Glob "../data/server.crt" }}
+{{- if $globcaBundle }}
+      caBundle: {{ $globcaBundle | b64enc }}
+{{- end }}
     rules:
       - apiGroups: 
         {{- range .Values.webhook.apiGroups }}
