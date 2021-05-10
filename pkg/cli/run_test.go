@@ -65,6 +65,7 @@ func TestRun(t *testing.T) {
 	kustomizeTestDirPath := filepath.Join(runTestDir, "kustomize-test")
 	testTerraformFilePath := filepath.Join(runTestDir, "config-only.tf")
 	testRemoteModuleFilePath := filepath.Join(runTestDir, "remote-modules.tf")
+	testTFJSONFilePath := filepath.Join(runTestDir, "tf-plan.json")
 
 	ruleSlice := []string{"AWS.ECR.DataSecurity.High.0579", "AWS.SecurityGroup.NetworkPortsSecurity.Low.0561"}
 
@@ -127,6 +128,18 @@ func TestRun(t *testing.T) {
 				configOnly:  true,
 				outputType:  "yaml",
 			},
+		},
+		{
+			// test for https://github.com/accurics/terrascan/issues/718
+			// a valid tfplan file is supplied, error is not expected
+			name: "iac type is tfplan and -f option used to specify the tfplan.json",
+			scanOptions: &ScanOptions{
+				policyType:  []string{"all"},
+				iacType:     "tfplan",
+				iacFilePath: testTFJSONFilePath,
+				outputType:  "yaml",
+			},
+			wantErr: false,
 		},
 		{
 			name: "config-only flag k8s",

@@ -1,4 +1,5 @@
 <results>
+  <directory_scan_errors></directory_scan_errors>
   <passed_rules></passed_rules>
   <violations>
     <violation rule_name="rdsAutoMinorVersionUpgradeEnabled" description="RDS Instance Auto Minor Version Upgrade flag disabled" rule_id="AWS.RDS.DS.High.1041" severity="HIGH" category="Data Security" resource_name="PtShGgAdi3" resource_type="aws_db_instance" file="main.tf" line="39"></violation>

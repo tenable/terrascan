@@ -177,7 +177,7 @@ func Colorize(st Style, message string) string {
 			pattern := strings.TrimSpace(clause[:eq])
 			style = strings.TrimSpace(clause[eq+1:])
 
-			if pattern != message {
+			if !strings.EqualFold(pattern, message) {
 				style = ""
 				continue
 			}

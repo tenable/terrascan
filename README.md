@@ -8,6 +8,7 @@
 [![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+[![Homebrew](https://img.shields.io/badge/dynamic/json.svg?url=https://formulae.brew.sh/api/formula/terrascan.json&query=$.versions.stable&label=homebrew)](https://formulae.brew.sh/formula/terrascan)
 
 Terrascan detects security vulnerabilities and compliance violations across your Infrastructure as Code. Mitigate risks before provisioning cloud native infrastructure. Run locally or integrate with your CI\CD.
 
@@ -28,13 +29,9 @@ Terrascan's supports multiple ways to install, including [brew](https://github.c
 Here, we will download the terrascan binary directly from the [releases](https://github.com/accurics/terrascan/releases) page. Make sure to select the right binary for your machine. Here's an example of how to install it:
 
 ```sh
-$ curl --location https://github.com/accurics/terrascan/releases/download/v1.4.0/terrascan_1.4.0_Darwin_x86_64.tar.gz --output terrascan.tar.gz
-$ tar -xvf terrascan.tar.gz
-  x CHANGELOG.md
-  x LICENSE
-  x README.md
-  x terrascan
-$ install terrascan /usr/local/bin
+$ curl -L "$(curl -s https://api.github.com/repos/accurics/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
+$ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
+$ install terrascan /usr/local/bin && rm terrascan
 $ terrascan
 ```
 ### Step 2: Run

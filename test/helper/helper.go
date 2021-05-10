@@ -57,6 +57,12 @@ var (
 	// filePattern is regex for 'file' attribute in violations output
 	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
+	// directoryPattern is regex for 'directory' attribute in scan_errors
+	directoryPattern = regexp.MustCompile(`["]*directory["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
+
+	// errMsgPattern is regex for 'errMsg' attribute in scan_errors
+	errMsgPattern = regexp.MustCompile(`["]*errMsg["]*[ \t]*[:=][ \t]*["]*(.+)["]*`)
+
 	// packagePattern is regex for 'package' attribute in junit-xml output
 	packagePattern = regexp.MustCompile(`package=["]*(.+)[\\\/](.+)["]*`)
 
@@ -149,6 +155,12 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 
 		sessionOutput = fileFolderPattern.ReplaceAllString(sessionOutput, "")
 		fileContents = fileFolderPattern.ReplaceAllString(fileContents, "")
+
+		sessionOutput = directoryPattern.ReplaceAllString(sessionOutput, "")
+		fileContents = directoryPattern.ReplaceAllString(fileContents, "")
+
+		sessionOutput = errMsgPattern.ReplaceAllString(sessionOutput, "")
+		fileContents = errMsgPattern.ReplaceAllString(fileContents, "")
 	}
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
@@ -199,6 +211,11 @@ func CompareActualWithGoldenXML(session *gexec.Session, goldenFileAbsPath string
 // ContainsErrorSubString will assert if error string is part of error output
 func ContainsErrorSubString(session *gexec.Session, errSubString string) {
 	gomega.Expect(string(session.Wait().Err.Contents())).Should(gomega.ContainSubstring(errSubString))
+}
+
+// ContainsDirScanErrorSubString will assert if dir error substring is part of scan output
+func ContainsDirScanErrorSubString(session *gexec.Session, errSubString string) {
+	gomega.Expect(string(session.Wait().Out.Contents())).Should(gomega.ContainSubstring(errSubString))
 }
 
 // DoesNotContainsErrorSubString will assert that a string is not part of the error output

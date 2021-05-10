@@ -65,6 +65,7 @@ type Rules struct {
 
 // K8sAdmissionControl deny rules in the terrascan config file
 type K8sAdmissionControl struct {
+	Dashboard      bool     `toml:"dashboard,omitempty"`
 	DeniedSeverity string   `toml:"denied-severity,omitempty"`
 	Categories     []string `toml:"denied-categories,omitempty"`
 	SaveRequests   bool     `toml:"save-requests,omitempty"`

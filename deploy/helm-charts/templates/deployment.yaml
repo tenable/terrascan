@@ -62,7 +62,7 @@ spec:
       volumes:
         - name: cert-volume
           secret:
-            secretName: certs
+            secretName: {{ .Values.secret_name }}
 {{- $globconfig := .Files.Glob "../data/config.toml" }}
 {{- if $globconfig }}
         - name: config-volume
