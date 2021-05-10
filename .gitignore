@@ -25,7 +25,7 @@ docs/_build/
 
 /updatedFiles
 
-kustomize/server/certs/
+kustomize/server-tls/certs/
 kustomize/server-remote-repo-scan/.ssh/
 
 # Go binary
