@@ -91,7 +91,7 @@ docker pull accurics/terrascan_atlantis
 
 ##### To build your own container image:
 ```
-docker build ./atlantis -t <image_name>
+docker build ./integrations/atlantis -t <image_name>
 ```
 
 ###### Running the container:
@@ -117,4 +117,4 @@ image rather than the latest tag.
 
 The default workflow.yaml file used is the `atlantis/workflow.yaml` in this repo. You can override the default workflow
 using the `--repo-config` flag. It will be up to you how you want to trigger `terrascan` for your usage. You can do
-something along the lines of `atlantis/workflow.yaml` and `atlantis/terrascan.sh` itself.
+something along the lines of `integrations/atlantis/workflow.yaml` and `integrations/atlantis/terrascan.sh` itself.
