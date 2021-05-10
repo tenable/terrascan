@@ -1,11 +1,11 @@
 # Helm chart for deploying terrascan in server mode
 
-This chart deploys terrascan as a server within your kubernetes cluster. By default it runs just terrascan by itself, but 
+This chart deploys terrascan as a server within your kubernetes cluster. By default it runs just terrascan by itself, but, 
 user creates namespace and secrets.
 
 In server mode, terrascan will act both as an API server for
 performing remote scans of IAC, as well as a validating admission
-webook for a Kubernetes cluster. Further details can be found in
+webhook for a Kubernetes cluster. Further details can be found in
 the [main documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/).
 
 ## Usage
@@ -16,8 +16,8 @@ at `data/server.crt` and key at `data/server.key`.
 
 ### Persistent storage
 By default, this chart will deploy terrascan with a `emptyDir`
-volume - basically a temporary volume. If you are intend to use the
-adminssion controller functionality, then you may want to store the
+volume - basically a temporary volume. If you intend to use the
+admission controller functionality, then you may want to store the
 admission controller database on a persistent volume. This chart
 supports speciyfing a [persistent volume
 claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for
