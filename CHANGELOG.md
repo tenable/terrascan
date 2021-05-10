@@ -1,5 +1,52 @@
 # Changelog
 
+## [v1.6.0](https://github.com/accurics/terrascan/tree/v1.6.0) (2021-05-10)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.5.1...v1.6.0)
+
+**Implemented enhancements:**
+
+- Atlantis Integration [\#686](https://github.com/accurics/terrascan/issues/686)
+- Enhancement: support for all iac scan for cli [\#673](https://github.com/accurics/terrascan/issues/673)
+- Feature request: scan sub-folders too [\#411](https://github.com/accurics/terrascan/issues/411)
+
+**Fixed bugs:**
+
+- Admission Controller Doesn't display feedback for kubectl "create" and "apply" [\#731](https://github.com/accurics/terrascan/issues/731)
+
+**Closed issues:**
+
+- GKE Control Plane is exposed to few public IP addresses [\#743](https://github.com/accurics/terrascan/issues/743)
+- Error with finding Enable AWS CloudWatch Logs for APIs [\#730](https://github.com/accurics/terrascan/issues/730)
+- Task: Add to github actions ability to build/push terrascan\_atlantis image [\#728](https://github.com/accurics/terrascan/issues/728)
+- accurics.azure.NS.161 does not work with tfplan [\#725](https://github.com/accurics/terrascan/issues/725)
+- terrascan "latest" docker image broken for tfplan [\#718](https://github.com/accurics/terrascan/issues/718)
+- Local expansion recursive infinite loop [\#690](https://github.com/accurics/terrascan/issues/690)
+
+**Merged pull requests:**
+
+- Feature/aws new policies sp [\#751](https://github.com/accurics/terrascan/pull/751) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- Argocd doc volume field modification [\#742](https://github.com/accurics/terrascan/pull/742) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs.yml [\#741](https://github.com/accurics/terrascan/pull/741) ([amirbenv](https://github.com/amirbenv))
+- fix failing test [\#740](https://github.com/accurics/terrascan/pull/740) ([patilpankaj212](https://github.com/patilpankaj212))
+- AWS policy pack update [\#737](https://github.com/accurics/terrascan/pull/737) ([harkirat22](https://github.com/harkirat22))
+- Adding release checklist [\#734](https://github.com/accurics/terrascan/pull/734) ([jlk](https://github.com/jlk))
+- Gh action terrscan\_atlantis release [\#733](https://github.com/accurics/terrascan/pull/733) ([dev-gaur](https://github.com/dev-gaur))
+- adds agrocd integration dockerfile, scripts, doc  and examples [\#732](https://github.com/accurics/terrascan/pull/732) ([Rchanger](https://github.com/Rchanger))
+- Fix NSG associations [\#727](https://github.com/accurics/terrascan/pull/727) ([xortim](https://github.com/xortim))
+- changes for argocd integration [\#724](https://github.com/accurics/terrascan/pull/724) ([patilpankaj212](https://github.com/patilpankaj212))
+- Update admission-controller-webhooks-usage.md [\#722](https://github.com/accurics/terrascan/pull/722) ([amirbenv](https://github.com/amirbenv))
+- fix - \#718 [\#720](https://github.com/accurics/terrascan/pull/720) ([patilpankaj212](https://github.com/patilpankaj212))
+- doc: add homebrew badge [\#714](https://github.com/accurics/terrascan/pull/714) ([chenrui333](https://github.com/chenrui333))
+- update version [\#713](https://github.com/accurics/terrascan/pull/713) ([chenrui333](https://github.com/chenrui333))
+- adds skipped tests for server file scan when file is k8s yaml [\#706](https://github.com/accurics/terrascan/pull/706) ([Rchanger](https://github.com/Rchanger))
+- fixes infinte loop while local variable resolution [\#700](https://github.com/accurics/terrascan/pull/700) ([patilpankaj212](https://github.com/patilpankaj212))
+- add terrascan atlantis container files, scripts and doc. [\#684](https://github.com/accurics/terrascan/pull/684) ([dev-gaur](https://github.com/dev-gaur))
+- adds support to scan directory with all iac providers in cli mode [\#674](https://github.com/accurics/terrascan/pull/674) ([patilpankaj212](https://github.com/patilpankaj212))
+- adds support to scan sub folders for terraform iac provider [\#640](https://github.com/accurics/terrascan/pull/640) ([patilpankaj212](https://github.com/patilpankaj212))
+
+# Changelog
+
 ## [v1.5.0](https://github.com/accurics/terrascan/tree/v1.5.0) (2021-04-23)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.4.0...v1.5.0)
