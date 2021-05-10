@@ -1,25 +1,37 @@
+{{- if .Values.webhook.mode }}
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: terrahook
+  name: {{ .Values.name }}
 webhooks:
-  - name: TerrascanWebhook
-    admissionReviewVersions: ["v1","v1beta1"]
-    failurePolicy: Fail
-    sideEffects: None
+  - name: {{ .Values.webhook.name }}
+    admissionReviewVersions:
+    {{- range .Values.webhook.admissionReviewVersions }}
+      - {{ . | printf "%s" }}
+    {{ end }}
+    failurePolicy: {{ .Values.webhook.failurePolicy }}
+    sideEffects: {{ .Values.webhook.sideEffects }}
     clientConfig:
       service:
-        name: terrahook
-        namespace: terrascan
-        path: "/v1/k8s/webhooks/terrascan/scan/validate"
+        name: {{ .Values.name }}
+        namespace: {{ .Release.Namespace }}
+        path: {{ .Values.terrascan_api_key | printf "/v1/k8s/webhooks/%s/scan/validate" }}
       caBundle: {{ .Values.ca_bundle }}
     rules:
-      - apiGroups: ["apps", ""]
+      - apiGroups: 
+        {{- range .Values.webhook.apiGroups }}
+          - {{ . -}}
+        {{- end }}
         resources:
-          - "deployments"
-          - "pods"
+        {{- range .Values.webhook.resources }}
+          - {{ . -}}
+        {{- end }}
         apiVersions:
-          - "*"
+        {{- range .Values.webhook.apiVersions }}
+          - {{ . -}}
+        {{- end }}
         operations:
-          - CREATE
-
+        {{- range .Values.webhook.operations }}
+          - {{ . -}}
+        {{- end }}
+{{- end }}
