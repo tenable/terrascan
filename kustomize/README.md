@@ -3,17 +3,19 @@
 This guide will help you install terrascan server inside your kubernetes cluster, as per your specific use case.
 We have covered four use cases in the sections below:
 
-  - Deploying Terrascan Server
+  ##### Deploying Terrascan Server
+  Terrascan operating in http server mode.
 
-      terrascan operating in http server mode.
+  #### Deploying Terrascan Server in TLS Mode
+  Terrascan operating in https server mode. This deployment is also a foundation for the terrascan webhook setup.
 
-  - Deploying Terrascan Server in TLS Mode
+  #### Deploying Terrascan Server for Remote Repository Scan
+  Terrascan in https server mode, with capability to scan remote repositories. This deployment can be used by an
+  argocd pre-sync hook that sends remote repository scan requests to the server.
 
-      terrascan operating in https server mode.
-
-  - Deploying Terrascan Server for Remote Repository Scan
-
-  - Setting Up Terrascan Webhook
+  #### Setting Up Terrascan Webhook
+  A Kubernetes Validating Webhook, that safeguards your cluster by denying the creation of kubernetes resources that
+  can cause potential security violations.
 
 ### PRE-REQUISITE
 1. Make sure you have required access on the kubernetes cluster to create and update the following resources:
@@ -24,7 +26,7 @@ We have covered four use cases in the sections below:
   - Services
   - ValidatingWebhookConfiguration (only if you're aiming to deploy the webhook as well)
 
-  **_If it is not a production level cluster, you probably do have the required access._**
+  **If it is not a production level cluster, you probably do have the required access.**
 
 2. Make sure you have `kubectl`, `kustomize` and `openssh` installed on your local machine.
 
