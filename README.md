@@ -13,16 +13,18 @@
 
 Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow you to:
 
-- Detect security vulnerabilities and compliance violations across your Infrastructure as Code.
+- seamlessly scan infrastructure as code for misconfigurations
+- monitor provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
+- Detect security vulnerabilities and compliance violations.
 - Mitigate risks before provisioning cloud native infrastructure.
 - Offers flexibility to run locally or integrate with your CI\CD.
 
-## Resources
+### Resources
 
-* Documentation: https://docs.accurics.com/projects/accurics-terrascan
+* To learn more about Terrascan's features and capabilities, see the documentation portal: https://docs.accurics.com/projects/accurics-terrascan
 * Discuss: https://community.accurics.com
 
-## Features
+## Key features
 * 500+ Policies for security best practices
 * Scanning of Terraform (HCL2)
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
@@ -70,15 +72,19 @@ To scan your code for security issues you can run the following (defaults to sca
 ```sh
 $ terrascan scan
 ```
+**Note**: Terrascan will exit with an error code 3 if any issues are found during a scan.
 
-The following options are available for the scan command:
+### Step 3: Integrate with CI\CD
+
+Terrascan can be integrated into CI/CD pipelines to enforce security best practices.
+Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/cicd/).
+
+## Terrascan Commands
+You can use terrascan command with the following options:
 
 ```sh
 $ terrascan
 Terrascan
-
-Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
-For more information, please visit https://docs.accurics.com
 
 Usage:
   terrascan [command]
@@ -99,35 +105,46 @@ Flags:
 
 Use "terrascan [command] --help" for more information about a command.
 ```
-**Note**: Terrascan will exit with an error code 3 if any issues are found during a scan.
 
-### Step 3: Integrate with CI\CD
-Terrascan can be integrated into CI/CD pipelines to enforce security best practices.
-Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/cicd/).
+## Policies
+Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). Every rego includes a JSON "rule" file which defines metadata for the policy.
+By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](./usage.md) for information about the Initialization process.
 
+Note: The scan command will implicitly run the initialization process there are no policies found.
 
-## Rule Suppression
-You can configure Terrascan to skip a particular rule while scanning a resource. Follow these steps depending on your platform:
+## Customizing scans
 
-### Terraform
+By default, Terrascan scans all the resources. However you can configure what you want to scan in the following ways:
+
+- [Exclude a particular policy for a specific resource.](#How_to_exclude_a_policy_while_scanning_a_resource)
+- [Manually configure policies to be suppressed or applied globally from a scan across all resources or, for just a particular resource.](#_How_to_include_or_exclude_specific_policies_or_resources_from_being_scanned)
+
+### How to exclude a policy while scanning a resource
+
+You can configure Terrascan to skip a particular policy (rule) while scanning a resource. Follow these steps depending on your platform:
+
+#### Terraform
 Use Terraform scripts to configure Terrascan to skip rules by inserting a comment with the phrase `"ts:skip=<RULENAME><SKIP_REASON>"`. The comment should be included inside the resource as shown in the example below.
 
 ![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
 
-### Kubernetes
-In Kubernetes yamls, you can configure Terrascan to skip rules by adding an annotation as seen in the snippet below.
+#### Kubernetes
+In Kubernetes yamls, you can configure Terrascan to skip policies by adding an annotation as seen in the snippet below.
 
 ![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
 
-### Global Rule Suppression
-Use the Terrascan config file to manually select the rules should be excluded or suppressed from the entire scan. This is suitable for edge use cases.
-Use the "in-file" suppression option to specify resources that should not be tested against particular rules. This ensures that the rules are skipped only for particular resources, rather than all of the resources.
+### How to include or exclude specific policies or resources from being scanned
+
+Use the Terrascan config file to manually select the policies which should be included or excluded from the entire scan. This is suitable for edge use cases.
+Use the "in-file" suppression option to specify resources that should be excluded from being tested against selected policies. This ensures that the policies are skipped only for particular resources, rather than all of the resources.
 
 ![config](https://user-images.githubusercontent.com/74685902/105115887-83e2f380-5a7e-11eb-82b8-a1d18c83a405.png)
 
-### Sample Output
-![Screenshot 2021-01-19 at 10 52 47 PM](https://user-images.githubusercontent.com/74685902/105115731-32d2ff80-5a7e-11eb-93b0-2f0620eb1295.png)
+### Sample scan Output
 
+Terrascan's default output is a list of violations present in the scanned IaC. A sample output:
+
+![Screenshot 2021-01-19 at 10 52 47 PM](https://user-images.githubusercontent.com/74685902/105115731-32d2ff80-5a7e-11eb-93b0-2f0620eb1295.png)
 
 ## Building Terrascan
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
@@ -149,7 +166,6 @@ RUN git clone https://github.com/accurics/terrascan && cd terrascan \
   && CGO_ENABLED=0 GO111MODULE=on go build -o /go/bin/terrascan cmd/terrascan/main.go
 
 ```
-
 
 ## Developing Terrascan
 To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
