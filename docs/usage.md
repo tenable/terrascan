@@ -12,11 +12,19 @@ $ terrascan
 ```
 
 ### Using Docker
-Terrascan is available as a Docker image and can used as follows:
+Terrascan is available as a Docker image. To run as a server mode, simply run:
 
 ``` Bash
 $ docker run accurics/terrascan
 ```
+
+To run in CLI mode, use the following command:
+
+``` Bash
+$ docker run --rm -it  --volume PATH/:/DATA accurics/terrascan:latest scan -d /DATA/
+```
+
+
 
 ### Building Terrascan
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
