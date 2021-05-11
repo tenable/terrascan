@@ -49,12 +49,20 @@ func Start(port, configFile, certFile, privateKeyFile string) {
 func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string) {
 
 	var (
-		err    error
 		logger = logging.GetDefaultLogger() // new logger
-		router = mux.NewRouter()            // new router
+		err    error
+		router = mux.NewRouter() // new router
 	)
 
 	logger.Info("registering routes...")
+
+	if privateKeyFile != "" || certFile != "" {
+		logger.Debugf("certfile is %s, privateKeyFile is %s", certFile, privateKeyFile)
+
+		if err := g.validateFiles(privateKeyFile, certFile); err != nil {
+			logger.Fatal(err)
+		}
+	}
 
 	// register all routes
 	for _, v := range routes {
@@ -72,19 +80,25 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 		Handler: router,
 	}
 
+	message := make(chan string)
 	go func() {
 		var err error
 		if certFile != "" && privateKeyFile != "" {
 			// In case a certificate file is specified, the server support TLS
+			message <- "https server listening at port %v"
 			err = server.ListenAndServeTLS(certFile, privateKeyFile)
 		} else {
+			message <- "http server listening at port %v"
 			err = server.ListenAndServe()
 		}
 		if err != nil && err != http.ErrServerClosed {
 			logger.Fatal(err)
 		}
 	}()
-	logger.Infof("http server listening at port %v", port)
+
+	logger.Infof(<-message, port)
+
+	close(message)
 
 	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)
