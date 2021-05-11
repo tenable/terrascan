@@ -7,21 +7,3 @@ name: terrahook
 persistence:
   enabled: false
   existingclaim: terrascanPvc
-webhook:
-  mode: false
-  name: www.terrahook.com
-  failurePolicy: fail
-  sideEffects: None
-  admissionReviewVersions:
-    - "v1"
-    - "v1beta1"
-  apiGroups:
-    - "apps"
-    - ""
-  resources:
-    - "deployments"
-    - "pods"
-  apiVersions:
-    - "*"
-  operations:
-    - CREATE
