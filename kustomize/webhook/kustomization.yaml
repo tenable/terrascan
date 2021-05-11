@@ -1,11 +1,7 @@
 resources:
   - ../server-tls
-  - validating-webhook.yaml
 
 namespace: <TERRASCAN_NAMESPACE>
-
-commonAnnotations:
-  terrascan-webhook: terrascan.<TERRASCAN_NAMESPACE>.svc
 
 patchesStrategicMerge:
   - deployment-env.yaml
