@@ -225,8 +225,8 @@ var _ = Describe("Server File Scan", func() {
 					err := json.Unmarshal(responseBytes, &responseEngineOutput)
 					Expect(err).NotTo(HaveOccurred())
 
-					// There are total 7 rules in the test policies directory, out of which 1 is skipped
-					Expect(responseEngineOutput.ViolationStore.Summary.TotalPolicies).To(BeIdenticalTo(6))
+					// There are total 8 rules in the test policies directory, out of which 1 is skipped
+					Expect(responseEngineOutput.ViolationStore.Summary.TotalPolicies).To(BeIdenticalTo(7))
 				})
 			})
 

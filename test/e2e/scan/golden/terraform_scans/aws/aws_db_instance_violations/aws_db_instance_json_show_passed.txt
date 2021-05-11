@@ -2,11 +2,11 @@
   "results": {
     "passed_rules": [
       {
-        "rule_name": "rdsCAExpired",
-        "description": "Ensure Certificate used in RDS instance is updated",
-        "rule_id": "AWS.RDS.DS.High.1042",
-        "severity": "HIGH",
-        "category": "Data Security"
+        "rule_name": "ensurePrivateIP",
+        "description": "Vulnerable to CVE-2020-8554",
+        "rule_id": "AC-K8-NS-SE-M-0188",
+        "severity": "MEDIUM",
+        "category": "Network Security"
       },
       {
         "rule_name": "noHttps",
@@ -21,6 +21,13 @@
         "rule_id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
         "severity": "MEDIUM",
         "category": "Encryption \u0026 KeyManagement"
+      },
+      {
+        "rule_name": "rdsCAExpired",
+        "description": "Ensure Certificate used in RDS instance is updated",
+        "rule_id": "AWS.RDS.DS.High.1042",
+        "severity": "HIGH",
+        "category": "Data Security"
       }
     ],
     "violations": [
@@ -198,7 +205,7 @@
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_db_instance_violation",
       "iac_type": "terraform",
       "scanned_at": "2021-03-03 07:01:04.624061 +0000 UTC",
-      "policies_validated": 7,
+      "policies_validated": 8,
       "violated_policies": 14,
       "low": 0,
       "medium": 0,

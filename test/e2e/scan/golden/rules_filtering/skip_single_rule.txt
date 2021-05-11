@@ -103,7 +103,7 @@
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_db_instance_violation",
       "iac_type": "terraform",
       "scanned_at": "2021-03-02 13:53:14.255721 +0000 UTC",
-      "policies_validated": 6,
+      "policies_validated": 7,
       "violated_policies": 8,
       "low": 0,
       "medium": 0,

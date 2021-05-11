@@ -14,7 +14,7 @@ webhooks:
           - UPDATE
         resources:
           - pods
-          - deployments
+          - services
     failurePolicy: Fail
     clientConfig:
       url: ""

@@ -125,3 +125,28 @@ func (k *KubernetesClient) CreatePod(resourceFile string) (*v1.Pod, error) {
 func (k *KubernetesClient) DeletePod(podName string) error {
 	return k.client.CoreV1().Pods(namespace).Delete(context.TODO(), podName, metav1.DeleteOptions{})
 }
+
+func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, error) {
+	service := v1.Service{}
+	data, err := ioutil.ReadFile(resourceFile)
+	if err != nil {
+		return nil, err
+	}
+	reader := bytes.NewReader(data)
+	decoder := yaml.NewYAMLOrJSONDecoder(reader, 1024)
+	err = decoder.Decode(&service)
+	if err != nil {
+		return nil, err
+	}
+
+	createdService, err := k.client.CoreV1().Services(namespace).Create(context.TODO(), &service, metav1.CreateOptions{})
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return createdService, err
+}
+
+func (k *KubernetesClient) DeleteService(serviceName string) error {
+	return k.client.CoreV1().Services(namespace).Delete(context.TODO(), serviceName, metav1.DeleteOptions{})
+}

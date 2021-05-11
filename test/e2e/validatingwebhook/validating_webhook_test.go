@@ -16,6 +16,7 @@ import (
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 	admissionv1 "k8s.io/api/admissionregistration/v1"
+	k8serr "k8s.io/apimachinery/pkg/api/errors"
 )
 
 const (
@@ -31,6 +32,9 @@ var (
 	certFileAbsPath     string
 	privKeyFileAbsPath  string
 	policyRootRelPath   = filepath.Join("..", "test_data", "policies")
+	webhookYamlRelPath  = filepath.Join("test-data", "yamls", "webhook.yaml")
+	podYamlRelPath      = filepath.Join("test-data", "yamls", "pod.yaml")
+	serviceYamlPath     = filepath.Join("test-data", "yamls", "service.yaml")
 )
 
 var _ = Describe("ValidatingWebhook", func() {
@@ -87,7 +91,7 @@ var _ = Describe("ValidatingWebhook", func() {
 			Fail(message)
 		}
 
-		os.RemoveAll("certs")
+		os.RemoveAll(certsFolder)
 	})
 
 	Describe("terrascan server as validating webhook with various available config options", func() {
@@ -100,7 +104,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
 				var configFileName string
 
-				It("should run server successfully", func() {
+				It("server should start running on port 9010", func() {
 					configFileName = "config1.toml"
 					// create a config file with default config values
 					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, nil)
@@ -109,51 +113,25 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookApiKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route GET - /health"))
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/local/file/scan"))
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/remote/dir/scan"))
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route GET - /k8s/webhooks/{apiKey}/logs"))
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route GET - /k8s/webhooks/logs/{uid}"))
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("Route POST - /v1/k8s/webhooks/{apiKey}/scan/validate"))
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9010"))
 				})
 
-				When("server is added as a validating webhook and resource is created", func() {
-					It("should get registered with k8s cluster as validating webhook", func() {
+				When("request is made to add server as a validating webhook", func() {
+					It("should get registered with k8s cluster as validating webhook successfully", func() {
 
-						webhookFilePath, err := filepath.Abs(filepath.Join("test-data", "yamls", "webhook.yaml"))
+						webhookFilePath, err := filepath.Abs(webhookYamlRelPath)
 						Expect(err).NotTo(HaveOccurred())
 
 						webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, "9010")
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("resource creation is requested, it should be handled by terrascan server", func() {
-						It("should be handled by terrascan server", func() {
+					When("pod creation addmission requested is sent to server", func() {
+						It("server should get the addmission request to review", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
-							podYamlAbsPath, err := filepath.Abs(filepath.Join("test-data", "yamls", "pod.yaml"))
-							Expect(err).NotTo(HaveOccurred())
-
-							pod, err := kubeClient.CreatePod(podYamlAbsPath)
-							Eventually(session.Err, 10).Should(gbytes.Say("handle: validating webhook request"))
-							Expect(err).NotTo(HaveOccurred())
-							Expect(pod).NotTo(BeNil())
-
-							// delete pod
-							err = kubeClient.DeletePod(pod.GetName())
-							Expect(err).NotTo(HaveOccurred())
-
-							// delete validating webhook configuration
-							err = kubeClient.DeleteValidatingWebhookConfiguration(webhookConfig.GetName())
-							Expect(err).NotTo(HaveOccurred())
-
-							if utils.IsWindowsPlatform() {
-								session.Kill()
-							} else {
-								session.Terminate()
-							}
+							createPod(session, webhookConfig.GetName())
 						})
 					})
 				})
@@ -167,7 +145,7 @@ var _ = Describe("ValidatingWebhook", func() {
 			var configFileName string
 			var port string
 
-			It("should run server successfully", func() {
+			It("server should start running on port 9011", func() {
 				port = "9011"
 				configFileName = "config2.toml"
 
@@ -187,42 +165,22 @@ var _ = Describe("ValidatingWebhook", func() {
 				Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9011"))
 			})
 
-			When("server is added as a validating webhook and resource is created", func() {
-				It("should get registered with k8s cluster as validating webhook", func() {
+			When("request is made to add server as a validating webhook", func() {
+				It("should get registered with k8s cluster as validating webhook successfully", func() {
 
-					webhookFilePath, err := filepath.Abs(filepath.Join("test-data", "yamls", "webhook.yaml"))
+					webhookFileAbsPath, err := filepath.Abs(filepath.Join(webhookYamlRelPath))
 					Expect(err).NotTo(HaveOccurred())
 
-					webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, port)
+					webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFileAbsPath, certFileAbsPath, apiKeyValue, port)
 					Expect(err).NotTo(HaveOccurred())
 				})
 
-				When("resource creation is requested, it should be handled by terrascan server", func() {
-					It("should be handled by terrascan server", func() {
+				When("pod creation addmission requested is sent to server", func() {
+					It("server should get the addmission request to review", func() {
 						// remove the config file
 						defer os.Remove(configFileName)
 
-						podYamlAbsPath, err := filepath.Abs(filepath.Join("test-data", "yamls", "pod.yaml"))
-						Expect(err).NotTo(HaveOccurred())
-
-						pod, err := kubeClient.CreatePod(podYamlAbsPath)
-						Eventually(session.Err, 10).Should(gbytes.Say("handle: validating webhook request"))
-						Expect(err).NotTo(HaveOccurred())
-						Expect(pod).NotTo(BeNil())
-
-						// delete pod
-						err = kubeClient.DeletePod(pod.GetName())
-						Expect(err).NotTo(HaveOccurred())
-
-						// delete validating webhook configuration
-						err = kubeClient.DeleteValidatingWebhookConfiguration(webhookConfig.GetName())
-						Expect(err).NotTo(HaveOccurred())
-
-						if utils.IsWindowsPlatform() {
-							session.Kill()
-						} else {
-							session.Terminate()
-						}
+						createPod(session, webhookConfig.GetName())
 					})
 				})
 			})
@@ -230,10 +188,156 @@ var _ = Describe("ValidatingWebhook", func() {
 
 		When("validating webhook config has 'denied-severity' specified", func() {
 
+			Context("service to be created violates a policy which has 'MEDIUM' seveirty", func() {
+				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
+				var session *gexec.Session
+				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
+				var configFileName string
+				var port string
+
+				It("server should start running on port 9012", func() {
+					port = "9012"
+					configFileName = "config3.toml"
+
+					// create a config file with desired severity specified
+					terrascanConfig := config.TerrascanConfig{
+						K8sAdmissionControl: config.K8sAdmissionControl{
+							DeniedSeverity: "MEDIUM",
+						},
+					}
+					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					Expect(err).NotTo(HaveOccurred())
+
+					os.Setenv(k8sWebhookApiKey, apiKeyValue)
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9012"))
+				})
+
+				When("request is made to add server as a validating webhook", func() {
+					It("should get registered with k8s cluster as validating webhook successfully", func() {
+
+						webhookFilePath, err := filepath.Abs(filepath.Join(webhookYamlRelPath))
+						Expect(err).NotTo(HaveOccurred())
+
+						webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, port)
+						Expect(err).NotTo(HaveOccurred())
+					})
+
+					When("service creation addmission requested is sent to server", func() {
+						It("server should get the addmission request to review and reject the request", func() {
+							// remove the config file
+							defer os.Remove(configFileName)
+
+							createService(session, webhookConfig.GetName())
+						})
+					})
+				})
+			})
 		})
 
 		When("validating webhook config has 'denied-categories' specified", func() {
+			Context("service to be created violates a policy which has 'Network Security' category", func() {
+				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
+				var session *gexec.Session
+				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
+				var configFileName string
+				var port string
 
+				It("server should start running on port 9013", func() {
+					port = "9013"
+					configFileName = "config4.toml"
+
+					// create a config file with desired severity specified
+					terrascanConfig := config.TerrascanConfig{
+						K8sAdmissionControl: config.K8sAdmissionControl{
+							Categories: []string{"Network Security"},
+						},
+					}
+					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					Expect(err).NotTo(HaveOccurred())
+
+					os.Setenv(k8sWebhookApiKey, apiKeyValue)
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9013"))
+				})
+
+				When("request is made to add server as a validating webhook", func() {
+					It("should get registered with k8s cluster as validating webhook successfully", func() {
+
+						webhookFilePath, err := filepath.Abs(filepath.Join(webhookYamlRelPath))
+						Expect(err).NotTo(HaveOccurred())
+
+						webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, port)
+						Expect(err).NotTo(HaveOccurred())
+					})
+
+					When("service creation addmission requested is sent to server", func() {
+						It("server should get the addmission request to review and reject the request", func() {
+							// remove the config file
+							defer os.Remove(configFileName)
+
+							createService(session, webhookConfig.GetName())
+						})
+					})
+				})
+			})
 		})
 	})
 })
+
+// createService creates a service and asserts for reject status,
+// and deletes the resources
+func createService(session *gexec.Session, webhookName string) {
+	serviceYamlAbsPath, err := filepath.Abs(filepath.Join(serviceYamlPath))
+	Expect(err).NotTo(HaveOccurred())
+
+	service, err := kubeClient.CreateService(serviceYamlAbsPath)
+	Eventually(session.Err, defaultTimeout).Should(gbytes.Say("handle: validating webhook request"))
+	Expect(err).To(HaveOccurred())
+
+	if e, ok := err.(*k8serr.StatusError); ok {
+		Expect(e.Status().Code).To(BeNumerically("==", 403))
+	} else {
+		errMessage := fmt.Sprintf("expected error to be of type 'k8s.io/apimachinery/pkg/api/errors.StatusError', got of type %T", err)
+		Fail(errMessage)
+	}
+	Expect(service).To(BeNil())
+
+	// delete validating webhook configuration
+	err = kubeClient.DeleteValidatingWebhookConfiguration(webhookName)
+	Expect(err).NotTo(HaveOccurred())
+
+	if utils.IsWindowsPlatform() {
+		session.Kill()
+	} else {
+		session.Terminate()
+	}
+}
+
+// createPod creates a pod and asserts for reject status,
+// and deletes the resources
+func createPod(session *gexec.Session, webhookName string) {
+	podYamlAbsPath, err := filepath.Abs(filepath.Join(podYamlRelPath))
+	Expect(err).NotTo(HaveOccurred())
+
+	pod, err := kubeClient.CreatePod(podYamlAbsPath)
+	Eventually(session.Err, 10).Should(gbytes.Say("handle: validating webhook request"))
+	Expect(err).NotTo(HaveOccurred())
+	Expect(pod).NotTo(BeNil())
+
+	// delete pod
+	err = kubeClient.DeletePod(pod.GetName())
+	Expect(err).NotTo(HaveOccurred())
+
+	// delete validating webhook configuration
+	err = kubeClient.DeleteValidatingWebhookConfiguration(webhookName)
+	Expect(err).NotTo(HaveOccurred())
+
+	if utils.IsWindowsPlatform() {
+		session.Kill()
+	} else {
+		session.Terminate()
+	}
+}

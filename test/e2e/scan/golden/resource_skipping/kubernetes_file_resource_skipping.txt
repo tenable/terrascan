@@ -6,7 +6,7 @@
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/resource_skipping/kubernetes",
       "iac_type": "k8s",
       "scanned_at": "2021-03-02 16:01:16.973652 +0000 UTC",
-      "policies_validated": 7,
+      "policies_validated": 8,
       "violated_policies": 0,
       "low": 0,
       "medium": 0,
