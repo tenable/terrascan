@@ -2,6 +2,7 @@ package accurics
 
 {{.prefix}}hardCodedShellScript[res.id]{
     res = input.aws_instance[_]
+    not startswith(res.config.user_data_base64, "$")
     value = base64NullCheck(res.config.user_data_base64)
     startswith(value, "#!/")
 }
