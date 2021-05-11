@@ -1,0 +1,104 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "publisherEmail": {
+      "type": "string",
+      "defaultValue" : "contoso@contoso.com",
+      "minLength": 1,
+      "metadata": {
+        "description": "The email address of the owner of the service"
+      }
+    },
+    "publisherName": {
+      "type": "string",
+      "defaultValue" : "Contoso",
+      "minLength": 1,
+      "metadata": {
+        "description": "The name of the owner of the service"
+      }
+    },
+    "sku": {
+      "type": "string",
+      "allowedValues": [
+        "Basic",
+        "Consumption",
+        "Developer",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "The pricing tier of this API Management service"
+      }
+    },
+    "skuCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The instance size of this API Management service."
+      }
+    },
+    "Secrets": {
+      "type": "array",
+      "metadata": {
+        "description": "An array of json objects like this : {'name':name, 'value':value}"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "defaultValue": "[concat('kv-', uniqueString(resourceGroup().id))]",
+      "metadata": {
+        "description": "Name of the KeyVault to provision"
+      }
+    },
+    "gatewayCustomHostname": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the gateway custom hostname"
+      }
+    }
+  },
+  "variables": {
+    "apiManagementServiceName": "[concat('apim-', uniqueString(resourceGroup().id))]",
+    "identityName": "[concat('id-', uniqueString(resourceGroup().id))]",
+    "identityID": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName'))]"
+      ],
+      "properties": {
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        },
+        "tenantId": "[reference(variables('identityID')).tenantId]",
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(variables('identityID')).tenantId]",
+            "objectId": "[reference(variables('identityID')).principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        ],
+        "enableSoftDelete": true
+      }
+    }
+ ]
+}
