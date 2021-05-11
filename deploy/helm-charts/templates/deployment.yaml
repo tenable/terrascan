@@ -27,6 +27,9 @@ spec:
               name: terrascan-data-sync
       containers:
         - name: terrascan-server
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: false
           image: {{ .Values.terrascan_container_image }}
           command:
             - terrascan
