@@ -22,8 +22,6 @@ var ResourceTypes = map[string]string{
 	"Microsoft.KeyVault/vaults/keys":                            AzureRMKeyVaultKey,
 	"Microsoft.KeyVault/vaults/secrets":                         AzureRMKeyVaultSecret,
 	"Microsoft.Network/applicationGateways":                     AzureRMApplicationGateway,
-	"Microsoft.ApiManagement/service":                           AzureRMAPIManagement,
-	"Microsoft.ManagedIdentity/userAssignedIdentities":          AzureRMUserAssignedIdentity,
 	"Microsoft.Insights/diagnosticsettings":                     AzureRMMonitorDiagnosticSetting,
 	"Microsoft.ContainerService/managedClusters":                AzureRMKubernetesCluster,
 	"Microsoft.Compute/disks":                                   AzureRMManagedDisk,
@@ -48,6 +46,8 @@ var ResourceTypes = map[string]string{
 	"Microsoft.Storage/storageAccounts/blobServices/containers": AzureRMStorageContainer,
 	"Microsoft.Compute/virtualMachines":                         AzureRMVirtualMachine,
 	"Microsoft.Network/virtualNetworks":                         AzureRMVirtualNetwork,
+	"Microsoft.Sql/servers/auditingSettings":                    AzureRMMSSQLDBAuditingPolicy,
+	"Microsoft.Cache/redis/patchSchedules":                      AzureRMPatchSchedule,
 }
 
 // ARM equivalent TF resource types
@@ -56,8 +56,6 @@ const (
 	AzureRMKeyVault                          = "azurerm_key_vault"
 	AzureRMKeyVaultKey                       = "azurerm_key_vault_key"
 	AzureRMApplicationGateway                = "azurerm_application_gateway"
-	AzureRMUserAssignedIdentity              = "azurerm_user_assigned_identity"
-	AzureRMAPIManagement                     = "azurerm_api_management"
 	AzureRMMonitorDiagnosticSetting          = "azurerm_monitor_diagnostic_setting"
 	AzureRMKubernetesCluster                 = "azurerm_kubernetes_cluster"
 	AzureRMManagedDisk                       = "azurerm_managed_disk"
@@ -82,4 +80,6 @@ const (
 	AzureRMStorageContainer                  = "azurerm_storage_container"
 	AzureRMVirtualMachine                    = "azurerm_virtual_machine"
 	AzureRMVirtualNetwork                    = "azurerm_virtual_network"
+	AzureRMMSSQLDBAuditingPolicy             = "extended_auditing_policy"
+	AzureRMPatchSchedule                     = "patch_schedule"
 )
