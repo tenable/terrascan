@@ -4,6 +4,6 @@ metadata:
   name: terrascan
 spec:
   ports:
-  - name: http_server_port
+  - name: http-server-port
     port: 80
     targetPort: 9010
