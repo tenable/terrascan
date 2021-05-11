@@ -36,9 +36,27 @@ terrascan server. The string replacement will be required in the following files
   - `base/kustomization.yaml`
   - `server/kustomization.yaml`
   - `server-tls/kustomization.yaml`
-  - `certs/domain.cnf` (that is generated in step 1 of `Deploying Terrascan Server in TLS Mode` section)
+  - `server-tls/certs/domain.cnf` (that is generated in step 1 of `Deploying Terrascan Server in TLS Mode` section)
   - `webhook/kustomization.yaml` (only if you're aiming to deploy the webhook as well)
   - `webhook/validating-webhook.yaml` (only if you're aiming to deploy the webhook as well)
+
+  *Make sure your pwd is same as this README.md file*
+
+  Let's assume that the desired namespace is 'terrascan'.
+  ```bash
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" base/kustomization.yaml
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server/kustomization.yaml
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server-tls/kustomization.yaml
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server-tls/certs/domain.cnf
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" webhook/kustomization.yaml
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" webhook/validating-webhook.yaml
+  ```
+4. Ensure that your desired namespace exist.
+
+  Let's assume that the desired namespace is 'terrascan'.
+  ```bash
+  kubectl create namespace terrascan
+  ```
 
 ### Deploying Terrascan Server
 
@@ -52,7 +70,7 @@ Deploy terrascan in server mode operating in plain HTTP mode.
    Note: Before running the command, please verify once that the `server/kustomization.yaml` is set with the desired parameters.
 
     ```bash
-    kubectl apply -k server/
+    kustomize build server/ | kubectl apply -f -
     ```
 
 ### Deploying Terrascan Server in TLS Mode
@@ -100,7 +118,7 @@ Deploy terrascan in server mode operating in HTTPS mode.
    **Note:** Before running the command, please verify once that the `server-tls/kustomization.yaml` is set with the desired parameters.
 
     ```bash
-    kubectl apply -k server-tls/
+    kustomize build server-tls/ | kubectl apply -f -
     ```
 
 ### Deploying Terrascan Server For Remote Repository Scan
@@ -132,7 +150,7 @@ repository locally to scan it. The following steps will help in setting up for t
    with the desired parameters.
 
    ```bash
-    kubectl apply -k server-remote-repo-scan/
+   kustomize build server-remote-repo-scan/ | kubectl apply -f -
     ```
 
 ### Setting Up Terrascan Webhook
@@ -155,8 +173,8 @@ follow the steps below.
    *Let's assume we want the string `t3rrascan` as the server key.*
 
     ```bash
-    sed s/<WEBHOOK_API_KEY>/t3rrascan/g webhook/validating-webhook.yaml
-    sed s/<WEBHOOK_API_KEY>/t3rrascan/g webhook/deployment-env.yaml
+    sed -i "" "s/<WEBHOOK_API_KEY>/t3rrascan/g" webhook/validating-webhook.yaml
+    sed -i "" "s/<WEBHOOK_API_KEY>/t3rrascan/g" webhook/deployment-env.yaml
     ```
 
 3. In `webhook/validating-webhook.yaml`, replace `<CA_BUNDLE>` with the base64 encoded value of the
@@ -165,8 +183,8 @@ follow the steps below.
    *You may also use this shell command:*
 
     ```bash
-    $CA_BUNDLE=(cat server-tls/certs/server.crt | base64)
-    sed s/<CA_BUNDLE>/$CA_BUNDLE/g webhook/validating-webhook.yaml
+    CA_BUNDLE=$(cat server-tls/certs/server.crt | base64)
+    sed -i "" "s/<CA_BUNDLE>/$CA_BUNDLE/g" webhook/validating-webhook.yaml
     ```
 
 4. In the `webhook/validating-webhook.yaml` file, set the `webhooks.rules` section as per your requirement. By default,
@@ -179,9 +197,32 @@ follow the steps below.
     ```
 
 5. Deploy.
-   Note: Before running the command, please verify once that the `server/kustomization.yaml` & `webhook/kustomization.yaml`
-         are set with the desired parameters.
+
+   5.1 Deploy the webhook's backend: terrascan deployment and service.
+
+   **Note:** Before running the command, please verify once that the `server/kustomization.yaml` & `webhook/kustomization.yaml`
+   are set with the desired parameters.
+
+   ```bash
+   kustomize build webhook/ | kubectl apply -f -
+   ```
+
+    5.2 Verify that the terrascan server pod is up and ready to server.
 
     ```bash
-    kubectl apply -k webhook/
+    kubectl -n <TERRASCAN_NAMESPACE> get pods -w
+    ```
+
+    When the pod is in running state, verify the logs.
+
+    ```bash
+    kubectl -n terrascan logs <pod-name> -f
+    ```
+
+    When there is a log message that says "server listening at port 9010", proceed to the next step.
+
+    5.3 Deploy the webhook.
+
+    ```bash
+    kubectl apply -f webhook/validating-webhook.yaml
     ```
