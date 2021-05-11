@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package validatingwebhook
 
 import (
@@ -20,10 +36,13 @@ const (
 	namespace = "default"
 )
 
+// KubernetesClient will connect to local k8s cluster,
+// and help perform resource operation
 type KubernetesClient struct {
 	client *kubernetes.Clientset
 }
 
+// NewKubernetesClient creates a new Kubernetes client
 func NewKubernetesClient() (*KubernetesClient, error) {
 	kubernetesClient := new(KubernetesClient)
 	var err error
@@ -97,10 +116,12 @@ func (k *KubernetesClient) CreateValidatingWebhookConfiguration(webhookFile, cer
 	return createdWebhookConfig, nil
 }
 
+// DeleteValidatingWebhookConfiguration will delete the specified webhook name
 func (k *KubernetesClient) DeleteValidatingWebhookConfiguration(webhookConfigName string) error {
 	return k.client.AdmissionregistrationV1().ValidatingWebhookConfigurations().Delete(context.TODO(), webhookConfigName, metav1.DeleteOptions{})
 }
 
+// CreatePod will create a pod by parsing a resource file
 func (k *KubernetesClient) CreatePod(resourceFile string) (*v1.Pod, error) {
 	pod := v1.Pod{}
 	data, err := ioutil.ReadFile(resourceFile)
@@ -122,10 +143,12 @@ func (k *KubernetesClient) CreatePod(resourceFile string) (*v1.Pod, error) {
 	return createdPod, err
 }
 
+// DeletePod will delete the specified pod name
 func (k *KubernetesClient) DeletePod(podName string) error {
 	return k.client.CoreV1().Pods(namespace).Delete(context.TODO(), podName, metav1.DeleteOptions{})
 }
 
+// CreateService will a service by parsing a resource file
 func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, error) {
 	service := v1.Service{}
 	data, err := ioutil.ReadFile(resourceFile)
@@ -147,6 +170,7 @@ func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, erro
 	return createdService, err
 }
 
+// DeleteService will delete the specified service name
 func (k *KubernetesClient) DeleteService(serviceName string) error {
 	return k.client.CoreV1().Services(namespace).Delete(context.TODO(), serviceName, metav1.DeleteOptions{})
 }

@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package validatingwebhook_test
 
 import (
@@ -21,7 +37,7 @@ import (
 
 const (
 	certsFolder      = "certs"
-	k8sWebhookApiKey = "K8S_WEBHOOK_API_KEY"
+	k8sWebhookAPIKey = "K8S_WEBHOOK_API_KEY"
 	apiKeyValue      = "accurics"
 	defaultTimeout   = 10
 )
@@ -110,7 +126,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, nil)
 					Expect(err).NotTo(HaveOccurred())
 
-					os.Setenv(k8sWebhookApiKey, apiKeyValue)
+					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9010"))
@@ -159,7 +175,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 				Expect(err).NotTo(HaveOccurred())
 
-				os.Setenv(k8sWebhookApiKey, apiKeyValue)
+				os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 				args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 				Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9011"))
@@ -208,7 +224,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
-					os.Setenv(k8sWebhookApiKey, apiKeyValue)
+					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9012"))
@@ -257,7 +273,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
-					os.Setenv(k8sWebhookApiKey, apiKeyValue)
+					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9013"))
