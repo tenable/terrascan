@@ -197,14 +197,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			}
 
 			// add all current's children to the queue
-			for childName, childModule := range current.Config.Children {
-				childModuleConfig := &ModuleConfig{
-					Config:           childModule,
-					ParentModuleCall: current.Config.Module.ModuleCalls[childName],
-					Name:             childName,
-				}
-				configsQ = append(configsQ, childModuleConfig)
-			}
+			configsQ = append(configsQ, current.getChildConfigs()...)
 		}
 	}
 
@@ -309,14 +302,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		}
 
 		// add all current's children to the queue
-		for childName, childModule := range current.Config.Children {
-			childModuleConfig := &ModuleConfig{
-				Config:           childModule,
-				ParentModuleCall: current.Config.Module.ModuleCalls[childName],
-				Name:             childName,
-			}
-			configsQ = append(configsQ, childModuleConfig)
-		}
+		configsQ = append(configsQ, current.getChildConfigs()...)
 	}
 
 	// successful
@@ -397,4 +383,18 @@ func (t TerraformDirectoryLoader) processTerraformRegistrySource(req *hclConfigs
 	}
 
 	return pathToModule, nil
+}
+
+// getChildConfigs will get all child configs in a ModuleConfig
+func (m *ModuleConfig) getChildConfigs() []*ModuleConfig {
+	allConfigs := make([]*ModuleConfig, 0)
+	for childName, childModule := range m.Config.Children {
+		childModuleConfig := &ModuleConfig{
+			Config:           childModule,
+			ParentModuleCall: m.Config.Module.ModuleCalls[childName],
+			Name:             childName,
+		}
+		allConfigs = append(allConfigs, childModuleConfig)
+	}
+	return allConfigs
 }
