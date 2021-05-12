@@ -15,7 +15,7 @@ Quickly get started with common tasks on Terrascan:
 Terrascan is a portable executable that does not strictly require installation, and is also available as a container image in Docker Hub. You can use Terrascan in two different methods based on your preference:
 
 1. [Installing Terrascan locally](#Native_executable)
-2. [Leveraging a Docker container](#Using_Docker)
+2. [Using a Docker container](#Using_Docker)
 
 The following sections explain how to use it as a [native executable](#native-executable) and how to use the [Docker image](#using-docker). You can choose from one of the following:
 
