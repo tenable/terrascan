@@ -54,6 +54,8 @@ spec:
           volumeMounts:
             - name: cert-volume
               mountPath: /etc/certs
+            - name: ssh-volume
+              mountPath: /home/terrascan/.ssh
 {{- $globconfig := .Files.Glob "../data/config.toml" }}
 {{- if $globconfig }}
             - name: config-volume
@@ -61,11 +63,14 @@ spec:
 {{- end }}
             - name: terrascan-data-sync
               mountPath: /home/terrascan/.terrascan
-
       volumes:
         - name: cert-volume
           secret:
-            secretName: {{ .Values.secret_name }}
+            secretName: {{ .Values.cert_secret_name }}
+        - name: ssh-volume
+          secret:
+            secretName: {{ .Values.ssh_secret_name }}
+            optional: true
 {{- $globconfig := .Files.Glob "../data/config.toml" }}
 {{- if $globconfig }}
         - name: config-volume
