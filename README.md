@@ -64,7 +64,7 @@ Terrascan is also available as a Docker image and can be used as follows
 ```sh
 $ docker run accurics/terrascan
 ```
-Refer to [documentation] (https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started/) for information.
+Refer to [documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started/) for information.
 
 ### Step 2: Scan
 To scan your code for security issues you can run the following (defaults to scanning Terraform).
