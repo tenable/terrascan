@@ -24,6 +24,8 @@ Terrascan's [release page](https://github.com/accurics/terrascan/releases) inclu
 
 #### macOS and Linux
 Download the latest version of builds for macOS and enter the following command:
+**Note:** for linux, replace `Darwin` with `Linux`
+
 
 ``` Bash
 $ curl -L "$(curl -s https://api.github.com/repos/accurics/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
