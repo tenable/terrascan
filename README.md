@@ -131,7 +131,7 @@ Use Terraform scripts to configure Terrascan to skip rules by inserting a commen
 #### Kubernetes
 In Kubernetes yamls, you can configure Terrascan to skip policies by adding an annotation as seen in the snippet below.
 
-![k8s](https://user-images.githubusercontent.com/74685902/105115885-834a5d00-5a7e-11eb-9190-e8b64d77c5ac.png)
+![k8s](https://user-images.githubusercontent.com/74685902/117906943-b9f4ef00-b28a-11eb-8224-37af18275ba1.png)
 
 ### How to include or exclude specific policies or resources from being scanned
 
