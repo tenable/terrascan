@@ -6,24 +6,24 @@ Terrascan is a static code analyzer for Infrastructure as Code. It can be instal
 
 Quickly get started with common tasks on Terrascan:
 
-- [Running Terrascan](#running_terrascan): Describes different methods for running Terrascan, one that installs Terrascan locally and another that leverages a Docker container. See  below for details.
+- [Running Terrascan for the First Time](#running-terrascan-for-the-first-time): Describes different methods for running Terrascan, one that installs Terrascan locally and another that leverages a Docker container. See  below for details.
 
-- ["Scanning with Terrascan"](#Scanning_with_Terrascan) - Explains how to scan vulnerable IaC using Terrascan with the an example including the scan output. See  below for details.
+- [Scanning with Terrascan](#scanning-with-terrascan) - Explains how to scan vulnerable IaC using Terrascan with the an example including the scan output. See  below for details.
 
-## Running Terrascan
+## Running Terrascan for the First Time
 
 Terrascan is a portable executable that does not strictly require installation, and is also available as a container image in Docker Hub. You can use Terrascan in two different methods based on your preference:
 
 1. [Installing Terrascan locally](#Native_executable)
 2. [Using a Docker container](#Using_Docker)
 
-The following sections explain how to use it as a [native executable](#native-executable) and how to use the [Docker image](#using-docker). You can choose from one of the following:
+The following sections explain how to use it as a [native executable](#native-executable) and how to use the [Docker image](#docker-image). You can choose from one of the following:
 
 ### Native executable
 Terrascan's [release page](https://github.com/accurics/terrascan/releases) includes latest version of builds for common platforms.  Download and extract the package for your platform. Follow instructions that apply to your platform:
 
 #### macOS and Linux
-Download the latest version of builds for macOS and enter the following command:
+Download the latest version of builds for macOS and enter the following command.
 **Note:** for linux, replace `Darwin` with `Linux`
 
 
@@ -69,15 +69,6 @@ $ alias terrascan="docker run --rm -it -v "$(pwd):/iac" -w /iac accurics/terrasc
 **Note**: This command includes a few extra options to enable Terrascan has access to the current directory when it is run.
 
 ## Scanning with Terrascan
-
-By default Terrascan scans all supported cloud providers on Terraform HCL files. Terrascan can be used in two ways:
-
-- Docker
-- Interactive or using CLI
-
-### Example of a scan using Docker
-
-tbd
 
 ### Example of interactive scan or using CLI
 
