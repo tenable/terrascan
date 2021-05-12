@@ -140,7 +140,7 @@ Use the "in-file" suppression option to specify resources that should be exclude
 
 ![config](https://user-images.githubusercontent.com/74685902/105115887-83e2f380-5a7e-11eb-82b8-a1d18c83a405.png)
 
-### Sample scan Output
+### Sample scan output
 
 Terrascan's default output is a list of violations present in the scanned IaC. A sample output:
 
