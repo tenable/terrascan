@@ -22,7 +22,7 @@ The following sections explain how to use it as a [native executable](#native-ex
 ### Native executable
 Terrascan's [release page](https://github.com/accurics/terrascan/releases) includes latest version of builds for common platforms.  Download and extract the package for your platform. Follow instructions that apply to your platform:
 
-#### macOS
+#### macOS and Linux
 Download the latest version of builds for macOS and enter the following command:
 
 ``` Bash
