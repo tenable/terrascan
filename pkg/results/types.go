@@ -34,6 +34,7 @@ type Violation struct {
 	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
+	ModuleName   string      `json:"module_name,omitempty" yaml:"module_name,omitempty" xml:"module_name,attr,omitempty"`
 	File         string      `json:"file,omitempty" yaml:"file,omitempty" xml:"file,attr,omitempty"`
 	PlanRoot     string      `json:"plan_root,omitempty" yaml:"plan_root,omitempty" xml:"plan_root,omitempty,attr"`
 	LineNumber   int         `json:"line,omitempty" yaml:"line,omitempty" xml:"line,attr,omitempty"`

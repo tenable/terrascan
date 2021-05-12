@@ -58,6 +58,10 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}
 
+		// set module name
+		// module name for the file scan will always be root
+		resourceConfig.ModuleName = "root"
+
 		// extract file name from path
 		resourceConfig.Source = getFileName(resourceConfig.Source)
 

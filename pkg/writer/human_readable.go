@@ -97,6 +97,12 @@ func defaultViolations(v results.Violation, isSkipped bool) string {
 	part := fmt.Sprintf("%-15v:\t%s\n\t%-15v:\t%s\n\t",
 		"Description", v.Description,
 		"File", v.File)
+
+	if v.ModuleName != "" {
+		moduleName := fmt.Sprintf("%-15v:\t%s\n\t", "Module Name", v.ModuleName)
+		part = part + moduleName
+	}
+
 	if v.PlanRoot != "" {
 		planRoot := fmt.Sprintf("%-15v:\t%s\n\t", "Plan Root", v.PlanRoot)
 		part = part + planRoot
