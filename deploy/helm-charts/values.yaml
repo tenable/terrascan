@@ -1,7 +1,13 @@
 terrascan_api_key: terrakey
 terrascan_container_image: accurics/terrascan:1.6.0
 use_debug: true
-secret_name: terrascancerts
+
+# provide secrets for admission controller
+secrets:
+  tlsCertFilePath: ""
+  tlsKeyFilePath: ""
+
+secret_name: "terrascancerts"
 config_name: terrascanconfig
 name: terrascan
 persistence:
