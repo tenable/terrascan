@@ -339,7 +339,7 @@ func createPod(session *gexec.Session, webhookName string) {
 	Expect(err).NotTo(HaveOccurred())
 
 	pod, err := kubeClient.CreatePod(podYamlAbsPath)
-	Eventually(session.Err, 10).Should(gbytes.Say("handle: validating webhook request"))
+	Eventually(session.Err, defaultTimeout).Should(gbytes.Say("handle: validating webhook request"))
 	Expect(err).NotTo(HaveOccurred())
 	Expect(pod).NotTo(BeNil())
 

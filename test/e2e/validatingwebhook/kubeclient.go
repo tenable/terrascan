@@ -98,7 +98,7 @@ func (k *KubernetesClient) CreateValidatingWebhookConfiguration(webhookFile, cer
 
 	webhook := &webhooks.Webhooks[0]
 	webhook.ClientConfig.CABundle = certData
-	ip, err := getIP()
+	ip, err := GetIP()
 	if err != nil {
 		return nil, err
 	}
