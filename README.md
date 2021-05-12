@@ -114,7 +114,7 @@ Note: The scan command will implicitly run the initialization process there are 
 
 ## Customizing scans
 
-By default, Terrascan scans all the resources. However you can configure what you want to scan in the following ways:
+By default, Terrascan scans your entire configuration against all policies. However you can configure what you want to scan in the following ways:
 
 - [Exclude a particular policy for a specific resource.](#How_to_exclude_a_policy_while_scanning_a_resource)
 - [Manually configure policies to be suppressed or applied globally from a scan across all resources or, for just a particular resource.](#_How_to_include_or_exclude_specific_policies_or_resources_from_being_scanned)
