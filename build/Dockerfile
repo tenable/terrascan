@@ -32,7 +32,7 @@ RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin && \
     chown -R terrascan:terrascan /home/terrascan
 
 # run as non root user
-USER terrascan
+USER 101
 
 ENV PATH /go/bin:$PATH
 
