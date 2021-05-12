@@ -55,6 +55,8 @@ This will use your current namespace unless `-n <namespace>` is specified
 ## TODO:
 This chart is a WIP - we intend to add the following functionality in the near future:
  - [x] Storage support - volume for db
+ - [ ] Add a documention section for setting the validating-webhook up.
+ - [ ] Add secrets to add ssh capabilities in the container, to enable remote repo scan feature.
  - [ ] Support more load balancer types
  - [ ] Support for ingress
  - [ ] Flag for UI enable/disable
