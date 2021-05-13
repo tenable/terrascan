@@ -204,7 +204,7 @@ var _ = Describe("ValidatingWebhook", func() {
 
 		When("validating webhook config has 'denied-severity' specified", func() {
 
-			Context("service to be created violates a policy which has 'MEDIUM' seveirty", func() {
+			Context("service to be created violates a policy with specified denied severity", func() {
 				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
 				var session *gexec.Session
 				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
@@ -245,15 +245,13 @@ var _ = Describe("ValidatingWebhook", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
-							createService(session, webhookConfig.GetName())
+							createService(session, webhookConfig.GetName(), true)
 						})
 					})
 				})
 			})
-		})
 
-		When("validating webhook config has 'denied-categories' specified", func() {
-			Context("service to be created violates a policy which has 'Network Security' category", func() {
+			Context("service to be created violates a policy which doesn't have the desired severity", func() {
 				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
 				var session *gexec.Session
 				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
@@ -267,7 +265,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					// create a config file with desired severity specified
 					terrascanConfig := config.TerrascanConfig{
 						K8sAdmissionControl: config.K8sAdmissionControl{
-							Categories: []string{"Network Security"},
+							DeniedSeverity: "HIGH",
 						},
 					}
 					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
@@ -294,7 +292,103 @@ var _ = Describe("ValidatingWebhook", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
-							createService(session, webhookConfig.GetName())
+							createService(session, webhookConfig.GetName(), false)
+						})
+					})
+				})
+			})
+		})
+
+		When("validating webhook config has 'denied-categories' specified", func() {
+			Context("service to be created violates the denied category", func() {
+				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
+				var session *gexec.Session
+				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
+				var configFileName string
+				var port string
+
+				It("server should start running on port 9014", func() {
+					port = "9014"
+					configFileName = "config5.toml"
+
+					// create a config file with desired severity specified
+					terrascanConfig := config.TerrascanConfig{
+						K8sAdmissionControl: config.K8sAdmissionControl{
+							Categories: []string{"Network Security"},
+						},
+					}
+					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					Expect(err).NotTo(HaveOccurred())
+
+					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9014"))
+				})
+
+				When("request is made to add server as a validating webhook", func() {
+					It("should get registered with k8s cluster as validating webhook successfully", func() {
+
+						webhookFilePath, err := filepath.Abs(filepath.Join(webhookYamlRelPath))
+						Expect(err).NotTo(HaveOccurred())
+
+						webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, port)
+						Expect(err).NotTo(HaveOccurred())
+					})
+
+					When("service creation addmission requested is sent to server", func() {
+						It("server should get the addmission request to review and reject the request", func() {
+							// remove the config file
+							defer os.Remove(configFileName)
+
+							createService(session, webhookConfig.GetName(), true)
+						})
+					})
+				})
+			})
+
+			Context("service to be created does not violate the denied category", func() {
+				var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
+				var session *gexec.Session
+				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
+				var configFileName string
+				var port string
+
+				It("server should start running on port 9015", func() {
+					port = "9015"
+					configFileName = "config6.toml"
+
+					// create a config file with desired severity specified
+					terrascanConfig := config.TerrascanConfig{
+						K8sAdmissionControl: config.K8sAdmissionControl{
+							Categories: []string{"Doesn't Exist"},
+						},
+					}
+					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					Expect(err).NotTo(HaveOccurred())
+
+					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9015"))
+				})
+
+				When("request is made to add server as a validating webhook", func() {
+					It("should get registered with k8s cluster as validating webhook successfully", func() {
+
+						webhookFilePath, err := filepath.Abs(filepath.Join(webhookYamlRelPath))
+						Expect(err).NotTo(HaveOccurred())
+
+						webhookConfig, err = kubeClient.CreateValidatingWebhookConfiguration(webhookFilePath, certFileAbsPath, apiKeyValue, port)
+						Expect(err).NotTo(HaveOccurred())
+					})
+
+					When("service creation addmission requested is sent to server", func() {
+						It("server should get the addmission request to review and reject the request", func() {
+							// remove the config file
+							defer os.Remove(configFileName)
+
+							createService(session, webhookConfig.GetName(), false)
 						})
 					})
 				})
@@ -305,21 +399,28 @@ var _ = Describe("ValidatingWebhook", func() {
 
 // createService creates a service and asserts for reject status,
 // and deletes the resources
-func createService(session *gexec.Session, webhookName string) {
+func createService(session *gexec.Session, webhookName string, shouldBeDenied bool) {
 	serviceYamlAbsPath, err := filepath.Abs(filepath.Join(serviceYamlPath))
 	Expect(err).NotTo(HaveOccurred())
 
 	service, err := kubeClient.CreateService(serviceYamlAbsPath)
 	Eventually(session.Err, defaultTimeout).Should(gbytes.Say("handle: validating webhook request"))
-	Expect(err).To(HaveOccurred())
 
-	if e, ok := err.(*k8serr.StatusError); ok {
-		Expect(e.Status().Code).To(BeNumerically("==", 403))
+	if shouldBeDenied {
+		Expect(err).To(HaveOccurred())
+		if e, ok := err.(*k8serr.StatusError); ok {
+			Expect(e.Status().Code).To(BeNumerically("==", 403))
+		} else {
+			errMessage := fmt.Sprintf("expected error to be of type 'k8s.io/apimachinery/pkg/api/errors.StatusError', got of type %T", err)
+			Fail(errMessage)
+		}
+		Expect(service).To(BeNil())
 	} else {
-		errMessage := fmt.Sprintf("expected error to be of type 'k8s.io/apimachinery/pkg/api/errors.StatusError', got of type %T", err)
-		Fail(errMessage)
+		Expect(err).NotTo(HaveOccurred())
+
+		err = kubeClient.DeleteService(service.GetName())
+		Expect(err).NotTo(HaveOccurred())
 	}
-	Expect(service).To(BeNil())
 
 	// delete validating webhook configuration
 	err = kubeClient.DeleteValidatingWebhookConfiguration(webhookName)
