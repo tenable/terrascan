@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -35,6 +36,7 @@ func TestUWebhooks(t *testing.T) {
 		allowed            bool
 		statusCode         int32
 		statusMessage      bool
+		dashboardCheck     bool
 	}{
 		{
 			name:               "missing api key",
@@ -50,14 +52,6 @@ func TestUWebhooks(t *testing.T) {
 			apiKey:             testAPIKey,
 			envAPIKey:          "",
 			wantStatus:         http.StatusInternalServerError,
-			configFile:         testConfigFile,
-		},
-		{
-			name:               "invalid api key",
-			contentRequestPath: testFilePath,
-			apiKey:             testAPIKey,
-			envAPIKey:          "Invalid API KEY",
-			wantStatus:         http.StatusUnauthorized,
 			configFile:         testConfigFile,
 		},
 		{
@@ -168,6 +162,30 @@ func TestUWebhooks(t *testing.T) {
 			allowed:            true,
 			wantStatus:         http.StatusOK,
 		},
+		{
+			name:               "risky request object with dashboard true",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
+			configFile:         filepath.Join(k8sTestData, "config-dashboard-true.toml"),
+			warnings:           true,
+			allowed:            true,
+			wantStatus:         http.StatusOK,
+			dashboardCheck:     true,
+		},
+		{
+			name:               "risky request object with denied categories and dashboard true",
+			contentRequestPath: filepath.Join(k8sTestData, "risky_testconfig.json"),
+			apiKey:             testAPIKey,
+			envAPIKey:          testEnvAPIKey,
+			configFile:         filepath.Join(k8sTestData, "config-with-dashboard-deny-categories.toml"),
+			warnings:           false,
+			allowed:            false,
+			statusCode:         403,
+			statusMessage:      true,
+			wantStatus:         http.StatusOK,
+			dashboardCheck:     true,
+		},
 	}
 
 	for _, tt := range table {
@@ -235,11 +253,7 @@ func TestUWebhooks(t *testing.T) {
 					t.Errorf("mismatch Status code Got: %v, expected: %v", response.Response.Result.Code, tt.statusCode)
 				}
 
-				// TODO: this needs to improved and more tests added after the config file changes
-				// commenting the log message check for now, it can be fixed later
-				// making the blind mode default has changed the log message output
-
-				/*
+				if tt.dashboardCheck {
 					if tt.warnings || tt.statusMessage {
 						var logPath string
 						if tt.warnings {
@@ -255,7 +269,7 @@ func TestUWebhooks(t *testing.T) {
 							t.Errorf("mismatch Log path. Got: %v, expected: %v", logPath, expectedLogPath)
 						}
 					}
-				*/
+				}
 			}
 		})
 	}

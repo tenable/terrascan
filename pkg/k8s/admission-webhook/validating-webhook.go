@@ -160,7 +160,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 		return w.createResponseAdmissionReview(review, allowed, output, logMsg), fmt.Errorf(errMsg, msg, err)
 	}
 
-	// Calculate if there are anydeny violations
+	// Calculate if there are any deny violations
 	denyViolations, err = w.getDenyViolations(output)
 	if err != nil {
 		msg := "failed to figure out denied violations"
