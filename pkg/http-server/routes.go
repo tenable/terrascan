@@ -29,8 +29,8 @@ type Route struct {
 
 // Routes returns a slice of routes of API endpoints to be registered with
 // http server
-func (g *APIServer) Routes(configFile string) []*Route {
-	h := NewAPIHandler(configFile)
+func (g *APIServer) Routes() []*Route {
+	h := NewAPIHandler()
 	routes := []*Route{
 		{verb: "GET", path: "/health", fn: h.Health},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},

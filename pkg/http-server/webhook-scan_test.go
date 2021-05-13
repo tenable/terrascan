@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/gorilla/mux"
 	v1 "k8s.io/api/admission/v1"
@@ -171,6 +172,11 @@ func TestUWebhooks(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
+			err := config.LoadGlobalConfig(tt.configFile)
+			if err != nil {
+				t.Errorf("error while loading the config file '%s', error: %v", tt.configFile, err)
+			}
+
 			os.Setenv("K8S_WEBHOOK_API_KEY", tt.envAPIKey)
 
 			// test file to upload
@@ -206,7 +212,7 @@ func TestUWebhooks(t *testing.T) {
 			})
 			res := httptest.NewRecorder()
 			// new api handler
-			h := &APIHandler{test: true, configFile: tt.configFile}
+			h := &APIHandler{test: true}
 			h.validateK8SWebhook(res, req)
 
 			if res.Code != tt.wantStatus {

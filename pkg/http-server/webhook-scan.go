@@ -46,7 +46,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	}
 	zap.S().Debugf("scanning configuration webhook request: %+v", string(body))
 
-	validatingWebhook := admissionWebhook.NewValidatingWebhook(g.configFile, body)
+	validatingWebhook := admissionWebhook.NewValidatingWebhook(body)
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
 	if err := validatingWebhook.Authorize(apiKey); err != nil {
 		switch err {
