@@ -28,8 +28,9 @@ docs/_build/
 # Go binary
 /bin
 
-deploy/helm-charts/.ssh
-deploy/helm-charts/data
+deploy/helm-charts/server/.ssh
+deploy/helm-charts/server/data
+deploy/helm-charts/webhook/data
 
 .DS_Store
 

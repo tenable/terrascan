@@ -43,20 +43,20 @@ spec:
             - "-l"
             - "debug"
 {{- end }}
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
             - "-c"
             - "/etc/config/terrascan-config"
 {{- end }}
           env:
             - name: "K8S_WEBHOOK_API_KEY"
-              value: {{ .Values.terrascan_api_key}}
+              value: {{ .Values.terrascan_webhook_key}}
           volumeMounts:
             - name: cert-volume
               mountPath: /etc/certs
             - name: ssh-volume
               mountPath: /home/terrascan/.ssh
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
             - name: config-volume
               mountPath: /etc/config
@@ -71,7 +71,7 @@ spec:
           secret:
             secretName: {{ .Values.ssh_secret_name }}
             optional: true
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
         - name: config-volume
           configMap:
