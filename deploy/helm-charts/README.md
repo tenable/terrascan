@@ -69,6 +69,20 @@ the chart with the following command:
 
     This will use your current namespace unless `-n <namespace>` is specified
 
+    #### Verification
+
+    You can query for the pod using the following command.
+    ```
+    kubectl get pod -n <namespace> -w
+    ```
+    Watch the pod until it attains the `Running` state.
+
+    Verify the logs of the terrascan pod using the following command.
+    ```
+    kubectl -n <namespace> logs <pod-name>
+    ```
+   If you see a log that goes like `server listening on port : <port-name>`, the deployment went smooth.
+
 2. Deploying Validating Webhook.
 
     *Ensure that your current working directory is `webhook/`.*
@@ -77,6 +91,7 @@ the chart with the following command:
     ```
    This will use your current namespace unless `-n <namespace>` is specified.
    ***Ensure that you provide the exact same <namespace> value as you did to deploy the `server/` chart in step 1.***
+
 
 
 ## TODO:
