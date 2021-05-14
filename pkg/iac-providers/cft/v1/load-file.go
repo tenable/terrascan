@@ -70,12 +70,13 @@ func (a *CFTV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
 			continue
 		}
-		for t, resource := range arc {
-			config = &resource[0]
-			config.Type = t
-			config.Source = absFilePath
-			allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
-			break
+		for t, resources := range arc {
+			for _, resource := range resources {
+				config = &resource
+				config.Type = t
+				config.Source = absFilePath
+				allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
+			}
 		}
 	}
 	return allResourcesConfig, nil
