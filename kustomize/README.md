@@ -1,7 +1,7 @@
 ## INSTALLING TERRASCAN IN A KUBERNETES CLUSTER USING KUSTOMIZE
 
 This guide will help you install terrascan server inside your kubernetes cluster, as per your specific use case.
-We have covered four use cases in the sections below:
+We have covered four use cases in the sections below. Follow the specific section as per your use case.
 
   ##### Deploying Terrascan Server
   Terrascan operating in http server mode.
@@ -36,6 +36,7 @@ terrascan server. The string replacement will be required in the following files
   - `base/kustomization.yaml`
   - `server/kustomization.yaml`
   - `server-tls/kustomization.yaml`
+  - `server-remote-repo-scan/kustomization.yaml`
   - `server-tls/certs/domain.cnf` (that is generated in step 1 of `Deploying Terrascan Server in TLS Mode` section)
   - `webhook/kustomization.yaml` (only if you're aiming to deploy the webhook as well)
   - `webhook/validating-webhook.yaml` (only if you're aiming to deploy the webhook as well)
@@ -47,6 +48,7 @@ terrascan server. The string replacement will be required in the following files
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" base/kustomization.yaml
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server/kustomization.yaml
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server-tls/kustomization.yaml
+  sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server-remote-repo-scan/kustomization.yaml
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" server-tls/certs/domain.cnf
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" webhook/kustomization.yaml
   sed -i "" "s/<TERRASCAN_NAMESPACE>/terrascan/g" webhook/validating-webhook.yaml
@@ -128,23 +130,35 @@ repository locally to scan it. The following steps will help in setting up for t
 
 1. Follow steps 1-3 of the `Deploying TerraScan Server in TLS mode` section.
 
-2. Generate SSH keys and copy `~/.ssh/config`, `~/.ssh/known-hosts` and `~/.ssh/<generated_private_key>` to
+2. Generate SSH keys and copy your generated private key to
    `server-remote-repo-scan/.ssh/` directory. Replace `<SSH_KEY_NAME>` with your private ssh key's name in
    `server-remote-repo-scan/kustomization.yaml` and setup the generated public ssh key on your respective code repository
-   hosting service, like github or bitbucket.
+   hosting service, like github, gitlab or bitbucket.
 
-   **You may also use this shell command:**
 
-   _Let's assume your private key is `~/.ssh/github_rsa`_
+   *Let's assume your private key is `~/.ssh/github_rsa`*
 
-    ```bash
+  ```bash
     mkdir server-remote-repo-scan/.ssh
-    cp ~/.ssh/config ~/.ssh/known_hosts server-remote-repo-scan/.ssh/
-    cp ~/.ssh/github_rsa ~/.ssh/github_rsa.pub server-remote-repo-scan/.ssh/
-    sed s/<SSH_KEY_NAME>/github_rsa/g server-remote-repo-scan/kustomization.yaml
-    ```
+    cp ~/.ssh/github_rsa server-remote-repo-scan/.ssh/
+    sed -i "" "s/<SSH_KEY_NAME>/github_rsa/g" server-remote-repo-scan/kustomization.yaml
+  ```
 
-3. Deploy. Skip this step if you're aiming to setup terrascan webhook.
+   Apart from the ssh key, we also require a `known_hosts` file. You can create `server-remote-repo-scan/.ssh/known_hosts` using the below command.
+   If you're dealing with some other code repository service than github, bitbucket or gitlab, please modify the known_host file accordingly.
+
+
+  ```bash
+    cat << EOF >> server-remote-repo-scan/.ssh/known_hosts
+    # known_hosts
+    github.com,192.30.255.113 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    bitbucket.org,104.192.141.1 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+    gitlab.com,172.65.251.78 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+  ```
+
+  After pasting the command, press RETURN key, type `EOF` on the prompt and press RETURN key again.
+
+3. Deploy.
 
    **Note:** Before running the command, please verify once that the `server-remote-repo-scan/kustomization.yaml` is set
    with the desired parameters.
@@ -162,8 +176,9 @@ follow the steps below.
 
    **OR**
 
-   If you aim to use the deployed terrascan server both by the validating webhook and argocd pre-sync hooks, follow steps 1 to 2 from the
-   `Deploying Terrascan Server For Remote Repository Scan` section above.
+   If you aim to use the deployed terrascan server both by the validating webhook and for remote repository scans, follow
+   steps 1 to 2 from the `Deploying Terrascan Server For Remote Repository Scan` section above and
+   replace `- ../server-tls` with `- ../server-remote-repo-scan` in the `webhook/kustomization.yaml` file.
 
 2. In `webhook/validating-webhook.yaml` and `webhook/deployment-env.yaml` file, Replace `<WEBHOOK_API_KEY>`with the string that
    you want your terrascan server key to be.

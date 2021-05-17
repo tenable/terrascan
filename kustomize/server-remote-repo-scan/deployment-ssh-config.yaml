@@ -11,16 +11,12 @@ spec:
           - mountPath: /etc/ssh-key-secret
             name: ssh-keys
             readOnly: true
-          - mountPath: /etc/ssh-config-secret
-            name: ssh-config
-            readOnly: true
           - mountPath: /etc/ssh-known-hosts-secret
             name: ssh-known-hosts
             readOnly: true
         args:
         - >
           cp /etc/ssh-key-secret/private-key /home/terrascan/.ssh/id_ed25519_github &&
-          cp /etc/ssh-config-secret/config /home/terrascan/.ssh/config &&
           cp /etc/ssh-known-hosts-secret/known-hosts /home/terrascan/.ssh/known_hosts &&
           chmod -R 400 /home/terrascan/.ssh/* &&
           terrascan server --cert-path /data/certs/server.crt --key-path /data/certs/server.key -l debug -c /data/config/config.toml
@@ -33,7 +29,3 @@ spec:
         - name: ssh-keys
           secret:
             secretName: ssh-key-secret
-        #add a secret for git config file
-        - name: ssh-config
-          secret:
-            secretName: ssh-config-secret
