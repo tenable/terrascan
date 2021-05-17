@@ -24,6 +24,6 @@ import (
 
 // Health returns the health of the http server
 func (g *APIHandler) Health(w http.ResponseWriter, r *http.Request) {
-	zap.S().Info("handle: health check request")
+	zap.S().Debug("handle: health check request")
 	w.WriteHeader(http.StatusOK)
 }

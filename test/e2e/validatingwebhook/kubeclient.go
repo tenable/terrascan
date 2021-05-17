@@ -57,7 +57,6 @@ func NewKubernetesClient() (*KubernetesClient, error) {
 func (k *KubernetesClient) getK8sClient() (*kubernetes.Clientset, error) {
 	home, err := homedir.Dir()
 	if err != nil {
-		fmt.Println("home directory not found", err)
 		return nil, fmt.Errorf("home directory not found, error: %s", err.Error())
 	}
 
@@ -110,7 +109,6 @@ func (k *KubernetesClient) CreateValidatingWebhookConfiguration(webhookFile, cer
 
 	createdWebhookConfig, err := admr.ValidatingWebhookConfigurations().Create(context.TODO(), &webhooks, metav1.CreateOptions{})
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	return createdWebhookConfig, nil
@@ -137,10 +135,9 @@ func (k *KubernetesClient) CreatePod(resourceFile string) (*v1.Pod, error) {
 
 	createdPod, err := k.client.CoreV1().Pods(namespace).Create(context.TODO(), &pod, metav1.CreateOptions{})
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
-	return createdPod, err
+	return createdPod, nil
 }
 
 // DeletePod will delete the specified pod name
@@ -164,10 +161,9 @@ func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, erro
 
 	createdService, err := k.client.CoreV1().Services(namespace).Create(context.TODO(), &service, metav1.CreateOptions{})
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
-	return createdService, err
+	return createdService, nil
 }
 
 // DeleteService will delete the specified service name

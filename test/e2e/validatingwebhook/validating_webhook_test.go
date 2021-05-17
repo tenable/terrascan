@@ -127,7 +127,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath}
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9010"))
 				})
@@ -176,7 +176,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				Expect(err).NotTo(HaveOccurred())
 
 				os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-				args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+				args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 				Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9011"))
 			})
@@ -225,7 +225,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9012"))
 				})
@@ -272,7 +272,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9013"))
 				})
@@ -321,7 +321,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9014"))
 				})
@@ -368,7 +368,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
-					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port}
+					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9015"))
 				})

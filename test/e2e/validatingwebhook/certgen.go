@@ -50,7 +50,7 @@ func GenerateCertificates(certFilePath, privateKeyPath string) error {
 	template := x509.Certificate{
 		SerialNumber: big.NewInt(1),
 		Subject: pkix.Name{
-			Organization: []string{"Accurics"},
+			Organization: []string{"acme.org"},
 			Country:      []string{"IN"},
 		},
 		IPAddresses:           []net.IP{ipAddr},

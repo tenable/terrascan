@@ -92,8 +92,8 @@ e2e-tests: build
 	./scripts/run-e2e.sh
 
 # run e2e validating webhook
-e2e-validating-webhook: build
-	./scripts/e2e-validating-webhook.sh
+e2e-admission-control-tests: build
+	./scripts/e2e-admission-control.sh
 
 # install kind
 install-kind: 

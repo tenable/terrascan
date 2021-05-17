@@ -88,6 +88,7 @@ func CreateCertificate(certsFolder, certFileName, privKeyFileName string) (strin
 // DeleteDefaultKindCluster deletes the default kind cluster
 func DeleteDefaultKindCluster() error {
 	cmd := exec.Command("kind", "delete", "cluster")
+	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
 		return err
@@ -98,6 +99,7 @@ func DeleteDefaultKindCluster() error {
 // CreateDefaultKindCluster creates the default kind cluster
 func CreateDefaultKindCluster() error {
 	cmd := exec.Command("kind", "create", "cluster")
+	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
 		return err

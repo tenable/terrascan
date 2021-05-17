@@ -35,7 +35,7 @@ import (
 
 // scanFile accepts uploaded file and runs scan on it
 func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
-	zap.S().Info("handle: file scan request")
+	zap.S().Debug("handle: file scan request")
 
 	// get url params
 	params := mux.Vars(r)
