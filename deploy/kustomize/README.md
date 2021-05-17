@@ -10,8 +10,9 @@ We have covered the following use cases in the sections below.
     Terrascan operating in https server mode. This deployment is also a foundation for the terrascan webhook setup.
 
   - ####[Deploying Terrascan Server for Remote Repository Scan](deploying-terrascan-server-for-remote-repository-scan)
-    Terrascan in https server mode installed with ssh capabilities, to scan remote repositories. This deployment can be used by an
-    argocd pre-sync hook that sends remote repository scan requests to the server.
+    Terrascan in https server mode installed with ssh capabilities, to scan ***private*** remote repositories. For remote
+    scanning public repos, deploying `Terrascan Server in TLS Mode` is sufficient.
+    This deployment can be handy for use-cases like an argocd pre-sync hook that sends remote repository scan requests to the server.
 
   - ####[Setting Up Terrascan Webhook](setting-up-terrascan-webhook)
     A Kubernetes Validating Webhook, that safeguards your cluster by denying the creation of kubernetes resources that
@@ -125,9 +126,9 @@ Deploy terrascan in server mode operating in HTTPS mode.
     kustomize build server-tls/ | kubectl apply -f -
     ```
 
-###Deploying Terrascan Server For Remote Repository Scan
+###Deploying Terrascan Server For Private Remote Repository Scan
 
-For scanning remote IaC file repositories, Terrascan must be provided with the required SSH keys to connect and clone the
+For scanning ***Private*** remote IaC file repositories, Terrascan must be provided with the required SSH keys to connect and clone the
 repository locally to scan it. The following steps will help in setting up for that.
 
 1. Follow steps 1-3 of the `Deploying TerraScan Server in TLS mode` section.
