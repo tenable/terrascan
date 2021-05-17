@@ -6,6 +6,18 @@ spec:
   replicas: 1
   template:
     spec:
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          args:
+            - clone
+            - --single-branch
+            - --branch=master
+            - https://github.com/accurics/terrascan.git
+            - /data
+          volumeMounts:
+            - mountPath: /data
+              name: terrascan-data-sync
       containers:
       - name: terrascan-server
         image: accurics/terrascan:1.6.0
@@ -23,11 +35,13 @@ spec:
           httpGet:
             path: /health
             port: 9010
-            scheme: HTTPS
+            scheme: http
         volumeMounts:
-            - mountPath: /data/config
-              name: terrascan-config
-              readOnly: true
+        - name: terrascan-data-sync
+          mountPath: /home/terrascan/.terrascan
+        - mountPath: /data/config
+          name: terrascan-config
+          readOnly: true
         command: ["/bin/sh", "-c"]
         args:
         - >
@@ -37,3 +51,5 @@ spec:
         - name: terrascan-config
           configMap:
             name: terrascan-config
+        - name: terrascan-data-sync
+          emptyDir: {}
