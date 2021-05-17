@@ -11,7 +11,7 @@ configMapGenerator:
 secretGenerator:
   - name: ssh-key-secret
     files:
-      - private-key=.ssh/github2
+      - private-key=.ssh/<SSH_KEY_NAME>
 
 patchesStrategicMerge:
   - deployment-ssh-config.yaml

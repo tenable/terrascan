@@ -19,7 +19,7 @@ We have covered the following use cases in the sections below.
 
   - ####[Clean Up](clean-up)
 
-### PRE-REQUISITE
+###PRE-REQUISITE
 1. Make sure you have required access on the kubernetes cluster to create and update the following resources:
 
   - Secrets
@@ -62,7 +62,7 @@ terrascan server. The string replacement will be required in the following files
   kubectl create namespace terrascan
   ```
 
-### Deploying Terrascan Server
+###Deploying Terrascan Server
 
 Deploy terrascan in server mode operating in plain HTTP mode.
 
@@ -77,7 +77,7 @@ Deploy terrascan in server mode operating in plain HTTP mode.
     kustomize build server/ | kubectl apply -f -
     ```
 
-### Deploying Terrascan Server in TLS Mode
+###Deploying Terrascan Server in TLS Mode
 
 Deploy terrascan in server mode operating in HTTPS mode.
 
