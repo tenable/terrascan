@@ -21,7 +21,7 @@ webhooks:
     clientConfig:
       service:
         name: terrascan
-        namespace: terrascan
+        namespace: <TERRASCAN_NAMESPACE>
         path: /v1/k8s/webhooks/<WEBHOOK_API_KEY>/scan/validate
       caBundle: <CA_BUNDLE>
     admissionReviewVersions: ["v1", "v1beta1"]
