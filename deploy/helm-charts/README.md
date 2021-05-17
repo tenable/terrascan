@@ -1,7 +1,7 @@
-# Helm chart for deploying terrascan
+# Helm charts for deploying terrascan
 
-This chart deploys terrascan as a server within your kubernetes cluster. By default it runs just terrascan by itself, but,
-user creates namespace and secrets.
+This guide deploys terrascan as a server within your kubernetes cluster. Additionally, you can deploy a
+Validating Webhook as well, that'll use the terrascan server as its backend.
 
 In server mode, terrascan will act both as an API server for
 performing remote scans of IAC, as well as a validating admission
@@ -19,13 +19,20 @@ happens over TLS. This helm chart expects to find the certificate
 at `server/data/server.crt` and key at `server/data/server.key`.
 If you opt to deploy the webhook as well, please copy `server/data/server.crt` at `webhook/data/server.crt`
 
-### Set up SSH config for remote repo scan
-If you're opting to utilise the remote repo scan feature,
+### Set up SSH config for private remote repo scan
+If you're opting to utilise the remote repo scan feature for ***private*** repositories,
 terrascan will require ssh capabilities to do that.
-This helm chart expects to find the your ssh private key at `.ssh/private_key`,
-ssh config file at `.ssh/config` and .ssh known_hosts file at `.ssh/known_hosts`.
+This helm chart expects to find the your ssh private key at `.ssh/private_key`,and .ssh known_hosts file at `.ssh/known_hosts`.
 Your ssh public key must setup at the code repository hosting service, such as github, bitbucket, etc.
 
+You can use the below content to create your `.ssh/known_hosts` file.
+
+```bash
+# known_hosts
+github.com,192.30.255.113 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+bitbucket.org,104.192.141.1 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+gitlab.com,172.65.251.78 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+```
 **Note:** This is an optional feature and not a requirement.
 
 ### Persistent storage
