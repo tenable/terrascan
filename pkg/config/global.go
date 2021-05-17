@@ -41,6 +41,8 @@ var (
 // in configFile will get default values
 func LoadGlobalConfig(configFile string) error {
 	// Start with the defaults
+	global = &TerrascanConfig{}
+
 	global.Policy = Policy{
 		BasePath: defaultBasePolicyPath,
 		RepoPath: defaultPolicyRepoPath,
@@ -120,50 +122,80 @@ func LoadGlobalConfig(configFile string) error {
 
 // GetPolicyBasePath returns the configured policy base path
 func GetPolicyBasePath() string {
+	if global == nil {
+		return defaultBasePolicyPath
+	}
 	return global.Policy.BasePath
 }
 
 // GetPolicyRepoPath return the configured path to the policies repo locally downloaded
 func GetPolicyRepoPath() string {
+	if global == nil {
+		return defaultPolicyRepoPath
+	}
 	return global.Policy.RepoPath
 }
 
 // GetPolicyRepoURL returns the configured policy repo url
 func GetPolicyRepoURL() string {
+	if global == nil {
+		return defaultPolicyRepoURL
+	}
 	return global.Policy.RepoURL
 }
 
 // GetPolicyBranch returns the configured policy repo url
 func GetPolicyBranch() string {
+	if global == nil {
+		return defaultPolicyBranch
+	}
 	return global.Policy.Branch
 }
 
 // GetScanRules returns the configured scan rules
 func GetScanRules() []string {
+	if global == nil {
+		return nil
+	}
 	return global.Rules.ScanRules
 }
 
 // GetSkipRules returns the configured skips rules
 func GetSkipRules() []string {
+	if global == nil {
+		return nil
+	}
 	return global.Rules.SkipRules
 }
 
 // GetSeverityLevel returns the configured severity level
 func GetSeverityLevel() string {
+	if global == nil {
+		return ""
+	}
 	return global.Severity.Level
 }
 
 // GetCategoryList returns the configured list of category of violations
 func GetCategoryList() []string {
+	if global == nil {
+		return nil
+	}
 	return global.Category.List
 }
 
 // GetNotifications returns the configured notifier map
 func GetNotifications() map[string]Notifier {
+	if global == nil {
+		return nil
+	}
 	return global.Notifications
 }
 
 // GetK8sAdmissionControl returns kubernetes admission control configuration
 func GetK8sAdmissionControl() K8sAdmissionControl {
+	if global == nil {
+		return K8sAdmissionControl{}
+	}
 	return global.K8sAdmissionControl
 }

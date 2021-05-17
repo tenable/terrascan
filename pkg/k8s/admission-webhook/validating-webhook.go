@@ -42,15 +42,13 @@ import (
 // the kubernetes API server and decides whether the admission request from
 // the kubernetes client should be allowed or not
 type ValidatingWebhook struct {
-	configFile  string
 	requestBody []byte
 	dblogger    *dblogs.WebhookScanLogger
 }
 
 // NewValidatingWebhook returns a new, empty ValidatingWebhook struct
-func NewValidatingWebhook(configFile string, body []byte) AdmissionWebhook {
+func NewValidatingWebhook(body []byte) AdmissionWebhook {
 	return ValidatingWebhook{
-		configFile:  configFile,
 		dblogger:    dblogs.NewWebhookScanLogger(),
 		requestBody: body,
 	}
@@ -162,7 +160,7 @@ func (w ValidatingWebhook) ProcessWebhook(review admissionv1.AdmissionReview, se
 		return w.createResponseAdmissionReview(review, allowed, output, logMsg), fmt.Errorf(errMsg, msg, err)
 	}
 
-	// Calculate if there are anydeny violations
+	// Calculate if there are any deny violations
 	denyViolations, err = w.getDenyViolations(output)
 	if err != nil {
 		msg := "failed to figure out denied violations"
@@ -215,13 +213,7 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 func (w ValidatingWebhook) getDenyViolations(output runtime.Output) ([]results.Violation, error) {
 
 	// Calcualte the deny violations according to the configuration specified in the config file
-	configReader, err := config.NewTerrascanConfigReader(w.configFile)
-	if err != nil {
-		zap.S().Errorf("error loading config file: '%v'", err)
-		return nil, err
-	}
-
-	denyViolations := w.getDeniedViolations(*output.Violations.ViolationStore, configReader.GetK8sAdmissionControl())
+	denyViolations := w.getDeniedViolations(*output.Violations.ViolationStore, config.GetK8sAdmissionControl())
 
 	return denyViolations, nil
 }

@@ -17,7 +17,7 @@
 package config
 
 // Global initalizes GlobalConfig struct
-var global *TerrascanConfig = &TerrascanConfig{}
+var global *TerrascanConfig
 
 // TerrascanConfig struct defines global variables/configurations across terrascan
 type TerrascanConfig struct {
