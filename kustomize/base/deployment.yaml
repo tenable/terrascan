@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: terrascan-server
-        image: devanggaur7/terrascan:latest
+        image: accurics/terrascan:1.6.0
         imagePullPolicy: IfNotPresent
         resources:
           limits:
