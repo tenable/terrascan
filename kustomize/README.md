@@ -97,7 +97,7 @@ Deploy terrascan in server mode operating in HTTPS mode.
     L = <My_Location>
     O = <My_Organization>
     emailAddress = <My_Email>
-    CN = terrascan.<TERRASCAN_NAMESPACE>.svc
+    CN = terrascan.<TERRASCAN_NAMESPACE>.svc.cluster.local
     [v3_req]
     subjectAltName = @alt_names
     [alt_names]
