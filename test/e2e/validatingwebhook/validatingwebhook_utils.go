@@ -29,8 +29,8 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-// CreateConfigFile creates a config file with test policy path
-func CreateConfigFile(configFileName, policyRootRelPath string, terrascanConfig *config.TerrascanConfig) error {
+// CreateTerrascanConfigFile creates a config file with test policy path
+func CreateTerrascanConfigFile(configFileName, policyRootRelPath string, terrascanConfig *config.TerrascanConfig) error {
 	policyAbsPath, err := filepath.Abs(policyRootRelPath)
 	if err != nil {
 		return err

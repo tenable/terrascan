@@ -123,7 +123,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				It("server should start running on port 9010", func() {
 					configFileName = "config1.toml"
 					// create a config file with default config values
-					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, nil)
+					err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, nil)
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
@@ -172,7 +172,7 @@ var _ = Describe("ValidatingWebhook", func() {
 						SaveRequests: true,
 					},
 				}
-				err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+				err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 				Expect(err).NotTo(HaveOccurred())
 
 				os.Setenv(k8sWebhookAPIKey, apiKeyValue)
@@ -221,7 +221,7 @@ var _ = Describe("ValidatingWebhook", func() {
 							DeniedSeverity: "MEDIUM",
 						},
 					}
-					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
@@ -268,7 +268,7 @@ var _ = Describe("ValidatingWebhook", func() {
 							DeniedSeverity: "HIGH",
 						},
 					}
-					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
@@ -317,7 +317,7 @@ var _ = Describe("ValidatingWebhook", func() {
 							Categories: []string{"Network Security"},
 						},
 					}
-					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
@@ -364,7 +364,7 @@ var _ = Describe("ValidatingWebhook", func() {
 							Categories: []string{"Doesn't Exist"},
 						},
 					}
-					err := validatingwebhook.CreateConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
+					err := validatingwebhook.CreateTerrascanConfigFile(configFileName, policyRootRelPath, &terrascanConfig)
 					Expect(err).NotTo(HaveOccurred())
 
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
