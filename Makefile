@@ -31,6 +31,7 @@ help:
 	@echo "test\n\texecute unit and integration tests"
 	@echo "unit-tests\n\texecute unit tests"
 	@echo "e2e-tests\n\texecute e2e tests"
+	@echo "e2e-admission-control-tests\n\texecute e2e admission control tests"
 	@echo "validate\n\trun all validations"
 
 # build terrascan binary
