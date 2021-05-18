@@ -18,6 +18,8 @@ package httpserver
 
 import (
 	"context"
+	httputils "github.com/accurics/terrascan/pkg/utils/http"
+	gorillaHandlers "github.com/gorilla/handlers"
 	"net/http"
 	"os"
 	"os/signal"
@@ -54,6 +56,8 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 		router = mux.NewRouter() // new router
 	)
 
+	logWriter := logging.GetLogWriter(logger)
+
 	logger.Info("registering routes...")
 
 	if privateKeyFile != "" || certFile != "" {
@@ -67,8 +71,12 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 	// register all routes
 	for _, v := range routes {
 		logger.Info("Route ", v.verb, " - ", v.path)
-		router.Methods(v.verb).Path(v.path).HandlerFunc(v.fn)
+		handler := gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(v.fn), logging.WriteRequestLog)
+		router.Methods(v.verb).Path(v.path).Handler(handler)
 	}
+
+	router.NotFoundHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotFound), logging.WriteRequestLog)
+	router.MethodNotAllowedHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotAllowed), logging.WriteRequestLog)
 
 	// Add a route for all static templates / assets. Currently used for the Webhook logs views
 	// go/terrascan/asset is the path where the assets files are located inside the docker container
@@ -114,3 +122,5 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 	}
 	logger.Info("server exiting gracefully")
 }
+
+
