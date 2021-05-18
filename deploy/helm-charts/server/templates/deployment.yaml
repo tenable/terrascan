@@ -75,7 +75,7 @@ spec:
 {{- if $globconfig }}
         - name: config-volume
           configMap:
-            configMapName: {{ .Values.configname }}
+            configMapName: {{ .Values.config_name }}
 {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: terrascan-data-sync
