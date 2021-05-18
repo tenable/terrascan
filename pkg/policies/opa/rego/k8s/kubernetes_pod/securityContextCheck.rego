@@ -57,7 +57,7 @@ containerSecurityCheck(container) {
 }
 
 containerSecurityCheck(container) {
-    not container.{{.param1}}.{{.param}}
+    object.get(container.{{.param1}}, "{{.param}}", "undefined") == "undefined"
 }
 
 containerSecurityCheck(container) {
