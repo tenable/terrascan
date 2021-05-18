@@ -9,6 +9,10 @@ keywords:
   - terrascan
   - opa
   - security
+  - webhook
+  - validating-webhook
+  - admission-controller
+  - admission
 sources:
   - https://github.com/accurics/terrascan
 maintainers:

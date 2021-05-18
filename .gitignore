@@ -25,11 +25,14 @@ docs/_build/
 
 /updatedFiles
 
-deploy/kustomize/server-tls/certs/
-deploy/kustomize/server-remote-repo-scan/.ssh/
-
 # Go binary
 /bin
+
+deploy/helm-charts/server/.ssh
+deploy/helm-charts/server/data
+deploy/helm-charts/webhook/data
+deploy/kustomize/server-remote-repo-scan/.ssh
+deploy/kustomize/server-tls/certs
 
 .DS_Store
 

@@ -1,0 +1,18 @@
+apiVersion: v1
+name: terrascan
+version: 1.0.0
+appVersion: v1.6.0
+description: A Helm chart for running terrascan in server mode
+icon: https://raw.githubusercontent.com/accurics/terrascan/master/docs/img/terrascan-icon-white.png
+home: https://github.com/accurics/terrascan
+keywords:
+  - terrascan
+  - opa
+  - security
+sources:
+  - https://github.com/accurics/terrascan
+maintainers:
+  - name: jlk
+    email: jlk@accurics.com
+  - name: dev-gaur
+    email: devang.gaur@accurics.com
