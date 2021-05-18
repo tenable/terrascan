@@ -19,12 +19,14 @@ package validatingwebhook_test
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/accurics/terrascan/test/e2e/server"
 	"github.com/accurics/terrascan/test/e2e/validatingwebhook"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -130,6 +132,34 @@ var _ = Describe("ValidatingWebhook", func() {
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9010"))
+				})
+
+				Context("in blind mode, log end points return error response", func() {
+					port := "9010"
+					myIP, err := validatingwebhook.GetIP()
+					When("request is made to the get a single log endpoint", func() {
+						It("should return a 400 bad request response", func() {
+							Expect(err).NotTo(HaveOccurred())
+
+							requestURL := fmt.Sprintf("http://%s:%s/k8s/webhooks/logs/%s", myIP.To4(), port, apiKeyValue)
+							resp, err := server.MakeHTTPRequest("GET", requestURL)
+							Expect(err).NotTo(HaveOccurred())
+							Expect(resp).NotTo(BeNil())
+							Expect(resp.StatusCode).To(BeIdenticalTo(http.StatusBadRequest))
+						})
+					})
+
+					When("request is made to the get a single log endpoint", func() {
+						It("should return a 400 bad request response", func() {
+							Expect(err).NotTo(HaveOccurred())
+
+							requestURL := fmt.Sprintf("http://%s:%s/k8s/webhooks/%s/logs", myIP.To4(), port, apiKeyValue)
+							resp, err := server.MakeHTTPRequest("GET", requestURL)
+							Expect(err).NotTo(HaveOccurred())
+							Expect(resp).NotTo(BeNil())
+							Expect(resp.StatusCode).To(BeIdenticalTo(http.StatusBadRequest))
+						})
+					})
 				})
 
 				When("request is made to add server as a validating webhook", func() {
