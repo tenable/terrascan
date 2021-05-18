@@ -7,7 +7,7 @@
     "arg2": "cpu",
     "name": "CpuRequestsCheck",
     "not_allowed": "false",
-    "param": "resources",
+    "param": "requests",
     "param1": "resources",
     "prefix": "",
     "suffix": "",

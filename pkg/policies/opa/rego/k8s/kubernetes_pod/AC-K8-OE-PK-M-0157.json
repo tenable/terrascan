@@ -7,7 +7,7 @@
     "arg2": "memory",
     "name": "MemoryRequestsCheck",
     "not_allowed": "false",
-    "param": "resources",
+    "param": "requests",
     "param1": "resources",
     "prefix": "",
     "suffix": "",
