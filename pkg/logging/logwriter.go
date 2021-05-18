@@ -11,16 +11,19 @@ import (
 	"time"
 )
 
+// LogWriter a type that can write logs to a zap.SugaredLogger object
 type LogWriter struct {
 	logger *zap.SugaredLogger
 }
 
+// GetLogWriter creates and fetches a LogWriter object
 func GetLogWriter(logger *zap.SugaredLogger) LogWriter {
 	return LogWriter{
 		logger: logger,
 	}
 }
 
+// Write writes the byte array to the logger object
 func (l LogWriter) Write(p []byte) (n int, err error) {
 	l.logger.Info(string(p))
 	return len(p), nil
@@ -71,6 +74,7 @@ func buildCommonLogLine(req *http.Request, url url.URL, ts time.Time, status int
 	return buf
 }
 
+// WriteRequestLog logs an http(s) request to a write object
 func WriteRequestLog(writer io.Writer, params gorillaHandlers.LogFormatterParams) {
 	writer.Write(buildCommonLogLine(params.Request, params.URL, params.TimeStamp, params.StatusCode, params.Size))
 }

@@ -122,5 +122,3 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 	}
 	logger.Info("server exiting gracefully")
 }
-
-
