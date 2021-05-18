@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terrascan
+spec:
+  template:
+    spec:
+      containers:
+      - name: terrascan-server
+        env:
+        - name: K8S_WEBHOOK_API_KEY
+          value: <WEBHOOK_API_KEY>

@@ -296,6 +296,7 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 		ResourceName: resource.Name,
 		ResourceType: resource.Type,
 		ResourceData: resource.Config,
+		ModuleName:   resource.ModuleName,
 		File:         resource.Source,
 		PlanRoot:     resource.PlanRoot,
 		LineNumber:   resource.Line,

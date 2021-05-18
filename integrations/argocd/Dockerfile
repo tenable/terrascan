@@ -17,6 +17,6 @@ RUN addgroup --gid 101 terrascan && \
     chown -R terrascan:terrascan bin && \
     chmod u+x bin/terrascan-remote-scan.sh
 
-USER terrascan
+USER 101
 
 CMD ["sh"]

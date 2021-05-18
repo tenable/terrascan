@@ -9,6 +9,7 @@
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
+        "module_name": "root",
         "file": "main.tf",
         "root_path": "./",
         "line": 39

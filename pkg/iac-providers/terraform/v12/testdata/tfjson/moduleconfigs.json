@@ -3,6 +3,7 @@
     {
       "id": "aws_cloudfront_distribution.s3-distribution-TLS-v1",
       "name": "s3-distribution-TLS-v1",
+      "module_name": "cloudfront",
       "source": "cloudfront/main.tf",
       "plan_root": "./",
       "line": 6,
@@ -133,6 +134,7 @@
     {
       "id": "aws_cloudtrail.missing-multi-region",
       "name": "missing-multi-region",
+      "module_name": "cloudtrail",
       "source": "cloudtrail/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -150,6 +152,7 @@
     {
       "id": "aws_ecs_task_definition.instanceNotInVpc",
       "name": "instanceNotInVpc",
+      "module_name": "ecs",
       "source": "ecs/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -166,6 +169,7 @@
     {
       "id": "aws_efs_file_system.efsNotEncrypted",
       "name": "efsNotEncrypted",
+      "module_name": "efs",
       "source": "efs/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -183,6 +187,7 @@
     {
       "id": "aws_elasticache_cluster.noMemcachedInElastiCache",
       "name": "noMemcachedInElastiCache",
+      "module_name": "elasticcache",
       "source": "../relative-moduleconfigs/elasticcache/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -202,6 +207,7 @@
     {
       "id": "aws_guardduty_detector.gaurdDutyDisabled",
       "name": "gaurdDutyDisabled",
+      "module_name": "guardduty",
       "source": "guardduty/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -216,6 +222,7 @@
     {
       "id": "aws_iam_access_key.noAccessKeyForRootAccount",
       "name": "noAccessKeyForRootAccount",
+      "module_name": "iam",
       "source": "iam/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -232,6 +239,7 @@
     {
       "id": "aws_kinesis_stream.kinesisEncryptedWithKms",
       "name": "kinesisEncryptedWithKms",
+      "module_name": "kinesis",
       "source": "kinesis/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -257,6 +265,7 @@
     {
       "id": "aws_kms_key.kmsKeyDisabled",
       "name": "kmsKeyDisabled",
+      "module_name": "sub-cloudfront",
       "source": "cloudfront/sub-cloudfront/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -276,6 +285,7 @@
     {
       "id": "aws_load_balancer_policy.elbWeakCipher",
       "name": "elbWeakCipher",
+      "module_name": "elb",
       "source": "elb/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -298,6 +308,7 @@
     {
       "id": "aws_s3_bucket.noS3BucketSseRules",
       "name": "noS3BucketSseRules",
+      "module_name": "s3",
       "source": "s3/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -317,6 +328,7 @@
     {
       "id": "aws_security_group.acme_web",
       "name": "acme_web",
+      "module_name": "sg",
       "source": "sg/main.tf",
       "plan_root": "./",
       "line": 1,
@@ -358,6 +370,7 @@
     {
       "id": "aws_sqs_queue.sqsQueueExposed",
       "name": "sqsQueueExposed",
+      "module_name": "sqs",
       "source": "sqs/main.tf",
       "plan_root": "./",
       "line": 1,

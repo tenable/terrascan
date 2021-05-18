@@ -28,13 +28,13 @@ import (
 )
 
 // Start initializes api routes and starts http server
-func Start(port, configFile, certFile, privateKeyFile string) {
+func Start(port, certFile, privateKeyFile string) {
 
 	// create a new API server
 	server := NewAPIServer()
 
 	// get all routes
-	routes := server.Routes(configFile)
+	routes := server.Routes()
 
 	// get port
 	if port == GatewayDefaultPort && os.Getenv(TerrascanServerPort) != "" {

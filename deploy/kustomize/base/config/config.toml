@@ -1,0 +1,3 @@
+[k8s-admission-control]
+denied-severity = "high"
+

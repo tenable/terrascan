@@ -89,7 +89,7 @@ func TestNewNotifiers(t *testing.T) {
 		},
 		{
 			name:    "no config file specified",
-			wantErr: nil,
+			wantErr: ErrNotificationNotPresent,
 		},
 	}
 
