@@ -6,7 +6,7 @@
         "port_number": "3389"
     },
     "severity": "MEDIUM",
-    "description": "Ensure that SSH access is restricted from the internet",
+    "description": "Ensure that RDP access is restricted from the internet",
     "reference_id": "accurics.gcp.NS.149",
     "category": "Infrastructure Security",
     "version": 1

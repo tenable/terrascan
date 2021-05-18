@@ -18,13 +18,10 @@ package httpserver
 
 // APIHandler struct for http api server
 type APIHandler struct {
-	test       bool
-	configFile string
+	test bool
 }
 
 // NewAPIHandler returns a new APIHandler{}
-func NewAPIHandler(configFile string) *APIHandler {
-	return &APIHandler{
-		configFile: configFile,
-	}
+func NewAPIHandler() *APIHandler {
+	return &APIHandler{}
 }

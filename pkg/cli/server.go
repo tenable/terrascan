@@ -46,7 +46,7 @@ Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Cod
 }
 
 func server(cmd *cobra.Command, args []string) {
-	httpserver.Start(port, ConfigFile, certFile, privateKeyFile)
+	httpserver.Start(port, certFile, privateKeyFile)
 }
 
 func init() {

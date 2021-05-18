@@ -24,13 +24,14 @@ import (
 
 // ResourceConfig describes a resource present in IaC
 type ResourceConfig struct {
-	ID       string      `json:"id"`
-	Name     string      `json:"name"`
-	Source   string      `json:"source"`
-	PlanRoot string      `json:"plan_root,omitempty" yaml:"plan_root,omitempty" `
-	Line     int         `json:"line"`
-	Type     string      `json:"type"`
-	Config   interface{} `json:"config"`
+	ID         string      `json:"id"`
+	Name       string      `json:"name"`
+	ModuleName string      `json:"module_name,omitempty" yaml:"module_name,omitempty"`
+	Source     string      `json:"source"`
+	PlanRoot   string      `json:"plan_root,omitempty" yaml:"plan_root,omitempty" `
+	Line       int         `json:"line"`
+	Type       string      `json:"type"`
+	Config     interface{} `json:"config"`
 	// SkipRules will hold the rules to be skipped for the resource.
 	// Each iac provider should append the rules to be skipped for a resource,
 	// while extracting resource from the iac files

@@ -16,10 +16,12 @@ package accurics
 }
 
 resourceLockExist(registry, registry_input) = exists {
+  # plan file inspection
 	resource_lock_exist_set := { resource_lock_id | input.azurerm_management_lock[i].type == "azurerm_management_lock"; resource_lock_id := input.azurerm_management_lock[i].config.scope }
-	resource_lock_exist_set[registry.id]
+	resource_lock_exist_set[registry.config.id]
     exists = true
 } else = exists {
+  # hcl inspection
 	resource_lock_exist_set := { resource_id | input.azurerm_management_lock[i].type == "azurerm_management_lock"; resource_id := input.azurerm_management_lock[i].config.name }
     registry_name := sprintf("azurerm_container_registry.%s", [registry.name])
 	resource_lock_exist_set[registry_name]

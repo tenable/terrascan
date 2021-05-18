@@ -3,6 +3,7 @@
     {
       "id": "terraform_remote_state.remote",
       "name": "remote",
+      "module_name": "root",
       "source": "dummyconfig.tf",
       "line": 41,
       "type": "terraform_remote_state",
@@ -22,6 +23,7 @@
     {
       "id": "type1.resource1",
       "name": "resource1",
+      "module_name": "root",
       "source": "dummyconfig.tf",
       "line": 1,
       "type": "type1",
@@ -48,6 +50,7 @@
     {
       "id": "type2.resource2",
       "name": "resource2",
+      "module_name": "root",
       "source": "dummyconfig.tf",
       "line": 13,
       "type": "type2",
@@ -70,6 +73,7 @@
     {
       "id": "type3.resource3",
       "name": "resource3",
+      "module_name": "root",
       "source": "dummyconfig.tf",
       "line": 26,
       "type": "type3",

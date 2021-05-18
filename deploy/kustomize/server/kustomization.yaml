@@ -1,0 +1,8 @@
+resources:
+  - ../base
+  - service.yaml
+
+namespace: <TERRASCAN_NAMESPACE>
+
+commonLabels:
+  app: terrascan

@@ -1,4 +1,4 @@
-terrascan_api_key: terrakey
+terrascan_webhook_key: terrakey
 terrascan_container_image: accurics/terrascan:1.6.0
 use_debug: true
 

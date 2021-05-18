@@ -3,6 +3,7 @@
     {
       "id": "aws_instance.instance_playground",
       "name": "instance_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 77,
@@ -47,6 +48,7 @@
     {
       "id": "aws_internet_gateway.igw_playground",
       "name": "igw_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 14,
@@ -64,6 +66,7 @@
     {
       "id": "aws_key_pair.ec2key_playground",
       "name": "ec2key_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 72,
@@ -79,6 +82,7 @@
     {
       "id": "aws_route_table.rtb_public_playground",
       "name": "rtb_public_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 30,
@@ -102,6 +106,7 @@
     {
       "id": "aws_route_table_association.rta_subnet_public_playground",
       "name": "rta_subnet_public_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 41,
@@ -117,6 +122,7 @@
     {
       "id": "aws_security_group.sg_playground",
       "name": "sg_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 46,
@@ -163,6 +169,7 @@
     {
       "id": "aws_subnet.subnet_public_playground",
       "name": "subnet_public_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 21,
@@ -182,6 +189,7 @@
     {
       "id": "aws_vpc.vpc_playground",
       "name": "vpc_playground",
+      "module_name": "root",
       "source": "config1.tf",
       "plan_root": "./",
       "line": 5,
