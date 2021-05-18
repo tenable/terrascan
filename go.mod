@@ -42,5 +42,6 @@ require (
 	honnef.co/go/tools v0.1.3 // indirect
 	k8s.io/api v0.19.2
 	k8s.io/apimachinery v0.19.2
+	k8s.io/client-go v10.0.0+incompatible
 	sigs.k8s.io/kustomize/api v0.8.5
 )
