@@ -16,25 +16,25 @@ func TestValidateFiles(t *testing.T) {
 		wantErr        error
 	}{
 		{
-			name:           "normal file names",
+			name:           "both file names provided",
 			privateKeyFile: "key",
 			certFile:       "cert",
 			wantErr:        nil,
 		},
 		{
-			name:           "error in both privatekey and certfile filenames",
+			name:           "privatekey filename absent",
 			privateKeyFile: "",
 			certFile:       "server.crt",
 			wantErr:        fmt.Errorf("certificate file provided but private key file missing"),
 		},
 		{
-			name:           "error in privatekey filename",
+			name:           "both file names blank",
 			privateKeyFile: "",
 			certFile:       "",
 			wantErr:        nil,
 		},
 		{
-			name:           "error in certfile filename",
+			name:           "cert filename absent",
 			privateKeyFile: "keyfile",
 			certFile:       "",
 			wantErr:        fmt.Errorf("private key file provided but certficate file missing"),
