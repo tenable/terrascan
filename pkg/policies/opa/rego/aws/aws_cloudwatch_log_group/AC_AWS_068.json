@@ -1,6 +1,8 @@
 {
     "name": "cloudWatchLogGroupNoRetentionPolicy",
     "file": "cloudWatchLogGroupNoRetentionPolicy.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudwatch_log_group",
     "template_args": {
         "prefix": ""
     },

@@ -1,6 +1,8 @@
 {
     "name": "passwordReuseNotAllowed",
     "file": "passwordReuseNotAllowed.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_account_password_policy",
     "template_args": {
         "name": "passwordReuseNotAllowed",
         "parameter": "password_reuse_prevention",

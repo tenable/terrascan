@@ -1,6 +1,8 @@
 {
     "name": "cloudFormationStackNotifs",
     "file": "cloudFormationNullCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudformation_stack",
     "template_args": {
         "name": "cloudFormationStackNotifs",
         "property": "notification_arns"

@@ -1,6 +1,8 @@
 {
     "name": "awsCloudWatchRetentionPreiod",
     "file": "awsCloudWatchRetentionPreiod.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudwatch",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "App-Tier CloudWatch Log Group Retention Period",

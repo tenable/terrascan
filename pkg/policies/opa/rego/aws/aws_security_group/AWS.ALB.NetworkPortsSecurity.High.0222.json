@@ -1,6 +1,8 @@
 {
     "name": "port7001AlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port7001AlbNetworkPortSecurityPublicScope",
         "portNumber": 7001,

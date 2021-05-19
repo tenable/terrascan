@@ -1,6 +1,8 @@
 {
     "name": "rdsPubliclyAccessible",
     "file": "rdsPubliclyAccessible.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_db_instance",
     "template_args": {
         "prefix": ""
     },

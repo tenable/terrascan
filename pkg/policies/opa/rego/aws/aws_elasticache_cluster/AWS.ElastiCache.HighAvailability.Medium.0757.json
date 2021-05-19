@@ -1,6 +1,8 @@
 {
     "name": "elastiCacheMultiAZ",
     "file": "elastiCacheMultiAZ.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticache_cluster",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "AWS ElastiCache Multi-AZ",

@@ -1,6 +1,8 @@
 {
     "name": "port137UdpAlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port137UdpAlbNetworkPortSecurityPublicScope",
         "portNumber": 137,

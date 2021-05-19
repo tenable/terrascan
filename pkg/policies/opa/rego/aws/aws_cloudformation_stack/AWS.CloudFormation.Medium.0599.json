@@ -1,6 +1,8 @@
 {
     "name": "awsCloudFormationInUse",
     "file": "cloudFormationNullCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudformation_stack",
     "template_args": {
         "name": "awsCloudFormationInUse",
         "property": "template_url"

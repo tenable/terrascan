@@ -1,6 +1,8 @@
 {
     "name": "passwordRotateEvery90Days",
     "file": "passwordRotateEvery90Days.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_account_password_policy",
     "template_args": {
         "name": "passwordRotateEvery90Days",
         "prefix": ""

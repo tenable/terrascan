@@ -1,6 +1,8 @@
 {
     "name": "neptuneClusterLoggingDisabled",
     "file": "neptuneClusterLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_neptune_cluster",
     "template_args": {
         "prefix": ""
     },

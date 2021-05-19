@@ -1,6 +1,8 @@
 {
     "name": "elastiSearchEncryptAtRest",
     "file": "elastiSearchEncryptAtRest.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticsearch_domain",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS ElasticSearch Encryption At Rest",

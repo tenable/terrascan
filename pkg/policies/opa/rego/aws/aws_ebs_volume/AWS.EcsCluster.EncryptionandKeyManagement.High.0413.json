@@ -1,6 +1,8 @@
 {
     "name": "ebsVolumeEncryptedWithNoKms",
     "file": "ebsEncryption.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_ebs_volume",
     "template_args": {
         "name": "ebsVolumeEncryptedWithNoKms",
         "prefix": ""

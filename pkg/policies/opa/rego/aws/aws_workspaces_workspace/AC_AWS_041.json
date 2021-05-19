@@ -1,10 +1,12 @@
 {
     "name": "workspaceUserEncryptionCheck",
     "file": "workspaceEncryptionCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_workspaces_workspace",
     "template_args": {
-        "prefix": "",
+        "attribute_name": "user_volume_encryption_enabled",
         "name": "workspaceUserEncryptionCheck",
-        "attribute_name": "user_volume_encryption_enabled"
+        "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure user volume for Workspaces is Encrypted",

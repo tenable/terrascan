@@ -1,6 +1,8 @@
 {
     "name": "iamUserManagedPolicyAttachment",
     "file": "iamUserManagedPolicyAttachment.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_user_policy_attachment",
     "template_args": {
         "prefix": ""
     },

@@ -1,6 +1,8 @@
 {
     "name": "vpcFlowLogsNotEnabled",
     "file": "vpcFlowLogsNotEnabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_vpc",
     "template_args": {
         "prefix": ""
     },

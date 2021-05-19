@@ -1,6 +1,8 @@
 {
     "name": "cloudTrailLogNotEncrypted",
     "file": "cloudTrailLogNotEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },

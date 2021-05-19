@@ -1,6 +1,8 @@
 {
     "name": "awsMqPubliclyAccessible",
     "file": "awsMqPubliclyAccessible.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_mq_broker",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Publicly Accessible MQ Brokers",

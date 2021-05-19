@@ -1,6 +1,8 @@
 {
     "name": "dynamoDbEncrypted",
     "file": "dynamoDbEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_dynamodb_table",
     "template_args": {
         "prefix": ""
     },

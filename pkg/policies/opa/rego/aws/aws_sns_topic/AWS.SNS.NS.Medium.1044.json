@@ -1,6 +1,8 @@
 {
     "name": "snsPublicAccess",
     "file": "snsPublicAccess.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_sns_topic",
     "template_args": {
         "prefix": ""
     },

@@ -1,6 +1,8 @@
 {
     "name": "port3000AlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port3000AlbNetworkPortSecurityPublicScope",
         "portNumber": 3000,
