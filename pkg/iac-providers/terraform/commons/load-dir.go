@@ -319,9 +319,11 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
 
 			// figure out path sub module directory, if it's remote then download it locally
-			var pathToModule string
-			var err error
-			var moduleDirDiags hcl.Diagnostics
+			var (
+				pathToModule   string
+				err            error
+				moduleDirDiags hcl.Diagnostics
+			)
 			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 
 				pathToModule = t.processLocalSource(req)
