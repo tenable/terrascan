@@ -46,6 +46,7 @@ var (
 type ModuleConfig struct {
 	Config           *hclConfigs.Config
 	ParentModuleCall *hclConfigs.ModuleCall
+	Name             string
 }
 
 // TerraformDirectoryLoader implements terraform directory loading
@@ -136,7 +137,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		*/
 
 		// queue of for BFS, add root module config to it
-		root := &ModuleConfig{Config: unified.Root}
+		root := &ModuleConfig{Config: unified.Root, Name: "root"}
 		configsQ := []*ModuleConfig{root}
 
 		// using BFS traverse through all modules in the unified config tree
@@ -159,6 +160,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 					t.addError(err.Error(), dir)
 					continue
 				}
+
+				// set module name
+				resourceConfig.ModuleName = current.Name
 
 				// resolve references
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
@@ -193,13 +197,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			}
 
 			// add all current's children to the queue
-			for childName, childModule := range current.Config.Children {
-				childModuleConfig := &ModuleConfig{
-					Config:           childModule,
-					ParentModuleCall: current.Config.Module.ModuleCalls[childName],
-				}
-				configsQ = append(configsQ, childModuleConfig)
-			}
+			configsQ = append(configsQ, current.getChildConfigs()...)
 		}
 	}
 
@@ -253,7 +251,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	*/
 
 	// queue of for BFS, add root module config to it
-	root := &ModuleConfig{Config: unified.Root}
+	root := &ModuleConfig{Config: unified.Root, Name: "root"}
 	configsQ := []*ModuleConfig{root}
 
 	// using BFS traverse through all modules in the unified config tree
@@ -275,6 +273,9 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			if err != nil {
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: "failed to create ResourceConfig"})
 			}
+
+			// set module name
+			resourceConfig.ModuleName = current.Name
 
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
@@ -301,13 +302,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		}
 
 		// add all current's children to the queue
-		for childName, childModule := range current.Config.Children {
-			childModuleConfig := &ModuleConfig{
-				Config:           childModule,
-				ParentModuleCall: current.Config.Module.ModuleCalls[childName],
-			}
-			configsQ = append(configsQ, childModuleConfig)
-		}
+		configsQ = append(configsQ, current.getChildConfigs()...)
 	}
 
 	// successful
@@ -388,4 +383,18 @@ func (t TerraformDirectoryLoader) processTerraformRegistrySource(req *hclConfigs
 	}
 
 	return pathToModule, nil
+}
+
+// getChildConfigs will get all child configs in a ModuleConfig
+func (m *ModuleConfig) getChildConfigs() []*ModuleConfig {
+	allConfigs := make([]*ModuleConfig, 0)
+	for childName, childModule := range m.Config.Children {
+		childModuleConfig := &ModuleConfig{
+			Config:           childModule,
+			ParentModuleCall: m.Config.Module.ModuleCalls[childName],
+			Name:             childName,
+		}
+		allConfigs = append(allConfigs, childModuleConfig)
+	}
+	return allConfigs
 }

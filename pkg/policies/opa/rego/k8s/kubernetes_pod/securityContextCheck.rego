@@ -27,11 +27,6 @@ package accurics
     checkCorrectAttribute(pod.config.spec)
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
-    pod := input.kubernetes_pod_security_policy[_]
-    podSecurityCheck(pod.config.spec)
-}
-
 checkCorrectAttribute(spec) {
     container := spec.containers[_]
     containerSecurityCheck(container)
@@ -40,11 +35,6 @@ checkCorrectAttribute(spec) {
 checkCorrectAttribute(spec) {
     container := spec.initContainers[_]
     containerSecurityCheck(container)
-}
-
-checkCorrectAttribute(spec) {
-    secContext := spec.securityContext
-    podSecurityCheck(secContext)
 }
 
 containerSecurityCheck(container) {
@@ -57,20 +47,10 @@ containerSecurityCheck(container) {
 }
 
 containerSecurityCheck(container) {
-    not container.{{.param1}}.{{.param}}
+    object.get(container.{{.param1}}, "{{.param}}", "undefined") == "undefined"
 }
 
 containerSecurityCheck(container) {
 	{{.allowed}}
     not container.{{.param1}}.{{.arg1}}.{{.arg2}}
-}
-
-podSecurityCheck(secContext) {
-	{{.not_allowed}}
-    secContext.{{.param}} == {{.value}}
-}
-
-podSecurityCheck(secContext) {
-	{{.not_allowed}}
-    object.get(secContext, "{{.param}}", "undefined") == "undefined"
 }

@@ -3,6 +3,7 @@
     {
       "id": "aws_instance.app",
       "name": "app",
+      "module_name": "root",
       "source": "main.tf",
       "plan_root": "./",
       "line": 5,

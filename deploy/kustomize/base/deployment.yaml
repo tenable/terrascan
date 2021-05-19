@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terrascan
+spec:
+  replicas: 1
+  template:
+    spec:
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          args:
+            - clone
+            - --single-branch
+            - --branch=master
+            - https://github.com/accurics/terrascan.git
+            - /data
+          volumeMounts:
+            - mountPath: /data
+              name: terrascan-data-sync
+      containers:
+      - name: terrascan-server
+        image: accurics/terrascan:1.6.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "0.5"
+        ports:
+        - containerPort: 9010
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          httpGet:
+            path: /health
+            port: 9010
+            scheme: http
+        volumeMounts:
+        - name: terrascan-data-sync
+          mountPath: /home/terrascan/.terrascan
+        - mountPath: /data/config
+          name: terrascan-config
+          readOnly: true
+        command: ["/bin/sh", "-c"]
+        args:
+        - >
+          terrascan server -l debug -c /data/config/config.toml
+      volumes:
+        #add a configmap for the terrascan config.toml file
+        - name: terrascan-config
+          configMap:
+            name: terrascan-config
+        - name: terrascan-data-sync
+          emptyDir: {}

@@ -7,6 +7,7 @@ results:
           category: Network Security
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 39
@@ -17,6 +18,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 39
@@ -27,6 +29,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi6
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 82
@@ -37,6 +40,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi4
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 55
@@ -47,6 +51,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi5
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 69
@@ -57,6 +62,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi1
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 10
@@ -67,6 +73,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi2
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 25
@@ -77,6 +84,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 39
@@ -87,6 +95,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi6
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 82
@@ -97,6 +106,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi4
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 55
@@ -107,6 +117,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi5
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 69
@@ -117,6 +128,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi2
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 25
@@ -127,6 +139,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 39
@@ -137,6 +150,7 @@ results:
           category: Data Security
           resource_name: PtShGgAdi3
           resource_type: aws_db_instance
+          module_name: root
           file: main.tf
           root_path: ./
           line: 39

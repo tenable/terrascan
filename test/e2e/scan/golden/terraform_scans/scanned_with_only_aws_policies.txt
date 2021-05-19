@@ -9,6 +9,7 @@
         "category": "Encryption \u0026 KeyManagement",
         "resource_name": "awsAmiEncrypted",
         "resource_type": "aws_ami",
+        "module_name": "root",
         "file": "main.tf",
         "plan_root": "./",
         "line": 5

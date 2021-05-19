@@ -3,6 +3,7 @@
     {
       "id": "aws_s3_bucket.bucket",
       "name": "bucket",
+      "module_name": "m1",
       "source": "modules/m1/main.tf",
       "plan_root": "./",
       "line": 20,
@@ -16,6 +17,7 @@
     {
       "id": "aws_s3_bucket.bucket",
       "name": "bucket",
+      "module_name": "m4",
       "source": "modules/m4/main.tf",
       "plan_root": "./",
       "line": 11,
@@ -29,6 +31,7 @@
     {
       "id": "aws_s3_bucket.bucket4a",
       "name": "bucket4a",
+      "module_name": "m4a",
       "source": "modules/m4/modules/m4a/main.tf",
       "plan_root": "./",
       "line": 20,
@@ -42,6 +45,7 @@
     {
       "id": "aws_s3_bucket.bucket",
       "name": "bucket",
+      "module_name": "root",
       "source": "modules/m4/main.tf",
       "plan_root": "modules/m4",
       "line": 11,

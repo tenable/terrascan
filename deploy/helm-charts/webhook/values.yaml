@@ -1,0 +1,20 @@
+terrascan_webhook_key: terrakey
+name: terrascan
+webhook:
+  name: webhook.terrascan.io
+  failurePolicy: Fail
+  sideEffects: None
+  admissionReviewVersions:
+    - "v1"
+    - "v1beta1"
+  apiGroups:
+    - "apps"
+    - ""
+  resources:
+    - "deployments"
+    - "pods"
+  apiVersions:
+    - "*"
+  operations:
+    - CREATE
+    - UPDATE

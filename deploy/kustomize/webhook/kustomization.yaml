@@ -1,0 +1,7 @@
+resources:
+  - ../server-tls
+
+namespace: <TERRASCAN_NAMESPACE>
+
+patchesStrategicMerge:
+  - deployment-env.yaml

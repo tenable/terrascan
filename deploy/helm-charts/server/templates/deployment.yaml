@@ -43,34 +43,39 @@ spec:
             - "-l"
             - "debug"
 {{- end }}
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
             - "-c"
             - "/etc/config/terrascan-config"
 {{- end }}
           env:
             - name: "K8S_WEBHOOK_API_KEY"
-              value: {{ .Values.terrascan_api_key}}
+              value: {{ .Values.terrascan_webhook_key}}
           volumeMounts:
             - name: cert-volume
               mountPath: /etc/certs
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+            - name: ssh-volume
+              mountPath: /home/terrascan/.ssh
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
             - name: config-volume
               mountPath: /etc/config
 {{- end }}
             - name: terrascan-data-sync
               mountPath: /home/terrascan/.terrascan
-
       volumes:
         - name: cert-volume
           secret:
-            secretName: {{ .Values.secret_name }}
-{{- $globconfig := .Files.Glob "../data/config.toml" }}
+            secretName: {{ .Values.cert_secret_name }}
+        - name: ssh-volume
+          secret:
+            secretName: {{ .Values.ssh_secret_name }}
+            optional: true
+{{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
         - name: config-volume
           configMap:
-            configMapName: {{ .Values.configname }}
+            configMapName: {{ .Values.config_name }}
 {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: terrascan-data-sync

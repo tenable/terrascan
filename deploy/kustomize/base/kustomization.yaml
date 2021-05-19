@@ -1,0 +1,12 @@
+resources:
+  - deployment.yaml
+
+namespace: <TERRASCAN_NAMESPACE>
+
+commonLabels:
+  app: terrascan
+
+configMapGenerator:
+  - name: terrascan-config
+    files:
+      - config.toml=config/config.toml

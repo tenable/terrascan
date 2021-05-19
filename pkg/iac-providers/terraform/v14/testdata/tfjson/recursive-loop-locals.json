@@ -3,6 +3,7 @@
     {
       "id": "aws_iam_user.lb",
       "name": "lb",
+      "module_name": "dummy",
       "source": "dummy/main.tf",
       "plan_root": "./",
       "line": 13,
