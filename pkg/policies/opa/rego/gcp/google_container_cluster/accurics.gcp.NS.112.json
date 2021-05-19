@@ -1,6 +1,8 @@
 {
     "name": "masterAuthEnabled",
     "file": "masterAuthEnabled.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters.",

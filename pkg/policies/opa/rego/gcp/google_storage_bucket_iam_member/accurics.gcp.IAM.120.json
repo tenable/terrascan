@@ -1,6 +1,8 @@
 {
     "name": "checkNoPublicAccess",
     "file": "checkNoPublicAccess.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_storage_bucket_iam_member",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Cloud Storage bucket is not anonymously or publicly Accessible.",

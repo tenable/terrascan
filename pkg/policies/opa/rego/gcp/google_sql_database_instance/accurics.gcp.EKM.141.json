@@ -1,6 +1,8 @@
 {
     "name": "checkRequireSSLEnabled",
     "file": "checkDatabaseSettings.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_sql_database_instance",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Cloud SQL database instance requires all incoming connections to use SSL",

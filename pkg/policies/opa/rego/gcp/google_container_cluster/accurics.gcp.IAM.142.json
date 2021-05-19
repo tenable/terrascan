@@ -1,6 +1,8 @@
 {
     "name": "legacyAuthEnabled",
     "file": "legacyAuthEnabled.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters.",

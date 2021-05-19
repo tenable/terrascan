@@ -1,6 +1,8 @@
 {
     "name": "rsaSha1NotUsedDNSSEC",
     "file": "rsaSha1NotUsedDNSSEC.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_dns_managed_zone",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that RSASHA1 is not used for the zone-signing and key-signing keys in Cloud DNS DNSSEC.",

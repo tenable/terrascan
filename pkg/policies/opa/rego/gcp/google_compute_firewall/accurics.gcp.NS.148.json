@@ -1,6 +1,8 @@
 {
     "name": "port22Open",
     "file": "portIsOpen.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_firewall",
     "template_args": {
         "name": "port22Open",
         "port_number": "22"
