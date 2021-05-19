@@ -321,9 +321,18 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 			// figure out path sub module directory, if it's remote then download it locally
 			var pathToModule string
 			var err error
+			var moduleDirDiags hcl.Diagnostics
 			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 
 				pathToModule = t.processLocalSource(req)
+				// verify whether the module source directory has any .tf config files
+				if !t.parser.IsConfigDir(pathToModule) {
+					moduleDirDiags = append(moduleDirDiags, &hcl.Diagnostic{
+						Severity: hcl.DiagError,
+						Summary:  "Invalid module config directory",
+						Detail:   fmt.Sprintf("Module directory '%s' has no terraform config files for module %s", pathToModule, req.Name),
+					})
+				}
 				zap.S().Debugf("processing local module %q", pathToModule)
 			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
 				// temp dir to download the remote repo
@@ -348,6 +357,7 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 			subMod, diags := t.parser.LoadConfigDir(pathToModule)
 			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))
 			versionI++
+			diags = append(diags, moduleDirDiags...)
 			return subMod, version, diags
 		},
 	))

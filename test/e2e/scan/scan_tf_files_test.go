@@ -214,5 +214,23 @@ var _ = Describe("Scan is run for terraform files", func() {
 				})
 			})
 		})
+
+		Context("when module source path does not exists", func() {
+			When("output type is json and ", func() {
+				It("should display violations in json format and should have scan_errors", func() {
+					iacDir := filepath.Join(iacRootRelPath, "terraform_module", "invalid_source")
+					scanArgs := []string{"-i", "terraform", "-d", iacDir, "-o", "json"}
+					scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(tfGoldenRelPath, "scanned_terraform_module_source_invalid_json.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+				})
+			})
+			When("output type is json and --non-recursive flag is", func() {
+				It("should display violations in json format and should have scan_errors", func() {
+					iacDir := filepath.Join(iacRootRelPath, "terraform_module", "invalid_source")
+					scanArgs := []string{"-i", "terraform", "-d", iacDir, "-o", "json"}
+					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
+				})
+			})
+		})
 	})
 })

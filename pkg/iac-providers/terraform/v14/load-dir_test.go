@@ -40,11 +40,11 @@ func TestLoadIacDir(t *testing.T) {
 `, testDataDir, emptyTfFilePath, emptyTfFilePath)
 
 	errStringInvalidModuleConfigs := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read., and 1 other diagnostic(s)
 `, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
 
 	errStringDependsOnDir := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read., and 1 other diagnostic(s)
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read., and 3 other diagnostic(s)
 `, filepath.Join(testDataDir, "depends_on", "live", "log"))
 
 	testDirPath1 := "not-there"
