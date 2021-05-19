@@ -1,6 +1,8 @@
 {
     "name": "defStorageAccessDisabled",
     "file": "defStorageAccessDisabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_storage_account_network_rules",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure default network access rule for Storage Accounts is set to deny.",

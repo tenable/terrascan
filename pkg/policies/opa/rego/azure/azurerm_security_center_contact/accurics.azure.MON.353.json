@@ -1,6 +1,8 @@
 {
     "name": "emailAlertsEnabled",
     "file": "emailAlertsEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_security_center_contact",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that 'Send email notification for high severity alerts' is set to 'On'",

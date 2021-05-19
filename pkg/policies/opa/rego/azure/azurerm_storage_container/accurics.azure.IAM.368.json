@@ -1,6 +1,8 @@
 {
     "name": "reme_checkStorageContainerAccess",
     "file": "checkStorageContainerAccess.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_storage_container",
     "template_args": {
         "prefix": "reme_"
     },

@@ -1,6 +1,8 @@
 {
     "name": "networkPolicyEnabled",
     "file": "networkPolicyEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_kubernetes_cluster",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure AKS cluster has Network Policy configured.",

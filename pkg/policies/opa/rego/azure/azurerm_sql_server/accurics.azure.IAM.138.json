@@ -1,6 +1,8 @@
 {
     "name": "reme_sqlServerPredictableAccount",
     "file": "sqlServerPredictableAccount.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_server",
     "template_args": {
         "prefix": "reme_"
     },
