@@ -1,6 +1,8 @@
 {
     "name": "defaultNamespaceUsed2",
     "file": "defaultNamespaceUsed.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_namespace",
     "template_args": {
         "generate_name": "generate_name",
         "name": "defaultNamespaceUsed2",

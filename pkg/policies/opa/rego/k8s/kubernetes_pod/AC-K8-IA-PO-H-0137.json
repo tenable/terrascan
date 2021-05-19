@@ -1,6 +1,8 @@
 {
     "name": "disallowedSysCalls",
     "file": "disallowedSysCalls.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
     "template_args": {
         "name": "disallowedSysCalls",
         "prefix": "",

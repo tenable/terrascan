@@ -1,6 +1,8 @@
 {
     "name": "allowedProcMount",
     "file": "allowedProcMount.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
     "template_args": {
         "name": "allowedProcMount",
         "prefix": "",
