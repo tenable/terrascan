@@ -44,8 +44,14 @@ func TestLoadIacDir(t *testing.T) {
 `, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
 
 	errStringDependsOnDir := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read., and 1 other diagnostic(s)
-`, filepath.Join(testDataDir, "depends_on", "live", "log"))
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
+`, filepath.Join(testDataDir, "depends_on", "live", "log"), filepath.Join(testDataDir, "depends_on", "live", "security"))
+
+	errStringModuleSourceInvalid := fmt.Sprintf(`failed to build unified config. errors:
+<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
+<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
+`, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
 
 	testDirPath1 := "not-there"
 	testDirPath2 := filepath.Join(testDataDir, "testfile")
@@ -119,11 +125,19 @@ func TestLoadIacDir(t *testing.T) {
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
 				fmt.Errorf(errStringDependsOnDir),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
+				fmt.Errorf(errStringModuleSourceInvalid),
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
+		},
+		{
+			name:    "invalid module source directory",
+			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
+			tfv14:   TfV14{},
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)),
 		},
 	}
 
