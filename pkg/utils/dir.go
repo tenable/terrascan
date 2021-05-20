@@ -26,7 +26,7 @@ func GenerateTempDir() string {
 	return filepath.Join(os.TempDir(), GenRandomString(6))
 }
 
-// Checks wether the provided directory exists or not
+// IsDirExists checks wether the provided directory exists or not
 func IsDirExists(dir string) bool {
 	_, err := os.Stat(dir)
 	if os.IsNotExist(err) {
