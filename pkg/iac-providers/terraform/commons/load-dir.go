@@ -348,7 +348,7 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 			}
 
 			// verify whether the module source directory has any .tf config files
-			if !t.parser.IsConfigDir(pathToModule) {
+			if utils.IsDirExists(pathToModule) && !t.parser.IsConfigDir(pathToModule) {
 				moduleDirDiags = append(moduleDirDiags, &hcl.Diagnostic{
 					Severity: hcl.DiagError,
 					Summary:  "Invalid module config directory",

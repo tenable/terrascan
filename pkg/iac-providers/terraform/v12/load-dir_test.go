@@ -49,7 +49,7 @@ func TestLoadIacDir(t *testing.T) {
 `, multipleProvidersDir, filepath.Join(multipleProvidersDir, "b.tf"), filepath.Join(multipleProvidersDir, "a.tf"))
 
 	errStringInvalidModuleConfigs := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module sub-cloudfront
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
 `, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
 
 	errStringDestroyProvisioners := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:

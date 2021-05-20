@@ -40,12 +40,12 @@ func TestLoadIacDir(t *testing.T) {
 `, testDataDir, emptyTfFilePath, emptyTfFilePath)
 
 	errStringInvalidModuleConfigs := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module sub-cloudfront
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
 `, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
 
 	errStringDependsOnDir := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module log
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module security
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
+<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
 `, filepath.Join(testDataDir, "depends_on", "live", "log"), filepath.Join(testDataDir, "depends_on", "live", "security"))
 
 	errStringModuleSourceInvalid := fmt.Sprintf(`failed to build unified config. errors:
