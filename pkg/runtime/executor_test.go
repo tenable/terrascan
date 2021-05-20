@@ -68,7 +68,7 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string, scanRules, skipRules, categories []string, severity string) error {
+func (m MockPolicyEngine) Init(input string, filter policy.PreLoadFilter) error {
 	return m.err
 }
 
@@ -82,7 +82,7 @@ func (m MockPolicyEngine) Configure() error {
 	return m.err
 }
 
-func (m MockPolicyEngine) Evaluate(input policy.EngineInput) (out policy.EngineOutput, err error) {
+func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreScanFilter) (out policy.EngineOutput, err error) {
 	return out, m.err
 }
 

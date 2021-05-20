@@ -18,11 +18,27 @@ package policy
 
 // Engine Policy Engine interface
 type Engine interface {
-	//Init method to initialize engine with policy path, scan and skip rules, and severity level
-	Init(string, []string, []string, []string, string) error
-	FilterRules(string, []string, []string, []string, string)
+	//Init method to initialize engine with policy path, and a pre load filter
+	Init(string, PreLoadFilter) error
 	Configure() error
-	Evaluate(EngineInput) (EngineOutput, error)
+	Evaluate(EngineInput, PreScanFilter) (EngineOutput, error)
 	GetResults() EngineOutput
 	Release() error
+}
+
+// FilterSpecification defines a function that
+// RegoMetadata filter specifications should implement
+type FilterSpecification interface {
+	IsSatisfied(r *RegoMetadata) bool
+}
+
+// PreLoadFilter defines functions that pre load filter should implement
+type PreLoadFilter interface {
+	IsAllowed(r *RegoMetadata) bool
+	IsFiltered(r *RegoMetadata) bool
+}
+
+// PreScanFilter defined function that a pre scan filter should implement
+type PreScanFilter interface {
+	Filter(rmap map[string]*RegoData, input EngineInput) map[string]*RegoData
 }

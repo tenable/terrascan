@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 )
 
@@ -24,7 +25,7 @@ func TestFilterRules(t *testing.T) {
 		args        args
 		assert      bool
 		regoMapSize int
-		regoDataMap map[string]*RegoData
+		regoDataMap map[string]*policy.RegoData
 	}{
 		{
 			name:        "no scan and skip rules",
@@ -212,7 +213,7 @@ func TestFilterRulesWithEquallyDividedSeverity(t *testing.T) {
 		args        args
 		assert      bool
 		regoMapSize int
-		regoDataMap map[string]*RegoData
+		regoDataMap map[string]*policy.RegoData
 	}{
 		{
 			name: "no scan and skip rules supplied, with desired severity: low and rules severities: low, medium, high",
@@ -322,17 +323,17 @@ func TestFilterRulesWithEquallyDividedSeverity(t *testing.T) {
 }
 
 // helper func to generate test rego data map of given size
-func getTestRegoDataMap(size int) map[string]*RegoData {
-	testRegoDataMap := make(map[string]*RegoData)
+func getTestRegoDataMap(size int) map[string]*policy.RegoData {
+	testRegoDataMap := make(map[string]*policy.RegoData)
 	for i := 0; i < size; i++ {
 		ruleID := fmt.Sprintf("Rule.%d", i)
-		testRegoDataMap[ruleID] = &RegoData{}
+		testRegoDataMap[ruleID] = &policy.RegoData{}
 	}
 	return testRegoDataMap
 }
 
 // helper func to generate test rego data map of given size with severity levels attached in equal proportion
-func getTestRegoDataMapWithEquallyDividedSeverity(size int, severities []string) map[string]*RegoData {
+func getTestRegoDataMapWithEquallyDividedSeverity(size int, severities []string) map[string]*policy.RegoData {
 
 	severitytypes := len(severities)
 
@@ -342,11 +343,11 @@ func getTestRegoDataMapWithEquallyDividedSeverity(size int, severities []string)
 
 	severitypartitionsizes := size / severitytypes
 	severitycounter := 0
-	testRegoDataMap := make(map[string]*RegoData)
+	testRegoDataMap := make(map[string]*policy.RegoData)
 
 	for i := 0; i < size; i++ {
 		ruleID := fmt.Sprintf("Rule.%d", i)
-		testRegoDataMap[ruleID] = &RegoData{Metadata: RegoMetadata{Severity: severities[severitycounter]}}
+		testRegoDataMap[ruleID] = &policy.RegoData{Metadata: policy.RegoMetadata{Severity: severities[severitycounter]}}
 		if (i+1)%severitypartitionsizes == 0 {
 			severitycounter = severitycounter + 1
 		}
@@ -356,7 +357,7 @@ func getTestRegoDataMapWithEquallyDividedSeverity(size int, severities []string)
 }
 
 // helper func to generate test rego data map of given size with required severity
-func getTestRegoDataMapWithSeverity(size int, severity string) map[string]*RegoData {
+func getTestRegoDataMapWithSeverity(size int, severity string) map[string]*policy.RegoData {
 	testRegoDataMap := getTestRegoDataMap(size)
 
 	for _, regoData := range testRegoDataMap {
@@ -365,7 +366,7 @@ func getTestRegoDataMapWithSeverity(size int, severity string) map[string]*RegoD
 	return testRegoDataMap
 }
 
-func getTestRegoDataMapWithCategory(size int, category string) map[string]*RegoData {
+func getTestRegoDataMapWithCategory(size int, category string) map[string]*policy.RegoData {
 	testRegoDataMap := getTestRegoDataMap(size)
 
 	for _, regoData := range testRegoDataMap {
@@ -375,24 +376,24 @@ func getTestRegoDataMapWithCategory(size int, category string) map[string]*RegoD
 }
 
 // helper func to generate test rego data map of given size with high severity
-func getTestRegoDataMapHighSeverity(size int) map[string]*RegoData {
+func getTestRegoDataMapHighSeverity(size int) map[string]*policy.RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.HighSeverity)
 }
 
 // helper func to generate test rego data map of given size with medium severity
-func getTestRegoDataMapMediumSeverity(size int) map[string]*RegoData {
+func getTestRegoDataMapMediumSeverity(size int) map[string]*policy.RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.MediumSeverity)
 }
 
 // helper func to generate test rego data map of given size with low severity
-func getTestRegoDataMapLowSeverity(size int) map[string]*RegoData {
+func getTestRegoDataMapLowSeverity(size int) map[string]*policy.RegoData {
 	return getTestRegoDataMapWithSeverity(size, utils.LowSeverity)
 }
 
-func getTestRegoDataMapCVCategory(size int) map[string]*RegoData {
+func getTestRegoDataMapCVCategory(size int) map[string]*policy.RegoData {
 	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[1])
 }
 
-func getTestRegoDataMapDPCategory(size int) map[string]*RegoData {
+func getTestRegoDataMapDPCategory(size int) map[string]*policy.RegoData {
 	return getTestRegoDataMapWithCategory(size, utils.AcceptedCategories[7])
 }
