@@ -7,16 +7,16 @@ import (
 
 // PolicyTypeFilterSpecification is policy type based Filter Spec
 type PolicyTypeFilterSpecification struct {
-	policyType string
+	policyTypes []string
 }
 
 // IsSatisfied implementation for policy type based Filter spec
 func (p PolicyTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	// if policy type is not present for metadata, return true
-	if len(r.PolicyType) < 1 {
+	// if resource type is not present for metadata, return true
+	if len(r.PolicyType) < 1 || len(p.policyTypes) < 1 {
 		return true
 	}
-	return p.policyType == r.PolicyType
+	return utils.CheckPolicyType(r.PolicyType, p.policyTypes)
 }
 
 // ResourceTypeFilterSpecification is resource type based Filter Spec

@@ -35,7 +35,6 @@ type Executor struct {
 	filePath      string
 	dirPath       string
 	policyPath    []string
-	cloudType     []string
 	iacType       string
 	iacVersion    string
 	scanRules     []string
@@ -44,17 +43,18 @@ type Executor struct {
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
 	categories    []string
+	policyTypes   []string
 	severity      string
 	nonRecursive  bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
 	e = &Executor{
 		filePath:     filePath,
 		dirPath:      dirPath,
 		policyPath:   policyPath,
-		cloudType:    cloudType,
+		policyTypes:  policyTypes,
 		iacType:      iacType,
 		iacVersion:   iacVersion,
 		iacProviders: make([]iacProvider.IacProvider, 0),
@@ -81,6 +81,10 @@ func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPa
 
 	if len(categories) > 0 {
 		e.categories = categories
+	}
+
+	if len(policyTypes) > 0 {
+		e.policyTypes = policyTypes
 	}
 
 	// initialize executor
@@ -149,7 +153,7 @@ func (e *Executor) Init() error {
 		}
 
 		// create a new RegoMetadata pre load filter
-		preloadFilter := filters.NewRegoMetadataPreLoadFilter(e.scanRules, e.skipRules, e.categories, e.severity)
+		preloadFilter := filters.NewRegoMetadataPreLoadFilter(e.scanRules, e.skipRules, e.categories, e.policyTypes, e.severity)
 
 		// initialize the engine
 		if err := engine.Init(policyPath, preloadFilter); err != nil {

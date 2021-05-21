@@ -9,22 +9,25 @@ type RegoMetadataPreLoadFilter struct {
 	scanRules   []string
 	skipRules   []string
 	categories  []string
+	policyTypes []string
 	severity    string
 	filterSpecs []policy.FilterSpecification
 }
 
 // NewRegoMetadataPreLoadFilter is a constructor func for RegoMetadataPreLoadFilter
-func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories []string, severity string) *RegoMetadataPreLoadFilter {
+func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories, policyTypes []string, severity string) *RegoMetadataPreLoadFilter {
 	return &RegoMetadataPreLoadFilter{
-		scanRules:  scanRules,
-		skipRules:  skipRules,
-		categories: categories,
-		severity:   severity,
+		scanRules:   scanRules,
+		skipRules:   skipRules,
+		categories:  categories,
+		policyTypes: policyTypes,
+		severity:    severity,
 		// add applicable filter specs to the list
 		filterSpecs: []policy.FilterSpecification{
 			RerefenceIDsFilterSpecification{scanRules},
 			CategoryFilterSpecification{categories: categories},
 			SeverityFilterSpecification{severity: severity},
+			PolicyTypeFilterSpecification{policyTypes: policyTypes},
 		},
 	}
 }

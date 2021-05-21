@@ -59,7 +59,7 @@ func TestRegoMetadataPreLoadFilterIsFiltered(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := NewRegoMetadataPreLoadFilter(nil, tt.fields.skipRules, nil, "")
+			r := NewRegoMetadataPreLoadFilter(nil, tt.fields.skipRules, nil, nil, "")
 			if got := r.IsFiltered(tt.args.regoMetadata); got != tt.want {
 				t.Errorf("RegoMetadataPreLoadFilter.IsFiltered() = %v, want %v", got, tt.want)
 			}
@@ -168,7 +168,7 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := NewRegoMetadataPreLoadFilter(tt.fields.scanRules, nil, tt.fields.categories, tt.fields.severity)
+			r := NewRegoMetadataPreLoadFilter(tt.fields.scanRules, nil, tt.fields.categories, nil, tt.fields.severity)
 			if got := r.IsAllowed(tt.args.regoMetadata); got != tt.want {
 				t.Errorf("RegoMetadataPreLoadFilter.IsAllowed() = %v, want %v", got, tt.want)
 			}
