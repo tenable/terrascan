@@ -269,7 +269,7 @@ func (e *Executor) findViolations(results *Output) error {
 	for _, engine := range e.policyEngines {
 		go func(eng policy.Engine) {
 			preScanFilter := filters.RegoDataFilter{}
-			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig}, preScanFilter)
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig}, &preScanFilter)
 			evalResultChan <- engineEvalResult{err, output}
 		}(engine)
 	}

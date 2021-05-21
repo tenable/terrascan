@@ -30,7 +30,7 @@ func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories []string, sev
 }
 
 // IsFiltered checks whether a RegoMetada should be filtered or not
-func (r RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata) bool {
+func (r *RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata) bool {
 	// if length of skip rules is RegoMetada is not filtered
 	if len(r.skipRules) < 1 {
 		return false
@@ -40,7 +40,7 @@ func (r RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata)
 }
 
 // IsAllowed checks whether a RegoMetada should be allowed or not
-func (r RegoMetadataPreLoadFilter) IsAllowed(regoMetadata *policy.RegoMetadata) bool {
+func (r *RegoMetadataPreLoadFilter) IsAllowed(regoMetadata *policy.RegoMetadata) bool {
 	andSpec := AndFilterSpecification{r.filterSpecs}
 	return andSpec.IsSatisfied(regoMetadata)
 }
@@ -49,9 +49,9 @@ func (r RegoMetadataPreLoadFilter) IsAllowed(regoMetadata *policy.RegoMetadata) 
 type RegoDataFilter struct{}
 
 // Filter func filters based on resource type
-func (r RegoDataFilter) Filter(rmap map[string]*policy.RegoData, input policy.EngineInput) map[string]*policy.RegoData {
+func (r *RegoDataFilter) Filter(rmap map[string]*policy.RegoData, input policy.EngineInput) map[string]*policy.RegoData {
 	// if resource config is empty, return original map
-	if len(*input.InputData) < 0 {
+	if len(*input.InputData) < 1 {
 		return rmap
 	}
 	tempMap := make(map[string]*policy.RegoData)

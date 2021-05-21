@@ -12,7 +12,8 @@ type PolicyTypeFilterSpecification struct {
 
 // IsSatisfied implementation for policy type based Filter spec
 func (p PolicyTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	if len(p.policyType) < 1 {
+	// if policy type is not present for metadata, return true
+	if len(r.PolicyType) < 1 {
 		return true
 	}
 	return p.policyType == r.PolicyType
@@ -25,7 +26,8 @@ type ResourceTypeFilterSpecification struct {
 
 // IsSatisfied implementation for resource type based Filter spec
 func (rs ResourceTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	if len(rs.resourceType) < 1 {
+	// if resource type is not present for metadata, return true
+	if len(r.ResourceType) < 1 {
 		return true
 	}
 	return rs.resourceType == r.ResourceType
@@ -38,9 +40,6 @@ type RerefenceIDFilterSpecification struct {
 
 // IsSatisfied implementation for reference ID based Filter spec
 func (rs RerefenceIDFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	if len(rs.ReferenceID) < 1 {
-		return true
-	}
 	return rs.ReferenceID == r.ReferenceID
 }
 
