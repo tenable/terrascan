@@ -27,7 +27,7 @@ func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories, policyTypes 
 			RerefenceIDsFilterSpecification{scanRules},
 			CategoryFilterSpecification{categories: categories},
 			SeverityFilterSpecification{severity: severity},
-			PolicyTypeFilterSpecification{policyTypes: policyTypes},
+			PolicyTypesFilterSpecification{policyTypes: policyTypes},
 		},
 	}
 }

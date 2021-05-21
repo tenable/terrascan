@@ -5,13 +5,13 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 )
 
-// PolicyTypeFilterSpecification is policy type based Filter Spec
-type PolicyTypeFilterSpecification struct {
+// PolicyTypesFilterSpecification is policy type based Filter Spec
+type PolicyTypesFilterSpecification struct {
 	policyTypes []string
 }
 
 // IsSatisfied implementation for policy type based Filter spec
-func (p PolicyTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
+func (p PolicyTypesFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
 	// if resource type is not present for metadata, return true
 	if len(r.PolicyType) < 1 || len(p.policyTypes) < 1 {
 		return true

@@ -72,18 +72,20 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 	testCategory := "Category.1"
 
 	type fields struct {
-		scanRules  []string
-		categories []string
-		severity   string
+		scanRules   []string
+		categories  []string
+		policyTypes []string
+		severity    string
 	}
 	type args struct {
 		regoMetadata *policy.RegoMetadata
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
+		name          string
+		fields        fields
+		args          args
+		want          bool
+		noFilterSpecs bool
 	}{
 		{
 			// when no values are present, all regometadata are allowed
@@ -165,10 +167,70 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 			},
 			want: true,
 		},
+		{
+			name: "only policyTypes specified, regometadata policy type doesn't match",
+			fields: fields{
+				policyTypes: []string{"k8s"},
+			},
+			args: args{
+				regoMetadata: &policy.RegoMetadata{
+					PolicyType: "aws",
+				},
+			},
+			want: false,
+		},
+		{
+			name: "only policyTypes specified, regometadata policy matches one of the policy specified",
+			fields: fields{
+				policyTypes: []string{"azure"},
+			},
+			args: args{
+				regoMetadata: &policy.RegoMetadata{
+					PolicyType: "azure",
+				},
+			},
+			want: true,
+		},
+		{
+			name: "all fields specified, regometadata matches all the values specified",
+			fields: fields{
+				scanRules:   []string{testRuleID, "Rule.2"},
+				categories:  []string{testCategory, "Category.2"},
+				policyTypes: []string{"k8s", "aws"},
+				severity:    utils.HighSeverity,
+			},
+			args: args{
+				regoMetadata: &policy.RegoMetadata{
+					ReferenceID: testRuleID,
+					Category:    testCategory,
+					PolicyType:  "aws",
+					Severity:    utils.HighSeverity,
+				},
+			},
+			want: true,
+		},
+		{
+			name: "all fields specified, regometadata doesn't match with one of the values specified",
+			fields: fields{
+				scanRules:   []string{testRuleID, "Rule.2"},
+				categories:  []string{testCategory, "Category.2"},
+				policyTypes: []string{"k8s", "aws"},
+				severity:    utils.HighSeverity,
+			},
+			args: args{
+				regoMetadata: &policy.RegoMetadata{
+					ReferenceID: testRuleID,
+					Category:    testCategory,
+					PolicyType:  "gcp",
+					Severity:    utils.HighSeverity,
+				},
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := NewRegoMetadataPreLoadFilter(tt.fields.scanRules, nil, tt.fields.categories, nil, tt.fields.severity)
+			r := NewRegoMetadataPreLoadFilter(tt.fields.scanRules, nil, tt.fields.categories, tt.fields.policyTypes, tt.fields.severity)
 			if got := r.IsAllowed(tt.args.regoMetadata); got != tt.want {
 				t.Errorf("RegoMetadataPreLoadFilter.IsAllowed() = %v, want %v", got, tt.want)
 			}
@@ -178,9 +240,27 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 
 func TestRegoDataFilter_Filter(t *testing.T) {
 	testRegoDataMap := map[string]*policy.RegoData{
-		"aws_s3_bucket":    {},
-		"aws_ec2_instance": {},
-		"kubernetes_pod":   {},
+		"Rule.1": {},
+		"Rule.2": {},
+		"Rule.3": {},
+	}
+
+	testRegoDataMapWithResourceType := map[string]*policy.RegoData{
+		"Rule.1": {
+			Metadata: policy.RegoMetadata{
+				ResourceType: "kubernetes_pod",
+			},
+		},
+		"Rule.2": {
+			Metadata: policy.RegoMetadata{
+				ResourceType: "ec2_instance",
+			},
+		},
+		"Rule.3": {
+			Metadata: policy.RegoMetadata{
+				ResourceType: "kubernetes_pod",
+			},
+		},
 	}
 
 	type args struct {
@@ -201,6 +281,41 @@ func TestRegoDataFilter_Filter(t *testing.T) {
 				},
 			},
 			want: testRegoDataMap,
+		},
+		{
+			name: "config input has resources but regometadata doesn't have resource type set",
+			args: args{
+				rmap: testRegoDataMap,
+				input: policy.EngineInput{
+					InputData: &output.AllResourceConfigs{
+						"pod": []output.ResourceConfig{},
+					},
+				},
+			},
+			want: testRegoDataMap,
+		},
+		{
+			name: "config input has resources but there are no policies matching the type",
+			args: args{
+				rmap: testRegoDataMapWithResourceType,
+				input: policy.EngineInput{
+					InputData: &output.AllResourceConfigs{
+						"kubernetes_pod": []output.ResourceConfig{},
+					},
+				},
+			},
+			want: map[string]*policy.RegoData{
+				"Rule.1": {
+					Metadata: policy.RegoMetadata{
+						ResourceType: "kubernetes_pod",
+					},
+				},
+				"Rule.3": {
+					Metadata: policy.RegoMetadata{
+						ResourceType: "kubernetes_pod",
+					},
+				},
+			},
 		},
 	}
 	for _, tt := range tests {
