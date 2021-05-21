@@ -1,5 +1,6 @@
 package utils
 
+// CheckPolicyType checks if supplied policy type matches desired policy types
 func CheckPolicyType(rulePolicyType string, desiredPolicyTypes []string) bool {
 	normDesiredPolicyTypes := make(map[string]bool, len(desiredPolicyTypes))
 	normRulePolicyType := EnsureUpperCaseTrimmed(rulePolicyType)
