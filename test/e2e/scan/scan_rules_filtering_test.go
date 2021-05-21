@@ -262,4 +262,29 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			})
 		})
 	})
+	Describe("resource specific rule prioritising", func() {
+		resourcePrioritisingGoldenRelPath := filepath.Join("golden", "resource_prioritising")
+		resourcePrioritisingIacRelPath := filepath.Join(iacRootRelPath, "resource_prioritising")
+		Context("resource max severity set to Low in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set")
+			It("should display violations with change priority to Low for the resource and exit with status code 3", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set", "terraform_file_setting_max_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_set")
+			It("should display violations with change priority to High for the resource and exit with status code 3", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "terraform_file_setting_min_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource max severity set to none in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set_none")
+			It("should skip all violations for the resource and exit with status code 0 since only one resource is in tf file", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set_none", "terraform_file_setting_max_severity_none.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+	})
 })

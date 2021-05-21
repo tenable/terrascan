@@ -82,7 +82,9 @@ const (
       config:
         bucket: ${module.m3.fullbucketname}
         policy: ${module.m2.fullbucketpolicy}
-      skip_rules: []`
+      skip_rules: []
+      maxseverity: ""
+      minseverity: ""`
 
 	scanTestOutputYAML = `results:
     violations:

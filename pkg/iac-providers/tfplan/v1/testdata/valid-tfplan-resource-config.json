@@ -28,7 +28,9 @@
         ],
         "website": []
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     },
     {
       "id": "aws_s3_bucket.demo-s3",
@@ -58,7 +60,9 @@
         ],
         "website": []
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }

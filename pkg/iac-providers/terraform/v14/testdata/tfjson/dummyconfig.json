@@ -16,7 +16,9 @@
           "region": "${var.region}"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "type1": [
@@ -43,7 +45,9 @@
         "test2": 5,
         "test3": "${1 + 2}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "type2": [
@@ -66,7 +70,9 @@
           "thing": "${[for x in local.arr: x * 2]}"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "type3": [
@@ -83,7 +89,9 @@
         "heredoc2": "\t\tAnother heredoc, that\n\t\tdoesn't remove indentation\n\t\tlocal.other.3\n\t\t%{if true ? false : true}\"gotcha\"\\n%{else}4%{endif}\n",
         "simple": "${4 - 2}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }

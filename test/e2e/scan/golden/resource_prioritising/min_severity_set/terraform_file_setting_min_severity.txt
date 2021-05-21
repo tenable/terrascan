@@ -1,0 +1,56 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Protection",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
+        "module_name": "root",
+        "file": "main.tf",
+        "plan_root": "./",
+        "line": 1
+      },
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Protection",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
+        "module_name": "root",
+        "file": "main.tf",
+        "plan_root": "./",
+        "line": 1
+      },
+      {
+        "rule_name": "dbInstanceLoggingDisabled",
+        "description": "Ensure AWS RDS instances have logging enabled.",
+        "rule_id": "AC_AWS_076",
+        "severity": "HIGH",
+        "category": "Logging and Monitoring",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
+        "module_name": "root",
+        "file": "main.tf",
+        "plan_root": "./",
+        "line": 1
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/min_severity_set",
+      "iac_type": "terraform",
+      "scanned_at": "2021-05-21 15:35:14.458679 +0000 UTC",
+      "policies_validated": 607,
+      "violated_policies": 3,
+      "low": 0,
+      "medium": 0,
+      "high": 3
+    }
+  }
+}
