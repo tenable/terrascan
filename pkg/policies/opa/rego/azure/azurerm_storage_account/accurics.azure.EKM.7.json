@@ -1,14 +1,15 @@
 {
-    "name": "reme_storageAccountEnableHttps",
-    "file": "storageAccountEnableHttps.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_storage_account",
-    "template_args": {
-        "prefix": "reme_"
-    },
-    "severity": "HIGH",
-    "description": "Ensure that 'Secure transfer required' is enabled for Storage Accounts",
-    "reference_id": "accurics.azure.EKM.7",
-    "category": "Data Protection",
-    "version": 2
+  "name": "reme_storageAccountEnableHttps",
+  "file": "storageAccountEnableHttps.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_storage_account",
+  "template_args": {
+    "prefix": "reme_"
+  },
+  "severity": "HIGH",
+  "description": "Ensure that 'Secure transfer required' is enabled for Storage Accounts",
+  "reference_id": "accurics.azure.EKM.7",
+  "category": "Data Protection",
+  "version": 2,
+  "id": "AC_AZURE_0373"
 }

@@ -1,16 +1,17 @@
 {
-    "name": "reme_publiclyAccessible",
-    "file": "publiclyAccessible.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_redis_cache",
-    "template_args": {
-        "isEntire": false,
-        "name": "publiclyAccessible",
-        "prefix": "reme_"
-    },
-    "severity": "HIGH",
-    "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources",
-    "reference_id": "accurics.azure.NS.31",
-    "category": "Infrastructure Security",
-    "version": 2
+  "name": "reme_publiclyAccessible",
+  "file": "publiclyAccessible.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_redis_cache",
+  "template_args": {
+    "isEntire": false,
+    "name": "publiclyAccessible",
+    "prefix": "reme_"
+  },
+  "severity": "HIGH",
+  "description": "Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources",
+  "reference_id": "accurics.azure.NS.31",
+  "category": "Infrastructure Security",
+  "version": 2,
+  "id": "AC_AZURE_0391"
 }

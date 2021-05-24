@@ -1,14 +1,15 @@
 {
-    "name": "reme_keyVaultSoftDeleteEnabled",
-    "file": "keyVaultSoftDeleteEnabled.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_key_vault",
-    "template_args": {
-        "prefix": "reme_"
-    },
-    "severity": "MEDIUM",
-    "description": "Ensure the key vault is recoverable - enable \"Soft Delete\" setting for a Key Vault",
-    "reference_id": "accurics.azure.EKM.164",
-    "category": "Data Protection",
-    "version": 2
+  "name": "reme_keyVaultSoftDeleteEnabled",
+  "file": "keyVaultSoftDeleteEnabled.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_key_vault",
+  "template_args": {
+    "prefix": "reme_"
+  },
+  "severity": "MEDIUM",
+  "description": "Ensure the key vault is recoverable - enable \"Soft Delete\" setting for a Key Vault",
+  "reference_id": "accurics.azure.EKM.164",
+  "category": "Data Protection",
+  "version": 2,
+  "id": "AC_AZURE_0170"
 }

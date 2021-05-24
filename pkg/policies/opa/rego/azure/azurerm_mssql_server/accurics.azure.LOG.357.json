@@ -1,15 +1,16 @@
 {
-    "name": "mssqlAuditingRetention",
-    "file": "mssqlAuditing.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_mssql_server",
-    "template_args": {
-        "checkRetention": true,
-        "name": "mssqlAuditingRetention"
-    },
-    "severity": "MEDIUM",
-    "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers.",
-    "reference_id": "accurics.azure.LOG.357",
-    "category": "Logging and Monitoring",
-    "version": 1
+  "name": "mssqlAuditingRetention",
+  "file": "mssqlAuditing.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_mssql_server",
+  "template_args": {
+    "checkRetention": true,
+    "name": "mssqlAuditingRetention"
+  },
+  "severity": "MEDIUM",
+  "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers.",
+  "reference_id": "accurics.azure.LOG.357",
+  "category": "Logging and Monitoring",
+  "version": 1,
+  "id": "AC_AZURE_0136"
 }

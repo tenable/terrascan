@@ -1,16 +1,17 @@
 {
-    "name": "reme_sqlPublicAccess",
-    "file": "checkPublicAccessNotAllow.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_sql_firewall_rule",
-    "template_args": {
-        "isEntire": true,
-        "name": "sqlPublicAccess",
-        "prefix": "reme_"
-    },
-    "severity": "HIGH",
-    "description": "Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server",
-    "reference_id": "accurics.azure.NS.5",
-    "category": "Infrastructure Security",
-    "version": 2
+  "name": "reme_sqlPublicAccess",
+  "file": "checkPublicAccessNotAllow.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_sql_firewall_rule",
+  "template_args": {
+    "isEntire": true,
+    "name": "sqlPublicAccess",
+    "prefix": "reme_"
+  },
+  "severity": "HIGH",
+  "description": "Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server",
+  "reference_id": "accurics.azure.NS.5",
+  "category": "Infrastructure Security",
+  "version": 2,
+  "id": "AC_AZURE_0381"
 }

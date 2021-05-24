@@ -1,14 +1,15 @@
 {
-    "name": "reme_storageAccountTrustedMicrosoftServicesEnabled",
-    "file": "storageAccountTrustedMicrosoftServicesEnabled.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_storage_account",
-    "template_args": {
-        "prefix": "reme_"
-    },
-    "severity": "HIGH",
-    "description": "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access",
-    "reference_id": "accurics.azure.NS.2",
-    "category": "Infrastructure Security",
-    "version": 2
+  "name": "reme_storageAccountTrustedMicrosoftServicesEnabled",
+  "file": "storageAccountTrustedMicrosoftServicesEnabled.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_storage_account",
+  "template_args": {
+    "prefix": "reme_"
+  },
+  "severity": "HIGH",
+  "description": "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access",
+  "reference_id": "accurics.azure.NS.2",
+  "category": "Infrastructure Security",
+  "version": 2,
+  "id": "AC_AZURE_0371"
 }

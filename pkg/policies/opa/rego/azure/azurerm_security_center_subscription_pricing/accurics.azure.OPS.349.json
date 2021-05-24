@@ -1,14 +1,15 @@
 {
-    "name": "reme_securityCenterPrincingTier",
-    "file": "securityCenterPrincingTier.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_security_center_subscription_pricing",
-    "template_args": {
-        "prefix": "reme_"
-    },
-    "severity": "MEDIUM",
-    "description": "Ensure that standard pricing tiers are selected",
-    "reference_id": "accurics.azure.OPS.349",
-    "category": "Security Best Practices",
-    "version": 1
+  "name": "reme_securityCenterPrincingTier",
+  "file": "securityCenterPrincingTier.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_security_center_subscription_pricing",
+  "template_args": {
+    "prefix": "reme_"
+  },
+  "severity": "MEDIUM",
+  "description": "Ensure that standard pricing tiers are selected",
+  "reference_id": "accurics.azure.OPS.349",
+  "category": "Security Best Practices",
+  "version": 1,
+  "id": "AC_AZURE_0385"
 }

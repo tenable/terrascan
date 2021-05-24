@@ -1,12 +1,13 @@
 {
-    "name": "kubeDashboardDisabled",
-    "file": "kubeDashboardDisabled.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_kubernetes_cluster",
-    "template_args": null,
-    "severity": "MEDIUM",
-    "description": "Ensure Kube Dashboard is disabled",
-    "reference_id": "accurics.azure.NS.383",
-    "category": "Infrastructure Security",
-    "version": 1
+  "name": "kubeDashboardDisabled",
+  "file": "kubeDashboardDisabled.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_kubernetes_cluster",
+  "template_args": null,
+  "severity": "MEDIUM",
+  "description": "Ensure Kube Dashboard is disabled",
+  "reference_id": "accurics.azure.NS.383",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_AZURE_0161"
 }

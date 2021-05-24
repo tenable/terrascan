@@ -1,14 +1,15 @@
 {
-    "name": "reme_containerRegistryResourceLock",
-    "file": "containerRegistryResourceLock.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_container_registry",
-    "template_args": {
-        "prefix": "reme_"
-    },
-    "severity": "HIGH",
-    "description": "Ensure Container Registry has locks",
-    "reference_id": "accurics.azure.AKS.3",
-    "category": "Resilience",
-    "version": 2
+  "name": "reme_containerRegistryResourceLock",
+  "file": "containerRegistryResourceLock.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_container_registry",
+  "template_args": {
+    "prefix": "reme_"
+  },
+  "severity": "HIGH",
+  "description": "Ensure Container Registry has locks",
+  "reference_id": "accurics.azure.AKS.3",
+  "category": "Resilience",
+  "version": 2,
+  "id": "AC_AZURE_0185"
 }
