@@ -56,7 +56,7 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 		router = mux.NewRouter() // new router
 	)
 
-	logWriter := logging.GetLogWriter(logger)
+	logWriter := httputils.GetLogWriter(logger)
 
 	logger.Info("registering routes...")
 
@@ -71,12 +71,12 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 	// register all routes
 	for _, v := range routes {
 		logger.Info("Route ", v.verb, " - ", v.path)
-		handler := gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(v.fn), logging.WriteRequestLog)
+		handler := gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(v.fn), httputils.WriteRequestLog)
 		router.Methods(v.verb).Path(v.path).Handler(handler)
 	}
 
-	router.NotFoundHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotFound), logging.WriteRequestLog)
-	router.MethodNotAllowedHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotAllowed), logging.WriteRequestLog)
+	router.NotFoundHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotFound), httputils.WriteRequestLog)
+	router.MethodNotAllowedHandler = gorillaHandlers.CustomLoggingHandler(logWriter, http.HandlerFunc(httputils.NotAllowed), httputils.WriteRequestLog)
 
 	// Add a route for all static templates / assets. Currently used for the Webhook logs views
 	// go/terrascan/asset is the path where the assets files are located inside the docker container

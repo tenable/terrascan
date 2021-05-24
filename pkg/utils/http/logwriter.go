@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package logging
+package httputils
 
 import (
 	gorillaHandlers "github.com/gorilla/handlers"
@@ -24,7 +24,6 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
 )
 
 // LogWriter a type that can write logs to a zap.SugaredLogger object
@@ -48,7 +47,7 @@ func (l LogWriter) Write(p []byte) (n int, err error) {
 // buildCommonLogLine builds a log entry for req in Apache Common Log Format.
 // ts is the timestamp with which the entry should be logged.
 // status and size are used to provide the response HTTP status and size.
-func buildCommonLogLine(req *http.Request, url url.URL, ts time.Time, status int, size int) []byte {
+func buildCommonLogLine(req *http.Request, url url.URL, status int, size int) []byte {
 	username := "-"
 	if url.User != nil {
 		if name := url.User.Username(); name != "" {
@@ -92,5 +91,5 @@ func buildCommonLogLine(req *http.Request, url url.URL, ts time.Time, status int
 
 // WriteRequestLog logs an http(s) request to a write object
 func WriteRequestLog(writer io.Writer, params gorillaHandlers.LogFormatterParams) {
-	writer.Write(buildCommonLogLine(params.Request, params.URL, params.TimeStamp, params.StatusCode, params.Size))
+	writer.Write(buildCommonLogLine(params.Request, params.URL, params.StatusCode, params.Size))
 }
