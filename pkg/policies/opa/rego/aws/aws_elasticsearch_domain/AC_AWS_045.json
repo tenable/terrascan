@@ -1,6 +1,8 @@
 {
     "name": "noNodeToNodeEncryptionDomain",
     "file": "noNodeToNodeEncryptionDomain.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticsearch_domain",
     "template_args": {
         "prefix": ""
     },

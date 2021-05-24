@@ -1,6 +1,8 @@
 {
     "name": "cloudfrontNoSecureCiphers",
     "file": "cloudfrontNoSecureCiphers.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudfront_distribution",
     "template_args": {
         "prefix": ""
     },

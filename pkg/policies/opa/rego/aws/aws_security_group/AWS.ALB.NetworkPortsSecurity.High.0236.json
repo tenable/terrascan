@@ -1,6 +1,8 @@
 {
     "name": "port135AlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port135AlbNetworkPortSecurityPublicScope",
         "portNumber": 135,

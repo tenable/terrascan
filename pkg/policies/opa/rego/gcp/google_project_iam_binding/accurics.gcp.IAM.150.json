@@ -1,6 +1,8 @@
 {
     "name": "noGmailAccount",
     "file": "noGmailAccount.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_project_iam_binding",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that corporate login credentials are used instead of Gmail accounts.",

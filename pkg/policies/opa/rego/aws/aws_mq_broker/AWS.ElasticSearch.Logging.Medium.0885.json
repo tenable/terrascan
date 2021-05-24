@@ -1,6 +1,8 @@
 {
     "name": "awsMqLoggingEnabled",
     "file": "awsMqLoggingEnabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_mq_broker",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS MQ Log Exports",

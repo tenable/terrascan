@@ -1,6 +1,8 @@
 {
     "name": "listenerNotHttps",
     "file": "listenerNotHttps.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_lb_listener",
     "template_args": {
         "prefix": ""
     },

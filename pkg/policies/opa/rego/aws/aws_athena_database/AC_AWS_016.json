@@ -1,6 +1,8 @@
 {
     "name": "athenaDatabaseEncrypted",
     "file": "athenaDatabaseEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_athena_database",
     "template_args": {
         "prefix": ""
     },

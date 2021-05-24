@@ -1,6 +1,8 @@
 {
     "name": "redisVersionCompliance",
     "file": "redisVersionCompliance.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticache_cluster",
     "template_args": {
         "allowed_versions": [
             "3.2.6",

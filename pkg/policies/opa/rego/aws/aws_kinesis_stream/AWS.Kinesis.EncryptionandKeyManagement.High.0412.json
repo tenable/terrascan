@@ -1,6 +1,8 @@
 {
     "name": "kinesisNotEncryptedWithKms",
     "file": "aws_kinesis_stream.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_kinesis_stream",
     "template_args": {
         "prefix": ""
     },

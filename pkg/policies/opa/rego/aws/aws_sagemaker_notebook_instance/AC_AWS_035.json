@@ -1,6 +1,8 @@
 {
     "name": "notEncryptedSageMaker",
     "file": "notEncryptedSageMaker.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_sagemaker_notebook_instance",
     "template_args": {
         "prefix": ""
     },

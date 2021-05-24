@@ -1,6 +1,8 @@
 {
     "name": "ipAliasingEnabled",
     "file": "ipAliasingEnabled.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Kubernetes Cluster is created with Alias IP ranges enabled",

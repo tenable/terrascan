@@ -1,14 +1,16 @@
 {
-  "name": "noHttps",
-  "file": "noHttps.rego",
-  "template_args": {
     "name": "noHttps",
-    "prefix": "",
-    "suffix": ""
-  },
-  "severity": "HIGH",
-  "description": "TLS disabled can affect the confidentiality of the data in transit",
-  "reference_id": "AC-K8-NS-IN-H-0020",
-  "category": "Infrastructure Security",
-  "version": 1
+    "file": "noHttps.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_ingress",
+    "template_args": {
+        "name": "noHttps",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "TLS disabled can affect the confidentiality of the data in transit",
+    "reference_id": "AC-K8-NS-IN-H-0020",
+    "category": "Infrastructure Security",
+    "version": 1
 }

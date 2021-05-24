@@ -1,6 +1,8 @@
 {
     "name": "allowedHostPath",
     "file": "allowedHostPath.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
     "template_args": {
         "name": "allowedHostPath",
         "prefix": "",

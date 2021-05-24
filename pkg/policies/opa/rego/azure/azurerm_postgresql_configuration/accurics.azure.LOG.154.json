@@ -1,6 +1,8 @@
 {
     "name": "reme_logDuration",
     "file": "logDuration.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_postgresql_configuration",
     "template_args": {
         "prefix": "reme_"
     },

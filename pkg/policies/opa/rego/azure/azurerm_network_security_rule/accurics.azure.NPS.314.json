@@ -1,6 +1,8 @@
 {
     "name": "reme_networkPort5500ExposedPrivateSmall",
     "file": "networkPortExposedPrivate.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_network_security_rule",
     "template_args": {
         "endLimit": 24,
         "evalHosts": true,

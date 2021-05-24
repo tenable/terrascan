@@ -1,6 +1,8 @@
 {
     "name": "checkIpForward",
     "file": "checkIpForward.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_instance",
     "template_args": {
         "name": "checkIpForward",
         "prefix": "",

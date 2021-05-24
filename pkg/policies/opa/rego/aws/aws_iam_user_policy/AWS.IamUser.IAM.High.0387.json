@@ -1,6 +1,8 @@
 {
     "name": "rootUserNotContainMfaTypeHardware",
     "file": "rootUserNotContainMfaTypeHardware.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_user_policy",
     "template_args": {
         "prefix": ""
     },

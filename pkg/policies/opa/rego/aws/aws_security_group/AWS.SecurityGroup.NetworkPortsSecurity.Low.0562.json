@@ -1,6 +1,8 @@
 {
     "name": "port3389OpenToInternet",
     "file": "portOpenToInternet.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "from_port": 3389,
         "name": "port3389OpenToInternet",

@@ -1,6 +1,8 @@
 {
     "name": "noMemcachedInElastiCache",
     "file": "noMemcachedInElastiCache.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticache_cluster",
     "template_args": {
         "elasticache_engine": "memcached",
         "name": "noMemcachedInElastiCache",

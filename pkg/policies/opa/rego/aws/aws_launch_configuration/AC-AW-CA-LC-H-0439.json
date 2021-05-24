@@ -1,6 +1,8 @@
 {
     "name": "imdsv1LaunchConfig",
     "file": "imdsv1LaunchConfig.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_launch_configuration",
     "template_args": {
         "prefix": ""
     },

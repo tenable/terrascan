@@ -1,6 +1,8 @@
 {
     "name": "kinesisSseNotConfigured",
     "file": "kinesis_sse_not_configured.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_kinesis_firehose_delivery_stream",
     "template_args": {
         "prefix": ""
     },

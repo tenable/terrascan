@@ -1,6 +1,8 @@
 {
     "name": "reme_enableSNSTopic",
     "file": "enableSNSTopic.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": "reme_"
     },

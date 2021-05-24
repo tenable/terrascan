@@ -1,6 +1,8 @@
 {
     "name": "unrestrictedRdpAccess",
     "file": "unrestrictedRdpAccess.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_firewall",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Google compute firewall ingress does not allow unrestricted rdp access.",

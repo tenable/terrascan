@@ -1,6 +1,8 @@
 {
     "name": "eksControlPlaneLoggingDisabled",
     "file": "eksControlPlaneLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_eks_cluster",
     "template_args": {
         "prefix": ""
     },

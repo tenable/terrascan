@@ -1,6 +1,8 @@
 {
     "name": "overlyPermissiveInstance",
     "file": "overlyPermissiveInstance.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_instance",
     "template_args": {
         "prefix": ""
     },

@@ -1,6 +1,8 @@
 {
     "name": "allUsersReadAccess",
     "file": "s3AclGrants.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_s3_bucket",
     "template_args": {
         "access": "public-read",
         "name": "allUsersReadAccess",

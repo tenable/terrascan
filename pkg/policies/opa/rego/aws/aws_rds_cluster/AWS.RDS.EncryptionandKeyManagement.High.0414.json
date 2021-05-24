@@ -1,6 +1,8 @@
 {
     "name": "storageNotEncrypted",
     "file": "storageNotEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_rds_cluster",
     "template_args": {
         "prefix": ""
     },

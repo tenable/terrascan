@@ -1,6 +1,8 @@
 {
     "name": "reme_storageAccountOpenToPublic",
     "file": "storageAccountOpenToPublic.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_storage_account",
     "template_args": {
         "prefix": "reme_"
     },

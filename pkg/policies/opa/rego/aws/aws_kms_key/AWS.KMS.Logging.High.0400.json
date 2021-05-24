@@ -1,6 +1,8 @@
 {
     "name": "kmsKeyNoDeletionWindow",
     "file": "kmsKeyNoDeletionWindow.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_kms_key",
     "template_args": {
         "prefix": ""
     },

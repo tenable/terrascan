@@ -1,6 +1,8 @@
 {
     "name": "ec2UsingIMDSv1",
     "file": "ec2UsingIMDSv1.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_instance",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",

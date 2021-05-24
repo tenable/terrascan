@@ -1,6 +1,8 @@
 {
     "name": "globalAccFlowLogsDisabled",
     "file": "globalAccFlowLogsDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_globalaccelerator_accelerator",
     "template_args": {
         "prefix": ""
     },

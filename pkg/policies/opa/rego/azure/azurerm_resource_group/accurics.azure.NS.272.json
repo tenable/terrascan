@@ -1,6 +1,8 @@
 {
     "name": "reme_resourceGroupLock",
     "file": "resourceGroupLock.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_resource_group",
     "template_args": {
         "prefix": "reme_"
     },
