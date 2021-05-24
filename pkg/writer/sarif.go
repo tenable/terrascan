@@ -20,6 +20,7 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/owenrumney/go-sarif/sarif"
 	"io"
+	"strings"
 )
 
 const (
@@ -55,7 +56,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		run.AddResult(rule.ID).
 			WithMessage(sarif.NewTextMessage(violation.Description)).
 			WithMessage(sarif.NewMarkdownMessage(violation.Description)).
-			WithLevel(string(violation.Severity)).
+			WithLevel(getSarifLevel(violation.Severity)).
 			WithLocation(sarif.NewLocation().
 				WithPhysicalLocation(sarif.NewPhysicalLocation().
 					WithArtifactLocation(sarif.NewSimpleArtifactLocation(violation.File)).
@@ -64,4 +65,13 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 
 	// print the report to anything that implements `io.Writer`
 	return report.PrettyWrite(writer)
+}
+
+func getSarifLevel(severity string) string {
+	m := make(map[string]string, 3)
+	m["low"] = "note"
+	m["medium"] = "warning"
+	m["high"] = "error"
+
+	return m[strings.ToLower(severity)]
 }
