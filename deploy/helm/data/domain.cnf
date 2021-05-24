@@ -1,0 +1,18 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+x509_extensions = v3_req
+distinguished_name = dn
+[dn]
+C = <COUNTRY>
+ST = <STATE>
+L = <CITY>
+O = <ORGANISATION>
+emailAddress = <name@email.org>
+CN = terrascan.terrascan.svc
+[v3_req]
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = terrascan.terrascan.svc
+DNS.2 = terrascan.terrascan.svc.cluster.local

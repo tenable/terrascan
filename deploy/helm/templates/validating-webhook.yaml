@@ -1,7 +1,11 @@
+{{- if .Values.webhook.mode }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: {{ .Values.name }}
+  annotations:
+    "helm.sh/hook-weight": "100"
+    "helm.sh/hook": post-install
 webhooks:
   - name: {{ .Values.webhook.name }}
     admissionReviewVersions:
@@ -57,3 +61,4 @@ webhooks:
       - {{ . -}}
       {{- end }}
       {{- end }}
+{{- end }}
