@@ -1,20 +1,21 @@
 {
-    "name": "reme_networkPort53ExposedPublicEntireUdp",
-    "file": "networkPortExposedPublic.rego",
-    "policy_type": "azure",
-    "resource_type": "azurerm_network_security_rule",
-    "template_args": {
-        "endLimit": 0,
-        "evalHosts": true,
-        "name": "networkPort53ExposedPublicEntireUdp",
-        "numberOfHosts": 1,
-        "portNumber": 53,
-        "prefix": "reme_",
-        "protocol": "UDP"
-    },
-    "severity": "HIGH",
-    "description": "DNS (UDP:53) is exposed to entire Public network",
-    "reference_id": "accurics.azure.NPS.45",
-    "category": "Infrastructure Security",
-    "version": 2
+  "name": "reme_networkPort53ExposedPublicEntireUdp",
+  "file": "networkPortExposedPublic.rego",
+  "policy_type": "azure",
+  "resource_type": "azurerm_network_security_rule",
+  "template_args": {
+    "endLimit": 0,
+    "evalHosts": true,
+    "name": "networkPort53ExposedPublicEntireUdp",
+    "numberOfHosts": 1,
+    "portNumber": 53,
+    "prefix": "reme_",
+    "protocol": "UDP"
+  },
+  "severity": "HIGH",
+  "description": "DNS (UDP:53) is exposed to entire Public network",
+  "reference_id": "accurics.azure.NPS.45",
+  "category": "Infrastructure Security",
+  "version": 2,
+  "id": "AC_AZURE_0535"
 }
