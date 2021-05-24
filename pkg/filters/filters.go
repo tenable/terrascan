@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package filters
 
 import (
@@ -5,6 +21,7 @@ import (
 )
 
 // RegoMetadataPreLoadFilter is a pre load filter
+// this filter would be while the policy files are processed by policy engine
 type RegoMetadataPreLoadFilter struct {
 	scanRules   []string
 	skipRules   []string
@@ -34,7 +51,7 @@ func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories, policyTypes 
 
 // IsFiltered checks whether a RegoMetada should be filtered or not
 func (r *RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata) bool {
-	// if length of skip rules is RegoMetada is not filtered
+	// if skip rules are specified, RegoMetada is not filtered
 	if len(r.skipRules) < 1 {
 		return false
 	}
@@ -48,10 +65,11 @@ func (r *RegoMetadataPreLoadFilter) IsAllowed(regoMetadata *policy.RegoMetadata)
 	return andSpec.IsSatisfied(regoMetadata)
 }
 
-// RegoDataFilter is a pre scan filter
+// RegoDataFilter is a pre scan filter,
+// it will be used by policy engine before the evaluation of resources start
 type RegoDataFilter struct{}
 
-// Filter func filters based on resource type
+// Filter func will filter based on resource type
 func (r *RegoDataFilter) Filter(rmap map[string]*policy.RegoData, input policy.EngineInput) map[string]*policy.RegoData {
 	// if resource config is empty, return original map
 	if len(*input.InputData) < 1 {

@@ -146,11 +146,13 @@ func (e *Engine) LoadRegoFiles(policyPath string, filter policy.PreLoadFilter) e
 			}
 
 			// check if the rego metadata is allowed
+			// this check is for scan rules, categories, policy types, and severity
 			if !filter.IsAllowed(regoMetadata) {
 				continue
 			}
 
 			// check if the rego metadata should be filtered
+			// this check is for skip rules
 			if filter.IsFiltered(regoMetadata) {
 				continue
 			}
@@ -364,7 +366,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput, filter policy.PreScanF
 		// Execute the prepared query.
 		rs, err := e.regoDataMap[k].PreparedQuery.Eval(e.context, rego.EvalInput(engineInput.InputData))
 		if err != nil {
-			// since the eval failed with the policy type, we should decrement the total count by 1
+			// since the eval failed with the policy, we should decrement the total count by 1
 			e.stats.ruleCount--
 			zap.S().Warn("failed to run prepared query", zap.Error(err), zap.String("rule", "'"+k+"'"), zap.String("file", e.regoDataMap[k].Metadata.File))
 			continue
