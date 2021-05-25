@@ -1,16 +1,17 @@
 {
+  "name": "secretsAsEnvVariables",
+  "file": "secretsAsEnvVariables.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "secretsAsEnvVariables",
-    "file": "secretsAsEnvVariables.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "secretsAsEnvVariables",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "HIGH",
-    "description": "Prefer using secrets as files over secrets as environment variables",
-    "reference_id": "AC-K8-NS-PO-H-0117",
-    "category": "Infrastructure Security",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "HIGH",
+  "description": "Prefer using secrets as files over secrets as environment variables",
+  "reference_id": "AC-K8-NS-PO-H-0117",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_K8S_0051"
 }

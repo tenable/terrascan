@@ -1,16 +1,17 @@
 {
+  "name": "priviledgedContainersEnabled",
+  "file": "priviledgedContainersEnabled.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "priviledgedContainersEnabled",
-    "file": "priviledgedContainersEnabled.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "priviledgedContainersEnabled",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "HIGH",
-    "description": "Minimize the admission of privileged containers",
-    "reference_id": "AC-K8-IA-PO-H-0106",
-    "category": "Identity and Access Management",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "HIGH",
+  "description": "Minimize the admission of privileged containers",
+  "reference_id": "AC-K8-IA-PO-H-0106",
+  "category": "Identity and Access Management",
+  "version": 1,
+  "id": "AC_K8S_0046"
 }

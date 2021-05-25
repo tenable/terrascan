@@ -1,23 +1,24 @@
 {
+  "name": "MemorylimitsCheck",
+  "file": "securityContextCheck.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
+    "allowed": "true",
+    "arg1": "limits",
+    "arg2": "memory",
     "name": "MemorylimitsCheck",
-    "file": "securityContextCheck.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "allowed": "true",
-        "arg1": "limits",
-        "arg2": "memory",
-        "name": "MemorylimitsCheck",
-        "not_allowed": "false",
-        "param": "limits",
-        "param1": "resources",
-        "prefix": "",
-        "suffix": "",
-        "value": "false"
-    },
-    "severity": "Medium",
-    "description": "Memory Limits Not Set in config file.",
-    "reference_id": "AC-K8-OE-PK-M-0158",
-    "category": "Security Best Practices",
-    "version": 1
+    "not_allowed": "false",
+    "param": "limits",
+    "param1": "resources",
+    "prefix": "",
+    "suffix": "",
+    "value": "false"
+  },
+  "severity": "Medium",
+  "description": "Memory Limits Not Set in config file.",
+  "reference_id": "AC-K8-OE-PK-M-0158",
+  "category": "Security Best Practices",
+  "version": 1,
+  "id": "AC_K8S_0100"
 }

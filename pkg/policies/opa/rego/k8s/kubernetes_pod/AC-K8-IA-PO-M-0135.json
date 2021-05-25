@@ -1,16 +1,17 @@
 {
+  "name": "appArmorProfile",
+  "file": "appArmorProfile.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "appArmorProfile",
-    "file": "appArmorProfile.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "appArmorProfile",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "AppArmor profile not set to default or custom profile will make the container vulnerable to kernel level threats",
-    "reference_id": "AC-K8-IA-PO-M-0135",
-    "category": "Identity and Access Management",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "AppArmor profile not set to default or custom profile will make the container vulnerable to kernel level threats",
+  "reference_id": "AC-K8-IA-PO-M-0135",
+  "category": "Identity and Access Management",
+  "version": 1,
+  "id": "AC_K8S_0073"
 }

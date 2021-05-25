@@ -1,18 +1,19 @@
 {
+  "name": "falseHostNetwork",
+  "file": "specBoolCheck.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "falseHostNetwork",
-    "file": "specBoolCheck.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "falseHostNetwork",
-        "param": "hostNetwork",
-        "prefix": "",
-        "suffix": "",
-        "value": "true"
-    },
-    "severity": "MEDIUM",
-    "description": "Containers Should Not Share the Host Network Namespace",
-    "reference_id": "AC-K8-NS-PO-M-0164",
-    "category": "Infrastructure Security",
-    "version": 1
+    "param": "hostNetwork",
+    "prefix": "",
+    "suffix": "",
+    "value": "true"
+  },
+  "severity": "MEDIUM",
+  "description": "Containers Should Not Share the Host Network Namespace",
+  "reference_id": "AC-K8-NS-PO-M-0164",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_K8S_0084"
 }

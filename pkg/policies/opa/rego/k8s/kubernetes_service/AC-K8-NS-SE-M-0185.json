@@ -1,16 +1,17 @@
 {
+  "name": "tillerServiceDeleted",
+  "file": "tillerServiceDeleted.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_service",
+  "template_args": {
     "name": "tillerServiceDeleted",
-    "file": "tillerServiceDeleted.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_service",
-    "template_args": {
-        "name": "tillerServiceDeleted",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "Ensure that the Tiller Service (Helm v2) is deleted",
-    "reference_id": "AC-K8-NS-SE-M-0185",
-    "category": "Infrastructure Security",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "Ensure that the Tiller Service (Helm v2) is deleted",
+  "reference_id": "AC-K8-NS-SE-M-0185",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_K8S_0110"
 }

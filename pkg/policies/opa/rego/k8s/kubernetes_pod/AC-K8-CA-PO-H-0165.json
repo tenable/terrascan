@@ -1,23 +1,24 @@
 {
+  "name": "privilegeEscalationCheck",
+  "file": "securityContextCheck.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
+    "allowed": "false",
+    "arg1": "cpu",
+    "arg2": "limits",
     "name": "privilegeEscalationCheck",
-    "file": "securityContextCheck.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "allowed": "false",
-        "arg1": "cpu",
-        "arg2": "limits",
-        "name": "privilegeEscalationCheck",
-        "not_allowed": "true",
-        "param": "allowPrivilegeEscalation",
-        "param1": "securityContext",
-        "prefix": "",
-        "suffix": "",
-        "value": "true"
-    },
-    "severity": "HIGH",
-    "description": "Containers Should Not Run with AllowPrivilegeEscalation",
-    "reference_id": "AC-K8-CA-PO-H-0165",
-    "category": "Compliance Validation",
-    "version": 1
+    "not_allowed": "true",
+    "param": "allowPrivilegeEscalation",
+    "param1": "securityContext",
+    "prefix": "",
+    "suffix": "",
+    "value": "true"
+  },
+  "severity": "HIGH",
+  "description": "Containers Should Not Run with AllowPrivilegeEscalation",
+  "reference_id": "AC-K8-CA-PO-H-0165",
+  "category": "Compliance Validation",
+  "version": 1,
+  "id": "AC_K8S_0085"
 }

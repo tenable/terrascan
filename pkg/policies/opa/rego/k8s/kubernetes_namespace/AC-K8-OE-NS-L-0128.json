@@ -1,16 +1,17 @@
 {
+  "name": "noOwnerLabel",
+  "file": "noOwnerLabel.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_namespace",
+  "template_args": {
     "name": "noOwnerLabel",
-    "file": "noOwnerLabel.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_namespace",
-    "template_args": {
-        "name": "noOwnerLabel",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "LOW",
-    "description": "No owner for namespace affects the operations",
-    "reference_id": "AC-K8-OE-NS-L-0128",
-    "category": "Security Best Practices",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "LOW",
+  "description": "No owner for namespace affects the operations",
+  "reference_id": "AC-K8-OE-NS-L-0128",
+  "category": "Security Best Practices",
+  "version": 1,
+  "id": "AC_K8S_0013"
 }

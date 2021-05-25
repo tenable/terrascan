@@ -1,19 +1,20 @@
 {
+  "name": "dontConnectDockerSock",
+  "file": "dockerSockCheck.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
+    "attrib": "spec.volumes[_].hostPath",
     "name": "dontConnectDockerSock",
-    "file": "dockerSockCheck.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "attrib": "spec.volumes[_].hostPath",
-        "name": "dontConnectDockerSock",
-        "param": "path",
-        "prefix": "",
-        "suffix": "",
-        "value": "/var/run/docker"
-    },
-    "severity": "MEDIUM",
-    "description": "Restrict Mounting Docker Socket in a Container",
-    "reference_id": "AC-K8-NS-PO-M-0171",
-    "category": "Infrastructure Security",
-    "version": 1
+    "param": "path",
+    "prefix": "",
+    "suffix": "",
+    "value": "/var/run/docker"
+  },
+  "severity": "MEDIUM",
+  "description": "Restrict Mounting Docker Socket in a Container",
+  "reference_id": "AC-K8-NS-PO-M-0171",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_K8S_0088"
 }

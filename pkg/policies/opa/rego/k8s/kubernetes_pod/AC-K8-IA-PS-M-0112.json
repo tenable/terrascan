@@ -1,17 +1,18 @@
 {
+  "name": "netRawCapabilityUsed",
+  "file": "capabilityUsed.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
+    "attribute": "requiredDropCapabilities",
     "name": "netRawCapabilityUsed",
-    "file": "capabilityUsed.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "attribute": "requiredDropCapabilities",
-        "name": "netRawCapabilityUsed",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "Minimize the admission of containers with the NET_RAW capability",
-    "reference_id": "AC-K8-IA-PS-M-0112",
-    "category": "Identity and Access Management",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "Minimize the admission of containers with the NET_RAW capability",
+  "reference_id": "AC-K8-IA-PS-M-0112",
+  "category": "Identity and Access Management",
+  "version": 1,
+  "id": "AC_K8S_0048"
 }

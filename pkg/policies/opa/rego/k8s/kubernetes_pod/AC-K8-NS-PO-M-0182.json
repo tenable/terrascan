@@ -1,16 +1,17 @@
 {
+  "name": "containersAsHighUID",
+  "file": "containersAsHighUID.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "containersAsHighUID",
-    "file": "containersAsHighUID.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "containersAsHighUID",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "Containers Should Run as a High UID to Avoid Host Conflict",
-    "reference_id": "AC-K8-NS-PO-M-0182",
-    "category": "Infrastructure Security",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "Containers Should Run as a High UID to Avoid Host Conflict",
+  "reference_id": "AC-K8-NS-PO-M-0182",
+  "category": "Infrastructure Security",
+  "version": 1,
+  "id": "AC_K8S_0079"
 }

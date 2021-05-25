@@ -1,16 +1,17 @@
 {
+  "name": "secCompProfile",
+  "file": "secCompProfile.rego",
+  "policy_type": "k8s",
+  "resource_type": "kubernetes_pod",
+  "template_args": {
     "name": "secCompProfile",
-    "file": "secCompProfile.rego",
-    "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
-    "template_args": {
-        "name": "secCompProfile",
-        "prefix": "",
-        "suffix": ""
-    },
-    "severity": "MEDIUM",
-    "description": "Default seccomp profile not enabled will make the container to make non-essential system calls",
-    "reference_id": "AC-K8-IA-PO-M-0141",
-    "category": "Identity and Access Management",
-    "version": 1
+    "prefix": "",
+    "suffix": ""
+  },
+  "severity": "MEDIUM",
+  "description": "Default seccomp profile not enabled will make the container to make non-essential system calls",
+  "reference_id": "AC-K8-IA-PO-M-0141",
+  "category": "Identity and Access Management",
+  "version": 1,
+  "id": "AC_K8S_0080"
 }
