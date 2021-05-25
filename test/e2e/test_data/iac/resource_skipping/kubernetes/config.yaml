@@ -3,8 +3,6 @@ kind: Namespace
 metadata:
   name: production
   labels:
-    "hey":
+    "hey": 
   annotations:
-    terrascanSkip:
-      - rule: AC-K8-OE-NS-L-0128
-        comment: reason to skip the rule
+    terrascanSkip: "[{\"rule\": \"AC-K8-OE-NS-L-0128\", \"comment\": \"reason to skip the rule\"}]"

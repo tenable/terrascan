@@ -1,0 +1,83 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "imageWithLatestTag",
+        "description": "No tag or container image with :Latest tag makes difficult to rollback and track",
+        "rule_id": "AC-K8-OE-PO-L-0134",
+        "severity": "LOW",
+        "category": "Security Best Practices",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      },
+      {
+        "rule_name": "secCompProfile",
+        "description": "Default seccomp profile not enabled will make the container to make non-essential system calls",
+        "rule_id": "AC-K8-IA-PO-M-0141",
+        "severity": "LOW",
+        "category": "Identity and Access Management",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      },
+      {
+        "rule_name": "privilegeEscalationCheck",
+        "description": "Containers Should Not Run with AllowPrivilegeEscalation",
+        "rule_id": "AC-K8-CA-PO-H-0165",
+        "severity": "LOW",
+        "category": "Compliance Validation",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      },
+      {
+        "rule_name": "imageWithoutDigest",
+        "description": "Image without digest affects the integrity principle of image security",
+        "rule_id": "AC-K8-NS-PO-M-0133",
+        "severity": "LOW",
+        "category": "Infrastructure Security",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      },
+      {
+        "rule_name": "appArmorProfile",
+        "description": "AppArmor profile not set to default or custom profile will make the container vulnerable to kernel level threats",
+        "rule_id": "AC-K8-IA-PO-M-0135",
+        "severity": "LOW",
+        "category": "Identity and Access Management",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      },
+      {
+        "rule_name": "defaultNamespaceUsed",
+        "description": "The default namespace should not be used",
+        "rule_id": "accurics.kubernetes.OPS.460",
+        "severity": "LOW",
+        "category": "Operational Efficiency",
+        "resource_name": "backend-server",
+        "resource_type": "kubernetes_pod",
+        "file": "config.yaml",
+        "line": 1
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/max_severity_set/k8s",
+      "iac_type": "k8s",
+      "scanned_at": "2021-05-24 11:19:12.941151 +0000 UTC",
+      "policies_validated": 607,
+      "violated_policies": 6,
+      "low": 6,
+      "medium": 0,
+      "high": 0
+    }
+  }
+}

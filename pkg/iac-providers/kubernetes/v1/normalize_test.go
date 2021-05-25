@@ -413,3 +413,70 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 		})
 	}
 }
+
+func Test_readMinMaxSeverityFromAnnotations(t *testing.T) {
+	type args struct {
+		annotations map[string]interface{}
+		resourceID  string
+	}
+	tests := []struct {
+		name            string
+		args            args
+		wantMaxSeverity string
+		wantMinSeverity string
+	}{
+		{
+			name: "no severity",
+			args: args{
+				annotations: map[string]interface{}{
+					"test": "test",
+				},
+			},
+			wantMinSeverity: "",
+			wantMaxSeverity: "",
+		},
+		{
+			name: "min severity set to high",
+			args: args{annotations: map[string]interface{}{
+				"terrascan/minseverity": "High",
+			}},
+			wantMinSeverity: "High",
+			wantMaxSeverity: "",
+		},
+		{
+			name: "max severity set to low",
+			args: args{annotations: map[string]interface{}{
+				"terrascan/maxseverity": "Low",
+			}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "Low",
+		},
+		{
+			name: "max severity set to None",
+			args: args{annotations: map[string]interface{}{
+				"terrascan/maxseverity": "None"}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "None",
+		},
+		{
+			name: "max severity set to low and Min severity set to high",
+			args: args{annotations: map[string]interface{}{
+				"terrascan/maxseverity": "LOw",
+				"terrascan/minseverity": "hiGh",
+			}},
+			wantMinSeverity: "hiGh",
+			wantMaxSeverity: "LOw",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotMaxSeverity, gotMinSeverity := readMinMaxSeverityFromAnnotations(tt.args.annotations, tt.args.resourceID)
+			if gotMaxSeverity != tt.wantMaxSeverity {
+				t.Errorf("readMinMaxSeverityFromAnnotations() gotMaxSeverity = %v, want %v", gotMaxSeverity, tt.wantMaxSeverity)
+			}
+			if gotMinSeverity != tt.wantMinSeverity {
+				t.Errorf("readMinMaxSeverityFromAnnotations() gotMinSeverity = %v, want %v", gotMinSeverity, tt.wantMinSeverity)
+			}
+		})
+	}
+}

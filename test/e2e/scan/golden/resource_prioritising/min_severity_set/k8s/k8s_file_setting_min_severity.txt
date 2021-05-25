@@ -1,0 +1,28 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "noOwnerLabel",
+        "description": "No owner for namespace affects the operations",
+        "rule_id": "AC-K8-OE-NS-L-0128",
+        "severity": "HIGH",
+        "category": "Security Best Practices",
+        "resource_name": "production",
+        "resource_type": "kubernetes_namespace",
+        "file": "config.yaml",
+        "line": 1
+      }
+    ],
+    "skipped_violations": null,
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/min_severity_set/k8s",
+      "iac_type": "k8s",
+      "scanned_at": "2021-05-24 11:04:50.218849 +0000 UTC",
+      "policies_validated": 607,
+      "violated_policies": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 1
+    }
+  }
+}

@@ -32,6 +32,8 @@ const (
 	terrascanSkip        = "terrascanSkip"
 	terrascanSkipRule    = "rule"
 	terrascanSkipComment = "comment"
+	terrascanMaxSeverity = "terrascan/maxseverity"
+	terrascanMinSeverity = "terrascan/minseverity"
 )
 
 var (
@@ -139,6 +141,11 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 		resourceConfig.SkipRules = append(resourceConfig.SkipRules, skipRules...)
 	}
 
+	maxSeverity, minSeverity := readMinMaxSeverityFromAnnotations(resource.Metadata.Annotations, resourceConfig.ID)
+
+	resourceConfig.MaxSeverity = maxSeverity
+	resourceConfig.MinSeverity = minSeverity
+
 	configData := make(map[string]interface{})
 	if err = json.Unmarshal(*jsonData, &configData); err != nil {
 		return nil, err
@@ -171,4 +178,24 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 
 	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
 	return nil
+}
+
+// readMinMaxSeverityFromAnnotations finds the min max severity values set in annotations for the resource
+func readMinMaxSeverityFromAnnotations(annotations map[string]interface{}, resourceID string) (maxSeverity, minSeverity string) {
+	var (
+		minSeverityAnnotation interface{}
+		maxSeverityAnnotation interface{}
+		ok                    bool
+	)
+	if minSeverityAnnotation, ok = annotations[terrascanMinSeverity]; !ok {
+		zap.S().Debugf("%s not present for resource: %s", terrascanMinSeverity, resourceID)
+	} else {
+		minSeverity = minSeverityAnnotation.(string)
+	}
+	if maxSeverityAnnotation, ok = annotations[terrascanMaxSeverity]; !ok {
+		zap.S().Debugf("%s not present for resource: %s", terrascanMaxSeverity, resourceID)
+	} else {
+		maxSeverity = maxSeverityAnnotation.(string)
+	}
+	return
 }
