@@ -40,6 +40,8 @@ var (
 	errUnsupportedDoc = fmt.Errorf("unsupported document type")
 	// ErrNoKind is returned when the "kind" key is not available (not a valid kubernetes resource)
 	ErrNoKind = fmt.Errorf("kind does not exist")
+
+	infileInstructionNotPresentLog = "%s not present for resource: %s"
 )
 
 // k8sMetadata is used to pull the name, namespace types and annotations for a given resource
@@ -162,7 +164,7 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 	var skipRulesFromAnnotations interface{}
 	var ok bool
 	if skipRulesFromAnnotations, ok = annotations[terrascanSkip]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanSkip, resourceID)
+		zap.S().Errorf(infileInstructionNotPresentLog, terrascanSkip, resourceID)
 		return nil
 	}
 
@@ -170,13 +172,13 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 		skipRules := make([]output.SkipRule, 0)
 		err := json.Unmarshal([]byte(rules), &skipRules)
 		if err != nil {
-			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
+			zap.S().Errorf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
 			return nil
 		}
 		return skipRules
 	}
 
-	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
+	zap.S().Errorf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
 	return nil
 }
 
@@ -188,12 +190,12 @@ func readMinMaxSeverityFromAnnotations(annotations map[string]interface{}, resou
 		ok                    bool
 	)
 	if minSeverityAnnotation, ok = annotations[terrascanMinSeverity]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanMinSeverity, resourceID)
+		zap.S().Errorf(infileInstructionNotPresentLog, terrascanMinSeverity, resourceID)
 	} else {
 		minSeverity = minSeverityAnnotation.(string)
 	}
 	if maxSeverityAnnotation, ok = annotations[terrascanMaxSeverity]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanMaxSeverity, resourceID)
+		zap.S().Errorf(infileInstructionNotPresentLog, terrascanMaxSeverity, resourceID)
 	} else {
 		maxSeverity = maxSeverityAnnotation.(string)
 	}

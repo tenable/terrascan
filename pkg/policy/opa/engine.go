@@ -303,18 +303,17 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 	}
 
 	if !strings.EqualFold(resource.MaxSeverity, "none") {
+		// if both values are set then max severity will be applicable and it will also change according to resource config and min severity value
 		if utils.MinSeverityApplicable(regoData.Metadata.Severity, resource.MinSeverity) {
-			regoData.Metadata.Severity = strings.ToUpper(resource.MinSeverity)
 			violation.Severity = strings.ToUpper(resource.MinSeverity)
 		}
 
 		if utils.MaxSeverityApplicable(regoData.Metadata.Severity, resource.MaxSeverity) {
-			regoData.Metadata.Severity = strings.ToUpper(resource.MaxSeverity)
 			violation.Severity = strings.ToUpper(resource.MaxSeverity)
 		}
 	}
 	if !isSkipped && !strings.EqualFold(resource.MaxSeverity, "none") {
-		severity := regoData.Metadata.Severity
+		severity := violation.Severity
 		if strings.ToLower(severity) == "high" {
 			e.results.ViolationStore.Summary.HighCount++
 		} else if strings.ToLower(severity) == "medium" {

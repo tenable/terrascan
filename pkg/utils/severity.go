@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package utils
 
 import (
@@ -45,6 +61,7 @@ func CheckSeverity(ruleSeverity, desiredSeverity string) bool {
 
 // MinSeverityApplicable verifies if the severity of policy rule need to be changed to the minimum severity level
 func MinSeverityApplicable(ruleSeverity, minSeverity string) bool {
+	// this case will never arise added for safe checks
 	if !ValidateSeverityInput(minSeverity) {
 		return false
 	}
@@ -59,12 +76,12 @@ func MinSeverityApplicable(ruleSeverity, minSeverity string) bool {
 		return ruleSeverity == LowSeverity
 	}
 
-	return !(minSeverity == LowSeverity)
-
+	return false
 }
 
 // MaxSeverityApplicable verifies if the severity of policy rule need to be changed to the maximum severity level
 func MaxSeverityApplicable(ruleSeverity, maxSeverity string) bool {
+	// this case will never arise added for safe checks
 	if !ValidateSeverityInput(maxSeverity) {
 		return false
 	}
@@ -78,7 +95,7 @@ func MaxSeverityApplicable(ruleSeverity, maxSeverity string) bool {
 		return ruleSeverity == HighSeverity
 	}
 
-	return !(maxSeverity == HighSeverity)
+	return false
 }
 
 // GetMinMaxSeverity returns the min and max severity to be applied to resources.

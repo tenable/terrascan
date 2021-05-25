@@ -1,3 +1,18 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 package utils
 
 import (
@@ -49,9 +64,19 @@ func TestCheckSeverity(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Different severity",
+			name: "desired severity High",
 			args: args{ruleSeverity: "Low", desiredSeverity: "High"},
 			want: false,
+		},
+		{
+			name: "Different severity: desired severity Low",
+			args: args{ruleSeverity: "Low", desiredSeverity: "Low"},
+			want: true,
+		},
+		{
+			name: "Different severity: desired severity Medium",
+			args: args{ruleSeverity: "Medium", desiredSeverity: "Medium"},
+			want: true,
 		},
 	}
 	for _, tt := range tests {
@@ -83,6 +108,16 @@ func TestMinSeverityApplicable(t *testing.T) {
 			args: args{ruleSeverity: "Medium", minSeverity: "Low"},
 			want: false,
 		},
+		{
+			name: "Min Severity Applicable with minSeverity medium",
+			args: args{ruleSeverity: "High", minSeverity: "Medium"},
+			want: false,
+		},
+		{
+			name: "Min Severity Applicable with minSeverity High",
+			args: args{ruleSeverity: "Medium", minSeverity: "High"},
+			want: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -112,6 +147,16 @@ func TestMaxSeverityApplicable(t *testing.T) {
 			name: "Max Severity not applicable",
 			args: args{ruleSeverity: "Low", maxSeverity: "High"},
 			want: false,
+		},
+		{
+			name: "Max Severity not applicable",
+			args: args{ruleSeverity: "Low", maxSeverity: "High"},
+			want: false,
+		},
+		{
+			name: "Max Severity applicable with maxSeverity medium",
+			args: args{ruleSeverity: "High", maxSeverity: "Medium"},
+			want: true,
 		},
 	}
 	for _, tt := range tests {
