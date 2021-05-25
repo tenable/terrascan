@@ -164,7 +164,7 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 	var skipRulesFromAnnotations interface{}
 	var ok bool
 	if skipRulesFromAnnotations, ok = annotations[terrascanSkip]; !ok {
-		zap.S().Errorf(infileInstructionNotPresentLog, terrascanSkip, resourceID)
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanSkip, resourceID)
 		return nil
 	}
 
@@ -190,12 +190,12 @@ func readMinMaxSeverityFromAnnotations(annotations map[string]interface{}, resou
 		ok                    bool
 	)
 	if minSeverityAnnotation, ok = annotations[terrascanMinSeverity]; !ok {
-		zap.S().Errorf(infileInstructionNotPresentLog, terrascanMinSeverity, resourceID)
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMinSeverity, resourceID)
 	} else {
 		minSeverity = minSeverityAnnotation.(string)
 	}
 	if maxSeverityAnnotation, ok = annotations[terrascanMaxSeverity]; !ok {
-		zap.S().Errorf(infileInstructionNotPresentLog, terrascanMaxSeverity, resourceID)
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMaxSeverity, resourceID)
 	} else {
 		maxSeverity = maxSeverityAnnotation.(string)
 	}
