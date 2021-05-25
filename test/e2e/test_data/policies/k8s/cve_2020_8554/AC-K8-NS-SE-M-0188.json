@@ -1,0 +1,15 @@
+{
+    "name": "ensurePrivateIP",
+    "file": "ensurePrivateIP.rego",
+    "template_args": {
+        "name": "ensurePrivateIP",
+        "prefix": "",
+        "resource_type": "kubernetes_service",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Vulnerable to CVE-2020-8554",
+    "reference_id": "AC-K8-NS-SE-M-0188",
+    "category": "Network Security",
+    "version": 1
+}

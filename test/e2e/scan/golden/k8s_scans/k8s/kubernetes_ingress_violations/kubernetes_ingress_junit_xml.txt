@@ -1,5 +1,5 @@
-<testsuites tests="7" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
-  <testsuite tests="7" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation">
+<testsuites tests="8" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="8" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation">
     <properties>
       <property name="Terrascan Version" value="v1.3.3"></property>
     </properties>

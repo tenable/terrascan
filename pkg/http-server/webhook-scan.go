@@ -31,6 +31,7 @@ import (
 
 // validateK8SWebhook handles the incoming validating admission webhook from kubernetes API server
 func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) {
+	zap.S().Debug("handle: validating webhook request")
 
 	var (
 		params = mux.Vars(r)

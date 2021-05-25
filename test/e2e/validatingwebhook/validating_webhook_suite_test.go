@@ -14,16 +14,16 @@
     limitations under the License.
 */
 
-package httpserver
+package validatingwebhook_test
 
 import (
-	"net/http"
+	"testing"
 
-	"go.uber.org/zap"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-// Health returns the health of the http server
-func (g *APIHandler) Health(w http.ResponseWriter, r *http.Request) {
-	zap.S().Debug("handle: health check request")
-	w.WriteHeader(http.StatusOK)
+func TestValidatingWebhook(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "ValidatingWebhook Suite")
 }

@@ -69,6 +69,7 @@ type webhookDisplayedShowLog struct {
 }
 
 func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
+	zap.S().Debug("handle: validating webhook's get logs request")
 
 	if !config.GetK8sAdmissionControl().Dashboard {
 		apiErrorResponse(w, ErrDashboardDisabled.Error(), http.StatusBadRequest)
@@ -134,6 +135,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
+	zap.S().Info("handle: validating webhook's get log by uid request")
 
 	if !config.GetK8sAdmissionControl().Dashboard {
 		apiErrorResponse(w, ErrDashboardDisabled.Error(), http.StatusBadRequest)

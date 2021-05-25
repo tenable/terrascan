@@ -193,7 +193,7 @@
       "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/resource_skipping/terraform",
       "iac_type": "terraform",
       "scanned_at": "2021-03-02 16:00:46.95002 +0000 UTC",
-      "policies_validated": 7,
+      "policies_validated": 8,
       "violated_policies": 11,
       "low": 0,
       "medium": 0,
