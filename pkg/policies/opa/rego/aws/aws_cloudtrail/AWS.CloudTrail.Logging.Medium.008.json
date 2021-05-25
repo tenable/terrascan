@@ -1,0 +1,12 @@
+{
+    "name": "ec2ebsnotoptimized",
+    "file": "ec2_ebs_not_optimized.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that EC2 is EBS optimized",
+    "reference_id": "AWS.CloudTrail.Logging.Medium.008",
+    "category": "Security Best Practices",
+    "version": 1
+}

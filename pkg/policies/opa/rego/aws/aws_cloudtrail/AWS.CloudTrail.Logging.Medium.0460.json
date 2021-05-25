@@ -1,14 +1,12 @@
 {
     "name": "cloudTrailMultiRegionNotCreated",
     "file": "cloudTrailMultiRegionNotCreated.rego",
-    "policy_type": "aws",
-    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Cloud Trail Multi Region not enabled",
     "reference_id": "AWS.CloudTrail.Logging.Medium.0460",
-    "category": "Logging and Monitoring",
+    "category": "Logging",
     "version": 2
 }

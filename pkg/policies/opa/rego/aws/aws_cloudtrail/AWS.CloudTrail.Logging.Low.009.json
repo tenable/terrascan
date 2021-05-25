@@ -1,0 +1,12 @@
+{
+    "name": "ecrmaketagsimmutable",
+    "file": "ecr_make_tags_immutable.rego",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "ECR should have an image tag be immutable",
+    "reference_id": "AWS.CloudTrail.Logging.Low.009",
+    "category": "Security Best Practices",
+    "version": 2
+}
