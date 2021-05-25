@@ -44,6 +44,15 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 	// add a run to the report
 	report.AddRun(run)
 
+	for _, passedRule := range outputData.PassedRules {
+		m := make(map[string]string)
+		m["category"] = passedRule.Category
+		m["severity"] = passedRule.Severity
+
+		run.AddRule(string(passedRule.RuleID)).
+			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
+	}
+
 	// for each result add the rule, location and result to the report
 	for _, violation := range outputData.Violations {
 		m := make(map[string]string)
