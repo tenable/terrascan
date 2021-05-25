@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure GKE basic auth is disabled.",
-    "reference_id": "accurics.gcp.IAM.110",
+    "reference_id": "AC_GCP_0021",
     "category": "Identity and Access Management",
     "version": 1
 }

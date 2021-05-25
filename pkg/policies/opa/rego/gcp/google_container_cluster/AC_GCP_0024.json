@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Kubernetes Cluster is created with Client Certificate disabled.",
-    "reference_id": "accurics.gcp.IAM.104",
+    "reference_id": "AC_GCP_0024",
     "category": "Identity and Access Management",
     "version": 1
 }

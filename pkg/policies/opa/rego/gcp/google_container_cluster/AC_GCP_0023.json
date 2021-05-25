@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure GKE Control Plane is not public.",
-    "reference_id": "accurics.gcp.NS.109",
+    "reference_id": "AC_GCP_0023",
     "category": "Infrastructure Security",
     "version": 1
 }

@@ -1,0 +1,10 @@
+{
+    "name": "checkProjectWideMFA",
+    "file": "checkProjectWideMFA.rego",
+    "template_args": null,
+    "severity": "HIGH",
+    "description": "Ensure Google cloud has multi-factor authentication enabled",
+    "reference_id": "AC_GCP_0275",
+    "category": "Security Best Practices",
+    "version": 1
+}
