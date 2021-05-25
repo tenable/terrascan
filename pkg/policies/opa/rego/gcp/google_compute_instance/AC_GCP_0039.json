@@ -7,7 +7,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure 'Block Project-wide SSH keys' is enabled for VM instances.",
-    "reference_id": "accurics.gcp.NS.126",
+    "reference_id": "AC_GCP_0039",
     "category": "Infrastructure Security",
     "version": 1
 }

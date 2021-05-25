@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Repository is Not Private.",
-    "reference_id": "accurics.gcp.IAM.145",
+    "reference_id": "AC_GCP_0231",
     "category": "Identity and Access Management",
     "version": 1
 }

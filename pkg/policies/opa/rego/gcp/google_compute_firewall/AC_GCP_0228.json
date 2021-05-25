@@ -7,7 +7,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that SSH access is restricted from the internet",
-    "reference_id": "accurics.gcp.NS.148",
+    "reference_id": "AC_GCP_0228",
     "category": "Infrastructure Security",
     "version": 1
 }

@@ -7,7 +7,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure 'Enable connecting to serial ports' is not enabled for VM instances.",
-    "reference_id": "accurics.gcp.NS.129",
+    "reference_id": "AC_GCP_0037",
     "category": "Infrastructure Security",
     "version": 1
 }
