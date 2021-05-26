@@ -61,7 +61,7 @@ func CheckSeverity(ruleSeverity, desiredSeverity string) bool {
 
 // MinSeverityApplicable verifies if the severity of policy rule need to be changed to the minimum severity level
 func MinSeverityApplicable(ruleSeverity, minSeverity string) bool {
-	// this case will never arise added for safe checks
+	// this case will never arise, added for safe check
 	if !ValidateSeverityInput(minSeverity) {
 		return false
 	}
@@ -81,7 +81,7 @@ func MinSeverityApplicable(ruleSeverity, minSeverity string) bool {
 
 // MaxSeverityApplicable verifies if the severity of policy rule need to be changed to the maximum severity level
 func MaxSeverityApplicable(ruleSeverity, maxSeverity string) bool {
-	// this case will never arise added for safe checks
+	// this case will never arise, added for safe check
 	if !ValidateSeverityInput(maxSeverity) {
 		return false
 	}

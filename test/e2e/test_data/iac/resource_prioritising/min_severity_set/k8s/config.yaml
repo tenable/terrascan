@@ -1,9 +1,14 @@
-apiVersion: v1
-kind: Namespace
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: production
-  labels:
-    "hey": test
+  name: ingress-demo-disallowed
   annotations:
-    terrascan/minseverity: High
-    
+    terrascan/minseverity: Medium
+spec:
+  rules:
+    - host: example-host.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: nginx
+              servicePort: 80  

@@ -56,7 +56,7 @@ kind: Pod
 metadata:
   name: myapp-pod
   annotations:
-    terrascanSkip: |
+    terrascan/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
@@ -68,7 +68,7 @@ kind: CRD
 metadata:
   generateName: myapp-pod-prefix-
   annotations:
-    terrascanSkip: |
+    terrascan/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
@@ -414,7 +414,7 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 	}
 }
 
-func Test_readMinMaxSeverityFromAnnotations(t *testing.T) {
+func TestReadMinMaxSeverityFromAnnotations(t *testing.T) {
 	type args struct {
 		annotations map[string]interface{}
 		resourceID  string
@@ -438,7 +438,7 @@ func Test_readMinMaxSeverityFromAnnotations(t *testing.T) {
 		{
 			name: "min severity set to high",
 			args: args{annotations: map[string]interface{}{
-				"terrascan/minseverity": "High",
+				terrascanMinSeverity: "High",
 			}},
 			wantMinSeverity: "High",
 			wantMaxSeverity: "",
@@ -446,7 +446,7 @@ func Test_readMinMaxSeverityFromAnnotations(t *testing.T) {
 		{
 			name: "max severity set to low",
 			args: args{annotations: map[string]interface{}{
-				"terrascan/maxseverity": "Low",
+				terrascanMaxSeverity: "Low",
 			}},
 			wantMinSeverity: "",
 			wantMaxSeverity: "Low",
@@ -454,15 +454,15 @@ func Test_readMinMaxSeverityFromAnnotations(t *testing.T) {
 		{
 			name: "max severity set to None",
 			args: args{annotations: map[string]interface{}{
-				"terrascan/maxseverity": "None"}},
+				terrascanMaxSeverity: "None"}},
 			wantMinSeverity: "",
 			wantMaxSeverity: "None",
 		},
 		{
 			name: "max severity set to low and Min severity set to high",
 			args: args{annotations: map[string]interface{}{
-				"terrascan/maxseverity": "LOw",
-				"terrascan/minseverity": "hiGh",
+				terrascanMaxSeverity: "LOw",
+				terrascanMinSeverity: "hiGh",
 			}},
 			wantMinSeverity: "hiGh",
 			wantMaxSeverity: "LOw",

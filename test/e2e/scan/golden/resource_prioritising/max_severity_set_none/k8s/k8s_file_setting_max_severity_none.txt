@@ -3,13 +3,13 @@
     "violations": null,
     "skipped_violations": [
       {
-        "rule_name": "noOwnerLabel",
-        "description": "No owner for namespace affects the operations",
-        "rule_id": "AC-K8-OE-NS-L-0128",
-        "severity": "LOW",
-        "category": "Security Best Practices",
-        "resource_name": "production",
-        "resource_type": "kubernetes_namespace",
+        "rule_name": "noHttps",
+        "description": "TLS disabled can affect the confidentiality of the data in transit",
+        "rule_id": "AC-K8-NS-IN-H-0020",
+        "severity": "HIGH",
+        "category": "Network Security",
+        "resource_name": "ingress-demo-disallowed",
+        "resource_type": "kubernetes_ingress",
         "file": "config.yaml",
         "line": 1
       }
@@ -17,8 +17,8 @@
     "scan_summary": {
       "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/max_severity_set_none/k8s",
       "iac_type": "k8s",
-      "scanned_at": "2021-05-24 11:12:18.816109 +0000 UTC",
-      "policies_validated": 607,
+      "scanned_at": "2021-05-26 08:26:12.117853 +0000 UTC",
+      "policies_validated": 7,
       "violated_policies": 0,
       "low": 0,
       "medium": 0,
