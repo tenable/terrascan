@@ -16,6 +16,5 @@
     "description": "CiscoSecure, WebSM (TCP:9090) is exposed to the entire public internet",
     "reference_id": "accurics.azure.NPS.170",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

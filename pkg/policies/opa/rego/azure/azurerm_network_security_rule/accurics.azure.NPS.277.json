@@ -16,6 +16,5 @@
     "description": "Cassandra OpsCenter (TCP:61621) is exposed to small Private network",
     "reference_id": "accurics.azure.NPS.277",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

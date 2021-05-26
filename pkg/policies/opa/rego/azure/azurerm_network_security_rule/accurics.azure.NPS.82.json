@@ -16,6 +16,5 @@
     "description": "NetBIOS Datagram Service (UDP:138) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.82",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

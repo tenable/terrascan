@@ -16,6 +16,5 @@
     "description": "MSSQL Admin (TCP:1434) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.189",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

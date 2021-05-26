@@ -16,6 +16,5 @@
     "description": "Mongo Web Portal (TCP:27018) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.207",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

@@ -16,6 +16,5 @@
     "description": "Cassandra OpsCenter (TCP:61621) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.42",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

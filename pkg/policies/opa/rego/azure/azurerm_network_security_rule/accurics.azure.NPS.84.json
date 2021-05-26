@@ -16,6 +16,5 @@
     "description": "NetBIOS Session Service (TCP:139) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.84",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

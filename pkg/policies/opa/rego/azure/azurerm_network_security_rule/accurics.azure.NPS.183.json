@@ -16,6 +16,5 @@
     "description": " Known internal web port (TCP:8000) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.183",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }

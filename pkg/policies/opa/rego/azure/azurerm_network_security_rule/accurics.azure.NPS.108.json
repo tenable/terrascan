@@ -16,6 +16,5 @@
     "description": "SQL Server Analysis (TCP:2383) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.108",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": ""
+    "version": 2
 }
