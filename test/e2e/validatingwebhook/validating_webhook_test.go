@@ -112,6 +112,9 @@ var _ = Describe("ValidatingWebhook", func() {
 		os.RemoveAll(certsFolder)
 	})
 
+	// log message to be asserted when sever starts
+	assertLogMessage := "https server listening at port %s"
+
 	Describe("terrascan server as validating webhook with various available config options", func() {
 
 		When("validating webhook with default 'k8s-admission-control' config", func() {
@@ -121,6 +124,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				var session *gexec.Session
 				var webhookConfig *admissionv1.ValidatingWebhookConfiguration
 				var configFileName string
+				port := "9010"
 
 				It("server should start running on port 9010", func() {
 					configFileName = "config1.toml"
@@ -131,11 +135,10 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9010"))
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 				})
 
 				Context("in blind mode, log end points return error response", func() {
-					port := "9010"
 					myIP, err := validatingwebhook.GetIP()
 					When("request is made to the get a single log endpoint", func() {
 						It("should return a 400 bad request response", func() {
@@ -208,7 +211,7 @@ var _ = Describe("ValidatingWebhook", func() {
 				os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 				args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-				Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9011"))
+				Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 			})
 
 			When("request is made to add server as a validating webhook", func() {
@@ -257,7 +260,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9012"))
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 				})
 
 				When("request is made to add server as a validating webhook", func() {
@@ -304,7 +307,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9013"))
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 				})
 
 				When("request is made to add server as a validating webhook", func() {
@@ -353,7 +356,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9014"))
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 				})
 
 				When("request is made to add server as a validating webhook", func() {
@@ -400,7 +403,7 @@ var _ = Describe("ValidatingWebhook", func() {
 					os.Setenv(k8sWebhookAPIKey, apiKeyValue)
 					args := []string{"server", "-c", configFileName, "--cert-path", certFileAbsPath, "--key-path", privKeyFileAbsPath, "-p", port, "-l", "debug"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
-					Eventually(session.Err, defaultTimeout).Should(gbytes.Say("http server listening at port 9015"))
+					Eventually(session.Err, defaultTimeout).Should(gbytes.Say(fmt.Sprintf(assertLogMessage, port)))
 				})
 
 				When("request is made to add server as a validating webhook", func() {
