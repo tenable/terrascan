@@ -38,16 +38,16 @@ const expectedSarifOutput1 = `{
                   "ruleId": "AWS.S3Bucket.DS.High.1043",
                   "level": "error",
                   "message": {
-                    "markdown": "S3 bucket Access is allowed to all AWS Account Users."
+                    "text": "S3 bucket Access is allowed to all AWS Account Users."
                   },
                   "locations": [
                     {
                       "physicalLocation": {
                         "artifactLocation": {
-                          "uri": "modules/m1/main.tf"
+                          "uri": "file://test/modules/m1/main.tf"
                         },
-                        "contextRegion": {
-                          "startLine": 20
+                        "region": {
+                          "startLine": 19
                         }
                       },
                       "logicalLocations": [

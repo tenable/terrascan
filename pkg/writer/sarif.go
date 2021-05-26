@@ -17,9 +17,11 @@
 package writer
 
 import (
+	"fmt"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/owenrumney/go-sarif/sarif"
 	"io"
+	"path/filepath"
 	"strings"
 )
 
@@ -52,7 +54,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		run.AddRule(string(passedRule.RuleID)).
 			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
 	}
-
+	resourcePath := outputData.Summary.ResourcePath
 	// for each result add the rule, location and result to the report
 	for _, violation := range outputData.Violations {
 		m := make(map[string]string)
@@ -62,10 +64,15 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		rule := run.AddRule(string(violation.RuleID)).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
+		absFilePath := violation.File
+		if !filepath.IsAbs(violation.File) {
+			absFilePath = filepath.Join(resourcePath, violation.File)
+		}
+
 		location := sarif.NewLocation().
 			WithPhysicalLocation(sarif.NewPhysicalLocation().
-				WithArtifactLocation(sarif.NewSimpleArtifactLocation(violation.File)).
-				WithContextRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
+				WithArtifactLocation(sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))).
+				WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber - 1)))
 
 		if len(violation.ResourceType) > 0 && len(violation.ResourceName) > 0 {
 			location.LogicalLocations = append(location.LogicalLocations, sarif.NewLogicalLocation().
@@ -74,7 +81,6 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 
 		run.AddResult(rule.ID).
 			WithMessage(sarif.NewTextMessage(violation.Description)).
-			WithMessage(sarif.NewMarkdownMessage(violation.Description)).
 			WithLevel(getSarifLevel(violation.Severity)).
 			WithLocation(location)
 	}
