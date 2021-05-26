@@ -98,7 +98,7 @@ webhooks:
     {{- range .Values.webhook.admissionReviewVersions }}
     - {{ . | printf "%s" }}
     {{ end }}
-    failurePolicy: {{ .Values.webhook.failurePolicy }}
+    failurePolicy: Ignore
     sideEffects: {{ .Values.webhook.sideEffects }}
     clientConfig:
       service:
