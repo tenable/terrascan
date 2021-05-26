@@ -22,8 +22,8 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/mapper"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/infracloudio/mapper"
 	"go.uber.org/zap"
 )
 

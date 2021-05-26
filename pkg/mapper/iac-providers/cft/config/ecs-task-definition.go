@@ -1,0 +1,84 @@
+package config
+
+import (
+	"encoding/json"
+
+	"github.com/awslabs/goformation/v4/cloudformation/ecs"
+)
+
+// EcsTaskDefinitionConfig holds config for aws_ecs_task_definition
+type EcsTaskDefinitionConfig struct {
+	Config
+	ContainerDefinitions string         `json:"container_definitions"`
+	NetworkMode          string         `json:"network_mode"`
+	Volumes              []VolumeConfig `json:"volume"`
+}
+
+// VolumeConfig holds config for volume attirbute of aws_ecs_task_definition
+type VolumeConfig struct {
+	EfsVolumeConfiguration EfsVolumeConfig `json:"efs_volume_configuration"`
+}
+
+// EfsVolumeConfig holds config for efs_volume_configuration atrtribute of volume
+type EfsVolumeConfig struct {
+	TransitEncryption string `json:"transit_encryption"`
+}
+
+// ContainerDefinitionConfig holds the config for container_definitions
+type ContainerDefinitionConfig struct {
+	Environment []EnvironmentConfig `json:"environment"`
+}
+
+// EnvironmentConfig holds config for environment atrtribute for container_definitions
+type EnvironmentConfig struct {
+	Name string `json:"name"`
+}
+
+// GetEcsTaskDefinitionConfig returns config for aws_ecs_service and aws_ecs_task_definition
+func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
+	cf := EcsTaskDefinitionConfig{
+		Config: Config{
+			Tags: t.Tags,
+		},
+		NetworkMode: t.NetworkMode,
+	}
+
+	if t.ContainerDefinitions != nil {
+		// add container_definitions as a json string with mapped values
+		cDefs := make([]ContainerDefinitionConfig, 0)
+		for _, cDef := range t.ContainerDefinitions {
+			// add environment kn pairs
+			if cDef.Environment != nil {
+				env := make([]EnvironmentConfig, 0)
+				for _, kvPair := range cDef.Environment {
+					env = append(env, EnvironmentConfig{
+						Name: kvPair.Name,
+					})
+				}
+				cDefs = append(cDefs, ContainerDefinitionConfig{
+					Environment: env,
+				})
+			}
+		}
+		definitions, err := json.Marshal(cDefs)
+		if err == nil {
+			cf.ContainerDefinitions = string(definitions)
+		}
+	}
+
+	if t.Volumes != nil {
+		volumes := make([]VolumeConfig, 0)
+		for _, volume := range t.Volumes {
+			if volume.EFSVolumeConfiguration != nil {
+				volumes = append(volumes, VolumeConfig{
+					EfsVolumeConfiguration: EfsVolumeConfig{
+						TransitEncryption: volume.EFSVolumeConfiguration.TransitEncryption,
+					},
+				})
+			}
+		}
+		cf.Volumes = volumes
+	}
+
+	return []AWSResourceConfig{{Resource: cf}}
+}

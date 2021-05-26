@@ -1,0 +1,28 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "myDBInstance": {
+      "Type": "AWS::DocDB::DBCluster",
+      "Properties": {
+        "BackupRetentionPeriod": 8,
+        "DBClusterIdentifier": "sample-cluster",
+        "DBClusterParameterGroupName": "default.docdb3.6",
+        "DBSubnetGroupName": "default",
+        "KmsKeyId": "your-kms-key-id",
+        "MasterUsername": "your-master-username",
+        "MasterUserPassword": "your-master-user-password",
+        "Port": 27017,
+        "PreferredBackupWindow": "07:34-08:04",
+        "PreferredMaintenanceWindow": "sat:04:51-sat:05:21",
+        "SnapshotIdentifier": "sample-cluster-snapshot-id",
+        "StorageEncrypted": true,
+        "Tags": [
+          {
+            "Key": "String",
+            "Value": "String"
+          }
+        ]
+      }
+    }
+  }
+}
