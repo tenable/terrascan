@@ -8,9 +8,6 @@ spec:
  ttlSecondsAfterFinished: 3600
  template:
    spec:
-     securityContext:
-       seccompProfile:
-         type: RuntimeDefault
      # if you want to add slack notification script add one more volume here
      volumes:
        - name: notification-scripts
@@ -20,7 +17,7 @@ spec:
        - name: ssh-key-secret
          secret:
            secretName: ssh-key-secret
-       #add a secret for git config file   
+       #add a secret for git config file
        - name: ssh-config
          secret:
            secretName: ssh-config-secret
@@ -64,7 +61,7 @@ spec:
            command:
            - /go/bin/terrascan
            - version
-         periodSeconds: 10 
+         periodSeconds: 10
        #if want to use private repo
        volumeMounts:
          - mountPath: /etc/secret-volume
@@ -77,9 +74,9 @@ spec:
            name: ssh-known-hosts
            readOnly: true
          - mountPath: /data
-           name: notification-scripts 
+           name: notification-scripts
            readOnly: true
- 
+
      restartPolicy: Never
  backoffLimit: 1
- 
+

@@ -4,14 +4,11 @@ metadata:
  generateName: terrascan-hook-
  namespace: <YOU APPLICATION NAMESPACE>
  annotations:
-   argocd.argoproj.io/hook: PreSync            
+   argocd.argoproj.io/hook: PreSync
 spec:
  ttlSecondsAfterFinished: 3600
  template:
    spec:
-     securityContext:
-       seccompProfile:
-         type: RuntimeDefault
      containers:
      - name: terrascan-argocd
        image: <CUSTOME PRESYNC HOOK IMAGE>
@@ -30,11 +27,11 @@ spec:
          - name: IAC_TYPE
            value: <IAC TYPE YOU WANT SCAN> # If not provided default value is 'k8s'
          - name: IAC_VERSION
-           value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1' 
+           value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1'
          - name: CLOUD_PROVIDER
            value: <TYPE OF CLOUD PROVIDER> #If not provided default value is 'all'
          - name: REMOTE_TYPE
-           value: <TYPE OF REMOTE> #If not provided default value is 'git'       
+           value: <TYPE OF REMOTE> #If not provided default value is 'git'
        args:
        - sh
        - /home/terrascan/bin/terrascan-remote-scan.sh
@@ -61,4 +58,4 @@ spec:
          initialDelaySeconds: 10
      restartPolicy: Never
  backoffLimit: 1
- 
+
