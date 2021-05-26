@@ -62,14 +62,21 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		rule := run.AddRule(string(violation.RuleID)).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
+		location := sarif.NewLocation().
+			WithPhysicalLocation(sarif.NewPhysicalLocation().
+				WithArtifactLocation(sarif.NewSimpleArtifactLocation(violation.File)).
+				WithContextRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
+
+		if len(violation.ResourceType) > 0 && len(violation.ResourceName) > 0 {
+			location.LogicalLocations = append(location.LogicalLocations, sarif.NewLogicalLocation().
+				WithKind(violation.ResourceType).WithName(violation.ResourceName))
+		}
+
 		run.AddResult(rule.ID).
 			WithMessage(sarif.NewTextMessage(violation.Description)).
 			WithMessage(sarif.NewMarkdownMessage(violation.Description)).
 			WithLevel(getSarifLevel(violation.Severity)).
-			WithLocation(sarif.NewLocation().
-				WithPhysicalLocation(sarif.NewPhysicalLocation().
-					WithArtifactLocation(sarif.NewSimpleArtifactLocation(violation.File)).
-					WithContextRegion(sarif.NewRegion().WithStartLine(violation.LineNumber))))
+			WithLocation(location)
 	}
 
 	// print the report to anything that implements `io.Writer`

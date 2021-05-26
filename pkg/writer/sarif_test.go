@@ -49,7 +49,13 @@ const expectedSarifOutput1 = `{
                         "contextRegion": {
                           "startLine": 20
                         }
-                      }
+                      },
+                      "logicalLocations": [
+                        {
+                          "name": "bucket",
+                          "kind": "aws_s3_bucket"
+                        }
+                      ]
                     }
                   ]
                 }
