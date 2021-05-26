@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-100"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+  name: webhook-deleter
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      serviceAccountName: terrascan-webhook-deleter-job-sa
+      containers:
+      - name: curl
+        image: curlimages/curl
+        command: ["/bin/sh", "-c", "AUTH_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) && curl --verbose https://kubernetes.default.svc/apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/terrascan -X DELETE -k -H \"Authorization: Bearer $AUTH_TOKEN\""]
+        resources:
+          requests:
+            cpu: "0.1"
+            memory: "50Mi"
+          limits:
+            cpu: "0.1"
+            memory: "50Mi"
+      restartPolicy: Never
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+        runAsUser: 101

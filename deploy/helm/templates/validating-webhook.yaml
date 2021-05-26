@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: {{ .Values.name }}
+  name: terrascan
   annotations:
     "helm.sh/hook-weight": "100"
     "helm.sh/hook": post-install

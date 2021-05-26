@@ -22,7 +22,6 @@ webhook:
     - ""
   resources:
     - "deployments"
-    - "pods"
   apiVersions:
     - "*"
   operations:
