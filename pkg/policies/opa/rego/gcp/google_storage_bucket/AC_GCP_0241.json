@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that object versioning is enabled on log-buckets.",
-    "reference_id": "accurics.gcp.LOG.146",
+    "reference_id": "AC_GCP_0241",
     "category": "Logging and Monitoring",
     "version": 1
 }

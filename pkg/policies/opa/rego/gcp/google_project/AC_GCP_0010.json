@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that the default network does not exist in a project.",
-    "reference_id": "accurics.gcp.NS.119",
+    "reference_id": "AC_GCP_0010",
     "category": "Infrastructure Security",
     "version": 1
 }

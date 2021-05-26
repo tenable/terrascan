@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Cloud Audit Logging is configured properly across all services and all users from a project.",
-    "reference_id": "accurics.gcp.LOG.010",
+    "reference_id": "AC_GCP_0009",
     "category": "Logging and Monitoring",
     "version": 1
 }

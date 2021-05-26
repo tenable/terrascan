@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level.",
-    "reference_id": "accurics.gcp.IAM.137",
+    "reference_id": "AC_GCP_0007",
     "category": "Identity and Access Management",
     "version": 1
 }

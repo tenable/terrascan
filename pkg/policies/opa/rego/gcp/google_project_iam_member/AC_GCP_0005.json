@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that Service Account has no Admin privileges.",
-    "reference_id": "accurics.gcp.IAM.138",
+    "reference_id": "AC_GCP_0005",
     "category": "Identity and Access Management",
     "version": 1
 }

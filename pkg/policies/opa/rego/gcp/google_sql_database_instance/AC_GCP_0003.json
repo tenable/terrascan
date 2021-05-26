@@ -4,7 +4,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Cloud SQL database instance requires all incoming connections to use SSL",
-    "reference_id": "accurics.gcp.EKM.141",
+    "reference_id": "AC_GCP_0003",
     "category": "Infrastructure Security",
     "version": 1
 }
