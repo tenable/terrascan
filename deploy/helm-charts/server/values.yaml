@@ -11,7 +11,7 @@ persistence:
 
 webhook:
   name: webhook.terrascan.io
-  failurePolicy: Ignore
+  failurePolicy: Fail
   sideEffects: None
   admissionReviewVersions:
     - "v1"
