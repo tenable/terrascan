@@ -1,14 +1,19 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  name: ingress-demo-disallowed
+  name: allowed-external-ip
   annotations:
-    terrascan/minseverity: Medium
+    runterrascan.io/minseverity: High
 spec:
-  rules:
-    - host: example-host.example.com
-      http:
-        paths:
-          - backend:
-              serviceName: nginx
-              servicePort: 80  
+  type: ClusterIP
+  selector:
+    app: MyApp
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  externalIPs:
+    - 192.168.10.10
+    - 8.8.8.8
+    - 203.0.113.0

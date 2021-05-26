@@ -29,11 +29,11 @@ import (
 )
 
 const (
-	terrascanSkip        = "terrascan/skip"
+	terrascanSkip        = "runterrascan.io/skip"
 	terrascanSkipRule    = "rule"
 	terrascanSkipComment = "comment"
-	terrascanMaxSeverity = "terrascan/maxseverity"
-	terrascanMinSeverity = "terrascan/minseverity"
+	terrascanMaxSeverity = "runterrascan.io/maxseverity"
+	terrascanMinSeverity = "runterrascan.io/minseverity"
 )
 
 var (

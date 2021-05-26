@@ -33,7 +33,7 @@
       "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/max_severity_set_none/terraform",
       "iac_type": "terraform",
       "scanned_at": "2021-05-26 08:34:10.87025 +0000 UTC",
-      "policies_validated": 7,
+      "policies_validated": 8,
       "violated_policies": 0,
       "low": 0,
       "medium": 0,

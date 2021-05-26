@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ingress-demo-disallowed
   annotations:
-    terrascan/skip: "[{\"rule\": \"AC-K8-NS-IN-H-0020\", \"comment\": \"reason to skip the rule\"}]"
+    runterrascan.io/skip: "[{\"rule\": \"AC-K8-NS-IN-H-0020\", \"comment\": \"reason to skip the rule\"}]"
 spec:
   rules:
     - host: example-host.example.com

@@ -56,7 +56,7 @@ kind: Pod
 metadata:
   name: myapp-pod
   annotations:
-    terrascan/skip: |
+    runterrascan.io/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
@@ -68,7 +68,7 @@ kind: CRD
 metadata:
   generateName: myapp-pod-prefix-
   annotations:
-    terrascan/skip: |
+    runterrascan.io/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
