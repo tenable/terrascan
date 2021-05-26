@@ -1,0 +1,23 @@
+policy:
+  path: custom-path
+  rego_subdir: rego-subdir
+  repo_url: 'https://repository/url'
+  branch: branch-name
+notifications:
+  webhook1:
+    type: webhook
+    config:
+      url: testurl1
+rules:
+  scan-rules:
+    - rule.1
+    - rule.2
+    - rule.3
+    - rule.4
+    - rule.5
+  skip-rules:
+    - rule.1
+category:
+  list:
+    - category.1
+    - category.2

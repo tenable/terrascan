@@ -21,52 +21,52 @@ var global *TerrascanConfig
 
 // TerrascanConfig struct defines global variables/configurations across terrascan
 type TerrascanConfig struct {
-	Policy              `toml:"policy,omitempty"`
-	Notifications       map[string]Notifier `toml:"notifications,omitempty"`
-	Rules               `toml:"rules,omitempty"`
-	Category            `toml:"category,omitempty"`
-	Severity            `toml:"severity,omitempty"`
-	K8sAdmissionControl `toml:"k8s-admission-control,omitempty"`
+	Policy              `toml:"policy,omitempty" yaml:"policy,omitempty"`
+	Notifications       map[string]Notifier `toml:"notifications,omitempty" yaml:"notifications,omitempty"`
+	Rules               `toml:"rules,omitempty" yaml:"rules,omitempty"`
+	Category            `toml:"category,omitempty" yaml:"category,omitempty"`
+	Severity            `toml:"severity,omitempty" yaml:"severity,omitempty"`
+	K8sAdmissionControl `toml:"k8s-admission-control,omitempty" yaml:"k8s-admission-control,omitempty"`
 }
 
 // Category defines the categories of violations that you want to be reported
 type Category struct {
-	List []string `toml:"list"`
+	List []string `toml:"list" yaml:"list"`
 }
 
 // Severity defines the minimum level of severity of violations that you want to be reported
 type Severity struct {
-	Level string `toml:"level"`
+	Level string `toml:"level" yaml:"level"`
 }
 
 // Policy struct defines policy specific configurations
 type Policy struct {
 	// policy repo local path
-	BasePath string `toml:"path,omitempty"`
+	BasePath string `toml:"path,omitempty" yaml:"path,omitempty"`
 	// local filepath where repository containing policies is cached at
-	RepoPath string `toml:"rego_subdir,omitempty"`
+	RepoPath string `toml:"rego_subdir,omitempty" yaml:"rego_subdir,omitempty"`
 
 	// policy git url and branch
-	RepoURL string `toml:"repo_url,omitempty"`
-	Branch  string `toml:"branch,omitempty"`
+	RepoURL string `toml:"repo_url,omitempty" yaml:"repo_url,omitempty"`
+	Branch  string `toml:"branch,omitempty" yaml:"branch,omitempty"`
 }
 
 // Notifier represent a single notification in the terrascan config file
 type Notifier struct {
-	NotifierType   string      `toml:"type"`
-	NotifierConfig interface{} `toml:"config"`
+	NotifierType   string      `toml:"type" yaml:"type"`
+	NotifierConfig interface{} `toml:"config" yaml:"config"`
 }
 
 // Rules represents scan and skip rules in the terrascan config file
 type Rules struct {
-	ScanRules []string `toml:"scan-rules,omitempty"`
-	SkipRules []string `toml:"skip-rules,omitempty"`
+	ScanRules []string `toml:"scan-rules,omitempty" yaml:"scan-rules,omitempty"`
+	SkipRules []string `toml:"skip-rules,omitempty" yaml:"skip-rules,omitempty"`
 }
 
 // K8sAdmissionControl deny rules in the terrascan config file
 type K8sAdmissionControl struct {
-	Dashboard      bool     `toml:"dashboard,omitempty"`
-	DeniedSeverity string   `toml:"denied-severity,omitempty"`
-	Categories     []string `toml:"denied-categories,omitempty"`
-	SaveRequests   bool     `toml:"save-requests,omitempty"`
+	Dashboard      bool     `toml:"dashboard,omitempty" yaml:"dashboard,omitempty"`
+	DeniedSeverity string   `toml:"denied-severity,omitempty" yaml:"denied-severity,omitempty"`
+	Categories     []string `toml:"denied-categories,omitempty" yaml:"denied-categories,omitempty"`
+	SaveRequests   bool     `toml:"save-requests,omitempty" yaml:"save-requests,omitempty"`
 }

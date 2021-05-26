@@ -20,9 +20,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/pelletier/go-toml"
 	"go.uber.org/zap"
+	"gopkg.in/yaml.v3"
+)
+
+const (
+	tomlExtension  = ".toml"
+	yamlExtension1 = ".yaml"
+	yamlExtension2 = ".yml"
 )
 
 var (
@@ -62,9 +70,21 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 		return configReader, ErrTomlLoadConfig
 	}
 
-	if err = toml.Unmarshal(data, &configReader.config); err != nil {
+	// check the extension of the file and decode using the file contents
+	// using the relevant package
+	switch filepath.Ext(fileName) {
+	case tomlExtension:
+		err = toml.Unmarshal(data, &configReader.config)
+	case yamlExtension1, yamlExtension2:
+		err = yaml.Unmarshal(data, &configReader.config)
+	default:
+		err = fmt.Errorf("file format %q not support for terrascan config file",
+			filepath.Ext(fileName))
+	}
+	if err != nil {
 		return configReader, err
 	}
+
 	return configReader, nil
 }
 
