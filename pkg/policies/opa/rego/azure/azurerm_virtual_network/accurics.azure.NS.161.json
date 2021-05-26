@@ -1,15 +1,15 @@
 {
-  "name": "reme_noSecurityGroupAssociated",
-  "file": "noSecurityGroupAssociated.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_virtual_network",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure that Azure Virtual Network subnet is configured with a Network Security Group",
-  "reference_id": "accurics.azure.NS.161",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0356"
+    "name": "reme_noSecurityGroupAssociated",
+    "file": "noSecurityGroupAssociated.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_virtual_network",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Azure Virtual Network subnet is configured with a Network Security Group",
+    "reference_id": "accurics.azure.NS.161",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0356"
 }

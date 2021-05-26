@@ -1,15 +1,15 @@
 {
-  "name": "reme_nonSslEnabled",
-  "file": "nonSslEnabled.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_redis_cache",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure that the Redis Cache accepts only SSL connections",
-  "reference_id": "accurics.azure.EKM.23",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0394"
+    "name": "reme_nonSslEnabled",
+    "file": "nonSslEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_redis_cache",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that the Redis Cache accepts only SSL connections",
+    "reference_id": "accurics.azure.EKM.23",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0394"
 }

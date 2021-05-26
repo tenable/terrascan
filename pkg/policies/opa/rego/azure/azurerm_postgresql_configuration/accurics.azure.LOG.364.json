@@ -1,13 +1,13 @@
 {
-  "name": "postgreSqlLogsEnabled",
-  "file": "postgreSqlLogsEnabled.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_postgresql_configuration",
-  "template_args": null,
-  "severity": "MEDIUM",
-  "description": "Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server",
-  "reference_id": "accurics.azure.LOG.364",
-  "category": "Logging and Monitoring",
-  "version": 1,
-  "id": "AC_AZURE_0409"
+    "name": "postgreSqlLogsEnabled",
+    "file": "postgreSqlLogsEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_postgresql_configuration",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.364",
+    "category": "Logging and Monitoring",
+    "version": 1,
+    "id": "AC_AZURE_0409"
 }

@@ -1,15 +1,15 @@
 {
-  "name": "reme_ipRangeFilterMissing",
-  "file": "ipRangeFilterMissing.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_cosmosdb_account",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "HIGH",
-  "description": "Ensure to filter source Ips for Cosmos DB Account",
-  "reference_id": "accurics.azure.NS.32",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0184"
+    "name": "reme_ipRangeFilterMissing",
+    "file": "ipRangeFilterMissing.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_cosmosdb_account",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure to filter source Ips for Cosmos DB Account",
+    "reference_id": "accurics.azure.NS.32",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0184"
 }

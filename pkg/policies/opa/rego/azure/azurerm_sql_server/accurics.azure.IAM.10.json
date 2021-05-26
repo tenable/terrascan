@@ -1,15 +1,15 @@
 {
-  "name": "reme_sqlServerADAdminConfigured",
-  "file": "sqlServerADAdminConfigured.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_sql_server",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "HIGH",
-  "description": "Ensure that Azure Active Directory Admin is configured for SQL Server",
-  "reference_id": "accurics.azure.IAM.10",
-  "category": "Identity and Access Management",
-  "version": 2,
-  "id": "AC_AZURE_0378"
+    "name": "reme_sqlServerADAdminConfigured",
+    "file": "sqlServerADAdminConfigured.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_server",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that Azure Active Directory Admin is configured for SQL Server",
+    "reference_id": "accurics.azure.IAM.10",
+    "category": "Identity and Access Management",
+    "version": 2,
+    "id": "AC_AZURE_0378"
 }

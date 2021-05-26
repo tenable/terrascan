@@ -16,5 +16,6 @@
     "description": "VNC Server (TCP:5900) is exposed to small Private network",
     "reference_id": "accurics.azure.NPS.315",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

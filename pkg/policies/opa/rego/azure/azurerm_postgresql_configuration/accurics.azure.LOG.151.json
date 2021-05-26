@@ -1,15 +1,15 @@
 {
-  "name": "reme_connectionThrottling",
-  "file": "connectionThrottling.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_postgresql_configuration",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
-  "reference_id": "accurics.azure.LOG.151",
-  "category": "Logging and Monitoring",
-  "version": 2,
-  "id": "AC_AZURE_0414"
+    "name": "reme_connectionThrottling",
+    "file": "connectionThrottling.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_postgresql_configuration",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.LOG.151",
+    "category": "Logging and Monitoring",
+    "version": 2,
+    "id": "AC_AZURE_0414"
 }

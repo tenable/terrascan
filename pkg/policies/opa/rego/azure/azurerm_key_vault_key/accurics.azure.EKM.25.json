@@ -1,15 +1,15 @@
 {
-  "name": "reme_checkKeyExpirationIsSet",
-  "file": "checkKeyExpirationIsSet.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_key_vault_key",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "HIGH",
-  "description": "Ensure that the expiration date is set on all keys",
-  "reference_id": "accurics.azure.EKM.25",
-  "category": "Data Protection",
-  "version": 2,
-  "id": "AC_AZURE_0164"
+    "name": "reme_checkKeyExpirationIsSet",
+    "file": "checkKeyExpirationIsSet.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_key_vault_key",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure that the expiration date is set on all keys",
+    "reference_id": "accurics.azure.EKM.25",
+    "category": "Data Protection",
+    "version": 2,
+    "id": "AC_AZURE_0164"
 }

@@ -1,15 +1,15 @@
 {
-  "name": "reme_sqlServerADPredictableAccount",
-  "file": "sqlServerADPredictableAccount.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_sql_active_directory_administrator",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account",
-  "reference_id": "accurics.azure.IAM.137",
-  "category": "Compliance Validation",
-  "version": 2,
-  "id": "AC_AZURE_0384"
+    "name": "reme_sqlServerADPredictableAccount",
+    "file": "sqlServerADPredictableAccount.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_active_directory_administrator",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account",
+    "reference_id": "accurics.azure.IAM.137",
+    "category": "Compliance Validation",
+    "version": 2,
+    "id": "AC_AZURE_0384"
 }

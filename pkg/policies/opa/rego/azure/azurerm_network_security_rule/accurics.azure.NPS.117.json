@@ -1,21 +1,21 @@
 {
-  "name": "reme_networkPort5500ExposedPublicEntire",
-  "file": "networkPortExposedPublic.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_network_security_rule",
-  "template_args": {
-    "endLimit": 0,
-    "evalHosts": true,
-    "name": "networkPort5500ExposedPublicEntire",
-    "numberOfHosts": 1,
-    "portNumber": 5500,
-    "prefix": "reme_",
-    "protocol": "TCP"
-  },
-  "severity": "HIGH",
-  "description": "VNC Listener (TCP:5500) is exposed to entire Public network",
-  "reference_id": "accurics.azure.NPS.117",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0427"
+    "name": "reme_networkPort5500ExposedPublicEntire",
+    "file": "networkPortExposedPublic.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_network_security_rule",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort5500ExposedPublicEntire",
+        "numberOfHosts": 1,
+        "portNumber": 5500,
+        "prefix": "reme_",
+        "protocol": "TCP"
+    },
+    "severity": "HIGH",
+    "description": "VNC Listener (TCP:5500) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.117",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0427"
 }

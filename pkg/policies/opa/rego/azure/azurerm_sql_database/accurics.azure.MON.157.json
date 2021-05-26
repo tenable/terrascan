@@ -1,15 +1,15 @@
 {
-  "name": "reme_checkAuditEnabled",
-  "file": "checkAuditEnabled.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_sql_database",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure that 'Threat Detection' is enabled for Azure SQL Database",
-  "reference_id": "accurics.azure.MON.157",
-  "category": "Logging and Monitoring",
-  "version": 2,
-  "id": "AC_AZURE_0383"
+    "name": "reme_checkAuditEnabled",
+    "file": "checkAuditEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_database",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that 'Threat Detection' is enabled for Azure SQL Database",
+    "reference_id": "accurics.azure.MON.157",
+    "category": "Logging and Monitoring",
+    "version": 2,
+    "id": "AC_AZURE_0383"
 }

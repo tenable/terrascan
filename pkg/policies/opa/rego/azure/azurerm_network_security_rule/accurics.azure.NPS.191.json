@@ -16,5 +16,6 @@
     "description": "MSSQL Browser (UDP:1434) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.191",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

@@ -1,15 +1,15 @@
 {
-  "name": "reme_sslEnforceDisabled",
-  "file": "sslEnforceDisabled.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_postgresql_server",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "HIGH",
-  "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server",
-  "reference_id": "accurics.azure.EKM.1",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0408"
+    "name": "reme_sslEnforceDisabled",
+    "file": "sslEnforceDisabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_postgresql_server",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server",
+    "reference_id": "accurics.azure.EKM.1",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0408"
 }

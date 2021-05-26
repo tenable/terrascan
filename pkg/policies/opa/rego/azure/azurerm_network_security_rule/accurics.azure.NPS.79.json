@@ -1,21 +1,21 @@
 {
-  "name": "reme_networkPort137ExposedPublicEntireUdp",
-  "file": "networkPortExposedPublic.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_network_security_rule",
-  "template_args": {
-    "endLimit": 0,
-    "evalHosts": true,
-    "name": "networkPort137ExposedPublicEntireUdp",
-    "numberOfHosts": 1,
-    "portNumber": 137,
-    "prefix": "reme_",
-    "protocol": "UDP"
-  },
-  "severity": "HIGH",
-  "description": "NetBIOS Name Service (UDP:137) is exposed to entire Public network",
-  "reference_id": "accurics.azure.NPS.79",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0487"
+    "name": "reme_networkPort137ExposedPublicEntireUdp",
+    "file": "networkPortExposedPublic.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_network_security_rule",
+    "template_args": {
+        "endLimit": 0,
+        "evalHosts": true,
+        "name": "networkPort137ExposedPublicEntireUdp",
+        "numberOfHosts": 1,
+        "portNumber": 137,
+        "prefix": "reme_",
+        "protocol": "UDP"
+    },
+    "severity": "HIGH",
+    "description": "NetBIOS Name Service (UDP:137) is exposed to entire Public network",
+    "reference_id": "accurics.azure.NPS.79",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0487"
 }

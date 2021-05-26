@@ -1,15 +1,15 @@
 {
-  "name": "reme_moreHostsAllowed",
-  "file": "moreHostsAllowed.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_sql_firewall_rule",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Restrict Azure SQL Server accessibility to a minimal address range",
-  "reference_id": "accurics.azure.NS.169",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0280"
+    "name": "reme_moreHostsAllowed",
+    "file": "moreHostsAllowed.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_firewall_rule",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Restrict Azure SQL Server accessibility to a minimal address range",
+    "reference_id": "accurics.azure.NS.169",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0280"
 }

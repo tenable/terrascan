@@ -1,13 +1,13 @@
 {
-  "name": "networkPolicyEnabled",
-  "file": "networkPolicyEnabled.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_kubernetes_cluster",
-  "template_args": null,
-  "severity": "MEDIUM",
-  "description": "Ensure AKS cluster has Network Policy configured.",
-  "reference_id": "accurics.azure.NS.382",
-  "category": "Infrastructure Security",
-  "version": 1,
-  "id": "AC_AZURE_0158"
+    "name": "networkPolicyEnabled",
+    "file": "networkPolicyEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_kubernetes_cluster",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Ensure AKS cluster has Network Policy configured.",
+    "reference_id": "accurics.azure.NS.382",
+    "category": "Infrastructure Security",
+    "version": 1,
+    "id": "AC_AZURE_0158"
 }

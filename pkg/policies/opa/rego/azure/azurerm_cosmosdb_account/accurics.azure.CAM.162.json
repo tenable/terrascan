@@ -1,15 +1,15 @@
 {
-  "name": "reme_noTags",
-  "file": "noTags.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_cosmosdb_account",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure that Cosmos DB Account has an associated tag",
-  "reference_id": "accurics.azure.CAM.162",
-  "category": "Compliance Validation",
-  "version": 2,
-  "id": "AC_AZURE_0277"
+    "name": "reme_noTags",
+    "file": "noTags.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_cosmosdb_account",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Cosmos DB Account has an associated tag",
+    "reference_id": "accurics.azure.CAM.162",
+    "category": "Compliance Validation",
+    "version": 2,
+    "id": "AC_AZURE_0277"
 }

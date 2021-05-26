@@ -1,17 +1,17 @@
 {
-  "name": "reme_sqlIngressAccess",
-  "file": "checkPublicAccessNotAllow.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_sql_firewall_rule",
-  "template_args": {
-    "isEntire": false,
-    "name": "sqlIngressAccess",
-    "prefix": "reme_"
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
-  "reference_id": "accurics.azure.NS.21",
-  "category": "Infrastructure Security",
-  "version": 2,
-  "id": "AC_AZURE_0380"
+    "name": "reme_sqlIngressAccess",
+    "file": "checkPublicAccessNotAllow.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_firewall_rule",
+    "template_args": {
+        "isEntire": false,
+        "name": "sqlIngressAccess",
+        "prefix": "reme_"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
+    "reference_id": "accurics.azure.NS.21",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0380"
 }

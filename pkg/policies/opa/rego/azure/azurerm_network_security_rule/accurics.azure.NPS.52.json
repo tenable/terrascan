@@ -16,5 +16,6 @@
     "description": "LDAP SSL (TCP:636) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.52",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

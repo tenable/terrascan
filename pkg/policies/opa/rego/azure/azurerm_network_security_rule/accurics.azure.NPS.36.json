@@ -16,5 +16,6 @@
     "description": "Remote Desktop (TCP:3389) is exposed to the wide public internet",
     "reference_id": "accurics.azure.NPS.36",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

@@ -16,5 +16,6 @@
     "description": "PostgreSQL (TCP:5432) is exposed to small Private network",
     "reference_id": "accurics.azure.NPS.303",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

@@ -10,5 +10,6 @@
     "description": "Ensure that 'OS disk' are encrypted",
     "reference_id": "accurics.azure.EKM.156",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

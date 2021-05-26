@@ -16,5 +16,6 @@
     "description": "Oracle DB SSL (TCP:2484) is exposed to wide Public network",
     "reference_id": "accurics.azure.NPS.88",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }

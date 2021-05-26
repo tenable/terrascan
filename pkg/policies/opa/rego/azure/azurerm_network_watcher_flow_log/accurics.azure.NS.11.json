@@ -1,15 +1,15 @@
 {
-  "name": "reme_networkWatcherEnabled",
-  "file": "networkWatcherCheck.rego",
-  "policy_type": "azure",
-  "resource_type": "azurerm_network_watcher_flow_log",
-  "template_args": {
-    "prefix": "reme_"
-  },
-  "severity": "HIGH",
-  "description": "Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure.",
-  "reference_id": "accurics.azure.NS.11",
-  "category": "Logging and Monitoring",
-  "version": 1,
-  "id": "AC_AZURE_0418"
+    "name": "reme_networkWatcherEnabled",
+    "file": "networkWatcherCheck.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_network_watcher_flow_log",
+    "template_args": {
+        "prefix": "reme_"
+    },
+    "severity": "HIGH",
+    "description": "Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure.",
+    "reference_id": "accurics.azure.NS.11",
+    "category": "Logging and Monitoring",
+    "version": 1,
+    "id": "AC_AZURE_0418"
 }

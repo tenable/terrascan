@@ -16,5 +16,6 @@
     "description": "Puppet Master (TCP:8140) is exposed to small Public network",
     "reference_id": "accurics.azure.NPS.235",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": ""
 }
