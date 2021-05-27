@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.name }}
@@ -87,6 +87,7 @@ spec:
         - name: terrascan-data-sync
           emptyDir: {}
 {{- end }}
+{{- if .Values.webhook.mode }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
@@ -147,3 +148,4 @@ webhooks:
         - {{ . -}}
         {{- end }}
         {{- end }}
+{{- end }}

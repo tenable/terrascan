@@ -1,4 +1,4 @@
-{{- if eq .Values.webhook.failurePolicy "Fail" }}
+{{- if and .Values.webhook.mode (eq .Values.webhook.failurePolicy "Fail") }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:

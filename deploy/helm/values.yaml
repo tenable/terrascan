@@ -1,17 +1,19 @@
 terrascan_webhook_key: terrakey
 terrascan_container_image: accurics/terrascan:1.6.0
+terrascan_service_type: ClusterIP
 use_debug: true
 cert_secret_name: terrascancerts
 ssh_secret_name: terrascanssh
 config_name: terrascanconfig
+replicas: 1
 name: terrascan
 persistence:
   enabled: false
   existingclaim: terrascanPvc
-
 webhook:
+  mode: false
   name: webhook.terrascan.io
-  failurePolicy: Fail
+  failurePolicy: Ignore
   sideEffects: None
   admissionReviewVersions:
     - "v1"

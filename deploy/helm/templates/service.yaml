@@ -4,6 +4,7 @@ metadata:
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
 spec:
+  type: {{ .Values.terrascan_service_type }}
   selector:
     app: {{ .Values.name }}
   ports:
