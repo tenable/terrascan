@@ -1,3 +1,6 @@
+# Had to create this file just to support validatingwebhookconfiguration failurePolicy to be FAIL.
+# It turns out, webhook doesn't allow the terrascan server pod to come up in case failurePolicy is Fail.
+# So, as a workaround, we create the webhook w/ Ignore, and then upgrade it to Fail in. post install chart hook. ref: https://helm.sh/docs/topics/charts_hooks/
 {{- if and .Values.webhook.mode (eq .Values.webhook.failurePolicy "Fail") }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
