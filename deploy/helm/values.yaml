@@ -5,6 +5,7 @@ use_debug: true
 cert_secret_name: terrascancerts
 ssh_secret_name: terrascanssh
 config_name: terrascanconfig
+replicas: 1
 name: terrascan
 persistence:
   enabled: false
