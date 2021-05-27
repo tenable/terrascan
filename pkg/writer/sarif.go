@@ -36,7 +36,6 @@ func init() {
 // SarifWriter writes sarif formatted violation results report
 func SarifWriter(data interface{}, writer io.Writer) error {
 	outputData := data.(policy.EngineOutput)
-	//summary := outputData.Summary
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
 		return err
