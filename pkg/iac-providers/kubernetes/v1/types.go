@@ -16,8 +16,12 @@
 
 package k8sv1
 
+import "github.com/hashicorp/go-multierror"
+
 // K8sV1 struct implements the IacProvider interface
-type K8sV1 struct{}
+type K8sV1 struct {
+	errIacLoadDirs *multierror.Error
+}
 
 const (
 	// YAMLExtension yaml

@@ -13,10 +13,6 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
-var (
-	errIacLoadDirs *multierror.Error = nil
-)
-
 func (*K8sV1) getFileType(file string) string {
 	if strings.HasSuffix(file, YAMLExtension) {
 		return YAMLExtension
@@ -36,7 +32,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, K8sFileExtensions())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: absRootDir, ErrMessage: err.Error()})
+		return allResourcesConfig, multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	for fileDir, files := range fileMap {
@@ -47,7 +43,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 			if configData, err = k.LoadIacFile(file); err != nil {
 				errMsg := fmt.Sprintf("error while loading iac file '%s'. err: %v", file, err)
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
-				errIacLoadDirs = multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: fileDir, ErrMessage: errMsg})
+				k.errIacLoadDirs = multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: fileDir, ErrMessage: errMsg})
 				continue
 			}
 
@@ -61,7 +57,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 		}
 	}
 
-	return allResourcesConfig, errIacLoadDirs
+	return allResourcesConfig, k.errIacLoadDirs
 }
 
 // makeSourcePathRelative modifies the source path of each resource from absolute to relative path
