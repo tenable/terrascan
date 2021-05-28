@@ -72,9 +72,25 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 			want:    &TerrascanConfigReader{},
 		},
 		{
+			name: "invalid config file format",
+			args: args{
+				fileName: "test.invalid",
+			},
+			wantErr: true,
+			want:    &TerrascanConfigReader{},
+		},
+		{
 			name: "invalid toml config file",
 			args: args{
 				fileName: "testdata/invalid.toml",
+			},
+			wantErr: true,
+			want:    &TerrascanConfigReader{},
+		},
+		{
+			name: "invalid yaml config file",
+			args: args{
+				fileName: "testdata/invalid.yaml",
 			},
 			wantErr: true,
 			want:    &TerrascanConfigReader{},
@@ -137,6 +153,79 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 			name: "valid toml config file with all fields and categories defined",
 			args: args{
 				fileName: "testdata/terrascan-config-category.toml",
+			},
+			want: &TerrascanConfigReader{
+				config: TerrascanConfig{
+					Policy: testPolicy,
+					Notifications: map[string]Notifier{
+						"webhook1": testNotifier,
+					},
+					Rules:    testRules,
+					Category: categoryList,
+				},
+			},
+			assertGetters: true,
+			notifications: map[string]Notifier{
+				"webhook1": testNotifier,
+			},
+			Policy: testPolicy,
+			Rules:  testRules,
+		},
+		{
+			name: "invalid yaml config file",
+			args: args{
+				fileName: "testdata/invalid.yaml",
+			},
+			wantErr: true,
+			want:    &TerrascanConfigReader{},
+		},
+		{
+			name: "valid yaml config file with all fields",
+			args: args{
+				fileName: "testdata/terrascan-config-all-fields.yaml",
+			},
+			want: &TerrascanConfigReader{
+				config: TerrascanConfig{
+					Policy: testPolicy,
+					Notifications: map[string]Notifier{
+						"webhook1": testNotifier,
+					},
+					Rules: testRules,
+				},
+			},
+			assertGetters: true,
+			notifications: map[string]Notifier{
+				"webhook1": testNotifier,
+			},
+			Policy: testPolicy,
+			Rules:  testRules,
+		},
+		{
+			name: "valid yaml config file with all fields and severity defined",
+			args: args{
+				fileName: "testdata/terrascan-config-severity.yml",
+			},
+			want: &TerrascanConfigReader{
+				config: TerrascanConfig{
+					Policy: testPolicy,
+					Notifications: map[string]Notifier{
+						"webhook1": testNotifier,
+					},
+					Rules:    testRules,
+					Severity: highSeverity,
+				},
+			},
+			assertGetters: true,
+			notifications: map[string]Notifier{
+				"webhook1": testNotifier,
+			},
+			Policy: testPolicy,
+			Rules:  testRules,
+		},
+		{
+			name: "valid yaml config file with all fields and categories defined",
+			args: args{
+				fileName: "testdata/terrascan-config-category.yaml",
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
