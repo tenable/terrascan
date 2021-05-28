@@ -1,9 +1,14 @@
 package kustomizev3
 
-import "github.com/accurics/terrascan/pkg/utils"
+import (
+	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
+)
 
 // KustomizeV3 struct
-type KustomizeV3 struct{}
+type KustomizeV3 struct {
+	errIacLoadDirs *multierror.Error
+}
 
 const (
 	// YAMLExtension yaml

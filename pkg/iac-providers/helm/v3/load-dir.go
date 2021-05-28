@@ -36,10 +36,9 @@ import (
 )
 
 var (
-	errSkipTestDir                       = fmt.Errorf("skipping test directory")
-	errBadChartName                      = fmt.Errorf("invalid chart name in Chart.yaml")
-	errBadChartVersion                   = fmt.Errorf("invalid chart version in Chart.yaml")
-	errIacLoadDirs     *multierror.Error = nil
+	errSkipTestDir     = fmt.Errorf("skipping test directory")
+	errBadChartName    = fmt.Errorf("invalid chart name in Chart.yaml")
+	errBadChartVersion = fmt.Errorf("invalid chart version in Chart.yaml")
 )
 
 // LoadIacDir loads all helm charts under the specified directory
@@ -51,13 +50,13 @@ func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllRes
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, h.getHelmChartFilenames())
 	if err != nil {
 		zap.S().Debug("error while searching for helm charts", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: err.Error()})
+		return allResourcesConfig, multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("no helm charts found in directory %s", absRootDir)
 		zap.S().Debug(zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: errMsg})
+		return allResourcesConfig, multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
 	// fileDir now contains the chart path
@@ -74,7 +73,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllRes
 		if err != nil && err != errSkipTestDir {
 			errMsg := fmt.Sprintf("error occurred while loading chart. err: %v", err)
 			logger.Debug("error occurred while loading chart", zap.Error(err))
-			errIacLoadDirs = multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
+			h.errIacLoadDirs = multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
 			continue
 		}
 
@@ -86,7 +85,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllRes
 		if err != nil {
 			errMsg := fmt.Sprintf("failed to create helm chart resource. err: %v", err)
 			logger.Error("failed to create helm chart resource", zap.Any("config", config), zap.Error(err))
-			errIacLoadDirs = multierror.Append(errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
+			h.errIacLoadDirs = multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: fileDir, ErrMessage: errMsg})
 			continue
 		}
 
@@ -105,7 +104,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllRes
 				// in that case, we should not output an error as it was the user's intention to prevent rendering the resource
 				if err != k8sv1.ErrNoKind {
 					zap.S().Error("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
-					errIacLoadDirs = multierror.Append(errIacLoadDirs, err)
+					h.errIacLoadDirs = multierror.Append(h.errIacLoadDirs, err)
 				}
 				continue
 			}
@@ -117,7 +116,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllRes
 		}
 	}
 
-	return allResourcesConfig, errIacLoadDirs
+	return allResourcesConfig, h.errIacLoadDirs
 }
 
 // createHelmChartResource returns normalized Helm Chart resource data
