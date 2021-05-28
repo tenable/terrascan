@@ -1,0 +1,45 @@
+{
+  "results": {
+    "violations": [
+      {
+        "rule_name": "rdsIamAuthEnabled",
+        "description": "Ensure that your RDS database has IAM Authentication enabled.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
+        "module_name": "root",
+        "file": "main.tf",
+        "plan_root": "./",
+        "line": 1
+      }
+    ],
+    "skipped_violations": [
+      {
+        "rule_name": "rdsHasStorageEncrypted",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "severity": "HIGH",
+        "category": "Data Security",
+        "skip_comment": "need to skip this rule",
+        "resource_name": "PtShGgAdi4",
+        "resource_type": "aws_db_instance",
+        "module_name": "root",
+        "file": "main.tf",
+        "plan_root": "./",
+        "line": 1
+      }
+    ],
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/min_severity_with_skip_rule/terraform",
+      "iac_type": "terraform",
+      "scanned_at": "2021-05-28 07:38:52.873682 +0000 UTC",
+      "policies_validated": 8,
+      "violated_policies": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 1
+    }
+  }
+}

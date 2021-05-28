@@ -40,7 +40,9 @@
           "${aws_security_group.sg_playground.id}"
         ]
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_internet_gateway": [
@@ -57,7 +59,9 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_key_pair": [
@@ -72,7 +76,9 @@
         "key_name": "testKey",
         "public_key": "${file(var.public_key_path)}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_route_table": [
@@ -95,7 +101,9 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_route_table_association": [
@@ -110,7 +118,9 @@
         "route_table_id": "${aws_route_table.rtb_public_playground.id}",
         "subnet_id": "${aws_subnet.subnet_public_playground.id}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_security_group": [
@@ -156,7 +166,9 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_subnet": [
@@ -175,7 +187,9 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_vpc": [
@@ -194,7 +208,9 @@
           "Environment": "${var.environment_tag}"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }

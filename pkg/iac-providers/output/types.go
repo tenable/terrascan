@@ -35,7 +35,9 @@ type ResourceConfig struct {
 	// SkipRules will hold the rules to be skipped for the resource.
 	// Each iac provider should append the rules to be skipped for a resource,
 	// while extracting resource from the iac files
-	SkipRules []SkipRule `json:"skip_rules" yaml:"skip_rules"`
+	SkipRules   []SkipRule `json:"skip_rules" yaml:"skip_rules"`
+	MaxSeverity string     `json:"max_severity"`
+	MinSeverity string     `json:"min_severity"`
 }
 
 // SkipRule struct will hold the skipped rule and any comment for the skipped rule

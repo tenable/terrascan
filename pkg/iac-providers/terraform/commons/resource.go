@@ -47,15 +47,18 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 		return resourceConfig, fmt.Errorf("failed to convert hcl.Body to go struct")
 	}
 
+	minSeverity, maxSeverity := utils.GetMinMaxSeverity(c.rangeSource(hclBody.Range()))
 	// create a resource config
 	resourceConfig = output.ResourceConfig{
-		ID:        fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
-		Name:      managedResource.Name,
-		Type:      managedResource.Type,
-		Source:    managedResource.DeclRange.Filename,
-		Line:      managedResource.DeclRange.Start.Line,
-		Config:    goOut,
-		SkipRules: utils.GetSkipRules(c.rangeSource(hclBody.Range())),
+		ID:          fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
+		Name:        managedResource.Name,
+		Type:        managedResource.Type,
+		Source:      managedResource.DeclRange.Filename,
+		Line:        managedResource.DeclRange.Start.Line,
+		Config:      goOut,
+		SkipRules:   utils.GetSkipRules(c.rangeSource(hclBody.Range())),
+		MaxSeverity: maxSeverity,
+		MinSeverity: minSeverity,
 	}
 
 	// successful

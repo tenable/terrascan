@@ -56,7 +56,7 @@ kind: Pod
 metadata:
   name: myapp-pod
   annotations:
-    terrascanSkip: |
+    runterrascan.io/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
@@ -68,7 +68,7 @@ kind: CRD
 metadata:
   generateName: myapp-pod-prefix-
   annotations:
-    terrascanSkip: |
+    runterrascan.io/skip: |
       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
@@ -409,6 +409,82 @@ func TestReadSkipRulesFromAnnotations(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := readSkipRulesFromAnnotations(tt.args.annotations, tt.args.resourceID); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("readSkipRulesFromAnnotations() = got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestReadMinMaxSeverityFromAnnotations(t *testing.T) {
+	type args struct {
+		annotations map[string]interface{}
+		resourceID  string
+	}
+	tests := []struct {
+		name            string
+		args            args
+		wantMaxSeverity string
+		wantMinSeverity string
+	}{
+		{
+			name: "no severity",
+			args: args{
+				annotations: map[string]interface{}{
+					"test": "test",
+				},
+			},
+			wantMinSeverity: "",
+			wantMaxSeverity: "",
+		},
+		{
+			name: "min severity set to high",
+			args: args{annotations: map[string]interface{}{
+				terrascanMinSeverity: "High",
+			}},
+			wantMinSeverity: "High",
+			wantMaxSeverity: "",
+		},
+		{
+			name: "max severity set to low",
+			args: args{annotations: map[string]interface{}{
+				terrascanMaxSeverity: "Low",
+			}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "Low",
+		},
+		{
+			name: "max severity set to None",
+			args: args{annotations: map[string]interface{}{
+				terrascanMaxSeverity: "None"}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "None",
+		},
+		{
+			name: "max severity set to low and Min severity set to high",
+			args: args{annotations: map[string]interface{}{
+				terrascanMaxSeverity: "LOw",
+				terrascanMinSeverity: "hiGh",
+			}},
+			wantMinSeverity: "hiGh",
+			wantMaxSeverity: "LOw",
+		},
+		{
+			name: "invalid min and max value",
+			args: args{annotations: map[string]interface{}{
+				terrascanMaxSeverity: 2,
+				terrascanMinSeverity: false,
+			}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotMaxSeverity, gotMinSeverity := readMinMaxSeverityFromAnnotations(tt.args.annotations, tt.args.resourceID)
+			if gotMaxSeverity != tt.wantMaxSeverity {
+				t.Errorf("readMinMaxSeverityFromAnnotations() gotMaxSeverity = %v, want %v", gotMaxSeverity, tt.wantMaxSeverity)
+			}
+			if gotMinSeverity != tt.wantMinSeverity {
+				t.Errorf("readMinMaxSeverityFromAnnotations() gotMinSeverity = %v, want %v", gotMinSeverity, tt.wantMinSeverity)
 			}
 		})
 	}

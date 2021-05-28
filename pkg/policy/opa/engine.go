@@ -302,8 +302,18 @@ func (e *Engine) reportViolation(regoData *RegoData, resource *output.ResourceCo
 		LineNumber:   resource.Line,
 	}
 
-	if !isSkipped {
-		severity := regoData.Metadata.Severity
+	if !strings.EqualFold(resource.MaxSeverity, "none") {
+		// if both values are set then min severity will be applicable
+		if resource.MinSeverity != "" {
+			if utils.MinSeverityApplicable(regoData.Metadata.Severity, resource.MinSeverity) {
+				violation.Severity = strings.ToUpper(resource.MinSeverity)
+			}
+		} else if utils.MaxSeverityApplicable(regoData.Metadata.Severity, resource.MaxSeverity) {
+			violation.Severity = strings.ToUpper(resource.MaxSeverity)
+		}
+	}
+	if !isSkipped && !strings.EqualFold(resource.MaxSeverity, "none") {
+		severity := violation.Severity
 		if strings.ToLower(severity) == "high" {
 			e.results.ViolationStore.Summary.HighCount++
 		} else if strings.ToLower(severity) == "medium" {

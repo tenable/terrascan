@@ -29,15 +29,19 @@ import (
 )
 
 const (
-	terrascanSkip        = "terrascanSkip"
+	terrascanSkip        = "runterrascan.io/skip"
 	terrascanSkipRule    = "rule"
 	terrascanSkipComment = "comment"
+	terrascanMaxSeverity = "runterrascan.io/maxseverity"
+	terrascanMinSeverity = "runterrascan.io/minseverity"
 )
 
 var (
 	errUnsupportedDoc = fmt.Errorf("unsupported document type")
 	// ErrNoKind is returned when the "kind" key is not available (not a valid kubernetes resource)
 	ErrNoKind = fmt.Errorf("kind does not exist")
+
+	infileInstructionNotPresentLog = "%s not present for resource: %s"
 )
 
 // k8sMetadata is used to pull the name, namespace types and annotations for a given resource
@@ -139,6 +143,11 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 		resourceConfig.SkipRules = append(resourceConfig.SkipRules, skipRules...)
 	}
 
+	maxSeverity, minSeverity := readMinMaxSeverityFromAnnotations(resource.Metadata.Annotations, resourceConfig.ID)
+
+	resourceConfig.MaxSeverity = maxSeverity
+	resourceConfig.MinSeverity = minSeverity
+
 	configData := make(map[string]interface{})
 	if err = json.Unmarshal(*jsonData, &configData); err != nil {
 		return nil, err
@@ -155,7 +164,7 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 	var skipRulesFromAnnotations interface{}
 	var ok bool
 	if skipRulesFromAnnotations, ok = annotations[terrascanSkip]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanSkip, resourceID)
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanSkip, resourceID)
 		return nil
 	}
 
@@ -171,4 +180,24 @@ func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID
 
 	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
 	return nil
+}
+
+// readMinMaxSeverityFromAnnotations finds the min max severity values set in annotations for the resource
+func readMinMaxSeverityFromAnnotations(annotations map[string]interface{}, resourceID string) (maxSeverity, minSeverity string) {
+	var (
+		minSeverityAnnotation interface{}
+		maxSeverityAnnotation interface{}
+		ok                    bool
+	)
+	if minSeverityAnnotation, ok = annotations[terrascanMinSeverity]; !ok {
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMinSeverity, resourceID)
+	} else if minSeverity, ok = minSeverityAnnotation.(string); !ok {
+		zap.S().Debugf("%s must be a string cantaining value as (High | Low| Medium)", terrascanMinSeverity)
+	}
+	if maxSeverityAnnotation, ok = annotations[terrascanMaxSeverity]; !ok {
+		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMaxSeverity, resourceID)
+	} else if maxSeverity, ok = maxSeverityAnnotation.(string); !ok {
+		zap.S().Debugf("%s must be a string cantaining value as (High | Low| Medium)", terrascanMaxSeverity)
+	}
+	return
 }

@@ -262,4 +262,81 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			})
 		})
 	})
+	Describe("resource specific rule prioritising", func() {
+		resourcePrioritisingGoldenRelPath := filepath.Join("golden", "resource_prioritising")
+		resourcePrioritisingIacRelPath := filepath.Join(iacRootRelPath, "resource_prioritising")
+		Context("resource max severity set to Low in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set", "terraform")
+			It("should display violations with change priority to Low for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set", "terraform", "terraform_file_setting_max_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_set", "terraform")
+			It("should display violations with change priority to High for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "terraform", "terraform_file_setting_min_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource max severity set to none in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set_none", "terraform")
+			It("should skip all violations for the resource and exit with status code 0 since only one resource is in tf file", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set_none", "terraform", "terraform_file_setting_max_severity_none.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High and max severity set to Low in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_max_both_severity_set", "terraform")
+			It("should display violations with change priority to High as specified by min severity for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "terraform", "terraform_file_setting_min_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High and skip rule provided in tf files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_with_skip_rule", "terraform")
+			It("should display skipped violations and violations with change priority to High as specified by min severity for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_with_skip_rule", "terraform", "terraform_file_setting_min_severity_with_skip_rule.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+
+		// k8s file tests
+		Context("resource max severity set to Low in k8s files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set", "k8s")
+			It("should display violations with change priority to Low for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set", "k8s", "k8s_file_setting_max_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High in k8s files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_set", "k8s")
+			It("should display violations with change priority to High for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "k8s", "k8s_file_setting_min_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource max severity set to none in k8s files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set_none", "k8s")
+			It("should skip all violations for the resource and exit with status code 0", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set_none", "k8s", "k8s_file_setting_max_severity_none.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High and max severity set to Low k8s files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_max_both_severity_set", "k8s")
+			It("should display violations with change priority to High as specified by min severity for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "k8s", "k8s_file_setting_min_severity.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High and skip rule provided in k8s files", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_with_skip_rule", "k8s")
+			// since only one violation is present for resource
+			It("should display skipped violations with change priority to High as specified by min severity for the resource and exit with status code 0", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_with_skip_rule", "k8s", "k8s_file_setting_min_severity_with_skip_rule.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+	})
 })
