@@ -17,3 +17,16 @@ rules:
     - rule.5
   skip-rules:
     - rule.1
+category:
+  list:
+    - category.1
+    - category.2
+severity:
+  level: high
+k8s-admission-control:
+  dashboard: true
+  denied-categories:
+    - "category.1"
+    - "category.2"
+  denied-severity: high
+  save-requests: true
