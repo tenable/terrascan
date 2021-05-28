@@ -484,9 +484,7 @@ var _ = Describe("Server Remote Scan", func() {
 				})
 
 				When("k8s file has resource skipped", func() {
-					// makrked pending since test data for this test has been updated in PR #802
-					// in next PR will resume this test
-					PIt("should receive violations result with 200 OK response", func() {
+					It("should receive violations result with 200 OK response", func() {
 						requestURL := fmt.Sprintf("%s:%s/v1/k8s/v1/all/remote/dir/scan", host, port)
 						remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/resource_skipping/kubernetes"
 						bodyAttrs := make(map[string]interface{})
