@@ -1,6 +1,8 @@
 {
     "name": "insecureSslUsed",
     "file": "insecureSslUsed.rego",
+    "policy_type": "github",
+    "resource_type": "github_organization_webhook",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Insecure SSL is used for organization webhook.",

@@ -1,6 +1,8 @@
 {
     "name": "detailedMonitoringEnabledInstance",
     "file": "detailedMonitoringEnabledInstance.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_instance",
     "template_args": {
         "prefix": ""
     },

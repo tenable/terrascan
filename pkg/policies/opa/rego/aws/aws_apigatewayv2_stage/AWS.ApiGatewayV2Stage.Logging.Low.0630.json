@@ -1,6 +1,8 @@
 {
     "name": "apiGatewayNoAccessLogs",
     "file": "apiGatewayNoAccessLogs.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_apigatewayv2_stage",
     "template_args": null,
     "severity": "Low",
     "description": "AWS API Gateway V2 Stage is missing access logs",

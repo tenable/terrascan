@@ -1,6 +1,8 @@
 {
     "name": "redshiftAuditLogs",
     "file": "redshiftAuditLogs.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_redshift_cluster",
     "template_args": {
         "prefix": ""
     },

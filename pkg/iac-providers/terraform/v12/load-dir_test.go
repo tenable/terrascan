@@ -65,6 +65,11 @@ References to other resources during the destroy phase can cause dependency cycl
 %s:34,1-29: Duplicate resource "null_resource" configuration; A null_resource resource named "b" was already declared at testdata/destroy-provisioners/main.tf:23,1-29. Resource names must be unique per type in each module.
 `, destroyProvisionersDir, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile)
 
+	errStringModuleSourceInvalid := fmt.Sprintf(`failed to build unified config. errors:
+<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
+<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
+`, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
+
 	testDirPath1 := "not-there"
 
 	testDirPath2 := filepath.Join(testDataDir, "testfile")
@@ -139,6 +144,8 @@ References to other resources during the destroy phase can cause dependency cycl
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
 				fmt.Errorf(errStringDestroyProvisioners),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
+				fmt.Errorf(errStringModuleSourceInvalid),
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(testErrorString2),
@@ -158,6 +165,12 @@ References to other resources during the destroy phase can cause dependency cycl
 			dirPath: multipleProvidersDir,
 			tfv12:   TfV12{},
 			wantErr: multierror.Append(fmt.Errorf(testErrorString2)),
+		},
+		{
+			name:    "invalid module source directory",
+			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
+			tfv12:   TfV12{},
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)),
 		},
 	}
 

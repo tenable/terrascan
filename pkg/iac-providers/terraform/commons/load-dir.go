@@ -120,7 +120,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		if diags.HasErrors() {
 			// log a warn message in this case because there are errors in
 			// loading the config dir, and continue with other directories
-			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
+			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", getErrorMessagesFromDiagnostics(diags))
 			zap.S().Warnf(errMessage)
 			t.addError(errMessage, dir)
 			continue
@@ -235,7 +235,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	if diags.HasErrors() {
 		// log a warn message in this case because there are errors in
 		// loading the config dir, and continue with other directories
-		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", diags)
+		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", getErrorMessagesFromDiagnostics(diags))
 		zap.S().Warnf(errMessage)
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: ErrBuildTFConfigDir.Error()})
 	}
@@ -319,8 +319,11 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
 
 			// figure out path sub module directory, if it's remote then download it locally
-			var pathToModule string
-			var err error
+			var (
+				pathToModule   string
+				err            error
+				moduleDirDiags hcl.Diagnostics
+			)
 			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 
 				pathToModule = t.processLocalSource(req)
@@ -344,6 +347,15 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 				}
 			}
 
+			// verify whether the module source directory has any .tf config files
+			if utils.IsDirExists(pathToModule) && !t.parser.IsConfigDir(pathToModule) {
+				moduleDirDiags = append(moduleDirDiags, &hcl.Diagnostic{
+					Severity: hcl.DiagError,
+					Summary:  "Invalid module config directory",
+					Detail:   fmt.Sprintf("Module directory '%s' has no terraform config files for module %s", pathToModule, req.Name),
+				})
+				return nil, nil, moduleDirDiags
+			}
 			// load sub module directory
 			subMod, diags := t.parser.LoadConfigDir(pathToModule)
 			version, _ := version.NewVersion(fmt.Sprintf("1.0.%d", versionI))

@@ -1,6 +1,8 @@
 {
     "name": "serviceAccountAdminPriviledges",
     "file": "serviceAccountAdminPriviledges.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_project_iam_member",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that Service Account has no Admin privileges.",

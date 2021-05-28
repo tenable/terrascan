@@ -1,6 +1,8 @@
 {
     "name": "reme_geoRedundancyDisabled",
     "file": "geoRedundancyDisabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_postgresql_server",
     "template_args": {
         "prefix": "reme_"
     },

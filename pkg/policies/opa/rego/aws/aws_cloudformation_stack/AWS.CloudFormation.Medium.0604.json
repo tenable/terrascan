@@ -1,6 +1,8 @@
 {
     "name": "cloudFormationStackPolicy",
     "file": "cloudFormationNullCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudformation_stack",
     "template_args": {
         "name": "cloudFormationStackPolicy",
         "property": "policy_url"

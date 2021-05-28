@@ -1,6 +1,8 @@
 {
     "name": "reme_vmAttachedToNetwork",
     "file": "vmAttachedToNetwork.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_virtual_machine",
     "template_args": {
         "prefix": "reme_"
     },

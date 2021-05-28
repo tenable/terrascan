@@ -25,3 +25,13 @@ func GetHomeDir() (terrascanDir string) {
 func GenerateTempDir() string {
 	return filepath.Join(os.TempDir(), GenRandomString(6))
 }
+
+// IsDirExists checks wether the provided directory exists or not
+func IsDirExists(dir string) bool {
+	_, err := os.Stat(dir)
+	if os.IsNotExist(err) {
+		zap.S().Debug("Directory %s does not exist.", dir)
+		return false
+	}
+	return true
+}

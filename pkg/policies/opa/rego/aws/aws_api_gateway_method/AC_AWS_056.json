@@ -1,6 +1,8 @@
 {
     "name": "apiGatewayAuthorizationDisabled",
     "file": "apiGatewayAuthorizationDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_api_gateway_method",
     "template_args": {
         "prefix": ""
     },

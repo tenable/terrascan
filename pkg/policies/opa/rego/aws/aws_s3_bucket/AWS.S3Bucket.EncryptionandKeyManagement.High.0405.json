@@ -1,6 +1,8 @@
 {
     "name": "s3BucketSseRulesWithKmsNull",
     "file": "s3BucketSseRulesWithKmsNull.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_s3_bucket",
     "template_args": {
         "prefix": ""
     },

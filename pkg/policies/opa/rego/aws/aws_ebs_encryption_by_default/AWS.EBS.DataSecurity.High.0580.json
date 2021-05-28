@@ -1,6 +1,8 @@
 {
     "name": "ebsDefaultEncryption",
     "file": "ebsDefaultEncryption.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_ebs_encryption_by_default",
     "template_args": {
         "prefix": ""
     },

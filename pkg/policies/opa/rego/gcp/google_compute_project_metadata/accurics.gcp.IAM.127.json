@@ -1,6 +1,8 @@
 {
     "name": "checkOSLoginEnabled",
     "file": "checkOSLoginEnabled.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_project_metadata",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure oslogin is enabled for a Project",

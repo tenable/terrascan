@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: localhost-validating-webhook
+webhooks:
+  - name: localhost.terrascan.server
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - pods
+          - services
+    failurePolicy: Fail
+    clientConfig:
+      url: ""
+      caBundle: "" 
+    sideEffects: None
+    admissionReviewVersions: ["v1"]

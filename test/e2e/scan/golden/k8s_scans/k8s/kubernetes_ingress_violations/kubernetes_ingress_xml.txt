@@ -5,5 +5,5 @@
     <violation rule_name="noHttps" description="TLS disabled can affect the confidentiality of the data in transit" rule_id="AC-K8-NS-IN-H-0020" severity="HIGH" category="Network Security" resource_name="ingress-demo-disallowed" resource_type="kubernetes_ingress" file="config.yaml" line="1"></violation>
   </violations>
   <skipped_violations></skipped_violations>
-  <scan_summary file_folder="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation" iac_type="k8s" scanned_at="2021-03-02 15:53:11.130276 +0000 UTC" policies_validated="7" violated_policies="1" low="0" medium="0" high="1"></scan_summary>
+  <scan_summary file_folder="/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation" iac_type="k8s" scanned_at="2021-03-02 15:53:11.130276 +0000 UTC" policies_validated="8" violated_policies="1" low="0" medium="0" high="1"></scan_summary>
 </results>

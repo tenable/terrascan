@@ -1,6 +1,8 @@
 {
     "name": "vpcFlowLogEnabled",
     "file": "vpcFlowLogEnabled.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_subnetwork",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network.",

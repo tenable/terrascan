@@ -1,6 +1,8 @@
 {
     "name": "gkeControlPlaneNotPublic",
     "file": "gkeControlPlaneNotPublic.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure GKE Control Plane is not public.",

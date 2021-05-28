@@ -1,6 +1,8 @@
 {
     "name": "reme_containerRegistryResourceLock",
     "file": "containerRegistryResourceLock.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_container_registry",
     "template_args": {
         "prefix": "reme_"
     },

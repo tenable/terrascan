@@ -1,10 +1,12 @@
 {
     "name": "workspaceRootEncryptionCheck",
     "file": "workspaceEncryptionCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_workspaces_workspace",
     "template_args": {
-        "prefix": "",
+        "attribute_name": "root_volume_encryption_enabled",
         "name": "workspaceRootEncryptionCheck",
-        "attribute_name": "root_volume_encryption_enabled"
+        "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure root volume for Workspaces is Encrypted",

@@ -29,6 +29,9 @@ jobs:
 
     - name: Run unit tests
       run: make unit-tests
+    
+    - name: install kind
+      run: make install-kind
 
     - name: Run e2e tests
       run: make e2e-tests

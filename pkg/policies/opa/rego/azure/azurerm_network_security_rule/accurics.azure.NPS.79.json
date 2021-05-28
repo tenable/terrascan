@@ -1,6 +1,8 @@
 {
     "name": "reme_networkPort137ExposedPublicEntireUdp",
     "file": "networkPortExposedPublic.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_network_security_rule",
     "template_args": {
         "endLimit": 0,
         "evalHosts": true,

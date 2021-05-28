@@ -1,6 +1,8 @@
 {
     "name": "reme_publiclyAccessible",
     "file": "publiclyAccessible.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_redis_cache",
     "template_args": {
         "isEntire": false,
         "name": "publiclyAccessible",

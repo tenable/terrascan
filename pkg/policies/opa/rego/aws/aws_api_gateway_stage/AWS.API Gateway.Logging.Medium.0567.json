@@ -1,6 +1,8 @@
 {
     "name": "apiGatewayName",
     "file": "apiGatewayName.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_api_gateway_stage",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS CloudWatch Logs for APIs",

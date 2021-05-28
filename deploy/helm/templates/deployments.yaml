@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.name }}
@@ -75,7 +75,7 @@ spec:
 {{- if $globconfig }}
         - name: config-volume
           configMap:
-            configMapName: {{ .Values.config_name }}
+            name: {{ .Values.config_name }}
 {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: terrascan-data-sync
@@ -86,4 +86,66 @@ spec:
 {{- else }}
         - name: terrascan-data-sync
           emptyDir: {}
+{{- end }}
+{{- if .Values.webhook.mode }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ .Values.name }}
+webhooks:
+  - name: {{ .Values.webhook.name }}
+    admissionReviewVersions:
+    {{- range .Values.webhook.admissionReviewVersions }}
+    - {{ . | printf "%s" }}
+    {{ end }}
+    failurePolicy: Ignore
+    sideEffects: {{ .Values.webhook.sideEffects }}
+    clientConfig:
+      service:
+        name: {{ .Values.name }}
+        namespace: {{ .Release.Namespace }}
+        path: {{ .Values.terrascan_webhook_key | printf "/v1/k8s/webhooks/%s/scan/validate" }}
+      caBundle: {{ .Files.Get "data/server.crt" | b64enc }}
+    rules:
+      - apiGroups:
+        {{- range .Values.webhook.apiGroups }}
+        {{- if eq . ""}}
+        - ""
+        {{- else if eq . "*" }}
+        - "*"
+        {{- else }}
+        - {{ . -}}
+        {{- end }}
+        {{- end }}
+        resources:
+        {{- range .Values.webhook.resources }}
+        {{- if eq . ""}}
+        - ""
+        {{- else if eq . "*" }}
+        - "*"
+        {{- else }}
+        - {{ . -}}
+        {{- end }}
+        {{- end }}
+        apiVersions:
+        {{- range .Values.webhook.apiVersions }}
+        {{- if eq . ""}}
+        - ""
+        {{- else if eq . "*" }}
+        - "*"
+        {{- else }}
+        - {{ . -}}
+        {{- end }}
+        {{- end }}
+        operations:
+        {{- range .Values.webhook.operations }}
+        {{- if eq . ""}}
+        - ""
+        {{- else if eq . "*" }}
+        - "*"
+        {{- else }}
+        - {{ . -}}
+        {{- end }}
+        {{- end }}
 {{- end }}

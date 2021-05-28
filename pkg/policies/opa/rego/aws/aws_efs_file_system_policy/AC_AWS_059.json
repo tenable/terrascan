@@ -1,6 +1,8 @@
 {
     "name": "efsPolicyNotSecure",
     "file": "efsPolicyNotSecure.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_efs_file_system_policy",
     "template_args": {
         "prefix": ""
     },

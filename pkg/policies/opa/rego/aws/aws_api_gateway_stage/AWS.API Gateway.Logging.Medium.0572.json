@@ -1,6 +1,8 @@
 {
     "name": "apiGatewayLogging",
     "file": "apiGatewayLogging.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_api_gateway_stage",
     "template_args": {
         "prefix": ""
     },

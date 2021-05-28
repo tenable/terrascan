@@ -1,6 +1,8 @@
 {
     "name": "ecrNoSecurePolicyAttached",
     "file": "ecrNoSecurePolicyAttached.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_ecr_repository",
     "template_args": {
         "prefix": ""
     },

@@ -1,6 +1,8 @@
 {
     "name": "lambdaNotInVpc",
     "file": "lambdaNotInVpc.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_lambda_function",
     "template_args": {
         "prefix": ""
     },

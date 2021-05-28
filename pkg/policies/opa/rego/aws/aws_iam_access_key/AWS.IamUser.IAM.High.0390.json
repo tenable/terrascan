@@ -1,6 +1,8 @@
 {
     "name": "noAccessKeyForRootAccount",
     "file": "noAccessKeyForRootAccount.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_access_key",
     "template_args": {
         "prefix": ""
     },

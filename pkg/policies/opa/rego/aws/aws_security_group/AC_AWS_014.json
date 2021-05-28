@@ -1,6 +1,8 @@
 {
     "name": "noRuleDescription",
     "file": "noRuleDescription.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "prefix": ""
     },

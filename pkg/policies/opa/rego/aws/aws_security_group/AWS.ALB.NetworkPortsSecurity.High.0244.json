@@ -1,6 +1,8 @@
 {
     "name": "port11214UdpAlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port11214UdpAlbNetworkPortSecurityPublicScope",
         "portNumber": 11214,

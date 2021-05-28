@@ -1,6 +1,8 @@
 {
     "name": "notEncryptedSecrets",
     "file": "notEncryptedSecrets.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_secretsmanager_secret",
     "template_args": {
         "prefix": ""
     },

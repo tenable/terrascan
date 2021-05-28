@@ -1,6 +1,8 @@
 {
     "name": "elastiSearchNoKms",
     "file": "elastiSearchNoKms.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticsearch_domain",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "ElasticSearch Domain Encrypted with KMS CMKs",

@@ -1,6 +1,8 @@
 {
     "name": "docDbEncrypted",
     "file": "docDbEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_docdb_cluster",
     "template_args": {
         "prefix": ""
     },

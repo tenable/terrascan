@@ -1,6 +1,8 @@
 {
     "name": "defaultVpcExist",
     "file": "defaultVpcExist.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_vpc",
     "template_args": {
         "prefix": ""
     },

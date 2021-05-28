@@ -1,6 +1,8 @@
 {
     "name": "ebsSnapshotDisabled",
     "file": "ebsSnapshot.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_ebs_volume",
     "template_args": {
         "name": "ebsSnapshotDisabled",
         "prefix": ""

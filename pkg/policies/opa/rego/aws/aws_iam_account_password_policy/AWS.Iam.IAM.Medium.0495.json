@@ -1,6 +1,8 @@
 {
     "name": "passwordRequireMinLength",
     "file": "passwordMinLength.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_iam_account_password_policy",
     "template_args": {
         "name": "passwordRequireMinLength",
         "parameter": "minimum_password_length",

@@ -1,6 +1,8 @@
 {
     "name": "s3BucketAccessLoggingDisabled",
     "file": "s3BucketAccessLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_s3_bucket",
     "template_args": {
         "prefix": ""
     },

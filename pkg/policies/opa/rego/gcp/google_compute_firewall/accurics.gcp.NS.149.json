@@ -1,6 +1,8 @@
 {
     "name": "port3389Open",
     "file": "portIsOpen.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_firewall",
     "template_args": {
         "name": "port3389Open",
         "port_number": "3389"

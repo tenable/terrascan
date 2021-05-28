@@ -1,14 +1,16 @@
 {
-  "name": "otherNamespace",
-  "file": "otherNamespace.rego",
-  "template_args": {
     "name": "otherNamespace",
-    "prefix": "",
-    "suffix": ""
-  },
-  "severity": "MEDIUM",
-  "description": "Default Namespace Should Not be Used",
-  "reference_id": "AC-K8-OE-PO-M-0166",
-  "category": "Security Best Practices",
-  "version": 1
+    "file": "otherNamespace.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
+    "template_args": {
+        "name": "otherNamespace",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Default Namespace Should Not be Used",
+    "reference_id": "AC-K8-OE-PO-M-0166",
+    "category": "Security Best Practices",
+    "version": 1
 }

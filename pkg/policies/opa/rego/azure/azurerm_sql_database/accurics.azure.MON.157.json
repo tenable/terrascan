@@ -1,6 +1,8 @@
 {
     "name": "reme_checkAuditEnabled",
     "file": "checkAuditEnabled.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_sql_database",
     "template_args": {
         "prefix": "reme_"
     },

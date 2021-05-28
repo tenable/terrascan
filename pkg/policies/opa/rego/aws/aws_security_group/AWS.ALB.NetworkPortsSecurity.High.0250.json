@@ -1,6 +1,8 @@
 {
     "name": "port3306AlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port3306AlbNetworkPortSecurityPublicScope",
         "portNumber": 3306,

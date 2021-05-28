@@ -1,6 +1,8 @@
 {
     "name": "port8080AlbNetworkPortSecurityPublicScope",
     "file": "portsAlbNetworkPortSecurityPublicScope.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
     "template_args": {
         "name": "port8080AlbNetworkPortSecurityPublicScope",
         "portNumber": 8080,

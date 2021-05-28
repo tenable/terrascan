@@ -31,6 +31,7 @@ help:
 	@echo "test\n\texecute unit and integration tests"
 	@echo "unit-tests\n\texecute unit tests"
 	@echo "e2e-tests\n\texecute e2e tests"
+	@echo "e2e-admission-control-tests\n\texecute e2e admission control tests"
 	@echo "validate\n\trun all validations"
 
 # build terrascan binary
@@ -90,6 +91,14 @@ unit-tests:
 # run e2e tests
 e2e-tests: build
 	./scripts/run-e2e.sh
+
+# run e2e validating webhook
+e2e-admission-control-tests: build
+	./scripts/e2e-admission-control.sh
+
+# install kind
+install-kind: 
+	./scripts/install-kind.sh
 
 # build terrascan docker image
 docker-build:

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config_name }}
+  namespace: {{ .Release.Namespace }}
+data:
+  terrascan-config: |
+{{ .Files.Get "data/config.toml" | indent 4 }}
