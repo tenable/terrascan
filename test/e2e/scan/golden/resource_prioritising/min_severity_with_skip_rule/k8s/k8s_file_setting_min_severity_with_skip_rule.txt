@@ -1,0 +1,29 @@
+{
+  "results": {
+    "violations": null,
+    "skipped_violations": [
+      {
+        "rule_name": "ensurePrivateIP",
+        "description": "Vulnerable to CVE-2020-8554",
+        "rule_id": "AC-K8-NS-SE-M-0188",
+        "severity": "HIGH",
+        "category": "Network Security",
+        "skip_comment": "reason to skip the rule",
+        "resource_name": "allowed-external-ip",
+        "resource_type": "kubernetes_service",
+        "file": "config.yaml",
+        "line": 1
+      }
+    ],
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_prioritising/min_severity_with_skip_rule/k8s",
+      "iac_type": "k8s",
+      "scanned_at": "2021-05-28 07:33:23.686144 +0000 UTC",
+      "policies_validated": 8,
+      "violated_policies": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0
+    }
+  }
+}

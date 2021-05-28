@@ -467,6 +467,15 @@ func TestReadMinMaxSeverityFromAnnotations(t *testing.T) {
 			wantMinSeverity: "hiGh",
 			wantMaxSeverity: "LOw",
 		},
+		{
+			name: "invalid min and max value",
+			args: args{annotations: map[string]interface{}{
+				terrascanMaxSeverity: 2,
+				terrascanMinSeverity: false,
+			}},
+			wantMinSeverity: "",
+			wantMaxSeverity: "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
