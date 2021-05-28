@@ -17,11 +17,15 @@
 package cftv1
 
 import (
-	"go.uber.org/zap"
+	"fmt"
 	"path/filepath"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 )
 
 // LoadIacDir loads all CFT template files in the current directory.
@@ -31,7 +35,7 @@ func (a *CFTV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, CFTFileExtensions())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
-		return allResourcesConfig, err
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
 	for fileDir, files := range fileMap {
@@ -40,15 +44,36 @@ func (a *CFTV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 
 			var configData output.AllResourceConfigs
 			if configData, err = a.LoadIacFile(file); err != nil {
+				errMsg := fmt.Sprintf("error while loading iac file '%s', err: %v", file, err)
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
+				a.errIacLoadDirs = multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: fileDir, ErrMessage: errMsg})
 				continue
 			}
 
 			for key := range configData {
+				resourceConfigs := configData[key]
+				makeSourcePathRelative(absRootDir, resourceConfigs)
 				allResourcesConfig[key] = append(allResourcesConfig[key], configData[key]...)
 			}
 		}
 	}
 
-	return allResourcesConfig, nil
+	return allResourcesConfig, a.errIacLoadDirs
+}
+
+// makeSourcePathRelative modifies the source path of each resource from absolute to relative path
+func makeSourcePathRelative(absRootDir string, resourceConfigs []output.ResourceConfig) {
+	for i := range resourceConfigs {
+		r := &resourceConfigs[i]
+		var err error
+		oldSource := r.Source
+		// update the source path
+		r.Source, err = filepath.Rel(absRootDir, r.Source)
+		// though this error should never occur, but, if occurs for some reason, assign the old value of source back
+		if err != nil {
+			r.Source = oldSource
+			zap.S().Debug("error while getting the relative path for", zap.String("IAC file", oldSource), zap.Error(err))
+			continue
+		}
+	}
 }

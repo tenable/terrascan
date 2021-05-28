@@ -19,14 +19,23 @@ package cftv1
 import (
 	"fmt"
 	"os"
-	"reflect"
+	"path/filepath"
 	"syscall"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 )
 
 func TestLoadIacDir(t *testing.T) {
+	testDataDir := "testdata"
+
+	pathErr := &os.PathError{Op: "lstat", Path: "not-there", Err: syscall.ENOENT}
+	if utils.IsWindowsPlatform() {
+		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
+	}
+
 	table := []struct {
 		name    string
 		dirPath string
@@ -36,13 +45,13 @@ func TestLoadIacDir(t *testing.T) {
 	}{
 		{
 			name:    "empty config",
-			dirPath: "./testdata/testfile",
+			dirPath: filepath.Join(testDataDir, "testfile"),
 			cftv1:   CFTV1{},
-			wantErr: fmt.Errorf("no directories found for path ./testdata/testfile"),
+			wantErr: multierror.Append(fmt.Errorf("no directories found for path %s", filepath.Join(testDataDir, "testfile"))),
 		},
 		{
-			name:    "load invalid config dir",
-			dirPath: "./testdata",
+			name:    "load config dir with sub directories",
+			dirPath: testDataDir,
 			cftv1:   CFTV1{},
 			wantErr: nil,
 		},
@@ -50,11 +59,11 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid dirPath",
 			dirPath: "not-there",
 			cftv1:   CFTV1{},
-			wantErr: &os.PathError{Err: syscall.ENOENT, Op: "lstat", Path: "not-there"},
+			wantErr: multierror.Append(pathErr),
 		},
 		{
-			name:    "key-vault",
-			dirPath: "./testdata/key-vault",
+			name:    "load valid dir",
+			dirPath: filepath.Join(testDataDir, "s3"),
 			cftv1:   CFTV1{},
 			wantErr: nil,
 		},
@@ -63,7 +72,15 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
 			_, gotErr := tt.cftv1.LoadIacDir(tt.dirPath, false)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nil {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})

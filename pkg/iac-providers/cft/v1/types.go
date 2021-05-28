@@ -16,8 +16,11 @@
 
 package cftv1
 
+import "github.com/hashicorp/go-multierror"
+
 // CFTV1 struct implements the IacProvider interface
 type CFTV1 struct {
+	errIacLoadDirs *multierror.Error
 }
 
 const (
