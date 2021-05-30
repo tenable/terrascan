@@ -90,3 +90,43 @@ func TestLoadIacFile(t *testing.T) {
 	}
 
 }
+
+func Test_getSourceRelativePath(t *testing.T) {
+	dir1, dir2 := "Dir1", "Dir2"
+	sourcePath1 := filepath.Join(dir1, dir2, "filename.yaml")
+
+	type args struct {
+		absRootDir string
+		sourcePath string
+	}
+	tests := []struct {
+		name            string
+		expectedRelPath string
+		args            args
+	}{
+		{
+			name: "empty root directory",
+			args: args{
+				sourcePath: sourcePath1,
+			},
+			expectedRelPath: "filename.yaml",
+		},
+		{
+			name: "root directory not empty",
+			args: args{
+				absRootDir: dir1,
+				sourcePath: sourcePath1,
+			},
+			expectedRelPath: filepath.Join(dir2, "filename.yaml"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			k := &K8sV1{absRootDir: tt.args.absRootDir}
+			gotRelPath := k.getSourceRelativePath(tt.args.sourcePath)
+			if gotRelPath != tt.expectedRelPath {
+				t.Errorf("Test_getSourceRelativePath() = unexpected relative path; want relPath: %s, got relPath: %s", tt.expectedRelPath, gotRelPath)
+			}
+		})
+	}
+}

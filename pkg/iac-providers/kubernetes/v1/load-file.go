@@ -2,6 +2,7 @@ package k8sv1
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/utils"
 
@@ -42,9 +43,24 @@ func (k *K8sV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 		}
 
 		config.Line = doc.StartLine
-		config.Source = absFilePath
+		config.Source = k.getSourceRelativePath(absFilePath)
 
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 	return allResourcesConfig, nil
+}
+
+// getSourceRelativePath fetches the relative path of file being loaded
+func (k *K8sV1) getSourceRelativePath(sourceFile string) string {
+
+	// rootDir should be empty when file scan was initiated by user
+	if k.absRootDir == "" {
+		return filepath.Base(sourceFile)
+	}
+	relPath, err := filepath.Rel(k.absRootDir, sourceFile)
+	if err != nil {
+		zap.S().Debug("error while getting the relative path for", zap.String("IAC file", sourceFile), zap.Error(err))
+		return sourceFile
+	}
+	return relPath
 }
