@@ -10,5 +10,6 @@
     "description": "Ensure CloudTrail logs are encrypted using KMS",
     "reference_id": "AWS.CloudTrail.Logging.High.0399",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0033"
 }

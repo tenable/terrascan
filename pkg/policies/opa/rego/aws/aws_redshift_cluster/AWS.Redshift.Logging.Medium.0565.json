@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "MEDIUM",
+    "severity": "LOW",
     "description": "Ensure AWS Redshift cluster instances have logging enabled.",
     "reference_id": "AWS.Redshift.Logging.Medium.0565",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0200"
 }

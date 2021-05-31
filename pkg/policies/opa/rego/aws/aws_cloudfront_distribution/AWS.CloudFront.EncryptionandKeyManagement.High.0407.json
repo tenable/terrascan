@@ -10,5 +10,6 @@
     "description": "Use encrypted connection between CloudFront and origin server",
     "reference_id": "AWS.CloudFront.EncryptionandKeyManagement.High.0407",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0024"
 }

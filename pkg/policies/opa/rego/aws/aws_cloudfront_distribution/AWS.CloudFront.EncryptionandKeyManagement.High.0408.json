@@ -10,5 +10,6 @@
     "description": "Secure ciphers are not used in CloudFront distribution",
     "reference_id": "AWS.CloudFront.EncryptionandKeyManagement.High.0408",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0023"
 }

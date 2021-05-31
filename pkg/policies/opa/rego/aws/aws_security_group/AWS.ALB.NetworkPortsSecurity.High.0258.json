@@ -13,5 +13,6 @@
     "description": "'NetBIOS Datagram Service' (UDP:138) is accessible by a CIDR block range",
     "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0258",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0299"
 }

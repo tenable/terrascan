@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "HIGH",
+    "severity": "LOW",
     "description": "Ensure that there are not any static websites being hosted on buckets you aren't aware of",
     "reference_id": "AWS.S3Bucket.NetworkSecurity.High.0417",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0208"
 }

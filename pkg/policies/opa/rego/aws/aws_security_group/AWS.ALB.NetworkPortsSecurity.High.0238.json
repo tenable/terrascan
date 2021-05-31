@@ -13,5 +13,6 @@
     "description": "'MSSQL Server' (TCP:1433) is accessible by a CIDR block range",
     "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0238",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0289"
 }

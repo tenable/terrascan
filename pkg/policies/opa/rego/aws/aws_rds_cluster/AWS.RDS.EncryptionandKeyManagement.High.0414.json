@@ -10,5 +10,6 @@
     "description": "Encrypt Amazon RDS instances and snapshots at rest, by enabling the encryption option for your Amazon RDS DB instance",
     "reference_id": "AWS.RDS.EncryptionandKeyManagement.High.0414",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0186"
 }

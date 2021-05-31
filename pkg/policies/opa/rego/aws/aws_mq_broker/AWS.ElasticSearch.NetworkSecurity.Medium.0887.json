@@ -8,5 +8,6 @@
     "description": "Publicly Accessible MQ Brokers",
     "reference_id": "AWS.ElasticSearch.NetworkSecurity.Medium.0887",
     "category": "Security Best Practices",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0175"
 }
