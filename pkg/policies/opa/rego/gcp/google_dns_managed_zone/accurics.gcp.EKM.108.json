@@ -8,5 +8,6 @@
     "description": "Ensure that RSASHA1 is not used for the zone-signing and key-signing keys in Cloud DNS DNSSEC.",
     "reference_id": "accurics.gcp.EKM.108",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0013"
 }

@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_project_iam_member",
     "template_args": null,
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level.",
     "reference_id": "accurics.gcp.IAM.137",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0006"
 }

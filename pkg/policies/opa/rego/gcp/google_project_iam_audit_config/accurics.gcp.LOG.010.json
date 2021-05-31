@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_project_iam_audit_config",
     "template_args": null,
-    "severity": "HIGH",
+    "severity": "LOW",
     "description": "Ensure that Cloud Audit Logging is configured properly across all services and all users from a project.",
     "reference_id": "accurics.gcp.LOG.010",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0009"
 }

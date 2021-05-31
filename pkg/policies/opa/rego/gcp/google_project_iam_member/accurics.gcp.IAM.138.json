@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_project_iam_member",
     "template_args": null,
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Ensure that Service Account has no Admin privileges.",
     "reference_id": "accurics.gcp.IAM.138",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0005"
 }

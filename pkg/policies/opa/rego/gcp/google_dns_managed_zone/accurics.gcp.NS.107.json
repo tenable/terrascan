@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_dns_managed_zone",
     "template_args": null,
-    "severity": "HIGH",
+    "severity": "LOW",
     "description": "Ensure that DNSSEC is enabled for Cloud DNS.",
     "reference_id": "accurics.gcp.NS.107",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0014"
 }

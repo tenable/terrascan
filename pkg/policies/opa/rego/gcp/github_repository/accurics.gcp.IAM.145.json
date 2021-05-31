@@ -8,5 +8,6 @@
     "description": "Repository is Not Private.",
     "reference_id": "accurics.gcp.IAM.145",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0231"
 }

@@ -8,5 +8,6 @@
     "description": "Ensure that logging is enabled for Cloud storage buckets.",
     "reference_id": "accurics.gcp.LOG.147",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0233"
 }

@@ -8,5 +8,6 @@
     "description": "Ensure GKE Control Plane is not public.",
     "reference_id": "accurics.gcp.NS.109",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0023"
 }
