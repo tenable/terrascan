@@ -10,6 +10,7 @@ replace (
 
 require (
 	github.com/ghodss/yaml v1.0.0
+	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-cleanhttp v0.5.1
 	github.com/hashicorp/go-getter v1.5.1

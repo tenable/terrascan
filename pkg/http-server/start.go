@@ -18,6 +18,9 @@ package httpserver
 
 import (
 	"context"
+	httputils "github.com/accurics/terrascan/pkg/utils/http"
+	gorillaHandlers "github.com/gorilla/handlers"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
@@ -54,6 +57,8 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 		router = mux.NewRouter() // new router
 	)
 
+	logWriter := getLogWriter(logger)
+
 	logger.Info("registering routes...")
 
 	if privateKeyFile != "" || certFile != "" {
@@ -67,8 +72,12 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 	// register all routes
 	for _, v := range routes {
 		logger.Info("Route ", v.verb, " - ", v.path)
-		router.Methods(v.verb).Path(v.path).HandlerFunc(v.fn)
+		handler := gorillaHandlers.LoggingHandler(logWriter, http.HandlerFunc(v.fn))
+		router.Methods(v.verb).Path(v.path).Handler(handler)
 	}
+
+	router.NotFoundHandler = gorillaHandlers.LoggingHandler(logWriter, http.HandlerFunc(httputils.NotFound))
+	router.MethodNotAllowedHandler = gorillaHandlers.LoggingHandler(logWriter, http.HandlerFunc(httputils.NotAllowed))
 
 	// Add a route for all static templates / assets. Currently used for the Webhook logs views
 	// go/terrascan/asset is the path where the assets files are located inside the docker container
@@ -113,4 +122,21 @@ func (g *APIServer) start(routes []*Route, port, certFile, privateKeyFile string
 		logger.Fatalf("server failed to exit gracefully. error: '%v'", err)
 	}
 	logger.Info("server exiting gracefully")
+}
+
+type logWriter struct {
+	logger *zap.SugaredLogger
+}
+
+// GetLogWriter creates and fetches a LogWriter object
+func getLogWriter(logger *zap.SugaredLogger) logWriter {
+	return logWriter{
+		logger: logger,
+	}
+}
+
+// Write writes the byte array to the logger object
+func (l logWriter) Write(p []byte) (n int, err error) {
+	l.logger.Info(string(p))
+	return len(p), nil
 }
