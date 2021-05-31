@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -74,7 +73,6 @@ func (t *TFPlan) LoadIacFile(absFilePath string) (allResourcesConfig output.AllR
 	// create AllResourceConfigs from resourceConfigs
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 	for _, r := range resourceConfigs {
-		r.ID = getTFID(r.ID)
 		if _, present := allResourcesConfig[r.Type]; !present {
 			allResourcesConfig[r.Type] = []output.ResourceConfig{r}
 		} else {
@@ -105,13 +103,4 @@ func (t *TFPlan) isValidTFPlanJSON(tfjson []byte) error {
 	}
 
 	return nil
-}
-
-// getTFID returns a valid resource ID for terraform
-func getTFID(id string) string {
-	split := strings.Split(id, ".")
-	if len(split) <= 2 {
-		return strings.Join(split, ".")
-	}
-	return strings.Join(split[len(split)-2:], ".")
 }
