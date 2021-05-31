@@ -21,6 +21,9 @@ import "github.com/hashicorp/go-multierror"
 // K8sV1 struct implements the IacProvider interface
 type K8sV1 struct {
 	errIacLoadDirs *multierror.Error
+	// absRootDir is the root directory being scanned.
+	// if a file scan was initiated, absRootDir should be empty.
+	absRootDir string
 }
 
 const (
