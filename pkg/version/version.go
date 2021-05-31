@@ -16,10 +16,17 @@
 
 package version
 
+import "fmt"
+
 // Terrascan The Terrascan version
-const Terrascan = "v1.6.0"
+const Terrascan = "1.6.0"
 
 // Get returns the terrascan version
 func Get() string {
+	return fmt.Sprintf("v%s", Terrascan)
+}
+
+// GetNumeric returns the numeric terrascan version
+func GetNumeric() string {
 	return Terrascan
 }
