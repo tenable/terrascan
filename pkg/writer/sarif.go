@@ -19,6 +19,7 @@ package writer
 import (
 	"fmt"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/version"
 	"github.com/owenrumney/go-sarif/sarif"
 	"io"
 	"path/filepath"
@@ -42,6 +43,8 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 	}
 
 	run := sarif.NewRun("terrascan", "https://github.com/accurics/terrascan")
+	run.Tool.Driver.WithVersion(version.GetNumeric())
+
 	// add a run to the report
 	report.AddRun(run)
 
@@ -71,7 +74,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		location := sarif.NewLocation().
 			WithPhysicalLocation(sarif.NewPhysicalLocation().
 				WithArtifactLocation(sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))).
-				WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber - 1)))
+				WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
 
 		if len(violation.ResourceType) > 0 && len(violation.ResourceName) > 0 {
 			location.LogicalLocations = append(location.LogicalLocations, sarif.NewLogicalLocation().

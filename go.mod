@@ -35,12 +35,12 @@ require (
 	github.com/spf13/cobra v1.1.1
 	github.com/zclconf/go-cty v1.8.2
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20210511113859-b0526f3d8744
-	golang.org/x/tools v0.1.1 // indirect
+	golang.org/x/sys v0.0.0-20210525143221-35b2ab0089ea
+	golang.org/x/tools v0.1.2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
-	honnef.co/go/tools v0.1.4 // indirect
+	honnef.co/go/tools v0.2.0 // indirect
 	k8s.io/api v0.19.2
 	k8s.io/apimachinery v0.19.2
 	k8s.io/client-go v10.0.0+incompatible

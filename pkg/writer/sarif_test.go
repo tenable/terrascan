@@ -17,6 +17,7 @@ const expectedSarifOutput1 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
+                  "version": "1.6.0",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
@@ -47,7 +48,7 @@ const expectedSarifOutput1 = `{
                           "uri": "file://test/modules/m1/main.tf"
                         },
                         "region": {
-                          "startLine": 19
+                          "startLine": 20
                         }
                       },
                       "logicalLocations": [
@@ -72,6 +73,7 @@ const expectedSarifOutput2 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
+                  "version": "1.6.0",
                   "informationUri": "https://github.com/accurics/terrascan"
                 }
               },
@@ -88,6 +90,7 @@ const expectedSarifOutput3 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
+                  "version": "1.6.0",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
