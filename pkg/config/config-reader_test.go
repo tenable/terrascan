@@ -17,30 +17,46 @@
 package config
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 )
 
-func TestNewTerrascanConfigReader(t *testing.T) {
-	testNotifier := Notifier{
+var (
+	testDataDir = "testdata"
+
+	testRules = Rules{
+		ScanRules: []string{"rule.1", "rule.2", "rule.3", "rule.4", "rule.5"},
+		SkipRules: []string{"rule.1"},
+	}
+
+	testCategoryList = Category{List: []string{"category.1", "category.2"}}
+
+	testNotifier = Notifier{
 		NotifierType: "webhook",
 		NotifierConfig: map[string]interface{}{
 			"url": "testurl1",
 		},
 	}
+
+	testK8sAdmControl = K8sAdmissionControl{
+		Dashboard:      true,
+		DeniedSeverity: highSeverity.Level,
+		Categories:     testCategoryList.List,
+		SaveRequests:   true,
+	}
+
+	highSeverity = Severity{Level: "high"}
+)
+
+func TestNewTerrascanConfigReader(t *testing.T) {
+
 	testPolicy := Policy{
 		RepoPath: "rego-subdir",
 		BasePath: "custom-path",
 		RepoURL:  "https://repository/url",
 		Branch:   "branch-name",
 	}
-	testRules := Rules{
-		ScanRules: []string{"rule.1", "rule.2", "rule.3", "rule.4", "rule.5"},
-		SkipRules: []string{"rule.1"},
-	}
-
-	categoryList := Category{List: []string{"category.1", "category.2"}}
-	highSeverity := Severity{Level: "high"}
 
 	type args struct {
 		fileName string
@@ -82,7 +98,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "invalid toml config file",
 			args: args{
-				fileName: "testdata/invalid.toml",
+				fileName: filepath.Join(testDataDir, "invalid.toml"),
 			},
 			wantErr: true,
 			want:    &TerrascanConfigReader{},
@@ -90,7 +106,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "invalid yaml config file",
 			args: args{
-				fileName: "testdata/invalid.yaml",
+				fileName: filepath.Join(testDataDir, "invalid.toml"),
 			},
 			wantErr: true,
 			want:    &TerrascanConfigReader{},
@@ -98,7 +114,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid toml config file with partial fields",
 			args: args{
-				fileName: "testdata/terrascan-config.toml",
+				fileName: filepath.Join(testDataDir, "terrascan-config.toml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -109,7 +125,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid toml config file with all fields",
 			args: args{
-				fileName: "testdata/terrascan-config-all-fields.toml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-all-fields.toml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -117,7 +133,10 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 					Notifications: map[string]Notifier{
 						"webhook1": testNotifier,
 					},
-					Rules: testRules,
+					Rules:               testRules,
+					Severity:            highSeverity,
+					Category:            testCategoryList,
+					K8sAdmissionControl: testK8sAdmControl,
 				},
 			},
 			assertGetters: true,
@@ -130,7 +149,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid toml config file with all fields and severity defined",
 			args: args{
-				fileName: "testdata/terrascan-config-severity.toml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-severity.toml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -152,7 +171,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid toml config file with all fields and categories defined",
 			args: args{
-				fileName: "testdata/terrascan-config-category.toml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-category.toml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -161,7 +180,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 						"webhook1": testNotifier,
 					},
 					Rules:    testRules,
-					Category: categoryList,
+					Category: testCategoryList,
 				},
 			},
 			assertGetters: true,
@@ -172,17 +191,9 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 			Rules:  testRules,
 		},
 		{
-			name: "invalid yaml config file",
-			args: args{
-				fileName: "testdata/invalid.yaml",
-			},
-			wantErr: true,
-			want:    &TerrascanConfigReader{},
-		},
-		{
 			name: "valid yaml config file with all fields",
 			args: args{
-				fileName: "testdata/terrascan-config-all-fields.yaml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-all-fields.yaml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -190,7 +201,10 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 					Notifications: map[string]Notifier{
 						"webhook1": testNotifier,
 					},
-					Rules: testRules,
+					Rules:               testRules,
+					Severity:            highSeverity,
+					Category:            testCategoryList,
+					K8sAdmissionControl: testK8sAdmControl,
 				},
 			},
 			assertGetters: true,
@@ -203,7 +217,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid yaml config file with all fields and severity defined",
 			args: args{
-				fileName: "testdata/terrascan-config-severity.yml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-severity.yml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -225,7 +239,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 		{
 			name: "valid yaml config file with all fields and categories defined",
 			args: args{
-				fileName: "testdata/terrascan-config-category.yaml",
+				fileName: filepath.Join(testDataDir, "terrascan-config-category.yaml"),
 			},
 			want: &TerrascanConfigReader{
 				config: TerrascanConfig{
@@ -234,7 +248,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 						"webhook1": testNotifier,
 					},
 					Rules:    testRules,
-					Category: categoryList,
+					Category: testCategoryList,
 				},
 			},
 			assertGetters: true,
