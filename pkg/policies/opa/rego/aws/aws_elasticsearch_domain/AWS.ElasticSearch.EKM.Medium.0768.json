@@ -8,5 +8,6 @@
     "description": "ElasticSearch Domain Encrypted with KMS CMKs",
     "reference_id": "AWS.ElasticSearch.EKM.Medium.0768",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0111"
 }

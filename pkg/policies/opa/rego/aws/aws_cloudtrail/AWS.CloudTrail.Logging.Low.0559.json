@@ -10,5 +10,6 @@
     "description": "Ensure appropriate subscribers to each SNS topic",
     "reference_id": "AWS.CloudTrail.Logging.Low.0559",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0035"
 }

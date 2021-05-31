@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "MEDIUM",
+    "severity": "LOW",
     "description": "Ensure VPC flow logging is enabled in all VPCs",
     "reference_id": "AWS.VPC.Logging.Medium.0470",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0369"
 }

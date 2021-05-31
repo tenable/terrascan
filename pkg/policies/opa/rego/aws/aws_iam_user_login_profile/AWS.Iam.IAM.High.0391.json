@@ -10,5 +10,6 @@
     "description": "Password policies are, in part, used to enforce password complexity requirements. IAM password policies can be used to ensure password are comprised of different character sets, have minimal length, rotation and history restrictions",
     "reference_id": "AWS.Iam.IAM.High.0391",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0148"
 }

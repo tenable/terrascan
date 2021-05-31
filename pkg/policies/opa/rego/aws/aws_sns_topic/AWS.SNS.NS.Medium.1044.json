@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Ensure SNS Topic is Publicly Accessible For Subscription",
     "reference_id": "AWS.SNS.NS.Medium.1044",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0385"
 }

@@ -13,5 +13,6 @@
     "description": "'MSSQL Debugger' (TCP:135) is accessible by a CIDR block range",
     "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0236",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0288"
 }

@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Ensure rotation for customer created CMKs is enabled",
     "reference_id": "AC_AWS_012",
-    "category": "Security Best Practices",
-    "version": 2
+    "category": "Data Protection",
+    "version": 2,
+    "id": "AC_AWS_0160"
 }

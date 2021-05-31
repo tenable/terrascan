@@ -9,9 +9,10 @@
         "prefix": "",
         "protocol": "tcp"
     },
-    "severity": "HIGH",
+    "severity": "LOW",
     "description": "'SSH' (TCP:22) is accessible by a CIDR block range",
     "reference_id": "AWS.ALB.NetworkPortsSecurity.High.0194",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0319"
 }

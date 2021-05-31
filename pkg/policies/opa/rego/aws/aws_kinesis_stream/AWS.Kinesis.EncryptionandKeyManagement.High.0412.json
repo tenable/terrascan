@@ -10,5 +10,6 @@
     "description": "Ensure Kinesis Stream is encrypted",
     "reference_id": "AWS.Kinesis.EncryptionandKeyManagement.High.0412",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0157"
 }
