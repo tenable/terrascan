@@ -8,9 +8,10 @@
         "prefix": "",
         "suffix": ""
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Do Not Use CAP_SYS_ADMIN Linux Capability",
     "reference_id": "AC-K8-NS-PO-H-0170",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0075"
 }

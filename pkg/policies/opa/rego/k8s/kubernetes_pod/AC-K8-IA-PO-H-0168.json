@@ -19,5 +19,6 @@
     "description": "Minimize Admission of Root Containers",
     "reference_id": "AC-K8-IA-PO-H-0168",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0087"
 }

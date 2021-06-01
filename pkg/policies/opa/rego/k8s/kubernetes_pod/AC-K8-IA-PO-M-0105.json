@@ -12,5 +12,6 @@
     "description": "Ensure that Service Account Tokens are only mounted where necessary",
     "reference_id": "AC-K8-IA-PO-M-0105",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0045"
 }

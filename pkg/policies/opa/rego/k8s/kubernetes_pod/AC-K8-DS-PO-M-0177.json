@@ -12,5 +12,6 @@
     "description": "Ensure That Tiller (Helm V2) Is Not Deployed",
     "reference_id": "AC-K8-DS-PO-M-0177",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0071"
 }

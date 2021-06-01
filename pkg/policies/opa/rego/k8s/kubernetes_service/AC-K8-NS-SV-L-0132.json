@@ -12,5 +12,6 @@
     "description": "Nodeport service can expose the worker nodes as they have public interface",
     "reference_id": "AC-K8-NS-SV-L-0132",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0111"
 }

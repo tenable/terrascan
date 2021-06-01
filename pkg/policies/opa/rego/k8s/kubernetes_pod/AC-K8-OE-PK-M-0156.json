@@ -19,5 +19,6 @@
     "description": "CPU Limits Not Set in config file.",
     "reference_id": "AC-K8-OE-PK-M-0156",
     "category": "Security Best Practices",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0098"
 }

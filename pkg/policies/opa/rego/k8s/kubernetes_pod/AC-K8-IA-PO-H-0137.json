@@ -8,9 +8,10 @@
         "prefix": "",
         "suffix": ""
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Allowing the pod to make system level calls provide access to host/node sensitive information",
     "reference_id": "AC-K8-IA-PO-H-0137",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0074"
 }

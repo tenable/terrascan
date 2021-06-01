@@ -17,5 +17,6 @@
     "description": "AlwaysPullImages plugin is not set",
     "reference_id": "AC-K8-OE-PK-M-0034",
     "category": "Compliance Validation",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0021"
 }

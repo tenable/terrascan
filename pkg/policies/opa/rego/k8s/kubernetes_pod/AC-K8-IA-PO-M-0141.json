@@ -12,5 +12,6 @@
     "description": "Default seccomp profile not enabled will make the container to make non-essential system calls",
     "reference_id": "AC-K8-IA-PO-M-0141",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0080"
 }

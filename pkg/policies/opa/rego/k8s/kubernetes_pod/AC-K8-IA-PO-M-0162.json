@@ -14,5 +14,6 @@
     "description": "Containers Should Not Share Host Process ID Namespace",
     "reference_id": "AC-K8-IA-PO-M-0162",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0082"
 }

@@ -13,5 +13,6 @@
     "description": "Minimize the admission of containers with the NET_RAW capability",
     "reference_id": "AC-K8-IA-PS-M-0112",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0048"
 }

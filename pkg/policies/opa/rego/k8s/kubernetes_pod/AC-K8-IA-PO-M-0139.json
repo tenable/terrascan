@@ -12,5 +12,6 @@
     "description": "Unmasking the procMount will allow more information than is necessary to the program running in the containers spawned by k8s",
     "reference_id": "AC-K8-IA-PO-M-0139",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0077"
 }

@@ -12,5 +12,6 @@
     "description": "No tag or container image with :Latest tag makes difficult to rollback and track",
     "reference_id": "AC-K8-OE-PO-L-0134",
     "category": "Security Best Practices",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0068"
 }

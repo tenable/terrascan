@@ -19,5 +19,6 @@
     "description": "Container images with readOnlyRootFileSystem set as false mounts the container root file system with write permissions",
     "reference_id": "AC-K8-IA-PO-M-0140",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0078"
 }
