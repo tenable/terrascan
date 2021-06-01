@@ -1,17 +1,17 @@
 {
-  "name": "nodePort",
-  "file": "nodePort.rego",
-  "policy_type": "k8s",
-  "resource_type": "kubernetes_service",
-  "template_args": {
     "name": "nodePort",
-    "prefix": "",
-    "suffix": ""
-  },
-  "severity": "LOW",
-  "description": "Nodeport service can expose the worker nodes as they have public interface",
-  "reference_id": "AC-K8-NS-SV-L-0132",
-  "category": "Infrastructure Security",
-  "version": 1,
-  "id": "AC_K8S_0111"
+    "file": "nodePort.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_service",
+    "template_args": {
+        "name": "nodePort",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Nodeport service can expose the worker nodes as they have public interface",
+    "reference_id": "AC-K8-NS-SV-L-0132",
+    "category": "Infrastructure Security",
+    "version": 1,
+    "id": "AC_K8S_0111"
 }

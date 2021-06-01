@@ -1,24 +1,24 @@
 {
-  "name": "CpuRequestsCheck",
-  "file": "securityContextCheck.rego",
-  "policy_type": "k8s",
-  "resource_type": "kubernetes_pod",
-  "template_args": {
-    "allowed": "true",
-    "arg1": "requests",
-    "arg2": "cpu",
     "name": "CpuRequestsCheck",
-    "not_allowed": "false",
-    "param": "requests",
-    "param1": "resources",
-    "prefix": "",
-    "suffix": "",
-    "value": "false"
-  },
-  "severity": "Medium",
-  "description": "CPU Request Not Set in config file.",
-  "reference_id": "AC-K8-OE-PK-M-0155",
-  "category": "Security Best Practices",
-  "version": 1,
-  "id": "AC_K8S_0097"
+    "file": "securityContextCheck.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
+    "template_args": {
+        "allowed": "true",
+        "arg1": "requests",
+        "arg2": "cpu",
+        "name": "CpuRequestsCheck",
+        "not_allowed": "false",
+        "param": "requests",
+        "param1": "resources",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "Medium",
+    "description": "CPU Request Not Set in config file.",
+    "reference_id": "AC-K8-OE-PK-M-0155",
+    "category": "Security Best Practices",
+    "version": 1,
+    "id": "AC_K8S_0097"
 }

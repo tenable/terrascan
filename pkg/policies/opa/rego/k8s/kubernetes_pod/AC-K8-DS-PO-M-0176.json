@@ -1,17 +1,17 @@
 {
-  "name": "kubeDashboardEnabled",
-  "file": "kubeDashboardEnabled.rego",
-  "policy_type": "k8s",
-  "resource_type": "kubernetes_pod",
-  "template_args": {
     "name": "kubeDashboardEnabled",
-    "prefix": "",
-    "suffix": ""
-  },
-  "severity": "MEDIUM",
-  "description": "Ensure Kubernetes Dashboard Is Not Deployed",
-  "reference_id": "AC-K8-DS-PO-M-0176",
-  "category": "Data Protection",
-  "version": 1,
-  "id": "AC_K8S_0067"
+    "file": "kubeDashboardEnabled.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
+    "template_args": {
+        "name": "kubeDashboardEnabled",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Kubernetes Dashboard Is Not Deployed",
+    "reference_id": "AC-K8-DS-PO-M-0176",
+    "category": "Data Protection",
+    "version": 1,
+    "id": "AC_K8S_0067"
 }

@@ -1,19 +1,19 @@
 {
-  "name": "noReadinessProbe",
-  "file": "probeCheck.rego",
-  "policy_type": "k8s",
-  "resource_type": "kubernetes_pod",
-  "template_args": {
-    "argument": "readinessProbe",
-    "argumentTF": "readiness_probe",
     "name": "noReadinessProbe",
-    "prefix": "",
-    "suffix": ""
-  },
-  "severity": "LOW",
-  "description": "No readiness probe will affect automatic recovery in case of unexpected errors",
-  "reference_id": "AC-K8-OE-PO-L-0130",
-  "category": "Security Best Practices",
-  "version": 1,
-  "id": "AC_K8S_0072"
+    "file": "probeCheck.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
+    "template_args": {
+        "argument": "readinessProbe",
+        "argumentTF": "readiness_probe",
+        "name": "noReadinessProbe",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "No readiness probe will affect automatic recovery in case of unexpected errors",
+    "reference_id": "AC-K8-OE-PO-L-0130",
+    "category": "Security Best Practices",
+    "version": 1,
+    "id": "AC_K8S_0072"
 }

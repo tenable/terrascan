@@ -1,24 +1,24 @@
 {
-  "name": "MemoryRequestsCheck",
-  "file": "securityContextCheck.rego",
-  "policy_type": "k8s",
-  "resource_type": "kubernetes_pod",
-  "template_args": {
-    "allowed": "true",
-    "arg1": "requests",
-    "arg2": "memory",
     "name": "MemoryRequestsCheck",
-    "not_allowed": "false",
-    "param": "requests",
-    "param1": "resources",
-    "prefix": "",
-    "suffix": "",
-    "value": "false"
-  },
-  "severity": "Medium",
-  "description": "Memory Request Not Set in config file.",
-  "reference_id": "AC-K8-OE-PK-M-0157",
-  "category": "Security Best Practices",
-  "version": 1,
-  "id": "AC_K8S_0099"
+    "file": "securityContextCheck.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_pod",
+    "template_args": {
+        "allowed": "true",
+        "arg1": "requests",
+        "arg2": "memory",
+        "name": "MemoryRequestsCheck",
+        "not_allowed": "false",
+        "param": "requests",
+        "param1": "resources",
+        "prefix": "",
+        "suffix": "",
+        "value": "false"
+    },
+    "severity": "Medium",
+    "description": "Memory Request Not Set in config file.",
+    "reference_id": "AC-K8-OE-PK-M-0157",
+    "category": "Security Best Practices",
+    "version": 1,
+    "id": "AC_K8S_0099"
 }
