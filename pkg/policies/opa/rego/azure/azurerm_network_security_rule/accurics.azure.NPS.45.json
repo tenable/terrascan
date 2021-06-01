@@ -16,5 +16,6 @@
     "description": "DNS (UDP:53) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.45",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0535"
 }

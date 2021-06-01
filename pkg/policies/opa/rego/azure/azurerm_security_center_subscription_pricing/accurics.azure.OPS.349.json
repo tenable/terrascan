@@ -10,5 +10,6 @@
     "description": "Ensure that standard pricing tiers are selected",
     "reference_id": "accurics.azure.OPS.349",
     "category": "Security Best Practices",
-    "version": 1
+    "version": 1,
+    "id": "AC_AZURE_0385"
 }

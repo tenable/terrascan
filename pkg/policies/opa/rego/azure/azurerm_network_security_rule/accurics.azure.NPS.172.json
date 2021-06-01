@@ -16,5 +16,6 @@
     "description": "SSH (TCP:22) is exposed to the entire public internet",
     "reference_id": "accurics.azure.NPS.172",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0285"
 }

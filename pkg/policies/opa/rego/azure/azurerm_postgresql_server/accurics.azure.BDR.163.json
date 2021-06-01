@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": "reme_"
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Ensure that Geo Redundant Backups is enabled on PostgreSQL",
     "reference_id": "accurics.azure.BDR.163",
     "category": "Resilience",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0407"
 }

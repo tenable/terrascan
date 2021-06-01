@@ -8,9 +8,10 @@
         "name": "sqlIngressAccess",
         "prefix": "reme_"
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP)",
     "reference_id": "accurics.azure.NS.21",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0380"
 }

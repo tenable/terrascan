@@ -10,5 +10,6 @@
     "description": "Ensure that the expiration date is set on all secrets",
     "reference_id": "accurics.azure.EKM.26",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0163"
 }

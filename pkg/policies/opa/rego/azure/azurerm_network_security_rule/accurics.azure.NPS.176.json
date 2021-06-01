@@ -16,5 +16,6 @@
     "description": "Cassandra (TCP:7001) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.176",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0275"
 }

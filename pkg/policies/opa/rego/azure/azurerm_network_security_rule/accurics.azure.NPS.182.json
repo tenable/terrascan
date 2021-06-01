@@ -16,5 +16,6 @@
     "description": "Hadoop Name Node (TCP:9000) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.182",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0530"
 }

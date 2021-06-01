@@ -10,5 +10,6 @@
     "description": "Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server",
     "reference_id": "accurics.azure.EKM.1",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0408"
 }

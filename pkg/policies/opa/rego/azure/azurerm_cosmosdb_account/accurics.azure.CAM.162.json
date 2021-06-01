@@ -10,5 +10,6 @@
     "description": "Ensure that Cosmos DB Account has an associated tag",
     "reference_id": "accurics.azure.CAM.162",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0277"
 }

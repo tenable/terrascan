@@ -10,5 +10,6 @@
     "description": "Ensure that Azure Virtual Network subnet is configured with a Network Security Group",
     "reference_id": "accurics.azure.NS.161",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0356"
 }

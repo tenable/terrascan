@@ -8,5 +8,6 @@
     "description": "Ensure AKS cluster has Network Policy configured.",
     "reference_id": "accurics.azure.NS.382",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_AZURE_0158"
 }

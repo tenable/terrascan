@@ -10,5 +10,6 @@
     "description": "Ensure to filter source Ips for Cosmos DB Account",
     "reference_id": "accurics.azure.NS.32",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0184"
 }

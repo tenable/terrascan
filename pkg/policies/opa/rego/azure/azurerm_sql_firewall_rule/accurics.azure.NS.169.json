@@ -10,5 +10,6 @@
     "description": "Restrict Azure SQL Server accessibility to a minimal address range",
     "reference_id": "accurics.azure.NS.169",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0280"
 }

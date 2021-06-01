@@ -16,5 +16,6 @@
     "description": "Memcached SSL (TCP:11215) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.65",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0505"
 }

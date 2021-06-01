@@ -10,5 +10,6 @@
     "description": "Ensure that logging for Azure KeyVault is 'Enabled'",
     "reference_id": "accurics.azure.EKM.20",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0169"
 }

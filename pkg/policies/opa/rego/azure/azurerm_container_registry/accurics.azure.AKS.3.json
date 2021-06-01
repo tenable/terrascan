@@ -10,5 +10,6 @@
     "description": "Ensure Container Registry has locks",
     "reference_id": "accurics.azure.AKS.3",
     "category": "Resilience",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0185"
 }

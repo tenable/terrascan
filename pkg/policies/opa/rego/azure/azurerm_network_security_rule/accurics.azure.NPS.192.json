@@ -16,5 +16,6 @@
     "description": "MSSQL Browser (UDP:1434) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.192",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0518"
 }

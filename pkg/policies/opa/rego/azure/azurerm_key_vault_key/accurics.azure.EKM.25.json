@@ -10,5 +10,6 @@
     "description": "Ensure that the expiration date is set on all keys",
     "reference_id": "accurics.azure.EKM.25",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0164"
 }

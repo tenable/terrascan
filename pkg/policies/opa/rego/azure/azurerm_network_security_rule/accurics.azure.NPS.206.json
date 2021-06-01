@@ -16,5 +16,6 @@
     "description": "Microsoft-DS (TCP:445) is exposed to wide Private network",
     "reference_id": "accurics.azure.NPS.206",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0494"
 }

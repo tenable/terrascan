@@ -8,5 +8,6 @@
     "description": "Ensure Kube Dashboard is disabled",
     "reference_id": "accurics.azure.NS.383",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_AZURE_0161"
 }

@@ -16,5 +16,6 @@
     "description": "VNC Listener (TCP:5500) is exposed to entire Public network",
     "reference_id": "accurics.azure.NPS.117",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_0427"
 }

@@ -4,9 +4,10 @@
     "policy_type": "azure",
     "resource_type": "azurerm_sql_server",
     "template_args": null,
-    "severity": "MEDIUM",
+    "severity": "LOW",
     "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers.",
     "reference_id": "accurics.azure.LOG.356",
     "category": "Compliance Validation",
-    "version": 1
+    "version": 1,
+    "id": "AC_AZURE_0375"
 }
