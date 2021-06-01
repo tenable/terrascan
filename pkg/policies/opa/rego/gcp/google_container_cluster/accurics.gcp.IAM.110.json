@@ -8,5 +8,6 @@
     "description": "Ensure GKE basic auth is disabled.",
     "reference_id": "accurics.gcp.IAM.110",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0021"
 }

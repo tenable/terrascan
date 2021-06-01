@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_project_iam_binding",
     "template_args": null,
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Ensure that corporate login credentials are used instead of Gmail accounts.",
     "reference_id": "accurics.gcp.IAM.150",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0008"
 }

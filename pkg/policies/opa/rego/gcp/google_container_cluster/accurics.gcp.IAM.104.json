@@ -4,9 +4,10 @@
     "policy_type": "gcp",
     "resource_type": "google_container_cluster",
     "template_args": null,
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Ensure Kubernetes Cluster is created with Client Certificate disabled.",
     "reference_id": "accurics.gcp.IAM.104",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0024"
 }

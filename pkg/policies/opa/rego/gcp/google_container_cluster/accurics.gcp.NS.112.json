@@ -8,5 +8,6 @@
     "description": "Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters.",
     "reference_id": "accurics.gcp.NS.112",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0027"
 }

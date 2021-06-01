@@ -8,5 +8,6 @@
     "description": "Ensure all Cloud SQL database instance have backup configuration enabled.",
     "reference_id": "accurics.gcp.BDR.105",
     "category": "Resilience",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0001"
 }

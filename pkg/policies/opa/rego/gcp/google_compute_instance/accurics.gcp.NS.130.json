@@ -12,5 +12,6 @@
     "description": "Ensure IP forwarding is not enabled on Instances.",
     "reference_id": "accurics.gcp.NS.130",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0232"
 }
