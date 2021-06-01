@@ -5,7 +5,7 @@
     "resource_type": "aws_api_gateway_stage",
     "template_args": null,
     "severity": "MEDIUM",
-    "description": "Enable Active Tracing",
+    "description": "Ensure AWS API Gateway has active xray tracing enabled",
     "reference_id": "AWS.API Gateway.Logging.Medium.0571",
     "category": "Logging and Monitoring",
     "version": 2
