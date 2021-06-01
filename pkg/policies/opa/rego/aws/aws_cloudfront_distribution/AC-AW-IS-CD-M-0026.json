@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "Medium",
+    "severity": "LOW",
     "description": "Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content.",
     "reference_id": "AC-AW-IS-CD-M-0026",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0026"
 }

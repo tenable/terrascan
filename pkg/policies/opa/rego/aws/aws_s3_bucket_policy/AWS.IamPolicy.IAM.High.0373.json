@@ -12,5 +12,6 @@
     "description": "Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion",
     "reference_id": "AWS.IamPolicy.IAM.High.0373",
     "category": "Identity and Access Management",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0219"
 }

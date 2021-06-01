@@ -4,9 +4,10 @@
     "policy_type": "aws",
     "resource_type": "aws_mq_broker",
     "template_args": null,
-    "severity": "MEDIUM",
+    "severity": "LOW",
     "description": "Enable AWS MQ Log Exports",
     "reference_id": "AWS.ElasticSearch.Logging.Medium.0885",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0174"
 }

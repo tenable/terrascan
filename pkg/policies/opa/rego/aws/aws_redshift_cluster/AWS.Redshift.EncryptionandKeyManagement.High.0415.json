@@ -6,9 +6,10 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "description": "Use customer-managed KMS keys instead of AWS-managed keys, to have granular control over encrypting and encrypting data. Encrypt Redshift clusters with a Customer-managed KMS key. This is a recommended best practice.",
     "reference_id": "AWS.Redshift.EncryptionandKeyManagement.High.0415",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0198"
 }

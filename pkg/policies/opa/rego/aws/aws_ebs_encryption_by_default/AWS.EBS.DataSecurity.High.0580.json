@@ -10,5 +10,6 @@
     "description": "Ensure that the AWS EBS that hold sensitive and critical data is encrypted by default to fulfill compliance requirements for data-at-rest encryption.",
     "reference_id": "AWS.EBS.DataSecurity.High.0580",
     "category": "Data Protection",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0079"
 }

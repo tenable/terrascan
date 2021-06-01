@@ -10,5 +10,6 @@
     "description": "RDS Instance publicly_accessible flag is true",
     "reference_id": "AWS.RDS.NS.High.0101",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0054"
 }

@@ -12,5 +12,6 @@
     "description": "Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack",
     "reference_id": "AWS.Iam.IAM.Medium.0456",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0137"
 }

@@ -10,5 +10,6 @@
     "description": "Avoid creating resources in default VPC",
     "reference_id": "AWS.VPC.Logging.Medium.0471",
     "category": "Security Best Practices",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0370"
 }

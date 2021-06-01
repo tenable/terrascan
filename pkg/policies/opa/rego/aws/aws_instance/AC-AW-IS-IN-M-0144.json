@@ -10,5 +10,6 @@
     "description": "Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices",
     "reference_id": "AC-AW-IS-IN-M-0144",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0153"
 }

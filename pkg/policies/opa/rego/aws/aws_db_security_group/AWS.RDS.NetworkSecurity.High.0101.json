@@ -10,5 +10,6 @@
     "description": "RDS should not be defined with public interface. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment.",
     "reference_id": "AWS.RDS.NetworkSecurity.High.0101",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0066"
 }

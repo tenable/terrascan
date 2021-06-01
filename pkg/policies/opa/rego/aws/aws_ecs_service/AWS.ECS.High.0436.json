@@ -8,5 +8,6 @@
     "description": "Ensure there are no ECS services Admin roles",
     "reference_id": "AWS.ECS.High.0436",
     "category": "Identity and Access Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0087"
 }

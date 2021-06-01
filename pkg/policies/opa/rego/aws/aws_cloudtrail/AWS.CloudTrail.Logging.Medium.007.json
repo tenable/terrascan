@@ -1,6 +1,8 @@
 {
     "name": "dynamoderecovery_enabled",
     "file": "dynamodb_without_recovery_enabled.rego",
+    "policy_type": "",
+    "resource_type": "",
     "template_args": {
         "prefix": ""
     },

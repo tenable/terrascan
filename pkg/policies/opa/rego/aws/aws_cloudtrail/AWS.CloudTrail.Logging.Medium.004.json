@@ -1,6 +1,8 @@
 {
     "name": "cloudTrailMultiRegionEnabled",
     "file": "cloudTrailMultiRegion.rego",
+    "policy_type": "",
+    "resource_type": "",
     "template_args": {
         "prefix": ""
     },

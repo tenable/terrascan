@@ -4,9 +4,10 @@
     "policy_type": "aws",
     "resource_type": "aws_elasticsearch_domain",
     "template_args": null,
-    "severity": "MEDIUM",
+    "severity": "HIGH",
     "description": "Enable AWS ElasticSearch Encryption At Rest",
     "reference_id": "AWS.ElasticSearch.EKM.Medium.0778",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0112"
 }
