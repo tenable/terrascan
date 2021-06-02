@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -75,7 +76,7 @@ func (a *CFTV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 			for _, resource := range resources {
 				config = &resource
 				config.Type = t
-				config.Source = absFilePath
+				config.Source = a.getSourceRelativePath(absFilePath)
 				allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 			}
 		}
@@ -98,9 +99,8 @@ func (*CFTV1) getFileType(file string) string {
 		}
 		if isJSON(string(f)) {
 			return JSONExtension
-		} else {
-			return YAMLExtension
 		}
+		return YAMLExtension
 	}
 	return UnknownExtension
 }
@@ -108,4 +108,19 @@ func (*CFTV1) getFileType(file string) string {
 func isJSON(s string) bool {
 	var js map[string]interface{}
 	return json.Unmarshal([]byte(s), &js) == nil
+}
+
+// getSourceRelativePath fetches the relative path of file being loaded
+func (a *CFTV1) getSourceRelativePath(sourceFile string) string {
+
+	// rootDir should be empty when file scan was initiated by user
+	if a.absRootDir == "" {
+		return filepath.Base(sourceFile)
+	}
+	relPath, err := filepath.Rel(a.absRootDir, sourceFile)
+	if err != nil {
+		zap.S().Debug("error while getting the relative path for", zap.String("IAC file", sourceFile), zap.Error(err))
+		return sourceFile
+	}
+	return relPath
 }
