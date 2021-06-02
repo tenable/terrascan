@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	cftv1 "github.com/accurics/terrascan/pkg/iac-providers/cft/v1"
 	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
 	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
@@ -215,7 +216,7 @@ func TestInit(t *testing.T) {
 				policyPath: []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv14.TfV14{}},
+			wantIacProvider: []iacProvider.IacProvider{&cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv14.TfV14{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{

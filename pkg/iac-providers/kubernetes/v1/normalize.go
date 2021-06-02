@@ -29,9 +29,6 @@ import (
 )
 
 const (
-	terrascanSkip        = "runterrascan.io/skip"
-	terrascanSkipRule    = "rule"
-	terrascanSkipComment = "comment"
 	terrascanMaxSeverity = "runterrascan.io/maxseverity"
 	terrascanMinSeverity = "runterrascan.io/minseverity"
 )
@@ -138,7 +135,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	}
 
 	// read and update skip rules, if present
-	skipRules := readSkipRulesFromAnnotations(resource.Metadata.Annotations, resourceConfig.ID)
+	skipRules := utils.ReadSkipRulesFromMap(resource.Metadata.Annotations, resourceConfig.ID)
 	if skipRules != nil {
 		resourceConfig.SkipRules = append(resourceConfig.SkipRules, skipRules...)
 	}
@@ -157,29 +154,6 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	resourceConfig.Config = configData
 
 	return &resourceConfig, nil
-}
-
-func readSkipRulesFromAnnotations(annotations map[string]interface{}, resourceID string) []output.SkipRule {
-
-	var skipRulesFromAnnotations interface{}
-	var ok bool
-	if skipRulesFromAnnotations, ok = annotations[terrascanSkip]; !ok {
-		zap.S().Debugf(infileInstructionNotPresentLog, terrascanSkip, resourceID)
-		return nil
-	}
-
-	if rules, ok := skipRulesFromAnnotations.(string); ok {
-		skipRules := make([]output.SkipRule, 0)
-		err := json.Unmarshal([]byte(rules), &skipRules)
-		if err != nil {
-			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
-			return nil
-		}
-		return skipRules
-	}
-
-	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
-	return nil
 }
 
 // readMinMaxSeverityFromAnnotations finds the min max severity values set in annotations for the resource
