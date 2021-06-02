@@ -31,8 +31,12 @@ func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
 			Tags: s.Tags,
+			Name: s.Name,
 		},
 		KmsKeyID: s.KmsKeyId,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
+	}}
 }

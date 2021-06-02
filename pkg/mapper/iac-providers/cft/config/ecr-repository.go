@@ -53,5 +53,8 @@ func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 		cf.ISC = make([]map[string]interface{}, 0)
 	}
 	cf.AERP = r.RepositoryPolicyText
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

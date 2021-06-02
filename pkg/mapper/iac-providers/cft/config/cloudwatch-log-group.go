@@ -38,5 +38,8 @@ func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 		KmsKeyID:        r.KmsKeyId,
 		RetentionInDays: r.RetentionInDays,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

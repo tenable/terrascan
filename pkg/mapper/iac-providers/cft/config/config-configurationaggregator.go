@@ -30,7 +30,10 @@ type ConfigurationAggregatorConfig struct {
 // GetConfigConfigurationAggregatorConfig returns config for aws_config_configuration_aggregator
 func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) []AWSResourceConfig {
 	cf := ConfigurationAggregatorConfig{
-		Config: Config{Tags: c.Tags, Name: c.ConfigurationAggregatorName},
+		Config: Config{
+			Tags: c.Tags,
+			Name: c.ConfigurationAggregatorName,
+		},
 	}
 	if c.AccountAggregationSources != nil {
 		accountAggregationSources := make([]map[string]interface{}, 0)
@@ -52,5 +55,8 @@ func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) [
 			cf.OrgAggregationSource = organizationAggregationSources
 		}
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: c.AWSCloudFormationMetadata,
+	}}
 }

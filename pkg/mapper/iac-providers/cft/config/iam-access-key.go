@@ -36,5 +36,8 @@ func GetIamAccessKeyConfig(r *iam.AccessKey) []AWSResourceConfig {
 		UserName: r.UserName,
 		Status:   r.Status,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

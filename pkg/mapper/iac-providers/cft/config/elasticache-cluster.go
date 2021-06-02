@@ -39,5 +39,8 @@ func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfi
 		Engine:        e.Engine,
 		EngineVersion: e.EngineVersion,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: e.AWSCloudFormationMetadata,
+	}}
 }

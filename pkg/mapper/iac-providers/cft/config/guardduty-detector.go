@@ -32,5 +32,8 @@ func GetGuardDutyDetectorConfig(d *guardduty.Detector) []AWSResourceConfig {
 		Config: Config{},
 		Enable: d.Enable,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: d.AWSCloudFormationMetadata,
+	}}
 }

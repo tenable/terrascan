@@ -32,9 +32,13 @@ func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	cf := RDSClusterConfig{
 		Config: Config{
 			Name: c.DatabaseName,
+			Tags: c.Tags,
 		},
 		BackupRetentionPeriod: c.BackupRetentionPeriod,
 		StorageEncrypted:      c.StorageEncrypted,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: c.AWSCloudFormationMetadata,
+	}}
 }

@@ -43,5 +43,8 @@ func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 		cf.KmsKeyID = k.StreamEncryption.KeyId
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: k.AWSCloudFormationMetadata,
+	}}
 }

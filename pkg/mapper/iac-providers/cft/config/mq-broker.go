@@ -32,6 +32,7 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	cf := MqBrokerConfig{
 		Config: Config{
 			Name: c.BrokerName,
+			Tags: c.Tags,
 		},
 		PubliclyAccessible: c.PubliclyAccessible,
 	}
@@ -50,5 +51,8 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 		cf.Logs = []map[string]bool{log}
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: c.AWSCloudFormationMetadata,
+	}}
 }

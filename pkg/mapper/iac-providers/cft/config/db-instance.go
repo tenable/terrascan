@@ -47,5 +47,8 @@ func GetDBInstanceConfig(d *rds.DBInstance) []AWSResourceConfig {
 		IamDBAuthEnabled:             d.EnableIAMDatabaseAuthentication,
 		PubliclyAccessible:           d.PubliclyAccessible,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: d.AWSCloudFormationMetadata,
+	}}
 }

@@ -35,5 +35,8 @@ func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 		},
 		IamRole: c.Role,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: c.AWSCloudFormationMetadata,
+	}}
 }

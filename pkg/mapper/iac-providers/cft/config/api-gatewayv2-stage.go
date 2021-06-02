@@ -37,5 +37,8 @@ func GetAPIGatewayV2StageConfig(s *apigatewayv2.Stage) []AWSResourceConfig {
 	if s.AccessLogSettings != nil {
 		cf.AccessLogSettings = s.AccessLogSettings
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
+	}}
 }

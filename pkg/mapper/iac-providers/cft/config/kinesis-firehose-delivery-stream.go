@@ -48,5 +48,8 @@ func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) [
 		sseConfig.KeyARN = k.DeliveryStreamEncryptionConfigurationInput.KeyARN
 	}
 	cf.ServerSideEncryption = []KinesisFirehoseDeliveryStreamSseConfig{sseConfig}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: k.AWSCloudFormationMetadata,
+	}}
 }

@@ -98,6 +98,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Resource: esDomainConfig,
+		Metadata: d.AWSCloudFormationMetadata,
 	})
 
 	// add domain access policy as aws_elasticsearch_domain_policy
@@ -115,6 +116,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 			Resource: policyConfig,
 			Type:     ElasticsearchDomainAccessPolicy,
 			Name:     d.DomainName,
+			Metadata: d.AWSCloudFormationMetadata,
 		})
 	}
 

@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/awslabs/goformation/v4/cloudformation/iam"
 )
@@ -39,7 +40,7 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 	// aws_iam_role_policy as a SubResource
 	policyConfigs := make([]AWSResourceConfig, 0)
 	if r.Policies != nil {
-		for _, policy := range r.Policies {
+		for i, policy := range r.Policies {
 			pc := IamGroupPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,
@@ -51,9 +52,11 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 				pc.PolicyDocument = string(policyDocument)
 			}
 			policyConfigs = append(policyConfigs, AWSResourceConfig{
-				Type:     IamGroupPolicy,
-				Name:     policy.PolicyName,
+				Type: IamGroupPolicy,
+				// Unique name for each policy used for ID
+				Name:     fmt.Sprintf("%s%v", policy.PolicyName, i),
 				Resource: pc,
+				Metadata: r.AWSCloudFormationMetadata,
 			})
 		}
 	}

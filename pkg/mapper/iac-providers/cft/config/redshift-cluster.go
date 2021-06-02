@@ -34,6 +34,7 @@ func GetRedshiftClusterConfig(c *redshift.Cluster) []AWSResourceConfig {
 	cf := RedshiftClusterConfig{
 		Config: Config{
 			Name: c.DBName,
+			Tags: c.Tags,
 		},
 		KmsKeyID:           c.KmsKeyId,
 		Encrypted:          c.Encrypted,
@@ -46,5 +47,8 @@ func GetRedshiftClusterConfig(c *redshift.Cluster) []AWSResourceConfig {
 		logging["enable"] = true
 		cf.LoggingProperties = []map[string]bool{logging}
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: c.AWSCloudFormationMetadata,
+	}}
 }

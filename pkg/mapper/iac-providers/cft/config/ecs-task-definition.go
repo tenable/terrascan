@@ -96,5 +96,8 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 		cf.Volumes = volumes
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: t.AWSCloudFormationMetadata,
+	}}
 }

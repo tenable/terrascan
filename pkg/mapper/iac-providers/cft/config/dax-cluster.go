@@ -39,5 +39,8 @@ func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 		sse["enabled"] = t.SSESpecification.SSEEnabled
 	}
 	cf.ServerSideEncryption = []map[string]interface{}{sse}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: t.AWSCloudFormationMetadata,
+	}}
 }

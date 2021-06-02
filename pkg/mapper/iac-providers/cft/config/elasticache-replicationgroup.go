@@ -36,5 +36,8 @@ func GetElastiCacheReplicationGroupConfig(r *elasticache.ReplicationGroup) []AWS
 		AtRestEncryptionEnabled:  r.AtRestEncryptionEnabled,
 		TransitEncryptionEnabled: r.TransitEncryptionEnabled,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

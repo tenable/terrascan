@@ -25,6 +25,7 @@ type Config struct {
 // AWSResourceConfig helps define type and name for sub-resources if nedded
 type AWSResourceConfig struct {
 	Resource interface{}
+	Metadata map[string]interface{}
 	Name     string
 	Type     string
 }

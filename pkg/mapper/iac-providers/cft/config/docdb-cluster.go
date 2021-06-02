@@ -38,5 +38,8 @@ func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 		StorageEncrypted:            d.StorageEncrypted,
 		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: d.AWSCloudFormationMetadata,
+	}}
 }

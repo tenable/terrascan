@@ -38,5 +38,8 @@ func GetDBSecurityGroupConfig(dbsg *rds.DBSecurityGroup) []AWSResourceConfig {
 		i["cidr"] = dbsgi.CIDRIP
 		cf.Ingress = append(cf.Ingress, i)
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: dbsg.AWSCloudFormationMetadata,
+	}}
 }

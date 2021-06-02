@@ -34,5 +34,8 @@ func GetRoute53RecordConfig(r *route53.RecordSet) []AWSResourceConfig {
 		},
 		ResourceRecords: r.ResourceRecords,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

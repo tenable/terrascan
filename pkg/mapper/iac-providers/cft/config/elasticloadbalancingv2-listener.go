@@ -46,6 +46,7 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 	for _, action := range l.DefaultActions {
 		// DefaultActions are required
 		cf := ElasticLoadBalancingV2ListenerConfig{
+			Config:   Config{},
 			Protocol: l.Protocol,
 		}
 		if action.RedirectConfig != nil {
@@ -58,6 +59,7 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 		}
 		resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 			Resource: cf,
+			Metadata: l.AWSCloudFormationMetadata,
 		})
 	}
 

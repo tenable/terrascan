@@ -86,5 +86,8 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 	}
 	cf.WebACLId = d.DistributionConfig.WebACLId
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: d.AWSCloudFormationMetadata,
+	}}
 }

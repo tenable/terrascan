@@ -35,5 +35,8 @@ func GetSecretsManagerSecretPolicyConfig(s *secretsmanager.ResourcePolicy) []AWS
 	if err == nil {
 		cf.ResourcePolicy = string(policy)
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
+	}}
 }

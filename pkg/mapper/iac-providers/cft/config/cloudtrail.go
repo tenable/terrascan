@@ -43,5 +43,5 @@ func GetCloudTrailConfig(t *cloudtrail.Trail) []AWSResourceConfig {
 		cf.SnsTopicName = t.SnsTopicName
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{Resource: cf, Metadata: t.AWSCloudFormationMetadata}}
 }

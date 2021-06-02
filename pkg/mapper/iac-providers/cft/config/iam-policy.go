@@ -41,5 +41,8 @@ func GetIamPolicyConfig(r *iam.Policy) []AWSResourceConfig {
 	if err == nil {
 		cf.PolicyDocument = string(policyDocument)
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: r.AWSCloudFormationMetadata,
+	}}
 }

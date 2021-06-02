@@ -46,8 +46,8 @@ func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
+		Metadata: f.AWSCloudFormationMetadata,
 		Resource: EfsFileSystemConfig{
-			Config:    Config{},
 			KmsKeyID:  f.KmsKeyId,
 			Encrypted: f.Encrypted,
 		},
@@ -61,6 +61,7 @@ func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 		}
 		resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 			Resource: policyConfig,
+			Metadata: f.AWSCloudFormationMetadata,
 			Type:     EfsFileSystemPolicy,
 			Name:     "efs",
 		})

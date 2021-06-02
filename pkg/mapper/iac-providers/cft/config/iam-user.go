@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/awslabs/goformation/v4/cloudformation/iam"
 )
@@ -55,23 +56,32 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 
 	// add aws_iam_user
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
+		Metadata: i.AWSCloudFormationMetadata,
 		Resource: IamUserConfig{
+			Config: Config{
+				Name: i.UserName,
+				Tags: i.Tags,
+			},
 			UserName: i.UserName,
 		},
 	})
 
 	// add aws_iam_user_login_profile
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
-		Type: IamUserLoginProfile,
-		Name: i.UserName,
+		Type:     IamUserLoginProfile,
+		Name:     i.UserName,
+		Metadata: i.AWSCloudFormationMetadata,
 		Resource: IamUserLoginProfileConfig{
+			Config: Config{
+				Name: i.UserName,
+			},
 			PasswordResetRequired: i.LoginProfile.PasswordResetRequired,
 		},
 	})
 
 	// add aws_iam_user_policy
 	if i.Policies != nil {
-		for _, policy := range i.Policies {
+		for j, policy := range i.Policies {
 			pc := IamUserPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,
@@ -83,9 +93,11 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 				pc.PolicyDocument = string(policyDocument)
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
-				Type:     IamUserPolicy,
-				Name:     policy.PolicyName,
+				Type: IamUserPolicy,
+				// Unique name for each policy used for ID
+				Name:     fmt.Sprintf("%s%v", policy.PolicyName, j),
 				Resource: pc,
+				Metadata: i.AWSCloudFormationMetadata,
 			})
 		}
 	}

@@ -40,5 +40,8 @@ func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 	if len(s.TemplateURL) > 0 {
 		cf.TemplateURL = s.TemplateURL
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
+	}}
 }

@@ -36,5 +36,8 @@ func GetEbsVolumeConfig(v *ec2.Volume) []AWSResourceConfig {
 		Encrypted: v.Encrypted,
 		KmsKeyID:  v.KmsKeyId,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: v.AWSCloudFormationMetadata,
+	}}
 }

@@ -17,10 +17,13 @@
 package cft
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/awslabs/goformation/v4/cloudformation/cloudfront"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudtrail"
+	"go.uber.org/zap"
 
 	cf "github.com/awslabs/goformation/v4/cloudformation/cloudformation"
 	cnf "github.com/awslabs/goformation/v4/cloudformation/config"
@@ -65,6 +68,11 @@ import (
 
 const errUnsupportedDoc = "unsupported document type"
 
+const (
+	terrascanSkip     = "terrascanSkip"
+	terrascanSkipRule = "rule"
+)
+
 type cftMapper struct {
 }
 
@@ -88,11 +96,12 @@ func (m cftMapper) Map(doc *utils.IacDocument, params ...map[string]interface{})
 				if resourceConfig.Name != "" {
 					name = resourceConfig.Name
 				}
+
 				rc := output.ResourceConfig{
 					Name:      name,
 					Source:    doc.FilePath,
 					Line:      doc.StartLine,
-					SkipRules: nil,
+					SkipRules: make([]output.SkipRule, 0),
 					Config:    resourceConfig.Resource,
 				}
 
@@ -106,6 +115,14 @@ func (m cftMapper) Map(doc *utils.IacDocument, params ...map[string]interface{})
 					rc.ID = rc.Type + "." + rc.Name
 				} else {
 					continue
+				}
+
+				// add skipRules if available
+				if resourceConfig.Metadata != nil {
+					skipRules := readSkipRulesFromMap(resourceConfig.Metadata, rc.ID)
+					if skipRules != nil {
+						rc.SkipRules = append(rc.SkipRules, skipRules...)
+					}
 				}
 
 				allRC[rc.Type] = append(allRC[rc.Type], rc)
@@ -133,6 +150,32 @@ func extractTemplate(doc *utils.IacDocument) (*cloudformation.Template, error) {
 	} else {
 		return nil, errors.New(errUnsupportedDoc)
 	}
+}
+
+func readSkipRulesFromMap(skipRuleMap map[string]interface{}, resourceID string) []output.SkipRule {
+
+	var skipRulesFromMap interface{}
+
+	var ok bool
+	if skipRulesFromMap, ok = skipRuleMap[terrascanSkip]; !ok {
+		zap.S().Debugf("%s not present for resource: %s", terrascanSkip, resourceID)
+		return nil
+	}
+
+	fmt.Printf("%+v\n", skipRuleMap)
+
+	if rules, ok := skipRulesFromMap.(string); ok {
+		skipRules := make([]output.SkipRule, 0)
+		err := json.Unmarshal([]byte(rules), &skipRules)
+		if err != nil {
+			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
+			return nil
+		}
+		return skipRules
+	}
+
+	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
+	return nil
 }
 
 func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSResourceConfig {

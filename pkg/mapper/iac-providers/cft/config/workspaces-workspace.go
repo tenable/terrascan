@@ -31,10 +31,14 @@ type WorkspacesWorkspaceConfig struct {
 func GetWorkspacesWorkspaceConfig(w *workspaces.Workspace) []AWSResourceConfig {
 	cf := WorkspacesWorkspaceConfig{
 		Config: Config{
+			Name: w.UserName,
 			Tags: w.Tags,
 		},
 		UserVolumeEncryptionEnabled: w.UserVolumeEncryptionEnabled,
 		RootVolumeEncryptionEnabled: w.RootVolumeEncryptionEnabled,
 	}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: w.AWSCloudFormationMetadata,
+	}}
 }

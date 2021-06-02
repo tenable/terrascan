@@ -48,5 +48,8 @@ func GetKmsKeyConfig(k *kms.Key) []AWSResourceConfig {
 		cf.KeyPolicy = string(keyPolicy)
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: k.AWSCloudFormationMetadata,
+	}}
 }

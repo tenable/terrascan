@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/awslabs/goformation/v4/cloudformation/iam"
 )
@@ -56,12 +57,15 @@ func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	if err == nil {
 		roleConfig.AssumeRolePolicyDocument = string(policyDocument)
 	}
-	resourceConfigs = append(resourceConfigs, AWSResourceConfig{Resource: roleConfig})
+	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
+		Resource: roleConfig,
+		Metadata: r.AWSCloudFormationMetadata,
+	})
 
 	// aws_iam_role_policy as a SubResource
 	// multiple Policies can be defined for a resource in cft
 	if r.Policies != nil {
-		for _, policy := range r.Policies {
+		for i, policy := range r.Policies {
 			pc := IamRolePolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,
@@ -73,9 +77,11 @@ func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 				pc.PolicyDocument = string(policyDocument)
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
-				Type:     IamRolePolicy,
-				Name:     policy.PolicyName,
+				Type: IamRolePolicy,
+				// Unique name for each policy used for ID
+				Name:     fmt.Sprintf("%s%v", policy.PolicyName, i),
 				Resource: pc,
+				Metadata: r.AWSCloudFormationMetadata,
 			})
 		}
 	}

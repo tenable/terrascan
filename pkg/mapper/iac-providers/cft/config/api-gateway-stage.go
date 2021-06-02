@@ -17,6 +17,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
 )
 
@@ -28,6 +30,10 @@ const (
 // MethodSettingConfig holds the config for aws_api_gateway_method_settings
 type MethodSettingConfig struct {
 	Config
+	MethodSettings []Settings `json:"settings"`
+}
+
+type Settings struct {
 	MetricsEnabled bool `json:"metrics_enabled"`
 }
 
@@ -63,20 +69,28 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	// add aws_api_gateway_stage
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
 	})
 
 	// add aws_api_gateway_method_settings
 	// multiple MethodSettings can be configured for same resource in cft
 	if s.MethodSettings != nil {
-		for _, settings := range s.MethodSettings {
-			msc := make(map[string][]MethodSettingConfig)
-			msc["settings"] = []MethodSettingConfig{{
-				MetricsEnabled: settings.MetricsEnabled,
-			}}
+		for i, settings := range s.MethodSettings {
+			msc := MethodSettingConfig{
+				Config: Config{
+					Name: s.StageName,
+					Tags: s.Tags,
+				},
+				MethodSettings: []Settings{{
+					MetricsEnabled: settings.MetricsEnabled,
+				}},
+			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
-				Type:     GatewayMethodSettings,
-				Name:     s.StageName,
+				Type: GatewayMethodSettings,
+				// Unique name for each method setting used fopr ID
+				Name:     fmt.Sprintf("%s%v", s.StageName, i),
 				Resource: msc,
+				Metadata: s.AWSCloudFormationMetadata,
 			})
 		}
 	}

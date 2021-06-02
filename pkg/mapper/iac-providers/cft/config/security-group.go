@@ -44,6 +44,7 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{
 			Name: s.GroupName,
+			Tags: s.Tags,
 		},
 		GroupName:        s.GroupName,
 		GroupDescription: s.GroupDescription,
@@ -77,5 +78,8 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	}
 	cf.SecurityGroupEgress = egresses
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: s.AWSCloudFormationMetadata,
+	}}
 }

@@ -44,5 +44,8 @@ func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 		ec["vpc_endpoint_ids"] = a.EndpointConfiguration.VpcEndpointIds
 	}
 	cf.EndpointConfiguration = []map[string][]string{ec}
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: a.AWSCloudFormationMetadata,
+	}}
 }

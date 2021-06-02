@@ -38,5 +38,8 @@ func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.Target
 		Protocol: l.Protocol,
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: l.AWSCloudFormationMetadata,
+	}}
 }

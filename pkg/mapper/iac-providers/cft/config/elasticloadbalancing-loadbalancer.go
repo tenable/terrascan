@@ -64,5 +64,8 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		cf.Listeners = lc
 	}
 
-	return []AWSResourceConfig{{Resource: cf}}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: e.AWSCloudFormationMetadata,
+	}}
 }
