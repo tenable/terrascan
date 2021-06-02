@@ -17,7 +17,6 @@
 package arm
 
 import (
-	"encoding/json"
 	"errors"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -25,14 +24,9 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/config"
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
-	"github.com/accurics/terrascan/pkg/utils"
 )
 
-const errUnsupportedDoc = "unsupported document type"
-
-type armMapper struct {
-	templateParameters map[string]interface{}
-}
+type armMapper struct{}
 
 // Mapper returns an ARM mapper for given template schema
 func Mapper() core.Mapper {
@@ -40,113 +34,82 @@ func Mapper() core.Mapper {
 }
 
 // Map transforms the provider specific template to terrascan native format.
-func (m armMapper) Map(doc *utils.IacDocument, params ...map[string]interface{}) (output.AllResourceConfigs, error) {
-	allRC := make(map[string][]output.ResourceConfig)
-	template, err := extractTemplate(doc)
-	if err != nil {
-		return nil, err
+func (m armMapper) Map(resource interface{}, config *output.ResourceConfig, params ...map[string]interface{}) error {
+	r, ok := resource.(types.Resource)
+	if !ok {
+		return errors.New("failed to cast resource into types.Resource")
 	}
 
-	// set template parameters with default values if not found
-	m.templateParameters = params[0]
-	for key, param := range template.Parameters {
-		if _, ok := m.templateParameters[key]; !ok {
-			m.templateParameters[key] = param.DefaultValue
-		}
-	}
+	variables := params[0]
+	parameters := params[1]
+	config.Name = fn.LookUp(variables, parameters, r.Name).(string)
+	config.Type = types.ResourceTypes[r.Type]
+	config.ID = config.Type + "." + config.Name
 
-	// transform each resource and generate config
-	for _, r := range template.Resources {
-		// skip if resource does not have a mapping
-		if _, ok := types.ResourceTypes[r.Type]; !ok {
-			continue
-		}
+	fn.ResourceIDs[r.Type] = config.ID
+	config.Config = m.mapConfigForResource(r, variables, parameters)
 
-		rc := output.ResourceConfig{
-			Name:   fn.LookUp(template.Variables, m.templateParameters, r.Name).(string),
-			Source: doc.FilePath,
-			Line:   doc.StartLine,
-			Type:   types.ResourceTypes[r.Type],
-		}
-
-		rc.ID = rc.Type + "." + rc.Name
-		fn.ResourceIDs[r.Type] = rc.ID
-		rc.Config = m.mapConfigForResource(r, template.Variables)
-		allRC[rc.Type] = append(allRC[rc.Type], rc)
-	}
-	return allRC, nil
+	return nil
 }
 
-func extractTemplate(doc *utils.IacDocument) (*types.Template, error) {
-	if doc.Type == utils.JSONDoc {
-		var t types.Template
-		err := json.Unmarshal(doc.Data, &t)
-		if err != nil {
-			return nil, err
-		}
-		return &t, nil
-	}
-	return nil, errors.New(errUnsupportedDoc)
-}
-
-func (m armMapper) mapConfigForResource(r types.Resource, vars map[string]interface{}) interface{} {
+func (m armMapper) mapConfigForResource(r types.Resource, vars, params map[string]interface{}) interface{} {
 	switch types.ResourceTypes[r.Type] {
 	case types.AzureRMKeyVault:
-		return config.KeyVaultConfig(r, m.templateParameters)
+		return config.KeyVaultConfig(r, params)
 	case types.AzureRMKeyVaultSecret:
-		return config.KeyVaultSecretConfig(r, m.templateParameters)
+		return config.KeyVaultSecretConfig(r, params)
 	case types.AzureRMKeyVaultKey:
-		return config.KeyVaultKeyConfig(r, m.templateParameters)
+		return config.KeyVaultKeyConfig(r, params)
 	case types.AzureRMApplicationGateway:
-		return config.ApplicationGatewayConfig(r, m.templateParameters)
+		return config.ApplicationGatewayConfig(r, params)
 	case types.AzureRMMonitorDiagnosticSetting:
-		return config.DiagnosticSettingConfig(r, vars, m.templateParameters)
+		return config.DiagnosticSettingConfig(r, vars, params)
 	case types.AzureRMKubernetesCluster:
-		return config.KubernetesClusterConfig(r, vars, m.templateParameters)
+		return config.KubernetesClusterConfig(r, vars, params)
 	case types.AzureRMManagedDisk:
-		return config.ManagedDiskConfig(r, vars, m.templateParameters)
+		return config.ManagedDiskConfig(r, vars, params)
 	case types.AzureRMCosmosDBAccount:
-		return config.CosmosDBAccountConfig(r, m.templateParameters)
+		return config.CosmosDBAccountConfig(r, params)
 	case types.AzureRMContainerRegistry:
-		return config.ContainerRegistryConfig(r, m.templateParameters)
+		return config.ContainerRegistryConfig(r, params)
 	case types.AzureRMManagementLock:
-		return config.ManagementLockConfig(r, vars, m.templateParameters)
+		return config.ManagementLockConfig(r, vars, params)
 	case types.AzureRMRoleAssignment:
-		return config.RoleAssignmentConfig(r, vars, m.templateParameters)
+		return config.RoleAssignmentConfig(r, vars, params)
 	case types.AzureRMMSSQLServer:
-		return config.MSSQLServerConfig(r, vars, m.templateParameters)
+		return config.MSSQLServerConfig(r, vars, params)
 	case types.AzureRMMySQLServer:
-		return config.MySQLServerConfig(r, vars, m.templateParameters)
+		return config.MySQLServerConfig(r, vars, params)
 	case types.AzureRMNetworkWatcherFlowLog:
-		return config.NetworkWatcherFlowLogConfig(r, vars, m.templateParameters)
+		return config.NetworkWatcherFlowLogConfig(r, vars, params)
 	case types.AzureRMResourceGroup:
-		return config.ResourceGroupConfig(r, m.templateParameters)
+		return config.ResourceGroupConfig(r, params)
 	case types.AzureRMSecurityCenterContact:
-		return config.SecurityCenterContactConfig(r, m.templateParameters)
+		return config.SecurityCenterContactConfig(r, params)
 	case types.AzureRMSecurityCenterSubscriptionPricing:
-		return config.SecurityCenterSubscriptionPricingConfig(r, m.templateParameters)
+		return config.SecurityCenterSubscriptionPricingConfig(r, params)
 	case types.AzureRMSQLActiveDirectoryAdministrator:
-		return config.SQLActiveDirectoryAdministratorConfig(r, vars, m.templateParameters)
+		return config.SQLActiveDirectoryAdministratorConfig(r, vars, params)
 	case types.AzureRMNetworkSecurityRule:
-		return config.NetworkSecurityRuleConfig(r, m.templateParameters)
+		return config.NetworkSecurityRuleConfig(r, params)
 	case types.AzureRMPostgreSQLConfiguration:
-		return config.PostgreSQLConfigurationConfig(r, m.templateParameters)
+		return config.PostgreSQLConfigurationConfig(r, params)
 	case types.AzureRMPostgreSQLServers:
-		return config.PostgreSQLServerConfig(r, vars, m.templateParameters)
+		return config.PostgreSQLServerConfig(r, vars, params)
 	case types.AzureRMRedisCache:
-		return config.RedisCacheConfig(r, m.templateParameters)
+		return config.RedisCacheConfig(r, params)
 	case types.AzureRMRedisFirewallRule:
-		return config.RedisFirewallRuleConfig(r, m.templateParameters)
+		return config.RedisFirewallRuleConfig(r, params)
 	case types.AzureRMStorageAccount:
-		return config.StorageAccountConfig(r, vars, m.templateParameters)
+		return config.StorageAccountConfig(r, vars, params)
 	case types.AzureRMSQLFirewallRule:
-		return config.SQLFirewallRuleConfig(r, m.templateParameters)
+		return config.SQLFirewallRuleConfig(r, params)
 	case types.AzureRMStorageContainer:
-		return config.StorageContainerConfig(r, m.templateParameters)
+		return config.StorageContainerConfig(r, params)
 	case types.AzureRMVirtualMachine:
-		return config.VirtualMachineConfig(r, m.templateParameters)
+		return config.VirtualMachineConfig(r, params)
 	case types.AzureRMVirtualNetwork:
-		return config.VirtualNetworkConfig(r, vars, m.templateParameters)
+		return config.VirtualNetworkConfig(r, vars, params)
 	}
 	return nil
 }

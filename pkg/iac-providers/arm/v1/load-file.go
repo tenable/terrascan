@@ -34,6 +34,7 @@ import (
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+	allResourcesConfig = make(map[string][]output.ResourceConfig)
 	var iacDocuments []*utils.IacDocument
 
 	fileExt := a.getFileType(absFilePath)
@@ -98,8 +99,8 @@ func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 	return allResourcesConfig, nil
 }
 
-func (*ARMV1) getFileType(file string) string {
-	if strings.HasSuffix(file, JSONExtension) {
+func (ARMV1) getFileType(file string) string {
+	if ext := filepath.Ext(file); strings.EqualFold(ext, JSONExtension) {
 		return JSONExtension
 	}
 	return UnknownExtension

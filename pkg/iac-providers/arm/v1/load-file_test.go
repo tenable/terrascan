@@ -17,11 +17,14 @@
 package armv1
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
+
+var fileTestDataDir = filepath.Join(testDataDir, "file-test-data")
 
 func TestLoadIacFile(t *testing.T) {
 	table := []struct {
@@ -31,7 +34,21 @@ func TestLoadIacFile(t *testing.T) {
 		typeOnly bool
 		want     output.AllResourceConfigs
 		wantErr  error
-	}{}
+	}{
+		{
+			// file is skipped if no kind is specified or bad
+			name:     "empty config file",
+			filePath: filepath.Join(fileTestDataDir, "empty-file.json"),
+			armv1:    ARMV1{},
+			wantErr:  nil,
+		},
+		{
+			name:     "key-vault",
+			filePath: filepath.Join(fileTestDataDir, "key-vault.json"),
+			armv1:    ARMV1{},
+			wantErr:  nil,
+		},
+	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
