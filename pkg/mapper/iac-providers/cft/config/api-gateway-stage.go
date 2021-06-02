@@ -33,6 +33,7 @@ type MethodSettingConfig struct {
 	MethodSettings []Settings `json:"settings"`
 }
 
+// Settings holds configs for the MethodSetting attribute
 type Settings struct {
 	MetricsEnabled bool `json:"metrics_enabled"`
 }

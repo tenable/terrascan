@@ -17,15 +17,27 @@
 package utils
 
 import (
+	"encoding/json"
 	"regexp"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"go.uber.org/zap"
+)
+
+const (
+	// TerrascanSkip key used to detect rules for skipping violations
+	TerrascanSkip = "runterrascan.io/skip"
+	// TerrascanSkipRule key used to detect the rule to be skipped
+	TerrascanSkipRule = "rule"
+	// TerrascanSkipComment key used to detect comment skiupping a give rule
+	TerrascanSkipComment = "comment"
 )
 
 var (
-	skipRulesPattern = regexp.MustCompile(`(#ts:skip=[ \t]*(([A-Za-z0-9]+[.-]{1}){3,5}([\d]+)){1}([ \t]+.*){0,1})`)
-	skipRulesPrefix  = "#ts:skip="
+	skipRulesPattern               = regexp.MustCompile(`(#ts:skip=[ \t]*(([A-Za-z0-9]+[.-]{1}){3,5}([\d]+)){1}([ \t]+.*){0,1})`)
+	skipRulesPrefix                = "#ts:skip="
+	infileInstructionNotPresentLog = "%s not present for resource: %s"
 )
 
 // GetSkipRules returns a list of rules to be skipped. The rules to be skipped
@@ -68,4 +80,50 @@ func getSkipRuleObject(s string) *output.SkipRule {
 		skipRule.Comment = strings.TrimSpace(comment)
 	}
 	return &skipRule
+}
+
+// ReadSkipRulesFromMap returns a list of rules to be skipped. The rules to be skipped
+// can be set in annotations for kubernetes manifests and Resource Metadata in AWS cft:
+// k8s:
+// metadata:
+//   annotations:
+//     runterrascan.io/skip: |
+//       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+// cft:
+// Resource:
+//   myResource:
+//     Metadata:
+//       runterrascan.io/skip: |
+//         [{"rule": "AC_AWS_047", "comment": "reason to skip the rule"}]
+// cft json:
+// "Resource":{
+//   "myResource":{
+//     "Metadata":{
+//        "runterrascan.io/skip": "[{\"rule\":\"AWS.CloudFormation.Medium.0603\"}]"
+//     }
+//   }
+// }
+// each rule and its optional comment must be a string containing an json array like
+// [{rule: ruleID, comment: reason for skipping}]
+func ReadSkipRulesFromMap(skipRulesMap map[string]interface{}, resourceID string) []output.SkipRule {
+
+	var skipRulesFromMap interface{}
+	var ok bool
+	if skipRulesFromMap, ok = skipRulesMap[TerrascanSkip]; !ok {
+		zap.S().Debugf(infileInstructionNotPresentLog, TerrascanSkip, resourceID)
+		return nil
+	}
+
+	if rules, ok := skipRulesFromMap.(string); ok {
+		skipRules := make([]output.SkipRule, 0)
+		err := json.Unmarshal([]byte(rules), &skipRules)
+		if err != nil {
+			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
+			return nil
+		}
+		return skipRules
+	}
+
+	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", TerrascanSkip)
+	return nil
 }

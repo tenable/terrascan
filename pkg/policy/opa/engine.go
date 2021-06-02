@@ -350,10 +350,6 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput) (policy.EngineOutput, 
 	// Keep track of how long it takes to evaluate the policies
 	start := time.Now()
 
-	inputData, err := json.Marshal(engineInput.InputData)
-	if err == nil {
-		fmt.Printf("%+v\n", string(inputData))
-	}
 	// Evaluate the policy against each resource type
 	for k := range e.regoDataMap {
 		// Execute the prepared query.

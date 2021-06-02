@@ -143,3 +143,48 @@ func TestGetSkipRules(t *testing.T) {
 		})
 	}
 }
+
+func TestReadSkipRulesFromMap(t *testing.T) {
+	testRuleAWS1 := "AWS.CloudFormation.Medium.0603"
+	testRuleK8s := "accurics.kubernetes.IAM.109"
+
+	table := []struct {
+		name     string
+		input    map[string]interface{}
+		expected []output.SkipRule
+	}{
+		{
+			name:  "no rules",
+			input: make(map[string]interface{}),
+			// expected would be empty
+		},
+		{
+			name:  "with valid aws rule",
+			input: map[string]interface{}{TerrascanSkip: "[{\"rule\":\"AWS.CloudFormation.Medium.0603\"}]"},
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS1},
+			},
+		},
+		{
+			name:  "with valid k8s rule",
+			input: map[string]interface{}{TerrascanSkip: "[{\"rule\":\"accurics.kubernetes.IAM.109\"}]"},
+			expected: []output.SkipRule{
+				{Rule: testRuleK8s},
+			},
+		},
+		{
+			name:  "with invalid rule format",
+			input: map[string]interface{}{TerrascanSkip: "[{\"rule\"\"accurics.kubernetes.IAM.109\"}]"},
+			// expected would be empty
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := ReadSkipRulesFromMap(tt.input, "testID")
+			if !reflect.DeepEqual(actual, tt.expected) {
+				t.Errorf("rule ids got: '%v', want: '%v'", actual, tt.expected)
+			}
+		})
+	}
+}
