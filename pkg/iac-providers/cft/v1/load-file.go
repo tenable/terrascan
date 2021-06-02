@@ -17,6 +17,7 @@
 package cftv1
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -68,7 +69,7 @@ func (a *CFTV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 		arc, err := m.Map(doc)
 		if err != nil {
 			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
-			continue
+			return allResourcesConfig, err
 		}
 		for t, resources := range arc {
 			for _, resource := range resources {
@@ -89,6 +90,22 @@ func (*CFTV1) getFileType(file string) string {
 		return YAMLExtension2
 	} else if strings.HasSuffix(file, JSONExtension) {
 		return JSONExtension
+	} else if strings.HasSuffix(file, TXTExtension) || strings.HasSuffix(file, TemplateExtension) {
+		f, err := ioutil.ReadFile(file)
+		if err != nil {
+			zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", file))
+			return UnknownExtension
+		}
+		if isJSON(string(f)) {
+			return JSONExtension
+		} else {
+			return YAMLExtension
+		}
 	}
 	return UnknownExtension
+}
+
+func isJSON(s string) bool {
+	var js map[string]interface{}
+	return json.Unmarshal([]byte(s), &js) == nil
 }
