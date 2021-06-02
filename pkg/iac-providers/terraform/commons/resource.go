@@ -39,7 +39,11 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 
 	// convert resource config from hcl.Body to map[string]interface{}
 	c := converter{bytes: fileBytes}
-	hclBody := managedResource.Config.(*hclsyntax.Body)
+	var hclBody *hclsyntax.Body
+	var ok bool
+	if hclBody, ok = managedResource.Config.(*hclsyntax.Body); !ok {
+		return resourceConfig, fmt.Errorf("failed type assertion for hcl.Body in *hclConfigs.Resource. error: expected hcl.Body type is *hclsyntax.Body, but got %T", managedResource.Config)
+	}
 	goOut, err := c.convertBody(hclBody)
 	if err != nil {
 		zap.S().Errorf("failed to convert hcl.Body to go struct; resource '%s', file: '%s'. error: '%v'",
