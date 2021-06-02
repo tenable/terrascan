@@ -1,8 +1,8 @@
 {
     "name": "ecrmaketagsimmutable",
     "file": "ecr_make_tags_immutable.rego",
-    "policy_type": "",
-    "resource_type": "",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },
