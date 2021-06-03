@@ -1,6 +1,6 @@
 {{- define "certificate_related_deployments" }}
 {{- if and (eq "" .Values.secrets.tlsCertFilePath) (eq "" .Values.secrets.tlsKeyFilePath) }}
-{{- $altNames := list ( printf "%s.%s.svc.cluster.local" .Values.name .Release.Namespace ) }}
+{{- $altNames := list ( printf "%s.%s.svc" .Values.name .Release.Namespace ) ( printf "%s.%s.svc.cluster.local" .Values.name .Release.Namespace ) }}
 {{- $ca := genCA ( printf "%s-server-ca" "terrascan" ) 365 }}
 {{- $certterrascan := genSignedCert ( printf "%s-server" "terrascan" ) nil $altNames 365 $ca }}
 {{- $_ := set . "cert" $certterrascan.Cert -}}
