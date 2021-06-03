@@ -368,7 +368,7 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput, filter policy.PreScanF
 		if err != nil {
 			// since the eval failed with the policy, we should decrement the total count by 1
 			e.stats.ruleCount--
-			zap.S().Warn("failed to run prepared query", zap.Error(err), zap.String("rule", "'"+k+"'"), zap.String("file", e.regoDataMap[k].Metadata.File))
+			zap.S().Debug("failed to run prepared query", zap.Error(err), zap.String("rule", "'"+k+"'"), zap.String("file", e.regoDataMap[k].Metadata.File))
 			continue
 		}
 

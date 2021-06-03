@@ -28,7 +28,7 @@ type PolicyTypesFilterSpecification struct {
 
 // IsSatisfied implementation for policy type based Filter spec
 func (p PolicyTypesFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	// if resource type is not present for metadata,
+	// if policy type is not present for rego metadata,
 	// or if policy types is not specified, return true
 	if len(r.PolicyType) < 1 || len(p.policyTypes) < 1 {
 		return true
@@ -43,7 +43,7 @@ type ResourceTypeFilterSpecification struct {
 
 // IsSatisfied implementation for resource type based Filter spec
 func (rs ResourceTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	// if resource type is not present for metadata, return true
+	// if resource type is not present for rego metadata, return true
 	if len(r.ResourceType) < 1 {
 		return true
 	}
@@ -122,12 +122,10 @@ func (a AndFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
 	if len(a.filterSpecs) < 1 {
 		return false
 	}
-	isSatisfied := true
 	for _, filterSpec := range a.filterSpecs {
-		isSatisfied = isSatisfied && filterSpec.IsSatisfied(r)
-		if !isSatisfied {
-			return isSatisfied
+		if !filterSpec.IsSatisfied(r) {
+			return false
 		}
 	}
-	return isSatisfied
+	return true
 }

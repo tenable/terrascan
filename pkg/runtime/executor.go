@@ -83,10 +83,6 @@ func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dir
 		e.categories = categories
 	}
 
-	if len(policyTypes) > 0 {
-		e.policyTypes = policyTypes
-	}
-
 	// initialize executor
 	if err = e.Init(); err != nil {
 		return e, err
@@ -272,9 +268,7 @@ func (e *Executor) findViolations(results *Output) error {
 
 	for _, engine := range e.policyEngines {
 		go func(eng policy.Engine) {
-			// create a regodata pre scan filter
-			preScanFilter := filters.RegoDataFilter{}
-			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig}, &preScanFilter)
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig}, &filters.RegoDataFilter{})
 			evalResultChan <- engineEvalResult{err, output}
 		}(engine)
 	}
