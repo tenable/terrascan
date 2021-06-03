@@ -134,7 +134,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 			namespace = "default"
 		}
 
-		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName() + "." + namespace
+		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName() + "-" + namespace
 	}
 
 	// read and update skip rules, if present

@@ -215,7 +215,7 @@ func TestK8sV1Normalize(t *testing.T) {
 				},
 			},
 			want: &output.ResourceConfig{
-				ID:   "kubernetes_pod.myapp-pod.default",
+				ID:   "kubernetes_pod.myapp-pod-default",
 				Name: "myapp-pod",
 				Line: 0,
 				Type: "kubernetes_pod",
@@ -249,7 +249,7 @@ func TestK8sV1Normalize(t *testing.T) {
 				},
 			},
 			want: &output.ResourceConfig{
-				ID:   "kubernetes_crd.myapp-pod-prefix-.default",
+				ID:   "kubernetes_crd.myapp-pod-prefix--default",
 				Name: "myapp-pod-prefix-",
 				Line: 0,
 				Type: "kubernetes_crd",
