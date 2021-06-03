@@ -10,5 +10,6 @@
     "description": "Like any other EC2 instance it is recommended to place ECS instance within a VPC. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations",
     "reference_id": "AWS.EcsCluster.NetworkSecurity.High.0104",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0088"
 }

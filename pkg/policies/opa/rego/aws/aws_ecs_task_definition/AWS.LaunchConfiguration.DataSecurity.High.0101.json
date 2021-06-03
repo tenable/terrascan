@@ -12,5 +12,6 @@
     "description": "Sensitive Information Disclosure",
     "reference_id": "AWS.LaunchConfiguration.DataSecurity.High.0101",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0095"
 }

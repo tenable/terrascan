@@ -1,6 +1,8 @@
 {
     "name": "dynamoderecovery_enabled",
     "file": "dynamodb_without_recovery_enabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },

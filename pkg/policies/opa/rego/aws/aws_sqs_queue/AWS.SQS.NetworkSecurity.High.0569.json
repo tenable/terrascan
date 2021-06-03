@@ -10,5 +10,6 @@
     "description": "Identify any publicly accessible SQS queues available in your AWS account and update their permissions in order to protect against unauthorized users.",
     "reference_id": "AWS.SQS.NetworkSecurity.High.0569",
     "category": "Security Best Practices",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0365"
 }

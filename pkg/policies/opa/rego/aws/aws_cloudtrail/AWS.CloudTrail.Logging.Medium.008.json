@@ -1,6 +1,8 @@
 {
     "name": "ec2ebsnotoptimized",
     "file": "ec2_ebs_not_optimized.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },

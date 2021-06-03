@@ -10,5 +10,6 @@
     "description": "Ensure that your AWS Elasticsearch clusters have enabled the support for publishing slow logs to AWS CloudWatch Logs. This feature enables you to publish slow logs from the indexing and search operations performed on your ES clusters and gain full insight into the performance of these operations.",
     "reference_id": "AWS.Elasticsearch.Logging.Medium.0573",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0105"
 }

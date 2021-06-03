@@ -10,5 +10,6 @@
     "description": "Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites",
     "reference_id": "AWS.S3Bucket.IAM.High.0370",
     "category": "Resilience",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0214"
 }

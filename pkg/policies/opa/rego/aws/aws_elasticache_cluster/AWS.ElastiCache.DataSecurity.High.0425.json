@@ -17,5 +17,6 @@
     "description": "ElastiCache for Redis version is not compliant with AWS PCI DSS requirements",
     "reference_id": "AWS.ElastiCache.DataSecurity.High.0425",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0102"
 }

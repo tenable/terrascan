@@ -8,5 +8,6 @@
     "description": "Ensure AWS Config Rule is enabled for Encrypted Volumes",
     "reference_id": "AWS.Config.Encryption\u0026KeyManagement.Medium.0660",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0048"
 }

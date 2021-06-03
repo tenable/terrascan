@@ -13,5 +13,6 @@
     "description": "Setting a lengthy password increases account resiliency against brute force login attempts",
     "reference_id": "AWS.Iam.IAM.Medium.0495",
     "category": "Compliance Validation",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0141"
 }

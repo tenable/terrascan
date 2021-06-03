@@ -10,5 +10,6 @@
     "description": "Route53HostedZone should have recordSets.",
     "reference_id": "AWS.Route53HostedZone.DNSManagement.High.0422",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0205"
 }

@@ -81,5 +81,6 @@
     "description": "Remove insecure ciphers for your ELB Predefined or Custom Security Policy, to reduce the risk of the SSL connection between the client and the load balancer being exploited.",
     "reference_id": "AWS.ELB.EncryptionandKeyManagement.High.0403",
     "category": "Infrastructure Security",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0171"
 }

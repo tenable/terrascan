@@ -10,5 +10,6 @@
     "description": "Ensure CloudWatch logging is enabled for Route53 hosted zones.",
     "reference_id": "AWS.Route53 query logs.Logging.Medium.0574",
     "category": "Logging and Monitoring",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0204"
 }
