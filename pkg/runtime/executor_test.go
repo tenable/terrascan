@@ -68,7 +68,7 @@ type MockPolicyEngine struct {
 	err error
 }
 
-func (m MockPolicyEngine) Init(input string, scanRules, skipRules, categories []string, severity string) error {
+func (m MockPolicyEngine) Init(input string, filter policy.PreLoadFilter) error {
 	return m.err
 }
 
@@ -82,7 +82,7 @@ func (m MockPolicyEngine) Configure() error {
 	return m.err
 }
 
-func (m MockPolicyEngine) Evaluate(input policy.EngineInput) (out policy.EngineOutput, err error) {
+func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreScanFilter) (out policy.EngineOutput, err error) {
 	return out, m.err
 }
 
@@ -197,12 +197,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "valid filePath",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
-				policyPath: []string{testPoliciesDir},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
+				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
 			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
@@ -211,9 +211,9 @@ func TestInit(t *testing.T) {
 		{
 			name: "empty iac type with -d flag",
 			executor: Executor{
-				dirPath:    testDataDir,
-				cloudType:  []string{"aws"},
-				policyPath: []string{testPoliciesDir},
+				dirPath:     testDataDir,
+				policyTypes: []string{"aws"},
+				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
 			wantIacProvider: []iacProvider.IacProvider{&cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv14.TfV14{}},
@@ -222,9 +222,9 @@ func TestInit(t *testing.T) {
 		{
 			name: "empty iac type with -f flag",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				cloudType:  []string{"aws"},
-				policyPath: []string{testPoliciesDir},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				policyTypes: []string{"aws"},
+				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
 			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
@@ -233,12 +233,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "valid notifier",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
-				policyPath: []string{testPoliciesDir},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
+				policyPath:  []string{testPoliciesDir},
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
@@ -248,11 +248,11 @@ func TestInit(t *testing.T) {
 		{
 			name: "invalid notifier",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
@@ -262,11 +262,11 @@ func TestInit(t *testing.T) {
 		{
 			name: "config not present",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
 			},
 			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
@@ -275,12 +275,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "invalid policy path",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
-				policyPath: []string{filepath.Join(testDataDir, "notthere")},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
+				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
@@ -290,12 +290,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "config file with invalid category",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v14",
-				policyPath: []string{filepath.Join(testDataDir, "notthere")},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
+				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-category.toml"),
 			wantErr:         fmt.Errorf("(3, 5): no value can start with c"),
@@ -304,12 +304,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "valid filePath",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v12",
-				policyPath: []string{testPoliciesDir},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
+				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
 			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
@@ -318,12 +318,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "valid notifier",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v12",
-				policyPath: []string{testPoliciesDir},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
+				policyPath:  []string{testPoliciesDir},
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         nil,
@@ -333,11 +333,11 @@ func TestInit(t *testing.T) {
 		{
 			name: "invalid notifier",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v12",
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
 			},
 			configFile:      filepath.Join(testDataDir, "invalid-notifier.toml"),
 			wantErr:         fmt.Errorf("notifier not supported"),
@@ -347,11 +347,11 @@ func TestInit(t *testing.T) {
 		{
 			name: "config not present",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v12",
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
 			},
 			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
@@ -360,12 +360,12 @@ func TestInit(t *testing.T) {
 		{
 			name: "invalid policy path",
 			executor: Executor{
-				filePath:   filepath.Join(testDataDir, "testfile"),
-				dirPath:    "",
-				cloudType:  []string{"aws"},
-				iacType:    "terraform",
-				iacVersion: "v12",
-				policyPath: []string{filepath.Join(testDataDir, "notthere")},
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
+				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
 			},
 			configFile:      filepath.Join(testDataDir, "webhook.toml"),
 			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
@@ -403,16 +403,16 @@ func TestInit(t *testing.T) {
 }
 
 type flagSet struct {
-	iacType    string
-	iacVersion string
-	filePath   string
-	dirPath    string
-	policyPath []string
-	cloudType  []string
-	categories []string
-	severity   string
-	scanRules  []string
-	skipRules  []string
+	iacType     string
+	iacVersion  string
+	filePath    string
+	dirPath     string
+	policyPath  []string
+	policyTypes []string
+	categories  []string
+	severity    string
+	scanRules   []string
+	skipRules   []string
 }
 
 func TestNewExecutor(t *testing.T) {
@@ -431,12 +431,12 @@ func TestNewExecutor(t *testing.T) {
 			configfile: filepath.Join(testDataDir, "scan-skip-rules-low-severity.toml"),
 			wantErr:    nil,
 			flags: flagSet{
-				severity:   "high",
-				scanRules:  []string{"AWS.S3Bucket.DS.High.1043"},
-				skipRules:  []string{"accurics.kubernetes.IAM.109"},
-				dirPath:    testDir,
-				policyPath: []string{testPoliciesDir},
-				cloudType:  []string{"aws"},
+				severity:    "high",
+				scanRules:   []string{"AWS.S3Bucket.DS.High.1043"},
+				skipRules:   []string{"accurics.kubernetes.IAM.109"},
+				dirPath:     testDir,
+				policyPath:  []string{testPoliciesDir},
+				policyTypes: []string{"aws"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -452,10 +452,10 @@ func TestNewExecutor(t *testing.T) {
 			configfile: filepath.Join(testDataDir, "scan-skip-rules-low-severity.toml"),
 			wantErr:    nil,
 			flags: flagSet{
-				skipRules:  []string{"accurics.kubernetes.IAM.109"},
-				dirPath:    testDir,
-				policyPath: []string{testPoliciesDir},
-				cloudType:  []string{"aws"},
+				skipRules:   []string{"accurics.kubernetes.IAM.109"},
+				dirPath:     testDir,
+				policyPath:  []string{testPoliciesDir},
+				policyTypes: []string{"aws"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -472,10 +472,10 @@ func TestNewExecutor(t *testing.T) {
 			configfile: filepath.Join(testDataDir, "scan-skip-rules-low-severity.toml"),
 			wantErr:    nil,
 			flags: flagSet{
-				scanRules:  []string{"AWS.S3Bucket.DS.High.1043"},
-				dirPath:    testDir,
-				policyPath: []string{testPoliciesDir},
-				cloudType:  []string{"aws"},
+				scanRules:   []string{"AWS.S3Bucket.DS.High.1043"},
+				dirPath:     testDir,
+				policyPath:  []string{testPoliciesDir},
+				policyTypes: []string{"aws"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -494,11 +494,11 @@ func TestNewExecutor(t *testing.T) {
 			configfile: filepath.Join(testDataDir, "scan-skip-rules-low-severity.toml"),
 			wantErr:    nil,
 			flags: flagSet{
-				severity:   "medium",
-				dirPath:    testDataDir,
-				policyPath: []string{testPoliciesDir},
-				cloudType:  []string{"aws"},
-				categories: []string{"DATA PROTECTION"},
+				severity:    "medium",
+				dirPath:     testDataDir,
+				policyPath:  []string{testPoliciesDir},
+				policyTypes: []string{"aws"},
+				categories:  []string{"DATA PROTECTION"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -518,9 +518,9 @@ func TestNewExecutor(t *testing.T) {
 			configfile: filepath.Join(testDataDir, "scan-skip-rules-low-severity.toml"),
 			wantErr:    nil,
 			flags: flagSet{
-				dirPath:    testDir,
-				policyPath: []string{testPoliciesDir},
-				cloudType:  []string{"aws"},
+				dirPath:     testDir,
+				policyPath:  []string{testPoliciesDir},
+				policyTypes: []string{"aws"},
 			},
 			wantScanRules: []string{
 				"AWS.S3Bucket.DS.High.1043",
@@ -541,7 +541,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.cloudType, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

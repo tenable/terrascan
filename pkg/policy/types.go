@@ -5,6 +5,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/results"
+	"github.com/open-policy-agent/opa/rego"
 )
 
 const (
@@ -43,4 +44,25 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 		PassedRules:       me.PassedRules,
 		Summary:           me.Summary,
 	}
+}
+
+// RegoMetadata The rego metadata struct which is read and saved from disk
+type RegoMetadata struct {
+	Name         string                 `json:"name"`
+	File         string                 `json:"file"`
+	PolicyType   string                 `json:"policy_type"`
+	ResourceType string                 `json:"resource_type"`
+	TemplateArgs map[string]interface{} `json:"template_args"`
+	Severity     string                 `json:"severity"`
+	Description  string                 `json:"description"`
+	ReferenceID  string                 `json:"reference_id"`
+	Category     string                 `json:"category"`
+	Version      int                    `json:"version"`
+}
+
+// RegoData Stores all information needed to evaluate and report on a rego rule
+type RegoData struct {
+	Metadata      RegoMetadata
+	RawRego       []byte
+	PreparedQuery *rego.PreparedEvalQuery
 }

@@ -102,8 +102,8 @@ func (e *Executor) ValidateInputs() error {
 		if e.dirPath != "" {
 			e.iacType = "all"
 		} else {
-			// TODO: handle more than cloudType[0]
-			e.iacType = policy.GetDefaultIacType(e.cloudType[0])
+			// TODO: handle more than policyTypes[0]
+			e.iacType = policy.GetDefaultIacType(e.policyTypes[0])
 		}
 	}
 
@@ -114,17 +114,17 @@ func (e *Executor) ValidateInputs() error {
 		}
 	}
 
-	// check if cloud type is supported
-	for _, ct := range e.cloudType {
+	// check if cloud type(policy type) is supported
+	for _, ct := range e.policyTypes {
 		if !policy.IsCloudProviderSupported(ct) {
 			zap.S().Errorf("cloud type '%s' not supported", ct)
 			return errCloudNotSupported
 		}
 	}
-	zap.S().Debugf("cloud type '%s' is supported", strings.Join(e.cloudType, ","))
+	zap.S().Debugf("cloud type '%s' is supported", strings.Join(e.policyTypes, ","))
 
 	if len(e.policyPath) == 0 {
-		e.policyPath = policy.GetDefaultPolicyPaths(e.cloudType)
+		e.policyPath = policy.GetDefaultPolicyPaths(e.policyTypes)
 	}
 
 	zap.S().Debugf("using policy path %v", e.policyPath)

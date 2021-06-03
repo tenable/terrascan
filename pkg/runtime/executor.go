@@ -21,6 +21,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/accurics/terrascan/pkg/filters"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
@@ -34,7 +35,6 @@ type Executor struct {
 	filePath      string
 	dirPath       string
 	policyPath    []string
-	cloudType     []string
 	iacType       string
 	iacVersion    string
 	scanRules     []string
@@ -43,17 +43,18 @@ type Executor struct {
 	policyEngines []policy.Engine
 	notifiers     []notifications.Notifier
 	categories    []string
+	policyTypes   []string
 	severity      string
 	nonRecursive  bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, cloudType []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
 	e = &Executor{
 		filePath:     filePath,
 		dirPath:      dirPath,
 		policyPath:   policyPath,
-		cloudType:    cloudType,
+		policyTypes:  policyTypes,
 		iacType:      iacType,
 		iacVersion:   iacVersion,
 		iacProviders: make([]iacProvider.IacProvider, 0),
@@ -147,8 +148,11 @@ func (e *Executor) Init() error {
 			return err
 		}
 
+		// create a new RegoMetadata pre load filter
+		preloadFilter := filters.NewRegoMetadataPreLoadFilter(e.scanRules, e.skipRules, e.categories, e.policyTypes, e.severity)
+
 		// initialize the engine
-		if err := engine.Init(policyPath, e.scanRules, e.skipRules, e.categories, e.severity); err != nil {
+		if err := engine.Init(policyPath, preloadFilter); err != nil {
 			zap.S().Errorf("%s", err)
 			return err
 		}
@@ -264,7 +268,7 @@ func (e *Executor) findViolations(results *Output) error {
 
 	for _, engine := range e.policyEngines {
 		go func(eng policy.Engine) {
-			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig})
+			output, err := eng.Evaluate(policy.EngineInput{InputData: &results.ResourceConfig}, &filters.RegoDataFilter{})
 			evalResultChan <- engineEvalResult{err, output}
 		}(engine)
 	}
