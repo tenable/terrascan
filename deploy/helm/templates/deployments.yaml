@@ -36,9 +36,9 @@ spec:
           args:
             - "server"
             - "--cert-path"
-            - "/etc/certs/cert"
+            - "/etc/certs/tls.crt"
             - "--key-path"
-            - "/etc/certs/key"
+            - "/etc/certs/tls.key"
 {{- if .Values.use_debug }}
             - "-l"
             - "debug"
