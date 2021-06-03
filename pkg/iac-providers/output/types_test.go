@@ -21,78 +21,6 @@ import (
 	"testing"
 )
 
-func TestAllResourceConfigsFindResourceByID(t *testing.T) {
-	testResourceConfig := ResourceConfig{
-		ID: "s3.my_s3_bucket",
-	}
-
-	type args struct {
-		resourceID string
-	}
-	tests := []struct {
-		name    string
-		a       AllResourceConfigs
-		args    args
-		want    *ResourceConfig
-		wantErr bool
-	}{
-		{
-			name:    "nil AllResourceConfigs",
-			a:       nil,
-			args:    args{},
-			want:    nil,
-			wantErr: true,
-		},
-		{
-			name: "invalid resource id",
-			a: AllResourceConfigs{
-				"key": {},
-			},
-			args: args{
-				resourceID: "id",
-			},
-			want:    nil,
-			wantErr: true,
-		},
-		{
-			name: "resource present in AllResourceConfigs",
-			a: AllResourceConfigs{
-				"s3": {
-					testResourceConfig,
-				},
-			},
-			args: args{
-				resourceID: "s3.my_s3_bucket",
-			},
-			want: &testResourceConfig,
-		},
-		{
-			name: "resource not present in AllResourceConfigs",
-			a: AllResourceConfigs{
-				"s3": {
-					testResourceConfig,
-				},
-			},
-			args: args{
-				resourceID: "ec2.test_instance",
-			},
-			want: nil,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.a.FindResourceByID(tt.args.resourceID)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("AllResourceConfigs.FindResourceByID() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AllResourceConfigs.FindResourceByID() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestAllResourceConfigsGetResourceCount(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -313,6 +241,10 @@ func TestAllResourceConfigsFindAllResourcesByID(t *testing.T) {
 		ID: "s3.my_s3_bucket",
 	}
 
+	testS3LongIDResourceConfig := ResourceConfig{
+		ID: "module.somemodule.s3.my_s3_bucket",
+	}
+
 	testResourceConfigList := []*ResourceConfig{&testS3ResourceConfig}
 
 	type args struct {
@@ -387,6 +319,20 @@ func TestAllResourceConfigsFindAllResourcesByID(t *testing.T) {
 				resourceID: "ec2.test_instance",
 			},
 			want: []*ResourceConfig{},
+		},
+		{
+			name: "long resource ID",
+			a: AllResourceConfigs{
+				"s3": {
+					testS3LongIDResourceConfig,
+				},
+			},
+			args: args{
+				resourceID: "module.somemodule.s3.my_s3_bucket",
+			},
+			want: []*ResourceConfig{
+				&testS3LongIDResourceConfig,
+			},
 		},
 	}
 	for _, tt := range tests {

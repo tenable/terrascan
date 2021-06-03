@@ -49,36 +49,6 @@ type SkipRule struct {
 // AllResourceConfigs is a list/slice of resource configs present in IaC
 type AllResourceConfigs map[string][]ResourceConfig
 
-// FindResourceByID Finds a given resource within the resource map and returns a reference to that resource
-func (a AllResourceConfigs) FindResourceByID(resourceID string) (*ResourceConfig, error) {
-	if len(a) == 0 {
-		return nil, fmt.Errorf("AllResourceConfigs is nil or doesn't contain any resource type")
-	}
-	resTypeName := strings.Split(resourceID, ".")
-	if len(resTypeName) < 2 {
-		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
-	}
-
-	resourceType := resTypeName[0]
-
-	found := false
-	var resource ResourceConfig
-	resourceTypeList := a[resourceType]
-	for i := range resourceTypeList {
-		if resourceTypeList[i].ID == resourceID {
-			resource = resourceTypeList[i]
-			found = true
-			break
-		}
-	}
-
-	if !found {
-		return nil, nil
-	}
-
-	return &resource, nil
-}
-
 // FindAllResourcesByID Finds all resources within the resource map
 func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*ResourceConfig, error) {
 	if len(a) == 0 {
@@ -89,7 +59,7 @@ func (a AllResourceConfigs) FindAllResourcesByID(resourceID string) ([]*Resource
 		return nil, fmt.Errorf("resource ID has an invalid format %s", resourceID)
 	}
 
-	resourceType := resTypeName[0]
+	resourceType := resTypeName[len(resTypeName)-2]
 
 	resources := make([]*ResourceConfig, 0)
 	resourceTypeList := a[resourceType]
