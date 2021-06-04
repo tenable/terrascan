@@ -1,0 +1,17 @@
+{
+    "name": "user",
+    "file": "userSecurity.rego",
+    "policy_type": "docker",
+    "resource_type": "docker",
+    "template_args": {
+        "name": "user",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Use user Id",
+    "reference_id": "docker.Medium.0000",
+    "id":"docker_Medium_0000",
+    "category": "Security",
+    "version": 1
+}
