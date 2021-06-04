@@ -1,0 +1,22 @@
+FROM runatlantis/atlantis:v0.16.1
+MAINTAINER accurics
+LABEL key="value"
+WORKDIR test
+ENV DEFAULT_TERRASCAN_VERSION=1.5.1
+ENV PLANFILE tfplan
+ADD setup.sh terrascan.sh launch-atlantis.sh entrypoint.sh /usr/local/bin/
+RUN mkdir -p /etc/atlantis/ && \
+    chmod +x /usr/local/bin/*.sh && \
+    /usr/local/bin/setup.sh
+Copy terrascan-workflow.yaml /etc/atlantis/workflow.yaml
+USER atlantis
+ARG name=defaultValue
+RUN terrascan init
+VOLUME /temp
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "executable" ]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+SHELL [ "cd" ]
+ONBUILD RUN cd 
+expose 9090
+STOPSIGNAL 1
+CMD ["server"]

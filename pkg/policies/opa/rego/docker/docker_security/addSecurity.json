@@ -1,0 +1,17 @@
+{
+    "name": "add",
+    "file": "addSecurity.rego",
+    "policy_type": "docker",
+    "resource_type": "docker",
+    "template_args": {
+        "name": "add",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Use Copy instead of Add",
+    "reference_id": "docker.Medium.0001",
+    "id": "docker_Medium_0001",
+    "category": "Security",
+    "version": 1
+}
