@@ -9,14 +9,15 @@ jobs:
       GO111MODULE: on
       GOPATH: /home/runner/work/terrascan
       GOBIN: /home/runner/work/terrascan/bin
+      GO_VERSION: 1.16
     steps:
     - name: Checkout Terrascan
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
-        go-version: 1.15
+        go-version: ${{ env.GO_VERSION }}
 
     - name: Install golint
       run: go get -u golang.org/x/lint/golint
@@ -49,7 +50,7 @@ jobs:
 
     steps:
     - name: Checkout Terrascan
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Build Terrascan docker image
       run: make docker-build
