@@ -18,6 +18,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -32,18 +33,24 @@ const (
 	TerrascanSkipRule = "rule"
 	// TerrascanSkipComment key used to detect comment skiupping a give rule
 	TerrascanSkipComment = "comment"
+	// SkipRulesPrefix used to identify and trim the skipping rule patterns
+	SkipRulesPrefix = "#ts:skip="
+	// RuleIDRegex used to match the reference_id string
+	RuleIDRegex = `((([ A-Za-z0-9]+[.-]{1})){2,5}([\d]+)){1}`
+	// SkipRuleCommentRegex used to detect comments in skipped rule
+	SkipRuleCommentRegex = `([ \t]+.*){0,1}`
 )
 
 var (
-	skipRulesPattern               = regexp.MustCompile(`(#ts:skip=[ \t]*(([A-Za-z0-9]+[.-]{1}){3,5}([\d]+)){1}([ \t]+.*){0,1})`)
-	skipRulesPrefix                = "#ts:skip="
+	ruleIDPattern                  = regexp.MustCompile(RuleIDRegex)
+	skipRulesPattern               = regexp.MustCompile(fmt.Sprintf("(%s%s%s)", SkipRulesPrefix, RuleIDRegex, SkipRuleCommentRegex))
 	infileInstructionNotPresentLog = "%s not present for resource: %s"
 )
 
 // GetSkipRules returns a list of rules to be skipped. The rules to be skipped
 // can be set in terraform resource config with the following pattern:
 // #ts:skip=AWS.S3Bucket.DS.High.1043
-// $ts:skip=AWS.S3Bucket.DS.High.1044 reason to skip the rule
+// #ts:skip=AWS.S3Bucket.DS.High.1044 reason to skip the rule
 // each rule and its optional comment must be in a new line
 func GetSkipRules(body string) []output.SkipRule {
 	var skipRules []output.SkipRule
@@ -53,12 +60,12 @@ func GetSkipRules(body string) []output.SkipRule {
 		return skipRules
 	}
 
-	// get all skip rule comments
+	// extract all commented skip rules
 	comments := skipRulesPattern.FindAllString(body, -1)
 
 	// extract rule ids from comments
 	for _, c := range comments {
-		c = strings.TrimPrefix(c, skipRulesPrefix)
+		c = strings.TrimPrefix(c, SkipRulesPrefix)
 		skipRule := getSkipRuleObject(c)
 		if skipRule != nil {
 			skipRules = append(skipRules, *skipRule)
@@ -71,14 +78,12 @@ func getSkipRuleObject(s string) *output.SkipRule {
 	if s == "" {
 		return nil
 	}
-	var skipRule output.SkipRule
-	ruleComment := strings.Fields(s)
 
-	skipRule.Rule = strings.TrimSpace(ruleComment[0])
-	if len(ruleComment) > 1 {
-		comment := strings.Join(ruleComment[1:], " ")
-		skipRule.Comment = strings.TrimSpace(comment)
-	}
+	var skipRule output.SkipRule
+	comment := ruleIDPattern.Split(s, 2)[1]
+	skipRule.Rule = ruleIDPattern.FindString(strings.TrimSpace(s))
+	skipRule.Comment = strings.TrimSpace(comment)
+
 	return &skipRule
 }
 
