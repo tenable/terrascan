@@ -27,6 +27,9 @@ import (
 func TestGetSkipRules(t *testing.T) {
 	testRuleAWS1 := "AWS.S3Bucket.DS.High.1041"
 	testRuleAWS2 := "AWS.S3Bucket.DS.High.1042"
+	testRuleAWS3 := "AWS.S3 Bucket.DS.High.1041"
+	testRuleAWS4 := "AWS.S3 Bucket DS.High.1041"
+	testRuleAWS5 := "AWS.S3 Bucket DS .High.1041"
 	testRuleAWSwithHyphen := "AC-AWS-NS-IN-M-1172"
 	testRuleAzure := "accurics.azure.NS.147"
 	testRuleKubernetesWithHyphen := "AC-K8-DS-PO-M-0143"
@@ -129,6 +132,52 @@ func TestGetSkipRules(t *testing.T) {
 				},
 				{
 					Rule: "AWS.S3Bucket.DS.High.1046",
+				},
+			},
+		},
+		{
+			// Rule with single space should get skipped
+			name:  "rule with space in between, aws",
+			input: "#ts:skip=AWS.S3 Bucket.DS.High.1041",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS3},
+			},
+		},
+		{
+			// Rule with two spaces should get skipped
+			name:  "rule with two spaces in between, aws",
+			input: "#ts:skip=AWS.S3 Bucket DS.High.1041",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS4},
+			},
+		},
+		{
+			// Rule with multiple spaces should get skipped
+			name:  "rule with multiple spaces in between, aws",
+			input: "#ts:skip=AWS.S3 Bucket DS .High.1041",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS5},
+			},
+		},
+		{
+			// Rule with space and comment should get skipped
+			name:  "rule with spaces in between and comment, aws",
+			input: "#ts:skip=AWS.S3 Bucket.DS.High.1041 skip rule with spaces",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleAWS3,
+					Comment: "skip rule with spaces",
+				},
+			},
+		},
+		{
+			// Rule with multiple spaces and comment should get skipped
+			name:  "rule with multiple spaces in between, aws",
+			input: "#ts:skip=AWS.S3 Bucket DS .High.1041 skip rule with multiple spaces",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleAWS5,
+					Comment: "skip rule with multiple spaces",
 				},
 			},
 		},
