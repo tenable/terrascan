@@ -34,7 +34,7 @@
                 "query_string": false
               }
             ],
-            "target_origin_id": "${local.s3_origin_id}",
+            "target_origin_id": "myS3Origin",
             "viewer_protocol_policy": "https-only"
           }
         ],
@@ -66,7 +66,7 @@
               }
             ],
             "path_pattern": "/content/immutable/*",
-            "target_origin_id": "${local.s3_origin_id}",
+            "target_origin_id": "myS3Origin",
             "viewer_protocol_policy": "allow-all"
           },
           {
@@ -90,14 +90,14 @@
               }
             ],
             "path_pattern": "/content/*",
-            "target_origin_id": "${local.s3_origin_id}",
+            "target_origin_id": "myS3Origin",
             "viewer_protocol_policy": "allow-all"
           }
         ],
         "origin": [
           {
             "domain_name": "aws_s3_bucket.b.bucket_regional_domain_name",
-            "origin_id": "${local.s3_origin_id}",
+            "origin_id": "myS3Origin",
             "s3_origin_config": [
               {
                 "origin_access_identity": "origin-access-identity/cloudfront/ABCDEFG1234567"
@@ -127,7 +127,9 @@
           }
         ]
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_cloudtrail": [
@@ -145,7 +147,9 @@
         "s3_bucket_name": "some-s3-bucket",
         "s3_key_prefix": "prefix"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_ecs_task_definition": [
@@ -162,7 +166,9 @@
         "family": "service",
         "network_mode": "bridge"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_efs_file_system": [
@@ -180,7 +186,9 @@
           "Name": "not-encrypted"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_elasticache_cluster": [
@@ -200,7 +208,9 @@
         "parameter_group_name": "default.memcached1.4",
         "port": 11211
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_guardduty_detector": [
@@ -215,7 +225,9 @@
       "config": {
         "enable": false
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_iam_access_key": [
@@ -232,7 +244,9 @@
         "status": "Inactive",
         "user": "root"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_kinesis_stream": [
@@ -258,7 +272,9 @@
           "Environment": "kinesisEncryptedWithKms"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_kms_key": [
@@ -278,7 +294,9 @@
           "Setup": "self-healing"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_load_balancer_policy": [
@@ -301,7 +319,9 @@
         "policy_name": "wu-tang-ssl",
         "policy_type_name": "SSLNegotiationPolicyType"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_s3_bucket": [
@@ -321,7 +341,9 @@
           "Name": "nos3BucketSseRules"
         }
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_security_group": [
@@ -363,7 +385,9 @@
         },
         "vpc_id": "some_dummy_vpc"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ],
   "aws_sqs_queue": [
@@ -381,7 +405,10 @@
         "name": "terraform-example-queue",
         "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Sid\":\"Queue1_AnonymousAccess_AllActions_WhitelistIP\",\n    \"Effect\": \"Allow\",\n    \"Principal\": \"*\",\n    \"Action\": \"sqs:*\",\n    \"Resource\": \"arn:aws:sqs:*:111122223333:queue1\"\n  }] \n}\n"
       },
-      "skip_rules": null
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
+      
     }
   ]
 }
