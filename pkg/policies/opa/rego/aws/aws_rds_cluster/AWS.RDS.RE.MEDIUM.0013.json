@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure backup retention period is set for rds cluster",
-    "reference_id": "AC_AWS_013",
+    "reference_id": "AWS.RDS.RE.MEDIUM.0013",
     "category": "Resilience",
     "version": 2
 }

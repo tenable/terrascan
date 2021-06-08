@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure S3 object is Encrypted",
-    "reference_id": "AC_AWS_034",
+    "reference_id": "AWS.ASBO.DP.MEDIUM.0034",
     "category": "Data Protection",
     "version": 2
 }

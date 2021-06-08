@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Ensure S3 buckets do not have, a both public ACL on the bucket and a public access block.",
-    "reference_id": "AC_AWS_065",
+    "reference_id": "AWS.S3Bucket.IAM.HIGH.0065",
     "category": "Identity and Access Management",
     "version": 1
 }

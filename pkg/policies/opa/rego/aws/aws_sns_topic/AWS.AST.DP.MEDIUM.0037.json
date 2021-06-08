@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure SNS topic is Encrypted using KMS master key",
-    "reference_id": "AC_AWS_037",
+    "reference_id": "AWS.AST.DP.MEDIUM.0037",
     "category": "Data Protection",
     "version": 2
 }
