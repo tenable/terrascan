@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that AWS CloudWatch logs are enabled for all your APIs created with Amazon API Gateway service in order to track and analyze execution behavior at the API stage level.",
-    "reference_id": "AWS.API Gateway.Logging.Medium.0572",
+    "reference_id": "AWS.APIGateway.Logging.Medium.0572",
     "category": "Logging and Monitoring",
     "version": 2,
     "id": "AC_AWS_0012"

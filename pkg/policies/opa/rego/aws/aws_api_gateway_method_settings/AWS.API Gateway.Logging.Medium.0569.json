@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable Detailed CloudWatch Metrics for APIs",
-    "reference_id": "AWS.API Gateway.Logging.Medium.0569",
+    "reference_id": "AWS.APIGateway.Logging.Medium.0569",
     "category": "Logging and Monitoring",
     "version": 2,
     "id": "AC_AWS_0007"
