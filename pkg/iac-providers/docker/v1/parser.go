@@ -51,8 +51,11 @@ type DockerConfig struct {
 
 const (
 	stringJoinCharacter = " "
+	commentPrefix       = "#"
+	newLine             = "\n"
 )
 
+// ValidateInstruction validates the dockerfile instructions
 func (dc *DockerV1) ValidateInstruction(node *parser.Node) error {
 	_, err := instructions.ParseInstruction(node)
 	return err
@@ -82,7 +85,7 @@ func (dc *DockerV1) Parse(filepath string) (DockerConfig, string, error) {
 		}
 
 		for _, comment := range child.PrevComment {
-			comments = comments + "#" + comment + "\n"
+			comments = comments + commentPrefix + comment + newLine
 		}
 
 		for i := child.Next; i != nil; i = i.Next {

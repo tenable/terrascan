@@ -75,9 +75,9 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 }
 
 // GetresourceIdforDockerfile Generates hash of the string to be used as the reference id for docker file
-func GetresourceIdforDockerfile(filepath string) (referenceId string) {
+func GetresourceIdforDockerfile(filepath string) (referenceID string) {
 	hasher := md5.New()
 	hasher.Write([]byte(filepath))
-	referenceId = strings.ToLower(hex.EncodeToString(hasher.Sum(nil)))
+	referenceID = strings.ToLower(hex.EncodeToString(hasher.Sum(nil)))
 	return
 }
