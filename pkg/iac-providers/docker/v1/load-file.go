@@ -22,25 +22,30 @@ import (
 	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
 // LoadIacFile loads the docker file specified
 func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
-	data, err := dc.Parse(absFilePath)
+	data, comments, err := dc.Parse(absFilePath)
 	if err != nil {
 		errMsg := fmt.Sprintf("error while parsing file %s, error: %v", absFilePath, err)
 		zap.S().Errorf("error while parsing file %s", absFilePath, err)
 		return allResourcesConfig, errors.New(errMsg)
 	}
+	minSeverity, maxSeverity := utils.GetMinMaxSeverity(comments)
 	config := output.ResourceConfig{
-		Name:   filepath.Base(absFilePath),
-		Type:   resourceTypeDockerfile,
-		Line:   1,
-		ID:     dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath),
-		Source: absFilePath,
-		Config: data,
+		Name:        filepath.Base(absFilePath),
+		Type:        resourceTypeDockerfile,
+		Line:        1,
+		ID:          dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath),
+		Source:      absFilePath,
+		Config:      data,
+		SkipRules:   utils.GetSkipRules(comments),
+		MinSeverity: minSeverity,
+		MaxSeverity: maxSeverity,
 	}
 	allResourcesConfig[dockerDirectory] = append(allResourcesConfig[dockerDirectory], config)
 	return allResourcesConfig, nil

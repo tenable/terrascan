@@ -59,26 +59,32 @@ func (dc *DockerV1) ValidateInstruction(node *parser.Node) error {
 }
 
 // Parse parses the given dockerfile and gives docker config.
-func (dc *DockerV1) Parse(filepath string) (DockerConfig, error) {
+func (dc *DockerV1) Parse(filepath string) (DockerConfig, string, error) {
 	dockerConfig := DockerConfig{}
 	data, err := ioutil.ReadFile(filepath)
+	comments := ""
 	if err != nil {
 		zap.S().Error("error loading docker file", filepath, zap.Error(err))
-		return DockerConfig{}, err
+		return DockerConfig{}, "", err
 	}
 	r := bytes.NewReader(data)
 	res, err := parser.Parse(r)
 	if err != nil {
 		zap.S().Errorf("error while parsing iac file", filepath, zap.Error(err))
-		return DockerConfig{}, err
+		return DockerConfig{}, "", err
 	}
 
 	for _, child := range res.AST.Children {
 		values := []string{}
 		err = dc.ValidateInstruction(child)
 		if err != nil {
-			return DockerConfig{}, err
+			return DockerConfig{}, "", err
 		}
+
+		for _, comment := range child.PrevComment {
+			comments = comments + "#" + comment + "\n"
+		}
+
 		for i := child.Next; i != nil; i = i.Next {
 			values = append(values, i.Value)
 		}
@@ -124,5 +130,5 @@ func (dc *DockerV1) Parse(filepath string) (DockerConfig, error) {
 			zap.S().Errorf("Unknow command %s", child.Value, nil)
 		}
 	}
-	return dockerConfig, nil
+	return dockerConfig, comments, nil
 }
