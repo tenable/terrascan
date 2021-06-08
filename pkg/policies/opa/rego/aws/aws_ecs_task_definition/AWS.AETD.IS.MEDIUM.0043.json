@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure EFS volume used for ECS task defination has in transit encryption enabled",
-    "reference_id": "AC_AWS_043",
+    "reference_id": "AWS.AETD.IS.MEDIUM.0043",
     "category": "Infrastructure Security",
     "version": 2
 }

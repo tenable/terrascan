@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure CloudTrail has log file validation enabled.",
-    "reference_id": "AC_AWS_067",
+    "reference_id": "AWS.CloudTrail.LM.MEDIUM.0087",
     "category": "Logging and Monitoring",
     "version": 1
 }
