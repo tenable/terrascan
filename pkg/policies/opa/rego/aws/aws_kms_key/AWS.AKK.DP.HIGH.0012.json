@@ -1,0 +1,15 @@
+{
+    "name": "kmsKeyRotationDisabled",
+    "file": "kmsKeyRotationDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_kms_key",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure rotation for customer created CMKs is enabled",
+    "reference_id": "AWS.AKK.DP.HIGH.0012",
+    "category": "Data Protection",
+    "version": 2,
+    "id": "AC_AWS_0160"
+}

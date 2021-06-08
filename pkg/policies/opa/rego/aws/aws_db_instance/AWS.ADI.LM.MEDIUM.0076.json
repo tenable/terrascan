@@ -1,0 +1,14 @@
+{
+    "name": "dbInstanceLoggingDisabled",
+    "file": "dbInstanceLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_db_instance",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure AWS RDS instances have logging enabled.",
+    "reference_id": "AWS.ADI.LM.MEDIUM.0076",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

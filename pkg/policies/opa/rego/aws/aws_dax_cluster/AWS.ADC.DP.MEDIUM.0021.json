@@ -1,0 +1,14 @@
+{
+    "name": "daxSse",
+    "file": "daxSse.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_dax_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure DAX is encrypted at rest",
+    "reference_id": "AWS.ADC.DP.MEDIUM.0021",
+    "category": "Data Protection",
+    "version": 2
+}

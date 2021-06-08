@@ -1,0 +1,14 @@
+{
+    "name": "docDbLogExportDisabled",
+    "file": "docDbLogExportDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_docdb_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure DocDb clusters have log exports enabled.",
+    "reference_id": "AWS.ADC.LM.MEDIUM.0069",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

@@ -1,0 +1,14 @@
+{
+    "name": "neptuneClusterLoggingDisabled",
+    "file": "neptuneClusterLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_neptune_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure AWS Neptune clusters have logging enabled.",
+    "reference_id": "AWS.ANC.LM.MEDIUM.0075",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

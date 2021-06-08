@@ -1,0 +1,14 @@
+{
+    "name": "inTransitNotEncryptedElasticCache",
+    "file": "inTransitNotEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elasticcache_replication_group",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Elastic Cache Replication Group is encrypted in transit",
+    "reference_id": "AWS.AERG.DP.MEDIUM.0044",
+    "category": "Data Protection",
+    "version": 2
+}

@@ -1,0 +1,14 @@
+{
+    "name": "docDbEncrypted",
+    "file": "docDbEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_docdb_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure DocDb is encrypted at rest",
+    "reference_id": "AWS.ADC.DP.MEDIUM.0022",
+    "category": "Data Protection",
+    "version": 2
+}

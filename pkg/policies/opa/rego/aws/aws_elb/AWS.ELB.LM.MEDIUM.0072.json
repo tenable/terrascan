@@ -1,0 +1,14 @@
+{
+    "name": "elbAccessLoggingDisabled",
+    "file": "elbAccessLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_elb",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure AWS ELB has access logging enabled.",
+    "reference_id": "AWS.ELB.LM.MEDIUM.0072",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

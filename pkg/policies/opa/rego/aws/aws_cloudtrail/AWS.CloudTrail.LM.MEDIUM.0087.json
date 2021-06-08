@@ -1,0 +1,14 @@
+{
+    "name": "cloudTrailLogValidationDisabled",
+    "file": "cloudTrailLogValidationDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudtrail",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure CloudTrail has log file validation enabled.",
+    "reference_id": "AWS.CloudTrail.LM.MEDIUM.0087",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

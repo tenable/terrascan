@@ -1,0 +1,14 @@
+{
+    "name": "backupRetentionRDS",
+    "file": "backupRetention.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_rds_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure backup retention period is set for rds cluster",
+    "reference_id": "AWS.RDS.RE.MEDIUM.0013",
+    "category": "Resilience",
+    "version": 2
+}

@@ -1,0 +1,14 @@
+{
+    "name": "athenaDatabaseEncrypted",
+    "file": "athenaDatabaseEncrypted.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_athena_database",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Athena Database is encrypted at rest",
+    "reference_id": "AWS.ADB.DP.MEDIUM.016",
+    "category": "Data Protection",
+    "version": 2
+}

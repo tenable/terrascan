@@ -1,0 +1,14 @@
+{
+    "name": "noSgDescription",
+    "file": "noSgDescription.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_security_group",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure every security group should have a description to ease the process of Auditing",
+    "reference_id": "AWS.ALB.SBP.High.0015",
+    "category": "Security Best Practices",
+    "version": 2
+}

@@ -1,0 +1,14 @@
+{
+    "name": "notEncryptedSageMaker",
+    "file": "notEncryptedSageMaker.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_sagemaker_notebook_instance",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure SageMaker Instance is Encrypted",
+    "reference_id": "AWS.ASNI.DP.MEDIUM.0035",
+    "category": "Data Protection",
+    "version": 2
+}

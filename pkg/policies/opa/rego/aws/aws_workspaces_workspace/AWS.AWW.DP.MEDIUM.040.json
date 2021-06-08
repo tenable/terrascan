@@ -1,0 +1,16 @@
+{
+    "name": "workspaceRootEncryptionCheck",
+    "file": "workspaceEncryptionCheck.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_workspaces_workspace",
+    "template_args": {
+        "attribute_name": "root_volume_encryption_enabled",
+        "name": "workspaceRootEncryptionCheck",
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure root volume for Workspaces is Encrypted",
+    "reference_id": "AWS.AWW.DP.MEDIUM.040",
+    "category": "Data Protection",
+    "version": 2
+}

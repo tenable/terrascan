@@ -1,0 +1,14 @@
+{
+    "name": "s3PublicAclNoAccessBlock",
+    "file": "s3PublicAclNoAccessBlock.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_s3_bucket",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure S3 buckets do not have, a both public ACL on the bucket and a public access block.",
+    "reference_id": "AWS.S3Bucket.IAM.HIGH.0065",
+    "category": "Identity and Access Management",
+    "version": 1
+}

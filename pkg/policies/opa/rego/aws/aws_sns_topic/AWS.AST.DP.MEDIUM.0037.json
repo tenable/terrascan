@@ -1,0 +1,14 @@
+{
+    "name": "notEncryptedSns",
+    "file": "notEncryptedSns.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_sns_topic",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure SNS topic is Encrypted using KMS master key",
+    "reference_id": "AWS.AST.DP.MEDIUM.0037",
+    "category": "Data Protection",
+    "version": 2
+}

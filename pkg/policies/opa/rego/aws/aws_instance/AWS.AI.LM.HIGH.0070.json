@@ -1,0 +1,14 @@
+{
+    "name": "detailedMonitoringEnabledInstance",
+    "file": "detailedMonitoringEnabledInstance.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_instance",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure that detailed monitoring is enabled for EC2 instances.",
+    "reference_id": "AWS.AI.LM.HIGH.0070",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

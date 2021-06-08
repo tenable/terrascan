@@ -1,0 +1,14 @@
+{
+    "name": "eksControlPlaneLoggingDisabled",
+    "file": "eksControlPlaneLoggingDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_eks_cluster",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure EKS clusters have control plane logging enabled.",
+    "reference_id": "AWS.AEC.LM.MEDIUM.0071",
+    "category": "Logging and Monitoring",
+    "version": 1
+}

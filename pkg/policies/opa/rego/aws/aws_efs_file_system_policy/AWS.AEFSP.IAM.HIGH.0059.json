@@ -1,0 +1,14 @@
+{
+    "name": "efsPolicyNotSecure",
+    "file": "efsPolicyNotSecure.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_efs_file_system_policy",
+    "template_args": {
+        "prefix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure EFS file system does not use insecure wildcard policies.",
+    "reference_id": "AWS.AEFSP.IAM.HIGH.0059",
+    "category": "Identity and Access Management",
+    "version": 1
+}
