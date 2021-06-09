@@ -31,14 +31,14 @@ jobs:
     - name: Build Terrascan docker image
       run: make docker-build
 
-    - name: Build terrascan_atlantis docker image
-      run: make atlantis-docker-build
-
     - name: Login to docker hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
 
     - name: Push Terrascan latest tag docker image
       run: make docker-push-latest-tag
+
+    - name: Build terrascan_atlantis docker image
+      run: make atlantis-docker-build
 
     - name: Push terrascan_atlantis latest tag docker image
       run: make atlantis-docker-push-latest-tag
