@@ -91,7 +91,7 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 				config[k] = sConfig
 			}
 
-		case vType == "[]tfv12.jsonObj" && vKind == reflect.Slice:
+		case vKind == reflect.Slice:
 
 			// case 4: config value is of type []jsonObj
 
