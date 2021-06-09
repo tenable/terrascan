@@ -2,13 +2,13 @@
     "name": "dynamoderecovery_enabled",
     "file": "dynamodb_without_recovery_enabled.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudtrail",
+    "resource_type": "aws_dynamodb_table",
     "template_args": {
         "prefix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure Point In Time Recovery is enabled for DynamoDB Tables",
-    "reference_id": "AWS.CloudTrail.Logging.Medium.007",
+    "reference_id": "AWS.DynamoDb.Logging.Medium.007",
     "category": "Resilience",
     "version": 2
 }
