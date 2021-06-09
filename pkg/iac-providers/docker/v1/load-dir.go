@@ -55,17 +55,23 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 				continue
 			}
 			minSeverity, maxSeverity := utils.GetMinMaxSeverity(comments)
+			sourcePath := file
+			sourcePath, err = filepath.Rel(absRootDir, file)
+			if err != nil {
+				zap.S().Debug("error while getting the relative path for", zap.String("IAC file", file), zap.Error(err))
+			}
 			config := output.ResourceConfig{
 				Name:        *files[i],
 				Type:        resourceTypeDockerfile,
 				Line:        1,
 				ID:          dockerDirectory + "." + GetresourceIdforDockerfile(file),
-				Source:      file,
+				Source:      sourcePath,
 				Config:      data,
 				SkipRules:   utils.GetSkipRules(comments),
 				MinSeverity: minSeverity,
 				MaxSeverity: maxSeverity,
 			}
+
 			allResourcesConfig[dockerDirectory] = append(allResourcesConfig[dockerDirectory], config)
 		}
 	}

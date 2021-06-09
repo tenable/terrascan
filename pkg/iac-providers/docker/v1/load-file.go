@@ -41,7 +41,7 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 		Type:        resourceTypeDockerfile,
 		Line:        1,
 		ID:          dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath),
-		Source:      absFilePath,
+		Source:      filepath.Base(absFilePath),
 		Config:      data,
 		SkipRules:   utils.GetSkipRules(comments),
 		MinSeverity: minSeverity,
