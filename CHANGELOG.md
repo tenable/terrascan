@@ -1,5 +1,111 @@
 # Changelog
 
+## [v1.7.0](https://github.com/accurics/terrascan/tree/v1.7.0) (2021-06-09)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.6.0...v1.7.0)
+
+**Implemented enhancements:**
+
+- Enhancement: Support sarif as output format [\#775](https://github.com/accurics/terrascan/issues/775)
+- Admission Controller e2e tests [\#749](https://github.com/accurics/terrascan/issues/749)
+- Enhance terrascan docker to support all terrascan run modes [\#748](https://github.com/accurics/terrascan/issues/748)
+- Config file changes for server and admission controller [\#747](https://github.com/accurics/terrascan/issues/747)
+- Create Helm charts for the terrascan admission webhook setup. [\#685](https://github.com/accurics/terrascan/issues/685)
+- Enhancement: Use module instance name for download directory [\#672](https://github.com/accurics/terrascan/issues/672)
+
+**Fixed bugs:**
+
+- Azure AKS failling to check the network policy status. [\#789](https://github.com/accurics/terrascan/issues/789)
+- Scan for terraform doesn't error out if a module definition refers to a directory with no tf files [\#782](https://github.com/accurics/terrascan/issues/782)
+- Wrong detection of MemoryRequestsCheck,CpuRequestsCheck,noReadinessProbe and nolivenessProbe policy in k8s Job spec  [\#767](https://github.com/accurics/terrascan/issues/767)
+- Update Docker build for terrascan to use numeric UID [\#766](https://github.com/accurics/terrascan/issues/766)
+- Wrong detection of AllowPrivilegeEscalation \(policy AC-K8-CA-PO-H-0165\) in K8s pod spec  [\#721](https://github.com/accurics/terrascan/issues/721)
+- Failed to run prepared query error in opa/engine.go [\#709](https://github.com/accurics/terrascan/issues/709)
+- tfplan should use resource address for id field [\#702](https://github.com/accurics/terrascan/issues/702)
+- Rule IDs with spaces cannot be skipped [\#610](https://github.com/accurics/terrascan/issues/610)
+- AWS.CloudFront.Network Security.Low.0568 Doesn't allow skipping due to space in filename [\#549](https://github.com/accurics/terrascan/issues/549)
+- Error parsing syntax if using complex query for dynamic ip\_restriction in azurerm\_function\_app or azurerm\_app\_service ressource [\#433](https://github.com/accurics/terrascan/issues/433)
+
+**Closed issues:**
+
+- Add support for YAML format for terrascan config file [\#807](https://github.com/accurics/terrascan/issues/807)
+- Add ID field [\#805](https://github.com/accurics/terrascan/issues/805)
+- Add a middleware to log incoming http\(s\) requests on terrascan server [\#784](https://github.com/accurics/terrascan/issues/784)
+- terrascan server: validation missing for --cert-path and --key-path [\#769](https://github.com/accurics/terrascan/issues/769)
+- show-passed should report passes only for the existing resources [\#757](https://github.com/accurics/terrascan/issues/757)
+- Out of the box handling of certificates in helm charts for terrascan in Server mode  [\#756](https://github.com/accurics/terrascan/issues/756)
+- In-file Instrumentation [\#755](https://github.com/accurics/terrascan/issues/755)
+- Release 1.5.2 or 1.6.0 [\#745](https://github.com/accurics/terrascan/issues/745)
+- Issue in GCP Policyfile unrestrictedRdpAccess.rego [\#735](https://github.com/accurics/terrascan/issues/735)
+- accurics.azure.AKS.3 is defective [\#711](https://github.com/accurics/terrascan/issues/711)
+- Rule `lambdaNotEncryptedWithKms` should not check for KMS when env vars are not being used [\#682](https://github.com/accurics/terrascan/issues/682)
+- Terrascan does not resolve env var for aws\_rds\_cluster attribute storage\_encrypted [\#678](https://github.com/accurics/terrascan/issues/678)
+- Valid Terraform configuration fails with `s3EnforceUserAcl` [\#659](https://github.com/accurics/terrascan/issues/659)
+-   kmsKeyExposedPolicy:22: eval\_builtin\_error: json.unmarshal: invalid character '$' looking for beginning of value} [\#627](https://github.com/accurics/terrascan/issues/627)
+- Terrascan not able to find terraform config files in a sub directory, but it works in case of k8s infrastructure type [\#622](https://github.com/accurics/terrascan/issues/622)
+- Potential nil-dereference found while fuzzing [\#611](https://github.com/accurics/terrascan/issues/611)
+- terrascan should have a `category-list` command [\#597](https://github.com/accurics/terrascan/issues/597)
+- Improved Documentation [\#416](https://github.com/accurics/terrascan/issues/416)
+- Improve test coverage for k8s [\#400](https://github.com/accurics/terrascan/issues/400)
+
+**Merged pull requests:**
+
+- Fixing the bug for google\_kms\_crypto\_key policies [\#848](https://github.com/accurics/terrascan/pull/848) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- Fix AWS dynamo Db policy for point in time recovery [\#847](https://github.com/accurics/terrascan/pull/847) ([harkirat22](https://github.com/harkirat22))
+- Bugfix/use ref id old format [\#846](https://github.com/accurics/terrascan/pull/846) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- reference ids with & and \<space\> fixed [\#845](https://github.com/accurics/terrascan/pull/845) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fixes: Terraform inner block reference resolution [\#844](https://github.com/accurics/terrascan/pull/844) ([Rchanger](https://github.com/Rchanger))
+- Bump up to Go/1.16 [\#836](https://github.com/accurics/terrascan/pull/836) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- \[fix\] Add Alternate names for k8s services [\#834](https://github.com/accurics/terrascan/pull/834) ([rahulchheda](https://github.com/rahulchheda))
+- Support for spaces in policy reference\_id [\#833](https://github.com/accurics/terrascan/pull/833) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- fix - type assertion check for hcl.Body in terraform iac provider [\#832](https://github.com/accurics/terrascan/pull/832) ([patilpankaj212](https://github.com/patilpankaj212))
+- Add ID Field for AWS Policies' Metadata [\#831](https://github.com/accurics/terrascan/pull/831) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Policy to check CVE-2021-25737 [\#830](https://github.com/accurics/terrascan/pull/830) ([harkirat22](https://github.com/harkirat22))
+- Enhancing AWS policies [\#829](https://github.com/accurics/terrascan/pull/829) ([harkirat22](https://github.com/harkirat22))
+- aws s3 policy `s3EnforceUserAcl` update [\#828](https://github.com/accurics/terrascan/pull/828) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- add check for env vars and kms [\#827](https://github.com/accurics/terrascan/pull/827) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Add ID Field for K8s Policies' Metadata [\#826](https://github.com/accurics/terrascan/pull/826) ([Avanti19](https://github.com/Avanti19))
+- Do not trim resource id from tfplan json [\#825](https://github.com/accurics/terrascan/pull/825) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- Add ID Field for GCP Policies' Metadata [\#824](https://github.com/accurics/terrascan/pull/824) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fix - source path for k8s file scan is absolute [\#821](https://github.com/accurics/terrascan/pull/821) ([patilpankaj212](https://github.com/patilpankaj212))
+- added pending test changes for config reader [\#820](https://github.com/accurics/terrascan/pull/820) ([patilpankaj212](https://github.com/patilpankaj212))
+- fix: moves the pending test to running [\#819](https://github.com/accurics/terrascan/pull/819) ([Rchanger](https://github.com/Rchanger))
+- fix multierror variable issue [\#818](https://github.com/accurics/terrascan/pull/818) ([patilpankaj212](https://github.com/patilpankaj212))
+- \[feat.\] Merge Webhook and Server Helm Chart [\#817](https://github.com/accurics/terrascan/pull/817) ([rahulchheda](https://github.com/rahulchheda))
+- add support for YAML format for terrascan config file [\#816](https://github.com/accurics/terrascan/pull/816) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+-  Add AWS  CFT as an IaC Provider  [\#815](https://github.com/accurics/terrascan/pull/815) ([mahendrabagul](https://github.com/mahendrabagul))
+- fix failing e2e test [\#812](https://github.com/accurics/terrascan/pull/812) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adding Aws new policies cloudTrail [\#810](https://github.com/accurics/terrascan/pull/810) ([Avanti19](https://github.com/Avanti19))
+- Feature/az id field [\#808](https://github.com/accurics/terrascan/pull/808) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- added support for sarif formatted violation reports [\#806](https://github.com/accurics/terrascan/pull/806) ([dev-gaur](https://github.com/dev-gaur))
+- Adds support to scan config resources with applicable policies & Refactors filteration [\#803](https://github.com/accurics/terrascan/pull/803) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds: in-file instrumentation for resource prioritizing [\#802](https://github.com/accurics/terrascan/pull/802) ([Rchanger](https://github.com/Rchanger))
+- shifted opa engine warning message to debug log level [\#800](https://github.com/accurics/terrascan/pull/800) ([dev-gaur](https://github.com/dev-gaur))
+- fix: added validation for module local source dir [\#793](https://github.com/accurics/terrascan/pull/793) ([Rchanger](https://github.com/Rchanger))
+- policy metadata changes to include `policy\_type` and `resource\_type` [\#792](https://github.com/accurics/terrascan/pull/792) ([patilpankaj212](https://github.com/patilpankaj212))
+- Fix pod level securityContext support [\#790](https://github.com/accurics/terrascan/pull/790) ([harkirat22](https://github.com/harkirat22))
+- Fix policy code for securityContext and Probes [\#787](https://github.com/accurics/terrascan/pull/787) ([harkirat22](https://github.com/harkirat22))
+- add logging middleware for server [\#785](https://github.com/accurics/terrascan/pull/785) ([dev-gaur](https://github.com/dev-gaur))
+- config file changes for terrascan server [\#780](https://github.com/accurics/terrascan/pull/780) ([patilpankaj212](https://github.com/patilpankaj212))
+- Automate generation of TLS Certs using Helm [\#779](https://github.com/accurics/terrascan/pull/779) ([rahulchheda](https://github.com/rahulchheda))
+- Add webhook setup capability and remote repo scan capability in the helm charts [\#778](https://github.com/accurics/terrascan/pull/778) ([dev-gaur](https://github.com/dev-gaur))
+- Changed description of policy file to match port. [\#777](https://github.com/accurics/terrascan/pull/777) ([menzbua](https://github.com/menzbua))
+- Added source\_range 0.0.0.0/0 \(any\) to avoid rule violations [\#776](https://github.com/accurics/terrascan/pull/776) ([menzbua](https://github.com/menzbua))
+- support for `module name` in violation summary  [\#774](https://github.com/accurics/terrascan/pull/774) ([patilpankaj212](https://github.com/patilpankaj212))
+- Modified the Dockerfile to use numeric UID  [\#773](https://github.com/accurics/terrascan/pull/773) ([Rchanger](https://github.com/Rchanger))
+- adds e2e tests for validating webhook [\#772](https://github.com/accurics/terrascan/pull/772) ([patilpankaj212](https://github.com/patilpankaj212))
+- add validation for tls private key and cert file values [\#771](https://github.com/accurics/terrascan/pull/771) ([dev-gaur](https://github.com/dev-gaur))
+- Documentation [\#768](https://github.com/accurics/terrascan/pull/768) ([lalchand12](https://github.com/lalchand12))
+- change docs to include docker subcommands.md [\#765](https://github.com/accurics/terrascan/pull/765) ([amirbenv](https://github.com/amirbenv))
+- shifted custom atlantis container source under integrations/ directory [\#758](https://github.com/accurics/terrascan/pull/758) ([dev-gaur](https://github.com/dev-gaur))
+- Update mkdocs-material to 7.1.4 [\#746](https://github.com/accurics/terrascan/pull/746) ([pyup-bot](https://github.com/pyup-bot))
+- Add a kustomize based guide for setting up terrascan server and validating webhook in kubernetes [\#739](https://github.com/accurics/terrascan/pull/739) ([dev-gaur](https://github.com/dev-gaur))
+- Fix accurics.azure.AKS.3 [\#712](https://github.com/accurics/terrascan/pull/712) ([xortim](https://github.com/xortim))
+- Update mkdocs-redirects to 1.0.3 [\#710](https://github.com/accurics/terrascan/pull/710) ([pyup-bot](https://github.com/pyup-bot))
+- Initial addition of terrascan helm chart [\#688](https://github.com/accurics/terrascan/pull/688) ([jlk](https://github.com/jlk))
+
+# Changelog
+
 ## [v1.6.0](https://github.com/accurics/terrascan/tree/v1.6.0) (2021-05-10)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.5.1...v1.6.0)
@@ -487,5 +593,8 @@ Major updates to Terrascan and the underlying architecture including:
 
 ## 0.1.0 (2017-11-26)
 - First release on PyPI.
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
 
 \* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*

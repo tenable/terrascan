@@ -2,11 +2,12 @@ package writer
 
 import (
 	"bytes"
+	"strings"
+	"testing"
+
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
-	"strings"
-	"testing"
 )
 
 const expectedSarifOutput1 = `{
@@ -17,7 +18,7 @@ const expectedSarifOutput1 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.6.0",
+                  "version": "1.7.0",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
@@ -73,7 +74,7 @@ const expectedSarifOutput2 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.6.0",
+                  "version": "1.7.0",
                   "informationUri": "https://github.com/accurics/terrascan"
                 }
               },
@@ -90,7 +91,7 @@ const expectedSarifOutput3 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.6.0",
+                  "version": "1.7.0",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
