@@ -45,7 +45,6 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/awslabs/goformation/v4"
 	"github.com/awslabs/goformation/v4/cloudformation"
 	"github.com/awslabs/goformation/v4/cloudformation/amazonmq"
 	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
@@ -61,6 +60,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/kms"
 	"github.com/awslabs/goformation/v4/cloudformation/redshift"
 	"github.com/awslabs/goformation/v4/cloudformation/route53"
+	"github.com/awslabs/goformation/v4/cloudformation/s3"
 )
 
 const errUnsupportedDoc = "unsupported document type"
@@ -74,27 +74,25 @@ func Mapper() core.Mapper {
 }
 
 // Map transforms the provider specific template to terrascan native format.
-func (m cftMapper) Map(doc *utils.IacDocument, params ...map[string]interface{}) (output.AllResourceConfigs, error) {
-	allRC := make(map[string][]output.ResourceConfig)
-	t, err := extractTemplate(doc)
-	if err != nil {
-		return nil, err
-	}
+func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) ([]output.ResourceConfig, error) {
 	// transform each resource and generate config
-	for name, untypedRes := range t.Resources {
+	var configs []output.ResourceConfig
+	template, ok := resource.(*cloudformation.Template)
+	if !ok {
+		return nil, errors.New(errUnsupportedDoc)
+	}
+	for name, untypedRes := range template.Resources {
 		for _, resourceConfig := range m.mapConfigForResource(untypedRes) {
 			if resourceConfig.Resource != nil {
-				// create config
-				if resourceConfig.Name != "" {
-					name = resourceConfig.Name
-				}
-
-				rc := output.ResourceConfig{
+				config := output.ResourceConfig{
 					Name:      name,
-					Source:    doc.FilePath,
-					Line:      doc.StartLine,
 					SkipRules: make([]output.SkipRule, 0),
 					Config:    resourceConfig.Resource,
+				}
+
+				// fill config
+				if resourceConfig.Name != "" {
+					config.Name = resourceConfig.Name
 				}
 
 				// determine resource type
@@ -103,45 +101,25 @@ func (m cftMapper) Map(doc *utils.IacDocument, params ...map[string]interface{})
 					cfnType = cfnType + "." + resourceConfig.Type
 				}
 				if terraType, ok := store.ResourceTypes[cfnType]; ok {
-					rc.Type = terraType
-					rc.ID = rc.Type + "." + rc.Name
+					config.Type = terraType
+					config.ID = config.Type + "." + config.Name
 				} else {
 					continue
 				}
 
 				// add skipRules if available
 				if resourceConfig.Metadata != nil {
-					skipRules := utils.ReadSkipRulesFromMap(resourceConfig.Metadata, rc.ID)
+					skipRules := utils.ReadSkipRulesFromMap(resourceConfig.Metadata, config.ID)
 					if skipRules != nil {
-						rc.SkipRules = append(rc.SkipRules, skipRules...)
+						config.SkipRules = append(config.SkipRules, skipRules...)
 					}
 				}
 
-				allRC[rc.Type] = append(allRC[rc.Type], rc)
+				configs = append(configs, config)
 			}
 		}
 	}
-	return allRC, nil
-}
-
-func extractTemplate(doc *utils.IacDocument) (*cloudformation.Template, error) {
-	if doc.Type == utils.JSONDoc {
-		var t *cloudformation.Template
-		t, err := goformation.ParseJSON(doc.Data)
-		if err != nil {
-			return nil, err
-		}
-		return t, nil
-	} else if doc.Type == utils.YAMLDoc {
-		var t *cloudformation.Template
-		t, err := goformation.ParseYAML(doc.Data)
-		if err != nil {
-			return nil, err
-		}
-		return t, nil
-	} else {
-		return nil, errors.New(errUnsupportedDoc)
-	}
+	return configs, nil
 }
 
 func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSResourceConfig {
@@ -232,6 +210,10 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSR
 		return config.GetSecretsManagerSecretPolicyConfig(resource)
 	case *ecs.TaskDefinition:
 		return config.GetEcsTaskDefinitionConfig(resource)
+	case *s3.Bucket:
+		return config.GetS3BucketConfig(resource)
+	case *s3.BucketPolicy:
+		return config.GetS3BucketPolicyConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}

@@ -25,66 +25,62 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/awslabs/goformation/v4"
+	"github.com/awslabs/goformation/v4/cloudformation"
 	"go.uber.org/zap"
 )
 
 // LoadIacFile loads the specified CFT template file.
 // Note that a single CFT template json file may contain multiple resource definitions.
 func (a *CFTV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-	var iacDocuments []*utils.IacDocument
-	fileExt := a.getFileType(absFilePath)
-	switch fileExt {
-	case YAMLExtension:
-		fallthrough
-	case YAMLExtension2:
-		iacDocuments, err = utils.LoadYAML(absFilePath)
-	case JSONExtension:
-		iacDocuments, err = utils.LoadJSON(absFilePath)
-	default:
-		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
-		return allResourcesConfig, fmt.Errorf("unknown file extension for file %s", absFilePath)
-	}
+	fileData, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
-		zap.S().Debug("failed to load file", zap.String("file", absFilePath))
-		return allResourcesConfig, err
+		zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", absFilePath))
+		return allResourcesConfig, fmt.Errorf("unable to read file %s", absFilePath)
 	}
-	allResourcesConfig = make(map[string][]output.ResourceConfig)
-	for _, doc := range iacDocuments {
 
-		// replacing yaml data as the default yaml.v3 removes
-		// intrinsic tags for cloudformation templates
-		// (!Ref, !Fn::<> etc are removed and resolved to a string
-		// which disables parameter resolution by goformation)
-		if fileExt != JSONExtension {
-			templateData, err := ioutil.ReadFile(absFilePath)
-			if err != nil {
-				zap.S().Debug("unable to read template data", zap.Error(err), zap.String("file", absFilePath))
-				return allResourcesConfig, err
-			}
-			doc.Data = templateData
-		}
-
-		var config *output.ResourceConfig
-		m := mapper.NewMapper("cft")
-		arc, err := m.Map(doc)
+	// parse the file as cloudformation.Template
+	fileExt := a.getFileType(absFilePath, &fileData)
+	var template *cloudformation.Template
+	switch fileExt {
+	case YAMLExtension, YAMLExtension2:
+		template, err = goformation.ParseYAML(fileData)
 		if err != nil {
-			zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
+			zap.S().Debug("failed to parse file", zap.String("file", absFilePath))
 			return allResourcesConfig, err
 		}
-		for t, resources := range arc {
-			for _, resource := range resources {
-				config = &resource
-				config.Type = t
-				config.Source = a.getSourceRelativePath(absFilePath)
-				allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
-			}
+	case JSONExtension:
+		template, err = goformation.ParseJSON(fileData)
+		if err != nil {
+			zap.S().Debug("failed to parse file", zap.String("file", absFilePath))
+			return allResourcesConfig, err
 		}
+	default:
+		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
+		return allResourcesConfig, fmt.Errorf("unsupported extension for file %s", absFilePath)
+	}
+
+	// map resource to a terrascan type
+	m := mapper.NewMapper("cft")
+	configs, err := m.Map(template)
+	if err != nil {
+		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
+		return allResourcesConfig, err
+	}
+
+	// fill AllResourceConfigs
+	allResourcesConfig = make(map[string][]output.ResourceConfig)
+	var config *output.ResourceConfig
+	for _, resource := range configs {
+		config = &resource
+		config.Line = 1
+		config.Source = a.getSourceRelativePath(absFilePath)
+		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 	return allResourcesConfig, nil
 }
 
-func (*CFTV1) getFileType(file string) string {
+func (*CFTV1) getFileType(file string, data *[]byte) string {
 	if strings.HasSuffix(file, YAMLExtension) {
 		return YAMLExtension
 	} else if strings.HasSuffix(file, YAMLExtension2) {
@@ -92,12 +88,7 @@ func (*CFTV1) getFileType(file string) string {
 	} else if strings.HasSuffix(file, JSONExtension) {
 		return JSONExtension
 	} else if strings.HasSuffix(file, TXTExtension) || strings.HasSuffix(file, TemplateExtension) {
-		f, err := ioutil.ReadFile(file)
-		if err != nil {
-			zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", file))
-			return UnknownExtension
-		}
-		if isJSON(string(f)) {
+		if isJSON(string(*data)) {
 			return JSONExtension
 		}
 		return YAMLExtension

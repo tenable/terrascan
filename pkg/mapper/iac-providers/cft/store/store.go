@@ -67,4 +67,7 @@ var ResourceTypes = map[string]string{
 	"AWS::EFS::FileSystem.FileSystemPolicy":    AwsEfsFileSystemPolicy,
 	"AWS::SecretsManager::ResourcePolicy":      AwsSecretsManagerResourcePolicy,
 	"AWS::ECS::TaskDefinition":                 AwsEcsTaskDefinition,
+	"AWS::S3::Bucket":                          AwsS3Bucket,
+	"AWS::S3::Bucket.PublicAccessBlock":        AwsS3BucketPublicAccessBlock,
+	"AWS::S3::BucketPolicy":                    AwsS3BucketPolicy,
 }

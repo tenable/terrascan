@@ -1,0 +1,30 @@
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Metadata:
+      runterrascan.io/skip: |
+        [{"rule": "AC_AWS_047", "comment": "reason to skip the rule"}]
+    Properties:
+      BucketName: DOC-EXAMPLE-BUCKET
+      AccessControl: Public
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+            ServerSideEncryptionByDefault:
+              KMSMasterKeyID: test
+              SSEAlgorithm: AES
+  SampleBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref DOC-EXAMPLE-BUCKET
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: *
+            Principal: '*'
+
