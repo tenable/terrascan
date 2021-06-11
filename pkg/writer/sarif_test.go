@@ -2,15 +2,17 @@ package writer
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/accurics/terrascan/pkg/version"
 )
 
-const expectedSarifOutput1 = `{
+var expectedSarifOutput1 = fmt.Sprintf(`{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
           "runs": [
@@ -18,7 +20,7 @@ const expectedSarifOutput1 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.7.0",
+                  "version": "%s",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
@@ -64,9 +66,9 @@ const expectedSarifOutput1 = `{
               ]
             }
           ]
-        }`
+        }`, version.GetNumeric())
 
-const expectedSarifOutput2 = `{
+var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
           "runs": [
@@ -74,16 +76,16 @@ const expectedSarifOutput2 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.7.0",
+                  "version": "%s",
                   "informationUri": "https://github.com/accurics/terrascan"
                 }
               },
               "results": []
             }
           ]
-        }`
+        }`, version.GetNumeric())
 
-const expectedSarifOutput3 = `{
+var expectedSarifOutput3 = fmt.Sprintf(`{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
           "runs": [
@@ -91,7 +93,7 @@ const expectedSarifOutput3 = `{
               "tool": {
                 "driver": {
                   "name": "terrascan",
-                  "version": "1.7.0",
+                  "version": "%s",
                   "informationUri": "https://github.com/accurics/terrascan",
                   "rules": [
                     {
@@ -111,7 +113,7 @@ const expectedSarifOutput3 = `{
               "results": []
             }
           ]
-        }`
+        }`, version.GetNumeric())
 
 func TestSarifWriter(t *testing.T) {
 
