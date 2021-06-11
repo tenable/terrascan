@@ -26,4 +26,9 @@ resourceLockExist(registry, registry_input) = exists {
     registry_name := sprintf("azurerm_container_registry.%s", [registry.name])
 	resource_lock_exist_set[registry_name]
     exists = true
+} else = exists {
+  # hcl inspection
+    resource_lock_exist_set := { resource_lock_id | resource_lock_id := split(input.azurerm_management_lock[i].config.scope, ".")[1] }
+    resource_lock_exist_set[registry.name]
+    exists = true
 }
