@@ -48,7 +48,7 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
                     {
                       "physicalLocation": {
                         "artifactLocation": {
-                          "uri": "file:///Users/dev-gaur/go/src/github.com/accurics/terrascan/pkg/writer/test/modules/m1/main.tf"
+                          "uri": "%s"
                         },
                         "region": {
                           "startLine": 20
@@ -66,7 +66,7 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
               ]
             }
           ]
-        }`, version.GetNumeric())
+        }`, version.GetNumeric(), fmt.Sprintf("file://%s", getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)))
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",

@@ -67,13 +67,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		rule := run.AddRule(string(violation.RuleID)).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
-		absFilePath := outputData.Summary.ResourcePath
-		if !filepath.IsAbs(absFilePath) {
-			absFilePath, _ = filepath.Abs(absFilePath)
-		}
-		if utils.GetFileMode(absFilePath).IsDir() {
-			absFilePath = filepath.Join(absFilePath, violation.File)
-		}
+		absFilePath := getAbsoluteFilePath(outputData.Summary.ResourcePath, violation.File)
 
 		location := sarif.NewLocation().
 			WithPhysicalLocation(sarif.NewPhysicalLocation().
@@ -102,4 +96,14 @@ func getSarifLevel(severity string) string {
 	m["high"] = "error"
 
 	return m[strings.ToLower(severity)]
+}
+
+func getAbsoluteFilePath(resourcePath, filePath string) string {
+	if !filepath.IsAbs(resourcePath) {
+		resourcePath, _ = filepath.Abs(resourcePath)
+	}
+	if utils.GetFileMode(resourcePath).IsDir() {
+		return filepath.Join(resourcePath, filePath)
+	}
+	return resourcePath
 }
