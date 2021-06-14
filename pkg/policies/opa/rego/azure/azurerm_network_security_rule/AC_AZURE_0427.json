@@ -1,0 +1,18 @@
+{
+	"name": "networkPort5500ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort5500ExposedToInternetAz",
+		"portNumber": 5500,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure VNC Listener (Tcp:5500) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0427",
+	"id": "AC_AZURE_0427",
+	"category": "Infrastructure Security",
+	"version": 2
+}

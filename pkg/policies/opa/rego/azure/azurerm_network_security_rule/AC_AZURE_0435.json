@@ -1,0 +1,18 @@
+{
+	"name": "networkPort4505ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort4505ExposedToPublicAz",
+		"portNumber": 4505,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SaltStack Master (Tcp:4505) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0435",
+	"id": "AC_AZURE_0435",
+	"category": "Infrastructure Security",
+	"version": 2
+}

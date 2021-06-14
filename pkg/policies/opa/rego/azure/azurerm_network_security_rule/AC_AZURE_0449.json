@@ -1,0 +1,18 @@
+{
+	"name": "networkPort8140ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort8140ExposedToPrivateAz",
+		"portNumber": 8140,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Puppet Master (Tcp:8140) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0449",
+	"id": "AC_AZURE_0449",
+	"category": "Infrastructure Security",
+	"version": 2
+}

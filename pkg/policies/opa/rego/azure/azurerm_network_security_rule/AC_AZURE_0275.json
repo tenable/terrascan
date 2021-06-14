@@ -1,0 +1,18 @@
+{
+	"name": "networkPort7001ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort7001ExposedToPrivateAz",
+		"portNumber": 7001,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Cassandra (Tcp:7001) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0275",
+	"id": "AC_AZURE_0275",
+	"category": "Infrastructure Security",
+	"version": 2
+}

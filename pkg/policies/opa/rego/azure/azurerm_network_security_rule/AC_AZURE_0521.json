@@ -1,0 +1,18 @@
+{
+	"name": "networkPort636ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort636ExposedToPrivateAz",
+		"portNumber": 636,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure LDAP SSL (Tcp:636) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0521",
+	"id": "AC_AZURE_0521",
+	"category": "Infrastructure Security",
+	"version": 2
+}

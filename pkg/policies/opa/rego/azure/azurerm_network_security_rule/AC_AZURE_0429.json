@@ -1,0 +1,18 @@
+{
+	"name": "networkPort23ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort23ExposedToPublicAz",
+		"portNumber": 23,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Telnet (Tcp:23) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0429",
+	"id": "AC_AZURE_0429",
+	"category": "Infrastructure Security",
+	"version": 2
+}

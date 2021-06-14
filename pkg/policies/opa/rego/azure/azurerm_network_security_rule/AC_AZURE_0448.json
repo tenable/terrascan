@@ -1,0 +1,18 @@
+{
+	"name": "networkPort25ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort25ExposedToInternetAz",
+		"portNumber": 25,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure SMTP (Tcp:25) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0448",
+	"id": "AC_AZURE_0448",
+	"category": "Infrastructure Security",
+	"version": 2
+}
