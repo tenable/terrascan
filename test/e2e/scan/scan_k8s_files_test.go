@@ -17,6 +17,7 @@
 package scan_test
 
 import (
+	"github.com/accurics/terrascan/pkg/version"
 	"path/filepath"
 
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
@@ -77,7 +78,8 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-d", iacDir, "-o", "sarif"}
-					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_sarif.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacDir, "config.yaml"))
+					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 
@@ -147,7 +149,8 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-f", iacFile, "-o", "sarif"}
-					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_sarif.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacFile, "config.yaml"))
+					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 

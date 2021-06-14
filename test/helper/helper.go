@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"sort"
@@ -184,6 +185,31 @@ func CompareActualWithGoldenJSON(session *gexec.Session, goldenFileAbsPath strin
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
 	CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
+}
+
+// CompareActualWithGoldenJSONString compares actual data with golden json string passed as parameter
+func CompareActualWithGoldenJSONString(session *gexec.Session, golden string, isStdOut bool) {
+	goldenBytes := []byte(golden)
+
+	var sessionBytes []byte
+
+	if isStdOut {
+		sessionBytes = session.Wait().Out.Contents()
+	} else {
+		sessionBytes = session.Wait().Err.Contents()
+	}
+
+	sessionBytes = bytes.TrimSpace(sessionBytes)
+	goldenBytes = bytes.TrimSpace(goldenBytes)
+
+	var sessionEngineOutput, goldenDataEngineOutput policy.EngineOutput
+
+	err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+	err = json.Unmarshal(goldenBytes, &goldenDataEngineOutput)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+
+	CompareSummaryAndViolations(sessionEngineOutput, goldenDataEngineOutput)
 }
 
 // CompareActualWithGoldenYAML compares actual data with contents of golden file passed as parameter
@@ -351,4 +377,15 @@ func removeFileAndRoothFromViolations(v violations) {
 		violation.File = ""
 		violation.PlanRoot = ""
 	}
+}
+
+// GetAbsoluteFilePathForSarif helper for sarif path
+func GetAbsoluteFilePathForSarif(resourcePath, filePath string) string {
+	if !filepath.IsAbs(resourcePath) {
+		resourcePath, _ = filepath.Abs(resourcePath)
+	}
+	if utils.GetFileMode(resourcePath).IsDir() {
+		return filepath.Join(resourcePath, filePath)
+	}
+	return resourcePath
 }

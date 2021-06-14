@@ -17,6 +17,7 @@
 package scan
 
 import (
+	"fmt"
 	"io"
 	"path/filepath"
 
@@ -55,6 +56,15 @@ func RunScanAndAssertJSONOutput(terrascanBinaryPath, relGoldenFilePath string, e
 	helper.CompareActualWithGoldenJSON(session, goldenFileAbsPath, isStdOut)
 }
 
+// RunScanAndAssertJSONOutputString runs the scan command with supplied paramters and compares actual and golden output
+func RunScanAndAssertJSONOutputString(terrascanBinaryPath, goldenString string, exitCode int, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
+	argList := []string{ScanCommand}
+	argList = append(argList, args...)
+	session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, argList...)
+	gomega.Eventually(session, ScanTimeout).Should(gexec.Exit(exitCode))
+	helper.CompareActualWithGoldenJSONString(session, goldenString, isStdOut)
+}
+
 // RunScanAndAssertYAMLOutput runs the scan command with supplied paramters and compares actual and golden output
 func RunScanAndAssertYAMLOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
@@ -84,3 +94,123 @@ func RunScanCommand(terrascanBinaryPath, relGoldenFilePath string, exitCode int,
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	return session, goldenFileAbsPath
 }
+
+// GetSarifGoldenString gives out golden sarif format string
+func GetSarifGoldenString(template, terrascanVersion string, absfilepath string) string {
+	return fmt.Sprintf(template, terrascanVersion, absfilepath)
+}
+
+// SarifTemplateAWSAMIViolation string
+const SarifTemplateAWSAMIViolation = `{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "terrascan",
+          "version": "%s",
+          "informationUri": "https://github.com/accurics/terrascan",
+          "rules": [
+            {
+              "id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+              "name": "amiNotEncrypted",
+              "shortDescription": {
+                "text": "Enable AWS AMI Encryption"
+              },
+              "properties": {
+                "category": "Encryption \u0026 KeyManagement",
+                "severity": "MEDIUM"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+          "level": "warning",
+          "message": {
+            "text": "Enable AWS AMI Encryption"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "%s"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "awsAmiEncrypted",
+                  "kind": "aws_ami"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`
+
+// SarifTemplateK8sTLSViolation string template
+const SarifTemplateK8sTLSViolation = `{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "terrascan",
+          "version": "%s",
+          "informationUri": "https://github.com/accurics/terrascan",
+          "rules": [
+            {
+              "id": "AC-K8-NS-IN-H-0020",
+              "name": "noHttps",
+              "shortDescription": {
+                "text": "TLS disabled can affect the confidentiality of the data in transit"
+              },
+              "properties": {
+                "category": "Network Security",
+                "severity": "HIGH"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AC-K8-NS-IN-H-0020",
+          "level": "error",
+          "message": {
+            "text": "TLS disabled can affect the confidentiality of the data in transit"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "%s"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "ingress-demo-disallowed",
+                  "kind": "kubernetes_ingress"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+`
