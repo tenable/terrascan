@@ -18,6 +18,7 @@ package runtime
 
 import (
 	"fmt"
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -217,7 +218,7 @@ func TestInit(t *testing.T) {
 				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv14.TfV14{}},
+			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv15.TfV15{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -228,7 +229,7 @@ func TestInit(t *testing.T) {
 				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
+			wantIacProvider: []iacProvider.IacProvider{&tfv15.TfV15{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{

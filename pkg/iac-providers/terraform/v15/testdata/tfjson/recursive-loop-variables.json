@@ -1,0 +1,17 @@
+{
+  "null_resource": [
+    {
+      "id": "null_resource.example",
+      "name": "example",
+      "module_name": "dummy",
+      "source": "dummy/main.tf",
+      "plan_root": "./",
+      "line": 5,
+      "type": "null_resource",
+      "config": {
+        "container_definitions": "${templatefile(\n    ${path.module}/${var.filename},\n    {\n      foo = \"bar\"\n    }\n  )}"
+      },
+      "skip_rules": null
+    }
+  ]
+}
