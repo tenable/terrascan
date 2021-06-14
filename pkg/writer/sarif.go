@@ -19,6 +19,7 @@ package writer
 import (
 	"fmt"
 	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
 	"github.com/owenrumney/go-sarif/sarif"
 	"io"
@@ -56,7 +57,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		run.AddRule(string(passedRule.RuleID)).
 			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
 	}
-	resourcePath := outputData.Summary.ResourcePath
+
 	// for each result add the rule, location and result to the report
 	for _, violation := range outputData.Violations {
 		m := make(map[string]string)
@@ -66,9 +67,12 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		rule := run.AddRule(string(violation.RuleID)).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
-		absFilePath := violation.File
-		if !filepath.IsAbs(violation.File) {
-			absFilePath = filepath.Join(resourcePath, violation.File)
+		absFilePath := outputData.Summary.ResourcePath
+		if !filepath.IsAbs(absFilePath) {
+			absFilePath, _ = filepath.Abs(absFilePath)
+		}
+		if utils.GetFileMode(absFilePath).IsDir() {
+			absFilePath = filepath.Join(absFilePath, violation.File)
 		}
 
 		location := sarif.NewLocation().

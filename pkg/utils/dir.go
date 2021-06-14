@@ -30,7 +30,7 @@ func GenerateTempDir() string {
 func IsDirExists(dir string) bool {
 	_, err := os.Stat(dir)
 	if os.IsNotExist(err) {
-		zap.S().Debug("Directory %s does not exist.", dir)
+		zap.S().Errorf("Directory %s does not exist.", dir)
 		return false
 	}
 	return true

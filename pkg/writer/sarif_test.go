@@ -48,7 +48,7 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
                     {
                       "physicalLocation": {
                         "artifactLocation": {
-                          "uri": "file://test/modules/m1/main.tf"
+                          "uri": "file:///Users/dev-gaur/go/src/github.com/accurics/terrascan/pkg/writer/test/modules/m1/main.tf"
                         },
                         "region": {
                           "startLine": 20
