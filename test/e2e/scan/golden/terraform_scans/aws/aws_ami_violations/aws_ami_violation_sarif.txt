@@ -1,0 +1,55 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "terrascan",
+          "version": "1.7.0",
+          "informationUri": "https://github.com/accurics/terrascan",
+          "rules": [
+            {
+              "id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+              "name": "amiNotEncrypted",
+              "shortDescription": {
+                "text": "Enable AWS AMI Encryption"
+              },
+              "properties": {
+                "category": "Encryption \u0026 KeyManagement",
+                "severity": "MEDIUM"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+          "level": "warning",
+          "message": {
+            "text": "Enable AWS AMI Encryption"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///Users/dev-gaur/go/src/github.com/accurics/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation/main.tf"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "awsAmiEncrypted",
+                  "kind": "aws_ami"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

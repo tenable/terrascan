@@ -117,6 +117,13 @@ var _ = Describe("Scan is run for terraform files", func() {
 				})
 			})
 
+			When("output type is sarif", func() {
+				It("should display violations in sarif format", func() {
+					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "sarif"}
+					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_sarif.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				})
+			})
+
 			When("output type is json and no iac type is specified", func() {
 				Context("when iac type is not specified and a directory is specified, it will be scanned will all iac providers", func() {
 					It("should display violations in json format, and should have iac type as 'all'", func() {
