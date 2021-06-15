@@ -1,6 +1,8 @@
 {
 	"name": "networkPort2484ExposedToPublicUAz",
 	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort2484ExposedToPublicUAz",
