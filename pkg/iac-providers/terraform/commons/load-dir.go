@@ -117,6 +117,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 
+		// Get the downloader chache
+		remoteURLMapping := t.remoteDownloader.GetModuleInstalledCache()
+
 		if diags.HasErrors() {
 			// log a warn message in this case because there are errors in
 			// loading the config dir, and continue with other directories
@@ -167,11 +170,21 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				// resolve references
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
-				// source file path
-				resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
-				if err != nil {
-					t.addError(err.Error(), dir)
-					continue
+				// Get source path if remote module used
+				remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
+				if remoteURL != "" {
+					rel, err := filepath.Rel(tempDir, resourceConfig.Source)
+					if err != nil {
+						zap.S().Debugf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
+					}
+					resourceConfig.Source = filepath.Join(filepath.Clean(remoteURL), rel)
+				} else {
+					// source file path
+					resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
+					if err != nil {
+						t.addError(err.Error(), dir)
+						continue
+					}
 				}
 
 				// tf plan directory relative path
@@ -232,6 +245,9 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
+	// Get the downloader chache
+	remoteURLMapping := t.remoteDownloader.GetModuleInstalledCache()
+
 	if diags.HasErrors() {
 		// log a warn message in this case because there are errors in
 		// loading the config dir, and continue with other directories
@@ -280,11 +296,21 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
-			// source file path
-			resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
-			if err != nil {
-				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
-				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
+			// Get source path if remote module used
+			remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
+			if remoteURL != "" {
+				rel, err := filepath.Rel(tempDir, resourceConfig.Source)
+				if err != nil {
+					zap.S().Debugf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
+				}
+				resourceConfig.Source = filepath.Join(filepath.Clean(remoteURL), rel)
+			} else {
+				// source file path
+				resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
+				if err != nil {
+					errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
+					return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
+				}
 			}
 
 			// add tf plan directory relative path
@@ -409,4 +435,20 @@ func (m *ModuleConfig) getChildConfigs() []*ModuleConfig {
 		allConfigs = append(allConfigs, childModuleConfig)
 	}
 	return allConfigs
+}
+
+// GetRemoteLocation check wether the source belongs to the remote module present in downloader cache.
+// cache has key = remoteURL and value = tempDir
+func GetRemoteLocation(cache map[string]string, resourcePath string) (remoteURL, tmpDir string) {
+	dir := filepath.Dir(resourcePath)
+	for k, v := range cache {
+		// this condition will never arise added for safe check
+		if len(v) > 0 {
+			// check dir length is greater than tempDir and file belongs to the same tempDir
+			if len(dir) >= len(v) && v == dir[:len(v)] {
+				return k, v
+			}
+		}
+	}
+	return
 }
