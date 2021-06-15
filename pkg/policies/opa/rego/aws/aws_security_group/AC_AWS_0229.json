@@ -1,0 +1,20 @@
+{
+	"name": "port443OpenToInternet",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port443OpenToInternet",
+		"portNumber": 443,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Security Groups - Unrestricted Specific Ports - (HTTPS,443)",
+	"reference_id": "AC_AWS_0229",
+	"id": "AC_AWS_0229",
+	"category": "Infrastructure Security",
+	"version": 2
+}

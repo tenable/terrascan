@@ -1,0 +1,20 @@
+{
+	"name": "networkPort2484ExposedToprivate",
+	"file": "networkPortExposedToPrivate.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort2484ExposedToprivate",
+		"portNumber": 2484,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure OracleDBSSL' (TCP,2484) is not exposed to private hosts more than 32",
+	"reference_id": "AC_AWS_0349",
+	"id": "AC_AWS_0349",
+	"category": "Infrastructure Security",
+	"version": 2
+}

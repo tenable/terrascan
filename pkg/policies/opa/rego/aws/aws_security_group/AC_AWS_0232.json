@@ -1,0 +1,17 @@
+{
+	"name": "defaultSGNotRestrictsAllTraffic",
+	"file": "defaultSGNotRestrictsAllTraffic.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"name": "defaultSGNotRestrictsAllTraffic",
+		"prefix": "",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure no default security groups are used as they allow ingress from 0.0.0.0/0 to ALL ports and protocols",
+	"reference_id": "AC_AWS_0232",
+	"id": "AC_AWS_0232",
+	"category": "Infrastructure Security",
+	"version": 2
+}

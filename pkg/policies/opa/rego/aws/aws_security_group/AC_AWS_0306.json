@@ -1,0 +1,20 @@
+{
+	"name": "port3000AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port3000AlbNetworkPortSecurityPublicScope",
+		"portNumber": 3000,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Prevalent known internal port (TCP,3000) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0306",
+	"id": "AC_AWS_0306",
+	"category": "Infrastructure Security",
+	"version": 2
+}

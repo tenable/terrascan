@@ -1,0 +1,20 @@
+{
+	"name": "port5432AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port5432AlbNetworkPortSecurity",
+		"portNumber": 5432,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Postgres SQL (TCP,5432)",
+	"reference_id": "AC_AWS_0262",
+	"id": "AC_AWS_0262",
+	"category": "Infrastructure Security",
+	"version": 2
+}

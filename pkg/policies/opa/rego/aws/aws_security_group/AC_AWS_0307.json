@@ -1,0 +1,20 @@
+{
+	"name": "port8140AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port8140AlbNetworkPortSecurityPublicScope",
+		"portNumber": 8140,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Puppet Master (TCP:8140) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0307",
+	"id": "AC_AWS_0307",
+	"category": "Infrastructure Security",
+	"version": 2
+}

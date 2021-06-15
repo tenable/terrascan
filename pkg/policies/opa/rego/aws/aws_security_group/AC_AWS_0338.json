@@ -1,0 +1,20 @@
+{
+	"name": "networkPort7001ExposedToprivate",
+	"file": "networkPortExposedToPrivate.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort7001ExposedToprivate",
+		"portNumber": 7001,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Cassandra' (TCP,7001) is not exposed to private hosts more than 32",
+	"reference_id": "AC_AWS_0338",
+	"id": "AC_AWS_0338",
+	"category": "Infrastructure Security",
+	"version": 2
+}

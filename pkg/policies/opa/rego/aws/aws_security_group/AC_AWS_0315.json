@@ -1,0 +1,20 @@
+{
+	"name": "port445AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port445AlbNetworkPortSecurityPublicScope",
+		"portNumber": 445,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure CIFS for file/printer (TCP,445) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0315",
+	"id": "AC_AWS_0315",
+	"category": "Infrastructure Security",
+	"version": 2
+}

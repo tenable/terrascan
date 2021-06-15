@@ -31,31 +31,15 @@ getretval(id, traverse, attribute, expected, actual) = retval {
         "Attribute": attribute,
         "AttributeDataType": "list",
         "Expected": expected,
-        "Actual": actual
+        "Actual": actual,
     }
 }
 
 checkConfig(config) = expected {
-    checkScopeIsPublic(config.cidr_blocks[_])
-    checkProtocol(config.protocol, "{{.protocol}}")
     checkPort(config, {{.portNumber}})
-    expected := [ item | item := validate_cidr(config.cidr_blocks[_]) ]
+    checkProtocol(config.protocol, "{{.protocol}}")
+    expected := [item | item := checkScopeIsPrivate(config.cidr_blocks[_])]
     expected != []
-}
-
-scopeIsPrivate(scope) {
-    private_ips = ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
-    net.cidr_contains(private_ips[_], scope)
-}
-
-checkScopeIsPublic(val) {
-    not scopeIsPrivate(val)
-    val != "0.0.0.0/0"
-}
-
-checkProtocol(configProtocol, protocol) {
-    protocols = [protocol, "-1"]
-    upper(configProtocol) == upper(protocols[_])
 }
 
 checkPort(config, port) {
@@ -66,10 +50,19 @@ checkPort(config, port) {
     config.to_port == port
 }
 
-validate_cidr(cidr) = "{{.defaultValue}}" {
-    checkScopeIsPublic(cidr)
+checkProtocol(configProtocol, protocol) {
+    protocols = [protocol, "-1"]
+    upper(configProtocol) == upper(protocols[_])
 }
 
-validate_cidr(cidr) = cidr {
-    not checkScopeIsPublic(cidr)
+checkScopeIsPrivate(ingress_cidr) = value {
+    glob.match("[0-9]*.[0-9]*.[0-9]*.*", [], ingress_cidr)
+
+    private_ips = ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
+    net.cidr_contains(private_ips[_], ingress_cidr)
+
+    hosts = split(ingress_cidr, "/")
+    to_number(hosts[1]) < 27
+
+    value := "{{.defaultValue}}"
 }

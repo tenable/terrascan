@@ -1,0 +1,18 @@
+{
+	"name": "unrestrictedIngressAccess",
+	"file": "unrestrictedIngressAccess.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "unrestrictedIngressAccess",
+		"prefix": "",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure no security groups allow ingress from 0.0.0.0/0 to ALL ports and protocols",
+	"reference_id": "AC_AWS_0231",
+	"id": "AC_AWS_0231",
+	"category": "Infrastructure Security",
+	"version": 2
+}

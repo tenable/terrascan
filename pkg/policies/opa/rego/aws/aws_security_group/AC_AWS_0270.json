@@ -1,0 +1,20 @@
+{
+	"name": "port1521AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port1521AlbNetworkPortSecurity",
+		"portNumber": 1521,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Oracle Database Server (TCP,1521)",
+	"reference_id": "AC_AWS_0270",
+	"id": "AC_AWS_0270",
+	"category": "Infrastructure Security",
+	"version": 2
+}

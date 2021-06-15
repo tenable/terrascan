@@ -1,0 +1,20 @@
+{
+	"name": "port4505AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port4505AlbNetworkPortSecurityPublicScope",
+		"portNumber": 4505,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SaltStack Master (TCP,4505) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0311",
+	"id": "AC_AWS_0311",
+	"category": "Infrastructure Security",
+	"version": 2
+}

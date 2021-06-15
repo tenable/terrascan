@@ -1,0 +1,20 @@
+{
+	"name": "port80OpenToInternet",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port80OpenToInternet",
+		"portNumber": 80,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - (HTTP,80)",
+	"reference_id": "AC_AWS_0228",
+	"id": "AC_AWS_0228",
+	"category": "Infrastructure Security",
+	"version": 2
+}

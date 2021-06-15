@@ -1,0 +1,20 @@
+{
+	"name": "port2484UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port2484UdpAlbNetworkPortSecurity",
+		"portNumber": 2484,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Oracle DB SSL (UDP,2484)",
+	"reference_id": "AC_AWS_0261",
+	"id": "AC_AWS_0261",
+	"category": "Infrastructure Security",
+	"version": 2
+}

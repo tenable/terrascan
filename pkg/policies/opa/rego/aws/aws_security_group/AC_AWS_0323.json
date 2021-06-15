@@ -1,0 +1,20 @@
+{
+	"name": "networkPort3389ExposedToprivate",
+	"file": "networkPortExposedToPrivate.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort3389ExposedToprivate",
+		"portNumber": 3389,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Security Groups Unrestricted Specific Ports remote desktop port (TCP,3389) is not exposed to private hosts more than 32",
+	"reference_id": "AC_AWS_0323",
+	"id": "AC_AWS_0323",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "port3000AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port3000AlbNetworkPortSecurity",
+		"portNumber": 3000,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Prevalent known internal port (TCP,3000)",
+	"reference_id": "AC_AWS_0264",
+	"id": "AC_AWS_0264",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,6 +1,6 @@
 package accurics
 
-{{.prefix}}defaultSGNotRestrictsAllTraffic[retVal] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     security_group = input.aws_security_group[_]
 
     disabled = true

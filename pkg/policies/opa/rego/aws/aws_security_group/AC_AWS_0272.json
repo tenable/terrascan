@@ -1,0 +1,20 @@
+{
+	"name": "port25AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port25AlbNetworkPortSecurity",
+		"portNumber": 25,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - SMTP (TCP,25)",
+	"reference_id": "AC_AWS_0272",
+	"id": "AC_AWS_0272",
+	"category": "Infrastructure Security",
+	"version": 2
+}

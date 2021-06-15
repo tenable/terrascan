@@ -1,0 +1,17 @@
+{
+	"name": "portWideOpenToPublic",
+	"file": "portWideOpenToPublic.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"name": "portWideOpenToPublic",
+		"prefix": "",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure no security groups is wide open to public, that is, allows traffic from 0.0.0.0/0 to ALL ports and protocols",
+	"reference_id": "AC_AWS_0275",
+	"id": "AC_AWS_0275",
+	"category": "Infrastructure Security",
+	"version": 2
+}
