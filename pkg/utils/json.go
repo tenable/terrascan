@@ -73,3 +73,23 @@ func AreEqualJSON(s1, s2 string) (bool, error) {
 
 	return reflect.DeepEqual(o1, o2), nil
 }
+
+// AreEqualJSONBytes validate if two json byte arrays are equal
+func AreEqualJSONBytes(b1, b2 []byte) (bool, error) {
+	var o1 interface{}
+	var o2 interface{}
+
+	errmsg := "error json unmarshalling bytes: %s. error: %v"
+
+	var err error
+	err = json.Unmarshal(b1, &o1)
+	if err != nil {
+		return false, fmt.Errorf(errmsg, b1, err.Error())
+	}
+	err = json.Unmarshal(b2, &o2)
+	if err != nil{
+		return false, fmt.Errorf(errmsg, b2, err.Error())
+	}
+
+	return reflect.DeepEqual(o1, o2), nil
+}

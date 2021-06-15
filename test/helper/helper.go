@@ -202,14 +202,7 @@ func CompareActualWithGoldenJSONString(session *gexec.Session, golden string, is
 	sessionBytes = bytes.TrimSpace(sessionBytes)
 	goldenBytes = bytes.TrimSpace(goldenBytes)
 
-	var sessionEngineOutput, goldenDataEngineOutput policy.EngineOutput
-
-	err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
-	gomega.Expect(err).NotTo(gomega.HaveOccurred())
-	err = json.Unmarshal(goldenBytes, &goldenDataEngineOutput)
-	gomega.Expect(err).NotTo(gomega.HaveOccurred())
-
-	CompareSummaryAndViolations(sessionEngineOutput, goldenDataEngineOutput)
+	gomega.Expect(utils.AreEqualJSONBytes(sessionBytes, goldenBytes)).To(gomega.BeTrue())
 }
 
 // CompareActualWithGoldenYAML compares actual data with contents of golden file passed as parameter

@@ -97,7 +97,7 @@ func RunScanCommand(terrascanBinaryPath, relGoldenFilePath string, exitCode int,
 
 // GetSarifGoldenString gives out golden sarif format string
 func GetSarifGoldenString(template, terrascanVersion string, absfilepath string) string {
-	return fmt.Sprintf(template, terrascanVersion, absfilepath)
+	return fmt.Sprintf(template, terrascanVersion, fmt.Sprintf("file://%s", absfilepath))
 }
 
 // SarifTemplateAWSAMIViolation string

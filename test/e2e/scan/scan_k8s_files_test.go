@@ -125,8 +125,8 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 				It("should scan will all iac and display violations", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-f", iacFile}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-					// exit code is 3 because iac files in directory has violations
-					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeThree)
+					// exit code is 1 because iac file is expected to be of terraform iac type by default, not k8s yaml
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeOne)
 				})
 			})
 		})

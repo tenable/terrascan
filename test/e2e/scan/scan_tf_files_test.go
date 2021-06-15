@@ -121,7 +121,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 			When("output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "sarif"}
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacDir, "main.tf"))
+					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateAWSAMIViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacDir, "main.tf"))
 					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
 				})
 			})
