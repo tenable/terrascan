@@ -17,6 +17,7 @@
 package commons
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -170,21 +171,11 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				// resolve references
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
-				// Get source path if remote module used
-				remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
-				if remoteURL != "" {
-					rel, err := filepath.Rel(tempDir, resourceConfig.Source)
-					if err != nil {
-						zap.S().Debugf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
-					}
-					resourceConfig.Source = filepath.Join(filepath.Clean(remoteURL), rel)
-				} else {
-					// source file path
-					resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
-					if err != nil {
-						t.addError(err.Error(), dir)
-						continue
-					}
+				// source file path
+				resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
+				if err != nil {
+					t.addError(err.Error(), dir)
+					continue
 				}
 
 				// tf plan directory relative path
@@ -296,21 +287,11 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
-			// Get source path if remote module used
-			remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
-			if remoteURL != "" {
-				rel, err := filepath.Rel(tempDir, resourceConfig.Source)
-				if err != nil {
-					zap.S().Debugf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
-				}
-				resourceConfig.Source = filepath.Join(filepath.Clean(remoteURL), rel)
-			} else {
-				// source file path
-				resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
-				if err != nil {
-					errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
-					return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
-				}
+			// source file path
+			resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
+			if err != nil {
+				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
+				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 			}
 
 			// add tf plan directory relative path
@@ -451,4 +432,30 @@ func GetRemoteLocation(cache map[string]string, resourcePath string) (remoteURL,
 		}
 	}
 	return
+}
+
+// GetConfigSource - get the source path for the resource
+func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.ResourceConfig, absRootDir string) (string, error) {
+	var (
+		source string
+		err    error
+		rel    string
+	)
+	// Get source path if remote module used
+	remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
+	if remoteURL != "" {
+		rel, err = filepath.Rel(tempDir, resourceConfig.Source)
+		if err != nil {
+			errMessage := fmt.Sprintf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
+			return source, errors.New(errMessage)
+		}
+		source = filepath.Join(filepath.Clean(remoteURL), rel)
+	} else {
+		// source file path
+		source, err = filepath.Rel(absRootDir, resourceConfig.Source)
+		if err != nil {
+			return source, err
+		}
+	}
+	return source, nil
 }
