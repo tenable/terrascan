@@ -87,7 +87,7 @@ func AreEqualJSONBytes(b1, b2 []byte) (bool, error) {
 		return false, fmt.Errorf(errmsg, b1, err.Error())
 	}
 	err = json.Unmarshal(b2, &o2)
-	if err != nil{
+	if err != nil {
 		return false, fmt.Errorf(errmsg, b2, err.Error())
 	}
 
