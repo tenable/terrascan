@@ -7,6 +7,7 @@
     "severity": "Medium",
     "description": "GKE Control Plane is exposed to few public IP addresses using master-authorized-network-config",
     "reference_id": "AC-GC-IS-CC-M-0367",
+    "id": "AC_GCP_0292",
     "category": "Infrastructure Security",
     "version": 1
 }
