@@ -1,0 +1,19 @@
+{
+	"name": "networkPort2382ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort2382ExposedToPublicGCP",
+		"portNumber": 2382,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SQL Server Analysis Service browser (TCP:2382) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0052",
+	"id": "AC_GCP_0052",
+	"category": "Infrastructure Security",
+	"version": 2
+}

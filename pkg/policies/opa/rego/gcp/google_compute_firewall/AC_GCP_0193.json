@@ -1,0 +1,19 @@
+{
+	"name": "networkPort7199ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort7199ExposedToPublicGCP",
+		"portNumber": 7199,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Cassandra Monitoring (TCP:7199) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0193",
+	"id": "AC_GCP_0193",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort161ExposedToPublicUGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort161ExposedToPublicUGCP",
+		"portNumber": 161,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SNMP (UDP:161) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0088",
+	"id": "AC_GCP_0088",
+	"category": "Infrastructure Security",
+	"version": 2
+}

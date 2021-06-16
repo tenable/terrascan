@@ -1,0 +1,19 @@
+{
+	"name": "networkPort11211ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort11211ExposedToInternetGCP",
+		"portNumber": 11211,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Unencrypted Memcached Instances (TCP:11211) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0176",
+	"id": "AC_GCP_0176",
+	"category": "Infrastructure Security",
+	"version": 2
+}

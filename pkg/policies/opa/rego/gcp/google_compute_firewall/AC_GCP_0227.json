@@ -1,0 +1,19 @@
+{
+	"name": "networkPort20ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort20ExposedToPublicGCP",
+		"portNumber": 20,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SSH (TCP:20) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0227",
+	"id": "AC_GCP_0227",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort9160ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort9160ExposedToPublicGCP",
+		"portNumber": 9160,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Cassandra Thrift (TCP:9160) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0184",
+	"id": "AC_GCP_0184",
+	"category": "Infrastructure Security",
+	"version": 2
+}

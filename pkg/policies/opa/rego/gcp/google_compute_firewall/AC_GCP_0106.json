@@ -1,0 +1,19 @@
+{
+	"name": "networkPort137ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort137ExposedToPublicGCP",
+		"portNumber": 137,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBIOS Name Service (TCP:137) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0106",
+	"id": "AC_GCP_0106",
+	"category": "Infrastructure Security",
+	"version": 2
+}

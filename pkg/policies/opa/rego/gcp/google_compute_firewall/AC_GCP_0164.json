@@ -1,0 +1,19 @@
+{
+	"name": "networkPort135ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort135ExposedToInternetGCP",
+		"portNumber": 135,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure MSSQL Debugger (TCP:135) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0164",
+	"id": "AC_GCP_0164",
+	"category": "Infrastructure Security",
+	"version": 2
+}

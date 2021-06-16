@@ -1,0 +1,19 @@
+{
+	"name": "networkPort3020ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort3020ExposedToPrivateGCP",
+		"portNumber": 3020,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure CIFS / SMB (TCP:3020) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0078",
+	"id": "AC_GCP_0078",
+	"category": "Infrastructure Security",
+	"version": 2
+}

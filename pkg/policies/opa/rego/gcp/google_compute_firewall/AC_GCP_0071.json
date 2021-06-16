@@ -1,0 +1,19 @@
+{
+	"name": "networkPort8000ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort8000ExposedToInternetGCP",
+		"portNumber": 8000,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Known internal web port (TCP:8000) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0071",
+	"id": "AC_GCP_0071",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort5900ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort5900ExposedToInternetGCP",
+		"portNumber": 5900,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure VNC Server (TCP:5900) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0062",
+	"id": "AC_GCP_0062",
+	"category": "Infrastructure Security",
+	"version": 2
+}

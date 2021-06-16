@@ -1,0 +1,19 @@
+{
+	"name": "networkPort138ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort138ExposedToPublicGCP",
+		"portNumber": 138,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBios Datagram Service (TCP:138) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0100",
+	"id": "AC_GCP_0100",
+	"category": "Infrastructure Security",
+	"version": 2
+}

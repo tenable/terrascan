@@ -1,0 +1,19 @@
+{
+	"name": "networkPort110ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort110ExposedToPrivateGCP",
+		"portNumber": 110,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure POP3 (TCP:110) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0108",
+	"id": "AC_GCP_0108",
+	"category": "Infrastructure Security",
+	"version": 2
+}

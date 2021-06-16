@@ -1,0 +1,19 @@
+{
+	"name": "networkPort11214ExposedToPrivateUGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort11214ExposedToPrivateUGCP",
+		"portNumber": 11214,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Memcached SSL (UDP:11214) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0126",
+	"id": "AC_GCP_0126",
+	"category": "Infrastructure Security",
+	"version": 2
+}

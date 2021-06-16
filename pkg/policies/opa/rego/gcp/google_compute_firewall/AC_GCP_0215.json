@@ -1,0 +1,19 @@
+{
+	"name": "networkPort389ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort389ExposedToPublicGCP",
+		"portNumber": 389,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure LDAP (TCP:389) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0215",
+	"id": "AC_GCP_0215",
+	"category": "Infrastructure Security",
+	"version": 2
+}

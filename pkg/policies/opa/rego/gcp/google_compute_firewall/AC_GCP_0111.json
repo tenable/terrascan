@@ -1,0 +1,19 @@
+{
+	"name": "networkPort25ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort25ExposedToPrivateGCP",
+		"portNumber": 25,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure SMTP (TCP:25) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0111",
+	"id": "AC_GCP_0111",
+	"category": "Infrastructure Security",
+	"version": 2
+}

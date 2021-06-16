@@ -1,0 +1,19 @@
+{
+	"name": "networkPort25ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort25ExposedToInternetGCP",
+		"portNumber": 25,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure SMTP (TCP:25) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0113",
+	"id": "AC_GCP_0113",
+	"category": "Infrastructure Security",
+	"version": 2
+}
