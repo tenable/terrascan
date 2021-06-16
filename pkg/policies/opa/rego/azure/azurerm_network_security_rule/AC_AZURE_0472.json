@@ -1,0 +1,20 @@
+{
+	"name": "networkPort139ExposedToInternetUAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort139ExposedToInternetUAz",
+		"portNumber": 139,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure NetBIOS Session Service (Udp:139) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0472",
+	"id": "AC_AZURE_0472",
+	"category": "Infrastructure Security",
+	"version": 2
+}

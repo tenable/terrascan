@@ -1,0 +1,20 @@
+{
+	"name": "networkPort2484ExposedToPublicUAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort2484ExposedToPublicUAz",
+		"portNumber": 2484,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Oracle DB SSL (Udp:2484) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0465",
+	"id": "AC_AZURE_0465",
+	"category": "Infrastructure Security",
+	"version": 2
+}

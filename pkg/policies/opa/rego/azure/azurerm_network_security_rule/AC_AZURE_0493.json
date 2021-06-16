@@ -1,0 +1,20 @@
+{
+	"name": "networkPort27018ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort27018ExposedToInternetAz",
+		"portNumber": 27018,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Mongo Web Portal (Tcp:27018) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0493",
+	"id": "AC_AZURE_0493",
+	"category": "Infrastructure Security",
+	"version": 2
+}

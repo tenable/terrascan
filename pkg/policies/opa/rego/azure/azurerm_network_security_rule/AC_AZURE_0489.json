@@ -1,0 +1,20 @@
+{
+	"name": "networkPort3306ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort3306ExposedToPublicAz",
+		"portNumber": 3306,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure MySQL (Tcp:3306) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0489",
+	"id": "AC_AZURE_0489",
+	"category": "Infrastructure Security",
+	"version": 2
+}

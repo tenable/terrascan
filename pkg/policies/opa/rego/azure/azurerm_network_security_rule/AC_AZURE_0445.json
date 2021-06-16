@@ -1,0 +1,20 @@
+{
+	"name": "networkPort161ExposedToInternetUAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort161ExposedToInternetUAz",
+		"portNumber": 161,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure SNMP (Udp:161) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0445",
+	"id": "AC_AZURE_0445",
+	"category": "Infrastructure Security",
+	"version": 2
+}

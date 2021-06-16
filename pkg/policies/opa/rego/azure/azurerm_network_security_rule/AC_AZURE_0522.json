@@ -1,0 +1,20 @@
+{
+	"name": "networkPort636ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort636ExposedToPublicAz",
+		"portNumber": 636,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure LDAP SSL (Tcp:636) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0522",
+	"id": "AC_AZURE_0522",
+	"category": "Infrastructure Security",
+	"version": 2
+}

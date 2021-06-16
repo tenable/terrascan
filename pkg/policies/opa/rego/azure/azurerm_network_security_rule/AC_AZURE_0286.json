@@ -1,0 +1,20 @@
+{
+	"name": "networkPort22ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort22ExposedToPublicAz",
+		"portNumber": 22,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SSH (Tcp:22) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0286",
+	"id": "AC_AZURE_0286",
+	"category": "Infrastructure Security",
+	"version": 2
+}

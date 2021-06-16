@@ -1,0 +1,20 @@
+{
+	"name": "networkPort135ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort135ExposedToPublicAz",
+		"portNumber": 135,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure MSSQL Debugger (Tcp:135) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0513",
+	"id": "AC_AZURE_0513",
+	"category": "Infrastructure Security",
+	"version": 2
+}

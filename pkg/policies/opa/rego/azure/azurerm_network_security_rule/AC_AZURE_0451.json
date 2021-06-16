@@ -1,0 +1,20 @@
+{
+	"name": "networkPort8140ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort8140ExposedToInternetAz",
+		"portNumber": 8140,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Puppet Master (Tcp:8140) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0451",
+	"id": "AC_AZURE_0451",
+	"category": "Infrastructure Security",
+	"version": 2
+}

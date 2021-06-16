@@ -1,0 +1,20 @@
+{
+	"name": "networkPort11215ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort11215ExposedToPublicAz",
+		"portNumber": 11215,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Memcached SSL (Tcp:11215) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0504",
+	"id": "AC_AZURE_0504",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "networkPort1433ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort1433ExposedToInternetAz",
+		"portNumber": 1433,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure MSSQL Server (Tcp:1433) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0511",
+	"id": "AC_AZURE_0511",
+	"category": "Infrastructure Security",
+	"version": 2
+}

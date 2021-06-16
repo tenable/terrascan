@@ -1,0 +1,20 @@
+{
+	"name": "networkPort27018ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort27018ExposedToPrivateAz",
+		"portNumber": 27018,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Mongo Web Portal (Tcp:27018) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0491",
+	"id": "AC_AZURE_0491",
+	"category": "Infrastructure Security",
+	"version": 2
+}

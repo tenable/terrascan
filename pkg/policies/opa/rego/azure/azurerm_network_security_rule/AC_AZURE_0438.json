@@ -1,0 +1,20 @@
+{
+	"name": "networkPort2383ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort2383ExposedToPublicAz",
+		"portNumber": 2383,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SQL Server Analysis (Tcp:2383) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0438",
+	"id": "AC_AZURE_0438",
+	"category": "Infrastructure Security",
+	"version": 2
+}

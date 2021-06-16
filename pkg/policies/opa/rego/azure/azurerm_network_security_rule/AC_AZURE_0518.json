@@ -1,0 +1,20 @@
+{
+	"name": "networkPort1434ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort1434ExposedToPrivateAz",
+		"portNumber": 1434,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure MSSQL Admin (Tcp:1434) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0518",
+	"id": "AC_AZURE_0518",
+	"category": "Infrastructure Security",
+	"version": 2
+}

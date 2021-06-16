@@ -1,0 +1,20 @@
+{
+	"name": "networkPort1434ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort1434ExposedToPublicAz",
+		"portNumber": 1434,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure MSSQL Admin (Tcp:1434) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0519",
+	"id": "AC_AZURE_0519",
+	"category": "Infrastructure Security",
+	"version": 2
+}

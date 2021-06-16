@@ -1,0 +1,20 @@
+{
+	"name": "networkPort9000ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort9000ExposedToInternetAz",
+		"portNumber": 9000,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Hadoop Name Node (Tcp:9000) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0532",
+	"id": "AC_AZURE_0532",
+	"category": "Infrastructure Security",
+	"version": 2
+}

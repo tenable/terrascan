@@ -1,0 +1,20 @@
+{
+	"name": "networkPortAllExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPortAllExposedToInternetAz",
+		"portNumber": "*",
+		"prefix": "",
+		"protocol": "*",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure that request initiated from all ports (*) for all destination ports (*) is restricted from the internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0357",
+	"id": "AC_AZURE_0357",
+	"category": "Infrastructure Security",
+	"version": 2
+}

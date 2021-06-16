@@ -1,0 +1,20 @@
+{
+	"name": "networkPort137ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort137ExposedToPublicAz",
+		"portNumber": 137,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBIOS Name Service (Tcp:137) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0486",
+	"id": "AC_AZURE_0486",
+	"category": "Infrastructure Security",
+	"version": 2
+}

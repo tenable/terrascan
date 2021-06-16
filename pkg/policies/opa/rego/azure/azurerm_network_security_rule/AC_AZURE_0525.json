@@ -1,0 +1,20 @@
+{
+	"name": "networkPort8080ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort8080ExposedToPublicAz",
+		"portNumber": 8080,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Known internal web port (Tcp:8080) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0525",
+	"id": "AC_AZURE_0525",
+	"category": "Infrastructure Security",
+	"version": 2
+}

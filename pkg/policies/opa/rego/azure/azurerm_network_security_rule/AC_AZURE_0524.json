@@ -1,0 +1,20 @@
+{
+	"name": "networkPort8080ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort8080ExposedToPrivateAz",
+		"portNumber": 8080,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Known internal web port (Tcp:8080) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0524",
+	"id": "AC_AZURE_0524",
+	"category": "Infrastructure Security",
+	"version": 2
+}

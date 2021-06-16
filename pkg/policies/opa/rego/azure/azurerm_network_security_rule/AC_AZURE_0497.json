@@ -1,0 +1,20 @@
+{
+	"name": "networkPort11215ExposedToPrivateUAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort11215ExposedToPrivateUAz",
+		"portNumber": 11215,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Memcached SSL (Udp:11215) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0497",
+	"id": "AC_AZURE_0497",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "networkPort138ExposedToPrivateUAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort138ExposedToPrivateUAz",
+		"portNumber": 138,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure NetBIOS Datagram Service (Udp:138) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0476",
+	"id": "AC_AZURE_0476",
+	"category": "Infrastructure Security",
+	"version": 2
+}

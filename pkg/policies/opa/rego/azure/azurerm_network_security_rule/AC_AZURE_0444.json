@@ -1,0 +1,20 @@
+{
+	"name": "networkPort161ExposedToPublicUAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort161ExposedToPublicUAz",
+		"portNumber": 161,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SNMP (Udp:161) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0444",
+	"id": "AC_AZURE_0444",
+	"category": "Infrastructure Security",
+	"version": 2
+}

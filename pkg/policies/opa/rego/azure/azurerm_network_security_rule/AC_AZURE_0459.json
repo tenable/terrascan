@@ -1,0 +1,20 @@
+{
+	"name": "networkPort5432ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort5432ExposedToPublicAz",
+		"portNumber": 5432,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure PostgreSQL (Tcp:5432) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0459",
+	"id": "AC_AZURE_0459",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "networkPort5432ExposedToInternetUAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort5432ExposedToInternetUAz",
+		"portNumber": 5432,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure PostgreSQL (Udp:5432) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0457",
+	"id": "AC_AZURE_0457",
+	"category": "Infrastructure Security",
+	"version": 2
+}

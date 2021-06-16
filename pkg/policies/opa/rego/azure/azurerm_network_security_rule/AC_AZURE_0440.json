@@ -1,0 +1,20 @@
+{
+	"name": "networkPort2382ExposedToPrivateAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort2382ExposedToPrivateAz",
+		"portNumber": 2382,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure SQL Server Analysis (Tcp:2382) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0440",
+	"id": "AC_AZURE_0440",
+	"category": "Infrastructure Security",
+	"version": 2
+}

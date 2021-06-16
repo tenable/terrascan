@@ -1,0 +1,20 @@
+{
+	"name": "networkPort3020ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort3020ExposedToPublicAz",
+		"portNumber": 3020,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure CIFS / SMB (Tcp:3020) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0271",
+	"id": "AC_AZURE_0271",
+	"category": "Infrastructure Security",
+	"version": 2
+}

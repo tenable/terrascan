@@ -1,0 +1,20 @@
+{
+	"name": "networkPort53ExposedToPublicUAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort53ExposedToPublicUAz",
+		"portNumber": 53,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure DNS (Udp:53) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0534",
+	"id": "AC_AZURE_0534",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "networkPort139ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort139ExposedToPublicAz",
+		"portNumber": 139,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBIOS Session Service (Tcp:139) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0474",
+	"id": "AC_AZURE_0474",
+	"category": "Infrastructure Security",
+	"version": 2
+}

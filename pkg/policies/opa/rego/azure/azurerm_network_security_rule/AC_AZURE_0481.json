@@ -1,0 +1,20 @@
+{
+	"name": "networkPort138ExposedToInternetAz",
+	"file": "networkPortExposedToInternetAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort138ExposedToInternetAz",
+		"portNumber": 138,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure NetBIOS Datagram Service (Tcp:138) is not exposed to entire internet for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0481",
+	"id": "AC_AZURE_0481",
+	"category": "Infrastructure Security",
+	"version": 2
+}

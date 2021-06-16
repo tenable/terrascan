@@ -1,0 +1,20 @@
+{
+	"name": "networkPort5500ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort5500ExposedToPublicAz",
+		"portNumber": 5500,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure VNC Listener (Tcp:5500) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0426",
+	"id": "AC_AZURE_0426",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "networkPort53ExposedToPrivateUAz",
+	"file": "networkPortExposedToPrivateAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort53ExposedToPrivateUAz",
+		"portNumber": 53,
+		"prefix": "",
+		"protocol": "Udp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure DNS (Udp:53) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0533",
+	"id": "AC_AZURE_0533",
+	"category": "Infrastructure Security",
+	"version": 2
+}

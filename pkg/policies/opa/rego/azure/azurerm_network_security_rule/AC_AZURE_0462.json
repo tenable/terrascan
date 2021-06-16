@@ -1,0 +1,20 @@
+{
+	"name": "networkPort110ExposedToPublicAz",
+	"file": "networkPortExposedToPublicAz.rego",
+	"policy_type": "azure",
+	"resource_type": "azurerm_network_security_rule",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort110ExposedToPublicAz",
+		"portNumber": 110,
+		"prefix": "",
+		"protocol": "Tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure POP3 (Tcp:110) is not exposed to public for Azure Network Security Rule",
+	"reference_id": "AC_AZURE_0462",
+	"id": "AC_AZURE_0462",
+	"category": "Infrastructure Security",
+	"version": 2
+}
