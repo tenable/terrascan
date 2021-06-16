@@ -10,5 +10,6 @@
     "description": "Ensure that launch configuration launched follows the least privilege principle",
     "reference_id": "AC-AW-IA-LC-H-0441",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0488",
     "version": 1
 }

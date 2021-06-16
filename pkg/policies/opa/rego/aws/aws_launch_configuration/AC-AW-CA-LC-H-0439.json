@@ -10,5 +10,6 @@
     "description": "Launch configuration uses IMDSv1 which vulnerable to SSRF",
     "reference_id": "AC-AW-CA-LC-H-0439",
     "category": "Configuration and Vulnerability Analysis",
+    "id": "AC_AWS_0487",
     "version": 1
 }

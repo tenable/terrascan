@@ -11,5 +11,6 @@
     "description": "AWS CloudFormation Not In Use",
     "reference_id": "AWS.CloudFormation.Medium.0599",
     "category": "Security Best Practices",
+    "id": "AC_AWS_0444",
     "version": 1
 }

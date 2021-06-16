@@ -10,5 +10,6 @@
     "description": "Ensure secrets manager do not wildcard policies attached",
     "reference_id": "AWS.ASSP.IAM.HIGH.0066",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0501",
     "version": 1
 }

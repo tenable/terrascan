@@ -7,8 +7,9 @@
         "prefix": ""
     },
     "severity": "HIGH",
-    "description": "Ensure IAM roles do not have any policies attached that may cause priviledge escalation.",
+    "description": "Ensure IAM roles do not have any policies attached that may cause privilege escalation.",
     "reference_id": "AWS.AIRP.IAM.HIGH.0051",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0473",
     "version": 1
 }

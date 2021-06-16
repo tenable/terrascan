@@ -12,5 +12,6 @@
     "description": "Ensure user volume for Workspaces is Encrypted",
     "reference_id": "AWS.AWW.DP.MEDIUM.041",
     "category": "Data Protection",
+    "id": "AC_AWS_0504",
     "version": 2
 }

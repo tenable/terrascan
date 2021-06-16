@@ -10,5 +10,6 @@
     "description": "ECR should have an image tag be immutable",
     "reference_id": "AWS.CloudTrail.Logging.Low.009",
     "category": "Security Best Practices",
+    "id": "AC_AWS_0447",
     "version": 2
 }

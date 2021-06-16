@@ -10,5 +10,6 @@
     "description": "Ensure IAM permissions are not given directly to users",
     "reference_id": "AWS.AIUPA.IAM.MEDIUM.0050",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0476",
     "version": 1
 }

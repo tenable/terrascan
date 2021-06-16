@@ -10,5 +10,6 @@
     "description": "Ensure EKS clusters have control plane logging enabled.",
     "reference_id": "AWS.AEC.LM.MEDIUM.0071",
     "category": "Logging and Monitoring",
+    "id": "AC_AWS_0465",
     "version": 1
 }

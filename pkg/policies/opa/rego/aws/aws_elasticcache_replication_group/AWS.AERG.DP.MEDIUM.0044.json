@@ -10,5 +10,6 @@
     "description": "Ensure Elastic Cache Replication Group is encrypted in transit",
     "reference_id": "AWS.AERG.DP.MEDIUM.0044",
     "category": "Data Protection",
+    "id": "AC_AWS_0467",
     "version": 2
 }
