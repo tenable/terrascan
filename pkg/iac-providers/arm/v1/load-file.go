@@ -31,11 +31,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	terrascanSkip     = "terrascanSkip"
-	terrascanSkipRule = "rule"
-)
-
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
@@ -146,46 +141,26 @@ func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r 
 		return nil
 	}
 
-	config := &output.ResourceConfig{
-		Line:      doc.StartLine,
-		Source:    a.getSourceRelativePath(path),
-		SkipRules: make([]output.SkipRule, 0),
+	var config *output.ResourceConfig
+	configs, err := m.Map(r, vars, a.templateParameters)
+	// For ARM configs will have only one element
+	for _, c := range configs {
+		config = &output.ResourceConfig{
+			ID:        c.ID,
+			Name:      c.Name,
+			Source:    a.getSourceRelativePath(path),
+			Line:      doc.StartLine,
+			Type:      c.Type,
+			Config:    c.Config,
+			SkipRules: c.SkipRules,
+		}
+
 	}
-	err := m.Map(r, config, vars, a.templateParameters)
+
 	if err != nil {
 		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", path))
 		return nil
 	}
 
-	// add skiprules, if available
-	if r.Tags != nil {
-		skipRules := readSkipRulesFromTags(r.Tags, config.ID)
-		if skipRules != nil {
-			config.SkipRules = append(config.SkipRules, skipRules...)
-		}
-	}
-
 	return config
-}
-
-func readSkipRulesFromTags(tags map[string]interface{}, resourceID string) []output.SkipRule {
-	var skipRules interface{}
-	var ok bool
-	if skipRules, ok = tags[terrascanSkip]; !ok {
-		zap.S().Debugf("%s not present for resource: %s", terrascanSkip, resourceID)
-		return nil
-	}
-
-	if rules, ok := skipRules.(string); ok {
-		skipRules := make([]output.SkipRule, 0)
-		err := json.Unmarshal([]byte(rules), &skipRules)
-		if err != nil {
-			zap.S().Debugf("json string %s cannot be unmarshalled to []output.SkipRules struct schema", rules)
-			return nil
-		}
-		return skipRules
-	}
-
-	zap.S().Debugf("%s must be a string containing an json array like [{rule: ruleID, comment: reason for skipping}]", terrascanSkip)
-	return nil
 }

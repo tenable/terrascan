@@ -24,6 +24,7 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/config"
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 type armMapper struct{}
@@ -34,10 +35,22 @@ func Mapper() core.Mapper {
 }
 
 // Map transforms the provider specific template to terrascan native format.
-func (m armMapper) Map(resource interface{}, config *output.ResourceConfig, params ...map[string]interface{}) error {
+func (m armMapper) Map(resource interface{}, params ...map[string]interface{}) ([]output.ResourceConfig, error) {
 	r, ok := resource.(types.Resource)
 	if !ok {
-		return errors.New("failed to cast resource into types.Resource")
+		return nil, errors.New("failed to cast resource into types.Resource")
+	}
+
+	config := output.ResourceConfig{
+		SkipRules: make([]output.SkipRule, 0),
+	}
+
+	// add skipRules if available
+	if r.Tags != nil {
+		skipRules := utils.ReadSkipRulesFromMap(r.Tags, config.ID)
+		if skipRules != nil {
+			config.SkipRules = append(config.SkipRules, skipRules...)
+		}
 	}
 
 	variables := params[0]
@@ -49,7 +62,7 @@ func (m armMapper) Map(resource interface{}, config *output.ResourceConfig, para
 	fn.ResourceIDs[r.Type] = config.ID
 	config.Config = m.mapConfigForResource(r, variables, parameters)
 
-	return nil
+	return []output.ResourceConfig{config}, nil
 }
 
 func (m armMapper) mapConfigForResource(r types.Resource, vars, params map[string]interface{}) interface{} {
