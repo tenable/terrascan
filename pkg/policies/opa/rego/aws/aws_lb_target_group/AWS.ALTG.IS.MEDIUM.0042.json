@@ -10,5 +10,6 @@
     "description": "Ensure Target Group use HTTPs to ensure end to end encryption",
     "reference_id": "AWS.ALTG.IS.MEDIUM.0042",
     "category": "Infrastructure Security",
+    "id": "AC_AWS_0492",
     "version": 2
 }

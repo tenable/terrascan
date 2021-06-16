@@ -8,5 +8,6 @@
     "description": "Insecure Cross-Origin Resource Sharing Configuration allowing all domains",
     "reference_id": "AWS.ApiGatewayV2Api.AccessControl.0630",
     "category": "Security Best Practices",
+    "id": "AC_AWS_0441",
     "version": 2
 }

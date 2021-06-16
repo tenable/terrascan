@@ -10,5 +10,6 @@
     "description": "Ensure use of API Gateway endpoint policy, and no action wildcards are being used.",
     "reference_id": "AWS.APGRAP.IAM.HIGH.0064",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0440",
     "version": 1
 }

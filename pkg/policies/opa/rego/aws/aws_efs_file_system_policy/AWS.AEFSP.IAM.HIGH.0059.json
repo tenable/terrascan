@@ -10,5 +10,6 @@
     "description": "Ensure EFS file system does not use insecure wildcard policies.",
     "reference_id": "AWS.AEFSP.IAM.HIGH.0059",
     "category": "Identity and Access Management",
+    "id": "AC_AWS_0464",
     "version": 1
 }

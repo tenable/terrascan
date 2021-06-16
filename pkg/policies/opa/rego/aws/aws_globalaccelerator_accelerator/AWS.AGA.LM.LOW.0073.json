@@ -10,5 +10,6 @@
     "description": "Ensure Global Accelerator accelerator has flow logs enabled.",
     "reference_id": "AWS.AGA.LM.LOW.0073",
     "category": "Logging and Monitoring",
+    "id": "AC_AWS_0471",
     "version": 1
 }

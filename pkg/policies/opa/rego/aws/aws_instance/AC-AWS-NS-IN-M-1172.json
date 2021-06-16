@@ -8,5 +8,6 @@
     "description": "EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain",
     "reference_id": "AC-AWS-NS-IN-M-1172",
     "category": "Infrastructure Security",
+    "id": "AC_AWS_0479",
     "version": 1
 }

@@ -10,5 +10,6 @@
     "description": "Ensure AWS ELB has access logging enabled.",
     "reference_id": "AWS.ELB.LM.MEDIUM.0072",
     "category": "Logging and Monitoring",
+    "id": "AC_AWS_0470",
     "version": 1
 }
