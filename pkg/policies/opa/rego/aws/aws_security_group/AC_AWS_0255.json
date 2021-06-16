@@ -1,0 +1,20 @@
+{
+	"name": "port137UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port137UdpAlbNetworkPortSecurity",
+		"portNumber": 137,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - NetBIOS Name Service (UDP,137)",
+	"reference_id": "AC_AWS_0255",
+	"id": "AC_AWS_0255",
+	"category": "Infrastructure Security",
+	"version": 2
+}

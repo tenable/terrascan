@@ -1,0 +1,20 @@
+{
+	"name": "networkPort3020ExposedToprivate",
+	"file": "networkPortExposedToPrivate.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort3020ExposedToprivate",
+		"portNumber": 3020,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure CIFS/SMB' (TCP,3020) is not exposed to private hosts more than 32",
+	"reference_id": "AC_AWS_0337",
+	"id": "AC_AWS_0337",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "port61621AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port61621AlbNetworkPortSecurity",
+		"portNumber": 61621,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Cassandra OpsCenter agent (TCP,61621)",
+	"reference_id": "AC_AWS_0238",
+	"id": "AC_AWS_0238",
+	"category": "Infrastructure Security",
+	"version": 2
+}

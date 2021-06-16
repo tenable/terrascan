@@ -1,0 +1,20 @@
+{
+	"name": "port8000AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port8000AlbNetworkPortSecurityPublicScope",
+		"portNumber": 8000,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Known internal web port (TCP,8000) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0283",
+	"id": "AC_AWS_0283",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "port2382AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port2382AlbNetworkPortSecurity",
+		"portNumber": 2382,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - SQL Server Analysis Service browser (TCP,2382)",
+	"reference_id": "AC_AWS_0267",
+	"id": "AC_AWS_0267",
+	"category": "Infrastructure Security",
+	"version": 2
+}

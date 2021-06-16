@@ -1,0 +1,20 @@
+{
+	"name": "port139AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port139AlbNetworkPortSecurityPublicScope",
+		"portNumber": 139,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBios Session Service (TCP,139) is not accessible by a CIDR block range",
+	"reference_id": "AC_AWS_0300",
+	"id": "AC_AWS_0300",
+	"category": "Infrastructure Security",
+	"version": 2
+}

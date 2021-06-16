@@ -1,0 +1,20 @@
+{
+	"name": "port11214AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port11214AlbNetworkPortSecurity",
+		"portNumber": 11214,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Memcached SSL (TCP,11214)",
+	"reference_id": "AC_AWS_0248",
+	"id": "AC_AWS_0248",
+	"category": "Infrastructure Security",
+	"version": 2
+}

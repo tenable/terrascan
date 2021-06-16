@@ -1,0 +1,20 @@
+{
+	"name": "port138UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port138UdpAlbNetworkPortSecurity",
+		"portNumber": 138,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - NetBIOS Datagram Service (UDP,138)",
+	"reference_id": "AC_AWS_0257",
+	"id": "AC_AWS_0257",
+	"category": "Infrastructure Security",
+	"version": 2
+}

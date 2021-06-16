@@ -1,0 +1,20 @@
+{
+	"name": "port9300AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port9300AlbNetworkPortSecurity",
+		"portNumber": 9300,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Elasticsearch (TCP,9300)",
+	"reference_id": "AC_AWS_0235",
+	"id": "AC_AWS_0235",
+	"category": "Infrastructure Security",
+	"version": 2
+}

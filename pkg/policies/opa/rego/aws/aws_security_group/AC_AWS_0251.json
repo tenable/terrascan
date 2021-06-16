@@ -1,0 +1,20 @@
+{
+	"name": "port11215UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port11215UdpAlbNetworkPortSecurity",
+		"portNumber": 11215,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - Memcached SSL (UDP,11215)",
+	"reference_id": "AC_AWS_0251",
+	"id": "AC_AWS_0251",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,20 @@
+{
+	"name": "port3020AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port3020AlbNetworkPortSecurityPublicScope",
+		"portNumber": 3020,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure CIFS / SMB (TCP,3020) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0279",
+	"id": "AC_AWS_0279",
+	"category": "Infrastructure Security",
+	"version": 2
+}

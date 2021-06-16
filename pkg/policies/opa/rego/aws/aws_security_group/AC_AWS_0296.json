@@ -1,0 +1,20 @@
+{
+	"name": "port137AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port137AlbNetworkPortSecurityPublicScope",
+		"portNumber": 137,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure NetBIOS Name Service (TCP,137) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0296",
+	"id": "AC_AWS_0296",
+	"category": "Infrastructure Security",
+	"version": 2
+}

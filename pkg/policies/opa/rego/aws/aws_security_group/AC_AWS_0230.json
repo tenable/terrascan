@@ -1,0 +1,20 @@
+{
+	"name": "port3389OpenToInternet",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port3389OpenToInternet",
+		"portNumber": 3389,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - remote desktop port (TCP,3389)",
+	"reference_id": "AC_AWS_0230",
+	"id": "AC_AWS_0230",
+	"category": "Infrastructure Security",
+	"version": 2
+}

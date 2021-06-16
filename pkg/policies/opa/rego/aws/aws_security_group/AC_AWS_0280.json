@@ -1,0 +1,20 @@
+{
+	"name": "port61621AlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port61621AlbNetworkPortSecurityPublicScope",
+		"portNumber": 61621,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Cassandra OpsCenter agent port (TCP,61621) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0280",
+	"id": "AC_AWS_0280",
+	"category": "Infrastructure Security",
+	"version": 2
+}

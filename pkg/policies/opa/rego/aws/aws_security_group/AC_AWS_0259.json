@@ -1,0 +1,20 @@
+{
+	"name": "port139UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port139UdpAlbNetworkPortSecurity",
+		"portNumber": 139,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - NetBIOS Session Service (UDP,139)",
+	"reference_id": "AC_AWS_0259",
+	"id": "AC_AWS_0259",
+	"category": "Infrastructure Security",
+	"version": 2
+}

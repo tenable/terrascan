@@ -1,0 +1,20 @@
+{
+	"name": "port11215UdpAlbNetworkPortSecurityPublicScope",
+	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port11215UdpAlbNetworkPortSecurityPublicScope",
+		"portNumber": 11215,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Memcached SSL (UDP,11215) is not accessible by a public CIDR block range",
+	"reference_id": "AC_AWS_0293",
+	"id": "AC_AWS_0293",
+	"category": "Infrastructure Security",
+	"version": 2
+}

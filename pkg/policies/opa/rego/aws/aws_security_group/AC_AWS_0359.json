@@ -1,0 +1,20 @@
+{
+	"name": "networkPort23ExposedToprivate",
+	"file": "networkPortExposedToPrivate.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "networkPort23ExposedToprivate",
+		"portNumber": 23,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Telnet' (TCP,23) is not exposed to private hosts more than 32",
+	"reference_id": "AC_AWS_0359",
+	"id": "AC_AWS_0359",
+	"category": "Infrastructure Security",
+	"version": 2
+}

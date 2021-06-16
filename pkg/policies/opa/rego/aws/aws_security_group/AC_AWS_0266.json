@@ -1,0 +1,20 @@
+{
+	"name": "port161UdpAlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port161UdpAlbNetworkPortSecurity",
+		"portNumber": 161,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - SNMP (UDP,161)",
+	"reference_id": "AC_AWS_0266",
+	"id": "AC_AWS_0266",
+	"category": "Infrastructure Security",
+	"version": 2
+}

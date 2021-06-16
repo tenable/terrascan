@@ -1,0 +1,20 @@
+{
+	"name": "port135AlbNetworkPortSecurity",
+	"file": "portOpenToInternet.rego",
+	"policy_type": "aws",
+	"resource_type": "aws_security_group",
+	"template_args": {
+		"defaultValue": "<cidr>",
+		"name": "port135AlbNetworkPortSecurity",
+		"portNumber": 135,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Security Groups - Unrestricted Specific Ports - MSSQL Debugger (TCP,135)",
+	"reference_id": "AC_AWS_0246",
+	"id": "AC_AWS_0246",
+	"category": "Infrastructure Security",
+	"version": 2
+}
