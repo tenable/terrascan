@@ -10,5 +10,6 @@
     "description": "Ensure that at least one Network Security Group is attached to all VMs and subnets that are public",
     "reference_id": "accurics.azure.NS.18",
     "category": "Network Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_AZURE_0543"
 }

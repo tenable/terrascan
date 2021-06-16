@@ -10,5 +10,6 @@
     "description": "Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server",
     "reference_id": "accurics.azure.LOG.155",
     "category": "Logging and Monitoring",
-    "version": 2
+    "version": 2,
+    "id": "AC_AZURE_540"
 }
