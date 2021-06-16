@@ -1,0 +1,19 @@
+{
+	"name": "networkPort3306ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort3306ExposedToPrivateGCP",
+		"portNumber": 3306,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure MySQL (TCP:3306) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0144",
+	"id": "AC_GCP_0144",
+	"category": "Infrastructure Security",
+	"version": 2
+}

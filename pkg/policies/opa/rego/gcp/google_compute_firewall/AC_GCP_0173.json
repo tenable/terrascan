@@ -1,0 +1,19 @@
+{
+	"name": "networkPort11211ExposedToInternetUGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort11211ExposedToInternetUGCP",
+		"portNumber": 11211,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Unencrypted Memcached Instances (UDP:11211) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0173",
+	"id": "AC_GCP_0173",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort8140ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort8140ExposedToInternetGCP",
+		"portNumber": 8140,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Puppet Master (TCP:8140) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0050",
+	"id": "AC_GCP_0050",
+	"category": "Infrastructure Security",
+	"version": 2
+}

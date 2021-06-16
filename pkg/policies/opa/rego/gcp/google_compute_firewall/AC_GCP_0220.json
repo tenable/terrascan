@@ -1,0 +1,19 @@
+{
+	"name": "networkPort9000ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort9000ExposedToPrivateGCP",
+		"portNumber": 9000,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Hadoop Name Node (TCP:9000) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0220",
+	"id": "AC_GCP_0220",
+	"category": "Infrastructure Security",
+	"version": 2
+}

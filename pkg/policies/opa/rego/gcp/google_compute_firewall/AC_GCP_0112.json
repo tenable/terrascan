@@ -1,0 +1,19 @@
+{
+	"name": "networkPort25ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort25ExposedToPublicGCP",
+		"portNumber": 25,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure SMTP (TCP:25) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0112",
+	"id": "AC_GCP_0112",
+	"category": "Infrastructure Security",
+	"version": 2
+}

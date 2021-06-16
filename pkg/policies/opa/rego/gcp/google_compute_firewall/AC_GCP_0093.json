@@ -1,0 +1,19 @@
+{
+	"name": "networkPort139ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort139ExposedToPrivateGCP",
+		"portNumber": 139,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure NetBios Session Service (TCP:139) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0093",
+	"id": "AC_GCP_0093",
+	"category": "Infrastructure Security",
+	"version": 2
+}

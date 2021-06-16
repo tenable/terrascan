@@ -1,0 +1,19 @@
+{
+	"name": "networkPort11214ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort11214ExposedToPublicGCP",
+		"portNumber": 11214,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Memcached SSL (TCP:11214) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0130",
+	"id": "AC_GCP_0130",
+	"category": "Infrastructure Security",
+	"version": 2
+}

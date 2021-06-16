@@ -1,0 +1,19 @@
+{
+	"name": "networkPort2383ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort2383ExposedToInternetGCP",
+		"portNumber": 2383,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure SQL Server Analysis Services (TCP:2383) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0155",
+	"id": "AC_GCP_0155",
+	"category": "Infrastructure Security",
+	"version": 2
+}

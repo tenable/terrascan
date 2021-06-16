@@ -1,0 +1,19 @@
+{
+	"name": "networkPort2484ExposedToInternetUGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort2484ExposedToInternetUGCP",
+		"portNumber": 2484,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Oracle DB SSL (UDP:2484) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0149",
+	"id": "AC_GCP_0149",
+	"category": "Infrastructure Security",
+	"version": 2
+}

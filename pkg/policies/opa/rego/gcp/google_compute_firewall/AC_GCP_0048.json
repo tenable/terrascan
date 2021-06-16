@@ -1,0 +1,19 @@
+{
+	"name": "networkPort8140ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort8140ExposedToPrivateGCP",
+		"portNumber": 8140,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Puppet Master (TCP:8140) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0048",
+	"id": "AC_GCP_0048",
+	"category": "Infrastructure Security",
+	"version": 2
+}

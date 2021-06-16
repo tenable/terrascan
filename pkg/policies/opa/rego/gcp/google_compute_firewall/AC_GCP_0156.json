@@ -1,0 +1,19 @@
+{
+	"name": "networkPort1433ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort1433ExposedToPrivateGCP",
+		"portNumber": 1433,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure MSSQL Server (TCP:1433) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0156",
+	"id": "AC_GCP_0156",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort5432ExposedToPrivateUGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort5432ExposedToPrivateUGCP",
+		"portNumber": 5432,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Postgres SQL (UDP:5432) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0138",
+	"id": "AC_GCP_0138",
+	"category": "Infrastructure Security",
+	"version": 2
+}

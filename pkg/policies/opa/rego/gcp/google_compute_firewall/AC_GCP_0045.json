@@ -1,0 +1,19 @@
+{
+	"name": "networkPort27018ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort27018ExposedToPrivateGCP",
+		"portNumber": 27018,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Mongo Web Portal (TCP:27018) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0045",
+	"id": "AC_GCP_0045",
+	"category": "Infrastructure Security",
+	"version": 2
+}

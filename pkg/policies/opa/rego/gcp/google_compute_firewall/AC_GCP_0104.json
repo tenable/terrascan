@@ -1,0 +1,19 @@
+{
+	"name": "networkPort137ExposedToInternetUGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort137ExposedToInternetUGCP",
+		"portNumber": 137,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure NetBIOS Name Service (UDP:137) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0104",
+	"id": "AC_GCP_0104",
+	"category": "Infrastructure Security",
+	"version": 2
+}

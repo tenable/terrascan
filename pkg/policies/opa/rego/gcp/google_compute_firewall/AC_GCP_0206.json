@@ -1,0 +1,19 @@
+{
+	"name": "networkPort2483ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort2483ExposedToPublicGCP",
+		"portNumber": 2483,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Oracle DB (TCP:2483) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0206",
+	"id": "AC_GCP_0206",
+	"category": "Infrastructure Security",
+	"version": 2
+}

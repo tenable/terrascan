@@ -1,0 +1,19 @@
+{
+	"name": "networkPort7001ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort7001ExposedToInternetGCP",
+		"portNumber": 7001,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Cassandra (TCP:7001) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0137",
+	"id": "AC_GCP_0137",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort8080ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort8080ExposedToPublicGCP",
+		"portNumber": 8080,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Known internal web port (TCP:8080) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0067",
+	"id": "AC_GCP_0067",
+	"category": "Infrastructure Security",
+	"version": 2
+}

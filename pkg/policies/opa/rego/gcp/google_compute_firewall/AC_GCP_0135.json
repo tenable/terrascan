@@ -1,0 +1,19 @@
+{
+	"name": "networkPort7001ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort7001ExposedToPrivateGCP",
+		"portNumber": 7001,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure Cassandra (TCP:7001) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0135",
+	"id": "AC_GCP_0135",
+	"category": "Infrastructure Security",
+	"version": 2
+}

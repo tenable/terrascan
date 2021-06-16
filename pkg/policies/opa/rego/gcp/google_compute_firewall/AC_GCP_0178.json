@@ -1,0 +1,19 @@
+{
+	"name": "networkPort9300ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort9300ExposedToPublicGCP",
+		"portNumber": 9300,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure Elastic Search (TCP:9300) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0178",
+	"id": "AC_GCP_0178",
+	"category": "Infrastructure Security",
+	"version": 2
+}

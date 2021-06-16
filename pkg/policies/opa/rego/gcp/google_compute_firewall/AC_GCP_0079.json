@@ -1,0 +1,19 @@
+{
+	"name": "networkPort3020ExposedToPublicGCP",
+	"file": "networkPortExposedToPublicGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort3020ExposedToPublicGCP",
+		"portNumber": 3020,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "MEDIUM",
+	"description": "Ensure CIFS / SMB (TCP:3020) is not exposed to public for Google Compute Firewall",
+	"reference_id": "AC_GCP_0079",
+	"id": "AC_GCP_0079",
+	"category": "Infrastructure Security",
+	"version": 2
+}

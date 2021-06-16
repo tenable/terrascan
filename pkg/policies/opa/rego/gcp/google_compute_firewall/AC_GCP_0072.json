@@ -1,0 +1,19 @@
+{
+	"name": "networkPort4506ExposedToPrivateGCP",
+	"file": "networkPortExposedToPrivateGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort4506ExposedToPrivateGCP",
+		"portNumber": 4506,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "LOW",
+	"description": "Ensure SaltStack Master (TCP:4506) is not exposed to private hosts more than 32 for Google Compute Firewall",
+	"reference_id": "AC_GCP_0072",
+	"id": "AC_GCP_0072",
+	"category": "Infrastructure Security",
+	"version": 2
+}

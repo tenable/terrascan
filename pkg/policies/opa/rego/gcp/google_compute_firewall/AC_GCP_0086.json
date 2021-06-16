@@ -1,0 +1,19 @@
+{
+	"name": "networkPort53ExposedToInternetUGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort53ExposedToInternetUGCP",
+		"portNumber": 53,
+		"prefix": "",
+		"protocol": "udp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure DNS (UDP:53) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0086",
+	"id": "AC_GCP_0086",
+	"category": "Infrastructure Security",
+	"version": 2
+}

@@ -1,0 +1,19 @@
+{
+	"name": "networkPort3389ExposedToInternetGCP",
+	"file": "networkPortExposedToInternetGCP.rego",
+	"policy_type": "gcp",
+	"resource_type": "google_compute_firewall",
+	"template_args": {
+		"name": "networkPort3389ExposedToInternetGCP",
+		"portNumber": 3389,
+		"prefix": "",
+		"protocol": "tcp",
+		"suffix": ""
+	},
+	"severity": "HIGH",
+	"description": "Ensure Remote Desktop (TCP:3389) is not exposed to entire internet for Google Compute Firewall",
+	"reference_id": "AC_GCP_0134",
+	"id": "AC_GCP_0134",
+	"category": "Infrastructure Security",
+	"version": 2
+}
