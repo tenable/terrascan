@@ -14,5 +14,6 @@
     "description": "The default namespace should not be used",
     "reference_id": "accurics.kubernetes.OPS.461",
     "category": "Operational Efficiency",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0132"
 }

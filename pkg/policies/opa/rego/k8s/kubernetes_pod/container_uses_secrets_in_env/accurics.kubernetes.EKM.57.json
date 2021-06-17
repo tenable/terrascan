@@ -14,5 +14,6 @@
     "description": "Container uses secrets in environment variables",
     "reference_id": "accurics.kubernetes.EKM.57",
     "category": "Encryption and Key Management",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0114"
 }

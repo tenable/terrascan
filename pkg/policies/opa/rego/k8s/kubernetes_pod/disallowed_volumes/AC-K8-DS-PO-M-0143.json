@@ -12,5 +12,6 @@
     "description": "Vulnerable to CVE-2020-8555 (affected version of kube-controller-manager: v1.18.0, v1.17.0 - v1.17.4, v1.16.0 - v1.16.8,\u003c v1.15.11",
     "reference_id": "AC-K8-DS-PO-M-0143",
     "category": "Data Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_K8S_0130"
 }
