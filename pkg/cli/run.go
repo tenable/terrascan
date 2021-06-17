@@ -190,6 +190,11 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
+	// set the ResourcePath to remoteURL if remote directory is scanned.
+	if s.remoteURL != "" {
+		results.Violations.ViolationStore.Summary.ResourcePath = s.remoteURL
+	}
+
 	// write results to console
 	err = s.writeResults(results)
 	if err != nil {
