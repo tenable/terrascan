@@ -7,7 +7,7 @@ Violation Details -
 	Line           :	5
 	Severity       :	MEDIUM
 	Rule Name      :	amiNotEncrypted
-	Rule ID        :	AWS.EC2.Encryption&KeyManagement.Medium.0688
+	Rule ID        :	AC_AWS_0001
 	Resource Name  :	awsAmiEncrypted
 	Resource Type  :	aws_ami
 	Category       :	Encryption & KeyManagement

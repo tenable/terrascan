@@ -58,6 +58,7 @@ type RegoMetadata struct {
 	ReferenceID  string                 `json:"reference_id"`
 	Category     string                 `json:"category"`
 	Version      int                    `json:"version"`
+	ID           string                 `json:"id"`
 }
 
 // RegoData Stores all information needed to evaluate and report on a rego rule

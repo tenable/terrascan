@@ -30,6 +30,11 @@ func TestGetSkipRules(t *testing.T) {
 	testRuleAWS3 := "AWS.S3 Bucket.DS.High.1041"
 	testRuleAWS4 := "AWS.S3 Bucket DS.High.1041"
 	testRuleAWS5 := "AWS.S3 Bucket DS .High.1041"
+	testRuleAWS6 := "AC_AWS_1111"
+	testRuleAZURE1 := "AC_AZURE_1111"
+	testRuleGCP1 := "AC_GCP_1111"
+	testRuleK8S1 := "AC_K8S_1111"
+	testRuleGITHUB1 := "AC_GITHUB_1111"
 	testRuleAWSwithHyphen := "AC-AWS-NS-IN-M-1172"
 	testRuleAzure := "accurics.azure.NS.147"
 	testRuleKubernetesWithHyphen := "AC-K8-DS-PO-M-0143"
@@ -179,6 +184,109 @@ func TestGetSkipRules(t *testing.T) {
 					Rule:    testRuleAWS5,
 					Comment: "skip rule with multiple spaces",
 				},
+			},
+		},
+		{
+			// skipping rule by ID field
+			name:  "skipping rule using ID field",
+			input: "#ts:skip=AC_AWS_1111",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS6},
+			},
+		},
+		{
+			// skipping rule by ID field and comment
+			name:  "skipping rule using ID field and comment",
+			input: "#ts:skip=AC_AWS_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleAWS6,
+					Comment: "skip rule by ID",
+				},
+			},
+		},
+		{
+			// skipping AZURE rule by ID field
+			name:  "skipping AZURE rule using ID field",
+			input: "#ts:skip=AC_AZURE_1111",
+			expected: []output.SkipRule{
+				{Rule: testRuleAZURE1},
+			},
+		},
+		{
+			// skipping AZURE rule by ID field and comment
+			name:  "skipping AZURE rule using ID field and comment",
+			input: "#ts:skip=AC_AZURE_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleAZURE1,
+					Comment: "skip rule by ID",
+				},
+			},
+		},
+		{
+			// skipping GCP rule by ID field
+			name:  "skipping GCP rule using ID field",
+			input: "#ts:skip=AC_GCP_1111",
+			expected: []output.SkipRule{
+				{Rule: testRuleGCP1},
+			},
+		},
+		{
+			// skipping GCP rule by ID field and comment
+			name:  "skipping GCP rule using ID field and comment",
+			input: "#ts:skip=AC_GCP_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleGCP1,
+					Comment: "skip rule by ID",
+				},
+			},
+		},
+		{
+			// skipping K8S rule by ID field
+			name:  "skipping K8S rule using ID field ",
+			input: "#ts:skip=AC_K8S_1111",
+			expected: []output.SkipRule{
+				{Rule: testRuleK8S1},
+			},
+		},
+		{
+			// skipping K8S rule by ID field and comment
+			name:  "skipping K8S rule using ID field and comment",
+			input: "#ts:skip=AC_K8S_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleK8S1,
+					Comment: "skip rule by ID",
+				},
+			},
+		},
+		{
+			// skipping GITHUB rule by ID field
+			name:  "skipping GITHUB rule using ID field ",
+			input: "#ts:skip=AC_GITHUB_1111",
+			expected: []output.SkipRule{
+				{Rule: testRuleGITHUB1},
+			},
+		},
+		{
+			// skipping K8S rule by ID field and comment
+			name:  "skipping GITHUB rule using ID field and comment",
+			input: "#ts:skip=AC_GITHUB_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{
+					Rule:    testRuleGITHUB1,
+					Comment: "skip rule by ID",
+				},
+			},
+		},
+		{
+			// skipping rule by ID field and comment
+			name:  "skipping rule using ID field and comment repeated name",
+			input: "#ts:skip=AC_AWS_1111AC_AWS_1111 skip rule by ID",
+			expected: []output.SkipRule{
+				{Rule: testRuleAWS6},
 			},
 		},
 	}

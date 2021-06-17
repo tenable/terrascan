@@ -4,7 +4,7 @@
       {
         "rule_name": "rdsAutoMinorVersionUpgradeEnabled",
         "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
-        "rule_id": "AWS.RDS.DS.High.1041",
+        "rule_id": "AC_AWS_0005",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",

@@ -5,7 +5,7 @@ Violation Details -
 	Line           :	1
 	Severity       :	HIGH
 	Rule Name      :	noHttps
-	Rule ID        :	AC-K8-NS-IN-H-0020
+	Rule ID        :	AC_K8S_0001
 	Resource Name  :	ingress-demo-disallowed
 	Resource Type  :	kubernetes_ingress
 	Category       :	Network Security

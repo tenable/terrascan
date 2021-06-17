@@ -5,7 +5,7 @@
       {
         "rule_name": "noHttps",
         "description": "TLS disabled can affect the confidentiality of the data in transit",
-        "rule_id": "AC-K8-NS-IN-H-0020",
+        "rule_id": "AC_K8S_0001",
         "severity": "HIGH",
         "category": "Network Security",
         "skip_comment": "reason to skip the rule",

@@ -35,15 +35,18 @@ const (
 	TerrascanSkipComment = "comment"
 	// SkipRulesPrefix used to identify and trim the skipping rule patterns
 	SkipRulesPrefix = "#ts:skip="
-	// RuleIDRegex used to match the reference_id string
-	RuleIDRegex = `((([ A-Za-z0-9]+[.-]{1})){2,5}([\d]+)){1}`
+	// MetaDataIDRegex pattern to match Rego Metadata ID
+	MetaDataIDRegex = `(AC_)(AWS|AZURE|GCP|K8S|GITHUB)[_]([\d]{4})`
+	// MetaDataReferenceIDRegex pattern to match Rego Metadata ReferenceID
+	MetaDataReferenceIDRegex = `(([ A-Za-z0-9]+[.-]{1}){2,5})([\d]+)`
 	// SkipRuleCommentRegex used to detect comments in skipped rule
 	SkipRuleCommentRegex = `([ \t]+.*){0,1}`
 )
 
 var (
-	ruleIDPattern                  = regexp.MustCompile(RuleIDRegex)
-	skipRulesPattern               = regexp.MustCompile(fmt.Sprintf("(%s%s%s)", SkipRulesPrefix, RuleIDRegex, SkipRuleCommentRegex))
+	ruleIDRegex                    = fmt.Sprintf("(%s|%s)", MetaDataReferenceIDRegex, MetaDataIDRegex)
+	ruleIDPattern                  = regexp.MustCompile(ruleIDRegex)
+	skipRulesPattern               = regexp.MustCompile(fmt.Sprintf("(%s%s%s)", SkipRulesPrefix, ruleIDRegex, SkipRuleCommentRegex))
 	infileInstructionNotPresentLog = "%s not present for resource: %s"
 )
 
