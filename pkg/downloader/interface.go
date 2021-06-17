@@ -36,7 +36,7 @@ type ModuleDownloader interface {
 	DownloadModule(addr, destPath string) (string, error)
 	DownloadRemoteModule(requiredVersion hclConfigs.VersionConstraint, destPath string, module *regsrc.Module) (string, error)
 	CleanUp()
-	GetModuleInstalledCache() map[string]string
+	GetDownloaderCache() map[string]string
 }
 
 // terraformRegistryClient will help interact with terraform registries

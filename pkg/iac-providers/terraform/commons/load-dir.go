@@ -119,7 +119,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 
 		// Get the downloader chache
-		remoteURLMapping := t.remoteDownloader.GetModuleInstalledCache()
+		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 		if diags.HasErrors() {
 			// log a warn message in this case because there are errors in
@@ -237,7 +237,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
 	// Get the downloader chache
-	remoteURLMapping := t.remoteDownloader.GetModuleInstalledCache()
+	remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 	if diags.HasErrors() {
 		// log a warn message in this case because there are errors in
@@ -418,7 +418,7 @@ func (m *ModuleConfig) getChildConfigs() []*ModuleConfig {
 	return allConfigs
 }
 
-// GetRemoteLocation check wether the source belongs to the remote module present in downloader cache.
+// GetRemoteLocation checks wether the source belongs to the remote module present in downloader cache.
 // cache has key = remoteURL and value = tempDir
 func GetRemoteLocation(cache map[string]string, resourcePath string) (remoteURL, tmpDir string) {
 	dir := filepath.Dir(resourcePath)
