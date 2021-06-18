@@ -36,14 +36,33 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 		return allResourcesConfig, errors.New(errMsg)
 	}
 	minSeverity, maxSeverity := utils.GetMinMaxSeverity(comments)
+	skipRules := utils.GetSkipRules(comments)
+
+	dockerCommand := []string{}
+	for i := 0; i < len(data); i++ {
+		dockerCommand = append(dockerCommand, data[i].Cmd)
+		config := output.ResourceConfig{
+			Name:        filepath.Base(absFilePath),
+			Type:        data[i].Cmd,
+			Line:        data[i].Line,
+			ID:          data[i].Cmd + "." + GetresourceIdforDockerfile(absFilePath, data[i].Value),
+			Source:      filepath.Base(absFilePath),
+			Config:      data[i].Value,
+			SkipRules:   skipRules,
+			MinSeverity: minSeverity,
+			MaxSeverity: maxSeverity,
+		}
+		allResourcesConfig[data[i].Cmd] = append(allResourcesConfig[data[i].Cmd], config)
+
+	}
 	config := output.ResourceConfig{
 		Name:        filepath.Base(absFilePath),
 		Type:        resourceTypeDockerfile,
 		Line:        1,
-		ID:          dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath),
+		ID:          dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath, ""),
 		Source:      filepath.Base(absFilePath),
-		Config:      data,
-		SkipRules:   utils.GetSkipRules(comments),
+		Config:      dockerCommand,
+		SkipRules:   skipRules,
 		MinSeverity: minSeverity,
 		MaxSeverity: maxSeverity,
 	}
