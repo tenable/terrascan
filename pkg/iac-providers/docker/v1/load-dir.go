@@ -60,18 +60,36 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 			if err != nil {
 				zap.S().Debug("error while getting the relative path for", zap.String("IAC file", file), zap.Error(err))
 			}
+			skipRules := utils.GetSkipRules(comments)
+
+			dockerCommand := []string{}
+			for j := 0; j < len(data); j++ {
+				dockerCommand = append(dockerCommand, data[j].Cmd)
+				config := output.ResourceConfig{
+					Name:        *files[i],
+					Type:        data[j].Cmd,
+					Line:        data[j].Line,
+					ID:          data[j].Cmd + "." + GetresourceIdforDockerfile(file, data[j].Value),
+					Source:      sourcePath,
+					Config:      data[j].Value,
+					SkipRules:   skipRules,
+					MinSeverity: minSeverity,
+					MaxSeverity: maxSeverity,
+				}
+				allResourcesConfig[data[j].Cmd] = append(allResourcesConfig[data[j].Cmd], config)
+
+			}
 			config := output.ResourceConfig{
 				Name:        *files[i],
 				Type:        resourceTypeDockerfile,
 				Line:        1,
-				ID:          dockerDirectory + "." + GetresourceIdforDockerfile(file),
+				ID:          dockerDirectory + "." + GetresourceIdforDockerfile(file, ""),
 				Source:      sourcePath,
-				Config:      data,
-				SkipRules:   utils.GetSkipRules(comments),
+				Config:      dockerCommand,
+				SkipRules:   skipRules,
 				MinSeverity: minSeverity,
 				MaxSeverity: maxSeverity,
 			}
-
 			allResourcesConfig[dockerDirectory] = append(allResourcesConfig[dockerDirectory], config)
 		}
 	}
@@ -81,9 +99,9 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 }
 
 // GetresourceIdforDockerfile Generates hash of the string to be used as the reference id for docker file
-func GetresourceIdforDockerfile(filepath string) (referenceID string) {
+func GetresourceIdforDockerfile(filepath string, value string) (referenceID string) {
 	hasher := md5.New()
-	hasher.Write([]byte(filepath))
+	hasher.Write([]byte(filepath + value))
 	referenceID = strings.ToLower(hex.EncodeToString(hasher.Sum(nil)))
 	return
 }

@@ -29,7 +29,7 @@ func TestParse(t *testing.T) {
 		name     string
 		filePath string
 		dockerv1 DockerV1
-		want     DockerConfig
+		want     []ResourceConfig
 		wantErr  error
 	}{
 		{
@@ -37,12 +37,13 @@ func TestParse(t *testing.T) {
 			filePath: filepath.Join(fileTestDataDir, "dockerfile-testparse-function"),
 			dockerv1: DockerV1{},
 			wantErr:  nil,
-			want:     DockerConfig{Args: []string{"name=defaultValue"}, Cmd: []string{"server"}, From: []string{"runatlantis/atlantis:v0.16.1"}, Labels: []string{"key \"value\""}, Run: []string{"mkdir -p /etc/atlantis/ &&     chmod +x /usr/local/bin/*.sh &&     /usr/local/bin/setup.sh", "terrascan init"}, Expose: []string{"9090"}, Env: []string{"DEFAULT_TERRASCAN_VERSION 1.5.1", "PLANFILE tfplan"}, Add: []string{"setup.sh terrascan.sh launch-atlantis.sh entrypoint.sh /usr/local/bin/"}, Copy: []string{"terrascan-workflow.yaml /etc/atlantis/workflow.yaml"}, Entrypoint: []string{"/bin/bash entrypoint.sh"}, Volume: []string{"/temp"}, User: []string{"atlantis"}, WorkDir: []string{"test"}, Onbuild: []string{""}, Maintainer: []string{"accurics"}, HealthCheck: []string{"CMD executable"}, Shell: []string{"cd"}, StopSignal: []string{"1"}},
+			want:     []ResourceConfig{{Cmd: "from", Value: "runatlantis/atlantis:v0.16.1", Line: 1}, {Cmd: "maintainer", Value: "accurics", Line: 2}, {Cmd: "label", Value: "key \"value\"", Line: 3}, {Cmd: "workdir", Value: "test", Line: 4}, {Cmd: "env", Value: "DEFAULT_TERRASCAN_VERSION 1.5.1", Line: 5}, {Cmd: "env", Value: "PLANFILE tfplan", Line: 6}, {Cmd: "add", Value: "setup.sh terrascan.sh launch-atlantis.sh entrypoint.sh /usr/local/bin/", Line: 7}, {Cmd: "run", Value: "mkdir -p /etc/atlantis/ &&     chmod +x /usr/local/bin/*.sh &&     /usr/local/bin/setup.sh", Line: 8}, {Cmd: "copy", Value: "terrascan-workflow.yaml /etc/atlantis/workflow.yaml", Line: 11}, {Cmd: "user", Value: "atlantis", Line: 13}, {Cmd: "arg", Value: "name=defaultValue", Line: 14}, {Cmd: "run", Value: "terrascan init", Line: 15}, {Cmd: "volume", Value: "/temp", Line: 16}, {Cmd: "healthcheck", Value: "CMD executable", Line: 17}, {Cmd: "entrypoint", Value: "/bin/bash entrypoint.sh", Line: 18}, {Cmd: "shell", Value: "cd", Line: 19}, {Cmd: "onbuild", Value: "", Line: 20}, {Cmd: "expose", Value: "9090", Line: 21}, {Cmd: "stopsignal", Value: "1", Line: 22}, {Cmd: "cmd", Value: "server", Line: 23}},
 		},
 		{
 			name:     "invalid  docker file path",
 			filePath: filepath.Join(fileTestDataDir, "dockerfile-testparse-function1"),
 			dockerv1: DockerV1{},
+			want:     []ResourceConfig{},
 			wantErr:  fmt.Errorf("open %s: no such file or directory", filepath.Join(fileTestDataDir, "dockerfile-testparse-function1")),
 		},
 	}

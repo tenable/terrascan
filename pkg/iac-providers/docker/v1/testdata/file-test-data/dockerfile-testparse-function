@@ -9,6 +9,7 @@ RUN mkdir -p /etc/atlantis/ && \
     chmod +x /usr/local/bin/*.sh && \
     /usr/local/bin/setup.sh
 Copy terrascan-workflow.yaml /etc/atlantis/workflow.yaml
+# run as non root user
 USER atlantis
 ARG name=defaultValue
 RUN terrascan init
