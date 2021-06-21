@@ -141,6 +141,10 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 		zap.S().Error(errMsg)
 		return output, isAdmissionDenied, err
 	}
+	// set remote url in case remote repo is scanned
+	if s.RemoteURL != "" {
+		results.Violations.Summary.ResourcePath = s.RemoteURL
+	}
 
 	if !s.ShowPassed {
 		results.Violations.ViolationStore.PassedRules = nil

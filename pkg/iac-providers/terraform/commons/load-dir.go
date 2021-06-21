@@ -17,6 +17,7 @@
 package commons
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -117,6 +118,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 
+		// Get the downloader chache
+		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
+
 		if diags.HasErrors() {
 			// log a warn message in this case because there are errors in
 			// loading the config dir, and continue with other directories
@@ -168,7 +172,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 				// source file path
-				resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
+				resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
 				if err != nil {
 					t.addError(err.Error(), dir)
 					continue
@@ -232,6 +236,9 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
+	// Get the downloader chache
+	remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
+
 	if diags.HasErrors() {
 		// log a warn message in this case because there are errors in
 		// loading the config dir, and continue with other directories
@@ -281,7 +288,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
 			// source file path
-			resourceConfig.Source, err = filepath.Rel(t.absRootDir, resourceConfig.Source)
+			resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
 			if err != nil {
 				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
@@ -409,4 +416,46 @@ func (m *ModuleConfig) getChildConfigs() []*ModuleConfig {
 		allConfigs = append(allConfigs, childModuleConfig)
 	}
 	return allConfigs
+}
+
+// GetRemoteLocation checks wether the source belongs to the remote module present in downloader cache.
+// cache has key = remoteURL and value = tempDir
+func GetRemoteLocation(cache map[string]string, resourcePath string) (remoteURL, tmpDir string) {
+	dir := filepath.Dir(resourcePath)
+	for k, v := range cache {
+		// this condition will never arise added for safe check
+		if len(v) > 0 {
+			// check dir length is greater than tempDir and file belongs to the same tempDir
+			if len(dir) >= len(v) && v == dir[:len(v)] {
+				return k, v
+			}
+		}
+	}
+	return
+}
+
+// GetConfigSource - get the source path for the resource
+func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.ResourceConfig, absRootDir string) (string, error) {
+	var (
+		source string
+		err    error
+		rel    string
+	)
+	// Get source path if remote module used
+	remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
+	if remoteURL != "" {
+		rel, err = filepath.Rel(tempDir, resourceConfig.Source)
+		if err != nil {
+			errMessage := fmt.Sprintf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
+			return source, errors.New(errMessage)
+		}
+		source = filepath.Join(filepath.Clean(remoteURL), rel)
+	} else {
+		// source file path
+		source, err = filepath.Rel(absRootDir, resourceConfig.Source)
+		if err != nil {
+			return source, err
+		}
+	}
+	return source, nil
 }

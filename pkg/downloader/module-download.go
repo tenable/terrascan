@@ -288,3 +288,8 @@ func getVersionToDownload(moduleVersions *response.ModuleVersions, requiredVersi
 
 	return versionToDownload, nil
 }
+
+// GetDownloaderCache - returns the cache of dowloaded modules mapping
+func (r *remoteModuleInstaller) GetDownloaderCache() map[string]string {
+	return r.cache
+}
