@@ -38,7 +38,7 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	if token != "" {
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer: '%s'", token))
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer: %s", token))
 	}
 
 	// make request
