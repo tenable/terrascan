@@ -4,7 +4,7 @@
       {
         "rule_name": "rdsPubliclyAccessible",
         "description": "RDS Instance publicly_accessible flag is true",
-        "rule_id": "AWS.AWS RDS.NS.High.0101",
+        "rule_id": "AC_AWS_0002",
         "severity": "HIGH",
         "category": "Network Security",
         "resource_name": "PtShGgAdi3",

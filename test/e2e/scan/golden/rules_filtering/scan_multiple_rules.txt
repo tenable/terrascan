@@ -4,7 +4,7 @@
       {
         "rule_name": "rdsAutoMinorVersionUpgradeEnabled",
         "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
-        "rule_id": "AWS.RDS.DS.High.1041",
+        "rule_id": "AC_AWS_0005",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
@@ -17,7 +17,7 @@
       {
         "rule_name": "rdsPubliclyAccessible",
         "description": "RDS Instance publicly_accessible flag is true",
-        "rule_id": "AWS.AWS RDS.NS.High.0101",
+        "rule_id": "AC_AWS_0002",
         "severity": "HIGH",
         "category": "Network Security",
         "resource_name": "PtShGgAdi3",
@@ -30,7 +30,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
@@ -43,7 +43,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi2",
@@ -56,7 +56,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi4",
@@ -69,7 +69,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi5",
@@ -82,7 +82,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi6",
@@ -95,7 +95,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",

@@ -8,5 +8,6 @@
     "description": "Ensure Certificate used in RDS instance is updated",
     "reference_id": "AWS.RDS.DS.High.1042",
     "category": "Data Security",
-    "version": 2
+    "version": 2,
+    "id":"AC_AWS_0006"
 }

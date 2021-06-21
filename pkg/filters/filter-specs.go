@@ -19,6 +19,7 @@ package filters
 import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
+	"go.uber.org/zap"
 )
 
 // PolicyTypesFilterSpecification is policy type based Filter Spec
@@ -57,7 +58,14 @@ type RerefenceIDFilterSpecification struct {
 
 // IsSatisfied implementation for reference ID based Filter spec
 func (rs RerefenceIDFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
-	return rs.ReferenceID == r.ReferenceID
+	if rs.ReferenceID == r.ID {
+		return true
+	}
+	if rs.ReferenceID == r.ReferenceID {
+		zap.S().Warnf("Deprecation warning : Use 'id' (%s) instead of 'reference_id' (%s) to skip/scan rules", r.ID, r.ReferenceID)
+		return true
+	}
+	return false
 }
 
 // RerefenceIDsFilterSpecification is reference IDs based Filter Spec

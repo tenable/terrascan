@@ -4,28 +4,28 @@
       {
         "rule_name": "ensurePrivateIP",
         "description": "Vulnerable to CVE-2020-8554",
-        "rule_id": "AC-K8-NS-SE-M-0188",
+        "rule_id": "AC_K8S_0002",
         "severity": "MEDIUM",
         "category": "Network Security"
       },
       {
         "rule_name": "noHttps",
         "description": "TLS disabled can affect the confidentiality of the data in transit",
-        "rule_id": "AC-K8-NS-IN-H-0020",
+        "rule_id": "AC_K8S_0001",
         "severity": "HIGH",
         "category": "Network Security"
       },
       {
         "rule_name": "amiNotEncrypted",
         "description": "Enable AWS AMI Encryption",
-        "rule_id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+        "rule_id": "AC_AWS_0001",
         "severity": "MEDIUM",
         "category": "Encryption \u0026 KeyManagement"
       },
       {
         "rule_name": "rdsCAExpired",
         "description": "Ensure Certificate used in RDS instance is updated",
-        "rule_id": "AWS.RDS.DS.High.1042",
+        "rule_id": "AC_AWS_0006",
         "severity": "HIGH",
         "category": "Data Security"
       }
@@ -34,7 +34,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi6",
@@ -47,7 +47,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi2",
@@ -60,7 +60,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
@@ -73,7 +73,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi1",
@@ -86,7 +86,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi4",
@@ -99,7 +99,7 @@
       {
         "rule_name": "rdsHasStorageEncrypted",
         "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0414",
+        "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi5",
@@ -112,7 +112,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi2",
@@ -125,7 +125,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
@@ -138,7 +138,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi6",
@@ -151,7 +151,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi4",
@@ -164,7 +164,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi5",
@@ -177,7 +177,7 @@
       {
         "rule_name": "rdsIamAuthEnabled",
         "description": "Ensure that your RDS database has IAM Authentication enabled.",
-        "rule_id": "AWS.RDS.DataSecurity.High.0577",
+        "rule_id": "AC_AWS_0004",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",
@@ -190,7 +190,7 @@
       {
         "rule_name": "rdsPubliclyAccessible",
         "description": "RDS Instance publicly_accessible flag is true",
-        "rule_id": "AWS.AWS RDS.NS.High.0101",
+        "rule_id": "AC_AWS_0002",
         "severity": "HIGH",
         "category": "Network Security",
         "resource_name": "PtShGgAdi3",
@@ -203,7 +203,7 @@
       {
         "rule_name": "rdsAutoMinorVersionUpgradeEnabled",
         "description": "RDS Instance Auto Minor Version Upgrade flag disabled",
-        "rule_id": "AWS.RDS.DS.High.1041",
+        "rule_id": "AC_AWS_0005",
         "severity": "HIGH",
         "category": "Data Security",
         "resource_name": "PtShGgAdi3",

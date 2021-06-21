@@ -294,7 +294,7 @@ func (e *Engine) reportViolation(regoData *policy.RegoData, resource *output.Res
 	violation := results.Violation{
 		RuleName:     regoData.Metadata.Name,
 		Description:  regoData.Metadata.Description,
-		RuleID:       regoData.Metadata.ReferenceID,
+		RuleID:       regoData.Metadata.ID,
 		Severity:     regoData.Metadata.Severity,
 		Category:     regoData.Metadata.Category,
 		RuleFile:     regoData.Metadata.File,
@@ -343,7 +343,7 @@ func (e *Engine) reportPassed(regoData *policy.RegoData) {
 	passedRule := results.PassedRule{
 		RuleName:    regoData.Metadata.Name,
 		Description: regoData.Metadata.Description,
-		RuleID:      regoData.Metadata.ReferenceID,
+		RuleID:      regoData.Metadata.ID,
 		Severity:    regoData.Metadata.Severity,
 		Category:    regoData.Metadata.Category,
 	}
@@ -431,9 +431,15 @@ func (e *Engine) Evaluate(engineInput policy.EngineInput, filter policy.PreScanF
 					found := false
 					var skipComment string
 					for _, rule := range resource.SkipRules {
+						if strings.EqualFold(e.regoDataMap[k].Metadata.ID, rule.Rule) {
+							found = true
+							skipComment = rule.Comment
+							break
+						}
 						if strings.EqualFold(k, rule.Rule) {
 							found = true
 							skipComment = rule.Comment
+							zap.S().Warnf("Deprecation warning : Use 'id' (%s) instead of 'reference_id' (%s) to skip rules", e.regoDataMap[k].Metadata.ID, k)
 							break
 						}
 					}
