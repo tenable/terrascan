@@ -17,7 +17,9 @@
 package armv1
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -31,6 +33,7 @@ import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -54,12 +57,21 @@ func TestLoadIacDir(t *testing.T) {
 		invalidDirErr = &os.PathError{Err: syscall.ENOENT, Op: "CreateFile", Path: "not-there"}
 	}
 
+	var linkedResConf output.ResourceConfig
+	if templateData, err := ioutil.ReadFile(filepath.Join(testDataDir, "linked", "output.json")); err == nil {
+		err := json.Unmarshal(templateData, &linkedResConf)
+		if err != nil {
+			t.Errorf("output file not found for linked template test, got %T", err)
+		}
+	}
+
 	table := []struct {
-		name    string
-		dirPath string
-		armv1   ARMV1
-		want    output.AllResourceConfigs
-		wantErr error
+		wantErr   error
+		want      output.AllResourceConfigs
+		armv1     ARMV1
+		name      string
+		dirPath   string
+		recursive bool
 	}{
 		{
 			name:    "empty config",
@@ -85,11 +97,19 @@ func TestLoadIacDir(t *testing.T) {
 			armv1:   ARMV1{},
 			wantErr: nil,
 		},
+		{
+			name:      "deduplicated-linked-templates",
+			dirPath:   filepath.Join(testDataDir, "linked"),
+			armv1:     ARMV1{},
+			want:      map[string][]output.ResourceConfig{"azurerm_storage_account": {linkedResConf}},
+			wantErr:   nil,
+			recursive: true,
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.armv1.LoadIacDir(tt.dirPath, false)
+			aRC, gotErr := tt.armv1.LoadIacDir(tt.dirPath, tt.recursive)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -100,6 +120,9 @@ func TestLoadIacDir(t *testing.T) {
 				}
 			} else if me.Error() != tt.wantErr.Error() {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+			if tt.want != nil {
+				assert.Equal(t, tt.want, aRC)
 			}
 		})
 	}

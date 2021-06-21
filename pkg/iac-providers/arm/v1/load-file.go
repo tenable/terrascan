@@ -28,13 +28,17 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 	"github.com/accurics/terrascan/pkg/utils"
+	getter "github.com/hashicorp/go-getter"
 	"go.uber.org/zap"
 )
+
+// used to detected linked templates
+const deployments = "Microsoft.Resources/deployments"
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-	allResourcesConfig = make(map[string][]output.ResourceConfig)
+	allResourcesConfig = make(output.AllResourceConfigs)
 	var iacDocuments []*utils.IacDocument
 
 	fileExt := a.getFileType(absFilePath)
@@ -70,30 +74,26 @@ func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 		}
 
 		for _, r := range template.Resources {
-			config := a.getConfig(doc, absFilePath, m, r, template.Variables)
-			if config == nil {
-				continue
-			}
-
-			cf, ok := config.Config.(map[string]interface{})
-			if !ok {
-				zap.S().Debug("unable to parse config.Config data",
-					zap.String("resource", r.Type), zap.String("file", absFilePath),
-				)
-				continue
-			}
-
-			for _, nr := range r.Resources {
-				if !strings.HasPrefix(nr.Type, "Microsoft.") {
-					nr.Type = r.Type + "/" + nr.Type
+			configs := a.getConfig(doc, absFilePath, m, r, template.Variables)
+			for _, config := range configs {
+				_, ok := config.Config.(map[string]interface{})
+				if !ok {
+					zap.S().Debug("unable to parse config.Config data",
+						zap.String("resource", r.Type), zap.String("file", absFilePath),
+					)
+					continue
 				}
 
-				config := a.getConfig(doc, absFilePath, m, nr, template.Variables)
-				if config != nil {
-					cf[config.Type] = config.Config
+				for _, nr := range r.Resources {
+					if !strings.HasPrefix(nr.Type, "Microsoft.") {
+						nr.Type = r.Type + "/" + nr.Type
+					}
+
+					resourceConfigs := a.getConfig(doc, absFilePath, m, nr, template.Variables)
+					a.addConfig(allResourcesConfig, resourceConfigs)
 				}
 			}
-			allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
+			a.addConfig(allResourcesConfig, configs)
 		}
 	}
 	return allResourcesConfig, nil
@@ -107,6 +107,7 @@ func (ARMV1) getFileType(file string) string {
 }
 
 func (ARMV1) extractTemplate(doc *utils.IacDocument) (*types.Template, error) {
+
 	const errUnsupportedDoc = "unsupported document type"
 
 	if doc.Type == utils.JSONDoc {
@@ -120,9 +121,21 @@ func (ARMV1) extractTemplate(doc *utils.IacDocument) (*types.Template, error) {
 	return nil, errors.New(errUnsupportedDoc)
 }
 
+func (ARMV1) addConfig(a output.AllResourceConfigs, configs []output.ResourceConfig) {
+	for _, config := range configs {
+		if _, present := a[config.Type]; !present {
+			a[config.Type] = []output.ResourceConfig{config}
+		} else {
+			resources := a[config.Type]
+			if !output.IsConfigPresent(resources, config) {
+				a[config.Type] = append(a[config.Type], config)
+			}
+		}
+	}
+}
+
 // getSourceRelativePath fetches the relative path of file being loaded
 func (a *ARMV1) getSourceRelativePath(sourceFile string) string {
-
 	// rootDir should be empty when file scan was initiated by user
 	if a.absRootDir == "" {
 		return filepath.Base(sourceFile)
@@ -136,31 +149,37 @@ func (a *ARMV1) getSourceRelativePath(sourceFile string) string {
 }
 
 func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r types.Resource,
-	vars map[string]interface{}) *output.ResourceConfig {
+	vars map[string]interface{}) []output.ResourceConfig {
+
 	if _, ok := types.ResourceTypes[r.Type]; !ok {
 		return nil
 	}
 
-	var config *output.ResourceConfig
 	configs, err := m.Map(r, vars, a.templateParameters)
 	// For ARM configs will have only one element
-	for _, c := range configs {
-		config = &output.ResourceConfig{
-			ID:        c.ID,
-			Name:      c.Name,
-			Source:    a.getSourceRelativePath(path),
-			Line:      doc.StartLine,
-			Type:      c.Type,
-			Config:    c.Config,
-			SkipRules: c.SkipRules,
-		}
-
-	}
+	configs[0].Source = a.getSourceRelativePath(path)
+	configs[0].Line = doc.StartLine
 
 	if err != nil {
 		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", path))
 		return nil
 	}
 
-	return config
+	return configs
+}
+
+func (ARMV1) downloadTemplate(uri string, dst string) (string, error) {
+	parts := strings.Split(uri, "/")
+	path := filepath.Join(dst, parts[len(parts)-1])
+	client := getter.Client{
+		Src:  uri,
+		Dst:  path,
+		Mode: getter.ClientModeFile,
+	}
+	err := client.Get()
+	if err != nil {
+		zap.S().Debug("unable to parse linked termplate parameters", zap.Error(err), zap.String("file", path))
+		return "", err
+	}
+	return path, nil
 }

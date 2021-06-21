@@ -39,7 +39,7 @@ func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 	// set the root directory being scanned
 	a.absRootDir = absRootDir
 
-	allResourcesConfig := make(map[string][]output.ResourceConfig)
+	allResourcesConfig := make(output.AllResourceConfigs)
 
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, ARMFileExtensions())
 	if err != nil {
@@ -69,8 +69,16 @@ func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 				continue
 			}
 
-			for key := range configData {
-				allResourcesConfig[key] = append(allResourcesConfig[key], configData[key]...)
+			for key, configs := range configData {
+				if _, present := allResourcesConfig[key]; !present {
+					allResourcesConfig[key] = configs
+				} else {
+					for _, config := range configs {
+						if !output.IsConfigPresent(allResourcesConfig[key], config) {
+							allResourcesConfig[key] = append(allResourcesConfig[key], config)
+						}
+					}
+				}
 			}
 		}
 	}
