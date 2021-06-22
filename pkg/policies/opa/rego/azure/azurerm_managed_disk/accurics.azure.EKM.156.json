@@ -1,15 +1,15 @@
 {
-    "name": "reme_checkDataDisksEncrypted",
-    "file": "checkDataDisksEncrypted.rego",
+    "name": "checkDiskEncryption",
+    "file": "checkDiskEncryption.rego",
     "policy_type": "azure",
     "resource_type": "azurerm_managed_disk",
     "template_args": {
         "prefix": "reme_"
     },
     "severity": "MEDIUM",
-    "description": "Ensure that 'OS disk' are encrypted",
+    "description": "Ensure that 'Unattached disks' are encrypted in Azure Managed Disk",
     "reference_id": "accurics.azure.EKM.156",
     "category": "Data Protection",
     "version": 2,
-    "id": "AC_AZURE_0538"
+    "id": "AC_AZURE_0143"
 }
