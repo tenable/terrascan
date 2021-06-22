@@ -23,18 +23,18 @@ import (
 )
 
 const (
-	arm_source = "source"
-	arm_value  = "value"
+	armSource = "source"
+	armValue  = "value"
 )
 
-const tf_value = "value"
+const tfValue = "value"
 
 // PostgreSQLConfigurationConfig returns config for azurerm_postgresql_configuration
 func PostgreSQLConfigurationConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_tags:     r.Tags,
-		tf_name:     convert.ToString(r.Properties, arm_source),
-		tf_value:    convert.ToString(r.Properties, arm_value),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfTags:     r.Tags,
+		tfName:     convert.ToString(r.Properties, armSource),
+		tfValue:    convert.ToString(r.Properties, armValue),
 	}
 }

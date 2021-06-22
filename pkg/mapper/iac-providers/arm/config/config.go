@@ -17,7 +17,7 @@
 package config
 
 const (
-	tf_location = "location"
-	tf_name     = "name"
-	tf_tags     = "tags"
+	tfLocation = "location"
+	tfName     = "name"
+	tfTags     = "tags"
 )

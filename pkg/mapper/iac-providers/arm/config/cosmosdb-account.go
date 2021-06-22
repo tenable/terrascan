@@ -23,31 +23,31 @@ import (
 )
 
 const (
-	arm_ipAddressOrRange = "ipAddressOrRange"
-	arm_ipRules          = "ipRules"
+	armIPAddressOrRange = "ipAddressOrRange"
+	armIPRules          = "ipRules"
 )
 
 const (
-	tf_ipRangeFilter = "ip_range_filter"
+	tfIPRangeFilter = "ip_range_filter"
 )
 
 // CosmosDBAccountConfig returns config for azurerm_cosmosdb_account
 func CosmosDBAccountConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
 	}
 
 	var v string
-	ipr := convert.ToSlice(r.Properties, arm_ipRules)
+	ipr := convert.ToSlice(r.Properties, armIPRules)
 	for _, s := range ipr {
 		m := s.(map[string]interface{})
-		v = convert.ToString(m, arm_ipAddressOrRange)
+		v = convert.ToString(m, armIPAddressOrRange)
 		break
 	}
 	if v != "" {
-		cf[tf_ipRangeFilter] = v
+		cf[tfIPRangeFilter] = v
 	}
 	return cf
 }

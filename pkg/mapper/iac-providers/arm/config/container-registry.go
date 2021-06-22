@@ -22,20 +22,20 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-const arm_adminUserEnabled = "adminUserEnabled"
+const armAdminUserEnabled = "adminUserEnabled"
 
 const (
-	tf_sku          = "sku"
-	tf_adminEnabled = "admin_enabled"
+	tfSku          = "sku"
+	tfAdminEnabled = "admin_enabled"
 )
 
 // ContainerRegistryConfig returns config for azurerm_container_registry
 func ContainerRegistryConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:     fn.LookUp(nil, params, r.Location).(string),
-		tf_name:         fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:         r.Tags,
-		tf_sku:          fn.LookUp(nil, params, r.SKU.Name).(string),
-		tf_adminEnabled: fn.LookUp(nil, params, convert.ToString(r.Properties, arm_adminUserEnabled)).(bool),
+		tfLocation:     fn.LookUp(nil, params, r.Location).(string),
+		tfName:         fn.LookUp(nil, params, r.Name).(string),
+		tfTags:         r.Tags,
+		tfSku:          fn.LookUp(nil, params, r.SKU.Name).(string),
+		tfAdminEnabled: fn.LookUp(nil, params, convert.ToString(r.Properties, armAdminUserEnabled)).(bool),
 	}
 }

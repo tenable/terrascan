@@ -27,25 +27,25 @@ import (
 // PostgreSQLServerConfig returns config for azurerm_postgresql_server
 func PostgreSQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
-		tf_skuName:  fn.LookUp(vars, params, r.SKU.Name).(string),
-		tf_version:  fn.LookUp(vars, params, convert.ToString(r.Properties, arm_version)).(string),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
+		tfSkuName:  fn.LookUp(vars, params, r.SKU.Name).(string),
+		tfVersion:  fn.LookUp(vars, params, convert.ToString(r.Properties, armVersion)).(string),
 	}
 
-	if profile := convert.ToMap(r.Properties, arm_storageProfile); profile != nil {
-		status := fn.LookUp(vars, params, convert.ToString(profile, arm_geoRedundantBackup))
-		cf[tf_geoRedundantBackupEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), arm_statusEnabled)
+	if profile := convert.ToMap(r.Properties, armStorageProfile); profile != nil {
+		status := fn.LookUp(vars, params, convert.ToString(profile, armGeoRedundantBackup))
+		cf[tfGeoRedundantBackupEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), armStatusEnabled)
 
-		value := fn.LookUp(vars, params, convert.ToString(profile, arm_backupRetentionDays))
-		cf[tf_backupRetentionDays] = value.(float64)
+		value := fn.LookUp(vars, params, convert.ToString(profile, armBackupRetentionDays))
+		cf[tfBackupRetentionDays] = value.(float64)
 
-		value = fn.LookUp(vars, params, convert.ToString(profile, arm_storageMB))
-		cf[tf_storageMB] = value.(float64)
+		value = fn.LookUp(vars, params, convert.ToString(profile, armStorageMB))
+		cf[tfStorageMB] = value.(float64)
 
-		status = fn.LookUp(vars, params, convert.ToString(profile, arm_sslEnforcement))
-		cf[tf_sslEnforcementEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), arm_statusEnabled)
+		status = fn.LookUp(vars, params, convert.ToString(profile, armSslEnforcement))
+		cf[tfSslEnforcementEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), armStatusEnabled)
 	}
 	return cf
 }

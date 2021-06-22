@@ -25,20 +25,20 @@ import (
 )
 
 const publicAccess = "publicAccess"
-const tf_containerAccessType = "container_access_type"
+const tfContainerAccessType = "container_access_type"
 
 // StorageContainerConfig returns config for azurerm_storage_container
 func StorageContainerConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
 	}
 
 	access := fn.LookUp(nil, params, convert.ToString(r.Properties, publicAccess)).(string)
 	if strings.ToUpper(access) == "NONE" {
 		access = "private"
 	}
-	cf[tf_containerAccessType] = access
+	cf[tfContainerAccessType] = access
 	return cf
 }

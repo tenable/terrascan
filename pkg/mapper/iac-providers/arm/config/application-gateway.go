@@ -22,24 +22,24 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-const arm_wafConfiguration = "webApplicationFirewallConfiguration"
+const armWafConfiguration = "webApplicationFirewallConfiguration"
 
 const (
-	tf_wafConfiguration = "waf_configuration"
-	tf_enabled          = "enabled"
+	tfWafConfiguration = "waf_configuration"
+	tfEnabled          = "enabled"
 )
 
 // ApplicationGatewayConfig returns config for azurerm_application_gateway
 func ApplicationGatewayConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_location: fn.LookUp(nil, params, tf_location).(string),
-		tf_tags:     r.Tags,
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUp(nil, params, tfLocation).(string),
+		tfTags:     r.Tags,
 	}
 
-	w := convert.ToMap(r.Properties, arm_wafConfiguration)
-	cf[tf_wafConfiguration] = map[string]interface{}{
-		tf_enabled: convert.ToBool(w, arm_enabled),
+	w := convert.ToMap(r.Properties, armWafConfiguration)
+	cf[tfWafConfiguration] = map[string]interface{}{
+		tfEnabled: convert.ToBool(w, armEnabled),
 	}
 	return cf
 }

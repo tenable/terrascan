@@ -23,22 +23,22 @@ import (
 )
 
 const (
-	arm_startIPAddress = "startIpAddress"
-	arm_endIPAddress   = "endIpAddress"
+	armStartIPAddress = "startIpAddress"
+	armEndIPAddress   = "endIpAddress"
 )
 
 const (
-	tf_startIPAddress = "start_ip_address"
-	tf_endIPAddress   = "end_ip_address"
+	tfStartIPAddress = "start_ip_address"
+	tfEndIPAddress   = "end_ip_address"
 )
 
 // SQLFirewallRuleConfig returns config for azurerm_sql_firewall_rule
 func SQLFirewallRuleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:       fn.LookUp(nil, params, r.Location).(string),
-		tf_name:           fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:           r.Tags,
-		tf_startIPAddress: fn.LookUp(nil, params, convert.ToString(r.Properties, arm_startIPAddress)).(string),
-		tf_endIPAddress:   fn.LookUp(nil, params, convert.ToString(r.Properties, arm_endIPAddress)).(string),
+		tfLocation:       fn.LookUp(nil, params, r.Location).(string),
+		tfName:           fn.LookUp(nil, params, r.Name).(string),
+		tfTags:           r.Tags,
+		tfStartIPAddress: fn.LookUp(nil, params, convert.ToString(r.Properties, armStartIPAddress)).(string),
+		tfEndIPAddress:   fn.LookUp(nil, params, convert.ToString(r.Properties, armEndIPAddress)).(string),
 	}
 }

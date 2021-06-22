@@ -27,15 +27,15 @@ import (
 // KeyVaultSecretConfig returns config for azurerm_key_vault_secret
 func KeyVaultSecretConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
 	}
 
-	a := convert.ToMap(r.Properties, arm_attributes)
+	a := convert.ToMap(r.Properties, armAttributes)
 	if i := a["exp"]; i != nil {
 		t := time.Unix(int64(i.(float64)), 0)
-		cf[tf_expirationDate] = t.Format(time.RFC3339)
+		cf[tfExpirationDate] = t.Format(time.RFC3339)
 	}
 	return cf
 }

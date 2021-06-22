@@ -22,25 +22,25 @@ import (
 )
 
 const (
-	arm_storageEndpoint            = "storageEndpoint"
-	arm_storageAccountAccessKey    = "storageAccountAccessKey"
-	arm_isStorageSecondaryKeyInUse = "isStorageSecondaryKeyInUse"
-	arm_retentionDays              = "retentionDays"
+	armStorageEndpoint            = "storageEndpoint"
+	armStorageAccountAccessKey    = "storageAccountAccessKey"
+	armIsStorageSecondaryKeyInUse = "isStorageSecondaryKeyInUse"
+	armRetentionDays              = "retentionDays"
 )
 
 const (
-	tf_storageEndpoint                    = "storage_endpoint,omitempty"
-	tf_storageAccountAccessKey            = "storage_account_access_key,omitempty"
-	tf_storageAccountAccessKeyIsSecondary = "storage_account_access_key_is_secondary,omitempty"
-	tf_retentionInDays                    = "retention_in_days,omitempty"
+	tfStorageEndpoint                    = "storage_endpoint,omitempty"
+	tfStorageAccountAccessKey            = "storage_account_access_key,omitempty"
+	tfStorageAccountAccessKeyIsSecondary = "storage_account_access_key_is_secondary,omitempty"
+	tfRetentionInDays                    = "retention_in_days,omitempty"
 )
 
 // AuditingPolicyConfig returns config for azurerm_mssql_database_extended_auditing_policy
 func AuditingPolicyConfig(r types.Resource) map[string]interface{} {
 	return map[string]interface{}{
-		tf_storageEndpoint:                    convert.ToString(r.Properties, arm_storageEndpoint),
-		tf_storageAccountAccessKey:            convert.ToString(r.Properties, arm_storageAccountAccessKey),
-		tf_storageAccountAccessKeyIsSecondary: convert.ToBool(r.Properties, arm_isStorageSecondaryKeyInUse),
-		tf_retentionInDays:                    convert.ToFloat64(r.Properties, arm_retentionDays),
+		tfStorageEndpoint:                    convert.ToString(r.Properties, armStorageEndpoint),
+		tfStorageAccountAccessKey:            convert.ToString(r.Properties, armStorageAccountAccessKey),
+		tfStorageAccountAccessKeyIsSecondary: convert.ToBool(r.Properties, armIsStorageSecondaryKeyInUse),
+		tfRetentionInDays:                    convert.ToFloat64(r.Properties, armRetentionDays),
 	}
 }

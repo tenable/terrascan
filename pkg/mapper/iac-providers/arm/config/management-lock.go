@@ -23,19 +23,19 @@ import (
 )
 
 const (
-	tf_scope     = "scope"
-	tf_lockLevel = "lock_level"
-	tf_notes     = "notes"
+	tfScope     = "scope"
+	tfLockLevel = "lock_level"
+	tfNotes     = "notes"
 )
 
 // ManagementLockConfig returns config for azurerm_management_lock
 func ManagementLockConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:  fn.LookUp(nil, params, r.Location).(string),
-		tf_name:      fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:      r.Tags,
-		tf_scope:     fn.LookUp(vars, params, r.Scope).(string),
-		tf_lockLevel: convert.ToString(r.Properties, arm_level),
-		tf_notes:     convert.ToString(r.Properties, tf_notes),
+		tfLocation:  fn.LookUp(nil, params, r.Location).(string),
+		tfName:      fn.LookUp(nil, params, r.Name).(string),
+		tfTags:      r.Tags,
+		tfScope:     fn.LookUp(vars, params, r.Scope).(string),
+		tfLockLevel: convert.ToString(r.Properties, armLevel),
+		tfNotes:     convert.ToString(r.Properties, tfNotes),
 	}
 }

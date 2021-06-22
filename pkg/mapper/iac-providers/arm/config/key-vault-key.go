@@ -24,21 +24,21 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-const arm_attributes = "attributes"
-const tf_expirationDate = "expiration_date"
+const armAttributes = "attributes"
+const tfExpirationDate = "expiration_date"
 
 // KeyVaultKeyConfig returns config for azurerm_key_vault_key
 func KeyVaultKeyConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
 	}
 
-	attr := convert.ToMap(r.Properties, arm_attributes)
+	attr := convert.ToMap(r.Properties, armAttributes)
 	if i := attr["exp"]; i != nil {
 		t := time.Unix(int64(i.(float64)), 0)
-		cf[tf_expirationDate] = t.Format(time.RFC3339)
+		cf[tfExpirationDate] = t.Format(time.RFC3339)
 	}
 	return cf
 }

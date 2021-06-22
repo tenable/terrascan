@@ -23,54 +23,54 @@ import (
 )
 
 const (
-	arm_targetResourceID                         = "targetResourceId"
-	arm_storageID                                = "storageId"
-	arm_enabled                                  = "enabled"
-	arm_retentionPolicy                          = "retentionPolicy"
-	arm_days                                     = "days"
-	arm_flowAnalyticsConfiguration               = "flowAnalyticsConfiguration"
-	arm_networkWatcherFlowAnalyticsConfiguration = "networkWatcherFlowAnalyticsConfiguration"
-	arm_workspaceID                              = "workspaceId"
-	arm_workspaceRegion                          = "workspaceRegion"
-	arm_workspaceResourceID                      = "workspaceResourceId"
-	arm_trafficAnalyticsInterval                 = "trafficAnalyticsInterval"
+	armTargetResourceID                         = "targetResourceId"
+	armStorageID                                = "storageId"
+	armEnabled                                  = "enabled"
+	armRetentionPolicy                          = "retentionPolicy"
+	armDays                                     = "days"
+	armFlowAnalyticsConfiguration               = "flowAnalyticsConfiguration"
+	armNetworkWatcherFlowAnalyticsConfiguration = "networkWatcherFlowAnalyticsConfiguration"
+	armWorkspaceID                              = "workspaceId"
+	armWorkspaceRegion                          = "workspaceRegion"
+	armWorkspaceResourceID                      = "workspaceResourceId"
+	armTrafficAnalyticsInterval                 = "trafficAnalyticsInterval"
 )
 
 const (
-	tf_networkSecurityGroupID = "network_security_group_id"
-	tf_trafficAnalytics       = "traffic_analytics"
-	tf_workspaceID            = "workspace_id,omitempty"
-	tf_workspaceRegion        = "workspace_region,omitempty"
-	tf_workspaceResourceID    = "workspace_resource_id,omitempty"
-	tf_intervalInMinutes      = "interval_in_minutes,omitempty"
+	tfNetworkSecurityGroupID = "network_security_group_id"
+	tfTrafficAnalytics       = "traffic_analytics"
+	tfWorkspaceID            = "workspace_id,omitempty"
+	tfWorkspaceRegion        = "workspace_region,omitempty"
+	tfWorkspaceResourceID    = "workspace_resource_id,omitempty"
+	tfIntervalInMinutes      = "interval_in_minutes,omitempty"
 )
 
 // NetworkWatcherFlowLogConfig returns config for azurerm_network_watcher_flow_log
 func NetworkWatcherFlowLogConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location:               fn.LookUp(nil, params, r.Location).(string),
-		tf_name:                   fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:                   r.Tags,
-		tf_networkSecurityGroupID: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_targetResourceID)).(string),
-		tf_storageAccountID:       fn.LookUp(vars, params, convert.ToString(r.Properties, arm_storageID)).(string),
-		tf_enabled:                convert.ToBool(r.Properties, arm_enabled),
+		tfLocation:               fn.LookUp(nil, params, r.Location).(string),
+		tfName:                   fn.LookUp(nil, params, r.Name).(string),
+		tfTags:                   r.Tags,
+		tfNetworkSecurityGroupID: fn.LookUp(vars, params, convert.ToString(r.Properties, armTargetResourceID)).(string),
+		tfStorageAccountID:       fn.LookUp(vars, params, convert.ToString(r.Properties, armStorageID)).(string),
+		tfEnabled:                convert.ToBool(r.Properties, armEnabled),
 	}
 
-	policy := convert.ToMap(r.Properties, arm_retentionPolicy)
-	cf[tf_retentionPolicy] = map[string]interface{}{
-		tf_enabled: convert.ToBool(policy, arm_enabled),
-		tf_days:    fn.LookUp(vars, params, convert.ToString(policy, arm_days)).(float64),
+	policy := convert.ToMap(r.Properties, armRetentionPolicy)
+	cf[tfRetentionPolicy] = map[string]interface{}{
+		tfEnabled: convert.ToBool(policy, armEnabled),
+		tfDays:    fn.LookUp(vars, params, convert.ToString(policy, armDays)).(float64),
 	}
 
-	flowConfig := convert.ToMap(r.Properties, arm_flowAnalyticsConfiguration)
+	flowConfig := convert.ToMap(r.Properties, armFlowAnalyticsConfiguration)
 	if flowConfig != nil {
-		networkConfig := convert.ToMap(flowConfig, arm_networkWatcherFlowAnalyticsConfiguration)
-		cf[tf_trafficAnalytics] = map[string]interface{}{
-			tf_enabled:             convert.ToBool(networkConfig, arm_enabled),
-			tf_workspaceID:         fn.LookUp(vars, params, arm_workspaceID).(string),
-			tf_workspaceRegion:     fn.LookUp(vars, params, arm_workspaceRegion).(string),
-			tf_workspaceResourceID: fn.LookUp(vars, params, arm_workspaceResourceID).(string),
-			tf_intervalInMinutes:   convert.ToFloat64(networkConfig, arm_trafficAnalyticsInterval),
+		networkConfig := convert.ToMap(flowConfig, armNetworkWatcherFlowAnalyticsConfiguration)
+		cf[tfTrafficAnalytics] = map[string]interface{}{
+			tfEnabled:             convert.ToBool(networkConfig, armEnabled),
+			tfWorkspaceID:         fn.LookUp(vars, params, armWorkspaceID).(string),
+			tfWorkspaceRegion:     fn.LookUp(vars, params, armWorkspaceRegion).(string),
+			tfWorkspaceResourceID: fn.LookUp(vars, params, armWorkspaceResourceID).(string),
+			tfIntervalInMinutes:   convert.ToFloat64(networkConfig, armTrafficAnalyticsInterval),
 		}
 	}
 	return cf

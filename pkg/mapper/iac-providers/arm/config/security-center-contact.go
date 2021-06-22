@@ -25,37 +25,37 @@ import (
 )
 
 const (
-	arm_emails              = "emails"
-	arm_phone               = "phone"
-	arm_alertNotifications  = "alertNotifications"
-	arm_notificationsByRole = "notificationsByRole"
-	arm_state               = "state"
+	armEmails              = "emails"
+	armPhone               = "phone"
+	armAlertNotifications  = "alertNotifications"
+	armNotificationsByRole = "notificationsByRole"
+	armState               = "state"
 )
 
 const (
-	tf_email              = "email"
-	tf_phone              = "phone"
-	tf_alertNotifications = "alert_notifications"
-	tf_alertsToAdmins     = "alerts_to_admins"
+	tfEmail              = "email"
+	tfPhone              = "phone"
+	tfAlertNotifications = "alert_notifications"
+	tfAlertsToAdmins     = "alerts_to_admins"
 )
 
 // SecurityCenterContactConfig returns config for azurerm_security_center_contact
 func SecurityCenterContactConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
-		tf_phone:    fn.LookUp(nil, params, convert.ToString(r.Properties, arm_phone)).(string),
-		tf_email:    fn.LookUp(nil, params, convert.ToString(r.Properties, arm_emails)).(string),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
+		tfPhone:    fn.LookUp(nil, params, convert.ToString(r.Properties, armPhone)).(string),
+		tfEmail:    fn.LookUp(nil, params, convert.ToString(r.Properties, armEmails)).(string),
 	}
 
-	notifications := convert.ToMap(r.Properties, arm_alertNotifications)
-	state := convert.ToString(notifications, arm_state)
-	cf[tf_alertNotifications] = strings.EqualFold(strings.ToUpper(state), "ON")
+	notifications := convert.ToMap(r.Properties, armAlertNotifications)
+	state := convert.ToString(notifications, armState)
+	cf[tfAlertNotifications] = strings.EqualFold(strings.ToUpper(state), "ON")
 
-	notifications = convert.ToMap(r.Properties, arm_notificationsByRole)
+	notifications = convert.ToMap(r.Properties, armNotificationsByRole)
 	state = convert.ToString(notifications, state)
-	cf[tf_alertsToAdmins] = strings.EqualFold(strings.ToUpper(state), "ON")
+	cf[tfAlertsToAdmins] = strings.EqualFold(strings.ToUpper(state), "ON")
 
 	return cf
 }

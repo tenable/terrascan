@@ -23,34 +23,34 @@ import (
 )
 
 const (
-	arm_encryptionSettingsCollection = "encryptionSettingsCollection"
-	arm_creationData                 = "creationData"
-	arm_createOption                 = "createOption"
-	arm_diskSizeGB                   = "diskSizeGB"
-	arm_sourceResourceID             = "sourceResourceId"
+	armEncryptionSettingsCollection = "encryptionSettingsCollection"
+	armCreationData                 = "creationData"
+	armCreateOption                 = "createOption"
+	armDiskSizeGB                   = "diskSizeGB"
+	armSourceResourceID             = "sourceResourceId"
 )
 
 const (
-	tf_createOption       = "create_option"
-	tf_diskSizeGB         = "disk_size_gb"
-	tf_sourceResourceID   = "source_resource_id"
-	tf_storageAccountType = "storage_account_type"
-	tf_encryptionSettings = "encryption_settings"
+	tfCreateOption       = "create_option"
+	tfDiskSizeGB         = "disk_size_gb"
+	tfSourceResourceID   = "source_resource_id"
+	tfStorageAccountType = "storage_account_type"
+	tfEncryptionSettings = "encryption_settings"
 )
 
 // ManagedDiskConfig returns config for azurerm_managed_disk.
 func ManagedDiskConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location:           fn.LookUp(nil, params, r.Location).(string),
-		tf_name:               fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:               r.Tags,
-		tf_storageAccountType: r.SKU.Name,
-		tf_encryptionSettings: convert.ToMap(r.Properties, arm_encryptionSettingsCollection),
-		tf_diskSizeGB:         fn.LookUp(vars, params, convert.ToString(r.Properties, arm_diskSizeGB)).(float64),
+		tfLocation:           fn.LookUp(nil, params, r.Location).(string),
+		tfName:               fn.LookUp(nil, params, r.Name).(string),
+		tfTags:               r.Tags,
+		tfStorageAccountType: r.SKU.Name,
+		tfEncryptionSettings: convert.ToMap(r.Properties, armEncryptionSettingsCollection),
+		tfDiskSizeGB:         fn.LookUp(vars, params, convert.ToString(r.Properties, armDiskSizeGB)).(float64),
 	}
 
-	data := convert.ToMap(r.Properties, arm_creationData)
-	cf[tf_createOption] = convert.ToString(data, arm_createOption)
-	cf[tf_sourceResourceID] = convert.ToString(data, arm_sourceResourceID)
+	data := convert.ToMap(r.Properties, armCreationData)
+	cf[tfCreateOption] = convert.ToString(data, armCreateOption)
+	cf[tfSourceResourceID] = convert.ToString(data, armSourceResourceID)
 	return cf
 }

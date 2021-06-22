@@ -22,15 +22,15 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-const arm_pricingTier = "pricingTier"
-const tf_tier = "tier"
+const armPricingTier = "pricingTier"
+const tfTier = "tier"
 
 // SecurityCenterSubscriptionPricingConfig returns config for azurerm_security_center_subscription_pricing
 func SecurityCenterSubscriptionPricingConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
-		tf_tier:     fn.LookUp(nil, params, convert.ToString(r.Properties, arm_pricingTier)).(string),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
+		tfTier:     fn.LookUp(nil, params, convert.ToString(r.Properties, armPricingTier)).(string),
 	}
 }

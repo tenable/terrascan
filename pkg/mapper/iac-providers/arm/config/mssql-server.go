@@ -23,25 +23,25 @@ import (
 )
 
 const (
-	arm_administratorLogin         = "administratorLogin"
-	arm_administratorLoginPassword = "administratorLoginPassword"
-	arm_minimumTLSVersion          = "minimalTlsVersion"
+	armAdministratorLogin         = "administratorLogin"
+	armAdministratorLoginPassword = "administratorLoginPassword"
+	armMinimumTLSVersion          = "minimalTlsVersion"
 )
 
 const (
-	tf_administratorLogin         = "administrator_login"
-	tf_administratorLoginPassword = "administrator_login_password"
-	tf_minimumTLSVersion          = "minimum_tls_version"
+	tfAdministratorLogin         = "administrator_login"
+	tfAdministratorLoginPassword = "administrator_login_password"
+	tfMinimumTLSVersion          = "minimum_tls_version"
 )
 
 // MSSQLServerConfig returns config for azurerm_mssql_server
 func MSSQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:                   fn.LookUp(nil, params, r.Location).(string),
-		tf_name:                       fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:                       r.Tags,
-		tf_administratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, arm_administratorLogin)).(string),
-		tf_administratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_administratorLoginPassword)).(string),
-		tf_minimumTLSVersion:          fn.LookUp(vars, params, convert.ToString(r.Properties, arm_minimumTLSVersion)).(string),
+		tfLocation:                   fn.LookUp(nil, params, r.Location).(string),
+		tfName:                       fn.LookUp(nil, params, r.Name).(string),
+		tfTags:                       r.Tags,
+		tfAdministratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLogin)).(string),
+		tfAdministratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)).(string),
+		tfMinimumTLSVersion:          fn.LookUp(vars, params, convert.ToString(r.Properties, armMinimumTLSVersion)).(string),
 	}
 }

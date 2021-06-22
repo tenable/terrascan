@@ -23,45 +23,45 @@ import (
 )
 
 const (
-	arm_subnets              = "subnets"
-	arm_properties           = "properties"
-	arm_addressPrefix        = "addressPrefix"
-	arm_networkSecurityGroup = "networkSecurityGroup"
+	armSubnets              = "subnets"
+	armProperties           = "properties"
+	armAddressPrefix        = "addressPrefix"
+	armNetworkSecurityGroup = "networkSecurityGroup"
 )
 
 const (
-	tf_subnet        = "subnet"
-	tf_addressPrefix = "address_prefix"
-	tf_securityGroup = "security_group,omitempty"
+	tfSubnet        = "subnet"
+	tfAddressPrefix = "address_prefix"
+	tfSecurityGroup = "security_group,omitempty"
 )
 
 // VirtualNetworkConfig returns config for azurerm_virtual_network
 func VirtualNetworkConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
 	}
 
-	subs := convert.ToSlice(r.Properties, arm_subnets)
+	subs := convert.ToSlice(r.Properties, armSubnets)
 	subnets := make([]map[string]string, 0)
 	for _, ss := range subs {
 		s := ss.(map[string]interface{})
-		prop := convert.ToMap(s, arm_properties)
+		prop := convert.ToMap(s, armProperties)
 
 		sub := map[string]string{
-			tf_name:          fn.LookUp(vars, params, s[tf_name].(string)).(string),
-			tf_addressPrefix: fn.LookUp(vars, params, prop[arm_addressPrefix].(string)).(string),
+			tfName:          fn.LookUp(vars, params, s[tfName].(string)).(string),
+			tfAddressPrefix: fn.LookUp(vars, params, prop[armAddressPrefix].(string)).(string),
 		}
 
-		if nsg := convert.ToMap(prop, arm_networkSecurityGroup); nsg != nil {
+		if nsg := convert.ToMap(prop, armNetworkSecurityGroup); nsg != nil {
 			if sg, ok := fn.LookUp(vars, params, nsg["id"].(string)).(string); ok {
-				sub[tf_securityGroup] = sg
+				sub[tfSecurityGroup] = sg
 			}
 		}
 		subnets = append(subnets, sub)
 	}
-	cf[tf_subnet] = subnets
+	cf[tfSubnet] = subnets
 
 	return cf
 }

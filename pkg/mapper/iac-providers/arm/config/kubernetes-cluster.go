@@ -23,61 +23,61 @@ import (
 )
 
 const (
-	arm_dnsPrefix         = "dnsPrefix"
-	arm_agentPoolProfiles = "agentPoolProfiles"
-	arm_poolName          = "name"
-	arm_nodeCount         = "count"
-	arm_vmSize            = "vmSize"
-	arm_addonProfiles     = "addonProfiles"
-	arm_networkProfile    = "networkProfile"
-	arm_networkPlugin     = "networkPlugin"
-	arm_networkPolicy     = "networkPolicy"
+	armDNSPrefix         = "dnsPrefix"
+	armAgentPoolProfiles = "agentPoolProfiles"
+	armPoolName          = "name"
+	armNodeCount         = "count"
+	armVMSize            = "vmSize"
+	armAddonProfiles     = "addonProfiles"
+	armNetworkProfile    = "networkProfile"
+	armNetworkPlugin     = "networkPlugin"
+	armNetworkPolicy     = "networkPolicy"
 )
 
 const (
-	tf_dnsPrefix       = "dns_prefix"
-	tf_defaultNodePool = "default_node_pool"
-	tf_nodeCount       = "node_count"
-	tf_vmSize          = "vm_size"
-	tf_addonProfile    = "addon_profile"
-	tf_config          = "config"
-	tf_networkProfile  = "network_profile"
-	tf_networkPlugin   = "network_plugin"
-	tf_networkPolicy   = "network_policy"
+	tfDNSPrefix       = "dns_prefix"
+	tfDefaultNodePool = "default_node_pool"
+	tfNodeCount       = "node_count"
+	tfVMSize          = "vm_size"
+	tfAddonProfile    = "addon_profile"
+	tfConfig          = "config"
+	tfNetworkProfile  = "network_profile"
+	tfNetworkPlugin   = "network_plugin"
+	tfNetworkPolicy   = "network_policy"
 )
 
 // KubernetesClusterConfig returns config for azurerm_kubernetes_cluster.
 func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location:  fn.LookUp(nil, params, r.Location).(string),
-		tf_name:      fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:      r.Tags,
-		tf_dnsPrefix: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_dnsPrefix)).(string),
+		tfLocation:  fn.LookUp(nil, params, r.Location).(string),
+		tfName:      fn.LookUp(nil, params, r.Name).(string),
+		tfTags:      r.Tags,
+		tfDNSPrefix: fn.LookUp(vars, params, convert.ToString(r.Properties, armDNSPrefix)).(string),
 	}
 
-	poolProfiles := convert.ToSlice(r.Properties, arm_agentPoolProfiles)
+	poolProfiles := convert.ToSlice(r.Properties, armAgentPoolProfiles)
 	dnp := make([]map[string]interface{}, 0)
 	for _, p := range poolProfiles {
 		profile := p.(map[string]interface{})
 		newPool := map[string]interface{}{
-			tf_name:      fn.LookUp(vars, params, convert.ToString(profile, arm_poolName)).(string),
-			tf_vmSize:    fn.LookUp(vars, params, convert.ToString(profile, arm_vmSize)).(string),
-			tf_nodeCount: fn.LookUp(vars, params, convert.ToString(profile, arm_nodeCount)).(float64),
+			tfName:      fn.LookUp(vars, params, convert.ToString(profile, armPoolName)).(string),
+			tfVMSize:    fn.LookUp(vars, params, convert.ToString(profile, armVMSize)).(string),
+			tfNodeCount: fn.LookUp(vars, params, convert.ToString(profile, armNodeCount)).(float64),
 		}
 		dnp = append(dnp, newPool)
 	}
-	cf[tf_defaultNodePool] = dnp
+	cf[tfDefaultNodePool] = dnp
 
-	addonProfiles := convert.ToMap(r.Properties, arm_addonProfiles)
+	addonProfiles := convert.ToMap(r.Properties, armAddonProfiles)
 	aps := make(map[string]interface{})
 	for key, value := range addonProfiles {
 		addon := value.(map[string]interface{})
 		profile := map[string]interface{}{
-			tf_enabled: addon["enabled"].(bool),
+			tfEnabled: addon["enabled"].(bool),
 		}
 
 		if cfg, ok := addon["config"]; ok {
-			profile[tf_config] = cfg.(map[string]interface{})
+			profile[tfConfig] = cfg.(map[string]interface{})
 		}
 
 		if key == "kubeDashboard" {
@@ -85,12 +85,12 @@ func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface
 		}
 		aps[key] = profile
 	}
-	cf[tf_addonProfile] = aps
+	cf[tfAddonProfile] = aps
 
-	netProfile := convert.ToMap(r.Properties, arm_networkProfile)
-	cf[tf_networkProfile] = map[string]string{
-		tf_networkPlugin: fn.LookUp(vars, params, convert.ToString(netProfile, arm_networkPlugin)).(string),
-		tf_networkPolicy: fn.LookUp(vars, params, convert.ToString(netProfile, arm_networkPolicy)).(string),
+	netProfile := convert.ToMap(r.Properties, armNetworkProfile)
+	cf[tfNetworkProfile] = map[string]string{
+		tfNetworkPlugin: fn.LookUp(vars, params, convert.ToString(netProfile, armNetworkPlugin)).(string),
+		tfNetworkPolicy: fn.LookUp(vars, params, convert.ToString(netProfile, armNetworkPolicy)).(string),
 	}
 	return cf
 }

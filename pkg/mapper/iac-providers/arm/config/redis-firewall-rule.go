@@ -23,22 +23,22 @@ import (
 )
 
 const (
-	arm_startIP = "startIP"
-	arm_endIP   = "endIP"
+	armStartIP = "startIP"
+	armEndIP   = "endIP"
 )
 
 const (
-	tf_startIP = "start_ip"
-	tf_endIP   = "end_ip"
+	tfStartIP = "start_ip"
+	tfEndIP   = "end_ip"
 )
 
 // RedisFirewallRuleConfig returns config for azurerm_redis_firewall_rule
 func RedisFirewallRuleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
-		tf_startIP:  fn.LookUp(nil, params, convert.ToString(r.Properties, arm_startIP)).(string),
-		tf_endIP:    fn.LookUp(nil, params, convert.ToString(r.Properties, arm_endIP)).(string),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
+		tfStartIP:  fn.LookUp(nil, params, convert.ToString(r.Properties, armStartIP)).(string),
+		tfEndIP:    fn.LookUp(nil, params, convert.ToString(r.Properties, armEndIP)).(string),
 	}
 }

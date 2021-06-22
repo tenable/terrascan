@@ -22,20 +22,20 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-const arm_enableSoftDelete = "enableSoftDelete"
+const armEnableSoftDelete = "enableSoftDelete"
 
 const (
-	tf_tenantID          = "tenant_id"
-	tf_softDeleteEnabled = "soft_delete_enabled"
+	tfTenantID          = "tenant_id"
+	tfSoftDeleteEnabled = "soft_delete_enabled"
 )
 
 // KeyVaultConfig returns config for azurerm_key_vault
 func KeyVaultConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:          fn.LookUp(nil, params, r.Location).(string),
-		tf_name:              fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:              r.Tags,
-		tf_softDeleteEnabled: convert.ToBool(r.Properties, arm_enableSoftDelete),
-		tf_tenantID:          convert.ToString(params, arm_tenantID),
+		tfLocation:          fn.LookUp(nil, params, r.Location).(string),
+		tfName:              fn.LookUp(nil, params, r.Name).(string),
+		tfTags:              r.Tags,
+		tfSoftDeleteEnabled: convert.ToBool(r.Properties, armEnableSoftDelete),
+		tfTenantID:          convert.ToString(params, armTenantID),
 	}
 }

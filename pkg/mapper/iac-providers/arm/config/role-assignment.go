@@ -23,25 +23,25 @@ import (
 )
 
 const (
-	arm_level            = "level"
-	arm_principalID      = "principalId"
-	arm_roleDefinitionID = "roleDefinitionId"
+	armLevel            = "level"
+	armPrincipalID      = "principalId"
+	armRoleDefinitionID = "roleDefinitionId"
 )
 
 const (
-	tf_principalID      = "principal_id"
-	tf_roleDefinitionID = "role_definition_id"
+	tfPrincipalID      = "principal_id"
+	tfRoleDefinitionID = "role_definition_id"
 )
 
 // RoleAssignmentConfig returns config for azurerm_role_assignment
 func RoleAssignmentConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location:         fn.LookUp(nil, params, r.Location).(string),
-		tf_name:             fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:             r.Tags,
-		tf_scope:            fn.LookUp(vars, params, r.Scope).(string),
-		tf_lockLevel:        convert.ToString(r.Properties, arm_level),
-		tf_principalID:      convert.ToString(r.Properties, arm_principalID),
-		tf_roleDefinitionID: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_roleDefinitionID)).(string),
+		tfLocation:         fn.LookUp(nil, params, r.Location).(string),
+		tfName:             fn.LookUp(nil, params, r.Name).(string),
+		tfTags:             r.Tags,
+		tfScope:            fn.LookUp(vars, params, r.Scope).(string),
+		tfLockLevel:        convert.ToString(r.Properties, armLevel),
+		tfPrincipalID:      convert.ToString(r.Properties, armPrincipalID),
+		tfRoleDefinitionID: fn.LookUp(vars, params, convert.ToString(r.Properties, armRoleDefinitionID)).(string),
 	}
 }

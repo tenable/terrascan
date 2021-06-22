@@ -3,11 +3,11 @@
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+    You may obtain a copy "PatchScheduleConfig the License at
 
 		http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
+	Unless required by applicable law or agreed to in writing, s"PatchScheduleConfigtware
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
@@ -23,22 +23,22 @@ import (
 )
 
 const (
-	arm_dayOfWeek       = "dayOfWeek"
-	arm_startHourUtc    = "startHourUtc"
-	arm_scheduleEntries = "scheduleEntries"
+	armDayOfWeek       = "dayOfWeek"
+	armStartHourUtc    = "startHourUtc"
+	armScheduleEntries = "scheduleEntries"
 )
 
 const (
-	tf_dayOfWeek    = "day_of_week"
-	tf_startHourUTC = "start_hour_utc"
+	tfDayOfWeek    = "day_of_week"
+	tfStartHourUTC = "start_hour_utc"
 )
 
-// RedisCacheConfig returns config for patch_schedule
+// PatchScheduleConfig returns config for patch_schedule
 func PatchScheduleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
-	sch := convert.ToMap(r.Properties, arm_scheduleEntries)
+	sch := convert.ToMap(r.Properties, armScheduleEntries)
 	return map[string]interface{}{
-		tf_dayOfWeek:    fn.LookUp(nil, params, convert.ToString(sch, arm_dayOfWeek)).(string),
-		tf_startHourUTC: fn.LookUp(nil, params, convert.ToString(sch, arm_startHourUtc)).(float64),
-		tf_tags:         r.Tags,
+		tfDayOfWeek:    fn.LookUp(nil, params, convert.ToString(sch, armDayOfWeek)).(string),
+		tfStartHourUTC: fn.LookUp(nil, params, convert.ToString(sch, armStartHourUtc)).(float64),
+		tfTags:         r.Tags,
 	}
 }

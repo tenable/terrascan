@@ -23,23 +23,23 @@ import (
 )
 
 const (
-	arm_login    = "login"
-	arm_sid      = "sid"
-	arm_tenantID = "tenantId"
+	armLogin    = "login"
+	armSid      = "sid"
+	armTenantID = "tenantId"
 )
 const (
-	tf_login    = "login"
-	tf_objectID = "object_id"
+	tfLogin    = "login"
+	tfObjectID = "object_id"
 )
 
 // SQLActiveDirectoryAdministratorConfig returns config for azurerm_sql_active_directory_administrator
 func SQLActiveDirectoryAdministratorConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tf_location: fn.LookUp(nil, params, r.Location).(string),
-		tf_name:     fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:     r.Tags,
-		tf_login:    fn.LookUp(vars, params, convert.ToString(r.Properties, arm_login)).(string),
-		tf_objectID: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_sid)).(string),
-		tf_tenantID: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_tenantID)).(string),
+		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfTags:     r.Tags,
+		tfLogin:    fn.LookUp(vars, params, convert.ToString(r.Properties, armLogin)).(string),
+		tfObjectID: fn.LookUp(vars, params, convert.ToString(r.Properties, armSid)).(string),
+		tfTenantID: fn.LookUp(vars, params, convert.ToString(r.Properties, armTenantID)).(string),
 	}
 }

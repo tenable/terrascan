@@ -25,55 +25,55 @@ import (
 )
 
 const (
-	arm_storageAccountID = "storageAccountId"
-	arm_category         = "category"
-	arm_logs             = "logs"
+	armStorageAccountID = "storageAccountId"
+	armCategory         = "category"
+	armLogs             = "logs"
 )
 
 const (
-	tf_targetResourceID = "target_resource_id"
-	tf_storageAccountID = "storage_account_id"
-	tf_log              = "log"
-	tf_category         = "category"
-	tf_retentionPolicy  = "retention_policy"
-	tf_days             = "days"
+	tfTargetResourceID = "target_resource_id"
+	tfStorageAccountID = "storage_account_id"
+	tfLog              = "log"
+	tfCategory         = "category"
+	tfRetentionPolicy  = "retention_policy"
+	tfDays             = "days"
 )
 
 // DiagnosticSettingConfig returns config for azurerm_monitor_diagnostic_setting
 func DiagnosticSettingConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location:         fn.LookUp(nil, params, r.Location).(string),
-		tf_name:             fn.LookUp(nil, params, r.Name).(string),
-		tf_tags:             r.Tags,
-		tf_targetResourceID: fn.LookUp(vars, params, getTargetResourceID(r.DependsOn)).(string),
-		tf_storageAccountID: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_storageAccountID)).(string),
+		tfLocation:         fn.LookUp(nil, params, r.Location).(string),
+		tfName:             fn.LookUp(nil, params, r.Name).(string),
+		tfTags:             r.Tags,
+		tfTargetResourceID: fn.LookUp(vars, params, getTargetResourceID(r.DependsOn)).(string),
+		tfStorageAccountID: fn.LookUp(vars, params, convert.ToString(r.Properties, armStorageAccountID)).(string),
 	}
 
-	logs := convert.ToSlice(r.Properties, arm_logs)
+	logs := convert.ToSlice(r.Properties, armLogs)
 	if len(logs) > 0 {
-		tfLog := make([]map[string]interface{}, 0)
+		tfLogMap := make([]map[string]interface{}, 0)
 		for _, lg := range logs {
 			mp := lg.(map[string]interface{})
-			policy := convert.ToMap(mp, arm_retentionPolicy)
+			policy := convert.ToMap(mp, armRetentionPolicy)
 
 			l := map[string]interface{}{
-				tf_enabled:  convert.ToBool(mp, arm_enabled),
-				tf_category: convert.ToString(mp, arm_category),
+				tfEnabled:  convert.ToBool(mp, armEnabled),
+				tfCategory: convert.ToString(mp, armCategory),
 			}
 
-			isEnabled := convert.ToBool(policy, arm_enabled)
+			isEnabled := convert.ToBool(policy, armEnabled)
 			if isEnabled {
-				l[tf_retentionPolicy] = map[string]interface{}{
-					tf_enabled: isEnabled,
-					tf_days:    fn.LookUp(vars, params, convert.ToString(policy, arm_days)).(float64),
+				l[tfRetentionPolicy] = map[string]interface{}{
+					tfEnabled: isEnabled,
+					tfDays:    fn.LookUp(vars, params, convert.ToString(policy, armDays)).(float64),
 				}
 			} else {
-				l[tf_retentionPolicy] = map[string]interface{}{
-					tf_enabled: isEnabled,
+				l[tfRetentionPolicy] = map[string]interface{}{
+					tfEnabled: isEnabled,
 				}
 			}
 		}
-		cf[tf_log] = tfLog
+		cf[tfLog] = tfLogMap
 	}
 	return cf
 }

@@ -25,45 +25,45 @@ import (
 )
 
 const (
-	arm_version             = "version"
-	arm_storageProfile      = "storageProfile"
-	arm_storageMB           = "storageMB"
-	arm_backupRetentionDays = "backupRetentionDays"
-	arm_geoRedundantBackup  = "geoRedundantBackup"
-	arm_sslEnforcement      = "sslEnforcement"
-	arm_statusEnabled       = "ENABLED"
+	armVersion             = "version"
+	armStorageProfile      = "storageProfile"
+	armStorageMB           = "storageMB"
+	armBackupRetentionDays = "backupRetentionDays"
+	armGeoRedundantBackup  = "geoRedundantBackup"
+	armSslEnforcement      = "sslEnforcement"
+	armStatusEnabled       = "ENABLED"
 )
 
 const (
-	tf_skuName                   = "sku_name"
-	tf_storageMB                 = "storage_mb"
-	tf_version                   = "version"
-	tf_backupRetentionDays       = "backup_retention_days"
-	tf_geoRedundantBackupEnabled = "geo_redundant_backup_enabled"
-	tf_sslEnforcementEnabled     = "ssl_enforcement_enabled"
+	tfSkuName                   = "sku_name"
+	tfStorageMB                 = "storage_mb"
+	tfVersion                   = "version"
+	tfBackupRetentionDays       = "backup_retention_days"
+	tfGeoRedundantBackupEnabled = "geo_redundant_backup_enabled"
+	tfSslEnforcementEnabled     = "ssl_enforcement_enabled"
 )
 
 // MySQLServerConfig returns config for azurerm_mysql_server
 func MySQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tf_location:                   fn.LookUp(nil, params, r.Location).(string),
-		tf_name:                       fn.LookUp(nil, params, r.Name).(string),
-		tf_skuName:                    fn.LookUp(vars, params, r.SKU.Name).(string),
-		tf_tags:                       r.Tags,
-		tf_version:                    fn.LookUp(vars, params, convert.ToString(r.Properties, arm_version)).(string),
-		tf_administratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, arm_administratorLogin)).(string),
-		tf_administratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, arm_administratorLoginPassword)).(string),
+		tfLocation:                   fn.LookUp(nil, params, r.Location).(string),
+		tfName:                       fn.LookUp(nil, params, r.Name).(string),
+		tfSkuName:                    fn.LookUp(vars, params, r.SKU.Name).(string),
+		tfTags:                       r.Tags,
+		tfVersion:                    fn.LookUp(vars, params, convert.ToString(r.Properties, armVersion)).(string),
+		tfAdministratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLogin)).(string),
+		tfAdministratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)).(string),
 	}
 
-	profile := convert.ToMap(r.Properties, arm_storageProfile)
-	cf[tf_storageMB] = fn.LookUp(vars, params, convert.ToString(profile, arm_storageMB)).(float64)
+	profile := convert.ToMap(r.Properties, armStorageProfile)
+	cf[tfStorageMB] = fn.LookUp(vars, params, convert.ToString(profile, armStorageMB)).(float64)
 
-	cf[tf_backupRetentionDays] = convert.ToFloat64(profile, arm_backupRetentionDays)
+	cf[tfBackupRetentionDays] = convert.ToFloat64(profile, armBackupRetentionDays)
 
-	status := strings.ToUpper(convert.ToString(profile, arm_geoRedundantBackup))
-	cf[tf_geoRedundantBackupEnabled] = strings.EqualFold(status, arm_statusEnabled)
+	status := strings.ToUpper(convert.ToString(profile, armGeoRedundantBackup))
+	cf[tfGeoRedundantBackupEnabled] = strings.EqualFold(status, armStatusEnabled)
 
-	status = strings.ToUpper(convert.ToString(r.Properties, arm_sslEnforcement))
-	cf[tf_sslEnforcementEnabled] = strings.EqualFold(status, arm_statusEnabled)
+	status = strings.ToUpper(convert.ToString(r.Properties, armSslEnforcement))
+	cf[tfSslEnforcementEnabled] = strings.EqualFold(status, armStatusEnabled)
 	return cf
 }
