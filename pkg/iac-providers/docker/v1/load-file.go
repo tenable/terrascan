@@ -17,13 +17,24 @@
 package dockerv1
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
+)
+
+const (
+	dockerDirectory        string = "docker"
+	resourceTypeDockerfile string = "dockerfile"
+	// IDConnectorString is string connector used in id creation
+	IDConnectorString string = "."
 )
 
 // LoadIacFile loads the docker file specified
@@ -45,8 +56,8 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 			Name:        filepath.Base(absFilePath),
 			Type:        data[i].Cmd,
 			Line:        data[i].Line,
-			ID:          data[i].Cmd + "." + GetresourceIdforDockerfile(absFilePath, data[i].Value),
-			Source:      filepath.Base(absFilePath),
+			ID:          data[i].Cmd + IDConnectorString + GetresourceIdforDockerfile(absFilePath, data[i].Value, data[i].Line),
+			Source:      dc.getSourceRelativePath(absFilePath),
 			Config:      data[i].Value,
 			SkipRules:   skipRules,
 			MinSeverity: minSeverity,
@@ -55,18 +66,44 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 		allResourcesConfig[data[i].Cmd] = append(allResourcesConfig[data[i].Cmd], config)
 
 	}
+
+	// creates config for entire dockerfile
 	config := output.ResourceConfig{
 		Name:        filepath.Base(absFilePath),
 		Type:        resourceTypeDockerfile,
 		Line:        1,
-		ID:          dockerDirectory + "." + GetresourceIdforDockerfile(absFilePath, ""),
-		Source:      filepath.Base(absFilePath),
+		ID:          dockerDirectory + IDConnectorString + GetresourceIdforDockerfile(absFilePath, "", 1),
+		Source:      dc.getSourceRelativePath(absFilePath),
 		Config:      dockerCommand,
 		SkipRules:   skipRules,
 		MinSeverity: minSeverity,
 		MaxSeverity: maxSeverity,
 	}
+
 	allResourcesConfig[dockerDirectory] = append(allResourcesConfig[dockerDirectory], config)
 	return allResourcesConfig, nil
 
+}
+
+// getSourceRelativePath fetches the relative path of file being loaded
+func (dc *DockerV1) getSourceRelativePath(sourceFile string) string {
+
+	// rootDir should be empty when file scan was initiated by user
+	if dc.absRootDir == "" {
+		return filepath.Base(sourceFile)
+	}
+	relPath, err := filepath.Rel(dc.absRootDir, sourceFile)
+	if err != nil {
+		zap.S().Debug("error while getting the relative path for", zap.String("IAC file", sourceFile), zap.Error(err))
+		return sourceFile
+	}
+	return relPath
+}
+
+// GetresourceIdforDockerfile Generates hash of the string to be used as the reference id for docker file
+func GetresourceIdforDockerfile(filepath string, value string, lineNumber int) (referenceID string) {
+	hasher := md5.New()
+	hasher.Write([]byte(filepath + value + strconv.Itoa(lineNumber)))
+	referenceID = strings.ToLower(hex.EncodeToString(hasher.Sum(nil)))
+	return
 }
