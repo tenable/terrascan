@@ -48,8 +48,8 @@ func (dc *DockerV1) ValidateInstruction(node *parser.Node) error {
 // Parse parses the given dockerfile and gives docker config.
 func (dc *DockerV1) Parse(filepath string) ([]ResourceConfig, string, error) {
 	config := []ResourceConfig{}
-	data, err := ioutil.ReadFile(filepath)
 	comments := ""
+	data, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		zap.S().Error("error loading docker file", filepath, zap.Error(err))
 		return []ResourceConfig{}, "", err
