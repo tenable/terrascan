@@ -1,6 +1,6 @@
 # Integration of Terrascan with Argo CD
 
-Terrascan can be configured as an Argo CD job during the application sync process using argocd’s resource hook. The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations.
+Terrascan can be configured as an Argo CD job during the application sync process using ArgoCD’s resource hook. The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations.
 
 ## Terrascan can be integrated with Argo CD in two ways
 ___
@@ -8,14 +8,18 @@ ___
 2. Use terrascan’s k8s admission controller along with a pre-sync that scans a configured repository with the admission controller webhook
 
 
-### 1. Configure terrascan as a PreSync hook and scan the remote repository. 
+### Method 1. Configure terrascan as a PreSync hook and scan the remote repository.
 ___
 
 #### Configure a PreSync hook
 
-The following example hook yaml is mostly ready to be added to an existing kubernetes configuration. Just make sure that the secrets,  known_hosts  and ssh_config volume are relevant and specify a terrascan image. You can also map a slack notification script to the container which will send notifications to your Slack webhook endpoint after the embedded script scans the repo.
- 
-```yaml 
+The following example of a hook yaml is nearly ready to be added to an existing kubernetes configuration. To complete the configutation, you need to:
+- Ensure that the secrets,  `known_hosts`, and `ssh_config` volume are relevant for your specific environment.
+- Specify a terrascan image.
+
+You can also map a slack notification script to the container which will send notifications to your Slack webhook endpoint after the embedded script scans the repo.
+
+```yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -82,7 +86,7 @@ spec:
            command:
            - /go/bin/terrascan
            - version
-         periodSeconds: 10 
+         periodSeconds: 10
        #if want to use private repo
        volumeMounts:
          - mountPath: /etc/secret-volume
@@ -95,46 +99,51 @@ spec:
            name: ssh-known-hosts
            readOnly: true
          - mountPath: /data
-           name: notification-scripts 
+           name: notification-scripts
            readOnly: true
- 
+
      restartPolicy: Never
  backoffLimit: 1
-``` 
- 
-As shown, the PreSync requires access to the repository where IaC is stored, using the same branch (default) as the Argo CD application pipeline.
-Configuring the job to delete only after the specified time see ttlSecondsAfterFinished will allow users to check for violations in the User Interface, the alternative is through notifications.
+```
 
-Example slack notification script
+> **Note:** As shown above, the PreSync requires access to the repository where IaC is stored, using the same branch (default) as the ArgoCD application pipeline.
+
+To allow users to check for violations in the web interface, configure the job to delete after the specified time, using the parameter `ttlSecondsAfterFinished`. In addition, violation can be reported as webhook notifications, as shown below.
+
+##### Example slack notification script
+
+
 
 ```sh
 #!/bin/sh
- 
+
 function send_slack_notificaton {
   channel=$1
   username=$2
   slack_hook=$3
- 
+
   curl -X POST --data-urlencode payload="{\"channel\": \"#${channel}\", \"username\": \"${username}\", \"text\": \" \`\`\` $(cat results.out) \`\`\` \", \"icon_emoji\": \":ghost:\"}" ${slack_hook}
 }
- 
+
 if [ -p /dev/stdin ]; then
   echo "processing terrascan results"
   while IFS= read line; do
           echo "${line}" | tr '\\"' ' ' >> results.out
   done
- 
+
   cat results.out
- 
+
   send_slack_notificaton $1 $2 $3
- 
+
   echo "notification exit code: $?"
 else
   echo "no response skipping"
 fi
-``` 
- 
-For non-public repositories, the private key, known_hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
+```
+
+For private repositories, the private following keys must be added as kubernetes secret:
+ - `private key` and ssh `config` as Secret
+ - `known_hosts`as ConfigMap
  
 ```
  kubectl create secret generic ssh-key-secret \
@@ -142,41 +151,40 @@ For non-public repositories, the private key, known_hosts and ssh config needs t
     --from-file=ssh-publickey=< path to your public key >
 ```
 
-Config-map: 
+**Config-map**:
 
-``` 
+```
   kubectl  create configmap ssh-known-hosts --from-file=< path to your known hosts file >
 ```   
 
-``` 
+```
   kubectl  create configmap slack-notifications --from-file=< path to your notification script >
 ```
- 
-ssh config secret
+
+**ssh config secret**
 
 ```
  kubectl create secret generic ssh-config-secret \
    --from-file=< path to your ssh config file >
 ```   
- 
-Example ssh config file
 
-``` 
+##### Example ssh config file
+
+```
  Host github.com
   HostName github.com
   IdentityFile ~/.ssh/id_ed25519_github
 ```
 
-Once the presynchook yaml file is completely configured, add this file to your repository folder for which Argo CD pipeline is configured.
+After configuring the presynchook yaml file, add the file to the relevant repository folder to configure Argo CD.
 
 
-### 2. Use PreSyncHook to trigger the Terrascan Server Service
+### Method 2. Use PreSyncHook to trigger the Terrascan Server Service
 ___
-You can use the already deployed terrascan server service in k8s cluster to scan the remote repository from Argo CD PreSync hook.
-To configure, follow below steps
+You can use a pre-deployed terrascan server service in K8s cluster to scan the remote repository from Argo CD PreSync hook.
+To configure, follow these steps:
 
-
-#### Step 1: Configure terrascan admission controller webhook deployment yaml file with required keys and volumes and service to expose the controller pod.
+#### Step 1: Configure Terrascan Server webhook deployment yaml file with required keys and volumes and service to expose the controller pod.
 
 ```yaml
 apiVersion: apps/v1
@@ -255,13 +263,13 @@ template:
       #add a configmap for the terrascan config.toml file    
       - name: terrascan-config
         configMap:
-          name: terrascan-config 
+          name: terrascan-config
       #add a secret for the tls certificates        
       - name: terrascan-certs-secret
         secret:
           secretName: terrascan-certs-secret    
 ```            
-Service example
+**Service example**
 
 ```yaml
 apiVersion: v1
@@ -276,50 +284,55 @@ spec:
     targetPort: 443
 ```
 
-For non-public repositories, the private key, known hosts and ssh config needs to be added as a kubernetes secret, configmap and secret respectively.
-  
+For private repositories, the following private keys needs to be added as a kubernetes secret:
+
+ - `private key` and ssh `config` as Secret
+ - `known_hosts`as ConFigmap
+
+
 ```
 kubectl create secret generic ssh-key-secret \
   --from-file=ssh-privatekey= < path to your private key > \
   --from-file=ssh-publickey=< path to your public key >
-``` 
+```
 
 ```
 kubectl create secret generic terrascan-certs-secret \
   --from-file= < path to your .key file > \
   --from-file= < path to your .crt file >
-``` 
+```
 
-Config-map: 
+**Config-map**:
 
-``` 
+```
 kubectl create configmap ssh-known-hosts --from-file=< path to your known hosts file >
-``` 
+```
 
 ```
 kubectl create configmap terrascan-config  --from-file=<path to your config.toml file >
 ```
-ssh config secret
+**ssh config secret**
 
-``` 
+```
 kubectl create secret generic ssh-config-secret \
   --from-file=< path to your ssh config file >
-``` 
+```
 
-Example ssh config file
+##### Example ssh config file
 
-``` 
+```
 Host github.com
   HostName github.com
   IdentityFile ~/.ssh/id_ed25519_github
-``` 
+```
 
 After making changes to the webhook deployment file, apply this yaml in your cluster.
 
-You can also run terrascan admission controller server outside cluster, for more information on configuring terrascan as an admission controller webhook, follow https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/admission-controller-webhooks-usage 
+You can also run terrascan admission controller server outside cluster, for more information and instructions on configuring terrascan as an admission controller webhook, see https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/admission-controller-webhooks-usage.
 
+#### Step 2: Create a Dockerfile
 
-#### Step 2: Create a Dockerfile for the container which has the terrascan script to run the remote scan against the terrascan’s admission controller webhook.
+Create a Dockerfile for the container. This container will run the script that triggers the remote Terrascan API server. The template for the script is below, after the Dockerfile. Please fill the values in the template to match your environment.
 
 ```DockerFile
 # Dockerfile with a script to use terrascan's validating webhook
@@ -327,7 +340,7 @@ You can also run terrascan admission controller server outside cluster, for more
 FROM alpine:3.12.0
 
 #curl to send request to terrascan validating webhook
-RUN apk add --no-cache curl 
+RUN apk add --no-cache curl
 
 WORKDIR /home/terrascan
 
@@ -346,7 +359,7 @@ USER 101
 CMD ["sh"]
 ```
 
-terrascan-remote-scan script
+##### The terrascan-remote-scan script
 
 ```sh
 #!/bin/sh
@@ -360,8 +373,8 @@ IAC_VERSION=${IAC_VERSION:-"v1"}
 CLOUD_PROVIDER=${CLOUD_PROVIDER:-"all"}
 REMOTE_TYPE=${REMOTE_TYPE:-"git"}
 
-if [ -z ${SERVICE_NAME} ]; then 
-    echo "Service Name Not set" 
+if [ -z ${SERVICE_NAME} ]; then
+    echo "Service Name Not set"
     exit 6
 fi
 
@@ -401,6 +414,8 @@ fi
 
 The following example hook yaml is mostly ready to be added to an existing kubernetes configuration.
 
+[comment]: <> (it says 'mostly', what is the pending thing for user to add/configure?)
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -434,7 +449,7 @@ template:
         - name: IAC_TYPE
           value: <IAC TYPE YOU WANT SCAN> # If not provided default value is 'k8s'
         - name: IAC_VERSION
-          value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1' 
+          value: <VERSION OF IAC TYPE SELECTED> # If not provided default value is 'v1'
         - name: CLOUD_PROVIDER
           value: <TYPE OF CLOUD PROVIDER> #If not provided default value is 'all'
         - name: REMOTE_TYPE
@@ -467,8 +482,8 @@ template:
 backoffLimit: 1
 ```
 
-Configuring the job to delete only after the specified time see ttlSecondsAfterFinished will allow users to check for violations in the User Interface, the alternative is through notifications.
-Once the presynchook yaml file is completely configured add this file to your Repository folder which you want to configure for Argo CD.
+To allow users to check for violations in the web interface, configure the job to delete after the specified time, using the parameter `ttlSecondsAfterFinished`. In addition, violation can be reported as webhook notifications, as shown in Method 1.
 
-` All the example yaml configuration files present in documentation are tested with k8s 1.19.7 version. 
-` 
+After configuring the presynchook yaml file, add the file to the relevant repository folder to configure Argo CD.
+
+> **Note**: All the example yaml configuration files present in documentation are tested with k8s 1.19.7 version.
