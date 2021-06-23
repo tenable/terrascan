@@ -17,15 +17,19 @@
 package cftv1
 
 import (
+	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
-	"gopkg.in/src-d/go-git.v4"
-	gitConfig "gopkg.in/src-d/go-git.v4/config"
-	"gopkg.in/src-d/go-git.v4/plumbing"
+	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"syscall"
 	"testing"
+
+	"go.uber.org/zap"
+	"gopkg.in/src-d/go-git.v4"
+	gitConfig "gopkg.in/src-d/go-git.v4/config"
+	"gopkg.in/src-d/go-git.v4/plumbing"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -55,11 +59,11 @@ func TestLoadIacDir(t *testing.T) {
 	}
 
 	table := []struct {
+		wantErr error
+		want    output.AllResourceConfigs
+		cftv1   CFTV1
 		name    string
 		dirPath string
-		cftv1   CFTV1
-		want    output.AllResourceConfigs
-		wantErr error
 	}{
 		{
 			name:    "empty config",
@@ -69,8 +73,9 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:    "load config dir with sub directories",
-			dirPath: testDataDir,
+			dirPath: filepath.Join(testDataDir, "templates"),
 			cftv1:   CFTV1{},
+			want:    map[string][]output.ResourceConfig{},
 			wantErr: nil,
 		},
 		{
@@ -81,8 +86,9 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:    "load valid dir",
-			dirPath: filepath.Join(testDataDir, "s3"),
+			dirPath: filepath.Join(testDataDir, "templates", "s3"),
 			cftv1:   CFTV1{},
+			want:    map[string][]output.ResourceConfig{},
 			wantErr: nil,
 		},
 	}
@@ -107,23 +113,48 @@ func TestLoadIacDir(t *testing.T) {
 
 func TestCFTMapper(t *testing.T) {
 	root := filepath.Join(basePath, provider)
-	dirList := make([]string, 0)
-	err := filepath.Walk(root, func(filePath string, fileInfo os.FileInfo, err error) error {
-		if fileInfo != nil && fileInfo.IsDir() {
-			dirList = append(dirList, filePath)
-		}
-		return err
-	})
-
+	dirList, err := ioutil.ReadDir(root)
 	if err != nil {
-		t.Error(err)
+		log.Fatal(err)
 	}
 
 	cftv1 := CFTV1{}
-	for i := 1; i < len(dirList); i++ {
-		dir := dirList[i]
-		t.Run(dir, func(t *testing.T) {
-			_, gotErr := cftv1.LoadIacDir(dir, false)
+	for _, dir := range dirList {
+		resourceDir := filepath.Join(root, dir.Name())
+		t.Run(resourceDir, func(t *testing.T) {
+			allResourceConfigs, gotErr := cftv1.LoadIacDir(resourceDir, false)
+
+			// load expected output.json from test artifacts
+			var testArc output.AllResourceConfigs
+			outputData, err := ioutil.ReadFile(filepath.Join(resourceDir, "output.json"))
+			if err != nil {
+				t.Errorf("error reading output.json ResourceConfig, %T", err)
+			}
+
+			err = json.Unmarshal(outputData, &testArc)
+			if err != nil {
+				t.Errorf("error loading output.json ResourceConfig, %T", err)
+			}
+
+			// check if resourcetype and resources are present
+			for name, resources := range testArc {
+				if allResourceConfigs[name] == nil {
+					t.Errorf("resource Type %s from test data %s not found", name, resourceDir)
+				}
+				for _, testResource := range resources {
+					var found bool
+					for _, resource := range allResourceConfigs[name] {
+						if resource.ID == testResource.ID {
+							found = true
+							break
+						}
+					}
+					if !found {
+						t.Errorf("resource %s of type %s from test data not found", testResource.ID, name)
+					}
+				}
+			}
+
 			_, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

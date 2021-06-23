@@ -67,4 +67,7 @@ const (
 	AwsEfsFileSystemPolicy           = "aws_efs_file_system_policy"
 	AwsSecretsManagerResourcePolicy  = "aws_secretsmanager_secret_policy"
 	AwsEcsTaskDefinition             = "aws_ecs_task_definition"
+	AwsS3Bucket                      = "aws_s3_bucket"
+	AwsS3BucketPublicAccessBlock     = "aws_s3_bucket_public_access_block"
+	AwsS3BucketPolicy                = "aws_s3_bucket_policy"
 )
