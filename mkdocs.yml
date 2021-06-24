@@ -39,7 +39,11 @@ extra:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - Usage: usage.md
+  - Usage:
+    - Usage Overview: usage/usage.md
+    - Command Line: usage/command_line_mode.md
+    - Server Mode: usage/server_mode.md
+    - Config File: usage/config_options.md
   - Integrations:
     - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
     - ArgoCD: integrations/argocd-integration.md
