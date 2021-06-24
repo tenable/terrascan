@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
 	"os"
@@ -373,12 +374,17 @@ func removeFileAndRoothFromViolations(v violations) {
 }
 
 // GetAbsoluteFilePathForSarif helper for sarif path
-func GetAbsoluteFilePathForSarif(resourcePath, filePath string) string {
+func GetAbsoluteFilePathForSarif(resourcePath, filePath string) (string, error) {
 	if !filepath.IsAbs(resourcePath) {
-		resourcePath, _ = filepath.Abs(resourcePath)
+		resourcePath, err := filepath.Abs(resourcePath)
+		if err != nil {
+			zap.S().Errorf("unable to get absolute path for %s, error: %v", resourcePath, err)
+			return "", err
+		}
 	}
-	if utils.GetFileMode(resourcePath).IsDir() {
-		return filepath.Join(resourcePath, filePath)
+	mode := utils.GetFileMode(resourcePath)
+	if mode != nil && (*mode).IsDir() {
+		return filepath.Join(resourcePath, filePath), nil
 	}
-	return resourcePath
+	return resourcePath, nil
 }

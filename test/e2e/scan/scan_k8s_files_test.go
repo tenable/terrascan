@@ -78,7 +78,8 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-d", iacDir, "-o", "sarif"}
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacDir, "config.yaml"))
+					path, _ := helper.GetAbsoluteFilePathForSarif(iacDir, "config.yaml")
+					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), path)
 					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
 				})
 			})
@@ -149,7 +150,8 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-f", iacFile, "-o", "sarif"}
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), helper.GetAbsoluteFilePathForSarif(iacFile, "config.yaml"))
+					path, _ := helper.GetAbsoluteFilePathForSarif(iacFile, "config.yaml")
+					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), path)
 					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
 				})
 			})

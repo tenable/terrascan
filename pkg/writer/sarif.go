@@ -22,6 +22,7 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
 	"github.com/owenrumney/go-sarif/sarif"
+	"go.uber.org/zap"
 	"io"
 	"path/filepath"
 	"strings"
@@ -67,7 +68,11 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		rule := run.AddRule(string(violation.RuleID)).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
-		absFilePath := getAbsoluteFilePath(outputData.Summary.ResourcePath, violation.File)
+		absFilePath, err := getAbsoluteFilePath(outputData.Summary.ResourcePath, violation.File)
+
+		if err != nil {
+			return err
+		}
 
 		location := sarif.NewLocation().
 			WithPhysicalLocation(sarif.NewPhysicalLocation().
@@ -98,12 +103,17 @@ func getSarifLevel(severity string) string {
 	return m[strings.ToLower(severity)]
 }
 
-func getAbsoluteFilePath(resourcePath, filePath string) string {
+func getAbsoluteFilePath(resourcePath, filePath string) (string, error) {
 	if !filepath.IsAbs(resourcePath) {
-		resourcePath, _ = filepath.Abs(resourcePath)
+		resourcePath, err := filepath.Abs(resourcePath)
+		if err != nil {
+			zap.S().Errorf("unable to get absolute path for %s, error: %v", resourcePath, err)
+			return "", err
+		}
 	}
-	if utils.GetFileMode(resourcePath).IsDir() {
-		return filepath.Join(resourcePath, filePath)
+	fileMode := utils.GetFileMode(resourcePath)
+	if fileMode != nil && (*fileMode).IsDir() {
+		return filepath.Join(resourcePath, filePath), nil
 	}
-	return resourcePath
+	return resourcePath, nil
 }
