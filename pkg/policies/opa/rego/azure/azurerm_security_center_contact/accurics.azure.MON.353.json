@@ -1,6 +1,6 @@
 {
-    "name": "emailAlertsEnabled",
-    "file": "emailAlertsEnabled.rego",
+    "name": "emailAlertsSecurityCenterContact",
+    "file": "emailAlertsSecurityCenterContact.rego",
     "policy_type": "azure",
     "resource_type": "azurerm_security_center_contact",
     "template_args": null,
@@ -9,5 +9,5 @@
     "reference_id": "accurics.azure.MON.353",
     "category": "Logging and Monitoring",
     "version": 1,
-    "id": "AC_AZURE_0541"
+    "id": "AC_AZURE_0386"
 }
