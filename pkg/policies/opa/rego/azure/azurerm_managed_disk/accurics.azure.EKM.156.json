@@ -5,7 +5,7 @@
     "resource_type": "azurerm_managed_disk",
     "template_args": {
         "prefix": "reme_",
-        "name": "",
+        "name": "checkDiskEncryption",
         "suffix": ""
     },
     "severity": "MEDIUM",
