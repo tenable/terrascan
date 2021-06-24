@@ -4,7 +4,9 @@
     "policy_type": "azure",
     "resource_type": "azurerm_managed_disk",
     "template_args": {
-        "prefix": "reme_"
+        "prefix": "reme_",
+        "name": "",
+        "suffix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure that 'Unattached disks' are encrypted in Azure Managed Disk",
