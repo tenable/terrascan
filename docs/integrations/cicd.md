@@ -2,37 +2,50 @@
 
 Terrascan can be integrated into CI/CD pipelines to enforce security best practices as codified in the OPA rego policies included as part of Terrascan or any custom policies. This section contains examples on how to configure Terrascan in popular CI/CD tooling.
 
-## GitHub Actions
+## GitHub Action
 
-Terrascan can be configured as a job within GitHub actions workflows. A straightforward way to accomplish this is by using the [super-linter](https://github.com/github/super-linter) GitHub action which includes Terrascan. Note that at the moment super-linter only supports scanning Terraform HCL files.
+The [Terrascan GitHub action](https://github.com/marketplace/actions/terrascan-iac-scanner) can be used as part of GitHub workflows to scan your repository for IaC issues as part of code pushes or pull requests.
 
-When using super-linter you can pass the environment variable "VALIDATE_TERRAFORM_TERRASCAN: true" to ensure that Terraform configuration files are evaluated using Terrascan. To configure your GitHub actions workflow a file with the below YAML content can be included within the .github/workflows/ directory of your repository.
+![Image of Terrascan action](../img/terrascan-action.png)
 
-``` YAML
----
-name: Scan Code Base
-on:
-  push:
-  pull_request:
-    branches: [master]
+Using Terrascan's SARIF output, the action can include issues found during the scan within [GitHub's code scanning](https://docs.github.com/en/rest/reference/code-scanning) results for the repository.
+
+
+![Image of code scanning results](../img/code-scanning.png)
+
+ Below is an example workflow configuration where the action is configured to scan a repository including Terraform v14+ HCL files for AWS resources and the SARIF output of the scan is uploaded to GitHub code scanning.
+
+ ``` YAML
+on: [push]
+
 jobs:
-  build:
-    name: Scan Code Base
+  terrascan_job:
     runs-on: ubuntu-latest
+    name: terrascan-action
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Scan Code Base
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_TERRAFORM_TERRASCAN: true
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Run Terrascan
+      id: terrascan
+      uses: accurics/terrascan-action@main
+      with:
+        iac_type: 'terraform'
+        iac_version: 'v14'
+        policy_type: 'aws'
+        only_warn: true
+        sarif_upload: true
+        #non_recursive:
+        #iac_dir:
+        #policy_path:
+        #skip_rules:
+        #config_path:
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: terrascan.sarif
 ```
 
-Documentation on the GitHub actions workflow syntax is available [here](https://help.github.com/en/articles/workflow-syntax-for-github-actions).
-
+A detailed explanation of the action's input variables is available in the [terrascan-action](https://github.com/accurics/terrascan-action/) repository.
 
 ## GitLab CI
 
@@ -57,7 +70,7 @@ terrascan:
 ## Argo CD Application PreSync Hooks
 
 
-Terrascan can be configured as an Argo CD job during the application sync process using [resource hooks](https://argoproj.github.io/argo-cd/user-guide/resource_hooks). The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations. 
+Terrascan can be configured as an Argo CD job during the application sync process using [resource hooks](https://argoproj.github.io/argo-cd/user-guide/resource_hooks). The PreSync resource hook is the best way to evaluate the kubernetes deployment configuration and report any violations.
 
 
 ![picture](../img/terrascan-argo-cd-pipeline.png)
@@ -88,7 +101,7 @@ spec:
       volumes:
       - name: secret-volume
         secret:
-          secretName: ssh-key-secret    
+          secretName: ssh-key-secret
       containers:
       - name: terrascan-argocd
         image: "<your container namespace>/<your container build from step #2 below>:<hash>"
@@ -106,7 +119,7 @@ spec:
   backoffLimit: 1
 ```
 
-As shown, the PreSync requires access to the repository where IaC is stored, using the same branch (default) as the Argo CD application pipeline. 
+As shown, the PreSync requires access to the repository where IaC is stored, using the same branch (default) as the Argo CD application pipeline.
 
 For non-public repositories, the private key needs to be added as a kubernetes secret.
 
@@ -177,7 +190,7 @@ The `Dockerfile` is, of course, used to build the container.  In this case, we s
 
   ENTRYPOINT []
 
-  USER root 
+  USER root
 
   RUN apk add --no-cache openssh curl
 
