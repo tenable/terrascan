@@ -113,7 +113,7 @@ const SarifTemplateAWSAMIViolation = `{
           "informationUri": "https://github.com/accurics/terrascan",
           "rules": [
             {
-              "id": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+              "id": "AC_AWS_0001",
               "name": "amiNotEncrypted",
               "shortDescription": {
                 "text": "Enable AWS AMI Encryption"
@@ -128,7 +128,7 @@ const SarifTemplateAWSAMIViolation = `{
       },
       "results": [
         {
-          "ruleId": "AWS.EC2.Encryption\u0026KeyManagement.Medium.0688",
+          "ruleId": "AC_AWS_0001",
           "level": "warning",
           "message": {
             "text": "Enable AWS AMI Encryption"
@@ -170,7 +170,7 @@ const SarifTemplateK8sTLSViolation = `{
           "informationUri": "https://github.com/accurics/terrascan",
           "rules": [
             {
-              "id": "AC-K8-NS-IN-H-0020",
+              "id": "AC_K8S_0001",
               "name": "noHttps",
               "shortDescription": {
                 "text": "TLS disabled can affect the confidentiality of the data in transit"
@@ -185,7 +185,7 @@ const SarifTemplateK8sTLSViolation = `{
       },
       "results": [
         {
-          "ruleId": "AC-K8-NS-IN-H-0020",
+          "ruleId": "AC_K8S_0001",
           "level": "error",
           "message": {
             "text": "TLS disabled can affect the confidentiality of the data in transit"
