@@ -38,6 +38,7 @@ type ResourceConfig struct {
 	SkipRules   []SkipRule `json:"skip_rules" yaml:"skip_rules"`
 	MaxSeverity string     `json:"max_severity"`
 	MinSeverity string     `json:"min_severity"`
+	K8sWorkloadContainerImages []string `json:"k8s_workload_container_images"`
 }
 
 // SkipRule struct will hold the skipped rule and any comment for the skipped rule

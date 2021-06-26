@@ -26,6 +26,8 @@ import (
 	"github.com/iancoleman/strcase"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
+	k8scorev1 "k8s.io/api/core/v1"
+	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 )
 
 const (
@@ -78,6 +80,7 @@ func (k *K8sV1) extractResource(doc *utils.IacDocument) (*k8sResource, *[]byte, 
 		if err != nil {
 			return nil, nil, err
 		}
+		zap.S().Infof("doc data: %s; resource: %v",doc.Data, resource)
 		return &resource, &data, nil
 	case utils.JSONDoc:
 		err := json.Unmarshal(doc.Data, &resource)
@@ -113,17 +116,17 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 
 	var resourceConfig output.ResourceConfig
 
-	resourceConfig.Type = k.getNormalizedName(resource.Kind)
+	resourceConfig.Type = k.getNormalizedName(kind)
 
-	switch resource.Kind {
+	switch kind {
 	case "":
 		// error case
 		return nil, ErrNoKind
 	// non-namespaced resources
 	case "ClusterRole":
 		fallthrough
-	case "Namespace":
-		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName()
+	case "Deployment", "ReplicaSet", "ReplicationController", "Job", "CronJob", "StatefulSet", "DaemonSet":
+		//resourceConfig.K8sWorkloadContainerImages
 	default:
 		// namespaced-resources
 		namespace := resource.Metadata.Namespace

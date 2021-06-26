@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
 	"os"
@@ -123,6 +124,7 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 			return iacDocumentList, err
 		}
 		iacDocumentList[i].Data = documentBytes
+		zap.S().Infof("i : %d; bytes: %s", string(byteArray))
 		i++
 	}
 
