@@ -12,6 +12,8 @@ import (
 	"github.com/accurics/terrascan/pkg/version"
 )
 
+var testpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
+
 var expectedSarifOutput1 = fmt.Sprintf(`{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
@@ -48,7 +50,7 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
                     {
                       "physicalLocation": {
                         "artifactLocation": {
-                          "uri": "file://test/modules/m1/main.tf"
+                          "uri": "%s"
                         },
                         "region": {
                           "startLine": 20
@@ -66,7 +68,7 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
               ]
             }
           ]
-        }`, version.GetNumeric())
+        }`, version.GetNumeric(), fmt.Sprintf("file://%s", testpath))
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",

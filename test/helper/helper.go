@@ -20,10 +20,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"sort"
@@ -184,6 +186,24 @@ func CompareActualWithGoldenJSON(session *gexec.Session, goldenFileAbsPath strin
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
 	CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput)
+}
+
+// CompareActualWithGoldenJSONString compares actual data with golden json string passed as parameter
+func CompareActualWithGoldenJSONString(session *gexec.Session, golden string, isStdOut bool) {
+	goldenBytes := []byte(golden)
+
+	var sessionBytes []byte
+
+	if isStdOut {
+		sessionBytes = session.Wait().Out.Contents()
+	} else {
+		sessionBytes = session.Wait().Err.Contents()
+	}
+
+	sessionBytes = bytes.TrimSpace(sessionBytes)
+	goldenBytes = bytes.TrimSpace(goldenBytes)
+
+	gomega.Expect(utils.AreEqualJSONBytes(sessionBytes, goldenBytes)).To(gomega.BeTrue())
 }
 
 // CompareActualWithGoldenYAML compares actual data with contents of golden file passed as parameter
@@ -351,4 +371,20 @@ func removeFileAndRoothFromViolations(v violations) {
 		violation.File = ""
 		violation.PlanRoot = ""
 	}
+}
+
+// GetAbsoluteFilePathForSarif helper for sarif path
+func GetAbsoluteFilePathForSarif(resourcePath, filePath string) (string, error) {
+	if !filepath.IsAbs(resourcePath) {
+		resourcePath, err := filepath.Abs(resourcePath)
+		if err != nil {
+			zap.S().Errorf("unable to get absolute path for %s, error: %v", resourcePath, err)
+			return "", err
+		}
+	}
+	mode := utils.GetFileMode(resourcePath)
+	if mode != nil && (*mode).IsDir() {
+		return filepath.Join(resourcePath, filePath), nil
+	}
+	return resourcePath, nil
 }
