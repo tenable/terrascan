@@ -93,7 +93,7 @@ func isMetadataFile(file string) bool {
 	return strings.Contains(file, MetadataFileExtension)
 }
 
-const errFileLoad = "error while loading iac files"
+const errFileLoad = "error while loading parameter file"
 
 func (a *ARMV1) tryGetParameters(fileName string, fileDir string, files []*string) {
 	pf := strings.TrimSuffix(fileName, filepath.Ext(fileName)) + ParametersFileExtension

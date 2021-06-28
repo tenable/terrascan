@@ -46,17 +46,17 @@ const (
 // MySQLServerConfig returns config for azurerm_mysql_server
 func MySQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:                   fn.LookUp(nil, params, r.Location).(string),
-		tfName:                       fn.LookUp(nil, params, r.Name).(string),
-		tfSkuName:                    fn.LookUp(vars, params, r.SKU.Name).(string),
+		tfLocation:                   fn.LookUpString(nil, params, r.Location),
+		tfName:                       fn.LookUpString(nil, params, r.Name),
+		tfSkuName:                    fn.LookUpString(vars, params, r.SKU.Name),
 		tfTags:                       r.Tags,
-		tfVersion:                    fn.LookUp(vars, params, convert.ToString(r.Properties, armVersion)).(string),
-		tfAdministratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLogin)).(string),
-		tfAdministratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)).(string),
+		tfVersion:                    fn.LookUpString(vars, params, convert.ToString(r.Properties, armVersion)),
+		tfAdministratorLogin:         fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLogin)),
+		tfAdministratorLoginPassword: fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)),
 	}
 
 	profile := convert.ToMap(r.Properties, armStorageProfile)
-	cf[tfStorageMB] = fn.LookUp(vars, params, convert.ToString(profile, armStorageMB)).(float64)
+	cf[tfStorageMB] = fn.LookUpFloat64(vars, params, convert.ToString(profile, armStorageMB))
 
 	cf[tfBackupRetentionDays] = convert.ToFloat64(profile, armBackupRetentionDays)
 

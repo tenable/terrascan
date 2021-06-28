@@ -41,12 +41,12 @@ const (
 // ManagedDiskConfig returns config for azurerm_managed_disk.
 func ManagedDiskConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:           fn.LookUp(nil, params, r.Location).(string),
-		tfName:               fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:           fn.LookUpString(nil, params, r.Location),
+		tfName:               fn.LookUpString(nil, params, r.Name),
 		tfTags:               r.Tags,
 		tfStorageAccountType: r.SKU.Name,
 		tfEncryptionSettings: convert.ToMap(r.Properties, armEncryptionSettingsCollection),
-		tfDiskSizeGB:         fn.LookUp(vars, params, convert.ToString(r.Properties, armDiskSizeGB)).(float64),
+		tfDiskSizeGB:         fn.LookUpFloat64(vars, params, convert.ToString(r.Properties, armDiskSizeGB)),
 	}
 
 	data := convert.ToMap(r.Properties, armCreationData)

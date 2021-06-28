@@ -49,10 +49,10 @@ const (
 // KubernetesClusterConfig returns config for azurerm_kubernetes_cluster.
 func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:  fn.LookUp(nil, params, r.Location).(string),
-		tfName:      fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:  fn.LookUpString(nil, params, r.Location),
+		tfName:      fn.LookUpString(nil, params, r.Name),
 		tfTags:      r.Tags,
-		tfDNSPrefix: fn.LookUp(vars, params, convert.ToString(r.Properties, armDNSPrefix)).(string),
+		tfDNSPrefix: fn.LookUpString(vars, params, convert.ToString(r.Properties, armDNSPrefix)),
 	}
 
 	poolProfiles := convert.ToSlice(r.Properties, armAgentPoolProfiles)
@@ -60,9 +60,9 @@ func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface
 	for _, p := range poolProfiles {
 		profile := p.(map[string]interface{})
 		newPool := map[string]interface{}{
-			tfName:      fn.LookUp(vars, params, convert.ToString(profile, armPoolName)).(string),
-			tfVMSize:    fn.LookUp(vars, params, convert.ToString(profile, armVMSize)).(string),
-			tfNodeCount: fn.LookUp(vars, params, convert.ToString(profile, armNodeCount)).(float64),
+			tfName:      fn.LookUpString(vars, params, convert.ToString(profile, armPoolName)),
+			tfVMSize:    fn.LookUpString(vars, params, convert.ToString(profile, armVMSize)),
+			tfNodeCount: fn.LookUpFloat64(vars, params, convert.ToString(profile, armNodeCount)),
 		}
 		dnp = append(dnp, newPool)
 	}
@@ -73,7 +73,7 @@ func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface
 	for key, value := range addonProfiles {
 		addon := value.(map[string]interface{})
 		profile := map[string]interface{}{
-			tfEnabled: addon["enabled"].(bool),
+			tfEnabled: convert.ToBool(addon, "enabled"),
 		}
 
 		if cfg, ok := addon["config"]; ok {
@@ -89,8 +89,8 @@ func KubernetesClusterConfig(r types.Resource, vars, params map[string]interface
 
 	netProfile := convert.ToMap(r.Properties, armNetworkProfile)
 	cf[tfNetworkProfile] = map[string]string{
-		tfNetworkPlugin: fn.LookUp(vars, params, convert.ToString(netProfile, armNetworkPlugin)).(string),
-		tfNetworkPolicy: fn.LookUp(vars, params, convert.ToString(netProfile, armNetworkPolicy)).(string),
+		tfNetworkPlugin: fn.LookUpString(vars, params, convert.ToString(netProfile, armNetworkPlugin)),
+		tfNetworkPolicy: fn.LookUpString(vars, params, convert.ToString(netProfile, armNetworkPolicy)),
 	}
 	return cf
 }

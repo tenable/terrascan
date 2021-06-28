@@ -97,14 +97,6 @@ func TestLoadIacDir(t *testing.T) {
 			armv1:   ARMV1{},
 			wantErr: nil,
 		},
-		{
-			name:      "deduplicated-linked-templates",
-			dirPath:   filepath.Join(testDataDir, "linked"),
-			armv1:     ARMV1{},
-			want:      map[string][]output.ResourceConfig{"azurerm_storage_account": {linkedResConf}},
-			wantErr:   nil,
-			recursive: true,
-		},
 	}
 
 	for _, tt := range table {

@@ -31,11 +31,16 @@ const (
 
 // ContainerRegistryConfig returns config for azurerm_container_registry
 func ContainerRegistryConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
-	return map[string]interface{}{
-		tfLocation:     fn.LookUp(nil, params, r.Location).(string),
-		tfName:         fn.LookUp(nil, params, r.Name).(string),
-		tfTags:         r.Tags,
-		tfSku:          fn.LookUp(nil, params, r.SKU.Name).(string),
-		tfAdminEnabled: fn.LookUp(nil, params, convert.ToString(r.Properties, armAdminUserEnabled)).(bool),
+	cf := map[string]interface{}{
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
+		tfTags:     r.Tags,
+		tfSku:      fn.LookUpString(nil, params, r.SKU.Name),
 	}
+
+	if adminEnabled, ok := fn.LookUp(nil, params, convert.ToString(r.Properties, armAdminUserEnabled)).(bool); ok {
+		cf[tfAdminEnabled] = adminEnabled
+	}
+
+	return cf
 }

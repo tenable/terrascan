@@ -27,25 +27,23 @@ import (
 // PostgreSQLServerConfig returns config for azurerm_postgresql_server
 func PostgreSQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
-		tfSkuName:  fn.LookUp(vars, params, r.SKU.Name).(string),
-		tfVersion:  fn.LookUp(vars, params, convert.ToString(r.Properties, armVersion)).(string),
+		tfSkuName:  fn.LookUpString(vars, params, r.SKU.Name),
+		tfVersion:  fn.LookUpString(vars, params, convert.ToString(r.Properties, armVersion)),
 	}
 
 	if profile := convert.ToMap(r.Properties, armStorageProfile); profile != nil {
-		status := fn.LookUp(vars, params, convert.ToString(profile, armGeoRedundantBackup))
-		cf[tfGeoRedundantBackupEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), armStatusEnabled)
+		status := fn.LookUpString(vars, params, convert.ToString(profile, armGeoRedundantBackup))
+		cf[tfGeoRedundantBackupEnabled] = strings.EqualFold(strings.ToUpper(status), armStatusEnabled)
 
-		value := fn.LookUp(vars, params, convert.ToString(profile, armBackupRetentionDays))
-		cf[tfBackupRetentionDays] = value.(float64)
+		cf[tfBackupRetentionDays] = fn.LookUpFloat64(vars, params, convert.ToString(profile, armBackupRetentionDays))
 
-		value = fn.LookUp(vars, params, convert.ToString(profile, armStorageMB))
-		cf[tfStorageMB] = value.(float64)
+		cf[tfStorageMB] = fn.LookUpFloat64(vars, params, convert.ToString(profile, armStorageMB))
 
-		status = fn.LookUp(vars, params, convert.ToString(profile, armSslEnforcement))
-		cf[tfSslEnforcementEnabled] = strings.EqualFold(strings.ToUpper(status.(string)), armStatusEnabled)
+		status = fn.LookUpString(vars, params, convert.ToString(profile, armSslEnforcement))
+		cf[tfSslEnforcementEnabled] = strings.EqualFold(strings.ToUpper(status), armStatusEnabled)
 	}
 	return cf
 }

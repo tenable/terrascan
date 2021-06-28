@@ -35,11 +35,11 @@ const (
 // SQLActiveDirectoryAdministratorConfig returns config for azurerm_sql_active_directory_administrator
 func SQLActiveDirectoryAdministratorConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
-		tfLogin:    fn.LookUp(vars, params, convert.ToString(r.Properties, armLogin)).(string),
-		tfObjectID: fn.LookUp(vars, params, convert.ToString(r.Properties, armSid)).(string),
-		tfTenantID: fn.LookUp(vars, params, convert.ToString(r.Properties, armTenantID)).(string),
+		tfLogin:    fn.LookUpString(vars, params, convert.ToString(r.Properties, armLogin)),
+		tfObjectID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armSid)),
+		tfTenantID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armTenantID)),
 	}
 }

@@ -38,8 +38,8 @@ const (
 // VirtualNetworkConfig returns config for azurerm_virtual_network
 func VirtualNetworkConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
 	}
 
@@ -50,8 +50,8 @@ func VirtualNetworkConfig(r types.Resource, vars, params map[string]interface{})
 		prop := convert.ToMap(s, armProperties)
 
 		sub := map[string]string{
-			tfName:          fn.LookUp(vars, params, s[tfName].(string)).(string),
-			tfAddressPrefix: fn.LookUp(vars, params, prop[armAddressPrefix].(string)).(string),
+			tfName:          fn.LookUpString(vars, params, convert.ToString(s, tfName)),
+			tfAddressPrefix: fn.LookUpString(vars, params, convert.ToString(prop, armAddressPrefix)),
 		}
 
 		if nsg := convert.ToMap(prop, armNetworkSecurityGroup); nsg != nil {

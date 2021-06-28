@@ -49,7 +49,7 @@ func Concat(vars, params map[string]interface{}, str string) string {
 	for _, s := range cs {
 		s = strings.TrimSpace(s)
 		s = strings.Trim(s, "'")
-		if _, err := sb.WriteString(LookUp(vars, params, s).(string)); err != nil {
+		if _, err := sb.WriteString(LookUpString(vars, params, s)); err != nil {
 			zap.S().Debugf("failed to parse expression: %s", str)
 			return ""
 		}

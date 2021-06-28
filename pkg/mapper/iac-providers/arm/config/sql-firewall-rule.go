@@ -35,10 +35,10 @@ const (
 // SQLFirewallRuleConfig returns config for azurerm_sql_firewall_rule
 func SQLFirewallRuleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation:       fn.LookUp(nil, params, r.Location).(string),
-		tfName:           fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:       fn.LookUpString(nil, params, r.Location),
+		tfName:           fn.LookUpString(nil, params, r.Name),
 		tfTags:           r.Tags,
-		tfStartIPAddress: fn.LookUp(nil, params, convert.ToString(r.Properties, armStartIPAddress)).(string),
-		tfEndIPAddress:   fn.LookUp(nil, params, convert.ToString(r.Properties, armEndIPAddress)).(string),
+		tfStartIPAddress: fn.LookUpString(nil, params, convert.ToString(r.Properties, armStartIPAddress)),
+		tfEndIPAddress:   fn.LookUpString(nil, params, convert.ToString(r.Properties, armEndIPAddress)),
 	}
 }

@@ -38,16 +38,19 @@ const (
 // RedisCacheConfig returns config for azurerm_redis_cache
 func RedisCacheConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:         fn.LookUp(nil, params, r.Location).(string),
-		tfName:             fn.LookUp(nil, params, r.Name).(string),
-		tfTags:             r.Tags,
-		tfEnableNonSSLPort: fn.LookUp(nil, params, convert.ToString(r.Properties, armEnableNonSSLPort)).(bool),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
+		tfTags:     r.Tags,
+	}
+
+	if enabledNonSSLPort, ok := fn.LookUp(nil, params, convert.ToString(r.Properties, armEnableNonSSLPort)).(bool); ok {
+		cf[tfEnableNonSSLPort] = enabledNonSSLPort
 	}
 
 	s := convert.ToMap(r.Properties, armSku)
-	cf[tfSkuName] = fn.LookUp(nil, params, convert.ToString(s, tfName)).(string)
-	cf[tfFamily] = fn.LookUp(nil, params, convert.ToString(s, armFamily)).(string)
-	cf[tfCapacity] = fn.LookUp(nil, params, convert.ToString(s, armCapacity)).(float64)
+	cf[tfSkuName] = fn.LookUpString(nil, params, convert.ToString(s, tfName))
+	cf[tfFamily] = fn.LookUpString(nil, params, convert.ToString(s, armFamily))
+	cf[tfCapacity] = fn.LookUpFloat64(nil, params, convert.ToString(s, armCapacity))
 
 	return cf
 }

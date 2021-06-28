@@ -32,8 +32,8 @@ const (
 // ApplicationGatewayConfig returns config for azurerm_application_gateway
 func ApplicationGatewayConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
-		tfLocation: fn.LookUp(nil, params, tfLocation).(string),
+		tfName:     fn.LookUpString(nil, params, r.Name),
+		tfLocation: fn.LookUpString(nil, params, tfLocation),
 		tfTags:     r.Tags,
 	}
 

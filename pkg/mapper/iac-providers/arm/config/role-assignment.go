@@ -36,12 +36,12 @@ const (
 // RoleAssignmentConfig returns config for azurerm_role_assignment
 func RoleAssignmentConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation:         fn.LookUp(nil, params, r.Location).(string),
-		tfName:             fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:         fn.LookUpString(nil, params, r.Location),
+		tfName:             fn.LookUpString(nil, params, r.Name),
 		tfTags:             r.Tags,
-		tfScope:            fn.LookUp(vars, params, r.Scope).(string),
+		tfScope:            fn.LookUpString(vars, params, r.Scope),
 		tfLockLevel:        convert.ToString(r.Properties, armLevel),
 		tfPrincipalID:      convert.ToString(r.Properties, armPrincipalID),
-		tfRoleDefinitionID: fn.LookUp(vars, params, convert.ToString(r.Properties, armRoleDefinitionID)).(string),
+		tfRoleDefinitionID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armRoleDefinitionID)),
 	}
 }

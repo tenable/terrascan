@@ -27,7 +27,7 @@ import (
 // and returns the final value in all lower case.
 //
 // For example:
-// if param = [Parameters('location')],
+// if param = [toLower('location')],
 // the function returns location as the key.
 func ToLower(vars, params map[string]interface{}, str string) string {
 	const (

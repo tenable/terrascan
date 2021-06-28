@@ -42,11 +42,11 @@ const (
 // SecurityCenterContactConfig returns config for azurerm_security_center_contact
 func SecurityCenterContactConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
-		tfPhone:    fn.LookUp(nil, params, convert.ToString(r.Properties, armPhone)).(string),
-		tfEmail:    fn.LookUp(nil, params, convert.ToString(r.Properties, armEmails)).(string),
+		tfPhone:    fn.LookUpString(nil, params, convert.ToString(r.Properties, armPhone)),
+		tfEmail:    fn.LookUpString(nil, params, convert.ToString(r.Properties, armEmails)),
 	}
 
 	notifications := convert.ToMap(r.Properties, armAlertNotifications)

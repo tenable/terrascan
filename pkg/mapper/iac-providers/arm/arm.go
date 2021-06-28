@@ -55,7 +55,12 @@ func (m armMapper) Map(resource interface{}, params ...map[string]interface{}) (
 
 	variables := params[0]
 	parameters := params[1]
-	config.Name = fn.LookUp(variables, parameters, r.Name).(string)
+	// TODO: generate a unique random string here, with a warn log?
+	configName, ok := fn.LookUp(variables, parameters, r.Name).(string)
+	if !ok {
+		configName = "random"
+	}
+	config.Name = configName
 	config.Type = types.ResourceTypes[r.Type]
 	config.ID = config.Type + "." + config.Name
 

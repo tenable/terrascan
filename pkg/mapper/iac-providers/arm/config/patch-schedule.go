@@ -37,8 +37,8 @@ const (
 func PatchScheduleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	sch := convert.ToMap(r.Properties, armScheduleEntries)
 	return map[string]interface{}{
-		tfDayOfWeek:    fn.LookUp(nil, params, convert.ToString(sch, armDayOfWeek)).(string),
-		tfStartHourUTC: fn.LookUp(nil, params, convert.ToString(sch, armStartHourUtc)).(float64),
+		tfDayOfWeek:    fn.LookUpString(nil, params, convert.ToString(sch, armDayOfWeek)),
+		tfStartHourUTC: fn.LookUpFloat64(nil, params, convert.ToString(sch, armStartHourUtc)),
 		tfTags:         r.Tags,
 	}
 }

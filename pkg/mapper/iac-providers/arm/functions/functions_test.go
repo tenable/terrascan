@@ -57,7 +57,7 @@ func TestLookUp(t *testing.T) {
 		{
 			name:     "parameters",
 			key:      "[parameters'sqlAdministratorLogin')]",
-			expected: "",
+			expected: "[parameters'sqlAdministratorLogin')]",
 		},
 		{
 			name:     "variables",
@@ -67,7 +67,7 @@ func TestLookUp(t *testing.T) {
 		{
 			name:     "variables-invalid",
 			key:      "[variables'dbName')]",
-			expected: "",
+			expected: "[variables'dbName')]",
 		},
 		{
 			name:     "concat-variables",

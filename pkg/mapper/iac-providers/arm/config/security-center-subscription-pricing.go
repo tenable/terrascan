@@ -28,9 +28,9 @@ const tfTier = "tier"
 // SecurityCenterSubscriptionPricingConfig returns config for azurerm_security_center_subscription_pricing
 func SecurityCenterSubscriptionPricingConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
-		tfTier:     fn.LookUp(nil, params, convert.ToString(r.Properties, armPricingTier)).(string),
+		tfTier:     fn.LookUpString(nil, params, convert.ToString(r.Properties, armPricingTier)),
 	}
 }

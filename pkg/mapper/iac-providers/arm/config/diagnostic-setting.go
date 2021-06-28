@@ -42,11 +42,11 @@ const (
 // DiagnosticSettingConfig returns config for azurerm_monitor_diagnostic_setting
 func DiagnosticSettingConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:         fn.LookUp(nil, params, r.Location).(string),
-		tfName:             fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:         fn.LookUpString(nil, params, r.Location),
+		tfName:             fn.LookUpString(nil, params, r.Name),
 		tfTags:             r.Tags,
-		tfTargetResourceID: fn.LookUp(vars, params, getTargetResourceID(r.DependsOn)).(string),
-		tfStorageAccountID: fn.LookUp(vars, params, convert.ToString(r.Properties, armStorageAccountID)).(string),
+		tfTargetResourceID: fn.LookUpString(vars, params, getTargetResourceID(r.DependsOn)),
+		tfStorageAccountID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armStorageAccountID)),
 	}
 
 	logs := convert.ToSlice(r.Properties, armLogs)
@@ -65,7 +65,7 @@ func DiagnosticSettingConfig(r types.Resource, vars, params map[string]interface
 			if isEnabled {
 				l[tfRetentionPolicy] = map[string]interface{}{
 					tfEnabled: isEnabled,
-					tfDays:    fn.LookUp(vars, params, convert.ToString(policy, armDays)).(float64),
+					tfDays:    fn.LookUpFloat64(vars, params, convert.ToString(policy, armDays)),
 				}
 			} else {
 				l[tfRetentionPolicy] = map[string]interface{}{

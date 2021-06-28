@@ -97,7 +97,7 @@ e2e-admission-control-tests: build
 	./scripts/e2e-admission-control.sh
 
 # install kind
-install-kind: 
+install-kind:
 	./scripts/install-kind.sh
 
 # build terrascan docker image

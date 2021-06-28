@@ -92,3 +92,13 @@ type SKU struct {
 	// The tier of this SKU.
 	Tier string `json:"tier"`
 }
+
+// Consts for linked templates
+const (
+	// TemplateContent key is used when linked template is not a relative path
+	LinkedTemplateContent = "template_content"
+	// ParametersContent key is used to store parameter overrides for linked templates
+	LinkedParametersContent = "parameters_content"
+	// TemplateRelativePath key is used when linked template is not a uri or direct template
+	LinkedTemplateRelativePath = "relativePath"
+)

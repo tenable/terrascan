@@ -48,18 +48,18 @@ const (
 // NetworkWatcherFlowLogConfig returns config for azurerm_network_watcher_flow_log
 func NetworkWatcherFlowLogConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:               fn.LookUp(nil, params, r.Location).(string),
-		tfName:                   fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:               fn.LookUpString(nil, params, r.Location),
+		tfName:                   fn.LookUpString(nil, params, r.Name),
 		tfTags:                   r.Tags,
-		tfNetworkSecurityGroupID: fn.LookUp(vars, params, convert.ToString(r.Properties, armTargetResourceID)).(string),
-		tfStorageAccountID:       fn.LookUp(vars, params, convert.ToString(r.Properties, armStorageID)).(string),
+		tfNetworkSecurityGroupID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armTargetResourceID)),
+		tfStorageAccountID:       fn.LookUpString(vars, params, convert.ToString(r.Properties, armStorageID)),
 		tfEnabled:                convert.ToBool(r.Properties, armEnabled),
 	}
 
 	policy := convert.ToMap(r.Properties, armRetentionPolicy)
 	cf[tfRetentionPolicy] = map[string]interface{}{
 		tfEnabled: convert.ToBool(policy, armEnabled),
-		tfDays:    fn.LookUp(vars, params, convert.ToString(policy, armDays)).(float64),
+		tfDays:    fn.LookUpFloat64(vars, params, convert.ToString(policy, armDays)),
 	}
 
 	flowConfig := convert.ToMap(r.Properties, armFlowAnalyticsConfiguration)
@@ -67,9 +67,9 @@ func NetworkWatcherFlowLogConfig(r types.Resource, vars, params map[string]inter
 		networkConfig := convert.ToMap(flowConfig, armNetworkWatcherFlowAnalyticsConfiguration)
 		cf[tfTrafficAnalytics] = map[string]interface{}{
 			tfEnabled:             convert.ToBool(networkConfig, armEnabled),
-			tfWorkspaceID:         fn.LookUp(vars, params, armWorkspaceID).(string),
-			tfWorkspaceRegion:     fn.LookUp(vars, params, armWorkspaceRegion).(string),
-			tfWorkspaceResourceID: fn.LookUp(vars, params, armWorkspaceResourceID).(string),
+			tfWorkspaceID:         fn.LookUpString(vars, params, armWorkspaceID),
+			tfWorkspaceRegion:     fn.LookUpString(vars, params, armWorkspaceRegion),
+			tfWorkspaceResourceID: fn.LookUpString(vars, params, armWorkspaceResourceID),
 			tfIntervalInMinutes:   convert.ToFloat64(networkConfig, armTrafficAnalyticsInterval),
 		}
 	}

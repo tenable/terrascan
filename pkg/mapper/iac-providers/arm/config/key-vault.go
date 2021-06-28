@@ -32,8 +32,8 @@ const (
 // KeyVaultConfig returns config for azurerm_key_vault
 func KeyVaultConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation:          fn.LookUp(nil, params, r.Location).(string),
-		tfName:              fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:          fn.LookUpString(nil, params, r.Location),
+		tfName:              fn.LookUpString(nil, params, r.Name),
 		tfTags:              r.Tags,
 		tfSoftDeleteEnabled: convert.ToBool(r.Properties, armEnableSoftDelete),
 		tfTenantID:          convert.ToString(params, armTenantID),

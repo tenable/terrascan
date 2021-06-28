@@ -42,8 +42,8 @@ const (
 // StorageAccountConfig returns config for azurerm_storage_account
 func StorageAccountConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation:               fn.LookUp(nil, params, r.Location).(string),
-		tfName:                   fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:               fn.LookUpString(nil, params, r.Location),
+		tfName:                   fn.LookUpString(nil, params, r.Name),
 		tfTags:                   r.Tags,
 		tfAccountTier:            r.SKU.Tier,
 		tfAccountReplicationType: r.SKU.Name,
@@ -58,8 +58,8 @@ func StorageAccountConfig(r types.Resource, vars, params map[string]interface{})
 			ipRules = append(ipRules, r[armValue])
 		}
 		cf[tfNetworkRules] = map[string]interface{}{
-			tfDefaultAction: fn.LookUp(vars, params, convert.ToString(acls, armDefaultAction)).(string),
-			tfByPass:        fn.LookUp(vars, params, convert.ToString(acls, armBypass)).(string),
+			tfDefaultAction: fn.LookUpString(vars, params, convert.ToString(acls, armDefaultAction)),
+			tfByPass:        fn.LookUpString(vars, params, convert.ToString(acls, armBypass)),
 			tfIPRules:       ipRules,
 		}
 	}

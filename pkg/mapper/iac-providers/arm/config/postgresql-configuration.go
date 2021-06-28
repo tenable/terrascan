@@ -32,7 +32,7 @@ const tfValue = "value"
 // PostgreSQLConfigurationConfig returns config for azurerm_postgresql_configuration
 func PostgreSQLConfigurationConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
 		tfTags:     r.Tags,
 		tfName:     convert.ToString(r.Properties, armSource),
 		tfValue:    convert.ToString(r.Properties, armValue),

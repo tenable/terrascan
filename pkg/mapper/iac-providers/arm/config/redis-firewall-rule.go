@@ -35,10 +35,10 @@ const (
 // RedisFirewallRuleConfig returns config for azurerm_redis_firewall_rule
 func RedisFirewallRuleConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
-		tfStartIP:  fn.LookUp(nil, params, convert.ToString(r.Properties, armStartIP)).(string),
-		tfEndIP:    fn.LookUp(nil, params, convert.ToString(r.Properties, armEndIP)).(string),
+		tfStartIP:  fn.LookUpString(nil, params, convert.ToString(r.Properties, armStartIP)),
+		tfEndIP:    fn.LookUpString(nil, params, convert.ToString(r.Properties, armEndIP)),
 	}
 }

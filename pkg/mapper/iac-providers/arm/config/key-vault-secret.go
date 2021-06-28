@@ -27,8 +27,8 @@ import (
 // KeyVaultSecretConfig returns config for azurerm_key_vault_secret
 func KeyVaultSecretConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	cf := map[string]interface{}{
-		tfLocation: fn.LookUp(nil, params, r.Location).(string),
-		tfName:     fn.LookUp(nil, params, r.Name).(string),
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfTags:     r.Tags,
 	}
 

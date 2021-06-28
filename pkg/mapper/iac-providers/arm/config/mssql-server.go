@@ -37,11 +37,11 @@ const (
 // MSSQLServerConfig returns config for azurerm_mssql_server
 func MSSQLServerConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
-		tfLocation:                   fn.LookUp(nil, params, r.Location).(string),
-		tfName:                       fn.LookUp(nil, params, r.Name).(string),
+		tfLocation:                   fn.LookUpString(nil, params, r.Location),
+		tfName:                       fn.LookUpString(nil, params, r.Name),
 		tfTags:                       r.Tags,
-		tfAdministratorLogin:         fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLogin)).(string),
-		tfAdministratorLoginPassword: fn.LookUp(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)).(string),
-		tfMinimumTLSVersion:          fn.LookUp(vars, params, convert.ToString(r.Properties, armMinimumTLSVersion)).(string),
+		tfAdministratorLogin:         fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLogin)),
+		tfAdministratorLoginPassword: fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)),
+		tfMinimumTLSVersion:          fn.LookUpString(vars, params, convert.ToString(r.Properties, armMinimumTLSVersion)),
 	}
 }

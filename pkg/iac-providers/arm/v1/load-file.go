@@ -24,16 +24,12 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/mapper"
 	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 	"github.com/accurics/terrascan/pkg/utils"
-	getter "github.com/hashicorp/go-getter"
 	"go.uber.org/zap"
 )
-
-// used to detected linked templates
-const deployments = "Microsoft.Resources/deployments"
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
@@ -55,7 +51,7 @@ func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllRe
 		return allResourcesConfig, err
 	}
 
-	m := arm.Mapper()
+	m := mapper.NewMapper("arm")
 	for _, doc := range iacDocuments {
 		template, err := a.extractTemplate(doc)
 		if err != nil {
@@ -157,8 +153,10 @@ func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r 
 
 	configs, err := m.Map(r, vars, a.templateParameters)
 	// For ARM configs will have only one element
-	configs[0].Source = a.getSourceRelativePath(path)
-	configs[0].Line = doc.StartLine
+	for i := 0; i < len(configs); i++ {
+		configs[i].Source = a.getSourceRelativePath(path)
+		configs[i].Line = doc.StartLine
+	}
 
 	if err != nil {
 		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", path))
@@ -166,20 +164,4 @@ func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r 
 	}
 
 	return configs
-}
-
-func (ARMV1) downloadTemplate(uri string, dst string) (string, error) {
-	parts := strings.Split(uri, "/")
-	path := filepath.Join(dst, parts[len(parts)-1])
-	client := getter.Client{
-		Src:  uri,
-		Dst:  path,
-		Mode: getter.ClientModeFile,
-	}
-	err := client.Get()
-	if err != nil {
-		zap.S().Debug("unable to parse linked termplate parameters", zap.Error(err), zap.String("file", path))
-		return "", err
-	}
-	return path, nil
 }
