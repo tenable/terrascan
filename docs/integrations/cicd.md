@@ -4,7 +4,7 @@ Terrascan can be integrated into CI/CD pipelines to enforce security best practi
 
 ## GitHub Action
 
-The [Terrascan GitHub action](https://github.com/marketplace/actions/terrascan-iac-scanner) can be used as part of GitHub workflows to scan your repository for IaC issues as part of code pushes or pull requests.
+The [Terrascan GitHub Action](https://github.com/marketplace/actions/terrascan-iac-scanner) can be used as part of GitHub workflows to scan your repository for IaC issues as part of code pushes or pull requests.
 
 ![Image of Terrascan action](../img/terrascan-action.png)
 
