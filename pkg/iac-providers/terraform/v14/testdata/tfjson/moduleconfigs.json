@@ -403,12 +403,22 @@
         "kms_data_key_reuse_period_seconds": 300,
         "kms_master_key_id": "alias/aws/sqs",
         "name": "terraform-example-queue",
-        "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Sid\":\"Queue1_AnonymousAccess_AllActions_WhitelistIP\",\n    \"Effect\": \"Allow\",\n    \"Principal\": \"*\",\n    \"Action\": \"sqs:*\",\n    \"Resource\": \"arn:aws:sqs:*:111122223333:queue1\"\n  }] \n}\n"
+        "policy": {
+          "Statement": [
+            {
+              "Action": "sqs:*",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Resource": "arn:aws:sqs:*:111122223333:queue1",
+              "Sid": "Queue1_AnonymousAccess_AllActions_WhitelistIP"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
       },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
-      
     }
   ]
 }

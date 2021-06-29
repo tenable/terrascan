@@ -17,6 +17,7 @@
 package commons
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"reflect"
 	"regexp"
@@ -86,8 +87,20 @@ func (r *RefResolver) ResolveLocalRef(localRef, callerRef string) interface{} {
 	}
 
 	// replace the local value reference string with actual value
-	if reflect.TypeOf(val).Kind() == reflect.String {
-		valStr := val.(string)
+	if reflect.TypeOf(val).Kind() == reflect.String || reflect.TypeOf(val).Kind() == reflect.Map {
+		valStr := ""
+
+		if reflect.TypeOf(val).Kind() == reflect.Map {
+			data, err := json.Marshal(val)
+			if err != nil {
+				zap.S().Errorf("failed to convert expression '%v', ref: '%v'", localAttr.Expr, localRef)
+				return localRef
+			}
+			valStr = string(data)
+		} else {
+			valStr = val.(string)
+		}
+
 		resolvedVal := strings.Replace(localRef, localExpr, valStr, 1)
 		if callerRef != "" && strings.Contains(resolvedVal, callerRef) {
 			zap.S().Debugf("resolved str local value ref: '%v', value: '%v'", localRef, resolvedVal)
