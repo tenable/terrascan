@@ -10,7 +10,7 @@
         "suffix": ""
     },
     "severity": "LOW",
-    "description": "Ensure default name space is not in use",
+    "description": "Ensure default name space is not in use in Kubernetes Namespace",
     "reference_id": "accurics.kubernetes.OPS.460",
     "category": "Security Best Practices",
     "version": 1,
