@@ -35,7 +35,6 @@ import (
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
-	zap.S().Debug("processing", zap.String("file", absFilePath))
 	allResourcesConfig = make(output.AllResourceConfigs)
 	if fileExt := a.getFileType(absFilePath); fileExt != JSONExtension {
 		return allResourcesConfig, fmt.Errorf("unsupported file %s", absFilePath)
@@ -146,16 +145,19 @@ func (a *ARMV1) getConfig(path string, mapper core.Mapper, r types.Resource,
 	if _, ok := types.ResourceTypes[r.Type]; !ok {
 		return nil
 	}
+
 	configs, err := mapper.Map(r, vars, a.templateParameters)
-	// For ARM configs will have only one element
-	configs[0].Source = a.getSourceRelativePath(path)
-	configs[0].Line = 1
+	for i := range configs {
+		configs[i].Source = a.getSourceRelativePath(path)
+		configs[i].Line = 1
+	}
 
 	if err != nil {
 		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", path))
 		return nil
 	}
 
+	// parse linked templates and translate resources
 	for _, config := range configs {
 		if linkedTemplate, templatePath := a.getLinkedTemplate(config, path, mapper, vars); linkedTemplate != nil {
 			if templatePath != "" {
@@ -225,7 +227,7 @@ func (a *ARMV1) getLinkedTemplate(config output.ResourceConfig, path string, map
 				}
 			}
 
-			// add values proided for linked templates
+			// add values provided for linked templates
 			for key, value := range templateParameters {
 				if parameterValue, ok := value.Value.(string); ok {
 					val := fn.LookUp(vars, a.templateParameters, parameterValue)
@@ -248,7 +250,7 @@ func (a *ARMV1) getLinkedTemplate(config output.ResourceConfig, path string, map
 					val := fn.LookUp(vars, a.templateParameters, varValue)
 					switch val := val.(type) {
 					case string, float64, bool:
-						a.templateParameters[key] = val
+						linkedTemplate.Variables[key] = val
 					default:
 					}
 				} else {

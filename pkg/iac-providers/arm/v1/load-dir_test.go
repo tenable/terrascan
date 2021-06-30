@@ -66,24 +66,17 @@ func TestLoadIacDir(t *testing.T) {
 	}
 
 	table := []struct {
-		wantErr   error
-		want      output.AllResourceConfigs
-		armv1     ARMV1
-		name      string
-		dirPath   string
-		recursive bool
+		wantErr error
+		want    output.AllResourceConfigs
+		armv1   ARMV1
+		name    string
+		dirPath string
 	}{
 		{
 			name:    "empty config",
 			dirPath: filepath.Join(testDataDir, "testfile"),
 			armv1:   ARMV1{},
 			wantErr: multierror.Append(fmt.Errorf("no directories found for path %s", filepath.Join(testDataDir, "testfile"))),
-		},
-		{
-			name:    "load invalid config dir",
-			dirPath: testDataDir,
-			armv1:   ARMV1{},
-			wantErr: nil,
 		},
 		{
 			name:    "invalid dirPath",
@@ -101,7 +94,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			aRC, gotErr := tt.armv1.LoadIacDir(tt.dirPath, tt.recursive)
+			aRC, gotErr := tt.armv1.LoadIacDir(tt.dirPath, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -135,16 +128,37 @@ func TestARMMapper(t *testing.T) {
 	}
 
 	armv1 := ARMV1{}
-	for i := 1; i < len(dirList); i++ {
-		dir := dirList[i]
-		t.Run(dir, func(t *testing.T) {
-			_, gotErr := armv1.LoadIacDir(dir, false)
-			_, ok := gotErr.(*multierror.Error)
-			if !ok {
-				t.Errorf("expected multierror.Error, got %T", gotErr)
-			}
-		})
+
+	// get output json to verify
+	var testArc output.AllResourceConfigs
+	outputData, err := ioutil.ReadFile(filepath.Join(root, "output.json"))
+	if err != nil {
+		t.Errorf("error reading output.json ResourceConfig, %T", err)
 	}
+
+	err = json.Unmarshal(outputData, &testArc)
+	if err != nil {
+		t.Errorf("error loading output.json ResourceConfig, %T", err)
+	}
+
+	t.Run(root, func(t *testing.T) {
+
+		allResourceConfigs, gotErr := armv1.LoadIacDir(root, false)
+		_, ok := gotErr.(*multierror.Error)
+		if !ok {
+			t.Errorf("expected multierror.Error, got %T", gotErr)
+		}
+
+		// check if resource count is as expected
+		for resType := range testArc {
+			if allResourceConfigs[resType] == nil {
+				t.Errorf("resource Type %s from test data", resType)
+			}
+			assert.Equal(t, len(allResourceConfigs[resType]), len(testArc[resType]))
+		}
+
+	})
+
 }
 
 func setup() {

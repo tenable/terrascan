@@ -31,7 +31,7 @@ const (
 	armParametersLink = "parametersLink"
 	armParameters     = "parameters"
 	armRelativePath   = types.LinkedTemplateRelativePath
-	armUri            = "uri"
+	armURI            = "uri"
 )
 
 const (
@@ -46,7 +46,6 @@ const (
 
 // DeploymentsConfig returns config for azurerm_resource_group_template_deployment
 func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) map[string]interface{} {
-	// TODO: check if vars are handled correctly
 	cf := map[string]interface{}{
 		tfLocation: fn.LookUpString(vars, params, r.Location),
 		tfName:     fn.LookUpString(vars, params, r.Name),
@@ -67,12 +66,12 @@ func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) ma
 		// if templateLink is relative path, resolve it later as it need the absPath for current template
 		if relativePath := convert.ToString(templateLink, armRelativePath); relativePath != "" {
 			cf[armRelativePath] = relativePath
-		} else if templateUri := convert.ToString(templateLink, armUri); templateUri != "" {
+		} else if templateURI := convert.ToString(templateLink, armURI); templateURI != "" {
 			// if templateLink has a uri
-			templateUri := fn.LookUpString(vars, params, templateUri)
-			templateContent, err := fn.ResolveLinkedTemplate(templateUri)
+			templateURI := fn.LookUpString(vars, params, templateURI)
+			templateContent, err := fn.ResolveLinkedTemplate(templateURI)
 			if err != nil {
-				zap.S().Debug(errTemplate, zap.String("resource", r.Type), zap.String("uri", templateUri))
+				zap.S().Debug(errTemplate, zap.String("resource", r.Type), zap.String("uri", templateURI))
 			}
 			cf[tfTemplateContent] = templateContent
 		}
@@ -88,12 +87,12 @@ func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) ma
 		}
 		cf[tfParametersContent] = parametersContent
 	} else if paramtersLink := convert.ToMap(r.Properties, armParametersLink); paramtersLink != nil {
-		if parametersUri := convert.ToString(paramtersLink, armUri); parametersUri != "" {
+		if parametersURI := convert.ToString(paramtersLink, armURI); parametersURI != "" {
 			// if paramtersLink has a uri
-			parametersUri = fn.LookUpString(vars, params, parametersUri)
-			parametersContent, err := fn.ResolveLinkedTemplate(parametersUri)
+			parametersURI = fn.LookUpString(vars, params, parametersURI)
+			parametersContent, err := fn.ResolveLinkedTemplate(parametersURI)
 			if err != nil {
-				zap.S().Debug(errParameters, zap.String("resource", r.Type), zap.String("uri", parametersUri))
+				zap.S().Debug(errParameters, zap.String("resource", r.Type), zap.String("uri", parametersURI))
 			}
 			cf[tfParametersContent] = parametersContent
 		}
