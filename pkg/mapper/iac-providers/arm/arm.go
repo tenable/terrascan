@@ -128,6 +128,8 @@ func (m armMapper) mapConfigForResource(r types.Resource, vars, params map[strin
 		return config.VirtualMachineConfig(r, params)
 	case types.AzureRMVirtualNetwork:
 		return config.VirtualNetworkConfig(r, vars, params)
+	case types.AzureRMDeployments:
+		return config.DeploymentsConfig(r, vars, params)
 	}
 	return nil
 }
