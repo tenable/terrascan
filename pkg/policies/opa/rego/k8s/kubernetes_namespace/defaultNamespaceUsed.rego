@@ -1,32 +1,34 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[api.id]
-{
-    api := input.{{.resource_type}}[_]
-    metadata := api.config.metadata
-    metadata.namespace == "default"
+{{.prefix}}{{.name}}{{.suffix}}[kind.id] {
+    item_list := [
+        object.get(input, "kubernetes_pod", "undefined"),
+        object.get(input, "kubernetes_deployment", "undefined"),
+        object.get(input, "kubernetes_job", "undefined"),
+        object.get(input, "kubernetes_namespace", "undefined")
+    ]
+
+    item = item_list[_]
+    item != "undefined"
+    kind := item[_]
+
+    checkNamespace(kind.config.metadata)
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[api.id]
-{
-    api := input.{{.resource_type}}[_]
-    metadata := api.config.metadata
+checkNamespace(metadata) {
+    lower(metadata.namespace) == "default"
+}
+
+checkNamespace(metadata) {
     metadata.namespace == ""
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[api.id]
-{
-    api := input.{{.resource_type}}[_]
-    metadata := api.config.metadata
+checkNamespace(metadata) {
     not metadata.namespace
     not metadata.{{.generate_name}}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[api.id]
-{
-    api := input.{{.resource_type}}[_]
-    metadata := api.config.metadata
+checkNamespace(metadata) {
     not metadata.namespace
     metadata.{{.generate_name}} == false
 }
-

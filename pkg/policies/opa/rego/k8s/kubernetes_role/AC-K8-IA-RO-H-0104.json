@@ -9,9 +9,9 @@
         "suffix": ""
     },
     "severity": "HIGH",
-    "description": "Ensure that default service accounts are not actively used",
+    "description": "Ensure that default service accounts are not actively used in Kubernetes Role",
     "reference_id": "AC-K8-IA-RO-H-0104",
     "category": "Identity and Access Management",
     "version": 1,
-    "id": "AC_K8S_0135"
+    "id": "AC_K8S_0113"
 }
