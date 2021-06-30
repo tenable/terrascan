@@ -75,10 +75,11 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 			if valueStr, ok := value.(string); ok {
 				var temp jsonObj
 				err := json.Unmarshal([]byte(valueStr), &temp)
-				if err == nil {
+				if err != nil {
+					zap.S().Debugf("failed to unmarshal json string %s", valueStr)
+				} else {
 					value = temp
 				}
-				zap.S().Debugf("resolved value is not a json object", err)
 			}
 
 			config[k] = value

@@ -86,11 +86,13 @@ func (r *RefResolver) ResolveLocalRef(localRef, callerRef string) interface{} {
 		return localRef
 	}
 
+	valKind := reflect.TypeOf(val).Kind()
+
 	// replace the local value reference string with actual value
-	if reflect.TypeOf(val).Kind() == reflect.String || reflect.TypeOf(val).Kind() == reflect.Map {
+	if valKind == reflect.String || valKind == reflect.Map {
 		valStr := ""
 
-		if reflect.TypeOf(val).Kind() == reflect.Map {
+		if valKind == reflect.Map {
 			data, err := json.Marshal(val)
 			if err != nil {
 				zap.S().Errorf("failed to convert expression '%v', ref: '%v'", localAttr.Expr, localRef)

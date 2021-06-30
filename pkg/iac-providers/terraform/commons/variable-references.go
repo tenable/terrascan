@@ -88,10 +88,12 @@ func (r *RefResolver) ResolveVarRef(varRef, callerRef string) interface{} {
 	}
 	zap.S().Debugf("resolved variable ref '%v', value: '%v'", varRef, val)
 
-	if reflect.TypeOf(val).Kind() == reflect.String || reflect.TypeOf(val).Kind() == reflect.Map {
+	valKind := reflect.TypeOf(val).Kind()
+
+	if valKind == reflect.String || valKind == reflect.Map {
 		valStr := ""
 
-		if reflect.TypeOf(val).Kind() == reflect.Map {
+		if valKind == reflect.Map {
 			data, err := json.Marshal(val)
 			if err != nil {
 				zap.S().Errorf("failed to convert expression '%v', ref: '%v'", hclVar, varRef)
