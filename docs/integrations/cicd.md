@@ -16,7 +16,7 @@ Using Terrascan's SARIF output, the action can include issues found during the s
  Below is an example workflow configuration where the action is configured to scan a repository including Terraform v14+ HCL files for AWS resources and the SARIF output of the scan is uploaded to GitHub code scanning.
 
 
- ``` YAML
+``` YAML
  
 on: [push]
 
