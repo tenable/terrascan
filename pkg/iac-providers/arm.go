@@ -14,21 +14,23 @@
     limitations under the License.
 */
 
-package mapper
+package iacprovider
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft"
+	"reflect"
+
+	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
 )
 
-// NewMapper returns a mapper based on IaC provider.
-func NewMapper(iacType string) core.Mapper {
-	switch iacType {
-	case "cft":
-		return cft.Mapper()
-	case "arm":
-		return arm.Mapper()
-	}
-	return nil
+// terraform specific constants
+const (
+	arm                  supportedIacType    = "arm"
+	armV1                supportedIacVersion = "v1"
+	armDefaultIacVersion                     = armV1
+)
+
+// register arm as an IaC provider with terrascan
+func init() {
+	// register iac provider
+	RegisterIacProvider(arm, armV1, armDefaultIacVersion, reflect.TypeOf(armv1.ARMV1{}))
 }

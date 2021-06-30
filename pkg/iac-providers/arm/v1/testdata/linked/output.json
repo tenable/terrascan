@@ -1,0 +1,20 @@
+{
+    "id": "azurerm_storage_account.GEN-UNIQUE",
+    "name": "GEN-UNIQUE",
+    "source": "child/azuredeploy.json",
+    "line": 1,
+    "type": "azurerm_storage_account",
+    "config": {
+        "account_replication_type": "Standard_LRS",
+        "account_tier": "",
+        "enable_https_traffic_only": false,
+        "location": "West US",
+        "name": "GEN-UNIQUE",
+        "tags": {
+            "test": "test"
+        }
+    },
+    "skip_rules": [],
+    "max_severity": "",
+    "min_severity": ""
+}

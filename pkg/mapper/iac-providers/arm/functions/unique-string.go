@@ -14,21 +14,13 @@
     limitations under the License.
 */
 
-package mapper
+package functions
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft"
+	"github.com/google/uuid"
 )
 
-// NewMapper returns a mapper based on IaC provider.
-func NewMapper(iacType string) core.Mapper {
-	switch iacType {
-	case "cft":
-		return cft.Mapper()
-	case "arm":
-		return arm.Mapper()
-	}
-	return nil
+// UniqueString function returns a string UUID.
+func UniqueString() string {
+	return uuid.NewString()
 }

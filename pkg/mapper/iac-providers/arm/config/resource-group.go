@@ -14,21 +14,18 @@
     limitations under the License.
 */
 
-package mapper
+package config
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft"
+	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
+	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
-// NewMapper returns a mapper based on IaC provider.
-func NewMapper(iacType string) core.Mapper {
-	switch iacType {
-	case "cft":
-		return cft.Mapper()
-	case "arm":
-		return arm.Mapper()
+// ResourceGroupConfig returns config for azurerm_resource_group
+func ResourceGroupConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
+	return map[string]interface{}{
+		tfLocation: fn.LookUpString(nil, params, r.Location),
+		tfName:     fn.LookUpString(nil, params, r.Name),
+		tfTags:     r.Tags,
 	}
-	return nil
 }

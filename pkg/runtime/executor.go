@@ -294,7 +294,7 @@ func implementsSubFolderScan(iacType string, nonRecursive bool) bool {
 		return false
 	}
 
-	iacWithSubFolderScan := []string{"all", "cft", "k8s", "helm", "terraform"}
+	iacWithSubFolderScan := []string{"all", "arm", "cft", "k8s", "helm", "terraform"}
 	for _, v := range iacWithSubFolderScan {
 		if v == iacType {
 			return true
