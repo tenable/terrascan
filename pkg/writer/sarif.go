@@ -21,6 +21,7 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
+	"github.com/go-errors/errors"
 	"github.com/owenrumney/go-sarif/sarif"
 	"go.uber.org/zap"
 	"io"
@@ -31,6 +32,9 @@ import (
 const (
 	sarifFormat supportedFormat = "sarif"
 )
+
+// SarifForGithub is a flag to know Sarif has to be generated for Github usage format or the generic default format
+var SarifForGithub = false
 
 func init() {
 	RegisterWriter(sarifFormat, SarifWriter)
@@ -46,7 +50,6 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 
 	run := sarif.NewRun("terrascan", "https://github.com/accurics/terrascan")
 	run.Tool.Driver.WithVersion(version.GetNumeric())
-
 	// add a run to the report
 	report.AddRun(run)
 
@@ -55,7 +58,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		m["category"] = passedRule.Category
 		m["severity"] = passedRule.Severity
 
-		run.AddRule(string(passedRule.RuleID)).
+		run.AddRule(passedRule.RuleID).
 			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
 	}
 
@@ -65,19 +68,24 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 		m["category"] = violation.Category
 		m["severity"] = violation.Severity
 
-		rule := run.AddRule(string(violation.RuleID)).
+		rule := run.AddRule(violation.RuleID).
 			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
 
-		absFilePath, err := getAbsoluteFilePath(outputData.Summary.ResourcePath, violation.File)
+		var artifactLocation *sarif.ArtifactLocation
 
-		if err != nil {
-			return err
+		if SarifForGithub {
+			artifactLocation = sarif.NewSimpleArtifactLocation(violation.File).
+				WithUriBaseId(outputData.Summary.ResourcePath)
+		} else {
+			absFilePath, err := getAbsoluteFilePath(outputData.Summary.ResourcePath, violation.File)
+			if err != nil {
+				return errors.Errorf("unable to create absolute path, error: %v", err)
+			}
+			artifactLocation = sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))
 		}
 
-		location := sarif.NewLocation().
-			WithPhysicalLocation(sarif.NewPhysicalLocation().
-				WithArtifactLocation(sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))).
-				WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
+		location := sarif.NewLocation().WithPhysicalLocation(sarif.NewPhysicalLocation().
+			WithArtifactLocation(artifactLocation).WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
 
 		if len(violation.ResourceType) > 0 && len(violation.ResourceName) > 0 {
 			location.LogicalLocations = append(location.LogicalLocations, sarif.NewLogicalLocation().

@@ -69,5 +69,6 @@ func init() {
 	scanCmd.Flags().StringSliceVarP(&scanOptions.categories, "categories", "", []string{}, "list of categories of violations to be reported by terrascan (example: --categories=\"category1,category2\")")
 	scanCmd.Flags().BoolVarP(&scanOptions.showPassedRules, "show-passed", "", false, "display passed rules, along with violations")
 	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "do not scan directories and modules recursively")
+	scanCmd.Flags().BoolVarP(&scanOptions.sarifForGithub, "github", "", false, "arrange sarif output to suit github codescanning alert format")
 	RegisterCommand(rootCmd, scanCmd)
 }

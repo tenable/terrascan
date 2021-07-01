@@ -12,9 +12,11 @@ import (
 	"github.com/accurics/terrascan/pkg/version"
 )
 
-var testpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
+var abstestpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
+var testpath = fmt.Sprintf("file://%s", abstestpath)
+var testpathForGH = violationsInput.Violations[0].File
 
-var expectedSarifOutput1 = fmt.Sprintf(`{
+const violationTemplate = `{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
           "runs": [
@@ -68,7 +70,67 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
               ]
             }
           ]
-        }`, version.GetNumeric(), fmt.Sprintf("file://%s", testpath))
+        }`
+
+const violationTemplateForGH = `{
+          "version": "2.1.0",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "runs": [
+            {
+              "tool": {
+                "driver": {
+                  "name": "terrascan",
+                  "version": "%s",
+                  "informationUri": "https://github.com/accurics/terrascan",
+                  "rules": [
+                    {
+                      "id": "AWS.S3Bucket.DS.High.1043",
+                      "name": "s3EnforceUserACL",
+                      "shortDescription": {
+                        "text": "S3 bucket Access is allowed to all AWS Account Users."
+                      },
+                      "properties": {
+                        "category": "S3",
+                        "severity": "HIGH"
+                      }
+                    }
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "ruleId": "AWS.S3Bucket.DS.High.1043",
+                  "level": "error",
+                  "message": {
+                    "text": "S3 bucket Access is allowed to all AWS Account Users."
+                  },
+                  "locations": [
+                    {
+                      "physicalLocation": {
+                        "artifactLocation": {
+                          "uri": "%s",
+						  "uriBaseId": "test"
+                        },
+                        "region": {
+                          "startLine": 20
+                        }
+                      },
+                      "logicalLocations": [
+                        {
+                          "name": "bucket",
+                          "kind": "aws_s3_bucket"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }`
+
+var expectedSarifOutput1 = fmt.Sprintf(violationTemplate, version.GetNumeric(), testpath)
+var expectedSarifOutput1GH = fmt.Sprintf(violationTemplateForGH, version.GetNumeric(), testpathForGH)
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",
@@ -125,11 +187,18 @@ func TestSarifWriter(t *testing.T) {
 		input          funcInput
 		expectedError  bool
 		expectedOutput string
+		forGithub      bool
 	}{
 		{
-			name:           "Human Readable Writer: Violations",
+			name:           "Sarif Writer: Violations",
 			input:          violationsInput,
 			expectedOutput: expectedSarifOutput1,
+		},
+		{
+			name:           "Sarif Writer for Github: Violations",
+			input:          violationsInput,
+			expectedOutput: expectedSarifOutput1GH,
+			forGithub:      true,
 		},
 		{
 			name: "Human Readable Writer: No Violations",
@@ -150,9 +219,11 @@ func TestSarifWriter(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			writer := &bytes.Buffer{}
+			SarifForGithub = tt.forGithub
 			if err := SarifWriter(tt.input, writer); (err != nil) != tt.expectedError {
 				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
+			SarifForGithub = false
 			outputBytes := writer.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 
