@@ -34,6 +34,7 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
+	// find all the files in the folder with name `Dockerfile`
 	fileMap, err := utils.FindFilesBySuffix(absRootDir, []string{DockerFileName})
 	if err != nil {
 		zap.S().Errorf("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))

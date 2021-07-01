@@ -33,25 +33,33 @@ import (
 const (
 	dockerDirectory        string = "docker"
 	resourceTypeDockerfile string = "dockerfile"
+
 	// IDConnectorString is string connector used in id creation
 	IDConnectorString string = "."
 )
 
-// LoadIacFile loads the docker file specified
+// LoadIacFile loads the docker file specified and create ResourceConfig for each dockerfile
 func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
+
 	data, comments, err := dc.Parse(absFilePath)
 	if err != nil {
-		errMsg := fmt.Sprintf("error while parsing file %s, error: %v", absFilePath, err)
-		zap.S().Errorf("error while parsing file %s", absFilePath, err)
+		errMsg := fmt.Sprintf("error while parsing dockerfile %s, error: %v", absFilePath, err)
+		zap.S().Errorf("error while parsing dockerfile %s", absFilePath, err)
 		return allResourcesConfig, errors.New(errMsg)
 	}
+
 	minSeverity, maxSeverity := utils.GetMinMaxSeverity(comments)
+
 	skipRules := utils.GetSkipRules(comments)
 
+	// create an array of all the instructions present in the docker file
 	dockerCommand := []string{}
+
+	// create config for each instruction of  dockerfile
 	for i := 0; i < len(data); i++ {
 		dockerCommand = append(dockerCommand, data[i].Cmd)
+
 		config := output.ResourceConfig{
 			Name:        filepath.Base(absFilePath),
 			Type:        data[i].Cmd,
@@ -67,7 +75,9 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 
 	}
 
-	// creates config for entire dockerfile
+	// Creates config for entire dockerfile which has array of instructions against the Config field.
+	// Created to use against policies which checks for availablility of command/instruction in dockerfile
+	// if command is not present line no also doesnot have any importance thats why set to 1.
 	config := output.ResourceConfig{
 		Name:        filepath.Base(absFilePath),
 		Type:        resourceTypeDockerfile,
@@ -101,6 +111,7 @@ func (dc *DockerV1) getSourceRelativePath(sourceFile string) string {
 }
 
 // GetresourceIdforDockerfile Generates hash of the string to be used as the reference id for docker file
+// added line no in creating hash because dockerfile may have same command multiple times with same value
 func GetresourceIdforDockerfile(filepath string, value string, lineNumber int) (referenceID string) {
 	hasher := md5.New()
 	hasher.Write([]byte(filepath + value + strconv.Itoa(lineNumber)))

@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"syscall"
 	"testing"
 
@@ -68,14 +69,40 @@ func TestLoadIacDir(t *testing.T) {
 			dockerV1: DockerV1{},
 			wantErr:  multierror.Append(errors.New(errString)),
 		},
+		{
+			name:     "valid dirPath having dockerfile with in-file instrumentation",
+			dirPath:  filepath.Join(testDataDir, "valid-directory-with-in-file-instrumentation"),
+			dockerV1: DockerV1{},
+			want: output.AllResourceConfigs{
+				"cmd": []output.ResourceConfig{
+					{ID: "cmd.55ceacedc5f1c0df6951723a7401a74e",
+						Name:       "Dockerfile",
+						ModuleName: "",
+						Source:     "Dockerfile",
+						PlanRoot:   "", Line: 5,
+						Type:   "cmd",
+						Config: "server",
+						SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041",
+							Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}},
+						MaxSeverity: "None",
+						MinSeverity: "High"}},
+				"docker": []output.ResourceConfig{{ID: "docker.96052d48e5364a05995aaec1e5d53f2d", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "dockerfile", Config: []string{"from", "cmd"}, SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}},
+				"from":   []output.ResourceConfig{{ID: "from.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "from", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}}},
+			wantErr: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			_, gotErr := tt.dockerV1.LoadIacDir(tt.dirPath, false)
+			got, gotErr := tt.dockerV1.LoadIacDir(tt.dirPath, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.want != nil {
+				if got == nil || !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("unexpected result; got: '%#v', want: '%v'", got, tt.want)
+				}
 			}
 			if tt.wantErr == nil {
 				if err := me.ErrorOrNil(); err != nil {
