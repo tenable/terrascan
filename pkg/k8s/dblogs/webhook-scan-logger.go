@@ -205,6 +205,7 @@ func (g *WebhookScanLogger) initDBIfNeeded() error {
 
 		if _, err := statement.Exec(); err != nil {
 			zap.S().Errorf("failed to create logs table, error: '%v'", err)
+			return err
 		}
 	}
 
