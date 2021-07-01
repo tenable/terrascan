@@ -47,3 +47,9 @@ jobs:
 
     - name: Push Terrascan latest tag docker image
       run: make docker-push-latest-tag
+
+    - name: Build terrascan_atlantis docker image
+      run: make atlantis-docker-build
+
+    - name: Push terrascan_atlantis latest tag docker image
+      run: make atlantis-docker-push-latest-tag
