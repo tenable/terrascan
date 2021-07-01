@@ -27,7 +27,6 @@ require (
 	github.com/iancoleman/strcase v0.1.3
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
-	github.com/mattn/go-sqlite3 v1.12.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.15.1
 	github.com/onsi/gomega v1.11.0
@@ -49,5 +48,6 @@ require (
 	k8s.io/api v0.19.2
 	k8s.io/apimachinery v0.19.2
 	k8s.io/client-go v10.0.0+incompatible
+	modernc.org/sqlite v1.11.1
 	sigs.k8s.io/kustomize/api v0.8.5
 )

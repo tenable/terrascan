@@ -25,7 +25,7 @@ import (
 	"go.uber.org/zap"
 
 	// importing sqlite driver
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 // WebhookScanLogger handles the logic to push scan logs to db
@@ -171,6 +171,7 @@ func (g *WebhookScanLogger) GetLogURL(host, logUID string) string {
 }
 
 func (g *WebhookScanLogger) initDBIfNeeded() error {
+
 	// Check where the SQL file exists. If it does do nothing. Otherwise, create the DB file and the Logs table.
 	if _, err := os.Stat(g.dbFilePath()); os.IsNotExist(err) {
 		file, err := os.Create(g.dbFilePath())
@@ -180,7 +181,7 @@ func (g *WebhookScanLogger) initDBIfNeeded() error {
 		}
 		file.Close()
 
-		db, err := sql.Open("sqlite3", g.dbFilePath())
+		db, err := sql.Open("sqlite", g.dbFilePath())
 		if err != nil {
 			zap.S().Errorf("failed to open sql file. error: '%v'", err)
 			return err
@@ -198,10 +199,14 @@ func (g *WebhookScanLogger) initDBIfNeeded() error {
 												  );`
 		statement, err := db.Prepare(createLogsTableSQL)
 		if err != nil {
-			zap.S().Errorf("failed to create logs table. error: '%v'", err)
+			zap.S().Errorf("failed to prepare sql query to create logs table. error: '%v'", err)
 			return err
 		}
-		statement.Exec()
+
+		if _, err := statement.Exec(); err != nil {
+			zap.S().Errorf("failed to create logs table, error: '%v'", err)
+			return err
+		}
 	}
 
 	return nil
@@ -210,7 +215,7 @@ func (g *WebhookScanLogger) initDBIfNeeded() error {
 func (g *WebhookScanLogger) getDbHandler() (*sql.DB, error) {
 	g.initDBIfNeeded()
 
-	db, err := sql.Open("sqlite3", g.dbFilePath())
+	db, err := sql.Open("sqlite", g.dbFilePath())
 	if err != nil {
 		zap.S().Errorf("failed to open sql file. error: '%v'", err)
 	}

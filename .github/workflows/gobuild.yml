@@ -58,9 +58,6 @@ jobs:
     - name: Login to docker hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
 
-    - name: Push Terrascan docker image
-      run: make docker-push
-
     - name: Push Terrascan latest docker image
       if: ${{ github.ref == 'refs/heads/master' }}
       run: make docker-push-latest
