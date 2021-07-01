@@ -41,7 +41,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:        "empty config file",
 			absFilePath: filepath.Join(fileTestDataDir, "Dockerfile"),
 			dockerV1:    DockerV1{},
-			wantErr:     fmt.Errorf("error while parsing file %s, error: file with no instructions", filepath.Join(fileTestDataDir, "Dockerfile")),
+			wantErr:     fmt.Errorf("error while parsing dockerfile %s, error: file with no instructions", filepath.Join(fileTestDataDir, "Dockerfile")),
 		},
 		{
 			name:        "valid docker file",
