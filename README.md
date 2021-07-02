@@ -130,7 +130,7 @@ You can configure Terrascan to skip a particular policy (rule) while scanning a 
 #### Terraform
 Use Terraform scripts to configure Terrascan to skip rules by inserting a comment with the phrase `"ts:skip=<RULENAME><SKIP_REASON>"`. The comment should be included inside the resource as shown in the example below.
 
-![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
+![tf](docs/img/tf_skip_rule.png)
 
 #### Kubernetes
 In Kubernetes yamls, you can configure Terrascan to skip policies by adding an annotation as seen in the snippet below.
