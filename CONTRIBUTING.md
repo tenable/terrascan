@@ -48,7 +48,7 @@ If you are proposing a feature:
 Ready to contribute? Here's how to set up `terrascan` for local development.
 
 1. Fork the `terrascan` repo on GitHub.
-2. Clone your fork locally::
+2. Clone your fork locally:
 ```
     $ git clone git@github.com:your_name_here/terrascan.git
 ```
@@ -57,7 +57,8 @@ Ready to contribute? Here's how to set up `terrascan` for local development.
     $ git checkout -b name-of-your-bugfix-or-feature
 ```
    Now you can make your changes locally.
-1. When you're done making changes, check that your changes pass linting and tests. The following commands will simulate locally all checks executed as part of Terrascan's CI pipeline:
+
+4. When you're done making changes, check that your changes pass linting and tests. The following commands will simulate locally all checks executed as part of Terrascan's CI pipeline:
 ```
     $ make cicd
 ```
