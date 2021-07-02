@@ -1,5 +1,67 @@
 # Changelog
 
+## [v1.8.0](https://github.com/accurics/terrascan/tree/v1.8.0) (2021-07-02)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.7.0...v1.8.0)
+
+**Implemented enhancements:**
+
+- Add Support for new reference id field [\#786](https://github.com/accurics/terrascan/issues/786)
+
+**Fixed bugs:**
+
+- Sarif output has wrong file path value for file scans [\#861](https://github.com/accurics/terrascan/issues/861)
+- 'k8s' key updated multiple times in policy package [\#439](https://github.com/accurics/terrascan/issues/439)
+
+**Closed issues:**
+
+- Terrascan is failing in scan [\#887](https://github.com/accurics/terrascan/issues/887)
+- Refactor to Disable CGO [\#884](https://github.com/accurics/terrascan/issues/884)
+- Issue on Azure Pipelines: failed to initialize terrascan 1.7.0 [\#864](https://github.com/accurics/terrascan/issues/864)
+- Can't skip rules with underscore [\#856](https://github.com/accurics/terrascan/issues/856)
+- Recursive Loop Scanning Terraform [\#851](https://github.com/accurics/terrascan/issues/851)
+- Improve filenames in remote modules [\#841](https://github.com/accurics/terrascan/issues/841)
+- Issues running terrascan in azure pipelines [\#835](https://github.com/accurics/terrascan/issues/835)
+
+**Merged pull requests:**
+
+- fix error messages reported from hcl diags [\#911](https://github.com/accurics/terrascan/pull/911) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- add in-file instrumentation segment [\#910](https://github.com/accurics/terrascan/pull/910) ([amirbenv](https://github.com/amirbenv))
+- Minor documentation fixes [\#908](https://github.com/accurics/terrascan/pull/908) ([brandysnaps](https://github.com/brandysnaps))
+- Use CGO independent package for sqlite [\#906](https://github.com/accurics/terrascan/pull/906) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- GH action doc - fix code block [\#902](https://github.com/accurics/terrascan/pull/902) ([amirbenv](https://github.com/amirbenv))
+- Update cicd-fix code block.md [\#901](https://github.com/accurics/terrascan/pull/901) ([amirbenv](https://github.com/amirbenv))
+- fixes: recursive loop when parent and child module has same local block [\#900](https://github.com/accurics/terrascan/pull/900) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs-material to 7.1.9 [\#895](https://github.com/accurics/terrascan/pull/895) ([pyup-bot](https://github.com/pyup-bot))
+- Updates documentation on Terrascan github action [\#894](https://github.com/accurics/terrascan/pull/894) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- fix usage overview links.md [\#893](https://github.com/accurics/terrascan/pull/893) ([amirbenv](https://github.com/amirbenv))
+- Split usage docs [\#890](https://github.com/accurics/terrascan/pull/890) ([amirbenv](https://github.com/amirbenv))
+- add proper values via metadata [\#888](https://github.com/accurics/terrascan/pull/888) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Update mkdocs to 1.2.1 [\#886](https://github.com/accurics/terrascan/pull/886) ([pyup-bot](https://github.com/pyup-bot))
+- Update Integration Docs.md [\#885](https://github.com/accurics/terrascan/pull/885) ([amirbenv](https://github.com/amirbenv))
+- k8s policies refactor [\#879](https://github.com/accurics/terrascan/pull/879) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- mod azure policies to improve parity with siac [\#878](https://github.com/accurics/terrascan/pull/878) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Fix authorization header for http request [\#877](https://github.com/accurics/terrascan/pull/877) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- Adding Id fix for github policies [\#874](https://github.com/accurics/terrascan/pull/874) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- Bugfix/k8s id field [\#873](https://github.com/accurics/terrascan/pull/873) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Add ID Field in Azure Policies [\#872](https://github.com/accurics/terrascan/pull/872) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- adding ID field for aws policies [\#871](https://github.com/accurics/terrascan/pull/871) ([harkirat22](https://github.com/harkirat22))
+- Adding missing Id field for GCP policies [\#870](https://github.com/accurics/terrascan/pull/870) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- Updating network security policies for GCP [\#869](https://github.com/accurics/terrascan/pull/869) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- improves: filename in remote module [\#867](https://github.com/accurics/terrascan/pull/867) ([Rchanger](https://github.com/Rchanger))
+- Adding AWS Network Security Policies [\#866](https://github.com/accurics/terrascan/pull/866) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+- Change api, Add support for s3 bucket resource and better cft loader [\#865](https://github.com/accurics/terrascan/pull/865) ([sigmabaryon](https://github.com/sigmabaryon))
+- Fixes incorrect filepath reporting in sarif output & added e2e tests for sarif output [\#863](https://github.com/accurics/terrascan/pull/863) ([dev-gaur](https://github.com/dev-gaur))
+- Bugfix/az nw sec policies [\#862](https://github.com/accurics/terrascan/pull/862) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Update mkdocs-material to 7.1.8 [\#859](https://github.com/accurics/terrascan/pull/859) ([pyup-bot](https://github.com/pyup-bot))
+- Fix AC\_AZURE\_0185 policy [\#858](https://github.com/accurics/terrascan/pull/858) ([maxgio92](https://github.com/maxgio92))
+- fixed sarif unit tests hardcoding code smell [\#857](https://github.com/accurics/terrascan/pull/857) ([dev-gaur](https://github.com/dev-gaur))
+- fix broken link to `usage.md` [\#855](https://github.com/accurics/terrascan/pull/855) ([dan-hill2802](https://github.com/dan-hill2802))
+- Added "id" field support & policy validation tests [\#843](https://github.com/accurics/terrascan/pull/843) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Add Microsoft Azure ARM as an IaC Provider  [\#736](https://github.com/accurics/terrascan/pull/736) ([gauravgahlot](https://github.com/gauravgahlot))
+
+# Changelog
+
 ## [v1.7.0](https://github.com/accurics/terrascan/tree/v1.7.0) (2021-06-09)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.6.0...v1.7.0)
@@ -593,6 +655,9 @@ Major updates to Terrascan and the underlying architecture including:
 
 ## 0.1.0 (2017-11-26)
 - First release on PyPI.
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
 
 \* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
 
