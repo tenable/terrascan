@@ -24,6 +24,9 @@ This section provides an overview of the different ways you can use Terrascan:
 
 See the [Configuring Terrascan](config_options.md) for steps to use a TOML file to configure webhook notifications.
 
+See the [In-File Instrumentation](in-file_instrumentation.md) to learn how to granularly customize your scan based on particular resources and rules. For example, by skipping certain rules.
+
+
 
 ## Integrations
 

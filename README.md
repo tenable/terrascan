@@ -114,7 +114,11 @@ Note: The scan command will implicitly run the initialization process there are 
 
 ## Customizing scans
 
-By default, Terrascan scans your entire configuration against all policies. However you can configure what you want to scan in the following ways:
+By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources. 
+
+Read more about [in-file instrumentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/in-file_instrumentation.html) and [the config file](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/config_options.html) on our documentation site.
+
+For now, some quick tips:
 
 - [Exclude a particular policy for a specific resource.](#How_to_exclude_a_policy_while_scanning_a_resource)
 - [Manually configure policies to be suppressed or applied globally from a scan across all resources or, for just a particular resource.](#_How_to_include_or_exclude_specific_policies_or_resources_from_being_scanned)
@@ -126,12 +130,12 @@ You can configure Terrascan to skip a particular policy (rule) while scanning a 
 #### Terraform
 Use Terraform scripts to configure Terrascan to skip rules by inserting a comment with the phrase `"ts:skip=<RULENAME><SKIP_REASON>"`. The comment should be included inside the resource as shown in the example below.
 
-![tf](https://user-images.githubusercontent.com/74685902/105115888-847b8a00-5a7e-11eb-983e-7f49f7c36ae1.png)
+![tf](docs/img/tf_skip_rule.png)
 
 #### Kubernetes
 In Kubernetes yamls, you can configure Terrascan to skip policies by adding an annotation as seen in the snippet below.
 
-![k8s](https://user-images.githubusercontent.com/74685902/117906943-b9f4ef00-b28a-11eb-8224-37af18275ba1.png)
+![k8s](docs/img/skiprules.png)
 
 ### How to include or exclude specific policies or resources from being scanned
 
