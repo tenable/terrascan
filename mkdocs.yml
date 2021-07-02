@@ -46,6 +46,7 @@ nav:
     - In-File Instrumentation: usage/in-file_instrumentation.md
     - Config File: usage/config_options.md
   - Integrations:
+    - Overview: integrations/integrations_overview.md
     - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
     - ArgoCD: integrations/argocd-integration.md
     - Atlantis: integrations/atlantis-integration.md

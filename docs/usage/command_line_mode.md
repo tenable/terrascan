@@ -2,10 +2,10 @@
 
 This section contains the following information:
 
-* [Terrascan commands](Terrascan_commands)
-* [Scanning](scanning) with examples
-* [Configuring the output format for a scan](Configuring_the_output_format_for_a_scan)
-* [CLI output types](CLI_output_types)
+* [Terrascan commands](#terrascan-commands)
+* [Scanning](#scanning) with examples
+* [Configuring the output format for a scan](#configuring-the-output-format-for-a-scan)
+
 
 The following is a description of all the commands available. Terrascan's interface is divided into subcommands as follows:
 
@@ -96,7 +96,7 @@ $ terrascan scan -t aws -r git -u git@github.com:accurics/KaiMonkey.git//terrafo
 
 ## Configuring the output format for a scan
 
-By default Terrascan output is displayed in human friendly format. Use the `-o` flag to change this to **YAML**, **JSON**, or **XML** format.
+By default Terrascan output is displayed in human friendly format. Use the `-o` flag to change this to **YAML**, **JSON**, **XML**, **JUNIT-XML** and **SARIF** formats.
 
 > **Note**: Terrascan exits with error code 3 if any issues are found during a scan.
 
