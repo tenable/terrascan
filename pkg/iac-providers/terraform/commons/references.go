@@ -17,10 +17,12 @@
 package commons
 
 import (
+	"encoding/json"
 	"reflect"
 	"regexp"
 
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"go.uber.org/zap"
 )
 
 var (
@@ -67,8 +69,20 @@ func (r *RefResolver) ResolveRefs(config jsonObj) jsonObj {
 
 			// case 1: config value is a string; in resource config, refs
 			// are of the type string
-			config[k] = r.ResolveStrRef(v.(string), "")
+			value := r.ResolveStrRef(v.(string), "")
 
+			// check if value is string and can be converted to map
+			if valueStr, ok := value.(string); ok {
+				var temp jsonObj
+				err := json.Unmarshal([]byte(valueStr), &temp)
+				if err != nil {
+					zap.S().Debugf("failed to unmarshal json string %s", valueStr)
+				} else {
+					value = temp
+				}
+			}
+
+			config[k] = value
 		case vType == "tfv12.jsonObj" && vKind == reflect.Map:
 
 			// case 2: config value is of type jsonObj

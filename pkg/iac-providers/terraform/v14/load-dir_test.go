@@ -241,6 +241,14 @@ func TestLoadIacDir(t *testing.T) {
 			nonRecursive: true,
 			wantErr:      nilMultiErr,
 		},
+		{
+			name:         "recursive loop while resolving locals with same name in parent and child module",
+			tfConfigDir:  filepath.Join(testDataDir, "recursive-loop-duplicate-locals"),
+			tfJSONFile:   filepath.Join(tfJSONDir, "recursive-loop-duplicate-locals.json"),
+			tfv14:        TfV14{},
+			nonRecursive: true,
+			wantErr:      nilMultiErr,
+		},
 	}
 
 	for _, tt := range table2 {

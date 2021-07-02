@@ -9,7 +9,7 @@
       "line": 13,
       "type": "aws_iam_user",
       "config": {
-        "name": "${lower(${local.foo} != null ? var.bar : var.foo)}"
+        "name": "${lower(bar != null ? bar : bar)}"
       },
       "skip_rules": null
     }

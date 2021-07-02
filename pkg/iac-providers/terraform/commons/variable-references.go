@@ -17,6 +17,7 @@
 package commons
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"reflect"
 	"regexp"
@@ -87,8 +88,22 @@ func (r *RefResolver) ResolveVarRef(varRef, callerRef string) interface{} {
 	}
 	zap.S().Debugf("resolved variable ref '%v', value: '%v'", varRef, val)
 
-	if reflect.TypeOf(val).Kind() == reflect.String {
-		valStr := val.(string)
+	valKind := reflect.TypeOf(val).Kind()
+
+	if valKind == reflect.String || valKind == reflect.Map {
+		valStr := ""
+
+		if valKind == reflect.Map {
+			data, err := json.Marshal(val)
+			if err != nil {
+				zap.S().Errorf("failed to convert expression '%v', ref: '%v'", hclVar, varRef)
+				return varRef
+			}
+			valStr = string(data)
+		} else {
+			valStr = val.(string)
+		}
+
 		resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
 		if varRef == resolvedVal {
 			zap.S().Debugf("resolved str variable ref refers to self: '%v'", varRef)
@@ -150,6 +165,16 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef, callerRef string
 	// replace the variable reference string with actual value
 	if reflect.TypeOf(val).Kind() == reflect.String {
 		valStr := val.(string)
+
+		// if resolved variable value from parent module is local reference get the local value from parent module
+		if isLocalRef(valStr) {
+			t := NewRefResolver(r.Config.Parent, nil)
+			localVal := t.ResolveLocalRef(valStr, varRef)
+			if reflect.TypeOf(localVal).Kind() == reflect.String {
+				valStr = localVal.(string)
+			}
+		}
+
 		resolvedVal := strings.Replace(varRef, varExpr, valStr, 1)
 		if strings.Contains(valStr, varExpr) {
 			zap.S().Debugf("resolved str variable ref refers to self: '%v'", varRef)
