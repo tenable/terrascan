@@ -39,12 +39,12 @@ func TestLoadIacFile(t *testing.T) {
 	testErrorString1 := `error occured while loading config file 'not-there'. error:
 <nil>: Failed to read file; The file "not-there" could not be read.
 `
-	testErrorString2 := fmt.Sprintf(`failed to load config file '%s'. error:
+	testErrorString2 := fmt.Sprintf(`failed to load iac file '%s'. error:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
 `, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
 
-	testErrorString3 := fmt.Sprintf(`failed to load config file '%s'. error:
+	testErrorString3 := fmt.Sprintf(`failed to load iac file '%s'. error:
 %s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
