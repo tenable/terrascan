@@ -43,6 +43,7 @@ nav:
     - Usage Overview: usage/usage.md
     - Command Line: usage/command_line_mode.md
     - Server Mode: usage/server_mode.md
+    - In-File Instrumentation: usage/in-file_instrumentation.md
     - Config File: usage/config_options.md
   - Integrations:
     - K8s Admission Controller: integrations/admission-controller-webhooks-usage.md
