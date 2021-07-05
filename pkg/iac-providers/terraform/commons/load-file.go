@@ -41,7 +41,7 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 	if diags != nil {
-		errMessage := fmt.Sprintf("failed to load config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
+		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}

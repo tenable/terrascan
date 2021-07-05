@@ -38,7 +38,7 @@ func TestLoadIacFile(t *testing.T) {
 <nil>: Failed to read file; The file "not-there" could not be read.
 `
 
-	testErrorString2 := fmt.Sprintf(`failed to load config file '%s'. error:
+	testErrorString2 := fmt.Sprintf(`failed to load iac file '%s'. error:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
 `, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
