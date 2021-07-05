@@ -145,74 +145,6 @@ func TestK8sV1ExtractResource(t *testing.T) {
 	}
 }
 
-
-func TestK8sV1ExtractContainerImages(t *testing.T) {
-	type args struct {
-		doc *utils.IacDocument
-		kind string
-	}
-	tests := []struct {
-		name    string
-		k       *K8sV1
-		args    args
-		wantContainerImageList []string
-		wantInitContainerImageList []string
-		wantErr bool
-	}{
-		{
-			name: "empty document object",
-			args: args{
-				doc: &utils.IacDocument{},
-				kind: "CRD",
-			},
-			wantErr: true,
-			wantContainerImageList: []string{},
-			wantInitContainerImageList: []string{},
-		},
-		{
-			name: "json document object",
-			args: args{
-				doc: &utils.IacDocument{
-					Type: "json",
-					Data: testJSONData,
-				},
-				kind: "Pod",
-			},
-			wantContainerImageList: []string{"k8s.gcr.io/exechealthz-amd64:1.2"},
-			wantInitContainerImageList: []string{},
-		},
-		{
-			name: "yaml document object",
-			args: args{
-				doc: &utils.IacDocument{
-					Type: "yaml",
-					Data: testYAMLData,
-				},
-				kind: "Pod",
-			},
-			wantContainerImageList: []string{"busybox"},
-			wantInitContainerImageList: []string{},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			k := &K8sV1{}
-			gotContainerImageList, gotInitContainerImageList, err := k.extractContainerImages(tt.args.kind, tt.args.doc)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("K8sV1.extractContainerImages() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(gotContainerImageList, tt.wantContainerImageList) {
-				t.Errorf("K8sV1.extractResource() got = %v, want %v", gotContainerImageList, tt.wantContainerImageList)
-			}
-			if !reflect.DeepEqual(gotInitContainerImageList, tt.wantInitContainerImageList) {
-				t.Errorf("K8sV1.extractResource() got = %v, want %v", gotInitContainerImageList, tt.wantInitContainerImageList)
-			}
-		})
-	}
-}
-
-
 func TestK8sV1GetNormalizedName(t *testing.T) {
 	type args struct {
 		kind string
@@ -305,7 +237,9 @@ func TestK8sV1Normalize(t *testing.T) {
 						},
 					},
 				},
-				SkipRules: []output.SkipRule{testSkipRule},
+				SkipRules:           []output.SkipRule{testSkipRule},
+				ContainerImages:     []output.ContainerNameAndImage{{Name: "myapp-container", Image: "busybox"}},
+				InitContainerImages: []output.ContainerNameAndImage{},
 			},
 		},
 		{
@@ -339,7 +273,9 @@ func TestK8sV1Normalize(t *testing.T) {
 						},
 					},
 				},
-				SkipRules: []output.SkipRule{testSkipRule},
+				SkipRules:           []output.SkipRule{testSkipRule},
+				ContainerImages:     []output.ContainerNameAndImage{},
+				InitContainerImages: []output.ContainerNameAndImage{},
 			},
 		},
 	}
@@ -351,8 +287,9 @@ func TestK8sV1Normalize(t *testing.T) {
 				t.Errorf("K8sV1.Normalize() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("K8sV1.Normalize() got = %+v, want = %+v", got, tt.want)
+				t.Errorf("K8sV1.Normalize() got = %+v, want = %+v", *got, *(tt.want))
 			}
 		})
 	}

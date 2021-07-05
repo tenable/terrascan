@@ -84,7 +84,9 @@ const (
         policy: ${module.m2.fullbucketpolicy}
       skip_rules: []
       maxseverity: ""
-      minseverity: ""`
+      minseverity: ""
+      containerimages: []
+      initcontainerimages: []`
 
 	scanTestOutputYAML = `results:
     violations:

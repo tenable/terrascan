@@ -42,7 +42,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_internet_gateway": [
@@ -61,7 +63,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_key_pair": [
@@ -78,7 +82,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_route_table": [
@@ -103,7 +109,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_route_table_association": [
@@ -120,7 +128,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_security_group": [
@@ -168,7 +178,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_subnet": [
@@ -189,7 +201,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ],
   "aws_vpc": [
@@ -210,7 +224,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "container_images": null,
+      "init_container_images": null
     }
   ]
 }
