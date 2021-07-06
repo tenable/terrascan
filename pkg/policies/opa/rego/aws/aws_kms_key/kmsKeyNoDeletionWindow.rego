@@ -2,7 +2,7 @@ package accurics
 
 {{.prefix}}kmsKeyNoDeletionWindow[retVal] {
     kms_key = input.aws_kms_key[_]
-    kms_key.config.is_enabled == true
+    kms_key.config.is_enabled == false
     kms_key.config.enable_key_rotation == true
     invalid_window_in_days(kms_key.config.deletion_window_in_days) == true
     traverse = "deletion_window_in_days"

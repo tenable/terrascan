@@ -7,7 +7,7 @@
         "prefix": ""
     },
     "severity": "HIGH",
-    "description": "Ensure rotation for customer created CMKs is enabled",
+    "description": "Ensure KMS key deletion window is set for deleted keys",
     "reference_id": "AWS.KMS.Logging.High.0400",
     "category": "Security Best Practices",
     "version": 2,
