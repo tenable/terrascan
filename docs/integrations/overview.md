@@ -16,3 +16,5 @@ Go to the [Usage](../usage/command_line_mode.md#configuring-the-output-format-fo
 
 ### Community Guides and Blogs:
 * [Azure DevOps](https://lgulliver.github.io/terrascan-in-azure-devops/) Credit to  [@lrgulliver](https://twitter.com/lrgulliver) (Liam Gulliver)
+* [Static Code Analyses - Terrascan, Terraform and Azure DevOps](https://jamescook.dev/codeanalyses-terrascan-terraform-azuredevops). Credit to [James Cook](https://twitter.com/OfficialCookJ)
+
