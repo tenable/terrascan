@@ -77,7 +77,7 @@ $ terrascan scan
 ### Step 3: Integrate with CI\CD
 
 Terrascan can be integrated into CI/CD pipelines to enforce security best practices.
-Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/cicd.html).
+Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/overview.html).
 
 ## Terrascan Commands
 You can use terrascan command with the following options:
