@@ -64,7 +64,7 @@ Terrascan is also available as a Docker image and can be used as follows
 ```sh
 $ docker run accurics/terrascan
 ```
-Refer to [documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started/) for information.
+Refer to [documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started.html) for information.
 
 ### Step 2: Scan
 To scan your code for security issues you can run the following (defaults to scanning Terraform).
@@ -77,7 +77,7 @@ $ terrascan scan
 ### Step 3: Integrate with CI\CD
 
 Terrascan can be integrated into CI/CD pipelines to enforce security best practices.
-Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/cicd/).
+Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/cicd.html).
 
 ## Terrascan Commands
 You can use terrascan command with the following options:
@@ -108,7 +108,7 @@ Use "terrascan [command] --help" for more information about a command.
 
 ## Policies
 Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). Every rego includes a JSON "rule" file which defines metadata for the policy.
-By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](./docs/usage.md) for information about the Initialization process.
+By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](./docs/usage/command_line_mode.md) for information about the Initialization process.
 
 Note: The scan command will implicitly run the initialization process there are no policies found.
 
