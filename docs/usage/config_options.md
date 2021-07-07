@@ -41,11 +41,13 @@ You can specify the following configurations:
 *  **skip-rules** - Specify one or more rules to skip while scanning. All other rules in the policy pack will be applied.
 *  **severity** - the minimal level of severity of the policies to be scanned and displayed. Options are high, medium and low
 *  **category** - the list of type of categories of the policies to be scanned and displayed
+*  **notifications** - Use these configuration as seen in the example above to send the output of scans as a webhook to a remote server. 
+
 
 **k8s-admission-control** - Config options for K8s Admission Controllers and GitOps workflows:
 
 *  **denied-severity** - Violations of this or higher severity will cause and admission rejection. Lower severity violations will be warnings. Options are high, medium. and low
-*  **denied-categories** - violations from these policy categories will lead to an admission rejection. Policy violations of other categories will lead to warnings.
+*  **denied-categories** - Violations from these policy categories will lead to an admission rejection. Policy violations of other categories will lead to warnings.
 *  **dashboard=true** - enable the `/logs` endpoint to log and graphically display K8s admission requests and violations. Default is `false`
 
 

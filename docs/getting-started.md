@@ -2,22 +2,18 @@
 
 Terrascan is a static code analyzer for Infrastructure as Code. It can be installed and run in a number of different ways, and is most commonly used in automated pipelines to identify policy violations before insecure infrastructure is provisioned.
 
-## Quickstart
-
-Quickly get started with common tasks on Terrascan:
-
-- [Running Terrascan for the First Time](#running-terrascan-for-the-first-time): Describes different methods for running Terrascan, one that installs Terrascan locally and another that leverages a Docker container. See  below for details.
-
-- [Scanning with Terrascan](#scanning-with-terrascan) - Explains how to scan vulnerable IaC using Terrascan with the an example including the scan output. See  below for details.
-
 ## Running Terrascan for the First Time
 
+Quickly get started with these common first tasks:
+
+- [Installing Terrascan](#installing-terrascan): 
+- [Scanning with Terrascan](#scanning-with-terrascan) 
+
+## Installing Terrascan
 Terrascan is a portable executable that does not strictly require installation, and is also available as a container image in Docker Hub. You can use Terrascan in two different methods based on your preference:
 
-1. [Installing Terrascan locally](#Native_executable)
-2. [Using a Docker container](#Using_Docker)
-
-The following sections explain how to use it as a [native executable](#native-executable) and how to use the [Docker image](#docker-image). You can choose from one of the following:
+1. [Installing Terrascan locally](#native-executable)
+2. [Using a Docker container](#using-a-docker-container)
 
 ### Native executable
 Terrascan's [release page](https://github.com/accurics/terrascan/releases) includes latest version of builds for common platforms.  Download and extract the package for your platform. Follow instructions that apply to your platform:
@@ -53,14 +49,14 @@ Download the latest version of builds for Windows and enter the following comman
 tar -zxf terrascan_<version number>_Windows_x86_64.tar.gz
 ```
 
-### Docker image
-Terrascan is also available as a Docker image in Docker Hub and can be used as follows assuming you have Docker installed:
+### Using a Docker Container
+Terrascan is also available as a Docker image in Docker Hub and can be used as follows (assuming you have Docker installed):
 
 ``` Bash
 $ docker run --rm accurics/terrascan version
 ```
 
-If you want to use the Docker image for the rest of this quickstart, it will help to create an alias, script or batch file that reduces the typing necessary.  For example with bash you could do something like this:
+If you want to use the Docker image for the rest of this "Getting Started" guide, please refer to the following command. Note the volume `(-v)` that is being mapped to the docker, and modify it if necessary to suit your environment. 
 
 ``` Bash
 $ alias terrascan="docker run --rm -it -v "$(pwd):/iac" -w /iac accurics/terrascan"
@@ -155,10 +151,11 @@ Scan Summary -
 
 You should see a total of 9 violations, which are detailed in the output.
 
-Now that you understand how to run Terrascan, you can explore various options available. The [usage page](./usage.md) covers the options in detail. For more information, see [Related resources](#related_resources).
+Now that you understand how to run Terrascan, you can explore various options available. The [usage page](usage/usage.md) covers the options in detail. For more information, see [Related resources](#related_resources).
 
 # Related resources
 
-* The [usage guide](./usage.md) explains general usage, how to scan other types of IaC (such as: Kubernetes, Helm, and Kustomize), List of other IaC providers (e.g. Kubernetes, Helm, etc.), instructions to limit the scan to specific directories or files, and generating the output in different formats.
+* The [usage guide](usage/usage.md) explains general usage, how to scan other types of IaC (such as: Kubernetes, Helm, and Kustomize), List of other IaC providers (e.g. Kubernetes, Helm, etc.), instructions to limit the scan to specific directories or files, and generating the output in different formats.
+* The [CI/CD](integrations/overview.md) page explains how to integrate Terrascan on CI/CD pipelines.
 * [Terrascan Policy Reference](../policies.md)
-* The [CI/CD](../cicd.md) page explains how to integrate Terrascan on CI/CD pipelines.
+
