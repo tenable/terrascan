@@ -108,7 +108,7 @@ Use "terrascan [command] --help" for more information about a command.
 
 ## Policies
 Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). Every rego includes a JSON "rule" file which defines metadata for the policy.
-By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](./docs/usage/command_line_mode.md) for information about the Initialization process.
+By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/command_line_mode.html) for information about the Initialization process.
 
 Note: The scan command will implicitly run the initialization process there are no policies found.
 
