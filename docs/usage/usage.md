@@ -1,12 +1,11 @@
 # Usage Overview
-Terrascan is a static code analyzer for Infrastructure as Code (IaC). It can executed with the native binary/executable or by using the [`docker`](#using-docker) container.
 
 ## Installing Terrascan
 
-For steps to install or run Terrascan from docker, see the section [Getting Started](getting-started.md).
+For steps to install locally, or run Terrascan from docker, see [this section](../getting-started.md#installing-terrascan).
 
 ## Building Terrascan
-Terrascan is a Go binary that you can build locally. This is useful if you want to be on the latest version or when developing Terrascan.
+Terrascan is a Go binary that you can build locally. This is useful if you want to be on the latest version, or when modding Terrascan.
 
 ``` Bash
 $ git clone git@github.com:accurics/terrascan.git
@@ -22,11 +21,9 @@ This section provides an overview of the different ways you can use Terrascan:
 1. [Command line mode](command_line_mode.md) provides list of Terrascan commands with descriptions.
 2. [Server mode](server_mode.md) using Terrascan as API server
 
-See the [Configuring Terrascan](config_options.md) for steps to use a TOML file to configure webhook notifications.
+See [Configuring Terrascan](config_options.md) to learn more about Terrascan's configuration file.
 
-See the [In-File Instrumentation](in-file_instrumentation.md) to learn how to granularly customize your scan based on particular resources and rules. For example, by skipping certain rules.
-
-
+See [In-File Instrumentation](in-file_instrumentation.md) to learn how to granularly customize your scan based on particular resources and rules. For example, by skipping certain rules or resources.
 
 ## Integrations
 
