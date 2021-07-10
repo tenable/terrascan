@@ -96,9 +96,6 @@ type ScanOptions struct {
 
 	// nonRecursive enables recursive scan for the terraform iac provider
 	nonRecursive bool
-
-	// sarifForGithub enables sarif output suited for github code scanning alert format
-	sarifForGithub bool
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -138,13 +135,6 @@ func (s ScanOptions) validate() error {
 	// asking the user to use yaml or json output format
 	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
 		return errors.New("please use yaml or json output format when using --config-only flag")
-	}
-
-	// only sarif output supports --github flag
-	// if --github flag is set, then exit with an error
-	// asking the user to use sarif output format
-	if s.sarifForGithub && !strings.EqualFold(s.outputType, sarifOutputFormat) {
-		return errors.New("please use sarif output format when using --github flag")
 	}
 
 	return nil
@@ -247,9 +237,6 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 
 	outputWriter := NewOutputWriter(s.UseColors)
 
-	if s.sarifForGithub {
-		writer.SarifForGithub = true
-	}
 	if s.configOnly {
 		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
 	}

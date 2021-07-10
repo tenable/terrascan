@@ -33,15 +33,16 @@ const (
 	sarifFormat supportedFormat = "sarif"
 )
 
-// SarifForGithub is a flag to know Sarif has to be generated for Github usage format or the generic default format
-var SarifForGithub = false
-
 func init() {
 	RegisterWriter(sarifFormat, SarifWriter)
 }
 
 // SarifWriter writes sarif formatted violation results report
 func SarifWriter(data interface{}, writer io.Writer) error {
+	return writeSarif(data, writer, false)
+}
+
+func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 	outputData := data.(policy.EngineOutput)
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
@@ -73,7 +74,7 @@ func SarifWriter(data interface{}, writer io.Writer) error {
 
 		var artifactLocation *sarif.ArtifactLocation
 
-		if SarifForGithub {
+		if forGithub {
 			artifactLocation = sarif.NewSimpleArtifactLocation(violation.File).
 				WithUriBaseId(outputData.Summary.ResourcePath)
 		} else {
