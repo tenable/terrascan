@@ -88,21 +88,21 @@ var _ = Describe("Help", func() {
 		})
 
 		Context("for scan command", func() {
-			It("should print help for init and exit with status code 0", func() {
+			It("should print help for scan and exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, helpCommand, "scan")
 				helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeZero, filepath.Join("golden", "help_scan.txt"), true)
 			})
 		})
 
 		Context("for server command", func() {
-			It("should print help for init and exit with status code 0", func() {
+			It("should print help for server and exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, helpCommand, "server")
 				helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeZero, filepath.Join("golden", "help_server.txt"), true)
 			})
 		})
 
 		Context("for version command", func() {
-			It("should print help for init and exit with status code 0", func() {
+			It("should print help for version and exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, helpCommand, "version")
 				helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeZero, filepath.Join("golden", "help_version.txt"), true)
 			})

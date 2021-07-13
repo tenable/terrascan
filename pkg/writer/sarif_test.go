@@ -12,9 +12,11 @@ import (
 	"github.com/accurics/terrascan/pkg/version"
 )
 
-var testpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
+var abstestpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
+var testpath = fmt.Sprintf("file://%s", abstestpath)
+var testpathForGH = violationsInput.Violations[0].File
 
-var expectedSarifOutput1 = fmt.Sprintf(`{
+const violationTemplate = `{
           "version": "2.1.0",
           "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
           "runs": [
@@ -68,7 +70,9 @@ var expectedSarifOutput1 = fmt.Sprintf(`{
               ]
             }
           ]
-        }`, version.GetNumeric(), fmt.Sprintf("file://%s", testpath))
+        }`
+
+var expectedSarifOutput1 = fmt.Sprintf(violationTemplate, version.GetNumeric(), testpath)
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",
@@ -127,7 +131,7 @@ func TestSarifWriter(t *testing.T) {
 		expectedOutput string
 	}{
 		{
-			name:           "Human Readable Writer: Violations",
+			name:           "Sarif Writer: Violations",
 			input:          violationsInput,
 			expectedOutput: expectedSarifOutput1,
 		},

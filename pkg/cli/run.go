@@ -33,6 +33,7 @@ import (
 
 const (
 	humanOutputFormat = "human"
+	sarifOutputFormat = "sarif"
 )
 
 // ScanOptions represents scan command and its optional flags
@@ -135,6 +136,7 @@ func (s ScanOptions) validate() error {
 	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
 		return errors.New("please use yaml or json output format when using --config-only flag")
 	}
+
 	return nil
 }
 
