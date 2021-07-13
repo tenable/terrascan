@@ -135,25 +135,26 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	}
 
 	// evaluate policies IaC for violations
-	results, err := executor.Execute()
+	results, err := executor.Execute(s.ConfigOnly)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		return output, isAdmissionDenied, err
-	}
-	// set remote url in case remote repo is scanned
-	if s.RemoteURL != "" {
-		results.Violations.Summary.ResourcePath = s.RemoteURL
-	}
-
-	if !s.ShowPassed {
-		results.Violations.ViolationStore.PassedRules = nil
 	}
 
 	// if config only, return only config else return only violations
 	if s.ConfigOnly {
 		output = results.ResourceConfig
 	} else {
+		// set remote url in case remote repo is scanned
+		if s.RemoteURL != "" {
+			results.Violations.Summary.ResourcePath = s.RemoteURL
+		}
+
+		if !s.ShowPassed {
+			results.Violations.ViolationStore.PassedRules = nil
+		}
+
 		isAdmissionDenied = hasK8sAdmissionDeniedViolations(results)
 		output = results.Violations
 	}

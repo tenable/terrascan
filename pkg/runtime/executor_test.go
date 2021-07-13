@@ -178,7 +178,49 @@ func TestExecute(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.executor.Execute()
+			_, gotErr := tt.executor.Execute(false)
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestInitPolicyEngine(t *testing.T) {
+	table := []struct {
+		name     string
+		executor Executor
+		wantErr  error
+	}{
+		{
+			name: "invalid policy path",
+			executor: Executor{
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v14",
+				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
+			},
+			wantErr: fmt.Errorf("failed to initialize OPA policy engine"),
+		},
+		{
+			name: "invalid policy path",
+			executor: Executor{
+				filePath:    filepath.Join(testDataDir, "testfile"),
+				dirPath:     "",
+				policyTypes: []string{"aws"},
+				iacType:     "terraform",
+				iacVersion:  "v12",
+				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
+			},
+			wantErr: fmt.Errorf("failed to initialize OPA policy engine"),
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := tt.executor.initPolicyEngines()
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -274,21 +316,6 @@ func TestInit(t *testing.T) {
 			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
 		},
 		{
-			name: "invalid policy path",
-			executor: Executor{
-				filePath:    filepath.Join(testDataDir, "testfile"),
-				dirPath:     "",
-				policyTypes: []string{"aws"},
-				iacType:     "terraform",
-				iacVersion:  "v14",
-				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
-			},
-			configFile:      filepath.Join(testDataDir, "webhook.toml"),
-			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
-			wantIacProvider: []iacProvider.IacProvider{&tfv14.TfV14{}},
-			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
-		},
-		{
 			name: "config file with invalid category",
 			executor: Executor{
 				filePath:    filepath.Join(testDataDir, "testfile"),
@@ -357,21 +384,6 @@ func TestInit(t *testing.T) {
 			configFile:      filepath.Join(testDataDir, "does-not-exist"),
 			wantErr:         config.ErrNotPresent,
 			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
-		},
-		{
-			name: "invalid policy path",
-			executor: Executor{
-				filePath:    filepath.Join(testDataDir, "testfile"),
-				dirPath:     "",
-				policyTypes: []string{"aws"},
-				iacType:     "terraform",
-				iacVersion:  "v12",
-				policyPath:  []string{filepath.Join(testDataDir, "notthere")},
-			},
-			configFile:      filepath.Join(testDataDir, "webhook.toml"),
-			wantErr:         fmt.Errorf("failed to initialize OPA policy engine"),
-			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
-			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
 		},
 	}
 

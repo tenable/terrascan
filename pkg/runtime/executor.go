@@ -17,6 +17,7 @@
 package runtime
 
 import (
+	"github.com/accurics/terrascan/pkg/policy/opa"
 	"sort"
 
 	"go.uber.org/zap"
@@ -26,7 +27,6 @@ import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
-	opa "github.com/accurics/terrascan/pkg/policy/opa"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -139,6 +139,11 @@ func (e *Executor) Init() error {
 		}
 	}
 
+	zap.S().Debug("initialized executor")
+	return nil
+}
+
+func (e *Executor) initPolicyEngines() (err error) {
 	// create a new policy engine based on IaC type
 	zap.S().Debugf("using policy path %v", e.policyPath)
 	for _, policyPath := range e.policyPath {
@@ -153,18 +158,16 @@ func (e *Executor) Init() error {
 
 		// initialize the engine
 		if err := engine.Init(policyPath, preloadFilter); err != nil {
-			zap.S().Errorf("%s", err)
+			zap.S().Errorf("failed to initialize policy engine for path %s, error: %s", policyPath, err)
 			return err
 		}
 		e.policyEngines = append(e.policyEngines, engine)
 	}
-
-	zap.S().Debug("initialized executor")
 	return nil
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute() (results Output, err error) {
+func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
@@ -193,6 +196,14 @@ func (e *Executor) Execute() (results Output, err error) {
 
 	// update results with resource config
 	results.ResourceConfig = resourceConfig
+
+	if configOnly {
+		return results, nil
+	}
+
+	if err := e.initPolicyEngines(); err != nil {
+		return results, err
+	}
 
 	if err := e.findViolations(&results); err != nil {
 		return results, err
