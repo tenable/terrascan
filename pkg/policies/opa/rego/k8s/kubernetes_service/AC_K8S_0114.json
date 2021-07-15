@@ -1,0 +1,17 @@
+{
+    "name": "ensureServiceWithSelector",
+    "file": "ensureServiceWithSelector.rego",
+    "policy_type": "k8s",
+    "resource_type": "kubernetes_service",
+    "template_args": {
+        "name": "ensureServiceWithSelector",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure the use of selector is enforced for Kubernetes Ingress or LoadBalancer service",
+    "reference_id": "AC_K8S_0114",
+    "category": "Infrastructure Security",
+    "version": 1,
+    "id": "AC_K8S_0114"
+}
