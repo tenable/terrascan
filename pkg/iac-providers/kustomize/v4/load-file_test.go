@@ -1,4 +1,4 @@
-package kustomizev3
+package kustomizev4
 
 import (
 	"reflect"
@@ -13,7 +13,7 @@ func TestLoadIacFile(t *testing.T) {
 		name      string
 		filePath  string
 		options   map[string]interface{}
-		kustomize KustomizeV3
+		kustomize KustomizeV4
 		typeOnly  bool
 		want      output.AllResourceConfigs
 		wantErr   error
@@ -21,7 +21,7 @@ func TestLoadIacFile(t *testing.T) {
 		{
 			name:      "load iac file is not supported for kustomize",
 			filePath:  "/dummyfilepath.yaml",
-			kustomize: KustomizeV3{},
+			kustomize: KustomizeV4{},
 			wantErr:   errLoadIacFileNotSupported,
 		},
 	}

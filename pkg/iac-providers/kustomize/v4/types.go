@@ -1,12 +1,12 @@
-package kustomizev3
+package kustomizev4
 
 import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 )
 
-// KustomizeV3 struct
-type KustomizeV3 struct {
+// KustomizeV4 struct
+type KustomizeV4 struct {
 	errIacLoadDirs *multierror.Error
 }
 

@@ -30,7 +30,7 @@ import (
 	dockerv1 "github.com/accurics/terrascan/pkg/iac-providers/docker/v1"
 	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
-	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
+	kustomizev4 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v4"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
@@ -262,7 +262,7 @@ func TestInit(t *testing.T) {
 				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &dockerv1.DockerV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv15.TfV15{}},
+			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &dockerv1.DockerV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev4.KustomizeV4{}, &tfv15.TfV15{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
