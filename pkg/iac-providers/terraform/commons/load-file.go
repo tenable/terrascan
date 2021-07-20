@@ -18,6 +18,7 @@ package commons
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform/addrs"
 	"path/filepath"
 	"strings"
 
@@ -34,17 +35,33 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
 
+	detectedRequiredProviders := map[addrs.Provider]string{}
+	// load current iac file
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if hclFile == nil {
 		errMessage := fmt.Sprintf("error occured while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
+
+	/*
+	for _, reqdProvider := range hclFile.RequiredProviders {
+		for k, v := range reqdProvider.RequiredProviders {
+			for _, providerName := range eligibleRequiredProviders {
+				if k == providerName {
+					detectedRequiredProviders[k] = v
+				}
+			}
+			zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
+		}
+	}*/
+
 	if diags != nil {
 		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
+
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
@@ -53,7 +70,7 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	for _, managedResource := range hclFile.ManagedResources {
 
 		// create output.ResourceConfig from hclConfigs.Resource
-		resourceConfig, err := CreateResourceConfig(managedResource)
+		resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
 		if err != nil {
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}

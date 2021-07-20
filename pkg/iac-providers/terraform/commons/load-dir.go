@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/hashicorp/terraform/addrs"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -40,7 +41,8 @@ import (
 
 var (
 	// ErrBuildTFConfigDir error
-	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
+	ErrBuildTFConfigDir       = fmt.Errorf("failed to build terraform allResourcesConfig")
+	eligibleRequiredProviders = []string{"registry.terraform.io/hashicorp/kubernetes", "registry.terraform.io/hashicorp/aws", "registry.terraform.io/hashicorp/azure", "registry.terraform.io/hashicorp/google"}
 )
 
 const (
@@ -138,8 +140,18 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			continue
 		}
 
+		detectedRequiredProviders := map[addrs.Provider]string{}
 		// load current config directory
 		rootMod, diags := t.parser.LoadConfigDir(dir)
+		zap.S().Infof(fmt.Sprintf("%v", rootMod.ProviderLocalNames))
+		for k, v := range rootMod.ProviderLocalNames {
+			for _, providerName := range eligibleRequiredProviders {
+				if k.String() == providerName {
+					detectedRequiredProviders[k] = v
+				}
+			}
+			zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
+		}
 		if diags.HasErrors() {
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
@@ -150,7 +162,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
-
 		// Get the downloader chache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
@@ -187,12 +198,11 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 			// reference resolver
 			r := NewRefResolver(current.Config, current.ParentModuleCall)
-
 			// traverse through all current's resources
 			for _, managedResource := range current.Config.Module.ManagedResources {
 
 				// create output.ResourceConfig from hclConfigs.Resource
-				resourceConfig, err := CreateResourceConfig(managedResource)
+				resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
 				if err != nil {
 					t.addError(err.Error(), dir)
 					continue
@@ -231,6 +241,19 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 						allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 					}
 				}
+				/*if managedResource.Type == "kubernetes_deployment" {
+					spew.Dump(managedResource)
+				}*/
+				/*
+					zap.S().Infof(managedResource.Provider.ForDisplay())
+					zap.S().Infof(managedResource.Provider.Namespace)
+					zap.S().Infof(managedResource.Provider.Type)
+					zap.S().Infof(fmt.Sprintf("isDefault: %s", managedResource.Provider.IsDefault()))
+					zap.S().Infof(fmt.Sprintf("isBuiltIn: %s", managedResource.Provider.IsBuiltIn()))
+					zap.S().Infof(fmt.Sprintf("isLegacy: %s", managedResource.Provider.IsLegacy()))
+					zap.S().Infof(fmt.Sprintf("isZero: %s", managedResource.Provider.IsZero()))
+					zap.S().Infof(fmt.Sprintf("isZero: %s", managedResource.Provider.LegacyString()))
+				*/
 			}
 
 			// add all current's children to the queue
@@ -257,8 +280,19 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
 
+	detectedRequiredProviders := map[addrs.Provider]string{}
 	// load current config directory
 	rootMod, diags := t.parser.LoadConfigDir(t.absRootDir)
+	zap.S().Infof(fmt.Sprintf("%v", rootMod.ProviderLocalNames))
+	for k, v := range rootMod.ProviderLocalNames {
+		for _, providerName := range eligibleRequiredProviders {
+			if k.String() == providerName {
+				detectedRequiredProviders[k] = v
+			}
+		}
+		zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
+	}
+
 	if diags.HasErrors() {
 		// log a debug message and continue with other directories
 		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", t.absRootDir, getErrorMessagesFromDiagnostics(diags))
@@ -309,7 +343,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		for _, managedResource := range current.Config.Module.ManagedResources {
 
 			// create output.ResourceConfig from hclConfigs.Resource
-			resourceConfig, err := CreateResourceConfig(managedResource)
+			resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
 			if err != nil {
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: "failed to create ResourceConfig"})
 			}
@@ -339,6 +373,10 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 					allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 				}
 			}
+
+			zap.S().Infof(managedResource.Provider.ForDisplay())
+			zap.S().Infof(managedResource.Provider.Namespace)
+			zap.S().Infof(managedResource.Provider.Type)
 		}
 
 		// add all current's children to the queue

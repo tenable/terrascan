@@ -18,6 +18,7 @@ package commons
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform/addrs"
 	"io/ioutil"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -28,7 +29,7 @@ import (
 )
 
 // CreateResourceConfig creates output.ResourceConfig
-func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig output.ResourceConfig, err error) {
+func CreateResourceConfig(managedResource *hclConfigs.Resource, reqdProviderNameMapping map[addrs.Provider]string) (resourceConfig output.ResourceConfig, err error) {
 
 	// read source file
 	fileBytes, err := ioutil.ReadFile(managedResource.DeclRange.Filename)
@@ -44,6 +45,11 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	if hclBody, ok = managedResource.Config.(*hclsyntax.Body); !ok {
 		return resourceConfig, fmt.Errorf("failed type assertion for hcl.Body in *hclConfigs.Resource. error: expected hcl.Body type is *hclsyntax.Body, but got %T", managedResource.Config)
 	}
+
+	if isEligibleForContainerImageExtraction(managedResource, reqdProviderNameMapping) {
+		extractContainerImages(managedResource, hclBody)
+	}
+
 	goOut, err := c.convertBody(hclBody)
 	if err != nil {
 		zap.S().Errorf("failed to convert hcl.Body to go struct; resource '%s', file: '%s'. error: '%v'",
