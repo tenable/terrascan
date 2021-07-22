@@ -1,0 +1,17 @@
+{
+  "aws_iam_user": [
+    {
+      "id": "aws_iam_user.lb",
+      "name": "lb",
+      "module_name": "dummy",
+      "source": "dummy/main.tf",
+      "plan_root": "./",
+      "line": 13,
+      "type": "aws_iam_user",
+      "config": {
+        "name": "${lower(bar != null ? bar : bar)}"
+      },
+      "skip_rules": null
+    }
+  ]
+}

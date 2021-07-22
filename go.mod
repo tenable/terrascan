@@ -10,6 +10,7 @@ replace (
 
 require (
 	github.com/VerbalExpressions/GoVerbalExpressions v0.0.0-20200410162751-4d76a1099a6e
+	github.com/apparentlymart/go-textseg/v12 v12.0.0 // indirect
 	github.com/awslabs/goformation/v4 v4.19.1
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-errors/errors v1.0.1
@@ -17,13 +18,13 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-cleanhttp v0.5.1
-	github.com/hashicorp/go-getter v1.5.1
-	github.com/hashicorp/go-multierror v1.1.0
+	github.com/hashicorp/go-getter v1.5.2
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl v1.0.0
-	github.com/hashicorp/hcl/v2 v2.8.2
-	github.com/hashicorp/terraform v0.14.4
+	github.com/hashicorp/hcl/v2 v2.10.0
+	github.com/hashicorp/terraform v0.15.3
 	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/iancoleman/strcase v0.1.3
 	github.com/itchyny/gojq v0.12.1
@@ -42,6 +43,8 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
 	golang.org/x/tools v0.1.4 // indirect
+	github.com/zclconf/go-cty v1.8.3
+	go.uber.org/zap v1.16.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
