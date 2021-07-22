@@ -17,8 +17,9 @@
 package scan_test
 
 import (
-	"github.com/accurics/terrascan/pkg/version"
 	"path/filepath"
+
+	"github.com/accurics/terrascan/pkg/version"
 
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
@@ -221,6 +222,15 @@ var _ = Describe("Scan is run for terraform files", func() {
 					iacDir := filepath.Join(iacRootRelPath, "terraform_recursive")
 					scanArgs := []string{"-i", "terraform", "-p", policyDir, "-d", iacDir, "-o", "json"}
 					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_recursive.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				})
+			})
+		})
+		Context("when --use-terraform-cache flag is used, all remote modules are refered from terraform cache", func() {
+			When("when --use-terraform-cache is set with output format json", func() {
+				It("should not display any violations", func() {
+					iacDir := filepath.Join(iacRootRelPath, "terraform_cache_use_in_scan")
+					scanArgs := []string{"-i", "terraform", "-p", policyDir, "-d", iacDir, "-o", "json", "--use-terraform-cache"}
+					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfGoldenRelPath, "terraform_cache_use_in_scan", "terraform_cache_use_in_scan_result.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})

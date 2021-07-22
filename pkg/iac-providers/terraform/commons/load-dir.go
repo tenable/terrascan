@@ -374,7 +374,6 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 			} else if t.useTerraformCache {
 				if _, dest := terraformInstalledModuleCache.GetRemoteModuleIfPresentInTerraformSrc(req); dest != "" {
 					pathToModule = dest
-					fmt.Println("module,", dest)
 				}
 			}
 			if pathToModule == "" {
