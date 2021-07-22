@@ -94,7 +94,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			aRC, gotErr := tt.armv1.LoadIacDir(tt.dirPath, false)
+			aRC, gotErr := tt.armv1.LoadIacDir(tt.dirPath, false, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -143,7 +143,7 @@ func TestARMMapper(t *testing.T) {
 
 	t.Run(root, func(t *testing.T) {
 
-		allResourceConfigs, gotErr := armv1.LoadIacDir(root, false)
+		allResourceConfigs, gotErr := armv1.LoadIacDir(root, false, false)
 		_, ok := gotErr.(*multierror.Error)
 		if !ok {
 			t.Errorf("expected multierror.Error, got %T", gotErr)

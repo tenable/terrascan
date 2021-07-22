@@ -24,5 +24,5 @@ import (
 // to claim support in terrascan
 type IacProvider interface {
 	LoadIacFile(string) (output.AllResourceConfigs, error)
-	LoadIacDir(string, bool) (output.AllResourceConfigs, error)
+	LoadIacDir(string, bool, bool) (output.AllResourceConfigs, error)
 }

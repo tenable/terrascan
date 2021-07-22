@@ -79,7 +79,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath, false)
+			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath, false, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

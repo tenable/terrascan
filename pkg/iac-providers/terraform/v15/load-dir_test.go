@@ -155,7 +155,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv15.LoadIacDir(tt.dirPath, tt.nonRecursive)
+			_, gotErr := tt.tfv15.LoadIacDir(tt.dirPath, tt.nonRecursive, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -257,7 +257,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv15.LoadIacDir(tt.tfConfigDir, tt.nonRecursive)
+			got, gotErr := tt.tfv15.LoadIacDir(tt.tfConfigDir, tt.nonRecursive, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

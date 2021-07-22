@@ -176,7 +176,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath, tt.nonRecursive)
+			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath, tt.nonRecursive, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -260,7 +260,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir, tt.nonRecursive)
+			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir, tt.nonRecursive, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

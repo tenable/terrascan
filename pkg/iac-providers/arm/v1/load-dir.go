@@ -35,7 +35,7 @@ import (
 const iacFile = "IAC file"
 
 // LoadIacDir loads all ARM template files in the current directory.
-func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive, useTerraformCache bool) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
 	a.absRootDir = absRootDir
 

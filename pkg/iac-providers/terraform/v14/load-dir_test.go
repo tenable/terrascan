@@ -63,12 +63,13 @@ func TestLoadIacDir(t *testing.T) {
 	}
 
 	table := []struct {
-		name         string
-		dirPath      string
-		tfv14        TfV14
-		want         output.AllResourceConfigs
-		nonRecursive bool
-		wantErr      error
+		name              string
+		dirPath           string
+		tfv14             TfV14
+		want              output.AllResourceConfigs
+		nonRecursive      bool
+		useTerraformCache bool
+		wantErr           error
 	}{
 		{
 			name:         "invalid dirPath",
@@ -143,7 +144,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath, tt.nonRecursive)
+			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath, tt.nonRecursive, tt.useTerraformCache)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -253,7 +254,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv14.LoadIacDir(tt.tfConfigDir, tt.nonRecursive)
+			got, gotErr := tt.tfv14.LoadIacDir(tt.tfConfigDir, tt.nonRecursive, false)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

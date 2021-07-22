@@ -17,10 +17,13 @@
 package commons
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -40,6 +43,15 @@ var (
 	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
+const (
+	terraformModuleInstallDir          = ".terraform/modules"
+	terraformModuleInstallMetaFileName = "modules.json"
+)
+
+type TerraformModuleManifestCache struct {
+	Cache map[string]output.TerraformModuleManifest
+}
+
 // ModuleConfig contains the *hclConfigs.Config for every module in the
 // unified config tree along with *hclConfig.ModuleCall made by the parent
 // module. The ParentModuleCall helps in resolving references for variables
@@ -52,20 +64,22 @@ type ModuleConfig struct {
 
 // TerraformDirectoryLoader implements terraform directory loading
 type TerraformDirectoryLoader struct {
-	absRootDir       string
-	nonRecursive     bool
-	remoteDownloader downloader.ModuleDownloader
-	parser           *hclConfigs.Parser
-	errIacLoadDirs   *multierror.Error
+	absRootDir        string
+	nonRecursive      bool
+	useTerraformCache bool
+	remoteDownloader  downloader.ModuleDownloader
+	parser            *hclConfigs.Parser
+	errIacLoadDirs    *multierror.Error
 }
 
 // NewTerraformDirectoryLoader creates a new terraformDirectoryLoader
-func NewTerraformDirectoryLoader(rootDirectory string, nonRecursive bool) TerraformDirectoryLoader {
+func NewTerraformDirectoryLoader(rootDirectory string, nonRecursive, useTerraformCache bool) TerraformDirectoryLoader {
 	return TerraformDirectoryLoader{
-		absRootDir:       rootDirectory,
-		nonRecursive:     nonRecursive,
-		remoteDownloader: downloader.NewRemoteDownloader(),
-		parser:           hclConfigs.NewParser(afero.NewOsFs()),
+		absRootDir:        rootDirectory,
+		nonRecursive:      nonRecursive,
+		useTerraformCache: useTerraformCache,
+		remoteDownloader:  downloader.NewRemoteDownloader(),
+		parser:            hclConfigs.NewParser(afero.NewOsFs()),
 	}
 }
 
@@ -95,6 +109,10 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 	// initialize normalized output
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
+	terraformInstalledModuleCache := TerraformModuleManifestCache{
+		Cache: make(map[string]output.TerraformModuleManifest),
+	}
+
 	for _, dir := range dirList {
 		// check if the directory has any tf config files (.tf or .tf.json)
 		if !t.parser.IsConfigDir(dir) {
@@ -116,7 +134,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 		}
 
 		// get unified config for the current directory
-		unified, diags := t.buildUnifiedConfig(rootMod, dir)
+		unified, diags := t.buildUnifiedConfig(rootMod, dir, terraformInstalledModuleCache)
 
 		// Get the downloader chache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
@@ -216,6 +234,10 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	// initialize normalized output
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
+	terraformInstalledModuleCache := TerraformModuleManifestCache{
+		Cache: make(map[string]output.TerraformModuleManifest),
+	}
+
 	// check if the directory has any tf config files (.tf or .tf.json)
 	if !t.parser.IsConfigDir(t.absRootDir) {
 		// log a debug message and continue with other directories
@@ -234,7 +256,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	}
 
 	// get unified config for the current directory
-	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
+	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir, terraformInstalledModuleCache)
 
 	// Get the downloader chache
 	remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
@@ -317,7 +339,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 }
 
 // buildUnifiedConfig builds a unified config from *hclConfigs.Module object specified for a dir
-func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module, dir string) (*hclConfigs.Config, hcl.Diagnostics) {
+func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module, dir string, terraformInstalledModuleCache TerraformModuleManifestCache) (*hclConfigs.Config, hcl.Diagnostics) {
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
 	// descendant modules from the root module and create a unified
 	// configuration of type *configs.Config
@@ -335,22 +357,30 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 
 				pathToModule = t.processLocalSource(req)
 				zap.S().Debugf("processing local module %q", pathToModule)
-			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
-				// temp dir to download the remote repo
-				tempDir := utils.GenerateTempDir()
-
-				pathToModule, err = t.processTerraformRegistrySource(req, tempDir)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+			} else if t.useTerraformCache {
+				if _, dest := terraformInstalledModuleCache.GetRemoteModuleIfPresentInTerraformSrc(req); dest != "" {
+					pathToModule = dest
+					fmt.Println("module,", dest)
 				}
-			} else {
-				// temp dir to download the remote repo
-				tempDir := utils.GenerateTempDir()
+			}
+			if pathToModule == "" {
+				if downloader.IsRegistrySourceAddr(req.SourceAddr) {
+					// temp dir to download the remote repo
+					tempDir := utils.GenerateTempDir()
 
-				// Download remote module
-				pathToModule, err = t.remoteDownloader.DownloadModule(req.SourceAddr, tempDir)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					pathToModule, err = t.processTerraformRegistrySource(req, tempDir)
+					if err != nil {
+						zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					}
+				} else {
+					// temp dir to download the remote repo
+					tempDir := utils.GenerateTempDir()
+
+					// Download remote module
+					pathToModule, err = t.remoteDownloader.DownloadModule(req.SourceAddr, tempDir)
+					if err != nil {
+						zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					}
 				}
 			}
 
@@ -454,8 +484,74 @@ func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.R
 		// source file path
 		source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 		if err != nil {
+			if strings.Contains(resourceConfig.Source, terraformModuleInstallDir) {
+				return resourceConfig.Source, nil
+			}
 			return source, err
 		}
 	}
 	return source, nil
+}
+
+// GetRemoteModuleIfPresentInTerraformSrc - Get the remote module if present in terraform init cache
+func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(req *hclConfigs.ModuleRequest) (src string, destpath string) {
+	workDir, err := filepath.Abs(filepath.Dir(req.SourceAddrRange.Filename))
+	if err != nil {
+		zap.S().Error("error finding working directory", err)
+		return
+	}
+	terraformInitRegs := filepath.Join(workDir, terraformModuleInstallDir)
+	modules := output.TerraformModuleManifest{}
+	var ok bool
+	if modules, ok = t.Cache[terraformInitRegs]; !ok {
+		if utils.IsDirExists(terraformInitRegs) {
+			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformModuleInstallMetaFileName))
+			if err != nil {
+				if os.IsNotExist(err) {
+					zap.S().Debug("found no terraform module metadata file in workDir %s", terraformInitRegs)
+					return
+				}
+				zap.S().Error("error reading terraform module metadata file", err)
+				return
+			}
+			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformModuleInstallMetaFileName))
+			if err == nil {
+				err := json.Unmarshal(data, &modules)
+				if err != nil {
+					zap.S().Error("error unmarshalling terraform module metadata", err)
+					return
+				}
+			}
+		}
+		t.Cache[terraformInitRegs] = modules
+	}
+	for _, m := range modules.Modules {
+		if strings.EqualFold(m.SourceAddr, req.SourceAddr) {
+			if !downloader.IsRegistrySourceAddr(req.SourceAddr) {
+				return req.SourceAddr, filepath.Join(workDir, m.Dir)
+			} else if checkVersionSatisfied(m.VersionStr, req.VersionConstraint) {
+				return req.SourceAddr, filepath.Join(workDir, m.Dir)
+			}
+		}
+	}
+	zap.S().Debug("found no version matching for module: %s in terraform module cache %s", req.Name, filepath.Join(terraformInitRegs, "modules.json"))
+	return
+}
+
+//checkVersionSatisfied - check version in terraform init cache satisfies the required version constraints
+func checkVersionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
+	currentVersion, err := version.NewVersion(foundversion)
+	if err != nil {
+		return false
+	}
+
+	if requiredVersion.Required == nil && foundversion != "" {
+		return true
+	}
+
+	if requiredVersion.Required.Check(currentVersion) {
+		return true
+	}
+
+	return false
 }

@@ -128,7 +128,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive)
+		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive, false)
 	if err != nil {
 		zap.S().Error(err)
 		return output, isAdmissionDenied, err

@@ -46,6 +46,17 @@ type SkipRule struct {
 	Comment string `json:"comment"`
 }
 
+type TerraformModuleInstallMetaData struct {
+	Key        string `json:"Key"`
+	SourceAddr string `json:"Source"`
+	VersionStr string `json:"Version,omitempty"`
+	Dir        string `json:"Dir"`
+}
+
+type TerraformModuleManifest struct {
+	Modules []TerraformModuleInstallMetaData `json:"Modules"`
+}
+
 // AllResourceConfigs is a list/slice of resource configs present in IaC
 type AllResourceConfigs map[string][]ResourceConfig
 

@@ -96,6 +96,9 @@ type ScanOptions struct {
 
 	// nonRecursive enables recursive scan for the terraform iac provider
 	nonRecursive bool
+
+	// useTerrafomeCache provides conset to use terraform init cache for remote mmodule rether than actually downloading it.
+	useTerrafomeCache bool
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -181,7 +184,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive)
+		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerrafomeCache)
 	if err != nil {
 		return err
 	}

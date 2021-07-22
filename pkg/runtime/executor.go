@@ -17,8 +17,9 @@
 package runtime
 
 import (
-	"github.com/accurics/terrascan/pkg/policy/opa"
 	"sort"
+
+	"github.com/accurics/terrascan/pkg/policy/opa"
 
 	"go.uber.org/zap"
 
@@ -32,33 +33,35 @@ import (
 
 // Executor object
 type Executor struct {
-	filePath      string
-	dirPath       string
-	policyPath    []string
-	iacType       string
-	iacVersion    string
-	scanRules     []string
-	skipRules     []string
-	iacProviders  []iacProvider.IacProvider
-	policyEngines []policy.Engine
-	notifiers     []notifications.Notifier
-	categories    []string
-	policyTypes   []string
-	severity      string
-	nonRecursive  bool
+	filePath          string
+	dirPath           string
+	policyPath        []string
+	iacType           string
+	iacVersion        string
+	scanRules         []string
+	skipRules         []string
+	iacProviders      []iacProvider.IacProvider
+	policyEngines     []policy.Engine
+	notifiers         []notifications.Notifier
+	categories        []string
+	policyTypes       []string
+	severity          string
+	nonRecursive      bool
+	useTerrafomeCache bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerrafomeCache bool) (e *Executor, err error) {
 	e = &Executor{
-		filePath:     filePath,
-		dirPath:      dirPath,
-		policyPath:   policyPath,
-		policyTypes:  policyTypes,
-		iacType:      iacType,
-		iacVersion:   iacVersion,
-		iacProviders: make([]iacProvider.IacProvider, 0),
-		nonRecursive: nonRecursive,
+		filePath:          filePath,
+		dirPath:           dirPath,
+		policyPath:        policyPath,
+		policyTypes:       policyTypes,
+		iacType:           iacType,
+		iacVersion:        iacVersion,
+		iacProviders:      make([]iacProvider.IacProvider, 0),
+		nonRecursive:      nonRecursive,
+		useTerrafomeCache: useTerrafomeCache,
 	}
 
 	// read config file and update scan and skip rules
@@ -172,6 +175,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
 
+	if e.useTerrafomeCache && e.iacType != "terraform" {
+		zap.S().Errorf("invalid option used with IacType %s, useTerraformCache option is only supported for terraform Iac types", e.iacType)
+	}
+
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
 	if e.dirPath != "" {
@@ -245,7 +252,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive)
+			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive, e.useTerrafomeCache)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}
