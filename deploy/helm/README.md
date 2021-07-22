@@ -120,8 +120,8 @@ This chart is a WIP - we intend to add the following functionality in the near f
 - [x] Storage support - volume for db
 - [x] Add section for setting the validating-webhook up.
 - [x] Add secrets to add ssh capabilities in the container, to enable remote repo scan feature.
+- [x] Support TLS certificate/key in existing secrets
 - [ ] Support more load balancer types
 - [ ] Support for ingress
 - [ ] Flag for UI enable/disable
 - [ ] Publish to Artifact hub
-- [ ] Support TLS certificate/key in existing secrets
