@@ -25,6 +25,7 @@ import (
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/google/uuid"
 )
 
 type armMapper struct{}
@@ -55,10 +56,9 @@ func (m armMapper) Map(resource interface{}, params ...map[string]interface{}) (
 
 	variables := params[0]
 	parameters := params[1]
-	// TODO: generate a unique random string here, with a warn log?
 	configName, ok := fn.LookUp(variables, parameters, r.Name).(string)
 	if !ok {
-		configName = "random"
+		configName = uuid.NewString()
 	}
 	config.Name = configName
 	config.Type = types.ResourceTypes[r.Type]
@@ -128,6 +128,8 @@ func (m armMapper) mapConfigForResource(r types.Resource, vars, params map[strin
 		return config.VirtualMachineConfig(r, params)
 	case types.AzureRMVirtualNetwork:
 		return config.VirtualNetworkConfig(r, vars, params)
+	case types.AzureRMDeployments:
+		return config.DeploymentsConfig(r, vars, params)
 	}
 	return nil
 }

@@ -126,3 +126,34 @@ func TestUniqueString(t *testing.T) {
 	_, err := uuid.Parse(res)
 	assert.NoError(t, err)
 }
+
+func TestResolveTemplate(t *testing.T) {
+	tests := []struct {
+		name    string
+		uri     string
+		wantErr string
+	}{
+		{
+			name: "resolve-template",
+			uri:  "https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/get-started-with-templates/quickstart-template/azuredeploy.json",
+		},
+		{
+			name:    "resolve-template-incorrect-uri",
+			uri:     "https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/get-started-with-templates/quickstart-template/deploy.json",
+			wantErr: "bad response code: 404",
+		},
+		{
+			name:    "resolve-template-empty-uri",
+			uri:     "",
+			wantErr: "invalid source string: ",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := ResolveLinkedTemplate(test.uri)
+			if err != nil {
+				assert.EqualError(t, err, test.wantErr)
+			}
+		})
+	}
+}

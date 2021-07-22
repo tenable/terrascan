@@ -18,16 +18,17 @@ package armv1
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
+	"io/ioutil"
 	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper"
+	"github.com/accurics/terrascan/pkg/mapper/convert"
 	"github.com/accurics/terrascan/pkg/mapper/core"
+	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
-	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -35,64 +36,64 @@ import (
 // Note that a single ARM template json file may contain multiple resource definitions.
 func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(output.AllResourceConfigs)
-	var iacDocuments []*utils.IacDocument
-
-	fileExt := a.getFileType(absFilePath)
-	switch fileExt {
-	case JSONExtension:
-		iacDocuments, err = utils.LoadJSON(absFilePath)
-	default:
-		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
-		return allResourcesConfig, fmt.Errorf("unknown file extension for file %s", absFilePath)
+	if fileExt := a.getFileType(absFilePath); fileExt != JSONExtension {
+		return allResourcesConfig, fmt.Errorf("unsupported file %s", absFilePath)
 	}
 
+	fileData, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
-		zap.S().Debug("failed to load file", zap.String("file", absFilePath))
-		return allResourcesConfig, err
+		zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", absFilePath))
+		return allResourcesConfig, fmt.Errorf("unable to read file %s", absFilePath)
 	}
 
-	m := mapper.NewMapper("arm")
-	for _, doc := range iacDocuments {
-		template, err := a.extractTemplate(doc)
-		if err != nil {
-			zap.S().Debug("unable to parse template", zap.Error(err), zap.String("file", absFilePath))
-			continue
-		}
-
-		// set template parameters with default values if not found
-		if a.templateParameters == nil {
-			a.templateParameters = make(map[string]interface{})
-		}
-		for key, param := range template.Parameters {
-			if _, ok := a.templateParameters[key]; !ok {
-				a.templateParameters[key] = param.DefaultValue
-			}
-		}
-
-		for _, r := range template.Resources {
-			configs := a.getConfig(doc, absFilePath, m, r, template.Variables)
-			for _, config := range configs {
-				_, ok := config.Config.(map[string]interface{})
-				if !ok {
-					zap.S().Debug("unable to parse config.Config data",
-						zap.String("resource", r.Type), zap.String("file", absFilePath),
-					)
-					continue
-				}
-
-				for _, nr := range r.Resources {
-					if !strings.HasPrefix(nr.Type, "Microsoft.") {
-						nr.Type = r.Type + "/" + nr.Type
-					}
-
-					resourceConfigs := a.getConfig(doc, absFilePath, m, nr, template.Variables)
-					a.addConfig(allResourcesConfig, resourceConfigs)
-				}
-			}
-			a.addConfig(allResourcesConfig, configs)
-		}
+	template, err := a.extractTemplate(fileData)
+	if err != nil {
+		zap.S().Debug("unable to parse template", zap.Error(err), zap.String("file", absFilePath))
+		return allResourcesConfig, fmt.Errorf("unable to parse file %s", absFilePath)
 	}
+	if resConfs := a.translateResources(template, absFilePath); resConfs != nil {
+		a.addConfig(allResourcesConfig, resConfs)
+	}
+
 	return allResourcesConfig, nil
+}
+
+func (a *ARMV1) translateResources(template *types.Template, absFilePath string) []output.ResourceConfig {
+	mapper := mapper.NewMapper("arm")
+	var allResourcesConfig = make([]output.ResourceConfig, 0)
+
+	// set template parameters with default values if not found
+	if a.templateParameters == nil {
+		a.templateParameters = make(map[string]interface{})
+	}
+	for key, param := range template.Parameters {
+		if _, ok := a.templateParameters[key]; !ok {
+			a.templateParameters[key] = param.DefaultValue
+		}
+	}
+
+	for _, r := range template.Resources {
+		configs := a.getConfig(absFilePath, mapper, r, template.Variables)
+		for _, config := range configs {
+			_, ok := config.Config.(map[string]interface{})
+			if !ok {
+				zap.S().Debug("unable to parse config.Config data",
+					zap.String("resource", r.Type), zap.String("file", absFilePath),
+				)
+				continue
+			}
+
+			for _, nr := range r.Resources {
+				if !strings.HasPrefix(nr.Type, "Microsoft.") {
+					nr.Type = r.Type + "/" + nr.Type
+				}
+				resourceConfigs := a.getConfig(absFilePath, mapper, nr, template.Variables)
+				allResourcesConfig = append(allResourcesConfig, resourceConfigs...)
+			}
+		}
+		allResourcesConfig = append(allResourcesConfig, configs...)
+	}
+	return allResourcesConfig
 }
 
 func (ARMV1) getFileType(file string) string {
@@ -102,19 +103,13 @@ func (ARMV1) getFileType(file string) string {
 	return UnknownExtension
 }
 
-func (ARMV1) extractTemplate(doc *utils.IacDocument) (*types.Template, error) {
-
-	const errUnsupportedDoc = "unsupported document type"
-
-	if doc.Type == utils.JSONDoc {
-		var t types.Template
-		err := json.Unmarshal(doc.Data, &t)
-		if err != nil {
-			return nil, err
-		}
-		return &t, nil
+func (ARMV1) extractTemplate(data []byte) (*types.Template, error) {
+	var t types.Template
+	err := json.Unmarshal(data, &t)
+	if err != nil {
+		return nil, err
 	}
-	return nil, errors.New(errUnsupportedDoc)
+	return &t, nil
 }
 
 func (ARMV1) addConfig(a output.AllResourceConfigs, configs []output.ResourceConfig) {
@@ -144,18 +139,17 @@ func (a *ARMV1) getSourceRelativePath(sourceFile string) string {
 	return relPath
 }
 
-func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r types.Resource,
+func (a *ARMV1) getConfig(path string, mapper core.Mapper, r types.Resource,
 	vars map[string]interface{}) []output.ResourceConfig {
 
 	if _, ok := types.ResourceTypes[r.Type]; !ok {
 		return nil
 	}
 
-	configs, err := m.Map(r, vars, a.templateParameters)
-	// For ARM configs will have only one element
-	for i := 0; i < len(configs); i++ {
+	configs, err := mapper.Map(r, vars, a.templateParameters)
+	for i := range configs {
 		configs[i].Source = a.getSourceRelativePath(path)
-		configs[i].Line = doc.StartLine
+		configs[i].Line = 1
 	}
 
 	if err != nil {
@@ -163,5 +157,109 @@ func (a *ARMV1) getConfig(doc *utils.IacDocument, path string, m core.Mapper, r 
 		return nil
 	}
 
+	// parse linked templates and translate resources
+	for _, config := range configs {
+		if linkedTemplate, templatePath := a.getLinkedTemplate(config, path, mapper, vars); linkedTemplate != nil {
+			if templatePath != "" {
+				return a.translateResources(linkedTemplate, templatePath)
+			}
+			return a.translateResources(linkedTemplate, path)
+		}
+	}
+
 	return configs
+}
+
+func (a *ARMV1) getLinkedTemplate(config output.ResourceConfig, path string, mapper core.Mapper, vars map[string]interface{}) (*types.Template, string) {
+
+	if config.Type == types.AzureRMDeployments {
+
+		var templateData []byte
+		var templateSource string
+		var templateParameters map[string]struct {
+			Value interface{} `json:"value"`
+		}
+
+		// get templateData from config
+		if resourceConfig, ok := config.Config.(map[string]interface{}); ok {
+			// if linked template is relative path
+			if relativePath := convert.ToString(resourceConfig, types.LinkedTemplateRelativePath); relativePath != "" {
+				templatePath := filepath.Join(filepath.Dir(path), relativePath)
+				data, err := ioutil.ReadFile(templatePath)
+				if err != nil {
+					zap.S().Debug("error loading linked template", zap.String("path", relativePath), zap.Error(err))
+				}
+				templateSource = a.getSourceRelativePath(templatePath)
+				templateData = data
+			} else if templateContent, ok := resourceConfig[types.LinkedTemplateContent]; ok {
+				data, ok := templateContent.([]byte)
+				if !ok {
+					zap.S().Debug("error loading linked template", zap.String("resource", config.ID))
+				}
+				templateSource = a.getSourceRelativePath(path)
+				templateData = data
+			}
+
+			// get parameters
+			if parametersContent, ok := resourceConfig[types.LinkedParametersContent]; ok {
+				parameters, ok := parametersContent.([]byte)
+				if ok {
+					err := json.Unmarshal(parameters, &templateParameters)
+					if err != nil {
+						zap.S().Debug("error loading linked template parameters", zap.String("resource", config.ID))
+					}
+				}
+			}
+		}
+
+		if len(templateData) != 0 {
+			// parse linked template
+			linkedTemplate, err := a.extractTemplate(templateData)
+			if err != nil {
+				zap.S().Debug("unable to parse template", zap.Error(err), zap.String("file", path))
+				return nil, path
+			}
+
+			// propogate parameters
+			for key, param := range linkedTemplate.Parameters {
+				if _, ok := a.templateParameters[key]; !ok {
+					a.templateParameters[key] = param.DefaultValue
+				}
+			}
+
+			// add values provided for linked templates
+			for key, value := range templateParameters {
+				if parameterValue, ok := value.Value.(string); ok {
+					val := fn.LookUp(vars, a.templateParameters, parameterValue)
+					switch val := val.(type) {
+					case string, float64, bool:
+						a.templateParameters[key] = val
+					default:
+					}
+				} else {
+					a.templateParameters[key] = value.Value
+				}
+			}
+
+			// propagate template variables
+			if linkedTemplate.Variables == nil {
+				linkedTemplate.Variables = make(map[string]interface{})
+			}
+			for key, value := range vars {
+				if varValue, ok := value.(string); ok {
+					val := fn.LookUp(vars, a.templateParameters, varValue)
+					switch val := val.(type) {
+					case string, float64, bool:
+						linkedTemplate.Variables[key] = val
+					default:
+					}
+				} else {
+					linkedTemplate.Variables[key] = value
+				}
+			}
+
+			return linkedTemplate, templateSource
+		}
+	}
+	return nil, ""
 }
