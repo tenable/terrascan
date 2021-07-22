@@ -76,6 +76,8 @@ func (dc *DockerV1) Parse(filepath string) ([]DockerConfig, string, error) {
 			comments = comments + commentPrefix + comment + newLine
 		}
 
+		values = append(values, child.Flags...)
+
 		for i := child.Next; i != nil; i = i.Next {
 			values = append(values, i.Value)
 		}
