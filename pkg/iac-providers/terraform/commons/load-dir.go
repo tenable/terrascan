@@ -44,12 +44,26 @@ var (
 )
 
 const (
-	terraformModuleInstallDir          = ".terraform/modules"
-	terraformModuleInstallMetaFileName = "modules.json"
+	terraformModuleInstallDir             = ".terraform/modules"
+	terraformInstalledModulelMetaFileName = "modules.json"
 )
 
+// TerraformModuleManifestCache - holds the mapping for modules.json file to avoid multiple time reading of file.
 type TerraformModuleManifestCache struct {
-	Cache map[string]output.TerraformModuleManifest
+	Cache map[string]TerraformModuleManifest
+}
+
+// TerraformInstalledModuleMetaData metadata about the module downloaded and present in terraform cache.
+type TerraformInstalledModuleMetaData struct {
+	Key        string `json:"Key"`
+	SourceAddr string `json:"Source"`
+	VersionStr string `json:"Version,omitempty"`
+	Dir        string `json:"Dir"`
+}
+
+//TerraformModuleManifest holds details of all modules downloaded by terraform
+type TerraformModuleManifest struct {
+	Modules []TerraformInstalledModuleMetaData `json:"Modules"`
 }
 
 // ModuleConfig contains the *hclConfigs.Config for every module in the
@@ -110,7 +124,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	terraformInstalledModuleCache := TerraformModuleManifestCache{
-		Cache: make(map[string]output.TerraformModuleManifest),
+		Cache: make(map[string]TerraformModuleManifest),
 	}
 
 	for _, dir := range dirList {
@@ -235,7 +249,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	terraformInstalledModuleCache := TerraformModuleManifestCache{
-		Cache: make(map[string]output.TerraformModuleManifest),
+		Cache: make(map[string]TerraformModuleManifest),
 	}
 
 	// check if the directory has any tf config files (.tf or .tf.json)
@@ -501,11 +515,11 @@ func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(re
 		return
 	}
 	terraformInitRegs := filepath.Join(workDir, terraformModuleInstallDir)
-	modules := output.TerraformModuleManifest{}
+	modules := TerraformModuleManifest{}
 	var ok bool
 	if modules, ok = t.Cache[terraformInitRegs]; !ok {
 		if utils.IsDirExists(terraformInitRegs) {
-			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformModuleInstallMetaFileName))
+			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err != nil {
 				if os.IsNotExist(err) {
 					zap.S().Debug("found no terraform module metadata file in workDir %s", terraformInitRegs)
@@ -514,7 +528,7 @@ func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(re
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformModuleInstallMetaFileName))
+			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {
@@ -529,7 +543,7 @@ func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(re
 		if strings.EqualFold(m.SourceAddr, req.SourceAddr) {
 			if !downloader.IsRegistrySourceAddr(req.SourceAddr) {
 				return req.SourceAddr, filepath.Join(workDir, m.Dir)
-			} else if checkVersionSatisfied(m.VersionStr, req.VersionConstraint) {
+			} else if versionSatisfied(m.VersionStr, req.VersionConstraint) {
 				return req.SourceAddr, filepath.Join(workDir, m.Dir)
 			}
 		}
@@ -538,8 +552,8 @@ func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(re
 	return
 }
 
-//checkVersionSatisfied - check version in terraform init cache satisfies the required version constraints
-func checkVersionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
+//versionSatisfied - check version in terraform init cache satisfies the required version constraints
+func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
 	currentVersion, err := version.NewVersion(foundversion)
 	if err != nil {
 		return false
