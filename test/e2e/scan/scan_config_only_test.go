@@ -85,20 +85,20 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		Context("for terraform files", func() {
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {
-					It("should display config json and exit with status code 3", func() {
+					It("should display config json and exit with status code 0", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "json"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 					})
 				})
 			})
 
 			When("output type is yaml", func() {
 				Context("it supports --config-only flag", func() {
-					It("should display config json and exit with status code 3", func() {
+					It("should display config json and exit with status code 0", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "yaml"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 					})
 				})
 			})
@@ -110,20 +110,20 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			})
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {
-					It("should display config json and exit with status code 3", func() {
+					It("should display config json and exit with status code 0", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "json", "-i", "k8s"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 					})
 				})
 			})
 
 			When("output type is yaml", func() {
 				Context("it supports --config-only flag", func() {
-					It("should display config json and exit with status code 3", func() {
+					It("should display config json and exit with status code 0", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "yaml", "-i", "k8s"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+						Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
 					})
 				})
 			})

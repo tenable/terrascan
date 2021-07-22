@@ -33,6 +33,7 @@ import (
 
 const (
 	humanOutputFormat = "human"
+	sarifOutputFormat = "sarif"
 )
 
 // ScanOptions represents scan command and its optional flags
@@ -135,6 +136,7 @@ func (s ScanOptions) validate() error {
 	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
 		return errors.New("please use yaml or json output format when using --config-only flag")
 	}
+
 	return nil
 }
 
@@ -185,7 +187,7 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// executor output
-	results, err := executor.Execute()
+	results, err := executor.Execute(s.configOnly)
 	if err != nil {
 		return err
 	}
@@ -202,7 +204,7 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-	if results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
+	if !s.configOnly && results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
 		os.RemoveAll(tempDir)
 		os.Exit(3)
 	}
@@ -226,6 +228,13 @@ func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 }
 
 func (s ScanOptions) writeResults(results runtime.Output) error {
+
+	outputWriter := NewOutputWriter(s.UseColors)
+
+	if s.configOnly {
+		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+	}
+
 	// add verbose flag to the scan summary
 	results.Violations.ViolationStore.Summary.ShowViolationDetails = s.verbose
 
@@ -233,10 +242,5 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
-	outputWriter := NewOutputWriter(s.UseColors)
-
-	if s.configOnly {
-		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
-	}
 	return writer.Write(s.outputType, results.Violations, outputWriter)
 }

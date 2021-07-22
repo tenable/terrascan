@@ -162,7 +162,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	normalized, err := executor.Execute()
+	normalized, err := executor.Execute(configOnly)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -172,14 +172,13 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	var output interface{}
 
-	if !showPassed {
-		normalized.Violations.ViolationStore.PassedRules = nil
-	}
-
 	// if config only, return resource config else return violations
 	if configOnly {
 		output = normalized.ResourceConfig
 	} else {
+		if !showPassed {
+			normalized.Violations.ViolationStore.PassedRules = nil
+		}
 		output = normalized.Violations
 	}
 

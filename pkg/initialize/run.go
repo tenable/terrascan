@@ -36,14 +36,14 @@ const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/te
 
 // Run initializes terrascan if not done already
 func Run(isNonInitCmd bool) error {
-	zap.S().Debug("initializing terrascan")
-
 	// check if policy paths exist
 	if path, err := os.Stat(config.GetPolicyRepoPath()); err == nil && path.IsDir() {
 		if isNonInitCmd {
 			return nil
 		}
 	}
+
+	zap.S().Debug("initializing terrascan")
 
 	if !connected(terrascanReadmeURL) {
 		return errNoConnection

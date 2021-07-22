@@ -13,6 +13,7 @@ require (
 	github.com/apparentlymart/go-textseg/v12 v12.0.0 // indirect
 	github.com/awslabs/goformation/v4 v4.19.1
 	github.com/ghodss/yaml v1.0.0
+	github.com/go-errors/errors v1.0.1
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -38,7 +39,9 @@ require (
 	github.com/spf13/afero v1.5.1
 	github.com/spf13/cobra v1.1.1
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
+	github.com/zclconf/go-cty v1.8.2
+	go.uber.org/zap v1.16.0
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
 	golang.org/x/tools v0.1.4 // indirect
 	github.com/zclconf/go-cty v1.8.3
 	go.uber.org/zap v1.16.0

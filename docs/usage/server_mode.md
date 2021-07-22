@@ -1,8 +1,12 @@
 # Using Terrascan in Server mode
 
-Server mode will execute Terrascan's API server. This is useful when using Terrascan to enforce a unified set of policies and configuration in multiple parts of the software development pipelines. It also simplifies programmatically interaction with Terrascan. By default the http server listens in port 9010 and supports the following routes:
+[Server mode](#run-terrascan-in-server-mode) will execute Terrascan's API server. This is useful when using Terrascan to enforce a unified set of policies and configuration in multiple parts of the software development pipelines. It also simplifies programmatically interacting with Terrascan. By default the http server listens in port 9010 and supports the following routes:
 
-> **Note:** URL placeholders are equivalent to the command line flags in the scan command
+> **Note:** URL placeholders are equivalent to the command line flags in the [scan command](command_line_mode.md#list-of-options-for-scan-command)
+
+
+
+## API Routes
 
 ### Check health of server
 
@@ -21,18 +25,20 @@ Example:
 
 * `POST - /v1/{iac}/{iacVersion}/{cloud}/remote/dir/scan`
 
-You can launch server mode by executing the Terrascan CLI or with the Docker container. Use the following to execute the Terrascan CLI:
+## Run Terrascan in Server Mode
+
+You can launch server mode by executing the Terrascan binary, or with a Docker container. Use the following to execute the Terrascan CLI:
 
 ``` Bash
 $ terrascan server
 ```
-Use this command to launch Terrascan server mode using Docker. :
+Use this command to launch Terrascan server mode using Docker:
 
 ``` Bash
 $ docker run --rm --name terrascan -p 9010:9010 accurics/terrascan
 ```
 
-Here's an example of how to send a request to the Terrascan server using curl:
+### Example of how to send a request to the Terrascan server using curl:
 
 ``` Bash
 $ curl -i -F "file=@aws_cloudfront_distribution.tf" localhost:9010/v1/terraform/v14/aws/local/file/scan

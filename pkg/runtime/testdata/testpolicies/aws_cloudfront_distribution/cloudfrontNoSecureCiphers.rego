@@ -1,4 +1,4 @@
-package accurics 
+package accurics
 
 {{.prefix}}cloudfrontNoSecureCiphers[retVal]{
     cloudfront = input.aws_cloudfront_distribution[_]
@@ -11,9 +11,9 @@ package accurics
 }
 
 minimumAllowedProtocolVersion(currentVersion) {
-    currentVersion == "TLSv1.1"
+    startswith(currentVersion, "TLSv1.1")
 }
 
 minimumAllowedProtocolVersion(currentVersion) {
-    currentVersion == "TLSv1.2"
+    startswith(currentVersion, "TLSv1.2")
 }
