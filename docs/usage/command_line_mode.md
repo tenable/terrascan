@@ -194,6 +194,8 @@ aws_ecr_repository:
 | |scan-rules|Specify rules to scan, example: --scan-rules="ruleID1,ruleID2"|
 | |skip-rules|Specify one or more rules to skip while scanning. Example: --skip-rules="ruleID1,ruleID2"|
 | |use-colours |Configure the color for output (**auto**, t, f) |
+|--non-recursive |Use this for non recursive directories and modules scan | By default directory is scanned recursively if this flag is used then only current directory is scanned|
+|--use-terraform-cache |Use this to specify to use the remote modules from terraform init cache rather than downloading from remote | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded  |
 | -v | verbose | Displays violations with all details |
 
 | Global flags | Description | Options |
@@ -224,6 +226,7 @@ Flags:
   -f, --iac-file string           path to a single IaC file
   -i, --iac-type string           iac type (helm, k8s, kustomize, terraform)
       --iac-version string        iac version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14)
+      --non-recursive             do not scan directories and modules recursively
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http)
@@ -231,6 +234,7 @@ Flags:
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
+      --use-terraform-cache       use terraform init cache for remote modules
   -v, --verbose                   will show violations with details (applicable for default output)
 
 Global Flags:
