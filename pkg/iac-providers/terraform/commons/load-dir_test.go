@@ -26,6 +26,7 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"go.uber.org/zap"
 )
 
 // test data
@@ -252,6 +253,70 @@ func TestGetConfigSource(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("GetConfigSource() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
+	workDir, err := filepath.Abs(filepath.Dir(filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")))
+	if err != nil {
+		zap.S().Error("error finding working directory", err)
+	}
+	terraformInitRegs := filepath.Join(workDir, terraformModuleInstallDir, "network")
+	type fields struct {
+		Cache map[string]TerraformModuleManifest
+	}
+	type args struct {
+		req *hclConfigs.ModuleRequest
+	}
+	tests := []struct {
+		name         string
+		fields       fields
+		args         args
+		wantSrc      string
+		wantDestpath string
+	}{
+		{
+			name: "module present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurerm",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "Azure/network/azurerm",
+			wantDestpath: terraformInitRegs,
+		},
+		{
+			name: "module not present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurermtest",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "",
+			wantDestpath: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tr := &TerraformModuleManifestCache{
+				Cache: tt.fields.Cache,
+			}
+			gotSrc, gotDestpath := tr.GetRemoteModuleIfPresentInTerraformSrc(tt.args.req)
+			if gotSrc != tt.wantSrc {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotSrc = %v, want %v", gotSrc, tt.wantSrc)
+			}
+			if gotDestpath != tt.wantDestpath {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotDestpath = %v, want %v", gotDestpath, tt.wantDestpath)
 			}
 		})
 	}

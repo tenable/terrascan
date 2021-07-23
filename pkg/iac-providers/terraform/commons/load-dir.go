@@ -372,6 +372,7 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 				pathToModule = t.processLocalSource(req)
 				zap.S().Debugf("processing local module %q", pathToModule)
 			} else if t.useTerraformCache {
+				// check if module is present in terraform cache
 				if _, dest := terraformInstalledModuleCache.GetRemoteModuleIfPresentInTerraformSrc(req); dest != "" {
 					pathToModule = dest
 				}
@@ -497,17 +498,15 @@ func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.R
 		// source file path
 		source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 		if err != nil {
-			if strings.Contains(resourceConfig.Source, terraformModuleInstallDir) {
-				return resourceConfig.Source, nil
-			}
 			return source, err
 		}
 	}
 	return source, nil
 }
 
-// GetRemoteModuleIfPresentInTerraformSrc - Get the remote module if present in terraform init cache
+// GetRemoteModuleIfPresentInTerraformSrc - Gets the remote module if present in terraform init cache
 func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(req *hclConfigs.ModuleRequest) (src string, destpath string) {
+	// find the working directory for the source file to check the terraform cache in that dir
 	workDir, err := filepath.Abs(filepath.Dir(req.SourceAddrRange.Filename))
 	if err != nil {
 		zap.S().Error("error finding working directory", err)
@@ -536,10 +535,12 @@ func (t *TerraformModuleManifestCache) GetRemoteModuleIfPresentInTerraformSrc(re
 				}
 			}
 		}
+		// if the module metadata file was read first time add that to cache against the found working directory
 		t.Cache[terraformInitRegs] = modules
 	}
 	for _, m := range modules.Modules {
 		if strings.EqualFold(m.SourceAddr, req.SourceAddr) {
+			// if the module source is not registry then version check is not required
 			if !downloader.IsRegistrySourceAddr(req.SourceAddr) {
 				return req.SourceAddr, filepath.Join(workDir, m.Dir)
 			} else if versionSatisfied(m.VersionStr, req.VersionConstraint) {
