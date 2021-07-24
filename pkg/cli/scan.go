@@ -72,6 +72,6 @@ func init() {
 	scanCmd.Flags().StringSliceVarP(&scanOptions.categories, "categories", "", []string{}, "list of categories of violations to be reported by terrascan (example: --categories=\"category1,category2\")")
 	scanCmd.Flags().BoolVarP(&scanOptions.showPassedRules, "show-passed", "", false, "display passed rules, along with violations")
 	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "do not scan directories and modules recursively")
-	scanCmd.Flags().BoolVarP(&scanOptions.useTerrafomeCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules")
+	scanCmd.Flags().BoolVarP(&scanOptions.useTerraformCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules")
 	RegisterCommand(rootCmd, scanCmd)
 }

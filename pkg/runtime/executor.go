@@ -47,11 +47,11 @@ type Executor struct {
 	policyTypes       []string
 	severity          string
 	nonRecursive      bool
-	useTerrafomeCache bool
+	useTerraformCache bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerrafomeCache bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache bool) (e *Executor, err error) {
 	e = &Executor{
 		filePath:          filePath,
 		dirPath:           dirPath,
@@ -61,7 +61,7 @@ func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dir
 		iacVersion:        iacVersion,
 		iacProviders:      make([]iacProvider.IacProvider, 0),
 		nonRecursive:      nonRecursive,
-		useTerrafomeCache: useTerrafomeCache,
+		useTerraformCache: useTerraformCache,
 	}
 
 	// read config file and update scan and skip rules
@@ -175,7 +175,7 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
 
-	if e.useTerrafomeCache && e.iacType != "terraform" {
+	if e.useTerraformCache && e.iacType != "terraform" {
 		zap.S().Errorf("invalid option used with IacType %s, useTerraformCache option is only supported for terraform Iac types", e.iacType)
 	}
 
@@ -252,7 +252,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive, e.useTerrafomeCache)
+			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive, e.useTerraformCache)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}

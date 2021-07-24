@@ -308,8 +308,8 @@ func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tr := &TerraformModuleManifestCache{
-				Cache: tt.fields.Cache,
+			tr := &TerraformDirectoryLoader{
+				terraformInitModuleCache: tt.fields.Cache,
 			}
 			gotSrc, gotDestpath := tr.GetRemoteModuleIfPresentInTerraformSrc(tt.args.req)
 			if gotSrc != tt.wantSrc {

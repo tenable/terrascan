@@ -29,7 +29,7 @@ import (
 )
 
 // LoadIacDir loads all CFT template files in the current directory.
-func (a *CFTV1) LoadIacDir(absRootDir string, nonRecursive, useTerraformCache bool) (output.AllResourceConfigs, error) {
+func (a *CFTV1) LoadIacDir(absRootDir string, nonRecursive, _ bool) (output.AllResourceConfigs, error) {
 	a.absRootDir = absRootDir
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
