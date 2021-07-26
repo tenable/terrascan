@@ -196,7 +196,7 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// set the ResourcePath to remoteURL if remote directory is scanned.
-	if s.remoteURL != "" {
+	if !s.configOnly && s.remoteURL != "" {
 		results.Violations.ViolationStore.Summary.ResourcePath = s.remoteURL
 	}
 
