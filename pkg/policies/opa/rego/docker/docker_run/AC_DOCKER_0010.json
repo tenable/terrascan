@@ -1,6 +1,6 @@
 {
-    "name": "pupUnpinnedVersion",
-    "file": "pupUnpinnedVersion.rego",
+    "name": "pipUnpinnedVersion",
+    "file": "pipUnpinnedVersion.rego",
     "policy_type": "docker",
     "resource_type": "run",
     "template_args": {
