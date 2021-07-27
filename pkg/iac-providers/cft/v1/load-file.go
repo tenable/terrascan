@@ -25,6 +25,8 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper"
+	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
+	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/awslabs/goformation/v4"
 	"github.com/awslabs/goformation/v4/cloudformation"
 	"go.uber.org/zap"
@@ -40,29 +42,7 @@ func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 	}
 
 	// parse the file as cloudformation.Template
-	fileExt := a.getFileType(absFilePath, &fileData)
-	var template *cloudformation.Template
-	switch fileExt {
-	case YAMLExtension, YAMLExtension2:
-		template, err = goformation.ParseYAML(fileData)
-		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", absFilePath))
-			return allResourcesConfig, err
-		}
-	case JSONExtension:
-		template, err = goformation.ParseJSON(fileData)
-		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", absFilePath))
-			return allResourcesConfig, err
-		}
-	default:
-		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
-		return allResourcesConfig, fmt.Errorf("unsupported extension for file %s", absFilePath)
-	}
-
-	// map resource to a terrascan type
-	m := mapper.NewMapper("cft")
-	configs, err := m.Map(template)
+	configs, err := a.getConfig(absFilePath, &fileData, nil)
 	if err != nil {
 		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
 		return allResourcesConfig, err
@@ -78,6 +58,80 @@ func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 	return allResourcesConfig, nil
+}
+
+func (a *CFTV1) getConfig(absFilePath string, fileData *[]byte, parameters *map[string]string) ([]output.ResourceConfig, error) {
+	// parse the file as cloudformation.Template
+	template, err := a.extractTemplate(absFilePath, fileData)
+	if err != nil {
+		return nil, err
+	}
+
+	// replace template parameter values
+	if parameters != nil {
+		for key, value := range *parameters {
+			if parameter, ok := template.Parameters[key]; ok {
+				parameter.Default = value
+				template.Parameters[key] = parameter
+			}
+		}
+	}
+
+	// map resource to a terrascan type
+	configs, err := a.translateResources(template, absFilePath)
+	if err != nil {
+		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
+		return nil, err
+	}
+	return configs, nil
+}
+
+func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Template, error) {
+	fileExt := a.getFileType(file, data)
+
+	switch fileExt {
+	case YAMLExtension, YAMLExtension2:
+		template, err := goformation.ParseYAML(*data)
+		if err != nil {
+			zap.S().Debug("failed to parse file", zap.String("file", file))
+			return nil, err
+		}
+		return template, nil
+	case JSONExtension:
+		template, err := goformation.ParseJSON(*data)
+		if err != nil {
+			zap.S().Debug("failed to parse file", zap.String("file", file))
+			return nil, err
+		}
+		return template, nil
+	default:
+		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
+		return nil, fmt.Errorf("unsupported extension for file %s", file)
+	}
+}
+
+func (a *CFTV1) translateResources(template *cloudformation.Template, absFilePath string) ([]output.ResourceConfig, error) {
+	m := mapper.NewMapper("cft")
+	configs, err := m.Map(template)
+	if err != nil {
+		zap.S().Debug("unable to normalize data", zap.Error(err), zap.String("file", absFilePath))
+		return nil, err
+	}
+
+	for _, config := range configs {
+		if config.Type == store.AwsCloudFormationStack {
+			if stackConfig, ok := config.Config.(cftRes.CloudFormationStackConfig); ok {
+				if stackConfig.TemplateData != nil {
+					stackResourceConfigs, err := a.getConfig(stackConfig.TemplateURL, &stackConfig.TemplateData, &stackConfig.Parameters)
+					if err == nil {
+						configs = append(configs, stackResourceConfigs...)
+					}
+				}
+			}
+		}
+	}
+
+	return configs, nil
 }
 
 func (*CFTV1) getFileType(file string, data *[]byte) string {
