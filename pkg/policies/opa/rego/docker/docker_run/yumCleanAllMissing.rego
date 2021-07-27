@@ -4,7 +4,7 @@ package accurics
 
     run := input.run[_]
     yumCleanAllMissing := run.config
-    output := regex.match("yum install", yumCleanAllMissing)
+    output := re_match("yum install", yumCleanAllMissing)
     output == true
 
 }

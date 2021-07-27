@@ -3,7 +3,11 @@ package accurics
 {{.prefix}}{{.name}}{{.suffix}}[run.id]{
     
     run := input.run[_]
-    ContainsSudo := run.config
-    regex.match("^( )*sudo", ContainsSudo) == true
+    ContainsSudo := run.config{
+    re_match("^( )*sudo", ContainsSudo)
+    }
+    ContainsSudo := run.config{
+    re_match("( )*&& sudo", ContainsSudo)
+    }
 
 }

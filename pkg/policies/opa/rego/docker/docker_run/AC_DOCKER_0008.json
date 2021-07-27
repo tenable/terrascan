@@ -7,7 +7,7 @@
         "prefix": "",
         "suffix": ""
     },
-    "severity": "INFO",
+    "severity": "LOW",
     "description": "Ensure Apt Get Install Lists gets Deleted",
     "reference_id": "AC_DOCKER_0008",
     "category": "Infrastructure Security",
