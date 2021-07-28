@@ -1,0 +1,9 @@
+repos:
+- repo: https://github.com/accurics/terrascan
+  rev: 2.1.5
+  hooks:
+    - id: terrascan
+      name: terrascan
+      description: Runs terrascan on supported IaC templates.
+      language: script
+      entry: scripts/pre-commit-hook.sh  
