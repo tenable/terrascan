@@ -1,13 +1,12 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[run.id]{
-    
-    run := input.run[_]
-    ContainsSudo := run.config{
-    re_match("^( )*sudo", ContainsSudo)
-    }
-    ContainsSudo := run.config{
-    re_match("( )*&& sudo", ContainsSudo)
-    }
-
+{{.prefix}}{{.name}}{{.suffix}}[run.id]{    
+    run := input.run[_]    
+    checkSudo(run.config)
+}
+checkSudo(config) {
+	startswith(config, "sudo")
+}
+checkSudo(config) {
+	contains(config, "&& sudo")
 }
