@@ -43,6 +43,7 @@ func TestLoadIacFile(t *testing.T) {
 		name     string
 		filePath string
 		typeOnly bool
+		options  map[string]interface{}
 	}{
 		{
 			wantErr:  fmt.Errorf(testErrString1),
@@ -77,7 +78,7 @@ func TestLoadIacFile(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.cftv1.LoadIacFile(tt.filePath)
+			_, gotErr := tt.cftv1.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%+v', wantErr: '%+v'", gotErr, tt.wantErr)
 			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {

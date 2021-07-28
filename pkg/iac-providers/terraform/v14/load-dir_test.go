@@ -63,20 +63,21 @@ func TestLoadIacDir(t *testing.T) {
 	}
 
 	table := []struct {
-		name              string
-		dirPath           string
-		tfv14             TfV14
-		want              output.AllResourceConfigs
-		nonRecursive      bool
-		useTerraformCache bool
-		wantErr           error
+		name    string
+		dirPath string
+		tfv14   TfV14
+		want    output.AllResourceConfigs
+		options map[string]interface{}
+		wantErr error
 	}{
 		{
-			name:         "invalid dirPath",
-			dirPath:      testDirPath1,
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
+			name:    "invalid dirPath",
+			dirPath: testDirPath1,
+			tfv14:   TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
 		},
 		{
 			name:    "invalid dirPath recursive",
@@ -85,11 +86,13 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr: multierror.Append(pathErr),
 		},
 		{
-			name:         "empty config",
-			dirPath:      testDirPath2,
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
+			name:    "empty config",
+			dirPath: testDirPath2,
+			tfv14:   TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
 		},
 		{
 			name:    "empty config recursive",
@@ -98,11 +101,13 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr: nilMultiErr,
 		},
 		{
-			name:         "incorrect module structure",
-			dirPath:      filepath.Join(testDataDir, "invalid-moduleconfigs"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
+			name:    "incorrect module structure",
+			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
+			tfv14:   TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
 		},
 		{
 			name:    "incorrect module structure recursive",
@@ -112,11 +117,13 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)),
 		},
 		{
-			name:         "load invalid config dir",
-			dirPath:      testDataDir,
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(testErrorMessage)),
+			name:    "load invalid config dir",
+			dirPath: testDataDir,
+			tfv14:   TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)),
 		},
 		{
 			name:    "load invalid config dir recursive",
@@ -144,7 +151,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath, tt.nonRecursive, tt.useTerraformCache)
+			_, gotErr := tt.tfv14.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -164,20 +171,22 @@ func TestLoadIacDir(t *testing.T) {
 	nestedModuleErr2 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules"))
 
 	table2 := []struct {
-		name         string
-		tfConfigDir  string
-		tfJSONFile   string
-		tfv14        TfV14
-		nonRecursive bool
-		wantErr      error
+		name        string
+		tfConfigDir string
+		tfJSONFile  string
+		tfv14       TfV14
+		options     map[string]interface{}
+		wantErr     error
 	}{
 		{
-			name:         "config1",
-			tfConfigDir:  filepath.Join(testDataDir, "tfconfigs"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "fullconfig.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "config1",
+			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "config1 recursive",
@@ -188,12 +197,14 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr:    nilMultiErr,
 		},
 		{
-			name:         "module directory",
-			tfConfigDir:  filepath.Join(testDataDir, "moduleconfigs"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "moduleconfigs.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "module directory",
+			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "module directory recursive",
@@ -204,12 +215,14 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr:    nilMultiErr,
 		},
 		{
-			name:         "nested module directory",
-			tfConfigDir:  filepath.Join(testDataDir, "deep-modules"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "deep-modules.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "nested module directory",
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "nested module directory recursive",
@@ -219,42 +232,50 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr:     multierror.Append(nestedModuleErr1, nestedModuleErr2),
 		},
 		{
-			name:         "complex variables",
-			tfConfigDir:  filepath.Join(testDataDir, "complex-variables"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "complex-variables.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "complex variables",
+			tfConfigDir: filepath.Join(testDataDir, "complex-variables"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "complex-variables.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
-			name:         "recursive loop while resolving variables",
-			tfConfigDir:  filepath.Join(testDataDir, "recursive-loop-variables"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "recursive-loop-variables.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "recursive loop while resolving variables",
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop-variables"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop-variables.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
-			name:         "recursive loop while resolving locals",
-			tfConfigDir:  filepath.Join(testDataDir, "recursive-loop-locals"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "recursive-loop-locals.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "recursive loop while resolving locals",
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop-locals"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop-locals.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
-			name:         "recursive loop while resolving locals with same name in parent and child module",
-			tfConfigDir:  filepath.Join(testDataDir, "recursive-loop-duplicate-locals"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "recursive-loop-duplicate-locals.json"),
-			tfv14:        TfV14{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "recursive loop while resolving locals with same name in parent and child module",
+			tfConfigDir: filepath.Join(testDataDir, "recursive-loop-duplicate-locals"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "recursive-loop-duplicate-locals.json"),
+			tfv14:       TfV14{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 	}
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv14.LoadIacDir(tt.tfConfigDir, tt.nonRecursive, false)
+			got, gotErr := tt.tfv14.LoadIacDir(tt.tfConfigDir, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

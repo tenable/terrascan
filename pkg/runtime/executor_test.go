@@ -18,10 +18,11 @@ package runtime
 
 import (
 	"fmt"
-	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
@@ -57,11 +58,11 @@ type MockIacProvider struct {
 	err    error
 }
 
-func (m MockIacProvider) LoadIacDir(dir string, nonRecursive, useTerraformCache bool) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacDir(dir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 
-func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 

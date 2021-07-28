@@ -83,15 +83,23 @@ type TerraformDirectoryLoader struct {
 }
 
 // NewTerraformDirectoryLoader creates a new terraformDirectoryLoader
-func NewTerraformDirectoryLoader(rootDirectory string, nonRecursive, useTerraformCache bool) TerraformDirectoryLoader {
-	return TerraformDirectoryLoader{
+func NewTerraformDirectoryLoader(rootDirectory string, options map[string]interface{}) TerraformDirectoryLoader {
+	terraformDirectoryLoader := TerraformDirectoryLoader{
 		absRootDir:               rootDirectory,
-		nonRecursive:             nonRecursive,
-		useTerraformCache:        useTerraformCache,
 		remoteDownloader:         downloader.NewRemoteDownloader(),
 		parser:                   hclConfigs.NewParser(afero.NewOsFs()),
 		terraformInitModuleCache: make(map[string]TerraformModuleManifest),
 	}
+	for key, val := range options {
+		// keeping switch case in case more flags are added
+		switch key {
+		case "useTerraformCache":
+			terraformDirectoryLoader.useTerraformCache = val.(bool)
+		case "nonRecursive":
+			terraformDirectoryLoader.nonRecursive = val.(bool)
+		}
+	}
+	return terraformDirectoryLoader
 }
 
 // LoadIacDir starts traversing from the given rootDir and traverses through

@@ -45,6 +45,7 @@ func TestLoadIacDir(t *testing.T) {
 		name          string
 		dirPath       string
 		helmv3        HelmV3
+		options       map[string]interface{}
 		want          output.AllResourceConfigs
 		wantErr       error
 		resourceCount int
@@ -79,7 +80,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath, false, false)
+			resources, gotErr := tt.helmv3.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

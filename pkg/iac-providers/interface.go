@@ -23,6 +23,6 @@ import (
 // IacProvider defines the interface which every IaC provider needs to implement
 // to claim support in terrascan
 type IacProvider interface {
-	LoadIacFile(string) (output.AllResourceConfigs, error)
-	LoadIacDir(string, bool, bool) (output.AllResourceConfigs, error)
+	LoadIacFile(string, map[string]interface{}) (output.AllResourceConfigs, error)
+	LoadIacDir(string, map[string]interface{}) (output.AllResourceConfigs, error)
 }

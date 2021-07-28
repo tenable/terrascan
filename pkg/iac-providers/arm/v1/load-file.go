@@ -34,7 +34,7 @@ import (
 
 // LoadIacFile loads the specified ARM template file.
 // Note that a single ARM template json file may contain multiple resource definitions.
-func (a *ARMV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (a *ARMV1) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(output.AllResourceConfigs)
 	if fileExt := a.getFileType(absFilePath); fileExt != JSONExtension {
 		return allResourcesConfig, fmt.Errorf("unsupported file %s", absFilePath)

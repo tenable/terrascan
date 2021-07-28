@@ -48,9 +48,10 @@ func TestProcessLocalSource(t *testing.T) {
 		req *hclConfigs.ModuleRequest
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name    string
+		args    args
+		want    string
+		options map[string]interface{}
 	}{
 		{
 			name: "no remote module",
@@ -62,7 +63,7 @@ func TestProcessLocalSource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := NewTerraformDirectoryLoader("", false, false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			if got := dl.processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
@@ -84,6 +85,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 		args    args
 		want    string
 		wantErr bool
+		options map[string]interface{}
 	}{
 		{
 			name: "invalid registry host",
@@ -113,7 +115,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			dl := NewTerraformDirectoryLoader("", false, false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			got, err := dl.processTerraformRegistrySource(tt.args.req, tt.args.tempDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)

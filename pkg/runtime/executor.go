@@ -31,6 +31,11 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
+const (
+	useTerraformCache = "useTerraformCache"
+	nonRecursive      = "nonRecursive"
+)
+
 // Executor object
 type Executor struct {
 	filePath          string
@@ -185,9 +190,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		// get all resource configs in the directory
 		resourceConfig, merr = e.getResourceConfigs()
 	} else {
+		options := e.buildOptions()
 		// create results output from Iac provider
 		// iac providers will contain one element
-		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath)
+		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath, options)
 		if err != nil {
 			return results, err
 		}
@@ -249,10 +255,11 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// channel for directory scan response
 	scanRespChan := make(chan dirScanResp)
 
+	options := e.buildOptions()
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive, e.useTerraformCache)
+			rc, err := ip.LoadIacDir(e.dirPath, options)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}
@@ -319,4 +326,12 @@ func implementsSubFolderScan(iacType string, nonRecursive bool) bool {
 		}
 	}
 	return false
+}
+
+// buildOptions builds map of scan options from executors config
+func (e *Executor) buildOptions() map[string]interface{} {
+	options := make(map[string]interface{})
+	options[useTerraformCache] = e.useTerraformCache
+	options[nonRecursive] = e.nonRecursive
+	return options
 }

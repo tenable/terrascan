@@ -39,6 +39,7 @@ func TestLoadIacDir(t *testing.T) {
 		name    string
 		dirPath string
 		k8sV1   K8sV1
+		options map[string]interface{}
 		want    output.AllResourceConfigs
 		wantErr error
 	}{
@@ -88,7 +89,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.k8sV1.LoadIacDir(tt.dirPath, false, false)
+			_, gotErr := tt.k8sV1.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

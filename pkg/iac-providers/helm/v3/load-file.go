@@ -28,7 +28,7 @@ var (
 )
 
 // LoadIacFile is not supported for helm. Only loading chart directories are supported
-func (h *HelmV3) LoadIacFile(absRootPath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (h *HelmV3) LoadIacFile(absRootPath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	zap.S().Errorf("load iac file is not supported for helm")
 	return make(map[string][]output.ResourceConfig), errLoadIacFileNotSupported
 }
