@@ -2,10 +2,11 @@
     "name": "runUsingApt",
     "file": "runUsingApt.rego",
     "policy_type": "docker",
-    "resource_type": "docker",
+    "resource_type": "run",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "runUsingApt"
     },
     "severity": "MEDIUM",
     "description": "Ensure apt is not used with RUN command for Docker file",

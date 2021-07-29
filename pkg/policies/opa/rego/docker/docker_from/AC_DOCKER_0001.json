@@ -5,7 +5,8 @@
     "resource_type": "from",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "docFilePlatformFlag"
     },
     "severity": "MEDIUM",
     "description": "Ensure platform flag with FROM command is not used for Docker file",

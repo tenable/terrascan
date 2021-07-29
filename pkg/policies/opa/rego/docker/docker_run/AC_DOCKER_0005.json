@@ -2,7 +2,7 @@
     "name": "lastUserRoot",
     "file": "lastUserRoot.rego",
     "policy_type": "docker",
-    "resource_type": "docker",
+    "resource_type": "run",
     "template_args": {
         "prefix": "",
         "suffix": "",
