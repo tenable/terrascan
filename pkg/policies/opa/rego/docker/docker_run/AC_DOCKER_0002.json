@@ -10,7 +10,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure apt is not used with RUN command for Docker file",
-    "reference_id": "AC_DOCKER_0001",
+    "reference_id": "AC_DOCKER_0002",
     "category": "Infrastructure Security",
     "id": "AC_DOCKER_0002",
     "version": 1

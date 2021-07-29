@@ -10,8 +10,8 @@
     },
     "severity": "HIGH",
     "description": "Ensure the use absolute paths for your WORKDIR.",
-    "reference_id": "AC_DOCKER_0014",
+    "reference_id": "AC_DOCKER_0013",
     "category": "Infrastructure Security",
-    "id": "AC_DOCKER_0014",
+    "id": "AC_DOCKER_0013",
     "version": 1
 }
