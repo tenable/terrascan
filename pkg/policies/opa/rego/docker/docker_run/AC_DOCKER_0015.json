@@ -2,7 +2,7 @@
     "name": "runuti",
     "file": "runuti.rego",
     "policy_type": "docker",
-    "resource_type": "docker",
+    "resource_type": "run",
     "template_args": {
         "prefix": "",
         "suffix": ""

@@ -1,7 +1,6 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[apt.config]
-{
+{{.prefix}}{{.name}}{{.suffix}}[apt.config]{
 	apt := input.run[_]
 	#conval := apt.config
     containsCommand(apt.config)    
@@ -42,6 +41,7 @@ containsCommand(cmds) {
 	not hasInstall(commandsList[i])
 	regex.match("^\\b(ps|shutdown|service|free|top|kill|mount|ifconfig|nano|vim)\\b$", commandsList[i])
 }
+
 containsCommand(cmd) {
 	string_encoded := json.marshal(cmd)
     not regex.match("(^[{[]).*([]}]$)", string_encoded)
@@ -50,4 +50,3 @@ containsCommand(cmd) {
     not hasInstall(commandsList[i])
 	regex.match("^\\b(ps|shutdown|service|free|top|kill|mount|ifconfig|nano|vim)\\b$", commandsList[i])
 }
-{
