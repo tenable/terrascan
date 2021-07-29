@@ -5,7 +5,8 @@
     "resource_type": "expose",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "UNIXPortsOutOfRange"
     },
     "severity": "HIGH",
     "description": "Ensure range of ports is from 0 to 65535",

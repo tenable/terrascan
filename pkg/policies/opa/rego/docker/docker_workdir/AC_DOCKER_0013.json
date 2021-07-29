@@ -5,7 +5,8 @@
     "resource_type": "workdir",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "workdir"
     },
     "severity": "HIGH",
     "description": "Ensure the use absolute paths for your WORKDIR.",
