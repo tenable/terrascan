@@ -5,7 +5,8 @@
     "resource_type": "run",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "pipUnpinnedVersion"
     },
     "severity": "MEDIUM",
     "description": "Ensure Pinned Pip Package Version",

@@ -4,6 +4,6 @@ package accurics
 	apt := input.workdir[_]
 	conval := apt.config
     
-    not regex.match("(^/[A-z0-9-_+]*)|(^[A-z0-9-_+]:\\\\.*)|(^\\$[{}A-z0-9-_+].*)", conval)
+    not re_match("(^/[A-z0-9-_+]*)|(^[A-z0-9-_+]:\\\\.*)|(^\\$[{}A-z0-9-_+].*)", conval)
     
 }

@@ -5,7 +5,8 @@
     "resource_type": "run",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "runWithSudo"
     },
     "severity": "HIGH",
     "description": "Ensure to avoid RUN with sudo command",

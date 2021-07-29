@@ -5,7 +5,8 @@
     "resource_type": "run",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "yumCleanAllMissing"
     },
     "severity": "MEDIUM",
     "description": "Ensure Yum Clean All is used after Yum Install",

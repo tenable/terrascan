@@ -1,0 +1,17 @@
+{
+    "name": "runUsingZypperUpdate",
+    "file": "runUsingZypperUpdate.rego",
+    "policy_type": "docker",
+    "resource_type": "run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "runUsingZypperUpdate"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Zypper should not be used",
+    "reference_id": "AC_DOCKER_0021",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0021",
+    "version": 1
+}

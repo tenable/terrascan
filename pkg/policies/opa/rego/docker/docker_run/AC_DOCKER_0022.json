@@ -1,0 +1,17 @@
+{
+    "name": "apkAddUsingCachePath",
+    "file": "apkAddUsingCachePath.rego",
+    "policy_type": "docker",
+    "resource_type": "run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "lastUserRoot"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure to use --no-cache flag when installing packages",
+    "reference_id": "AC_DOCKER_00022",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_00022",
+    "version": 1
+}
