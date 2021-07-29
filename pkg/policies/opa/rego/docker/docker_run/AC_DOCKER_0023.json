@@ -1,0 +1,17 @@
+{
+    "name": "apt-getMissing-yFlag",
+    "file": "apt-getMissing-yFlag.rego",
+    "policy_type": "docker",
+    "resource_type": "run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "apt-getMissing-yFlag"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure to use -y flag with apt-get",
+    "reference_id": "AC_DOCKER_00023",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_00023",
+    "version": 1
+}
