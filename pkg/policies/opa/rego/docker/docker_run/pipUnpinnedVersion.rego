@@ -29,10 +29,10 @@ withVersion(pack) {
 }
 
 withVersion(pack) {
-	regex.match("[A-Za-z0-9_-]+[:-]([0-9]+.)+[0-9]+", pack)
+	re_match("[A-Za-z0-9_-]+[:-]([0-9]+.)+[0-9]+", pack)
 }
 
 withVersion(pack) {
-	regex.match("[A-Za-z0-9_-]+=(.+)", pack)
+	re_match("[A-Za-z0-9_-]+=(.+)", pack)
 }
 

@@ -1,6 +1,6 @@
 # In-file Instrumentation
 
-Terrascan can be instrumented using special commands inside your IaC files (Terraform and K8s)
+Terrascan can be instrumented using special commands inside your IaC files (Terraform, K8s and dockerfile)
 
 Today, Terrascan supports these instrumentations:
 
@@ -50,7 +50,18 @@ spec:
               serviceName: nginx
               servicePort: 80  
 ```
+### In Dockerfile
+Use the syntax `#ts:skip=RuleID optional_comment` inside the dockerfile to skip the rule for that resource. 
 
+#### Example
+``` dockerfile
+FROM runatlantis/atlantis:v0.16.1
+#ts:skip=AC_DOCKER_0001 skip this rule.
+ENV DEFAULT_TERRASCAN_VERSION=1.5.1
+RUN terrascan init
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+CMD ["server"]
+```
 ## Resource Prioritization
 Resource prioritization allows you set maximum and minimum severities for violations in a given resource. Are you configuring a very sensitive resource? Set the minimum severity to `High`, so low and medium violations will be escalated. Need to suppress all violations from a particular resource? Set the maximum severity to `None`.
 
@@ -96,4 +107,15 @@ spec:
               serviceName: nginx
               servicePort: 80 
 ```
+### In Dockerfile
+Use the syntax `#ts:maxseverity=SEVERITY`, or `#ts:minseverity=SEVERITY` inside a dockerfile to skip the rule for that resource. 
 
+#### Example
+``` dockerfile
+#ts:maxseverity=None
+FROM runatlantis/atlantis:v0.16.1
+ENV DEFAULT_TERRASCAN_VERSION=1.5.1
+RUN terrascan init
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+CMD ["server"]
+```

@@ -29,7 +29,8 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow 
 * 500+ Policies for security best practices
 * Scanning of Terraform (HCL2)
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
-* Support for AWS, Azure, GCP, Kubernetes and GitHub
+* Scanning of Dockerfiles
+* Support for AWS, Azure, GCP, Kubernetes, Dockerfiles, and GitHub
 
 ## Quick Start
 
