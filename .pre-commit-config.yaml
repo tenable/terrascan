@@ -1,0 +1,5 @@
+repos:
+- repo: https://github.com/mihirhasan/terrascan
+  rev: v2.1.5
+  hooks:
+    - id: pre-commit-hook
