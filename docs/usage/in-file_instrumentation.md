@@ -8,12 +8,12 @@ Today, Terrascan supports these instrumentations:
 * Resource Prioritization
 
 ## Rule Skipping
-Rule skipping allows you to specify a rule that should not be applied to a particular resource. 
+Rule skipping allows you to specify a rule that should not be applied to a particular resource.
 
-> Note:  In-file instrumentation will skip the rule only for the resource it is defined in. The `skip_rules` parameter in config file will skip the rule for the entire scan.
+> Note:  In-file instrumentation will skip the rule only for the resource it is defined in. The `skip_rules` parameter in the config file will skip the rule for the entire scan.
 
 ### In Terraform
-Use the syntax `#ts:skip=RuleID optional_comment` inside a resource to skip the rule for that resource. 
+Use the syntax `#ts:skip=RuleID optional_comment` inside a resource to skip the rule for that resource.
 
 #### Example
 ``` HCL
@@ -30,7 +30,7 @@ resource "aws_db_instance" "PtShGgAdi4" {
 }
 ```
 ### In Kubernetes
-Use the annotation 
+Use the annotation
 `runterrascan.io/skip:[{\"rule\": \RuleID\", \"comment\": \"reason to skip the rule\"}] ` inside a resource to skip the rule for that resource.
 
 #### Example
@@ -48,10 +48,10 @@ spec:
         paths:
           - backend:
               serviceName: nginx
-              servicePort: 80  
+              servicePort: 80
 ```
 ### In Dockerfile
-Use the syntax `#ts:skip=RuleID optional_comment` inside the dockerfile to skip the rule for that resource. 
+Use the syntax `#ts:skip=RuleID optional_comment` inside the dockerfile to skip the rule for that resource.
 
 #### Example
 ``` dockerfile
@@ -70,7 +70,7 @@ For maximum severity, meaningful options are Medium, Low, and None.
 For minimum severity, meaningful options are High and Medium.
 
 ### In Terraform
-Use the syntax `#ts:maxseverity=SEVERITY`, or `#ts:minseverity=SEVERITY` inside a resource to skip the rule for that resource. 
+Use the syntax `#ts:maxseverity=SEVERITY`, or `#ts:minseverity=SEVERITY` inside a resource to skip the rule for that resource.
 
 #### Example
 ``` HCL
@@ -87,7 +87,7 @@ resource "aws_db_instance" "PtShGgAdi4" {
 }
 ```
 ### In Kubernetes
-Use the annotation 
+Use the annotation
 `runterrascan.io/minseverity: SEVERITY`, or `runterrascan.io/maxseverity: SEVERITY` inside a resource to skip the rule for that resource.
 
 #### Example
@@ -105,10 +105,10 @@ spec:
         paths:
           - backend:
               serviceName: nginx
-              servicePort: 80 
+              servicePort: 80
 ```
 ### In Dockerfile
-Use the syntax `#ts:maxseverity=SEVERITY`, or `#ts:minseverity=SEVERITY` inside a dockerfile to skip the rule for that resource. 
+Use the syntax `#ts:maxseverity=SEVERITY`, or `#ts:minseverity=SEVERITY` inside a dockerfile to skip the rule for that resource.
 
 #### Example
 ``` dockerfile
