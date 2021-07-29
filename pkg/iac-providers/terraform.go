@@ -1,6 +1,7 @@
 package iacprovider
 
 import (
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"reflect"
 
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
@@ -13,7 +14,8 @@ const (
 	terraformV12            supportedIacVersion = "v12"
 	terraformV13            supportedIacVersion = "v13"
 	terraformV14            supportedIacVersion = "v14"
-	terraformDefaultVersion                     = terraformV14
+	terraformV15            supportedIacVersion = "v15"
+	terraformDefaultVersion                     = terraformV15
 )
 
 // register terraform as an IaC provider with terrascan
@@ -22,4 +24,5 @@ func init() {
 	RegisterIacProvider(terraform, terraformV12, terraformDefaultVersion, reflect.TypeOf(tfv12.TfV12{}))
 	RegisterIacProvider(terraform, terraformV13, terraformDefaultVersion, reflect.TypeOf(tfv14.TfV14{}))
 	RegisterIacProvider(terraform, terraformV14, terraformDefaultVersion, reflect.TypeOf(tfv14.TfV14{}))
+	RegisterIacProvider(terraform, terraformV15, terraformDefaultVersion, reflect.TypeOf(tfv15.TfV15{}))
 }

@@ -21,8 +21,9 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow 
 
 ### Resources
 
-* To learn more about Terrascan's features and capabilities, see the documentation portal: https://docs.accurics.com/projects/accurics-terrascan
+* To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
 * Discuss: https://community.accurics.com
+* Join The Terrascan Community on Discord : https://discord.gg/DFwXEfbjzt 
 
 ## Key features
 * 500+ Policies for security best practices
@@ -64,7 +65,7 @@ Terrascan is also available as a Docker image and can be used as follows
 ```sh
 $ docker run accurics/terrascan
 ```
-Refer to [documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/getting-started.html) for information.
+Refer to [documentation](https://runterrascan.io/docs/getting-started/) for information.
 
 ### Step 2: Scan
 To scan your code for security issues you can run the following (defaults to scanning Terraform).
@@ -77,7 +78,7 @@ $ terrascan scan
 ### Step 3: Integrate with CI\CD
 
 Terrascan can be integrated into CI/CD pipelines to enforce security best practices.
-Please refer to our [documentation to integrate with your pipeline](https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/overview.html).
+Please refer to our [documentation to integrate with your pipeline](https://runterrascan.io/docs/integrations/).
 
 ## Terrascan Commands
 You can use terrascan command with the following options:
@@ -108,7 +109,7 @@ Use "terrascan [command] --help" for more information about a command.
 
 ## Policies
 Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). Every rego includes a JSON "rule" file which defines metadata for the policy.
-By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/command_line_mode.html) for information about the Initialization process.
+By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://runterrascan.io/docs/usage/command_line_mode/) for information about the Initialization process.
 
 Note: The scan command will implicitly run the initialization process there are no policies found.
 
@@ -116,7 +117,7 @@ Note: The scan command will implicitly run the initialization process there are 
 
 By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources. 
 
-Read more about [in-file instrumentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/in-file_instrumentation.html) and [the config file](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/config_options.html) on our documentation site.
+Read more about [in-file instrumentation](https://runterrascan.io/docs/usage/in-file_instrumentation/) and [the config file](https://runterrascan.io/docs/usage/config_options/) on our documentation site.
 
 For now, some quick tips:
 

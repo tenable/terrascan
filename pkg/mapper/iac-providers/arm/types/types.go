@@ -48,6 +48,7 @@ var ResourceTypes = map[string]string{
 	"Microsoft.Network/virtualNetworks":                         AzureRMVirtualNetwork,
 	"Microsoft.Sql/servers/auditingSettings":                    AzureRMMSSQLDBAuditingPolicy,
 	"Microsoft.Cache/redis/patchSchedules":                      AzureRMPatchSchedule,
+	"Microsoft.Resources/deployments":                           AzureRMDeployments,
 }
 
 // ARM equivalent TF resource types
@@ -82,4 +83,5 @@ const (
 	AzureRMVirtualNetwork                    = "azurerm_virtual_network"
 	AzureRMMSSQLDBAuditingPolicy             = "extended_auditing_policy"
 	AzureRMPatchSchedule                     = "patch_schedule"
+	AzureRMDeployments                       = "azurerm_resource_group_template_deployment"
 )
