@@ -57,9 +57,6 @@ parse_cmdline_() {
         ARGS+=("$2")  #Add flag argument (iac provider type) to args array
         shift 2       #shift up both args 
         ;;
-      -h | --help)
-        ARGS += ("$1")
-        shift 
       --)   
         shift
         FILES+=("$@")  #not sure what to do with this, replace with -f, -d handling? 
