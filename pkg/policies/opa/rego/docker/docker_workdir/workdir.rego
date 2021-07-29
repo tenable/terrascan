@@ -1,6 +1,6 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[apt]{
+{{.prefix}}{{.name}}{{.suffix}}[apt.id]{
 	apt := input.workdir[_]
 	conval := apt.config
     
