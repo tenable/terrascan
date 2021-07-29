@@ -11,10 +11,10 @@
 
 ## Introduction
 
-Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow you to:
+Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows you to:
 
-- seamlessly scan infrastructure as code for misconfigurations
-- monitor provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
+- Seamlessly scan infrastructure as code for misconfigurations.
+- Monitor provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
 - Detect security vulnerabilities and compliance violations.
 - Mitigate risks before provisioning cloud native infrastructure.
 - Offers flexibility to run locally or integrate with your CI\CD.
@@ -22,8 +22,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow 
 ### Resources
 
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
-* Discuss: https://community.accurics.com
-* Join The Terrascan Community on Discord : https://discord.gg/DFwXEfbjzt 
+* Join The Terrascan Community on Discord : https://discord.gg/DFwXEfbjzt
 
 ## Key features
 * 500+ Policies for security best practices
@@ -116,7 +115,7 @@ Note: The scan command will implicitly run the initialization process there are 
 
 ## Customizing scans
 
-By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources. 
+By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources.
 
 Read more about [in-file instrumentation](https://runterrascan.io/docs/usage/in-file_instrumentation/) and [the config file](https://runterrascan.io/docs/usage/config_options/) on our documentation site.
 
