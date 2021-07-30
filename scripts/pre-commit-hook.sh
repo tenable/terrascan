@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
-PARAMS = "scan "
+PARAMS="scan "
 
 main() {
   initialize_
@@ -22,7 +22,7 @@ terrascan_() {
   #put arguments array into runnable string 
   for i in "${arr[@]}"
   do
-   PARAMS= "${PARAMS} ${i}"
+   PARAMS="${PARAMS} ${i}"
   done
   echo $PARAMS
   for path_uniq in $(echo "${paths[*]}" | tr ' ' '\n' | sort -u); do
