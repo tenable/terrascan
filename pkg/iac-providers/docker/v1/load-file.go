@@ -31,11 +31,13 @@ import (
 )
 
 const (
-	dockerDirectory        string = "docker"
+	docker                 string = "docker"
 	resourceTypeDockerfile string = "dockerfile"
+	underScoreSeparator    string = "_"
 
 	// IDConnectorString is string connector used in id creation
-	IDConnectorString string = "."
+	IDConnectorString        string = "."
+	dockerResourceTypePrefix        = docker + underScoreSeparator
 )
 
 // LoadIacFile loads the docker file specified and create ResourceConfig for each dockerfile
@@ -62,16 +64,16 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 
 		config := output.ResourceConfig{
 			Name:        filepath.Base(absFilePath),
-			Type:        data[i].Cmd,
+			Type:        dockerResourceTypePrefix + data[i].Cmd,
 			Line:        data[i].Line,
-			ID:          data[i].Cmd + IDConnectorString + GetresourceIdforDockerfile(absFilePath, data[i].Value, data[i].Line),
+			ID:          dockerResourceTypePrefix + data[i].Cmd + IDConnectorString + GetresourceIdforDockerfile(absFilePath, data[i].Value, data[i].Line),
 			Source:      dc.getSourceRelativePath(absFilePath),
 			Config:      data[i].Value,
 			SkipRules:   skipRules,
 			MinSeverity: minSeverity,
 			MaxSeverity: maxSeverity,
 		}
-		allResourcesConfig[data[i].Cmd] = append(allResourcesConfig[data[i].Cmd], config)
+		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], config)
 
 	}
 
@@ -80,9 +82,9 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 	// if command is not present line no also doesnot have any importance thats why set to 1.
 	config := output.ResourceConfig{
 		Name:        filepath.Base(absFilePath),
-		Type:        resourceTypeDockerfile,
+		Type:        dockerResourceTypePrefix + resourceTypeDockerfile,
 		Line:        1,
-		ID:          dockerDirectory + IDConnectorString + GetresourceIdforDockerfile(absFilePath, "", 1),
+		ID:          dockerResourceTypePrefix + resourceTypeDockerfile + IDConnectorString + GetresourceIdforDockerfile(absFilePath, "", 1),
 		Source:      dc.getSourceRelativePath(absFilePath),
 		Config:      dockerCommand,
 		SkipRules:   skipRules,
@@ -90,7 +92,7 @@ func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.A
 		MaxSeverity: maxSeverity,
 	}
 
-	allResourcesConfig[dockerDirectory] = append(allResourcesConfig[dockerDirectory], config)
+	allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], config)
 	return allResourcesConfig, nil
 
 }

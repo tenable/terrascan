@@ -2,7 +2,7 @@
     "name": "workdir",
     "file": "workdir.rego",
     "policy_type": "docker",
-    "resource_type": "workdir",
+    "resource_type": "docker_workdir",
     "template_args": {
         "prefix": "",
         "suffix": "",

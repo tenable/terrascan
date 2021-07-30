@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]{    
-    run := input.run[_]    
+    run := input.docker_run[_]    
     checkSudo(run.config)
 }
 checkSudo(config) {

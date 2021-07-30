@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[apt.id]{
-	apt := input.expose[_]
+	apt := input.docker_expose[_]
 	conval := apt.config
     port := split(conval, "/")
     containsPortOutOfRange(port)

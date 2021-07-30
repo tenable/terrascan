@@ -2,7 +2,7 @@
     "name": "runWithSudo",
     "file": "runWithSudo.rego",
     "policy_type": "docker",
-    "resource_type": "run",
+    "resource_type": "docker_run",
     "template_args": {
         "prefix": "",
         "suffix": ""

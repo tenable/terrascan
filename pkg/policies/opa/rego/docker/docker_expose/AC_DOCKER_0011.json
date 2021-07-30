@@ -2,7 +2,7 @@
     "name": "UNIXPortsOutOfRange",
     "file": "UNIXPortsOutOfRange.rego",
     "policy_type": "docker",
-    "resource_type": "expose",
+    "resource_type": "docker_expose",
     "template_args": {
         "prefix": "",
         "suffix": "",

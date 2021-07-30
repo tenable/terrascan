@@ -2,7 +2,7 @@
     "name": "docFilePlatformFlag",
     "file": "docFilePlatformFlag.rego",
     "policy_type": "docker",
-    "resource_type": "from",
+    "resource_type": "docker_from",
     "template_args": {
         "prefix": "",
         "suffix": "",
