@@ -54,7 +54,7 @@ parse_cmdline_() {
   for argv; do
     case $1 in
       -i | --iac-type)   #add support for all scan options ?
-        ARGS+=("$2")  #add flag 
+        ARGS+=("$1")  #add flag 
         #ARGS+=("$3") 
         shift 2       #shift up both args 
         ;;
