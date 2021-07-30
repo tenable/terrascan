@@ -23,7 +23,7 @@ repos:
         - id: terraform-pre-commit
             args: [ '-i <IAC PROVIDER>'] #optional 
 ```
-**Note**
+**Note:**
 The optional args line allows you to specify the IaC provider. For example, 
 ```yaml
 repos:
@@ -33,7 +33,11 @@ repos:
         - id: terraform-pre-commit
             args: [ '-i k8s'] 
 ```
-will cause 'terrascan scan -i k8s' to run and thus scan kubernetes yaml files. You may exclude the args like so: 
+will cause 
+```bash
+'terrascan scan -i k8s' 
+```
+to run and thus scan kubernetes yaml files. You may exclude the args like so: 
 ```yaml
 repos:
     - repo: https://github.com/accurics/terrascan
@@ -51,7 +55,7 @@ ___
 
 Once you have everything installed, and add the appropriate config file to your repo, 
 ```bash
-'Terrascan scan -i <IAC PROVIDER>' 
+'terrascan scan -i <IAC PROVIDER>' 
 ```
 everytime you attempt to commit your staged changes. You can also call the hook directly on all files using pre-commit run --all-files 
 
