@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/hashicorp/terraform/addrs"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -33,6 +32,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/terraform/addrs"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/spf13/afero"
@@ -140,18 +140,8 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			continue
 		}
 
-		detectedRequiredProviders := map[addrs.Provider]string{}
 		// load current config directory
 		rootMod, diags := t.parser.LoadConfigDir(dir)
-		zap.S().Infof(fmt.Sprintf("%v", rootMod.ProviderLocalNames))
-		for k, v := range rootMod.ProviderLocalNames {
-			for _, providerName := range eligibleRequiredProviders {
-				if k.String() == providerName {
-					detectedRequiredProviders[k] = v
-				}
-			}
-			zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
-		}
 		if diags.HasErrors() {
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
@@ -159,6 +149,8 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			t.addError(errMessage, dir)
 			continue
 		}
+
+		detectedRequiredProviders := getRequiedProviderMapFromProviderLocalNames(rootMod.ProviderLocalNames)
 
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
@@ -241,19 +233,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 						allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 					}
 				}
-				/*if managedResource.Type == "kubernetes_deployment" {
-					spew.Dump(managedResource)
-				}*/
-				/*
-					zap.S().Infof(managedResource.Provider.ForDisplay())
-					zap.S().Infof(managedResource.Provider.Namespace)
-					zap.S().Infof(managedResource.Provider.Type)
-					zap.S().Infof(fmt.Sprintf("isDefault: %s", managedResource.Provider.IsDefault()))
-					zap.S().Infof(fmt.Sprintf("isBuiltIn: %s", managedResource.Provider.IsBuiltIn()))
-					zap.S().Infof(fmt.Sprintf("isLegacy: %s", managedResource.Provider.IsLegacy()))
-					zap.S().Infof(fmt.Sprintf("isZero: %s", managedResource.Provider.IsZero()))
-					zap.S().Infof(fmt.Sprintf("isZero: %s", managedResource.Provider.LegacyString()))
-				*/
 			}
 
 			// add all current's children to the queue
@@ -280,25 +259,16 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
 
-	detectedRequiredProviders := map[addrs.Provider]string{}
 	// load current config directory
 	rootMod, diags := t.parser.LoadConfigDir(t.absRootDir)
-	zap.S().Infof(fmt.Sprintf("%v", rootMod.ProviderLocalNames))
-	for k, v := range rootMod.ProviderLocalNames {
-		for _, providerName := range eligibleRequiredProviders {
-			if k.String() == providerName {
-				detectedRequiredProviders[k] = v
-			}
-		}
-		zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
-	}
-
 	if diags.HasErrors() {
 		// log a debug message and continue with other directories
 		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", t.absRootDir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
+
+	detectedRequiredProviders := getRequiedProviderMapFromProviderLocalNames(rootMod.ProviderLocalNames)
 
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
@@ -597,4 +567,17 @@ func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionCon
 	}
 
 	return false
+}
+
+// getRequiedProviderMapFromProviderLocalNames creates the map of provider requirements
+func getRequiedProviderMapFromProviderLocalNames(ProviderLocalNames map[addrs.Provider]string) map[string]ResourceMetadata {
+	detectedRequiredProviders := make(map[string]ResourceMetadata)
+	for k := range ProviderLocalNames {
+		temp := ResourceMetadata{
+			ProviderType: k.Type,
+			Namespace:    k.Namespace,
+		}
+		detectedRequiredProviders[k.Type] = temp
+	}
+	return detectedRequiredProviders
 }

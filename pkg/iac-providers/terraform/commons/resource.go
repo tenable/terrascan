@@ -18,7 +18,6 @@ package commons
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform/addrs"
 	"io/ioutil"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -29,7 +28,7 @@ import (
 )
 
 // CreateResourceConfig creates output.ResourceConfig
-func CreateResourceConfig(managedResource *hclConfigs.Resource, reqdProviderNameMapping map[addrs.Provider]string) (resourceConfig output.ResourceConfig, err error) {
+func CreateResourceConfig(managedResource *hclConfigs.Resource, reqdProviderNameMapping map[string]ResourceMetadata) (resourceConfig output.ResourceConfig, err error) {
 
 	// read source file
 	fileBytes, err := ioutil.ReadFile(managedResource.DeclRange.Filename)
@@ -46,8 +45,11 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource, reqdProviderName
 		return resourceConfig, fmt.Errorf("failed type assertion for hcl.Body in *hclConfigs.Resource. error: expected hcl.Body type is *hclsyntax.Body, but got %T", managedResource.Config)
 	}
 
+	conatiners := []output.ContainerNameAndImage{}
+	initContainers := []output.ContainerNameAndImage{}
+
 	if isEligibleForContainerImageExtraction(managedResource, reqdProviderNameMapping) {
-		extractContainerImages(managedResource, hclBody)
+		conatiners, initContainers = extractContainerImages(managedResource, hclBody)
 	}
 
 	goOut, err := c.convertBody(hclBody)
@@ -60,15 +62,17 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource, reqdProviderName
 	minSeverity, maxSeverity := utils.GetMinMaxSeverity(c.rangeSource(hclBody.Range()))
 	// create a resource config
 	resourceConfig = output.ResourceConfig{
-		ID:          fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
-		Name:        managedResource.Name,
-		Type:        managedResource.Type,
-		Source:      managedResource.DeclRange.Filename,
-		Line:        managedResource.DeclRange.Start.Line,
-		Config:      goOut,
-		SkipRules:   utils.GetSkipRules(c.rangeSource(hclBody.Range())),
-		MaxSeverity: maxSeverity,
-		MinSeverity: minSeverity,
+		ID:                  fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
+		Name:                managedResource.Name,
+		Type:                managedResource.Type,
+		Source:              managedResource.DeclRange.Filename,
+		Line:                managedResource.DeclRange.Start.Line,
+		Config:              goOut,
+		SkipRules:           utils.GetSkipRules(c.rangeSource(hclBody.Range())),
+		MaxSeverity:         maxSeverity,
+		MinSeverity:         minSeverity,
+		ContainerImages:     conatiners,
+		InitContainerImages: initContainers,
 	}
 
 	// successful

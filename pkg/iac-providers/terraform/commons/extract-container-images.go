@@ -1,28 +1,29 @@
 package commons
 
 import (
-	"github.com/hashicorp/hcl/v2/hclsyntax"
-	"github.com/hashicorp/terraform/addrs"
-	hclConfigs "github.com/hashicorp/terraform/configs"
-	"go.uber.org/zap"
 	"strings"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
+	hclConfigs "github.com/hashicorp/terraform/configs"
 )
 
 const (
-	hashiCorp = "hashicorp"
-	container = "container"
+	hashiCorp     = "hashicorp"
+	container     = "container"
 	initContainer = "init_container"
-	spec = "spec"
-	template = "template"
-	kubernetes = "kubernetes"
-	image = "image"
-	name = "name"
-	jobTemplate = "job_template"
+	spec          = "spec"
+	template      = "template"
+	kubernetes    = "kubernetes"
+	image         = "image"
+	name          = "name"
+	jobTemplate   = "job_template"
 )
 
 type ResourceMetadata struct {
 	ProviderType string // 	kubernetes
 	ResourceType string // 	kubernetes_service
+	Namespace    string // hoshicorp
 }
 
 var eligibiltylist []ResourceMetadata = []ResourceMetadata{
@@ -35,178 +36,97 @@ var eligibiltylist []ResourceMetadata = []ResourceMetadata{
 	{ProviderType: kubernetes, ResourceType: "kubernetes_replication_controller"},
 }
 
-
-func isEligibleForContainerImageExtraction(resource *hclConfigs.Resource, reqdProviderNameMapping map[addrs.Provider]string) bool {
-
-	zap.S().Infof("Checking eligibility for resource:")
-	zap.S().Infof(resource.Provider.Namespace)
-	zap.S().Infof(resource.Provider.Type)
-	zap.S().Infof(resource.Type)
-	zap.S().Infof(resource.Name)
+func isEligibleForContainerImageExtraction(resource *hclConfigs.Resource, reqdProviderNameMapping map[string]ResourceMetadata) bool {
+	if resource.Provider.Namespace == "" && resource.Provider.Type == "" {
+		if v, ok := reqdProviderNameMapping[kubernetes]; ok {
+			for _, item := range eligibiltylist {
+				if strings.ToLower(v.Namespace) == hashiCorp &&
+					strings.ToLower(resource.Type) == item.ResourceType {
+					return true
+				}
+			}
+		} else {
+			for _, item := range eligibiltylist {
+				if strings.ToLower(resource.Type) == item.ResourceType {
+					return true
+				}
+			}
+		}
+		return false
+	}
 
 	for _, item := range eligibiltylist {
 		// only official providers from hashicorp will be eligible for now
 		if strings.ToLower(resource.Provider.Namespace) == hashiCorp &&
 			strings.ToLower(resource.Provider.Type) == item.ProviderType &&
 			strings.ToLower(resource.Type) == item.ResourceType {
-			zap.S().Info("true")
 			return true
 		}
 	}
-	zap.S().Info("false")
 	return false
 }
 
-func extractContainerImages(resource *hclConfigs.Resource, body *hclsyntax.Body) []error {
-//  zap.S().Info("Dumping resource body")
-//	spew.Dump(body)
+func extractContainerImages(resource *hclConfigs.Resource, body *hclsyntax.Body) (containers, initContainers []output.ContainerNameAndImage) {
+	for _, block := range body.Blocks {
+		if block.Type == spec {
+			containerBlocks, initContainerBlocks := getContainerAndInitContainerFromBlocks(block.Body)
+			containers = getContainerConfigFromContainerBlock(containerBlocks)
+			initContainers = getContainerConfigFromContainerBlock(initContainerBlocks)
 
-	if strings.ToLower(resource.Provider.Type) == kubernetes {
-		if strings.ToLower(resource.Type) == "kubernetes_deployment" ||
-			strings.ToLower(resource.Type) == "kubernetes_daemonset" ||
-			strings.ToLower(resource.Type) == "kubernetes_job" ||
-			strings.ToLower(resource.Type) == "kubernetes_replication_controller" ||
-			strings.ToLower(resource.Type) == "kubernetes_stateful_set" {
-			zap.S().Infof("Inside resource type %s", resource.Type)
-			for _, block := range body.Blocks {
-				if block.Type == spec {
-					zap.S().Info("Inside spec")
-					for _, block1 := range block.Body.Blocks {
-						if block1.Type == template {
-							zap.S().Info("Inside spec.template")
-							for _, block2 := range block1.Body.Blocks {
-								zap.S().Infof("block type : %s", block2.Type)
-								if block2.Type == spec {
-									zap.S().Info("Inside spec.template.spec")
-									for _, block3 := range block2.Body.Blocks {
-										if block3.Type == container {
-											zap.S().Info("Inside spec.template.spec.container")
-											//spew.Dump(block3)
-											for _, attr := range block3.Body.Attributes {
-												if attr.Name == image {
-													val, _ := attr.Expr.Value(nil)
-													//spew.Dump(val)
-													zap.S().Info("image: %s", val.AsString())
-												}
-												if attr.Name == name {
-													val, _ := attr.Expr.Value(nil)
-													//spew.Dump(val)
-													zap.S().Infof("name: %s", val.AsString())
-												}
-											}
-										}
-										if block3.Type == initContainer {
-											zap.S().Info("Inside spec.template.spec.init_container")
-											//spew.Dump(block3)
-											for _, attr := range block3.Body.Attributes {
-												if attr.Name == image {
-													val, _ := attr.Expr.Value(nil)
-													//spew.Dump(val)
-													zap.S().Infof("image: %s", val.AsString())
-												}
-												if attr.Name == name {
-													val, _ := attr.Expr.Value(nil)
-													//spew.Dump(val)
-													zap.S().Infof("name: %s", val.AsString())
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		} else if strings.ToLower(resource.Type) == "kubernetes_cron_job" {
-			zap.S().Infof("Inside resource type %s", resource.Type)
-			for _, block := range body.Blocks {
-				if block.Type == spec {
-					zap.S().Info("Inside spec")
-					for _, block1 := range block.Body.Blocks {
-						if block1.Type == jobTemplate {
-							zap.S().Info("Inside spec.job_template")
-							for _, block2 := range block1.Body.Blocks {
-								if block2.Type == spec {
-									zap.S().Info("Inside spec.job_template.spec")
-									for _, block3 := range block2.Body.Blocks {
-										if block3.Type == template {
-											zap.S().Info("Inside spec.job_template.spec.template")
-											for _, block4 := range block3.Body.Blocks {
-												zap.S().Infof("block type : %s", block2.Type)
-												if block4.Type == spec {
-													zap.S().Info("Inside spec.job_template.spec.template.spec")
-													for _, block5 := range block4.Body.Blocks {
-														if block5.Type == container {
-															zap.S().Info("Inside spec.job_template.spec.template.spec.container")
-															//spew.Dump(block3)
-															for _, attr := range block5.Body.Attributes {
-																if attr.Name == image {
-																	val, _ := attr.Expr.Value(nil)
-																	//spew.Dump(val)
-																	zap.S().Info("image: %s", val.AsString())
-																}
-																if attr.Name == name {
-																	val, _ := attr.Expr.Value(nil)
-																	//spew.Dump(val)
-																	zap.S().Infof("name: %s", val.AsString())
-																}
-															}
-														}
-														if block5.Type == initContainer {
-															zap.S().Info("Inside spec.job_template.spec.template.spec.init_container")
-															//spew.Dump(block3)
-															for _, attr := range block5.Body.Attributes {
-																if attr.Name == image {
-																	val, _ := attr.Expr.Value(nil)
-																	//spew.Dump(val)
-																	zap.S().Infof("image: %s", val.AsString())
-																}
-																if attr.Name == name {
-																	val, _ := attr.Expr.Value(nil)
-																	//spew.Dump(val)
-																	zap.S().Infof("name: %s", val.AsString())
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		} else if strings.ToLower(resource.Type) == "kubernetes_pod" {
-			for _, block := range body.Blocks {
-				if block.Type == spec {
-					zap.S().Info("Inside spec")
-					for _, block1 := range block.Body.Blocks {
-						if block1.Type == container {
-							zap.S().Info("Inside spec.container")
-							//spew.Dump(block3)
-							for _, attr := range block1.Body.Attributes {
-								if attr.Name == image {
-									val, _ := attr.Expr.Value(nil)
-									//spew.Dump(val)
-									zap.S().Info(val.AsString())
-								}
-								if attr.Name == name {
-									val, _ := attr.Expr.Value(nil)
-									//spew.Dump(val)
-									zap.S().Info(val.AsString())
-								}
-							}
-						}
-					}
-				}
-			}
-		} else {
-			zap.S().Infof("Extraction logic coming soon for resource type %s", resource.Type)
 		}
 	}
-	return nil
+	return
+}
+
+func getContainerAndInitContainerFromBlocks(specs *hclsyntax.Body) (containers, initContainers []*hclsyntax.Block) {
+	for _, block := range specs.Blocks {
+		if block.Type == template {
+			return getContainerAndInitContainerFromTemplateBlocks(block.Body.Blocks)
+		} else if block.Type == jobTemplate {
+			for _, jobTemplateBlock := range block.Body.Blocks {
+				if jobTemplateBlock.Type == spec {
+					return getContainerAndInitContainerFromBlocks(jobTemplateBlock.Body)
+				}
+			}
+		} else if block.Type == container {
+			containers = append(containers, block)
+		}
+	}
+	return
+}
+
+func getContainerAndInitContainerFromTemplateBlocks(templateBlocks []*hclsyntax.Block) (containers, initContainers []*hclsyntax.Block) {
+	for _, templateBlocks := range templateBlocks {
+		if templateBlocks.Type == spec {
+			for _, specBlocks := range templateBlocks.Body.Blocks {
+				if specBlocks.Type == container {
+					containers = append(containers, specBlocks)
+				} else if specBlocks.Type == initContainer {
+					initContainers = append(initContainers, specBlocks)
+				}
+			}
+		}
+	}
+	return
+}
+
+func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (containerImages []output.ContainerNameAndImage) {
+	for _, conatainerBlock := range containerBlocks {
+		containerImage := output.ContainerNameAndImage{}
+		for _, attr := range conatainerBlock.Body.Attributes {
+			if attr.Name == image {
+				val, _ := attr.Expr.Value(nil)
+				containerImage.Image = val.AsString()
+			}
+			if attr.Name == name {
+				val, _ := attr.Expr.Value(nil)
+				containerImage.Name = val.AsString()
+			}
+		}
+		if containerImage.Image == "" && containerImage.Name == "" {
+			continue
+		}
+		containerImages = append(containerImages, containerImage)
+	}
+	return
 }

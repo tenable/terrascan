@@ -18,7 +18,6 @@ package commons
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform/addrs"
 	"path/filepath"
 	"strings"
 
@@ -35,7 +34,7 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
 
-	detectedRequiredProviders := map[addrs.Provider]string{}
+	detectedRequiredProviders := map[string]ResourceMetadata{}
 	// load current iac file
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if hclFile == nil {
@@ -44,24 +43,22 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
-	/*
 	for _, reqdProvider := range hclFile.RequiredProviders {
-		for k, v := range reqdProvider.RequiredProviders {
-			for _, providerName := range eligibleRequiredProviders {
-				if k == providerName {
-					detectedRequiredProviders[k] = v
-				}
+		for _, v := range reqdProvider.RequiredProviders {
+			temp := ResourceMetadata{
+				Namespace:    v.Type.Namespace,
+				ProviderType: v.Type.Type,
 			}
-			zap.S().Info(k.Namespace, k.Type, k.Hostname, k.ForDisplay(), k.String(), k.IsBuiltIn(), v)
+			detectedRequiredProviders[v.Type.Type] = temp
+
 		}
-	}*/
+	}
 
 	if diags != nil {
 		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
-
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
