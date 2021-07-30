@@ -18,11 +18,16 @@ terrascan_() {
 
     let "index+=1"
   done
-
+  #put arguments array into runnable string 
+  PARAMS = ''
+  for i in "${arr[@]}"
+  do
+   PARAMS= "${PARAMS} ${i}"
+  done
+  echo $PARAMS
   for path_uniq in $(echo "${paths[*]}" | tr ' ' '\n' | sort -u); do
     path_uniq="${path_uniq//__REPLACED__SPACE__/ }"
     pushd "$path_uniq" > /dev/null
-    echo 'args' ${ARGS[*]}
     terrascan scan $ARGS
     popd > /dev/null
   done
