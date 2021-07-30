@@ -20,7 +20,7 @@ terrascan_() {
     let "index+=1"
   done
   #put arguments array into runnable string 
-  for i in "${arr[@]}"
+  for i in "${ARGS[@]}"
   do
    PARAMS="${PARAMS} ${i}"
   done
