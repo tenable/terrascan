@@ -20,6 +20,7 @@ const (
 	jobTemplate   = "job_template"
 )
 
+// ResourceMetadata holds details about the provider
 type ResourceMetadata struct {
 	ProviderType string // 	kubernetes
 	ResourceType string // 	kubernetes_service

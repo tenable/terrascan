@@ -41,8 +41,7 @@ import (
 
 var (
 	// ErrBuildTFConfigDir error
-	ErrBuildTFConfigDir       = fmt.Errorf("failed to build terraform allResourcesConfig")
-	eligibleRequiredProviders = []string{"registry.terraform.io/hashicorp/kubernetes", "registry.terraform.io/hashicorp/aws", "registry.terraform.io/hashicorp/azure", "registry.terraform.io/hashicorp/google"}
+	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
 const (
