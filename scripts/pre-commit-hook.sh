@@ -22,7 +22,7 @@ terrascan_() {
   for path_uniq in $(echo "${paths[*]}" | tr ' ' '\n' | sort -u); do
     path_uniq="${path_uniq//__REPLACED__SPACE__/ }"
     pushd "$path_uniq" > /dev/null
-    echo $ARGS
+    echo 'args' $ARGS
     terrascan scan $ARGS
     popd > /dev/null
   done
@@ -54,10 +54,8 @@ parse_cmdline_() {
   for argv; do
     case $1 in
       -i | --iac-type)   #add support for all scan options ?
-        ARGS+=("$2")  #add flag 
-        echo $2 
-        ARGS+=("$3") 
-        echo $3  #Add flag argument (iac provider type) to args array
+        ARGS+=("$1")  #add flag 
+        ARGS+=("$2") 
         shift 2       #shift up both args 
         ;;
       --)   
