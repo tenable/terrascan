@@ -42,7 +42,7 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 	}
 
 	if len(fileMap) == 0 {
-		zap.S().Warnf("directory '%s' has no dockerfile", absRootDir)
+		zap.S().Warnf("directory '%s' has no files named Dockerfile. Use -f flag if Dockerfiles follow a different naming convention.", absRootDir)
 	}
 
 	for fileDir, files := range fileMap {
