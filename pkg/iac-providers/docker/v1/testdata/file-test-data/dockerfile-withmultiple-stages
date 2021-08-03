@@ -1,0 +1,8 @@
+# -------- builder stage -------- #
+FROM golang:alpine AS builder
+RUN go build main.go
+
+# -------- prod stage -------- #
+FROM alpine:3.12.0
+ENV PATH /go/bin:$PATH
+ENTRYPOINT ["/go/bin/main"]

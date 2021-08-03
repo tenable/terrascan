@@ -27,6 +27,94 @@ import (
 
 var fileTestDataDir = filepath.Join(testDataDir, "file-test-data")
 
+var multiStageDockerfileConfig = output.AllResourceConfigs{
+	"docker_dockerfile": []output.ResourceConfig{
+		{
+			ID:         "docker_dockerfile.37b4650bc01b676c9d26b3596fc1e6bd",
+			Name:       "dockerfile-withmultiple-stages",
+			ModuleName: "",
+			Source:     "dockerfile-withmultiple-stages",
+			PlanRoot:   "", Line: 1, Type: "docker_dockerfile",
+			Config:      []string{"from", "run", "from", "env", "entrypoint"},
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+	},
+	"docker_entrypoint": []output.ResourceConfig{
+		{
+			ID:   "docker_entrypoint.21a71774cdc858e44224d9d490498d49",
+			Name: "dockerfile-withmultiple-stages", ModuleName: "",
+			Source:      "dockerfile-withmultiple-stages",
+			PlanRoot:    "",
+			Line:        8,
+			Type:        "docker_entrypoint",
+			Config:      "/go/bin/main",
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+	},
+	"docker_env": []output.ResourceConfig{
+		{
+			ID:          "docker_env.4310dbbbae33fba2711fe69239d0ebbe",
+			Name:        "dockerfile-withmultiple-stages",
+			ModuleName:  "",
+			Source:      "dockerfile-withmultiple-stages",
+			PlanRoot:    "",
+			Line:        7,
+			Type:        "docker_env",
+			Config:      "PATH /go/bin:$PATH",
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+	},
+	"docker_from": []output.ResourceConfig{
+		{
+			ID:          "docker_from.273cb3c947150fa2365b39346e207035",
+			Name:        "dockerfile-withmultiple-stages",
+			ModuleName:  "",
+			Source:      "dockerfile-withmultiple-stages",
+			PlanRoot:    "",
+			Line:        2,
+			Type:        "docker_from",
+			Config:      "golang:alpine AS builder",
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+		{
+			ID:          "docker_from.3e7f6a412bae2c36b5e8123c0d437288",
+			Name:        "dockerfile-withmultiple-stages",
+			ModuleName:  "",
+			Source:      "dockerfile-withmultiple-stages",
+			PlanRoot:    "",
+			Line:        6,
+			Type:        "docker_from",
+			Config:      "alpine:3.12.0",
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+	},
+	"docker_run": []output.ResourceConfig{
+		{
+			ID:          "docker_run.556176d13b816800a50fb2998cac92ec",
+			Name:        "dockerfile-withmultiple-stages",
+			ModuleName:  "",
+			Source:      "dockerfile-withmultiple-stages",
+			PlanRoot:    "",
+			Line:        3,
+			Type:        "docker_run",
+			Config:      "go build main.go",
+			SkipRules:   []output.SkipRule(nil),
+			MaxSeverity: "",
+			MinSeverity: "",
+		},
+	},
+}
+
 func TestLoadIacFile(t *testing.T) {
 
 	tests := []struct {
@@ -49,11 +137,23 @@ func TestLoadIacFile(t *testing.T) {
 			dockerV1:    DockerV1{},
 			wantErr:     nil,
 		},
+		{
+			name:        "docker file with multiple stages",
+			absFilePath: filepath.Join(fileTestDataDir, "dockerfile-withmultiple-stages"),
+			dockerV1:    DockerV1{},
+			wantErr:     nil,
+			want:        multiStageDockerfileConfig,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			_, gotErr := tt.dockerV1.LoadIacFile(tt.absFilePath)
+			got, gotErr := tt.dockerV1.LoadIacFile(tt.absFilePath)
+			if tt.want != nil {
+				if got == nil || !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("unexpected result; got: '%#v', want: '%v'", got, tt.want)
+				}
+			}
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {
