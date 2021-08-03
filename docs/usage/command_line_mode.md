@@ -195,7 +195,7 @@ aws_ecr_repository:
 | |skip-rules|Specify one or more rules to skip while scanning. Example: --skip-rules="ruleID1,ruleID2"|
 | |use-colours |Configure the color for output (**auto**, t, f) |
 |--non-recursive |Use this for non recursive directories and modules scan | By default directory is scanned recursively if this flag is used then only current directory is scanned|
-|--use-terraform-cache |Use this to specify to use the remote modules from terraform init cache rather than downloading from remote | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded  |
+|--use-terraform-cache |Use this to specify to use the remote modules from terraform init cache rather than downloading from remote | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded. Directory will be scanned non recurively if this flag is used.|
 | -v | verbose | Displays violations with all details |
 
 | Global flags | Description | Options |
@@ -234,7 +234,7 @@ Flags:
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
-      --use-terraform-cache       use terraform init cache for remote modules
+      --use-terraform-cache       use terraform init cache for remote modules (with this flag directory scan will be non recursive by default)
   -v, --verbose                   will show violations with details (applicable for default output)
 
 Global Flags:

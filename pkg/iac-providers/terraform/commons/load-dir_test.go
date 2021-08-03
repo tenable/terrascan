@@ -261,11 +261,11 @@ func TestGetConfigSource(t *testing.T) {
 }
 
 func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
-	workDir, err := filepath.Abs(filepath.Dir(filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")))
+	absRootDir, err := filepath.Abs(filepath.Dir(filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")))
 	if err != nil {
 		zap.S().Error("error finding working directory", err)
 	}
-	terraformInitRegs := filepath.Join(workDir, terraformModuleInstallDir, "network")
+	terraformInitRegs := filepath.Join(absRootDir, terraformModuleInstallDir, "network")
 	type fields struct {
 		Cache map[string]TerraformModuleManifest
 	}
@@ -311,6 +311,7 @@ func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tr := &TerraformDirectoryLoader{
+				absRootDir:               absRootDir,
 				terraformInitModuleCache: tt.fields.Cache,
 			}
 			gotSrc, gotDestpath := tr.GetRemoteModuleIfPresentInTerraformSrc(tt.args.req)

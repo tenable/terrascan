@@ -109,7 +109,7 @@ func (t TerraformDirectoryLoader) LoadIacDir() (allResourcesConfig output.AllRes
 
 	defer t.remoteDownloader.CleanUp()
 
-	if t.nonRecursive {
+	if t.nonRecursive || t.useTerraformCache {
 		return t.loadDirNonRecursive()
 	}
 
@@ -503,13 +503,7 @@ func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.R
 
 // GetRemoteModuleIfPresentInTerraformSrc - Gets the remote module if present in terraform init cache
 func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *hclConfigs.ModuleRequest) (src string, destpath string) {
-	// find the working directory for the source file to check the terraform cache in that dir
-	workDir, err := filepath.Abs(filepath.Dir(req.SourceAddrRange.Filename))
-	if err != nil {
-		zap.S().Error("error finding working directory", err)
-		return
-	}
-	terraformInitRegs := filepath.Join(workDir, terraformModuleInstallDir)
+	terraformInitRegs := filepath.Join(t.absRootDir, terraformModuleInstallDir)
 	modules := TerraformModuleManifest{}
 	var ok bool
 	if modules, ok = t.terraformInitModuleCache[terraformInitRegs]; !ok {
@@ -517,7 +511,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err != nil {
 				if os.IsNotExist(err) {
-					zap.S().Debug("found no terraform module metadata file in workDir %s", terraformInitRegs)
+					zap.S().Debug("found no terraform module metadata file in dir %s", terraformInitRegs)
 					return
 				}
 				zap.S().Error("error reading terraform module metadata file", err)
@@ -539,9 +533,9 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 		if strings.EqualFold(m.SourceAddr, req.SourceAddr) {
 			// if the module source is not registry then version check is not required
 			if !downloader.IsRegistrySourceAddr(req.SourceAddr) {
-				return req.SourceAddr, filepath.Join(workDir, m.Dir)
+				return req.SourceAddr, filepath.Join(t.absRootDir, m.Dir)
 			} else if versionSatisfied(m.VersionStr, req.VersionConstraint) {
-				return req.SourceAddr, filepath.Join(workDir, m.Dir)
+				return req.SourceAddr, filepath.Join(t.absRootDir, m.Dir)
 			}
 		}
 	}

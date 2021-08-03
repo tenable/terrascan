@@ -23,7 +23,7 @@ Flags:
       --show-passed               display passed rules, along with violations
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
-      --use-terraform-cache       use terraform init cache for remote modules
+      --use-terraform-cache       use terraform init cache for remote modules (with this flag directory scan will be non recursive by default)
   -v, --verbose                   will show violations with details (applicable for default output)
 
 Global Flags:
