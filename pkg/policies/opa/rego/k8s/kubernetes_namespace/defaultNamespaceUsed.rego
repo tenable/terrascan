@@ -5,7 +5,6 @@ package accurics
         object.get(input, "kubernetes_pod", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
         object.get(input, "kubernetes_job", "undefined"),
-        object.get(input, "kubernetes_namespace", "undefined")
     ]
 
     item = item_list[_]
