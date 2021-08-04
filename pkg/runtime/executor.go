@@ -167,6 +167,7 @@ func (e *Executor) initPolicyEngines() (err error) {
 		// initialize the engine
 		if err := engine.Init(policyPath, preloadFilter); err != nil {
 			zap.S().Errorf("failed to initialize policy engine for path %s, error: %s", policyPath, err)
+			zap.S().Error("perform 'terrascan init' command and then try running the scan command again")
 			return err
 		}
 		e.policyEngines = append(e.policyEngines, engine)
@@ -179,10 +180,6 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
-
-	if e.useTerraformCache && e.iacType != "terraform" {
-		zap.S().Errorf("invalid option used with IacType %s, useTerraformCache option is only supported for terraform Iac types", e.iacType)
-	}
 
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
