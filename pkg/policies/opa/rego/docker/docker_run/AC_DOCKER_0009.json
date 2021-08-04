@@ -1,0 +1,16 @@
+{
+    "name": "yumCleanAllMissing",
+    "file": "yumCleanAllMissing.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Yum Clean All is used after Yum Install",
+    "reference_id": "AC_DOCKER_0009",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0009",
+    "version": 1
+}

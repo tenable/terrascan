@@ -1,0 +1,16 @@
+{
+    "name": "runWithSudo",
+    "file": "runWithSudo.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure to avoid RUN with sudo command",
+    "reference_id": "AC_DOCKER_0007",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0007",
+    "version": 1
+}

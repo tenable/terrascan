@@ -36,7 +36,7 @@ const (
 	// SkipRulesPrefix used to identify and trim the skipping rule patterns
 	SkipRulesPrefix = "#ts:skip="
 	// MetaDataIDRegex pattern to match Rego Metadata ID
-	MetaDataIDRegex = `(AC_)(AWS|AZURE|GCP|K8S|GITHUB)[_]([\d]{4})`
+	MetaDataIDRegex = `(AC_)(AWS|AZURE|GCP|K8S|GITHUB|DOCKER)[_]([\d]{4})`
 	// MetaDataReferenceIDRegex pattern to match Rego Metadata ReferenceID
 	MetaDataReferenceIDRegex = `(([ A-Za-z0-9]+[.-]{1}){2,5})([\d]+)`
 	// SkipRuleCommentRegex used to detect comments in skipped rule

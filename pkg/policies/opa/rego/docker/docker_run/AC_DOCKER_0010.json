@@ -1,0 +1,16 @@
+{
+    "name": "pipUnpinnedVersion",
+    "file": "pipUnpinnedVersion.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Pinned Pip Package Version",
+    "reference_id": "AC_DOCKER_0010",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0010",
+    "version": 1
+}
