@@ -41,7 +41,7 @@ const (
 )
 
 // LoadIacFile loads the docker file specified and create ResourceConfig for each dockerfile
-func (dc *DockerV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (dc *DockerV1) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	data, comments, err := dc.Parse(absFilePath)

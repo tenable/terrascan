@@ -127,6 +127,7 @@ func TestLoadIacFile(t *testing.T) {
 	tests := []struct {
 		name        string
 		absFilePath string
+		options     map[string]interface{}
 		dockerV1    DockerV1
 		want        output.AllResourceConfigs
 		wantErr     error
@@ -155,7 +156,7 @@ func TestLoadIacFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			got, gotErr := tt.dockerV1.LoadIacFile(tt.absFilePath)
+			got, gotErr := tt.dockerV1.LoadIacFile(tt.absFilePath, tt.options)
 			if tt.want != nil {
 				if got == nil || !reflect.DeepEqual(got, tt.want) {
 					t.Errorf("unexpected result; got: '%#v', want: '%v'", got, tt.want)
