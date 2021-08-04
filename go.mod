@@ -29,6 +29,7 @@ require (
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/moby/buildkit v0.8.3
 	github.com/onsi/ginkgo v1.15.1
 	github.com/onsi/gomega v1.11.0
 	github.com/open-policy-agent/opa v0.22.0
