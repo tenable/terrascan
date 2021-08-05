@@ -9,7 +9,7 @@ replace (
 )
 
 require (
-	github.com/BurntSushi/toml v0.4.0 // indirect
+	github.com/BurntSushi/toml v0.4.1 // indirect
 	github.com/VerbalExpressions/GoVerbalExpressions v0.0.0-20200410162751-4d76a1099a6e
 	github.com/aws/aws-sdk-go-v2/config v1.5.0
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.3.2

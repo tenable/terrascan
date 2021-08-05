@@ -54,7 +54,9 @@ func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 	for _, resource := range configs {
 		config = &resource
 		config.Line = 1
-		config.Source = a.getSourceRelativePath(absFilePath)
+		if config.Source == "" {
+			config.Source = a.getSourceRelativePath(absFilePath)
+		}
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], *config)
 	}
 	return allResourcesConfig, nil
@@ -124,6 +126,10 @@ func (a *CFTV1) translateResources(template *cloudformation.Template, absFilePat
 				if stackConfig.TemplateData != nil {
 					stackResourceConfigs, err := a.getConfig(stackConfig.TemplateURL, &stackConfig.TemplateData, &stackConfig.Parameters)
 					if err == nil {
+						for i := range stackResourceConfigs {
+							// Add template url as source for the nested resources
+							stackResourceConfigs[i].Source = stackConfig.TemplateURL
+						}
 						configs = append(configs, stackResourceConfigs...)
 					}
 				}

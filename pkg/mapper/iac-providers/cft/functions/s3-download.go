@@ -76,7 +76,7 @@ func DownloadBucketObj(templateURL string) ([]byte, error) {
 	case "http", "https":
 		buf, err := downloadPublicTemplate(templateURL)
 		if err != nil {
-			zap.S().Debug("not a public object", zap.String("url", templateURL), err)
+			zap.S().Debug("the s3 url for nested stack is not a public object", zap.String("url", templateURL), err)
 		} else {
 			return buf, nil
 		}
