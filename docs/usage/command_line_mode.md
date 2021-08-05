@@ -199,7 +199,7 @@ aws_ecr_repository:
 | -i type  | Use this to change the IaC provider | arm, cft, docker, helm, k8s, kustomize, **terraform**|
 | -i version  | Use this in conjunction with `- i type` to specify the version of IaC provider | Supported versions of each IaC are: `arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, v15`|
 | -p | Use this to specify directory path for policies | By default policies are installed here: <tbd specify a default path> |
-| -t  | Use this to specify individual cloud providers | **all**, aws, azure, gcp, github, k8s|
+| -t  | Use this to specify individual cloud providers | **all**, aws, azure, docker, gcp, github, k8s|
 | -r | Use this to specify directory path for remote backend | git, s3, gcs, http |
 | -u | Use this to specify directory URL for remote IaC repositories | see options below |
 | |scan-rules|Specify rules to scan, example: --scan-rules="ruleID1,ruleID2"|
@@ -238,7 +238,7 @@ Flags:
       --iac-version string        iac version (arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, v15, tfplan: v1)
       --non-recursive             do not scan directories and modules recursively
   -p, --policy-path stringArray   policy path directory
-  -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
+  -t, --policy-type strings       policy type (all, aws, azure, docker, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http, terraform-registry)
   -u, --remote-url string         url pointing to remote IaC repository
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")

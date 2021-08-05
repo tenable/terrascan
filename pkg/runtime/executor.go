@@ -17,8 +17,9 @@
 package runtime
 
 import (
-	"github.com/accurics/terrascan/pkg/policy/opa"
 	"sort"
+
+	"github.com/accurics/terrascan/pkg/policy/opa"
 
 	"go.uber.org/zap"
 
@@ -159,6 +160,7 @@ func (e *Executor) initPolicyEngines() (err error) {
 		// initialize the engine
 		if err := engine.Init(policyPath, preloadFilter); err != nil {
 			zap.S().Errorf("failed to initialize policy engine for path %s, error: %s", policyPath, err)
+			zap.S().Error("perform 'terrascan init' command and then try running the scan command again")
 			return err
 		}
 		e.policyEngines = append(e.policyEngines, engine)
