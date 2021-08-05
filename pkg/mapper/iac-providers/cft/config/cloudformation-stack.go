@@ -17,29 +17,47 @@
 package config
 
 import (
+	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/functions"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudformation"
 )
 
 // CloudFormationStackConfig holds config for aws_cloudformation_stack
 type CloudFormationStackConfig struct {
 	Config
-	TemplateURL      interface{} `json:"template_url"`
-	NotificationARNs interface{} `json:"notification_arns"`
+	TemplateURL      string            `json:"template_url"`
+	NotificationARNs interface{}       `json:"notification_arns"`
+	Parameters       map[string]string `json:"-"`
+	TemplateData     []byte            `json:"-"`
 }
 
 // GetCloudFormationStackConfig returns config for aws_cloudformation_stack
 func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 	cf := CloudFormationStackConfig{
-		Config: Config{
-			Tags: s.Tags,
-		},
+		Config:           Config{Tags: s.Tags},
+		TemplateURL:      "",
+		NotificationARNs: nil,
+		TemplateData:     []byte{},
 	}
+
 	if len(s.NotificationARNs) > 0 {
 		cf.NotificationARNs = s.NotificationARNs
 	}
+
+	// Add and resolve template URL
 	if len(s.TemplateURL) > 0 {
 		cf.TemplateURL = s.TemplateURL
+
+		templateData, err := fn.DownloadBucketObj(s.TemplateURL)
+		if err == nil {
+			cf.TemplateData = templateData
+		}
 	}
+
+	// Add Parameters for propogation to the nested Stack
+	if s.Parameters != nil {
+		cf.Parameters = s.Parameters
+	}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: s.AWSCloudFormationMetadata,

@@ -9,8 +9,12 @@ replace (
 )
 
 require (
-	github.com/BurntSushi/toml v0.4.0 // indirect
+	github.com/BurntSushi/toml v0.4.1 // indirect
 	github.com/VerbalExpressions/GoVerbalExpressions v0.0.0-20200410162751-4d76a1099a6e
+	github.com/aws/aws-sdk-go-v2/config v1.5.0
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.3.2
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
+	github.com/aws/smithy-go v1.6.0
 	github.com/awslabs/goformation/v4 v4.19.1
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-errors/errors v1.0.1
