@@ -12,7 +12,7 @@ var (
 )
 
 // LoadIacFile is not supported for kustomize. Only loading directories that have kustomization.y(a)ml file are supported
-func (k *KustomizeV3) LoadIacFile(absRootPath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (k *KustomizeV3) LoadIacFile(absRootPath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	zap.S().Error(errLoadIacFileNotSupported)
 	return make(map[string][]output.ResourceConfig), errLoadIacFileNotSupported
 }

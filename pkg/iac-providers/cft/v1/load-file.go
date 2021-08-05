@@ -32,7 +32,7 @@ import (
 
 // LoadIacFile loads the specified CFT template file.
 // Note that a single CFT template json file may contain multiple resource definitions.
-func (a *CFTV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	fileData, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
 		zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", absFilePath))

@@ -38,6 +38,7 @@ func TestLoadIacFile(t *testing.T) {
 	table := []struct {
 		name     string
 		filePath string
+		options  map[string]interface{}
 		tfplan   TFPlan
 		want     output.AllResourceConfigs
 		wantErr  error
@@ -70,13 +71,13 @@ func TestLoadIacFile(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfplan.LoadIacFile(tt.filePath)
+			_, gotErr := tt.tfplan.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
 	}
-
+	options := make(map[string]interface{})
 	t.Run("validate tfplan iac output", func(t *testing.T) {
 		var (
 			tfplan             = TFPlan{}
@@ -85,7 +86,7 @@ func TestLoadIacFile(t *testing.T) {
 			wantErr      error = nil
 		)
 
-		got, err := tfplan.LoadIacFile(tfplanFile)
+		got, err := tfplan.LoadIacFile(tfplanFile, options)
 		if !reflect.DeepEqual(err, wantErr) {
 			t.Errorf("error want: '%v', got: '%v'", wantErr, err)
 		}

@@ -1,0 +1,15 @@
+{
+    "Modules": [
+        {
+            "Key": "",
+            "Source": "",
+            "Dir": "."
+        },
+        {
+            "Key": "network",
+            "Source": "Azure/network/azurerm",
+            "Version": "3.2.1",
+            "Dir": ".terraform/modules/network"
+        }
+    ]
+}

@@ -25,7 +25,7 @@ func (*K8sV1) getFileType(file string) string {
 }
 
 // LoadIacDir loads all k8s files in the current directory
-func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
 	k.absRootDir = absRootDir
 
@@ -42,7 +42,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 			file := filepath.Join(fileDir, *files[i])
 
 			var configData output.AllResourceConfigs
-			if configData, err = k.LoadIacFile(file); err != nil {
+			if configData, err = k.LoadIacFile(file, options); err != nil {
 				errMsg := fmt.Sprintf("error while loading iac file '%s'. err: %v", file, err)
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
 				k.errIacLoadDirs = multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: fileDir, ErrMessage: errMsg})

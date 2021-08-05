@@ -12,7 +12,7 @@ import (
 
 // LoadIacFile loads the k8s file specified
 // Note that a single k8s yaml file may contain multiple resource definitions
-func (k *K8sV1) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (k *K8sV1) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 
 	var iacDocuments []*utils.IacDocument

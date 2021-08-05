@@ -26,6 +26,7 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"go.uber.org/zap"
 )
 
 // test data
@@ -47,9 +48,10 @@ func TestProcessLocalSource(t *testing.T) {
 		req *hclConfigs.ModuleRequest
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name    string
+		args    args
+		want    string
+		options map[string]interface{}
 	}{
 		{
 			name: "no remote module",
@@ -61,7 +63,7 @@ func TestProcessLocalSource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := NewTerraformDirectoryLoader("", false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			if got := dl.processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
@@ -83,6 +85,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 		args    args
 		want    string
 		wantErr bool
+		options map[string]interface{}
 	}{
 		{
 			name: "invalid registry host",
@@ -112,7 +115,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			dl := NewTerraformDirectoryLoader("", false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			got, err := dl.processTerraformRegistrySource(tt.args.req, tt.args.tempDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
@@ -252,6 +255,71 @@ func TestGetConfigSource(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("GetConfigSource() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
+	absRootDir, err := filepath.Abs(filepath.Dir(filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")))
+	if err != nil {
+		zap.S().Error("error finding working directory", err)
+	}
+	terraformInitRegs := filepath.Join(absRootDir, terraformModuleInstallDir, "network")
+	type fields struct {
+		Cache map[string]TerraformModuleManifest
+	}
+	type args struct {
+		req *hclConfigs.ModuleRequest
+	}
+	tests := []struct {
+		name         string
+		fields       fields
+		args         args
+		wantSrc      string
+		wantDestpath string
+	}{
+		{
+			name: "module present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurerm",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "Azure/network/azurerm",
+			wantDestpath: terraformInitRegs,
+		},
+		{
+			name: "module not present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurermtest",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "",
+			wantDestpath: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tr := &TerraformDirectoryLoader{
+				absRootDir:               absRootDir,
+				terraformInitModuleCache: tt.fields.Cache,
+			}
+			gotSrc, gotDestpath := tr.GetRemoteModuleIfPresentInTerraformSrc(tt.args.req)
+			if gotSrc != tt.wantSrc {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotSrc = %v, want %v", gotSrc, tt.wantSrc)
+			}
+			if gotDestpath != tt.wantDestpath {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotDestpath = %v, want %v", gotDestpath, tt.wantDestpath)
 			}
 		})
 	}

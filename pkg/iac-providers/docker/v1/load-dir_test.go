@@ -41,6 +41,7 @@ func TestLoadIacDir(t *testing.T) {
 	tests := []struct {
 		name     string
 		dirPath  string
+		options  map[string]interface{}
 		dockerV1 DockerV1
 		want     output.AllResourceConfigs
 		wantErr  error
@@ -94,7 +95,7 @@ func TestLoadIacDir(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			got, gotErr := tt.dockerV1.LoadIacDir(tt.dirPath, false)
+			got, gotErr := tt.dockerV1.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

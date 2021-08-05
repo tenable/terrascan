@@ -27,6 +27,7 @@ func TestLoadIacDir(t *testing.T) {
 		want          output.AllResourceConfigs
 		wantErr       error
 		resourceCount int
+		options       map[string]interface{}
 	}{
 		{
 			name:          "invalid dirPath",
@@ -90,7 +91,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			resourceMap, gotErr := tt.kustomize.LoadIacDir(tt.dirPath, false)
+			resourceMap, gotErr := tt.kustomize.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -123,6 +124,7 @@ func TestLoadKustomize(t *testing.T) {
 		want        output.AllResourceConfigs
 		wantErr     error
 		checkPrefix bool
+		options     map[string]interface{}
 	}{
 		{
 			name:     "simple-deployment",

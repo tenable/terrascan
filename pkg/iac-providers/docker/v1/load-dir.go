@@ -28,7 +28,7 @@ import (
 )
 
 // LoadIacDir loads the docker file specified in given folder.
-func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
 	dc.absRootDir = absRootDir
 
@@ -49,7 +49,7 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.All
 		for i := range files {
 			file := filepath.Join(fileDir, *files[i])
 			var configData output.AllResourceConfigs
-			if configData, err = dc.LoadIacFile(file); err != nil {
+			if configData, err = dc.LoadIacFile(file, options); err != nil {
 				errMsg := fmt.Sprintf("error while parsing file %s", file)
 				zap.S().Errorf("error while searching for iac files", zap.String("root dir", absRootDir), errMsg)
 				dc.errIacLoadDirs = multierror.Append(dc.errIacLoadDirs, results.DirScanErr{IacType: "docker", Directory: absRootDir, ErrMessage: errMsg})

@@ -17,8 +17,9 @@
 package runtime
 
 import (
-	"github.com/accurics/terrascan/pkg/policy/opa"
 	"sort"
+
+	"github.com/accurics/terrascan/pkg/policy/opa"
 
 	"go.uber.org/zap"
 
@@ -30,35 +31,42 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
+const (
+	useTerraformCache = "useTerraformCache"
+	nonRecursive      = "nonRecursive"
+)
+
 // Executor object
 type Executor struct {
-	filePath      string
-	dirPath       string
-	policyPath    []string
-	iacType       string
-	iacVersion    string
-	scanRules     []string
-	skipRules     []string
-	iacProviders  []iacProvider.IacProvider
-	policyEngines []policy.Engine
-	notifiers     []notifications.Notifier
-	categories    []string
-	policyTypes   []string
-	severity      string
-	nonRecursive  bool
+	filePath          string
+	dirPath           string
+	policyPath        []string
+	iacType           string
+	iacVersion        string
+	scanRules         []string
+	skipRules         []string
+	iacProviders      []iacProvider.IacProvider
+	policyEngines     []policy.Engine
+	notifiers         []notifications.Notifier
+	categories        []string
+	policyTypes       []string
+	severity          string
+	nonRecursive      bool
+	useTerraformCache bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache bool) (e *Executor, err error) {
 	e = &Executor{
-		filePath:     filePath,
-		dirPath:      dirPath,
-		policyPath:   policyPath,
-		policyTypes:  policyTypes,
-		iacType:      iacType,
-		iacVersion:   iacVersion,
-		iacProviders: make([]iacProvider.IacProvider, 0),
-		nonRecursive: nonRecursive,
+		filePath:          filePath,
+		dirPath:           dirPath,
+		policyPath:        policyPath,
+		policyTypes:       policyTypes,
+		iacType:           iacType,
+		iacVersion:        iacVersion,
+		iacProviders:      make([]iacProvider.IacProvider, 0),
+		nonRecursive:      nonRecursive,
+		useTerraformCache: useTerraformCache,
 	}
 
 	// read config file and update scan and skip rules
@@ -159,6 +167,7 @@ func (e *Executor) initPolicyEngines() (err error) {
 		// initialize the engine
 		if err := engine.Init(policyPath, preloadFilter); err != nil {
 			zap.S().Errorf("failed to initialize policy engine for path %s, error: %s", policyPath, err)
+			zap.S().Error("perform 'terrascan init' command and then try running the scan command again")
 			return err
 		}
 		e.policyEngines = append(e.policyEngines, engine)
@@ -178,9 +187,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		// get all resource configs in the directory
 		resourceConfig, merr = e.getResourceConfigs()
 	} else {
+		options := e.buildOptions()
 		// create results output from Iac provider
 		// iac providers will contain one element
-		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath)
+		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath, options)
 		if err != nil {
 			return results, err
 		}
@@ -242,10 +252,11 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	// channel for directory scan response
 	scanRespChan := make(chan dirScanResp)
 
+	options := e.buildOptions()
 	// create results output from Iac provider[s]
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
-			rc, err := ip.LoadIacDir(e.dirPath, e.nonRecursive)
+			rc, err := ip.LoadIacDir(e.dirPath, options)
 			scanRespChan <- dirScanResp{err, rc}
 		}(iacP)
 	}
@@ -312,4 +323,12 @@ func implementsSubFolderScan(iacType string, nonRecursive bool) bool {
 		}
 	}
 	return false
+}
+
+// buildOptions builds map of scan options from executors config
+func (e *Executor) buildOptions() map[string]interface{} {
+	options := make(map[string]interface{})
+	options[useTerraformCache] = e.useTerraformCache
+	options[nonRecursive] = e.nonRecursive
+	return options
 }
