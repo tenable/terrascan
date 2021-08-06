@@ -214,3 +214,62 @@ const SarifTemplateK8sTLSViolation = `{
   ]
 }
 `
+
+// SarifTemplateDockerPlatformFlagViolation string template
+const SarifTemplateDockerPlatformFlagViolation = `
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "terrascan",
+          "version": "%s",
+          "informationUri": "https://github.com/accurics/terrascan",
+          "rules": [
+            {
+              "id": "AC_DOCKER_0001",
+              "name": "docFilePlatformFlag",
+              "shortDescription": {
+                "text": "Ensure platform flag with FROM command is not used for Docker file"
+              },
+              "properties": {
+                "category": "Infrastructure Security",
+                "severity": "MEDIUM"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AC_DOCKER_0001",
+          "level": "warning",
+          "message": {
+            "text": "Ensure platform flag with FROM command is not used for Docker file"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "%s"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "Dockerfile",
+                  "kind": "docker_from"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+`

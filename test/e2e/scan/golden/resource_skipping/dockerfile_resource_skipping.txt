@@ -1,0 +1,28 @@
+{
+  "results": {
+    "violations": null,
+    "skipped_violations": [
+      {
+        "rule_name": "docFilePlatformFlag",
+        "description": "Ensure platform flag with FROM command is not used for Docker file",
+        "rule_id": "AC_DOCKER_0001",
+        "severity": "MEDIUM",
+        "category": "Infrastructure Security",
+        "resource_name": "Dockerfile",
+        "resource_type": "docker_from",
+        "file": "Dockerfile",
+        "line": 1
+      }
+    ],
+    "scan_summary": {
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/resource_skipping/docker",
+      "iac_type": "docker",
+      "scanned_at": "2021-08-06 10:32:56.961838 +0000 UTC",
+      "policies_validated": 9,
+      "violated_policies": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0
+    }
+  }
+}
