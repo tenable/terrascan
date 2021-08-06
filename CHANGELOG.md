@@ -35,8 +35,6 @@
 - Update mkdocs-material to 7.2.0 [\#939](https://github.com/accurics/terrascan/pull/939) ([pyup-bot](https://github.com/pyup-bot))
 - Dockerfile support  [\#849](https://github.com/accurics/terrascan/pull/849) ([Rchanger](https://github.com/Rchanger))
 
-# Changelog
-
 ## [v1.8.1](https://github.com/accurics/terrascan/tree/v1.8.1) (2021-07-22)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.8.0...v1.8.1)
