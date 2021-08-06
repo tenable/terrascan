@@ -3,6 +3,7 @@ module github.com/accurics/terrascan
 go 1.16
 
 replace (
+	github.com/tencentcloud/tencentcloud-sdk-go v3.0.82+incompatible => github.com/tencentcloud/tencentcloud-sdk-go v1.0.191
 	k8s.io/api => k8s.io/api v0.19.0
 	k8s.io/apimachinery => k8s.io/apimachinery v0.19.0
 	k8s.io/client-go => k8s.io/client-go v0.19.0
