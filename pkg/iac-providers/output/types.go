@@ -38,8 +38,8 @@ type ResourceConfig struct {
 	SkipRules           []SkipRule              `json:"skip_rules" yaml:"skip_rules"`
 	MaxSeverity         string                  `json:"max_severity"`
 	MinSeverity         string                  `json:"min_severity"`
-	ContainerImages     []ContainerNameAndImage `json:"container_images"`
-	InitContainerImages []ContainerNameAndImage `json:"init_container_images"`
+	ContainerImages     []ContainerNameAndImage `json:"container_images,omitempty"`
+	InitContainerImages []ContainerNameAndImage `json:"init_container_images,omitempty"`
 }
 
 // ContainerNameAndImage container name and image

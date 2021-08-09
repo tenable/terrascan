@@ -21,9 +21,7 @@ const (
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ]
 }`

@@ -30,9 +30,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     },
     {
       "id": "aws_s3_bucket.demo-s3",
@@ -64,9 +62,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ]
 }

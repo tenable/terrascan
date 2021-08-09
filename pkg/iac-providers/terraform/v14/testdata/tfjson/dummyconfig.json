@@ -18,9 +18,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ],
   "type1": [
@@ -49,9 +47,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ],
   "type2": [
@@ -76,9 +72,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ],
   "type3": [
@@ -97,9 +91,7 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": "",
-      "container_images": null,
-      "init_container_images": null
+      "min_severity": ""
     }
   ]
 }

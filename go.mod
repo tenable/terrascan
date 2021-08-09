@@ -47,8 +47,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.8.3
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
-	golang.org/x/tools v0.1.4 // indirect
+	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069
+	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0

@@ -1,11 +1,28 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package k8sv1
 
 import (
+	"reflect"
+	"testing"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1/testdata"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
-	"reflect"
-	"testing"
 )
 
 func TestK8sV1ExtractContainerImages(t *testing.T) {
@@ -133,6 +150,18 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				{Name: "init2", Image: "init-image-2"},
 				{Name: "init3", Image: "init-image-3"}},
 		},
+		{
+			name: "statefulSet yaml document object",
+			args: args{
+				doc: &utils.IacDocument{
+					Type: "yaml",
+					Data: testdata.StatefulSetTemplate,
+				},
+				kind: "StatefulSet",
+			},
+			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "nginx", Image: "k8s.gcr.io/nginx-slim:0.8"}},
+			wantInitContainerImageList: []output.ContainerNameAndImage{},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -146,7 +175,7 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				t.Errorf("K8sV1.extractResource() got = %v, want %v", gotContainerImageList, tt.wantContainerImageList)
 			}
 			if !reflect.DeepEqual(gotInitContainerImageList, tt.wantInitContainerImageList) {
-				t.Errorf("K8sV1.extractResource() got = %v, want %v", gotInitContainerImageList, tt.wantInitContainerImageList)
+				t.Errorf("K8sV1.extractResource() got InitContainerImageList = %v, want %v", gotInitContainerImageList, tt.wantInitContainerImageList)
 			}
 		})
 	}

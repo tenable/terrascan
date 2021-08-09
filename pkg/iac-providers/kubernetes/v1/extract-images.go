@@ -1,7 +1,24 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package k8sv1
 
 import (
 	"encoding/json"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
@@ -41,12 +58,9 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range pod.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range pod.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(pod.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(pod.Spec.InitContainers)...)
+
 	case "Deployment":
 		deployment := k8sappsv1.Deployment{}
 		err = json.Unmarshal(data, &deployment)
@@ -55,12 +69,9 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range deployment.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range deployment.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(deployment.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(deployment.Spec.Template.Spec.InitContainers)...)
+
 	case "ReplicationController":
 		rc := k8scorev1.ReplicationController{}
 		err = json.Unmarshal(data, &rc)
@@ -69,12 +80,9 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range rc.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range rc.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(rc.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(rc.Spec.Template.Spec.InitContainers)...)
+
 	case "Job":
 		job := k8sbatchv1.Job{}
 		err = json.Unmarshal(data, &job)
@@ -83,12 +91,9 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range job.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range job.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(job.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(job.Spec.Template.Spec.InitContainers)...)
+
 	case "CronJob":
 		cronjob := k8sbatchv1beta1.CronJob{}
 		err = json.Unmarshal(data, &cronjob)
@@ -97,12 +102,8 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range cronjob.Spec.JobTemplate.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range cronjob.Spec.JobTemplate.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(cronjob.Spec.JobTemplate.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(cronjob.Spec.JobTemplate.Spec.Template.Spec.InitContainers)...)
 	case "StatefulSet":
 		ss := k8sappsv1.StatefulSet{}
 		err = json.Unmarshal(data, &ss)
@@ -111,12 +112,8 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range ss.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range ss.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(ss.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(ss.Spec.Template.Spec.InitContainers)...)
 	case "ReplicaSet":
 		rs := k8sappsv1.ReplicaSet{}
 		err = json.Unmarshal(data, &rs)
@@ -125,12 +122,8 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range rs.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range rs.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(rs.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(rs.Spec.Template.Spec.InitContainers)...)
 	case "DaemonSet":
 		ds := k8sappsv1.DaemonSet{}
 		err = json.Unmarshal(data, &ds)
@@ -139,14 +132,18 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		for _, container := range ds.Spec.Template.Spec.Containers {
-			containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
-		for _, container := range ds.Spec.Template.Spec.InitContainers {
-			initContainerImages = append(initContainerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
-		}
+		containerImages = append(containerImages, readContainers(ds.Spec.Template.Spec.Containers)...)
+		initContainerImages = append(initContainerImages, readContainers(ds.Spec.Template.Spec.InitContainers)...)
 	default:
 		zap.S().Debugf("the container image extraction for kubernetes workload of kind %s is not supported.", kind)
 	}
 	return containerImages, initContainerImages, nil
+}
+
+//readContainers prepares list of containers and init containers from k8scorev1.Container object
+func readContainers(containers []k8scorev1.Container) (containerImages []output.ContainerNameAndImage) {
+	for _, container := range containers {
+		containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
+	}
+	return
 }
