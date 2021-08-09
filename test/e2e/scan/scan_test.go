@@ -37,6 +37,7 @@ var (
 	iacRootRelPath       = filepath.Join("..", "test_data", "iac")
 	awsIacRelPath        = filepath.Join(iacRootRelPath, "aws")
 	k8sIacRelPath        = filepath.Join(iacRootRelPath, "k8s")
+	dockerIacRelPath     = filepath.Join(iacRootRelPath, "docker")
 	policyRootRelPath    = filepath.Join("..", "test_data", "policies")
 	outWriter, errWriter io.Writer
 )
