@@ -263,18 +263,11 @@ var _ = Describe("Scan command with rule filtering options", func() {
 		})
 
 		Context("resource skipping in docker files", func() {
-			oldIacDir := iacDir
-			JustBeforeEach(func() {
-				iacDir, err = filepath.Abs(filepath.Join(resourceSkipIacRelPath, "docker"))
-			})
-			JustAfterEach(func() {
-				iacDir = oldIacDir
-			})
-
+			iacScanDir := filepath.Join(resourceSkipIacRelPath, "docker")
 			// the iac file has only one resource with one violation, which is skipped.
 			// hence, the exit code is 0
 			It("should display skipped violations and exit with status code 0", func() {
-				scanArgs := []string{"-p", policyDir, "-d", iacDir, "-i", "docker", "-o", "json"}
+				scanArgs := []string{"-p", policyDir, "-d", iacScanDir, "-i", "docker", "-o", "json"}
 				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourceSkipGoldenRelPath, "dockerfile_resource_skipping.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})

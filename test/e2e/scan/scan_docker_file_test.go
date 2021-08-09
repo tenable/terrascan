@@ -19,7 +19,6 @@ package scan_test
 import (
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/version"
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -75,13 +74,10 @@ var _ = Describe("Scan is run for dockerfile directories and files", func() {
 				})
 			})
 
-			//TODO: verify this with sarif owner
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "docker", "-p", policyDir, "-d", iacDir, "-o", "sarif"}
-					path, _ := helper.GetAbsoluteFilePathForSarif(iacDir, "Dockerfile")
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateDockerPlatformFlagViolation, version.GetNumeric(), path)
-					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, filepath.Join(dockerGoldenRelPath, "dockerfile_platform_flag_sarif.txt"), helper.ExitCodeThree, outWriter, errWriter, scanArgs...)
 				})
 			})
 
@@ -151,9 +147,7 @@ var _ = Describe("Scan is run for dockerfile directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "docker", "-p", policyDir, "-f", iacFile, "-o", "sarif"}
-					path, _ := helper.GetAbsoluteFilePathForSarif(iacFile, "Dockerfile")
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateDockerPlatformFlagViolation, version.GetNumeric(), path)
-					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, filepath.Join(dockerGoldenRelPath, "dockerfile_platform_flag_sarif.txt"), helper.ExitCodeThree, outWriter, errWriter, scanArgs...)
 				})
 			})
 

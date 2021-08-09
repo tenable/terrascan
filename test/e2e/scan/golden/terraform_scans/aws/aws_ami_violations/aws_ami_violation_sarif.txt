@@ -10,13 +10,13 @@
           "informationUri": "https://github.com/accurics/terrascan",
           "rules": [
             {
-              "id": "AC_DOCKER_0001",
-              "name": "docFilePlatformFlag",
+              "id": "AC_AWS_0001",
+              "name": "amiNotEncrypted",
               "shortDescription": {
-                "text": "Ensure platform flag with FROM command is not used for Docker file"
+                "text": "Enable AWS AMI Encryption"
               },
               "properties": {
-                "category": "Infrastructure Security",
+                "category": "Encryption \u0026 KeyManagement",
                 "severity": "MEDIUM"
               }
             }
@@ -25,25 +25,25 @@
       },
       "results": [
         {
-          "ruleId": "AC_DOCKER_0001",
+          "ruleId": "AC_AWS_0001",
           "level": "warning",
           "message": {
-            "text": "Ensure platform flag with FROM command is not used for Docker file"
+            "text": "Enable AWS AMI Encryption"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/docker/dockerfile_with_platform_flag_violation/Dockerfile"
+                  "uri": "file:///Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation/main.tf"
                 },
                 "region": {
-                  "startLine": 1
+                  "startLine": 5
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "Dockerfile",
-                  "kind": "docker_from"
+                  "name": "awsAmiEncrypted",
+                  "kind": "aws_ami"
                 }
               ]
             }

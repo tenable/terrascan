@@ -10,14 +10,14 @@
           "informationUri": "https://github.com/accurics/terrascan",
           "rules": [
             {
-              "id": "AC_DOCKER_0001",
-              "name": "docFilePlatformFlag",
+              "id": "AC_K8S_0001",
+              "name": "noHttps",
               "shortDescription": {
-                "text": "Ensure platform flag with FROM command is not used for Docker file"
+                "text": "TLS disabled can affect the confidentiality of the data in transit"
               },
               "properties": {
-                "category": "Infrastructure Security",
-                "severity": "MEDIUM"
+                "category": "Network Security",
+                "severity": "HIGH"
               }
             }
           ]
@@ -25,16 +25,16 @@
       },
       "results": [
         {
-          "ruleId": "AC_DOCKER_0001",
-          "level": "warning",
+          "ruleId": "AC_K8S_0001",
+          "level": "error",
           "message": {
-            "text": "Ensure platform flag with FROM command is not used for Docker file"
+            "text": "TLS disabled can affect the confidentiality of the data in transit"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "file:///Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/docker/dockerfile_with_platform_flag_violation/Dockerfile"
+                  "uri": "file:///Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/k8s/kubernetes_ingress_violation/config.yaml"
                 },
                 "region": {
                   "startLine": 1
@@ -42,8 +42,8 @@
               },
               "logicalLocations": [
                 {
-                  "name": "Dockerfile",
-                  "kind": "docker_from"
+                  "name": "ingress-demo-disallowed",
+                  "kind": "kubernetes_ingress"
                 }
               ]
             }

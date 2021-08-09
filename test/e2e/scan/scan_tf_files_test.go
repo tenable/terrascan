@@ -19,8 +19,6 @@ package scan_test
 import (
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/version"
-
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -122,9 +120,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 			When("output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "sarif"}
-					path, _ := helper.GetAbsoluteFilePathForSarif(iacDir, "main.tf")
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateAWSAMIViolation, version.GetNumeric(), path)
-					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_sarif.txt"), helper.ExitCodeThree, outWriter, errWriter, scanArgs...)
 				})
 			})
 
