@@ -1,0 +1,17 @@
+{
+    "name": "runUsingDnfUpdate",
+    "file": "runUsingDnfUpdate.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "runUsingDnfUpdate"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure dnf Update is not used for Docker file",
+    "reference_id": "AC_DOCKER_0003",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0003",
+    "version": 1
+}

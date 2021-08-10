@@ -1,0 +1,17 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Resources" : {
+    "myStackWithParams" : {
+      "Type" : "AWS::CloudFormation::Stack",
+      "Properties" : {
+        "TemplateURL" : "https://s3.amazonaws.com/cloudformation-templates-us-east-1/S3_Bucket.template",
+        "Parameters" : {
+          "InstanceType" : "t1.micro",
+          "KeyName" : "mykey"
+        },
+        "NotificationARNs":[]
+      }
+    }
+  }
+}
+

@@ -31,6 +31,7 @@ func TestLoadIacFile(t *testing.T) {
 	table := []struct {
 		wantErr  error
 		want     output.AllResourceConfigs
+		options  map[string]interface{}
 		armv1    ARMV1
 		name     string
 		filePath string
@@ -58,7 +59,7 @@ func TestLoadIacFile(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.armv1.LoadIacFile(tt.filePath)
+			_, gotErr := tt.armv1.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {
@@ -72,6 +73,7 @@ func TestLinkedTemplateDownload(t *testing.T) {
 	table := []struct {
 		wantErr  error
 		want     output.AllResourceConfigs
+		options  map[string]interface{}
 		armv1    ARMV1
 		name     string
 		filePath string
@@ -113,7 +115,7 @@ func TestLinkedTemplateDownload(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			aRC, gotErr := tt.armv1.LoadIacFile(tt.filePath)
+			aRC, gotErr := tt.armv1.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {

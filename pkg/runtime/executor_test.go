@@ -18,14 +18,16 @@ package runtime
 
 import (
 	"fmt"
-	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"path/filepath"
 	"reflect"
 	"testing"
 
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
+
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
 	cftv1 "github.com/accurics/terrascan/pkg/iac-providers/cft/v1"
+	dockerv1 "github.com/accurics/terrascan/pkg/iac-providers/docker/v1"
 	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
 	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
@@ -57,11 +59,11 @@ type MockIacProvider struct {
 	err    error
 }
 
-func (m MockIacProvider) LoadIacDir(dir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacDir(dir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 
-func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 
@@ -260,7 +262,7 @@ func TestInit(t *testing.T) {
 				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv15.TfV15{}},
+			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &dockerv1.DockerV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv15.TfV15{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -555,7 +557,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

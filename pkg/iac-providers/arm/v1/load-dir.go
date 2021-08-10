@@ -35,7 +35,7 @@ import (
 const iacFile = "IAC file"
 
 // LoadIacDir loads all ARM template files in the current directory.
-func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
 	a.absRootDir = absRootDir
 
@@ -62,7 +62,7 @@ func (a *ARMV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 			a.tryGetParameters(*files[i], fileDir, files)
 
 			var configData output.AllResourceConfigs
-			if configData, err = a.LoadIacFile(file); err != nil {
+			if configData, err = a.LoadIacFile(file, options); err != nil {
 				errMsg := fmt.Sprintf("error while loading iac file '%s'. err: %v", file, err)
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
 				a.errIacLoadDirs = multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: fileDir, ErrMessage: errMsg})

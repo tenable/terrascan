@@ -82,19 +82,21 @@ References to other resources during the destroy phase can cause dependency cycl
 	}
 
 	table := []struct {
-		name         string
-		dirPath      string
-		tfv12        TfV12
-		want         output.AllResourceConfigs
-		nonRecursive bool
-		wantErr      error
+		name    string
+		dirPath string
+		tfv12   TfV12
+		want    output.AllResourceConfigs
+		wantErr error
+		options map[string]interface{}
 	}{
 		{
-			name:         "invalid dirPath",
-			dirPath:      testDirPath1,
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
+			name:    "invalid dirPath",
+			dirPath: testDirPath1,
+			tfv12:   TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath1)),
 		},
 		{
 			name:    "invalid dirPath recursive",
@@ -103,11 +105,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			wantErr: multierror.Append(pathErr),
 		},
 		{
-			name:         "empty config",
-			dirPath:      testDirPath2,
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
+			name:    "empty config",
+			dirPath: testDirPath2,
+			tfv12:   TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(invalidDirErrStringTemplate, testDirPath2)),
 		},
 		{
 			name:    "empty config recursive",
@@ -116,11 +120,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			wantErr: nilMultiErr,
 		},
 		{
-			name:         "incorrect module structure",
-			dirPath:      filepath.Join(testDataDir, "invalid-moduleconfigs"),
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
+			name:    "incorrect module structure",
+			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
+			tfv12:   TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
 		},
 		{
 			name:    "incorrect module structure recursive",
@@ -130,11 +136,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)),
 		},
 		{
-			name:         "load invalid config dir",
-			dirPath:      testDataDir,
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(testErrorString1)),
+			name:    "load invalid config dir",
+			dirPath: testDataDir,
+			tfv12:   TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(testErrorString1)),
 		},
 		{
 			name:    "load invalid config dir recursive",
@@ -154,11 +162,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			),
 		},
 		{
-			name:         "load multiple provider config dir",
-			dirPath:      multipleProvidersDir,
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      multierror.Append(fmt.Errorf(testErrorString2)),
+			name:    "load multiple provider config dir",
+			dirPath: multipleProvidersDir,
+			tfv12:   TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf(testErrorString2)),
 		},
 		{
 			name:    "load multiple provider config dir recursive",
@@ -176,7 +186,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath, tt.nonRecursive)
+			_, gotErr := tt.tfv12.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -195,20 +205,22 @@ References to other resources during the destroy phase can cause dependency cycl
 	nestedModuleErr2 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules"))
 
 	table2 := []struct {
-		name         string
-		tfConfigDir  string
-		tfJSONFile   string
-		tfv12        TfV12
-		nonRecursive bool
-		wantErr      error
+		name        string
+		tfConfigDir string
+		tfJSONFile  string
+		tfv12       TfV12
+		options     map[string]interface{}
+		wantErr     error
 	}{
 		{
-			name:         "config1",
-			tfConfigDir:  filepath.Join(testDataDir, "tfconfigs"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "fullconfig.json"),
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "config1",
+			tfConfigDir: filepath.Join(testDataDir, "tfconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "fullconfig.json"),
+			tfv12:       TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "config1 recursive",
@@ -219,12 +231,14 @@ References to other resources during the destroy phase can cause dependency cycl
 			wantErr:    nilMultiErr,
 		},
 		{
-			name:         "module directory",
-			tfConfigDir:  filepath.Join(testDataDir, "moduleconfigs"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "moduleconfigs.json"),
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "module directory",
+			tfConfigDir: filepath.Join(testDataDir, "moduleconfigs"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "moduleconfigs.json"),
+			tfv12:       TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "module directory recursive",
@@ -235,12 +249,14 @@ References to other resources during the destroy phase can cause dependency cycl
 			wantErr:    nilMultiErr,
 		},
 		{
-			name:         "nested module directory",
-			tfConfigDir:  filepath.Join(testDataDir, "deep-modules"),
-			tfJSONFile:   filepath.Join(tfJSONDir, "deep-modules.json"),
-			tfv12:        TfV12{},
-			nonRecursive: true,
-			wantErr:      nilMultiErr,
+			name:        "nested module directory",
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
+			tfv12:       TfV12{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: nilMultiErr,
 		},
 		{
 			name:        "variables of list type",
@@ -260,7 +276,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir, tt.nonRecursive)
+			got, gotErr := tt.tfv12.LoadIacDir(tt.tfConfigDir, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)

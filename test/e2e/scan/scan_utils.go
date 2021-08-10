@@ -17,7 +17,6 @@
 package scan
 
 import (
-	"fmt"
 	"io"
 	"path/filepath"
 
@@ -95,122 +94,9 @@ func RunScanCommand(terrascanBinaryPath, relGoldenFilePath string, exitCode int,
 	return session, goldenFileAbsPath
 }
 
-// GetSarifGoldenString gives out golden sarif format string
-func GetSarifGoldenString(template, terrascanVersion string, absfilepath string) string {
-	return fmt.Sprintf(template, terrascanVersion, fmt.Sprintf("file://%s", absfilepath))
+// RunScanAndAssertGoldenSarifOutputRegex runs the scan command with supplied paramters and compares actual and golden output
+// it replaces variable parts in output with regex eg: uri, version path
+func RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, relGoldenFilePath string, exitCode int, outWriter, errWriter io.Writer, args ...string) {
+	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
+	helper.CompareActualSarifOutputWithGoldenSummaryRegex(session, goldenFileAbsPath)
 }
-
-// SarifTemplateAWSAMIViolation string
-const SarifTemplateAWSAMIViolation = `{
-  "version": "2.1.0",
-  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
-  "runs": [
-    {
-      "tool": {
-        "driver": {
-          "name": "terrascan",
-          "version": "%s",
-          "informationUri": "https://github.com/accurics/terrascan",
-          "rules": [
-            {
-              "id": "AC_AWS_0001",
-              "name": "amiNotEncrypted",
-              "shortDescription": {
-                "text": "Enable AWS AMI Encryption"
-              },
-              "properties": {
-                "category": "Encryption \u0026 KeyManagement",
-                "severity": "MEDIUM"
-              }
-            }
-          ]
-        }
-      },
-      "results": [
-        {
-          "ruleId": "AC_AWS_0001",
-          "level": "warning",
-          "message": {
-            "text": "Enable AWS AMI Encryption"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "%s"
-                },
-                "region": {
-                  "startLine": 5
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "awsAmiEncrypted",
-                  "kind": "aws_ami"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}`
-
-// SarifTemplateK8sTLSViolation string template
-const SarifTemplateK8sTLSViolation = `{
-  "version": "2.1.0",
-  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
-  "runs": [
-    {
-      "tool": {
-        "driver": {
-          "name": "terrascan",
-          "version": "%s",
-          "informationUri": "https://github.com/accurics/terrascan",
-          "rules": [
-            {
-              "id": "AC_K8S_0001",
-              "name": "noHttps",
-              "shortDescription": {
-                "text": "TLS disabled can affect the confidentiality of the data in transit"
-              },
-              "properties": {
-                "category": "Network Security",
-                "severity": "HIGH"
-              }
-            }
-          ]
-        }
-      },
-      "results": [
-        {
-          "ruleId": "AC_K8S_0001",
-          "level": "error",
-          "message": {
-            "text": "TLS disabled can affect the confidentiality of the data in transit"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "%s"
-                },
-                "region": {
-                  "startLine": 1
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "ingress-demo-disallowed",
-                  "kind": "kubernetes_ingress"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-`

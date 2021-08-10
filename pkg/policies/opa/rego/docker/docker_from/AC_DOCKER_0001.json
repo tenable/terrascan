@@ -1,0 +1,17 @@
+{
+    "name": "docFilePlatformFlag",
+    "file": "docFilePlatformFlag.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_from",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "docFilePlatformFlag"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure platform flag with FROM command is not used for Docker file",
+    "reference_id": "AC_DOCKER_0001",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0001",
+    "version": 1
+}

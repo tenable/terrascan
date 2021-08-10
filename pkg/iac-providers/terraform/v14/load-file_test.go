@@ -47,6 +47,7 @@ func TestLoadIacFile(t *testing.T) {
 		name     string
 		filePath string
 		tfv14    TfV14
+		options  map[string]interface{}
 		want     output.AllResourceConfigs
 		wantErr  error
 	}{
@@ -91,7 +92,7 @@ func TestLoadIacFile(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv14.LoadIacFile(tt.filePath)
+			_, gotErr := tt.tfv14.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -102,6 +103,7 @@ func TestLoadIacFile(t *testing.T) {
 		name         string
 		tfConfigFile string
 		tfJSONFile   string
+		options      map[string]interface{}
 		tfv14        TfV14
 		wantErr      error
 	}{
@@ -123,7 +125,7 @@ func TestLoadIacFile(t *testing.T) {
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv14.LoadIacFile(tt.tfConfigFile)
+			got, gotErr := tt.tfv14.LoadIacFile(tt.tfConfigFile, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}

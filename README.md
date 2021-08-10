@@ -11,10 +11,10 @@
 
 ## Introduction
 
-Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow you to:
+Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows you to:
 
-- seamlessly scan infrastructure as code for misconfigurations
-- monitor provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
+- Seamlessly scan infrastructure as code for misconfigurations.
+- Monitor provisioned cloud infrastructure for configuration changes that introduce posture drift, and enables reverting to a secure posture.
 - Detect security vulnerabilities and compliance violations.
 - Mitigate risks before provisioning cloud native infrastructure.
 - Offers flexibility to run locally or integrate with your CI\CD.
@@ -22,14 +22,14 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow 
 ### Resources
 
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
-* Discuss: https://community.accurics.com
-* Join The Terrascan Community on Discord : https://discord.gg/DFwXEfbjzt 
+* Join The Terrascan Community on Discord : https://discord.gg/DFwXEfbjzt
 
 ## Key features
 * 500+ Policies for security best practices
 * Scanning of Terraform (HCL2)
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
-* Support for AWS, Azure, GCP, Kubernetes and GitHub
+* Scanning of Dockerfiles
+* Support for AWS, Azure, GCP, Kubernetes, Dockerfiles, and GitHub
 
 ## Quick Start
 
@@ -38,8 +38,8 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allow 
 3. [Integrate](#integrate)
 
 ### Step 1: Install
-Terrascan's supports multiple ways to install and is also available as a Docker image.
-See Terrascan's [releases](https://github.com/accurics/terrascan/releases) page for latest version of builds in all supported platforms. Select the correct binary for your platform.
+Terrascan supports multiple ways to install and is also available as a Docker image.
+See Terrascan's [releases](https://github.com/accurics/terrascan/releases) page for the latest version of builds in all supported platforms. Select the correct binary for your platform.
 
 #### Install as a native executable
 
@@ -81,7 +81,7 @@ Terrascan can be integrated into CI/CD pipelines to enforce security best practi
 Please refer to our [documentation to integrate with your pipeline](https://runterrascan.io/docs/integrations/).
 
 ## Terrascan Commands
-You can use terrascan command with the following options:
+You can use the `terrascan` command with the following options:
 
 ```sh
 $ terrascan
@@ -109,13 +109,13 @@ Use "terrascan [command] --help" for more information about a command.
 
 ## Policies
 Terrascan policies are written using the [Rego policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). Every rego includes a JSON "rule" file which defines metadata for the policy.
-By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://runterrascan.io/docs/usage/command_line_mode/) for information about the Initialization process.
+By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However, if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://runterrascan.io/docs/usage/command_line_mode/) for information about the Initialization process.
 
-Note: The scan command will implicitly run the initialization process there are no policies found.
+Note: The scan command will implicitly run the initialization process if there are no policies found.
 
 ## Customizing scans
 
-By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources. 
+By default, Terrascan scans your entire configuration against all policies. However, Terrascan supports granular configuration of policies and resources.
 
 Read more about [in-file instrumentation](https://runterrascan.io/docs/usage/in-file_instrumentation/) and [the config file](https://runterrascan.io/docs/usage/config_options/) on our documentation site.
 
@@ -173,7 +173,7 @@ RUN git clone https://github.com/accurics/terrascan && cd terrascan \
 ```
 
 ## Developing Terrascan
-To learn more about developing and contributing to Terrascan refer to the [contributing guide](CONTRIBUTING.md).
+To learn more about developing and contributing to Terrascan, refer to the [contributing guide](CONTRIBUTING.md).
 
 ## Code of Conduct
 We believe having an open and inclusive community benefits all of us. Please note that this project is released with a [Contributor Code of Conduct](code_of_conduct.md). By participating in this project you agree to abide by its terms.

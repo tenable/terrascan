@@ -1,0 +1,17 @@
+{
+    "name": "yumInstallAllowInput",
+    "file": "yumInstallAllowInput.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "yumInstallAllowInput"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure yum install allow manual input with RUN command for Docker file",
+    "reference_id": "AC_DOCKER_0004",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0004",
+    "version": 1
+}

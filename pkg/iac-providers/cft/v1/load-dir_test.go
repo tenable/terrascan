@@ -64,6 +64,7 @@ func TestLoadIacDir(t *testing.T) {
 		cftv1   CFTV1
 		name    string
 		dirPath string
+		options map[string]interface{}
 	}{
 		{
 			name:    "empty config",
@@ -95,7 +96,7 @@ func TestLoadIacDir(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.cftv1.LoadIacDir(tt.dirPath, false)
+			_, gotErr := tt.cftv1.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
@@ -117,12 +118,12 @@ func TestCFTMapper(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	options := make(map[string]interface{})
 	cftv1 := CFTV1{}
 	for _, dir := range dirList {
 		resourceDir := filepath.Join(root, dir.Name())
 		t.Run(resourceDir, func(t *testing.T) {
-			allResourceConfigs, gotErr := cftv1.LoadIacDir(resourceDir, false)
+			allResourceConfigs, gotErr := cftv1.LoadIacDir(resourceDir, options)
 
 			// load expected output.json from test artifacts
 			var testArc output.AllResourceConfigs
