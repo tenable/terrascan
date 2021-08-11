@@ -11,6 +11,8 @@ WORKDIR $GOPATH/src/terrascan
 COPY go.mod go.sum ./
 RUN go mod download
 RUN apk add -U build-base
+RUN apk add --no-cache curl 
+
 
 # copy terrascan source
 COPY . .
@@ -27,6 +29,7 @@ RUN addgroup --gid 101 terrascan && \
     adduser -S --uid 101 --ingroup terrascan terrascan && \
     apk add --no-cache git openssh
 
+
 # create ~/.ssh & ~/bin folder and change owner to terrascan
 RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin && \
     chown -R terrascan:terrascan /home/terrascan
@@ -39,6 +42,9 @@ ENV PATH /go/bin:$PATH
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
+#
+RUN chmod u+x /go/bin/argocd-terrascan-remote-scan.sh
+
 # Copy webhooks UI templates & assets
 COPY ./pkg/http-server/templates /go/terrascan
 COPY ./pkg/http-server/assets /go/terrascan/assets
@@ -47,3 +53,5 @@ EXPOSE 9010
 
 ENTRYPOINT ["/go/bin/terrascan"]
 CMD ["server", "--log-type", "json"]
+CMD ["sh"]
+FROM alpine:3.12.0
