@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"time"
 
 	"github.com/mitchellh/go-homedir"
 	admissionv1 "k8s.io/api/admissionregistration/v1"
@@ -169,4 +170,20 @@ func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, erro
 // DeleteService will delete the specified service name
 func (k *KubernetesClient) DeleteService(serviceName string) error {
 	return k.client.CoreV1().Services(namespace).Delete(context.TODO(), serviceName, metav1.DeleteOptions{})
+}
+
+// WaitForServiceAccount will wait for the default serviceaccount to get created
+func (k *KubernetesClient) WaitForServiceAccount(ctx context.Context) error {
+	for {
+		svcAcc, err := k.client.CoreV1().ServiceAccounts(namespace).List(ctx, metav1.ListOptions{})
+		if err != nil || ctx.Err() != nil {
+			return err
+		}
+		if len(svcAcc.Items) == 0 {
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		break
+	}
+	return nil
 }

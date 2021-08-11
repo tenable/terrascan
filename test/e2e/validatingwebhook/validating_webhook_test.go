@@ -17,6 +17,7 @@
 package validatingwebhook_test
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -90,9 +91,15 @@ var _ = Describe("ValidatingWebhook", func() {
 			Fail(errMessage)
 		}
 
-		// sleep added so that the default serviceaccount is get created
-		// this logic needs to be improved
-		time.Sleep(20 * time.Second)
+		// wait 1 minute max for the service account to get created
+		ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+		defer cancel()
+
+		err = kubeClient.WaitForServiceAccount(ctx)
+		if err != nil {
+			errMessage := fmt.Sprintf("service account for default namespace not created after 1 minute, error: %s", err.Error())
+			Fail(errMessage)
+		}
 	})
 
 	AfterSuite(func() {
