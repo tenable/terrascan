@@ -1,4 +1,3 @@
-
 # -------- builder stage -------- #
 FROM golang:alpine AS builder
 
