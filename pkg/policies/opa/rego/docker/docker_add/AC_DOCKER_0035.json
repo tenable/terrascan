@@ -1,0 +1,17 @@
+{
+    "name": "CurlWgetinsteadofAdd",
+    "file": "CurlWgetinsteadofAdd.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_add",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "CurlWgetinsteadofAdd"
+    },
+    "severity": "LOW",
+    "description": "Ensure use Curl or Wget instead of Add to fetch packages from remote URLs, because using Add is strongly discouraged",
+    "reference_id": "AC_DOCKER_0035",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0035",
+    "version": 1
+}
