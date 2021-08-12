@@ -42,6 +42,7 @@ ENV PATH /go/bin:$PATH
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
+RUN chmod u+x bin/terrascan-remote-scan.sh
 
 # Copy webhooks UI templates & assets
 COPY ./pkg/http-server/templates /go/terrascan
