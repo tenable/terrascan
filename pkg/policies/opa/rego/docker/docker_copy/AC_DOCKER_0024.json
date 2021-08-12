@@ -1,0 +1,17 @@
+{
+    "name": "chownFlagExists",
+    "file": "chownFlagExists.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_copy",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "chownFlagExists"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure not to use --chown flag when user only needs execution permission",
+    "reference_id": "AC_DOCKER_00024",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_00024",
+    "version": 1
+}
