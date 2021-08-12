@@ -17,6 +17,7 @@ RUN apk add --no-cache curl
 # copy terrascan source
 COPY . .
 
+
 # build binary
 RUN CGO_ENABLED=${CGO_ENABLED_VAL} GOOS=${GOOS_VAL} GOARCH=${GOARCH_VAL} go build -v -ldflags "-w -s" -o /go/bin/terrascan ./cmd/terrascan
 
@@ -34,6 +35,10 @@ RUN addgroup --gid 101 terrascan && \
 RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin && \
     chown -R terrascan:terrascan /home/terrascan
 
+COPY terrascan/integrations/argocd/scripts/argocd-terrascan-remote-scan.sh  /home/terrascan/bin/terrascan-remote-scan.sh
+
+RUN chmod u+x /home/terrascan/bin/terrascan-remote-scan.sh
+
 # run as non root user
 USER 101
 
@@ -42,7 +47,6 @@ ENV PATH /go/bin:$PATH
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
-RUN chmod u+x /home/terrascan/integrations/argocd/scripts/argocd-terrascan-remote-scan.sh
 
 # Copy webhooks UI templates & assets
 COPY ./pkg/http-server/templates /go/terrascan
