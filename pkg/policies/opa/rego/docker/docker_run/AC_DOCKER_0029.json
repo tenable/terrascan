@@ -1,0 +1,17 @@
+{
+    "name": "yumupdate",
+    "file": "yumupdate.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "yumupdate"
+    },
+    "severity": "HIGH",
+    "description": "Ensure Yum update is being used",
+    "reference_id": "AC_DOCKER_0029",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0029",
+    "version": 1
+}
