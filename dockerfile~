@@ -42,6 +42,8 @@ ENV PATH /go/bin:$PATH
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
+#
+RUN chmod u+x /go/bin/argocd-terrascan-remote-scan.sh
 
 # Copy webhooks UI templates & assets
 COPY ./pkg/http-server/templates /go/terrascan
@@ -50,4 +52,6 @@ COPY ./pkg/http-server/assets /go/terrascan/assets
 EXPOSE 9010
 
 ENTRYPOINT ["/go/bin/terrascan"]
-CMD ["server", "--log-type", "json", "sh"]
+CMD ["server", "--log-type", "json"]
+CMD ["sh"]
+FROM alpine:3.12.0
