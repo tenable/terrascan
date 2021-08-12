@@ -35,7 +35,7 @@ RUN addgroup --gid 101 terrascan && \
 RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin && \
     chown -R terrascan:terrascan /home/terrascan
 
-COPY /go/bin/terrascan/integrations/argocd/scripts/argocd-terrascan-remote-scan.sh  /home/terrascan/bin/terrascan-remote-scan.sh
+COPY integrations/argocd/scripts/argocd-terrascan-remote-scan.sh  /home/terrascan/bin/terrascan-remote-scan.sh
 
 RUN chmod u+x /home/terrascan/bin/terrascan-remote-scan.sh
 
