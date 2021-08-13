@@ -44,8 +44,9 @@ type ResourceConfig struct {
 
 // ContainerNameAndImage container name and image
 type ContainerNameAndImage struct {
-	Name  string `json:"name"`
-	Image string `json:"image"`
+	Name            string          `json:"name"`
+	Image           string          `json:"image"`
+	Vulnerabilities []Vulnerability `json:"vulnerabilities"`
 }
 
 // SkipRule struct will hold the skipped rule and any comment for the skipped rule

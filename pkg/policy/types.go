@@ -41,6 +41,7 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 	}
 	return results.ViolationStore{
 		Violations:        me.Violations,
+		Vulnerabilities:   me.Vulnerabilities,
 		SkippedViolations: me.SkippedViolations,
 		PassedRules:       me.PassedRules,
 		Summary:           me.Summary,

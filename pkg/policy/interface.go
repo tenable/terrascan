@@ -23,6 +23,7 @@ type Engine interface {
 	Configure() error
 	Evaluate(EngineInput, PreScanFilter) (EngineOutput, error)
 	GetResults() EngineOutput
+	ReportVulnerability(EngineInput) EngineOutput
 	Release() error
 }
 

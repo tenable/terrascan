@@ -20,6 +20,7 @@ import (
 	"sort"
 
 	"github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/accurics/terrascan/pkg/vulnerability"
 
 	"go.uber.org/zap"
 
@@ -219,6 +220,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		return results, err
 	}
 
+	results.ResourceConfig = vulnerability.FindVulnerabilities(results.ResourceConfig)
+
+	e.AddVulnerabilitiesToResult(&results)
+
 	resourcePath := e.filePath
 	if resourcePath == "" {
 		resourcePath = e.dirPath
@@ -305,6 +310,19 @@ func (e *Executor) findViolations(results *Output) error {
 
 	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 	return nil
+}
+
+// AddVulnerabilitiesToResult add vulnerability findings to output
+func (e *Executor) AddVulnerabilitiesToResult(results *Output) {
+	vulOutput := policy.EngineOutput{}
+	for _, engine := range e.policyEngines {
+		vulOutput = engine.ReportVulnerability(policy.EngineInput{InputData: &results.ResourceConfig})
+	}
+	if vulOutput.ViolationStore != nil {
+		results.Violations.Vulnerabilities = vulOutput.Vulnerabilities
+		results.Violations.Summary.Vulnerabilities = len(vulOutput.Vulnerabilities)
+	}
+
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning

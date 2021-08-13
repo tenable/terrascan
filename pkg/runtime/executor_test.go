@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
+	"github.com/hashicorp/go-multierror"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
@@ -34,7 +35,6 @@ import (
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
-	"github.com/hashicorp/go-multierror"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -88,6 +88,10 @@ func (m MockPolicyEngine) Configure() error {
 
 func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreScanFilter) (out policy.EngineOutput, err error) {
 	return out, m.err
+}
+
+func (m MockPolicyEngine) ReportVulnerability(input policy.EngineInput) (out policy.EngineOutput) {
+	return out
 }
 
 func (m MockPolicyEngine) GetResults() (out policy.EngineOutput) {
