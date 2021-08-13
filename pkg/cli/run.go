@@ -99,6 +99,9 @@ type ScanOptions struct {
 
 	// useTerraformCache provides ability to use terraform init local cache for modules rather than downloading them.
 	useTerraformCache bool
+
+	// FindVulnerabilities gives option to scan container images for vulnerabilities
+	findVulnerabilities bool
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -184,7 +187,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache)
+		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities)
 	if err != nil {
 		return err
 	}

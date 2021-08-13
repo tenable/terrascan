@@ -39,35 +39,37 @@ const (
 
 // Executor object
 type Executor struct {
-	filePath          string
-	dirPath           string
-	policyPath        []string
-	iacType           string
-	iacVersion        string
-	scanRules         []string
-	skipRules         []string
-	iacProviders      []iacProvider.IacProvider
-	policyEngines     []policy.Engine
-	notifiers         []notifications.Notifier
-	categories        []string
-	policyTypes       []string
-	severity          string
-	nonRecursive      bool
-	useTerraformCache bool
+	filePath            string
+	dirPath             string
+	policyPath          []string
+	iacType             string
+	iacVersion          string
+	scanRules           []string
+	skipRules           []string
+	iacProviders        []iacProvider.IacProvider
+	policyEngines       []policy.Engine
+	notifiers           []notifications.Notifier
+	categories          []string
+	policyTypes         []string
+	severity            string
+	nonRecursive        bool
+	useTerraformCache   bool
+	findVulnerabilities bool
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool) (e *Executor, err error) {
 	e = &Executor{
-		filePath:          filePath,
-		dirPath:           dirPath,
-		policyPath:        policyPath,
-		policyTypes:       policyTypes,
-		iacType:           iacType,
-		iacVersion:        iacVersion,
-		iacProviders:      make([]iacProvider.IacProvider, 0),
-		nonRecursive:      nonRecursive,
-		useTerraformCache: useTerraformCache,
+		filePath:            filePath,
+		dirPath:             dirPath,
+		policyPath:          policyPath,
+		policyTypes:         policyTypes,
+		iacType:             iacType,
+		iacVersion:          iacVersion,
+		iacProviders:        make([]iacProvider.IacProvider, 0),
+		nonRecursive:        nonRecursive,
+		useTerraformCache:   useTerraformCache,
+		findVulnerabilities: findVulnerabilities,
 	}
 
 	// read config file and update scan and skip rules
@@ -208,6 +210,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	// update results with resource config
 	results.ResourceConfig = resourceConfig
 
+	if e.findVulnerabilities {
+		results.ResourceConfig = vulnerability.FindVulnerabilities(results.ResourceConfig)
+	}
+
 	if configOnly {
 		return results, nil
 	}
@@ -220,9 +226,9 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		return results, err
 	}
 
-	results.ResourceConfig = vulnerability.FindVulnerabilities(results.ResourceConfig)
-
-	e.AddVulnerabilitiesToResult(&results)
+	if e.findVulnerabilities {
+		e.addVulnerabilitiesToResult(&results)
+	}
 
 	resourcePath := e.filePath
 	if resourcePath == "" {
@@ -313,16 +319,17 @@ func (e *Executor) findViolations(results *Output) error {
 }
 
 // AddVulnerabilitiesToResult add vulnerability findings to output
-func (e *Executor) AddVulnerabilitiesToResult(results *Output) {
+func (e *Executor) addVulnerabilitiesToResult(results *Output) {
 	vulOutput := policy.EngineOutput{}
+	violations := results.Violations.AsViolationStore()
 	for _, engine := range e.policyEngines {
 		vulOutput = engine.ReportVulnerability(policy.EngineInput{InputData: &results.ResourceConfig})
 	}
 	if vulOutput.ViolationStore != nil {
-		results.Violations.Vulnerabilities = vulOutput.Vulnerabilities
-		results.Violations.Summary.Vulnerabilities = len(vulOutput.Vulnerabilities)
+		violations.Vulnerabilities = vulOutput.Vulnerabilities
+		violations.Summary.Vulnerabilities = len(vulOutput.Vulnerabilities)
 	}
-
+	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning
