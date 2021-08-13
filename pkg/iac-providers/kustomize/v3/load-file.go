@@ -1,4 +1,4 @@
-package kustomizev4
+package kustomizev3
 
 import (
 	"github.com/accurics/terrascan/pkg/iac-providers/kustomize/commons"
@@ -6,6 +6,6 @@ import (
 )
 
 // LoadIacFile is not supported for kustomize. Only loading directories that have kustomization.y(a)ml file are supported
-func (k *KustomizeV4) LoadIacFile(absRootPath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (k *KustomizeV3) LoadIacFile(absRootPath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 	return commons.LoadIacFile()
 }

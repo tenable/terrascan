@@ -1,4 +1,4 @@
-package kustomizev4
+package kustomizev2
 
 import (
 	"github.com/accurics/terrascan/pkg/iac-providers/kustomize/commons"
@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	versionSuffix = "V4"
+	versionSuffix = "V2"
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
-func (k *KustomizeV4) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
-	return commons.NewKustomizeDirectoryLoader(absRootDir, options, false, versionSuffix).LoadIacDir()
+func (k *KustomizeV2) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
+	return commons.NewKustomizeDirectoryLoader(absRootDir, options, true, versionSuffix).LoadIacDir()
 }
