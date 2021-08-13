@@ -10,6 +10,6 @@ hasCacheFlag(values) {
 	commands = split(values, "&&")
 	some i
 	instruction := commands[i]
-	regex.match("pip(3)? (-(-)?[a-zA-Z]+ *)*install", instruction) == true
+	re_match("pip(3)? (-(-)?[a-zA-Z]+ *)*install", instruction) == true
 	not contains(instruction, "--no-cache-dir")
 }
