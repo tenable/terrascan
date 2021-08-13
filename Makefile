@@ -132,3 +132,11 @@ atlantis-docker-push-latest:
 # push release tag terrascan_atlantis docker image
 atlantis-docker-push-latest-tag:
 	./scripts/atlantis/docker-push-latest-tag.sh
+
+#build terrascan_argo docker image
+argo-docker-build:
+	./scripts/argocd/docker-build-argo.sh
+
+#push latest terrascan_argo docker image
+argo-docker-push-latest:
+	./scripts/argocd/docker-push-argo.sh

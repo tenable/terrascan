@@ -53,3 +53,8 @@ jobs:
 
     - name: Push terrascan_atlantis latest tag docker image
       run: make atlantis-docker-push-latest-tag
+
+    - name: Build terrascan-argo docker image 
+      run: make argo-docker-build
+    - name: Push terrascan-argo latest tag docker image 
+      run: make argo-docker-push
