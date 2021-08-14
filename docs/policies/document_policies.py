@@ -3,6 +3,8 @@ import json
 
 def dir_size(dir):
     for policy_type in os.listdir(dir):
+        if ".go" in policy_type:
+            continue
         with open(f"docs/policies/{policy_type}.md", "w") as f:
             f.write(f"\n")
             for resource_type in os.listdir(os.path.join(dir,policy_type)):

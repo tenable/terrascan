@@ -2,287 +2,388 @@
 ### aws_iam_role_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1189 |
+| Identity and Access Management | AIRP | HIGH | Ensure IAM roles do not have any policies attached that may cause privilege escalation. | AWS.AIRP.IAM.HIGH.0051 |
 
 
 ### aws_route53_record
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| DNS Management | Route53HostedZone | HIGH | Route53HostedZone should have recordSets. | AWS.Route53HostedZone.DNSManagement.High.0422 |
+| Logging and Monitoring | Route53HostedZone | HIGH | Route53HostedZone should have recordSets. | AWS.Route53HostedZone.DNSManagement.High.0422 |
+
+
+### aws_elasticsearch_domain_policy
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Identity and Access Management | AEDP | HIGH | Ensure Elasticsearch domains do not have wildcard policies. | AWS.AEDP.IAM.HIGH.0060 |
+
+
+### aws_lb_target_group
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Infrastructure Security | ALTG | MEDIUM | Ensure Target Group use HTTPs to ensure end to end encryption | AWS.ALTG.IS.MEDIUM.0042 |
 
 
 ### aws_api_gateway_method_settings
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | API Gateway | MEDIUM | Enable Detailed CloudWatch Metrics for APIs | AWS.API Gateway.Logging.Medium.0569 |
+| Logging and Monitoring | API Gateway | MEDIUM | Enable Detailed CloudWatch Metrics for APIs | AWS.APIGateway.Logging.Medium.0569 |
+
+
+### aws_workspaces_workspace
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | AWW | MEDIUM | Ensure user volume for Workspaces is Encrypted | AWS.AWW.DP.MEDIUM.041 |
+| Data Protection | AWW | MEDIUM | Ensure root volume for Workspaces is Encrypted | AWS.AWW.DP.MEDIUM.040 |
 
 
 ### aws_vpc
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | VPC | MEDIUM | Avoid creating resources in default VPC | AWS.VPC.Logging.Medium.0471 |
-| Logging | VPC | MEDIUM | Ensure VPC flow logging is enabled in all VPCs | AWS.VPC.Logging.Medium.0470 |
+| Security Best Practices | VPC | MEDIUM | Avoid creating resources in default VPC | AWS.VPC.Logging.Medium.0471 |
+| Logging and Monitoring | VPC | LOW | Ensure VPC flow logging is enabled in all VPCs | AWS.VPC.Logging.Medium.0470 |
 
 
 ### aws_iam_account_password_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| IAM | Iam | MEDIUM | Lower case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0454 |
-| IAM | Iam | MEDIUM | Setting a lengthy password increases account resiliency against brute force login attempts | AWS.Iam.IAM.Medium.0458 |
-| IAM | Iam | LOW | It is recommended that the password policy prevent the reuse of passwords.Preventing password reuse increases account resiliency against brute force login attempts | AWS.Iam.IAM.Low.0539 |
-| IAM | Iam | MEDIUM | Number not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0455 |
-| IAM | Iam | MEDIUM | Setting a lengthy password increases account resiliency against brute force login attempts | AWS.Iam.IAM.Medium.0495 |
-| IAM | Iam | MEDIUM | Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0456 |
-| IAM | Iam | MEDIUM | Upper case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0457 |
-| IAM | Iam | LOW | Reducing the password lifetime increases account resiliency against brute force login attempts | AWS.Iam.IAM.Low.0540 |
+| Compliance Validation | Iam | LOW | Lower case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0454 |
+| Compliance Validation | Iam | MEDIUM | Setting a lengthy password increases account resiliency against brute force login attempts | AWS.Iam.IAM.Medium.0458 |
+| Compliance Validation | Iam | LOW | It is recommended that the password policy prevent the reuse of passwords.Preventing password reuse increases account resiliency against brute force login attempts | AWS.Iam.IAM.Low.0539 |
+| Compliance Validation | Iam | MEDIUM | Number not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0455 |
+| Compliance Validation | Iam | MEDIUM | Setting a lengthy password increases account resiliency against brute force login attempts | AWS.Iam.IAM.Medium.0495 |
+| Compliance Validation | Iam | MEDIUM | Special symbols not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0456 |
+| Compliance Validation | Iam | MEDIUM | Upper case alphabet not present in the Password, Password Complexity is not high. Increased Password complexity increases resiliency against brute force attack | AWS.Iam.IAM.Medium.0457 |
+| Compliance Validation | Iam | LOW | Reducing the password lifetime increases account resiliency against brute force login attempts | AWS.Iam.IAM.Low.0540 |
 
 
 ### aws_mq_broker
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | ElasticSearch | MEDIUM | Publicly Accessible MQ Brokers | AWS.ElasticSearch.NetworkSecurity.Medium.0887 |
-| Logging | ElasticSearch | MEDIUM | Enable AWS MQ Log Exports | AWS.ElasticSearch.Logging.Medium.0885 |
+| Security Best Practices | ElasticSearch | MEDIUM | Publicly Accessible MQ Brokers | AWS.ElasticSearch.NetworkSecurity.Medium.0887 |
+| Logging and Monitoring | ElasticSearch | LOW | Enable AWS MQ Log Exports | AWS.ElasticSearch.Logging.Medium.0885 |
 
 
 ### aws_db_instance
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | AWS RDS | HIGH | RDS Instance publicly_accessible flag is true | AWS.AWS RDS.NS.High.0101 |
-| Data Security | RDS | HIGH | Ensure Certificate used in RDS instance is updated | AWS.RDS.DS.High.1042 |
-| Data Security | RDS | HIGH | Ensure that your RDS database has IAM Authentication enabled. | AWS.RDS.DataSecurity.High.0577 |
-| Data Security | RDS | HIGH | RDS Instance Auto Minor Version Upgrade flag disabled | AWS.RDS.DS.High.1041 |
-| Data Security | RDS | HIGH | Ensure that your RDS database instances have automated backups enabled for point-in-time recovery. To back up your database instances, AWS RDS take automatically a full daily snapshot of your data (with transactions logs) during the specified backup window and keeps the backups for a limited period of time (known as retention period) defined by the instance owner. | AWS.RDS.DataSecurity.High.0414 |
+| Data Protection | RDS | HIGH | Ensure Certificate used in RDS instance is updated | AWS.RDS.DS.High.1042 |
+| Logging and Monitoring | ADI | MEDIUM | Ensure AWS RDS instances have logging enabled. | AWS.ADI.LM.MEDIUM.0076 |
+| Data Protection | RDS | MEDIUM | Ensure that your RDS database has IAM Authentication enabled. | AWS.RDS.DataSecurity.High.0577 |
+| Infrastructure Security | RDS | HIGH | RDS Instance publicly_accessible flag is true | AWS.RDS.NS.High.0101 |
+| Data Protection | RDS | HIGH | RDS Instance Auto Minor Version Upgrade flag disabled | AWS.RDS.DS.High.1041 |
+| Data Protection | RDS | HIGH | Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance. | AWS.RDS.DataSecurity.High.0414 |
+
+
+### aws_secretsmanager_secret_policy
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Identity and Access Management | ASSP | HIGH | Ensure secrets manager do not wildcard policies attached | AWS.ASSP.IAM.HIGH.0066 |
 
 
 ### aws_ebs_volume
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | EcsCluster | HIGH | Ensure that AWS EBS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS EBS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
-| Encryption and Key Management | EBS | HIGH | Enable AWS EBS Snapshot Encryption | AWS.EBS.EKM.Medium.0682 |
+| Data Protection | EcsCluster | HIGH | Ensure that AWS EBS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS EBS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
+| Data Protection | EBS | HIGH | Enable AWS EBS Snapshot Encryption | AWS.EBS.EKM.Medium.0682 |
 
 
 ### aws_api_gateway_rest_api
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-|   | APIGateway | MEDIUM | Enable Content Encoding | AWS.APIGateway.Medium.0568 |
-| Network Security | APIGateway | MEDIUM | API Gateway Private Endpoints | AWS.APIGateway.Network Security.Medium.0570 |
+| Infrastructure Security | APIGateway | MEDIUM | Enable Content Encoding | AWS.APIGateway.Medium.0568 |
+| Infrastructure Security | APIGateway | MEDIUM | API Gateway Private Endpoints | AWS.APIGateway.NetworkSecurity.Medium.0570 |
 
 
 ### aws_iam_role
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1188 |
+
+
+### aws_iam_user_policy_attachment
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Identity and Access Management | AIUPA | MEDIUM | Ensure IAM permissions are not given directly to users | AWS.AIUPA.IAM.MEDIUM.0050 |
 
 
 ### aws_ebs_encryption_by_default
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Data Security | EBS | HIGH | Ensure that the AWS EBS that hold sensitive and critical data is encrypted by default to fulfill compliance requirements for data-at-rest encryption. | AWS.EBS.DataSecurity.High.0580 |
+| Data Protection | EBS | HIGH | Ensure that the AWS EBS that hold sensitive and critical data is encrypted by default to fulfill compliance requirements for data-at-rest encryption. | AWS.EBS.DataSecurity.High.0580 |
 
 
 ### aws_sns_topic
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | SNS | MEDIUM | Ensure SNS Topic is Publicly Accessible For Subscription | AWS.SNS.NS.Medium.1044 |
+| Compliance Validation | SNS | HIGH | Ensure SNS Topic is Publicly Accessible For Subscription | AWS.SNS.NS.Medium.1044 |
+| Data Protection | AST | MEDIUM | Ensure SNS topic is Encrypted using KMS master key | AWS.AST.DP.MEDIUM.0037 |
 
 
 ### aws_apigatewayv2_api
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| AccessControl | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.0630 |
+| Security Best Practices | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.0630 |
 
 
 ### aws_efs_file_system
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | EFS | HIGH | Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization. | AWS.EFS.EncryptionandKeyManagement.High.0409 |
-| Encryption and Key Management | EFS | HIGH | Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization. | AWS.EFS.EncryptionandKeyManagement.High.0410 |
+| Data Protection | EFS | HIGH | Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization. | AWS.EFS.EncryptionandKeyManagement.High.0409 |
+| Data Protection | EFS | HIGH | Enable encryption of your EFS file systems in order to protect your data and metadata from breaches or unauthorized access and fulfill compliance requirements for data-at-rest encryption within your organization. | AWS.EFS.EncryptionandKeyManagement.High.0410 |
+
+
+### aws_lb_listener
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Infrastructure Security | ALL | MEDIUM | Ensure there is a listener configured on HTTPs or with a port 443 | AWS.ALL.IS.MEDIUM.0046 |
 
 
 ### aws_sqs_queue
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | SQS | HIGH | Identify any publicly accessible SQS queues available in your AWS account and update their permissions in order to protect against unauthorized users. | AWS.SQS.NetworkSecurity.High.0569 |
-| Network Security | SQS | HIGH | Ensure that your Amazon Simple Queue Service (SQS) queues are protecting the contents of their messages using Server-Side Encryption (SSE). The SQS service uses an AWS KMS Customer Master Key (CMK) to generate data keys required for the encryption/decryption process of SQS messages. There is no additional charge for using SQS Server-Side Encryption, however, there is a charge for using AWS KMS | AWS.SQS.NetworkSecurity.High.0570 |
+| Security Best Practices | SQS | HIGH | Identify any publicly accessible SQS queues available in your AWS account and update their permissions in order to protect against unauthorized users. | AWS.SQS.NetworkSecurity.High.0569 |
+| Security Best Practices | SQS | HIGH | Ensure that your Amazon Simple Queue Service (SQS) queues are protecting the contents of their messages using Server-Side Encryption (SSE). The SQS service uses an AWS KMS Customer Master Key (CMK) to generate data keys required for the encryption/decryption process of SQS messages. There is no additional charge for using SQS Server-Side Encryption, however, there is a charge for using AWS KMS | AWS.SQS.NetworkSecurity.High.0570 |
+
+
+### aws_docdb_cluster
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | ADC | MEDIUM | Ensure DocDb is encrypted at rest | AWS.ADC.DP.MEDIUM.0022 |
+| Logging and Monitoring | ADC | MEDIUM | Ensure DocDb clusters have log exports enabled. | AWS.ADC.LM.MEDIUM.0069 |
+
+
+### aws_cloudwatch_log_group
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Logging and Monitoring | ACLG | MEDIUM | Ensure AWS Cloudwatch log group has retention policy set. | AWS.ACLG.LM.MEDIUM.0068 |
 
 
 ### aws_instance
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | json | MEDIUM | EC2 instances should disable IMDS or require IMDSv2 | AC-AWS-NS-IN-M-1172 |
-| Network Security | Instance | MEDIUM | Instance should be configured in vpc. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations. | AWS.Instance.NetworkSecurity.Medium.0506 |
+| Infrastructure Security | json | MEDIUM | EC2 instances should disable IMDS or require IMDSv2 as this can be related to the weaponization phase of kill chain | AC-AWS-NS-IN-M-1172 |
+| Identity and Access Management | json | HIGH | Ensure that instance launched follows the least privilege principle as this can be related to delivery-exploitation-Installation phases of kill  chain | AC-AW-IA-LC-H-0442 |
+| Logging and Monitoring | AI | HIGH | Ensure that detailed monitoring is enabled for EC2 instances. | AWS.AI.LM.HIGH.0070 |
+| Infrastructure Security | json | HIGH | Security group attached to launch configuration is wide open to internet and this can be related to reconnaissance phase | AC-AW-IS-LC-H-0443 |
+| Infrastructure Security | json | MEDIUM | Ensure that your AWS application is not deployed within the default Virtual Private Cloud in order to follow security best practices | AC-AW-IS-IN-M-0144 |
 
 
 ### aws_config
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption & Key Management | Config | MEDIUM | Ensure AWS Config Rule is enabled for Encrypted Volumes | AWS.Config.Encryption&KeyManagement.Medium.0660 |
+| Data Protection | Config | MEDIUM | Ensure AWS Config Rule is enabled for Encrypted Volumes | AWS.Config.EncryptionandKeyManagement.Medium.0660 |
 
 
 ### aws_cloudformation_stack
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-|   | CloudFormation | MEDIUM | AWS CloudFormation Not In Use | AWS.CloudFormation.Medium.0599 |
-|   | CloudFormation | MEDIUM | AWS CloudFormation Stack Policy | AWS.CloudFormation.Medium.0604 |
-|   | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Termination Protection | AWS.CloudFormation.Medium.0605 |
-|   | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Notifications | AWS.CloudFormation.Medium.0603 |
+| Security Best Practices | CloudFormation | MEDIUM | AWS CloudFormation Not In Use | AWS.CloudFormation.Medium.0599 |
+| Security Best Practices | CloudFormation | MEDIUM | AWS CloudFormation Stack Policy | AWS.CloudFormation.Medium.0604 |
+| Security Best Practices | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Termination Protection | AWS.CloudFormation.Medium.0605 |
+| Security Best Practices | CloudFormation | MEDIUM | Enable AWS CloudFormation Stack Notifications | AWS.CloudFormation.Medium.0603 |
 
 
 ### aws_iam_user_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
-| Identity and Access Management | IamUser | HIGH | Ensure Hardware MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0387 |
-| Identity and Access Management | IamUser | HIGH | Ensure Virtual MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0388 |
-| Identity and Access Management | IamUser | HIGH | It is recommended that MFA be enabled for all accounts that have a console password. Enabling MFA provides increased security for console access as it requires the authenticating principal to possess a device that emits a time-sensitive key and have knowledge of a credential | AWS.IamUser.IAM.High.0389 |
+| Compliance Validation | IamUser | HIGH | Ensure Hardware MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0387 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1190 |
+| Identity and Access Management | AIUP | MEDIUM | Ensure IAM policies are attached only to groups or roles | AWS.AIUP.IAM.MEDIUM.0049 |
+| Compliance Validation | IamUser | HIGH | Ensure Virtual MFA device is enabled for the "root" account | AWS.IamUser.IAM.High.0388 |
+| Compliance Validation | IamUser | HIGH | It is recommended that MFA be enabled for all accounts that have a console password. Enabling MFA provides increased security for console access as it requires the authenticating principal to possess a device that emits a time-sensitive key and have knowledge of a credential | AWS.IamUser.IAM.High.0389 |
 
 
 ### aws_ecs_task_definition
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | EcsCluster | HIGH | Like any other EC2 instance it is recommended to place ECS instance within a VPC. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations | AWS.EcsCluster.NetworkSecurity.High.0104 |
-| Data Security | LaunchConfiguration | HIGH | Sensitive Information Disclosure | AWS.LaunchConfiguration.DataSecurity.High.0101 |
+| Infrastructure Security | EcsCluster | HIGH | Like any other EC2 instance it is recommended to place ECS instance within a VPC. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations | AWS.EcsCluster.NetworkSecurity.High.0104 |
+| Infrastructure Security | AETD | MEDIUM | Ensure EFS volume used for ECS task defination has in transit encryption enabled | AWS.AETD.IS.MEDIUM.0043 |
+| Data Protection | LaunchConfiguration | HIGH | Sensitive Information Disclosure | AWS.LaunchConfiguration.DataSecurity.High.0101 |
 
 
 ### aws_ecr_repository_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Data Security | ECR | HIGH | Identify any exposed Amazon ECR image repositories available within your AWS account and update their permissions in order to protect against unauthorized access. Amazon Elastic Container Registry (ECR) is a managed Docker registry service that makes it easy for DevOps teams to store, manage and deploy Docker container images. An ECR repository is a collection of Docker images available on AWS cloud. | AWS.ECR.DataSecurity.High.0579 |
+| Identity and Access Management | ECR | HIGH | Identify any exposed Amazon ECR image repositories available within your AWS account and update their permissions in order to protect against unauthorized access. Amazon Elastic Container Registry (ECR) is a managed Docker registry service that makes it easy for DevOps teams to store, manage and deploy Docker container images. An ECR repository is a collection of Docker images available on AWS cloud. | AWS.ECR.DataSecurity.High.0579 |
 
 
 ### aws_iam_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-1187 |
+
+
+### aws_dynamodb_table
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Resilience | DynamoDb | MEDIUM | Ensure Point In Time Recovery is enabled for DynamoDB Tables | AWS.DynamoDb.Logging.Medium.007 |
+| Data Protection | ADT | MEDIUM | Ensure DynamoDb is encrypted at rest | AWS.ADT.DP.MEDIUM.0025 |
 
 
 ### aws_apigatewayv2_stage
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.0630 |
+| Logging and Monitoring | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.0630 |
 
 
 ### aws_ecr_repository
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Data Security | ECR | MEDIUM | Unscanned images may contain vulnerabilities | AWS.ECR.DataSecurity.High.0578 |
+| Data Protection | AER | MEDIUM | Ensure ECR repository is encrypted at rest | AWS.AER.DP.MEDIUM.0026 |
+| Configuration and Vulnerability Analysis | ECR | MEDIUM | Unscanned images may contain vulnerabilities | AWS.ECR.DataSecurity.High.0578 |
+| Identity and Access Management | AER | MEDIUM | Ensure ECR repository has policy attached. | AWS.AER.DP.MEDIUM.0058 |
 
 
 ### aws_cloudfront_distribution
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | CloudFront | HIGH | Secure ciphers are not used in CloudFront distribution | AWS.CloudFront.EncryptionandKeyManagement.High.0408 |
-| Network Security | CloudFront | LOW | Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content. | AWS.CloudFront.Network Security.Low.0568 |
-| Encryption and Key Management | CloudFront | HIGH | Use encrypted connection between CloudFront and origin server | AWS.CloudFront.EncryptionandKeyManagement.High.0407 |
-| Logging | CloudFront | MEDIUM | Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN). | AWS.CloudFront.Logging.Medium.0567 |
+| Data Protection | CloudFront | HIGH | Secure ciphers are not used in CloudFront distribution | AWS.CloudFront.EncryptionandKeyManagement.High.0408 |
+| Infrastructure Security | json | LOW | Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content. | AC-AW-IS-CD-M-0026 |
+| Infrastructure Security | json | Medium | Ensure that cloud-front has web application firewall enabled | AC-AW-IS-CD-M-1186 |
+| Data Protection | CloudFront | HIGH | Use encrypted connection between CloudFront and origin server | AWS.CloudFront.EncryptionandKeyManagement.High.0407 |
+| Logging and Monitoring | CloudFront | MEDIUM | Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN). | AWS.CloudFront.Logging.Medium.0567 |
 
 
 ### aws_cloudwatch
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | CloudWatch | MEDIUM | App-Tier CloudWatch Log Group Retention Period | AWS.CloudWatch.Logging.Medium.0631 |
-| Encryption and Key Management | CloudWatch | HIGH | AWS CloudWatch log group is not encrypted with a KMS CMK | AWS.CloudWatch.EncryptionandKeyManagement.High.0632 |
+| Logging and Monitoring | CloudWatch | MEDIUM | App-Tier CloudWatch Log Group Retention Period | AWS.CloudWatch.Logging.Medium.0631 |
+| Data Protection | CloudWatch | HIGH | AWS CloudWatch log group is not encrypted with a KMS CMK | AWS.CloudWatch.EncryptionandKeyManagement.High.0632 |
 
 
 ### aws_ami_launch_permission
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | AMI | MEDIUM | Limit access to AWS AMIs | AWS.AMI.NS.Medium.1040 |
+| Infrastructure Security | AMI | MEDIUM | Limit access to AWS AMIs | AWS.AMI.NS.Medium.1040 |
 
 
 ### aws_launch_configuration
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | EcsCluster | HIGH | Ensure that AWS ECS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS ECS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
-| Data Security | LaunchConfiguration | HIGH | Avoid using base64 encoded private keys as part of config | AWS.LaunchConfiguration.DataSecurity.High.0102 |
-| Data Security | LaunchConfiguration | HIGH | Avoid using base64 encoded shell script as part of config | AWS.LaunchConfiguration.DataSecurity.High.0101 |
+| Data Protection | EcsCluster | HIGH | Ensure that AWS ECS clusters are encrypted. Data encryption at rest, prevents unauthorized users from accessing sensitive data on your AWS ECS clusters and associated cache storage systems. | AWS.EcsCluster.EncryptionandKeyManagement.High.0413 |
+| Identity and Access Management | json | HIGH | Ensure that launch configuration launched follows the least privilege principle | AC-AW-IA-LC-H-0441 |
+| Data Protection | LaunchConfiguration | HIGH | Avoid using base64 encoded private keys as part of config | AWS.LaunchConfiguration.DataSecurity.High.0102 |
+| Data Protection | LaunchConfiguration | HIGH | Avoid using base64 encoded shell script as part of config | AWS.LaunchConfiguration.DataSecurity.High.0101 |
+| Logging and Monitoring | json | Medium | It is important to enable cloudWatch monitoring incase monitoring the activity | AC-AW-LM-LC-M-0440 |
+| Configuration and Vulnerability Analysis | json | HIGH | Launch configuration uses IMDSv1 which vulnerable to SSRF | AC-AW-CA-LC-H-0439 |
+| Infrastructure Security | json | HIGH | Security group attached to launch configuration is wide open to internet  | AC-AW-IS-LC-H-0438 |
+
+
+### aws_athena_database
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | ADB | MEDIUM | Ensure Athena Database is encrypted at rest | AWS.ADB.DP.MEDIUM.016 |
 
 
 ### aws_api_gateway_stage
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | API Gateway | MEDIUM | Enable SSL Client Certificate | AWS.API Gateway.Network Security.Medium.0565 |
-| Logging | API Gateway | MEDIUM | Ensure that AWS CloudWatch logs are enabled for all your APIs created with Amazon API Gateway service in order to track and analyze execution behavior at the API stage level. | AWS.API Gateway.Logging.Medium.0572 |
-| Logging | API Gateway | MEDIUM | Enable Active Tracing | AWS.API Gateway.Logging.Medium.0571 |
-| Logging | API Gateway | MEDIUM | Enable AWS CloudWatch Logs for APIs | AWS.API Gateway.Logging.Medium.0567 |
+| Infrastructure Security | API Gateway | MEDIUM | Enable SSL Client Certificate | AWS.APIGateway.NetworkSecurity.Medium.0565 |
+| Logging and Monitoring | API Gateway | MEDIUM | Ensure that AWS CloudWatch logs are enabled for all your APIs created with Amazon API Gateway service in order to track and analyze execution behavior at the API stage level. | AWS.APIGateway.Logging.Medium.0572 |
+| Logging and Monitoring | API Gateway | LOW | Ensure AWS API Gateway has active xray tracing enabled | AWS.APIGateway.Logging.Medium.0571 |
+| Logging and Monitoring | API Gateway | MEDIUM | Enable AWS CloudWatch Logs for APIs | AWS.APIGateway.Logging.Medium.0567 |
 
 
 ### aws_elasticsearch_domain
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | ElasticSearch | MEDIUM | Enable AWS ElasticSearch Encryption At Rest | AWS.ElasticSearch.EKM.Medium.0778 |
-| Encryption and Key Management | ElasticSearch | MEDIUM | ElasticSearch Domain Encrypted with KMS CMKs | AWS.ElasticSearch.EKM.Medium.0768 |
-| Logging | Elasticsearch | MEDIUM | Ensure that your AWS Elasticsearch clusters have enabled the support for publishing slow logs to AWS CloudWatch Logs. This feature enables you to publish slow logs from the indexing and search operations performed on your ES clusters and gain full insight into the performance of these operations. | AWS.Elasticsearch.Logging.Medium.0573 |
+| Data Protection | ElasticSearch | HIGH | Enable AWS ElasticSearch Encryption At Rest | AWS.ElasticSearch.EKM.Medium.0778 |
+| Infrastructure Security | ElasticSearch | MEDIUM | Ensure Elasticsearch domains being created are set to be encrypted node-to-node | AWS.ElasticSearch.IS.MEDIUM.0045 |
+| Data Protection | ElasticSearch | MEDIUM | ElasticSearch Domain Encrypted with KMS CMKs | AWS.ElasticSearch.EKM.Medium.0768 |
+| Compliance Validation | Elasticsearch | MEDIUM | Ensure that your AWS Elasticsearch clusters have enabled the support for publishing slow logs to AWS CloudWatch Logs. This feature enables you to publish slow logs from the indexing and search operations performed on your ES clusters and gain full insight into the performance of these operations. | AWS.Elasticsearch.Logging.Medium.0573 |
 
 
 ### aws_iam_user_login_profile
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | Iam | HIGH | Password policies are, in part, used to enforce password complexity requirements. IAM password policies can be used to ensure password are comprised of different character sets, have minimal length, rotation and history restrictions | AWS.Iam.IAM.High.0391 |
+| Compliance Validation | Iam | HIGH | Password policies are, in part, used to enforce password complexity requirements. IAM password policies can be used to ensure password are comprised of different character sets, have minimal length, rotation and history restrictions | AWS.Iam.IAM.High.0391 |
 
 
 ### aws_iam_group_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | IamPolicy | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AWS.IamPolicy.IAM.High.0392 |
+| Identity and Access Management | json | HIGH | It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges. | AC-AW-IA-H-0392 |
 
 
 ### aws_load_balancer_policy
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | ELB | HIGH | Using insecure ciphers for your ELB Predefined or Custom Security Policy, could make the SSL connection between the client and the load balancer vulnerable to exploits. TLS 1.0 was recommended to be disabled by PCI Council after June 30, 2016 | AWS.ELB.EncryptionandKeyManagement.High.0401 |
-| Encryption and Key Management | ELB | HIGH | Remove insecure ciphers for your ELB Predefined or Custom Security Policy, to reduce the risk of the SSL connection between the client and the load balancer being exploited. | AWS.ELB.EncryptionandKeyManagement.High.0403 |
+| Infrastructure Security | ELB | HIGH | Using insecure ciphers for your ELB Predefined or Custom Security Policy, could make the SSL connection between the client and the load balancer vulnerable to exploits. TLS 1.0 was recommended to be disabled by PCI Council after June 30, 2016 | AWS.ELB.EncryptionandKeyManagement.High.0401 |
+| Infrastructure Security | ELB | HIGH | Remove insecure ciphers for your ELB Predefined or Custom Security Policy, to reduce the risk of the SSL connection between the client and the load balancer being exploited. | AWS.ELB.EncryptionandKeyManagement.High.0403 |
 
 
 ### aws_s3_bucket
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| IAM | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0377 |
-| Network Security | S3Bucket | HIGH | Ensure that there are not any static websites being hosted on buckets you aren't aware of | AWS.S3Bucket.NetworkSecurity.High.0417 |
-| IAM | S3Bucket | HIGH | Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites | AWS.S3Bucket.IAM.High.0370 |
-| S3 | S3Bucket | HIGH | S3 bucket Access is allowed to all AWS Account Users. | AWS.S3Bucket.DS.High.1043 |
-| IAM | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0379 |
-| Encryption and Key Management | S3Bucket | HIGH | Ensure that S3 Buckets have server side encryption at rest enabled with KMS key to protect sensitive data. | AWS.S3Bucket.EncryptionandKeyManagement.High.0405 |
-| IAM | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0378 |
-| IAM | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0381 |
+| Identity and Access Management | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0377 |
+| Identity and Access Management | S3Bucket | HIGH | Ensure S3 buckets do not have, a both public ACL on the bucket and a public access block. | AWS.S3Bucket.IAM.HIGH.0065 |
+| Logging and Monitoring | S3Bucket | MEDIUM | Ensure S3 buckets have access logging enabled. | AWS.S3Bucket.LM.MEDIUM.0078 |
+| Infrastructure Security | S3Bucket | LOW | Ensure that there are not any static websites being hosted on buckets you aren't aware of | AWS.S3Bucket.NetworkSecurity.High.0417 |
+| Resilience | S3Bucket | HIGH | Enabling S3 versioning will enable easy recovery from both unintended user actions, like deletes and overwrites | AWS.S3Bucket.IAM.High.0370 |
+| Identity and Access Management | S3Bucket | HIGH | S3 bucket Access is allowed to all AWS Account Users. | AWS.S3Bucket.DS.High.1043 |
+| Identity and Access Management | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0379 |
+| Data Protection | S3Bucket | HIGH | Ensure that S3 Buckets have server side encryption at rest enabled with KMS key to protect sensitive data. | AWS.S3Bucket.EncryptionandKeyManagement.High.0405 |
+| Identity and Access Management | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0378 |
+| Identity and Access Management | S3Bucket | HIGH | Misconfigured S3 buckets can leak private information to the entire internet or allow unauthorized data tampering / deletion | AWS.S3Bucket.IAM.High.0381 |
+
+
+### aws_eks_cluster
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Logging and Monitoring | AEC | MEDIUM | Ensure EKS clusters have control plane logging enabled. | AWS.AEC.LM.MEDIUM.0071 |
 
 
 ### aws_elb
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Ports Security | ELB | LOW | AWS ELB incoming traffic not encrypted | AWS.ELB.NetworkPortsSecurity.Low.0563 |
+| Logging and Monitoring | ELB | MEDIUM | Ensure AWS ELB has access logging enabled. | AWS.ELB.LM.MEDIUM.0072 |
+| Infrastructure Security | ELB | LOW | AWS ELB incoming traffic not encrypted | AWS.ELB.NetworkPortsSecurity.Low.0563 |
 
 
 ### aws_redshift_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | Redshift | HIGH | Ensure Redshift clusters are not publicly accessible to minimize security risks. | AWS.Redshift.NetworkSecurity.HIGH.0564 |
-| Logging | Redshift | MEDIUM | Ensure audit logging is enabled for Redshift clusters for security and troubleshooting purposes. | AWS.Redshift.Logging.Medium.0565 |
-| Encryption and Key Management | Redshift | HIGH | Use customer-managed KMS keys instead of AWS-managed keys, to have granular control over encrypting and encrypting data. Encrypt Redshift clusters with a Customer-managed KMS key. This is a recommended best practice. | AWS.Redshift.EncryptionandKeyManagement.High.0415 |
+| Infrastructure Security | Redshift | HIGH | Ensure Redshift clusters are not publicly accessible to minimize security risks. | AWS.Redshift.NetworkSecurity.HIGH.0564 |
+| Logging and Monitoring | Redshift | LOW | Ensure AWS Redshift cluster instances have logging enabled. | AWS.Redshift.Logging.Medium.0565 |
+| Data Protection | Redshift | MEDIUM | Use customer-managed KMS keys instead of AWS-managed keys, to have granular control over encrypting and encrypting data. Encrypt Redshift clusters with a Customer-managed KMS key. This is a recommended best practice. | AWS.Redshift.EncryptionandKeyManagement.High.0415 |
+
+
+### aws_elasticcache_replication_group
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | AERG | MEDIUM | Ensure Elastic Cache Replication Group is encrypted at rest | AWS.AERG.DP.MEDIUM.0027 |
+| Data Protection | AERG | MEDIUM | Ensure Elastic Cache Replication Group is encrypted in transit | AWS.AERG.DP.MEDIUM.0044 |
 
 
 ### aws_kinesis_stream
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | Kinesis | HIGH | Kinesis Streams and metadata are not protected | AWS.Kinesis.EncryptionandKeyManagement.High.0412 |
+| Data Protection | Kinesis | HIGH | Ensure Kinesis Stream is encrypted | AWS.Kinesis.EncryptionandKeyManagement.High.0412 |
 
 
 ### aws_config_configuration_aggregator
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | Config | HIGH | Ensure AWS Config is enabled in all regions | AWS.Config.Logging.HIGH.0590 |
+| Logging and Monitoring | Config | HIGH | Ensure AWS Config is enabled in all regions | AWS.Config.Logging.HIGH.0590 |
 
 
-### aws_organizations_policy
+### aws_s3_bucket_object
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| IAM | Organizations | MEDIUM | Ensure that All Features is enabled within your Amazon Organizations to achieve full control over the use of AWS services and actions across multiple AWS accounts using Service Control Policies (SCPs). | AWS.Organizations.IAM.MEDIUM.0590 |
+| Data Protection | ASBO | MEDIUM | Ensure S3 object is Encrypted | AWS.ASBO.DP.MEDIUM.0034 |
 
 
 ### aws_route53_query_log
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | Route53 query logs | MEDIUM | Ensure CloudWatch logging is enabled for Route53 hosted zones. | AWS.Route53 query logs.Logging.Medium.0574 |
+| Logging and Monitoring | Route53 query logs | MEDIUM | Ensure CloudWatch logging is enabled for Route53 hosted zones. | AWS.Route53querylogs.Logging.Medium.0574 |
+
+
+### aws_secretsmanager_secret
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | SecretsManagerSecret | MEDIUM | Ensure SecretsManager Secrets are Encrypted using KMS key | AWS.SecretsManagerSecret.DP.MEDIUM.0036 |
 
 
 ### aws_iam_access_key
@@ -292,18 +393,31 @@
 | Identity and Access Management | IamUser | MEDIUM | Ensure that there are no exposed Amazon IAM access keys in order to protect your AWS resources against unapproved access | AWS.IamUser.IAM.High.0391 |
 
 
+### aws_neptune_cluster
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | ANC | MEDIUM | Ensure Neptune Cluster is Encrypted | AWS.ANC.DP.MEDIUM.0030 |
+| Logging and Monitoring | ANC | MEDIUM | Ensure AWS Neptune clusters have logging enabled. | AWS.ANC.LM.MEDIUM.0075 |
+
+
+### aws_dax_cluster
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | ADC | MEDIUM | Ensure server-side encryption is enabled for AWS DAX Cluster | AWS.ADC.DP.MEDIUM.0021 |
+
+
 ### aws_guardduty_detector
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | GuardDuty Enabled | MEDIUM | Ensure that Amazon GuardDuty service is currently enabled in all regions in order to protect your AWS environment and infrastructure (AWS accounts and resources, IAM credentials, guest operating systems, applications, etc) against security threats. AWS GuardDuty is a managed threat detection service that continuously monitors your VPC flow logs, AWS CloudTrail event logs and DNS logs for malicious or unauthorized behavior. The service monitors for activity such as unusual API calls, potentially compromised EC2 instances or potentially unauthorized deployments that indicate a possible AWS account compromise. AWS GuardDuty operates entirely on Amazon Web Services infrastructure and does not affect the performance or reliability of your applications. The service does not require any software agents, sensors or network appliances. | AWS.GuardDuty Enabled.Security.Medium.0575 |
+| Logging and Monitoring | GuardDuty Enabled | MEDIUM | Ensure that Amazon GuardDuty service is currently enabled in all regions in order to protect your AWS environment and infrastructure (AWS accounts and resources, IAM credentials, guest operating systems, applications, etc) against security threats. AWS GuardDuty is a managed threat detection service that continuously monitors your VPC flow logs, AWS CloudTrail event logs and DNS logs for malicious or unauthorized behavior. The service monitors for activity such as unusual API calls, potentially compromised EC2 instances or potentially unauthorized deployments that indicate a possible AWS account compromise. AWS GuardDuty operates entirely on Amazon Web Services infrastructure and does not affect the performance or reliability of your applications. The service does not require any software agents, sensors or network appliances. | AWS.GuardDutyEnabled.Security.Medium.0575 |
 
 
 ### aws_db_security_group
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | RDS | HIGH | RDS should not be defined with public interface. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0101 |
-| Network Security | RDS | HIGH | RDS should not be open to a large scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0103 |
-| Network Security | RDS | HIGH | RDS should not be open to a public scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0102 |
+| Infrastructure Security | RDS | HIGH | RDS should not be defined with public interface. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0101 |
+| Infrastructure Security | RDS | HIGH | RDS should not be open to a large scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0103 |
+| Infrastructure Security | RDS | HIGH | RDS should not be open to a public scope. Firewall and router configurations should be used to restrict connections between untrusted networks and any system components in the cloud environment. | AWS.RDS.NetworkSecurity.High.0102 |
 
 
 ### aws_s3_bucket_policy
@@ -320,101 +434,237 @@
 ### aws_ami
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption & KeyManagement | EC2 | MEDIUM | Enable AWS AMI Encryption | AWS.EC2.Encryption&KeyManagement.Medium.0688 |
+| Infrastructure Security | EC2 | MEDIUM | Enable AWS AMI Encryption | AWS.EC2.EncryptionandKeyManagement.Medium.0688 |
 
 
 ### aws_elasticache_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Data Security | ElastiCache | HIGH | ElastiCache for Redis version is not compliant with AWS PCI DSS requirements | AWS.ElastiCache.DataSecurity.High.0425 |
-| Data Security | ElastiCache | HIGH | ElastiCache for Memcached is not in use in AWS PCI DSS environments | AWS.ElastiCache.DataSecurity.High.0424 |
-| High Availability | ElastiCache | MEDIUM | AWS ElastiCache Multi-AZ | AWS.ElastiCache.HighAvailability.Medium.0757 |
+| Compliance Validation | ElastiCache | HIGH | ElastiCache for Redis version is not compliant with AWS PCI DSS requirements | AWS.ElastiCache.DataSecurity.High.0425 |
+| Compliance Validation | ElastiCache | HIGH | ElastiCache for Memcached is not in use in AWS PCI DSS environments | AWS.ElastiCache.DataSecurity.High.0424 |
+| Resilience | ElastiCache | MEDIUM | AWS ElastiCache Multi-AZ | AWS.ElastiCache.HighAvailability.Medium.0757 |
 
 
 ### aws_kinesis_firehose_delivery_stream
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | Kinesis | HIGH | AWS Kinesis Server data at rest has server side encryption (SSE) | AWS.Kinesis.EncryptionandKeyManagement.High.0411 |
+| Data Protection | Kinesis | HIGH | AWS Kinesis Server data at rest has server side encryption (SSE) | AWS.Kinesis.EncryptionandKeyManagement.High.0411 |
 
 
 ### aws_rds_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | RDS | HIGH | Encrypt Amazon RDS instances and snapshots at rest, by enabling the encryption option for your Amazon RDS DB instance | AWS.RDS.EncryptionandKeyManagement.High.0414 |
+| Resilience | RDS | MEDIUM | Ensure backup retention period is set for rds cluster | AWS.RDS.RE.MEDIUM.0013 |
+| Data Protection | RDS | HIGH | Encrypt Amazon RDS instances and snapshots at rest, by enabling the encryption option for your Amazon RDS DB instance | AWS.RDS.EncryptionandKeyManagement.High.0414 |
 
 
 ### aws_cloudtrail
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | CloudTrail | HIGH | Cloud Trail Log Not Enabled | AWS.CloudTrail.Logging.High.0399 |
-| Logging | CloudTrail | MEDIUM | Cloud Trail Multi Region not enabled | AWS.CloudTrail.Logging.Medium.0460 |
-| Logging | CloudTrail | MEDIUM | Ensure appropriate subscribers to each SNS topic | AWS.CloudTrail.Logging.Low.0559 |
+| Logging and Monitoring | CloudTrail | HIGH | Ensure CloudTrail logs are encrypted using KMS | AWS.CloudTrail.Logging.High.0399 |
+| Logging and Monitoring | CloudTrail | MEDIUM | Cloud Trail Multi Region not enabled | AWS.CloudTrail.Logging.Medium.004 |
+| Security Best Practices | CloudTrail | MEDIUM | Ensure that EC2 is EBS optimized | AWS.CloudTrail.Logging.Medium.008 |
+| Security Best Practices | CloudTrail | LOW | ECR should have an image tag be immutable | AWS.CloudTrail.Logging.Low.009 |
+| Logging and Monitoring | CloudTrail | MEDIUM | Cloud Trail Multi Region not enabled | AWS.CloudTrail.Logging.Medium.0460 |
+| Logging and Monitoring | CloudTrail | MEDIUM | Ensure CloudTrail has log file validation enabled. | AWS.CloudTrail.LM.MEDIUM.0087 |
+| Logging and Monitoring | CloudTrail | MEDIUM | Ensure appropriate subscribers to each SNS topic | AWS.CloudTrail.Logging.Low.0559 |
+| Logging and Monitoring | Config | Medium | Ensure AWS Config is enabled in all regions | AWS.Config.Logging.Medium.0590 |
+
+
+### aws_sagemaker_notebook_instance
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Data Protection | ASNI | MEDIUM | Ensure SageMaker Instance is Encrypted | AWS.ASNI.DP.MEDIUM.0035 |
 
 
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 |
-| Logging | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 |
-| Encryption and Key Management | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 |
+| Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEIDUM.0063 |
+| Infrastructure Security | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 |
+| Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 |
+| Data Protection | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 |
+| Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 |
 
 
 ### aws_kms_key
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | KMS | HIGH | Ensure rotation for customer created CMKs is enabled | AWS.KMS.Logging.High.0400 |
-| Network Security | KMS | HIGH | Identify any publicly accessible AWS Key Management Service master keys and update their access policy in order to stop any unsigned requests made to these resources. | AWS.KMS.NetworkSecurity.High.0566 |
+| Identity and Access Management | AKK | HIGH | Ensure IAM policies do not have 'Principal' element missing from the policy statement. | AWS.AKK.IAM.HIGH.0012 |
+| Identity and Access Management | KMS | HIGH | Identify any publicly accessible AWS Key Management Service master keys and update their access policy in order to stop any unsigned requests made to these resources. | AWS.KMS.NetworkSecurity.High.0566 |
+| Data Protection | AKK | HIGH | Ensure rotation for customer created CMKs is enabled | AWS.AKK.DP.HIGH.0012 |
+| Identity and Access Management | AKK | HIGH | Ensure KMS key policy does not have wildcard policies attached. | AWS.AKK.IAM.HIGH.0082 |
 
 
 ### aws_security_group
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Ports Security | ALB | MEDIUM | 'MSSQL Debugger' (TCP:135) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0236 |
-| Network Ports Security | ALB | MEDIUM | 'Cassandra OpsCenter agent port' (TCP:61621) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0220 |
-| Network Ports Security | SecurityGroup | HIGH | remote desktop port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0562 |
-| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (TCP:11214) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0240 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Datagram Service' (TCP:138) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0256 |
-| Network Ports Security | ALB | MEDIUM | 'SNMP' (UDP:161) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0276 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Session Service' (TCP:139) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0260 |
-| Network Ports Security | ALB | MEDIUM | 'LDAP SSL ' (TCP:636) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0230 |
-| Network Ports Security | ALB | MEDIUM | 'Known internal web port' (TCP:8000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0226 |
-| Network Ports Security | ALB | MEDIUM | 'Postgres SQL' (UDP:5432) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0270 |
-| Network Ports Security | SecurityGroup | HIGH | It is recommended that no security group allows unrestricted ingress access | AWS.SecurityGroup.NPS.High.1045 |
-| Network Ports Security | ALB | MEDIUM | 'Oracle DB SSL' (UDP:2484) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0266 |
-| Network Ports Security | SecurityGroup | HIGH | A VPC comes with a default security group whose initial settings deny all inbound traffic, allow all outbound traffic, and allow all traffic between instances assigned to the security group. If you don't specify a security group when you launch an instance, the instance is automatically assigned to this default security group. Security groups provide stateful filtering of ingress/egress network traffic to AWS resources. It is recommended that the default security group restrict all traffic. Configuring the default security group to restrict all traffic will encourage least privilege security group development and mindful placement of AWS resource into security groups which will in-turn reduce the exposure of those resources. | AWS.SecurityGroup.NetworkSecurity.High.0097 |
-| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (UDP:11215) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0246 |
-| Network Ports Security | ALB | MEDIUM | 'SaltStack Master' (TCP:4505) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0196 |
-| Network Ports Security | ALB | MEDIUM | 'MySQL' (TCP:3306) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0250 |
-| Network Ports Security | ALB | MEDIUM | 'Known internal web port' (TCP:8080) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0228 |
-| Network Ports Security | SecurityGroup | HIGH |  It is recommended that no security group allows unrestricted ingress access | AWS.SecurityGroup.NetworkSecurity.High.0094 |
-| Network Ports Security | ALB | MEDIUM | 'Hadoop Name Node' (TCP:9000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0224 |
-| Network Ports Security | SecurityGroup | HIGH | Unknown Port is exposed to the entire internet | AWS.SecurityGroup.NPS.High.1046 |
-| Network Ports Security | ALB | MEDIUM | 'MSSQL Admin' (TCP:1434) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0232 |
-| Network Ports Security | ALB | MEDIUM | 'Mongo Web Portal' (TCP:27018) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0248 |
-| Network Ports Security | ALB | MEDIUM | 'Oracle DB SSL' (TCP:2484) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0264 |
-| Network Ports Security | ALB | MEDIUM | 'Prevalent known internal port' (TCP:3000) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0272 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Name Service' (TCP:137) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0252 |
-| Network Ports Security | ALB | HIGH | 'SSH' (TCP:22) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0194 |
-| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (UDP:11214) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0244 |
-| Network Ports Security | ALB | MEDIUM | 'Postgres SQL' (TCP:5432) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0268 |
-| Network Ports Security | ALB | MEDIUM | 'Cassandra' (TCP:7001) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0222 |
-| Network Ports Security | ALB | MEDIUM | 'MSSQL Browser Service' (UDP:1434) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0234 |
-| Network Ports Security | ALB | MEDIUM | 'CIFS / SMB' (TCP:3020) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0218 |
-| Network Ports Security | ALB | MEDIUM | 'SQL Server Analysis Services' (TCP:2383) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0280 |
-| Network Ports Security | ALB | MEDIUM | 'MSSQL Server' (TCP:1433) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0238 |
-| Network Ports Security | SecurityGroup | HIGH | ssh port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0560 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Name Service' (UDP:137) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0254 |
-| Network Ports Security | SecurityGroup | HIGH | http port open to internet | AWS.SecurityGroup.NetworkPortsSecurity.Low.0561 |
-| Network Ports Security | ALB | MEDIUM | 'Memcached SSL' (TCP:11215) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0242 |
-| Network Ports Security | ALB | MEDIUM | 'SQL Server Analysis Service browser' (TCP:2382) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0278 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Datagram Service' (UDP:138) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0258 |
-| Network Ports Security | ALB | MEDIUM | 'NetBIOS Session Service' (UDP:139) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0262 |
-| Network Ports Security | ALB | MEDIUM | 'Puppet Master' (TCP:8140) is accessible by a CIDR block range | AWS.ALB.NetworkPortsSecurity.High.0274 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (UDP,11214) is not accessible by a public CIDR block range | AC_AWS_0292 |
+| Infrastructure Security | json | LOW | Ensure Cassandra' (TCP,7001) is not exposed to private hosts more than 32 | AC_AWS_0338 |
+| Infrastructure Security | json | MEDIUM | Ensure Known internal web port (TCP,8080) is not accessible by a CIDR block range | AC_AWS_0284 |
+| Infrastructure Security | json | MEDIUM | Ensure Oracle DB SSL (TCP,2484) is not accessible by a public CIDR block range | AC_AWS_0302 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MSSQL Server (TCP,1433) | AC_AWS_0247 |
+| Infrastructure Security | json | LOW | Ensure SNMP' (UDP,161) is not exposed to private hosts more than 32 | AC_AWS_0355 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSNameService' (TCP,137) is not exposed to private hosts more than 32 | AC_AWS_0343 |
+| Infrastructure Security | json | HIGH | Ensure SMTP (TCP,25) is not accessible by a public CIDR block range | AC_AWS_0314 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Memcached SSL (UDP,11215) | AC_AWS_0251 |
+| Infrastructure Security | json | LOW | Ensure Elasticsearch' (TCP,9300) is not exposed to private hosts more than 32 | AC_AWS_0363 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Telnet (TCP,23) | AC_AWS_0271 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MemcachedSSL (UDP,11214) is not exposed to  private hosts more than 32 | AC_AWS_0334 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SQL Server Analysis Service browser (TCP,2382) | AC_AWS_0267 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Debugger (TCP,135) is not accessible by a public CIDR block range | AC_AWS_0288 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports https (TCP,443) is not exposed to private hosts more than 32 | AC_AWS_0322 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - remote desktop port (TCP,3389) | AC_AWS_0230 |
+| Infrastructure Security | json | LOW | Ensure Telnet' (TCP,23) is not exposed to private hosts more than 32 | AC_AWS_0359 |
+| Infrastructure Security | json | HIGH | Ensure Elasticsearch (TCP,9300) is not accessible by a public CIDR block range | AC_AWS_0318 |
+| Infrastructure Security | json | LOW | Ensure SSH (TCP,22) is not accessible by a public CIDR block range | AC_AWS_0319 |
+| Infrastructure Security | json | LOW | Ensure OracleDatabaseServer' (TCP,521) is not exposed to private hosts more than 32 | AC_AWS_0358 |
+| Infrastructure Security | json | HIGH | Ensure no security groups allow ingress from 0.0.0.0/0 to ALL ports and protocols | AC_AWS_0231 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SNMP (UDP,161) | AC_AWS_0266 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Server (TCP,1433) is not accessible by a public CIDR block range | AC_AWS_0289 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports remote desktop port (TCP,3389) is not exposed to private hosts more than 32 | AC_AWS_0323 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Oracle Database Server (TCP,1521) | AC_AWS_0270 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MemcachedSSL (UDP,11215) is not exposed to  private hosts more than 32 | AC_AWS_0335 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - (SSH,22) | AC_AWS_0227 |
+| Infrastructure Security | json | LOW | Ensure MongoDB' (TCP,27017) is not exposed to private hosts more than 32 | AC_AWS_0362 |
+| Infrastructure Security | json | HIGH | Ensure CIFS for file/printer (TCP,445) is not accessible by a public CIDR block range | AC_AWS_0315 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Memcached SSL (UDP,11214) | AC_AWS_0250 |
+| Infrastructure Security | json | LOW | Ensure MongoWebPortal' (TCP,27018) is not exposed to private hosts more than 32 | AC_AWS_0342 |
+| Infrastructure Security | json | LOW | Ensure PuppetMaster' (TCP,8140) is not exposed to private hosts more than 32 | AC_AWS_0354 |
+| Infrastructure Security | json | MEDIUM | Ensure Oracle DB SSL (UDP,2484) is not accessible by a public CIDR block range | AC_AWS_0303 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MSSQL Debugger (TCP,135) | AC_AWS_0246 |
+| Infrastructure Security | json | MEDIUM | Ensure LDAP SSL (TCP,636) is not accessible by a public CIDR block range | AC_AWS_0285 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (UDP,11215) is not accessible by a public CIDR block range | AC_AWS_0293 |
+| Infrastructure Security | json | LOW | Ensure HadoopNameNode' (TCP,9000) is not exposed to private hosts more than 32 | AC_AWS_0339 |
+| Infrastructure Security | json | MEDIUM | Ensure SaltStack Master (TCP,4505) is not accessible by a public CIDR block range | AC_AWS_0277 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MemcachedSSL (TCP,11214) is not exposed to private hosts more than 32 | AC_AWS_0332 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBios Datagram Service (TCP,138) is not accessible by a public CIDR block range | AC_AWS_0298 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Oracle DB SSL (UDP,2484) | AC_AWS_0261 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports Elasticsearch (TCP,9200) is not exposed to  private hosts more than 32 | AC_AWS_0324 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SaltStack Master (TCP,4506) | AC_AWS_0236 |
+| Infrastructure Security | json | MEDIUM | Ensure SNMP (UDP,161) is not accessible by a public CIDR block range | AC_AWS_0308 |
+| Infrastructure Security | json | LOW | Ensure OracleDBSSL' (TCP,2484) is not exposed to private hosts more than 32 | AC_AWS_0349 |
+| Infrastructure Security | json | MEDIUM | Ensure Mongo Web Portal (TCP,27018) is not accessible by a public CIDR block range | AC_AWS_0294 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MSSQLAdmin (TCP,1434) is not exposed to private hosts more than 32 | AC_AWS_0328 |
+| Infrastructure Security | json | MEDIUM | Ensure Hadoop Name Node (TCP,9000) is not accessible by a public CIDR block range | AC_AWS_0282 |
+| Infrastructure Security | json | MEDIUM | Ensure Postgres SQL (TCP,5432) is not accessible by a public CIDR block range | AC_AWS_0304 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Known internal web port (TCP,8000) | AC_AWS_0241 |
+| Infrastructure Security | json | LOW | Ensure Prevalentknowninternalport' (TCP,3000) is not exposed to private hosts more than 32 | AC_AWS_0353 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSNameService' (UDP,137) is not exposed to private hosts more than 32 | AC_AWS_0345 |
+| Infrastructure Security | json | HIGH | Ensure Oracle Database Server (TCP,1521) is not accessible by a public CIDR block range | AC_AWS_0312 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Datagram Service (UDP,138) | AC_AWS_0257 |
+| Infrastructure Security | json | HIGH | Ensure Telnet (TCP,23) is not accessible by a public CIDR block range | AC_AWS_0313 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Datagram Service (TCP,138) | AC_AWS_0256 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSNameService' (UDP,137) is not exposed to private hosts more than 32 | AC_AWS_0344 |
+| Infrastructure Security | json | LOW | Ensure PostgresSQL' (UDP,5432) is not exposed to private hosts more than 32 | AC_AWS_0352 |
+| Infrastructure Security | json | MEDIUM | Ensure Postgres SQL (UDP,5432) is not accessible by a CIDR block range | AC_AWS_0305 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Hadoop Name Node (TCP,9000) | AC_AWS_0240 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MSSQLBrowserService (UDP,1434) is not exposed to private hosts more than 32 | AC_AWS_0329 |
+| Infrastructure Security | json | MEDIUM | Ensure Known internal web port (TCP,8000) is not accessible by a public CIDR block range | AC_AWS_0283 |
+| Infrastructure Security | json | MEDIUM | Ensure MySQL (TCP,3306) is not accessible by a public CIDR block range | AC_AWS_0295 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSSessionService' (UDP,139) is not exposed to private hosts more than 32 | AC_AWS_0348 |
+| Infrastructure Security | json | MEDIUM | Ensure SQL Server Analysis Service browser (TCP,2382) is not accessible by a public CIDR block range | AC_AWS_0309 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - CIFS / SMB (TCP,3020) | AC_AWS_0237 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Oracle DB SSL (TCP,2484) | AC_AWS_0260 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports SaltStackMaster (TCP,4506) is not exposed to private hosts more than 32 | AC_AWS_0325 |
+| Infrastructure Security | json | HIGH | Ensure Unknown Port is not exposed to the entire internet | AC_AWS_0276 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MemcachedSSL (TCP,11215) is not exposed to private hosts more than 32 | AC_AWS_0333 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBios Datagram Service (UDP,138) is not accessible by a public CIDR block range | AC_AWS_0299 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Session Service (UDP,139) | AC_AWS_0259 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Elasticsearch (TCP,9200) | AC_AWS_0234 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports CassandraOpsCenteragent (TCP,61621) is not exposed to private hosts more than 32 | AC_AWS_0326 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Postgres SQL (UDP,5432) | AC_AWS_0263 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MSSQLDebugger (TCP,135) is not exposed to private hosts more than 32 | AC_AWS_0330 |
+| Infrastructure Security | json | HIGH | Ensure no security groups is wide open to public, that is, allows traffic from 0.0.0.0/0 to ALL ports and protocols | AC_AWS_0275 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Name Service (UDP,137) | AC_AWS_0255 |
+| Infrastructure Security | json | MEDIUM | Ensure SQL Server Analysis Services (TCP,2383) is not accessible by a public CIDR block range | AC_AWS_0310 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSSessionService' (TCP,139) is not exposed to private hosts more than 32 | AC_AWS_0347 |
+| Infrastructure Security | json | LOW | Ensure PostgresSQL' (TCP,5432) is not exposed to private hosts more than 32 | AC_AWS_0351 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - LDAP SSL (TCP,636) | AC_AWS_0243 |
+| Infrastructure Security | json | MEDIUM | Ensure Prevalent known internal port (TCP,3000) is not accessible by a public CIDR block range | AC_AWS_0306 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Cassandra OpsCenter agent (TCP,61621) | AC_AWS_0238 |
+| Infrastructure Security | json | MEDIUM | Ensure Cassandra OpsCenter agent port (TCP,61621) is not accessible by a public CIDR block range | AC_AWS_0280 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Name Service (TCP,137) is not accessible by a public CIDR block range | AC_AWS_0296 |
+| Infrastructure Security | json | MEDIUM | Ensure CIFS / SMB (TCP,3020) is not accessible by a public CIDR block range | AC_AWS_0279 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Name Service (UDP,137) is not accessible by a public CIDR block range | AC_AWS_0297 |
+| Infrastructure Security | json | MEDIUM | Ensure SaltStack Master (TCP,4506) is not accessible by a public CIDR block range | AC_AWS_0278 |
+| Infrastructure Security | json | MEDIUM | Ensure Cassandra (TCP,7001) is not accessible by a public CIDR block range | AC_AWS_0281 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Cassandra (TCP,7001) | AC_AWS_0239 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Known internal web port (TCP,8080) | AC_AWS_0242 |
+| Infrastructure Security | json | MEDIUM | Ensure Puppet Master (TCP:8140) is not accessible by a public CIDR block range | AC_AWS_0307 |
+| Infrastructure Security | json | LOW | Ensure OracleDBSSL' (UDP,2484) is not exposed to private hosts more than 32 | AC_AWS_0350 |
+| Infrastructure Security | json | LOW | Ensure NetBIOSDatagramService' (UDP,138) is not exposed to private hosts more than 32 | AC_AWS_0346 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Name Service (TCP,137) | AC_AWS_0254 |
+| Infrastructure Security | json | MEDIUM | Ensure SaltStack Master (TCP,4505) is not accessible by a public CIDR block range | AC_AWS_0311 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MSSQLServer (TCP,1433) is not exposed to private hosts more than 32 | AC_AWS_0331 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MongoDB (TCP,27017) | AC_AWS_0274 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports Knowninternalwebport (TCP,8080) is not exposed to private hosts more than 32 | AC_AWS_0327 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Postgres SQL (TCP,5432) | AC_AWS_0262 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Elasticsearch (TCP,9300) | AC_AWS_0235 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - NetBIOS Session Service (TCP,139) | AC_AWS_0258 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MySQL (TCP,3306) | AC_AWS_0253 |
+| Infrastructure Security | json | HIGH | Ensure MongoDB (TCP,27017) is not accessible by a public CIDR block range | AC_AWS_0316 |
+| Infrastructure Security | json | LOW | Ensure LDAPSSL' (TCP,636) is not exposed to private hosts more than 32 | AC_AWS_0341 |
+| Infrastructure Security | json | LOW | Ensure SQLServerAnalysisServices' (TCP,2383) is not exposed to private hosts more than 32 | AC_AWS_0357 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MSSQL Browser Service (UDP,1434) | AC_AWS_0245 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBios Session Service (TCP,139) is not accessible by a CIDR block range | AC_AWS_0300 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Admin (TCP,1434) is not accessible by a public CIDR block range | AC_AWS_0286 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SaltStack Master (TCP,4505) | AC_AWS_0269 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (TCP,11214) is not accessible by a public CIDR block range | AC_AWS_0290 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - (HTTP,80) | AC_AWS_0228 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Memcached SSL (TCP,11215) | AC_AWS_0249 |
+| Infrastructure Security | json | HIGH | Ensure no default security groups are used as they allow ingress from 0.0.0.0/0 to ALL ports and protocols | AC_AWS_0232 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports SSH (TCP,22) is not exposed to private hosts more than 32 | AC_AWS_0320 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Puppet Master (TCP,8140) | AC_AWS_0265 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports MySQL (TCP,3306) is not exposed to private hosts more than 32 | AC_AWS_0336 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - CIFS for file/printer (TCP,445) | AC_AWS_0273 |
+| Infrastructure Security | json | LOW | Ensure CIFSforfile/printer' (TCP,445) is not exposed to private hosts more than 32 | AC_AWS_0361 |
+| Infrastructure Security | json | LOW | Ensure SMTP' (TCP,25) is not exposed to private hosts more than 32 | AC_AWS_0360 |
+| Infrastructure Security | json | LOW | Ensure CIFS/SMB' (TCP,3020) is not exposed to private hosts more than 32 | AC_AWS_0337 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SMTP (TCP,25) | AC_AWS_0272 |
+| Infrastructure Security | json | LOW | Ensure Security Groups Unrestricted Specific Ports http (TCP,80) is not exposed to private hosts more than 32 | AC_AWS_0321 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Prevalent known internal port (TCP,3000) | AC_AWS_0264 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SaltStack Master (TCP,4505) | AC_AWS_0233 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Memcached SSL (TCP,11214) | AC_AWS_0248 |
+| Infrastructure Security | json | LOW | Security Groups - Unrestricted Specific Ports - (HTTPS,443) | AC_AWS_0229 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (TCP,11215) is not accessible by a public CIDR block range | AC_AWS_0291 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Browser Service (UDP,1434) is not accessible by a public CIDR block range | AC_AWS_0287 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - SQL Server Analysis Services (TCP,2383) | AC_AWS_0268 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - MSSQL Admin (TCP,1434) | AC_AWS_0244 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBios Session Service (UDP,139) is not accessible by a CIDR block range | AC_AWS_0301 |
+| Infrastructure Security | json | LOW | Ensure SQLServerAnalysisServicebrowser' (TCP,2382) is not exposed to private hosts more than 32 | AC_AWS_0356 |
+| Infrastructure Security | json | LOW | Ensure Knowninternalwebport' (TCP,8000) not exposed to private hosts more than 32 | AC_AWS_0340 |
+| Infrastructure Security | json | HIGH | Security Groups - Unrestricted Specific Ports - Mongo Web Portal (TCP,27018) | AC_AWS_0252 |
+| Infrastructure Security | json | HIGH | Ensure Elasticsearch (TCP,9200) is not accessible by a public CIDR block range | AC_AWS_0317 |
+
+
+### aws_api_gateway_method
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Infrastructure Security | APGM | LOW | Ensure there is no open access to back-end resources through API | AWS.APGM.IS.LOW.0056 |
+
+
+### aws_efs_file_system_policy
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Identity and Access Management | AEFSP | HIGH | Ensure EFS file system does not use insecure wildcard policies. | AWS.AEFSP.IAM.HIGH.0059 |
 
 
 ### aws_ecs_service
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
 | Identity and Access Management | ECS | HIGH | Ensure there are no ECS services Admin roles | AWS.ECS.High.0436 |
+
+
+### aws_globalaccelerator_accelerator
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Logging and Monitoring | AGA | LOW | Ensure Global Accelerator accelerator has flow logs enabled. | AWS.AGA.LM.LOW.0073 |
+
+
+### aws_api_gateway_rest_api_policy
+| Category | Resource | Severity | Description | Reference ID |
+| -------- | -------- | -------- | ----------- | ------------ |
+| Identity and Access Management | APGRAP | HIGH | Ensure use of API Gateway endpoint policy, and no action wildcards are being used. | AWS.APGRAP.IAM.HIGH.0064 |
 
 
