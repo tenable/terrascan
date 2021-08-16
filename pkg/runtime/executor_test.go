@@ -17,12 +17,15 @@
 package runtime
 
 import (
+	"encoding/xml"
 	"fmt"
 	"path/filepath"
 	"reflect"
 	"testing"
 
 	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/vulnerability"
 	"github.com/hashicorp/go-multierror"
 
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
@@ -71,6 +74,9 @@ func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}
 type MockPolicyEngine struct {
 	err error
 }
+type MockVulnerabiltyEngine struct {
+	out vulnerability.EngineOutput
+}
 
 func (m MockPolicyEngine) Init(input string, filter policy.PreLoadFilter) error {
 	return m.err
@@ -90,7 +96,11 @@ func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreSc
 	return out, m.err
 }
 
-func (m MockPolicyEngine) ReportVulnerability(input policy.EngineInput) (out policy.EngineOutput) {
+func (m MockVulnerabiltyEngine) ReportVulnerability(input vulnerability.EngineInput, options map[string]interface{}) (out vulnerability.EngineOutput) {
+	return m.out
+}
+
+func (m MockVulnerabiltyEngine) FindVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
 	return out
 }
 
@@ -180,6 +190,22 @@ func TestExecute(t *testing.T) {
 				policyEngines: []policy.Engine{MockPolicyEngine{err: errMockPolicyEngine}},
 			},
 			wantErr: errMockPolicyEngine,
+		},
+		{
+			name: "test find vulnerability engine",
+			executor: Executor{
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
+				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
+				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
+				vulnerabilityEngine: MockVulnerabiltyEngine{
+					out: vulnerability.EngineOutput{
+						XMLName:        xml.Name{},
+						ViolationStore: results.NewViolationStore(),
+					},
+				},
+				findVulnerabilities: true,
+			},
+			wantErr: nil,
 		},
 	}
 

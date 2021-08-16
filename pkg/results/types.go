@@ -67,7 +67,7 @@ type ScanSummary struct {
 	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`
 	TotalPolicies        int    `json:"policies_validated" yaml:"policies_validated" xml:"policies_validated,attr"`
 	ViolatedPolicies     int    `json:"violated_policies" yaml:"violated_policies" xml:"violated_policies,attr"`
-	Vulnerabilities      int    `json:"vulnerabilities,omitempty" yaml:"vulnerabilities,omitempty" xml:"vulnerabilities,attr,omitempty"`
+	Vulnerabilities      *int   `json:"vulnerabilities,omitempty" yaml:"vulnerabilities,omitempty"`
 	LowCount             int    `json:"low" yaml:"low" xml:"low,attr"`
 	MediumCount          int    `json:"medium" yaml:"medium" xml:"medium,attr"`
 	HighCount            int    `json:"high" yaml:"high" xml:"high,attr"`
@@ -77,10 +77,10 @@ type ScanSummary struct {
 
 // CVSS will hold cvss score details
 type CVSS struct {
-	V2Vector string  `json:"v2_vector,omitempty" yaml:"v2_vector,omitempty" xml:"v2_vector,attr"`
-	V3Vector string  `json:"v3_vector,omitempty" yaml:"v3_vector,omitempty" xml:"v3_vector,attr"`
-	V2Score  float64 `json:"v2_score,omitempty" yaml:"v2_score,omitempty" xml:"v2_score,attr"`
-	V3Score  float64 `json:"v3_score,omitempty" yaml:"v3_score,omitempty" xml:"v3_score,attr"`
+	V2Vector string  `json:"v2_vector,omitempty" yaml:"v2_vector,omitempty" xml:"v2_vector,attr,omitempty"`
+	V3Vector string  `json:"v3_vector,omitempty" yaml:"v3_vector,omitempty" xml:"v3_vector,attr,omitempty"`
+	V2Score  float64 `json:"v2_score,omitempty" yaml:"v2_score,omitempty" xml:"v2_score,attr,omitempty"`
+	V3Score  float64 `json:"v3_score,omitempty" yaml:"v3_score,omitempty" xml:"v3_score,attr,omitempty"`
 }
 
 //Vulnerability will hold vulnerability details
@@ -89,7 +89,7 @@ type Vulnerability struct {
 	Container        string `json:"container,omitempty" yaml:"container,omitempty" xml:"container,attr"`
 	Package          string `json:"package,omitempty" yaml:"package,omitempty" xml:"package,attr"`
 	Severity         string `json:"severity" yaml:"severity" xml:"severity,attr"`
-	CVSSScore        CVSS   `json:"cvss_score,omitempty" yaml:"cvss_score" xml:"cvss_score,attr"`
+	CVSSScore        CVSS   `json:"cvss_score,omitempty" yaml:"cvss_score,omitempty" xml:"cvss_score>cvss_score,omitempty"`
 	InstalledVersion string `json:"installed_version,omitempty" yaml:"installed_version,omitempty" xml:"installed_version,attr,omitempty"`
 	Description      string `json:"description,omitempty" yaml:"description,omitempty" xml:"description,attr,omitempty"`
 	VulnerabilityID  string `json:"vulnerability_id" yaml:"vulnerability_id" xml:"vulnerability_id,attr"`

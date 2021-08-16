@@ -143,19 +143,6 @@ func detailedViolations(v results.Violation) string {
 }
 
 func scanSummary(s results.ScanSummary) string {
-	if s.Vulnerabilities > 0 {
-		out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
-			"File/Folder", s.ResourcePath,
-			"IaC Type", s.IacType,
-			"Scanned At", s.Timestamp,
-			"Policies Validated", s.TotalPolicies,
-			"Violated Policies", s.ViolatedPolicies,
-			"Vulnerabilities", s.Vulnerabilities,
-			"Low", s.LowCount,
-			"Medium", s.MediumCount,
-			"High", s.HighCount)
-		return out
-	}
 	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
 		"File/Folder", s.ResourcePath,
 		"IaC Type", s.IacType,
@@ -165,6 +152,11 @@ func scanSummary(s results.ScanSummary) string {
 		"Low", s.LowCount,
 		"Medium", s.MediumCount,
 		"High", s.HighCount)
+
+	if s.Vulnerabilities != nil {
+		out += fmt.Sprintf("%-20v:\t%d\n\t", "Vulnerabilities", *s.Vulnerabilities)
+	}
+
 	return out
 }
 
@@ -184,11 +176,14 @@ func defaultVulnerabilities(v results.Vulnerability) string {
 	if resourceName == "" {
 		resourceName = `""`
 	}
-	out := fmt.Sprintf("%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t%-15v:\t%s\n\t",
+	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%s\n\t",
+		"Description", v.Description,
 		"Vulnerability ID", v.VulnerabilityID,
 		"Resource Name", resourceName,
 		"Resource Type", v.ResourceType,
 		"Image", v.Image,
-		"Package", v.Package)
+		"Package", v.Package,
+		"Line", v.LineNumber,
+		"Primary URL", v.PrimaryURL)
 	return out
 }
