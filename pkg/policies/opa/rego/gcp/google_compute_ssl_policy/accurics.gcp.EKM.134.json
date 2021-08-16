@@ -2,7 +2,9 @@
     "name": "weakCipherSuitesEnabled",
     "file": "weakCipherSuitesEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_compute_ssl_policy",
+    "resource_type": {
+        "google_compute_ssl_policy": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites.",

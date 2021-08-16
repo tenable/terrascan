@@ -2,12 +2,14 @@
     "name": "networkPolicyEnabled",
     "file": "networkPolicyEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_container_cluster",
+    "resource_type": {
+        "google_container_cluster": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Network policy is enabled on Kubernetes Engine Clusters.",
     "reference_id": "accurics.gcp.NS.103",
-    "id": "AC_GCP_0293",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0293"
 }

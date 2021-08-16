@@ -2,7 +2,9 @@
 	"name": "networkPort137ExposedToPrivateUAz",
 	"file": "networkPortExposedToPrivateAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort137ExposedToPrivateUAz",
@@ -14,7 +16,7 @@
 	"severity": "LOW",
 	"description": "Ensure NetBIOS Name Service (Udp:137) is not exposed to private hosts more than 32 for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0482",
-	"id": "AC_AZURE_0482",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0482"
 }

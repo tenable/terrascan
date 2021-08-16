@@ -2,7 +2,9 @@
 	"name": "networkPort5432ExposedToInternetAz",
 	"file": "networkPortExposedToInternetAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort5432ExposedToInternetAz",
@@ -14,7 +16,7 @@
 	"severity": "HIGH",
 	"description": "Ensure PostgreSQL (Tcp:5432) is not exposed to entire internet for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0460",
-	"id": "AC_AZURE_0460",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0460"
 }

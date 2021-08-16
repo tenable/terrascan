@@ -2,7 +2,9 @@
     "name": "s3BucketNoWebsiteIndexDoc",
     "file": "s3BucketNoWebsiteIndexDoc.rego",
     "policy_type": "aws",
-    "resource_type": "aws_s3_bucket",
+    "resource_type": {
+        "aws_s3_bucket": true
+    },
     "template_args": {
         "prefix": ""
     },

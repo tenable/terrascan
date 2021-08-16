@@ -2,7 +2,9 @@
     "name": "reme_containerRegistryAdminEnabled",
     "file": "containerRegistryAdminEnabled.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_container_registry",
+    "resource_type": {
+        "azurerm_container_registry": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

@@ -2,7 +2,9 @@
 	"name": "networkPort23ExposedToPublicGCP",
 	"file": "networkPortExposedToPublicGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": "google_compute_firewall",
+	"resource_type": {
+		"google_compute_firewall": true
+	},
 	"template_args": {
 		"name": "networkPort23ExposedToPublicGCP",
 		"portNumber": 23,
@@ -13,7 +15,7 @@
 	"severity": "MEDIUM",
 	"description": "Ensure Telnet (TCP:23) is not exposed to public for Google Compute Firewall",
 	"reference_id": "AC_GCP_0118",
-	"id": "AC_GCP_0118",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_GCP_0118"
 }

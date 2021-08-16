@@ -2,7 +2,9 @@
 	"name": "networkPort9090ExposedToInternetGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": "google_compute_firewall",
+	"resource_type": {
+		"google_compute_firewall": true
+	},
 	"template_args": {
 		"name": "networkPort9090ExposedToInternetGCP",
 		"portNumber": 9090,
@@ -13,7 +15,7 @@
 	"severity": "HIGH",
 	"description": "Ensure CiscoSecure, Websm (TCP:9090) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0219",
-	"id": "AC_GCP_0219",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_GCP_0219"
 }

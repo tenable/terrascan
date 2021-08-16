@@ -50,7 +50,7 @@ var _ = Describe("Scan is run for dockerfile directories and files", func() {
 	Context("scan iac directories violating dockerfile policies", func() {
 		Context("iac type docker will be part of all iac", func() {
 			When("docker files are scanned but iac type is not specified", func() {
-				It("should scan all iac and display violations", func() {
+				PIt("should scan all iac and display violations", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					// exit code is 5 because iac files in directory has violations

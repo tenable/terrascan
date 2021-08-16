@@ -52,7 +52,7 @@ type RegoMetadata struct {
 	Name         string                 `json:"name"`
 	File         string                 `json:"file"`
 	PolicyType   string                 `json:"policy_type"`
-	ResourceType string                 `json:"resource_type"`
+	ResourceType map[string]bool        `json:"resource_type"`
 	TemplateArgs map[string]interface{} `json:"template_args"`
 	Severity     string                 `json:"severity"`
 	Description  string                 `json:"description"`

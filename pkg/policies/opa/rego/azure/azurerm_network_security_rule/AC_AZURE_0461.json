@@ -2,7 +2,9 @@
 	"name": "networkPort110ExposedToPrivateAz",
 	"file": "networkPortExposedToPrivateAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort110ExposedToPrivateAz",
@@ -14,7 +16,7 @@
 	"severity": "LOW",
 	"description": "Ensure POP3 (Tcp:110) is not exposed to private hosts more than 32 for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0461",
-	"id": "AC_AZURE_0461",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0461"
 }

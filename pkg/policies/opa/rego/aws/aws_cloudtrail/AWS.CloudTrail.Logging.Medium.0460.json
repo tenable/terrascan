@@ -2,7 +2,9 @@
     "name": "cloudTrailMultiRegionNotCreated",
     "file": "cloudTrailMultiRegionNotCreated.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudtrail",
+    "resource_type": {
+        "aws_cloudtrail": true
+    },
     "template_args": {
         "prefix": ""
     },

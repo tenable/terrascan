@@ -2,7 +2,9 @@
     "name": "amiSharedToMultipleAccounts",
     "file": "amiSharedToMultipleAccounts.rego",
     "policy_type": "aws",
-    "resource_type": "aws_ami_launch_permission",
+    "resource_type": {
+        "aws_ami_launch_permission": true
+    },
     "template_args": {
         "prefix": ""
     },

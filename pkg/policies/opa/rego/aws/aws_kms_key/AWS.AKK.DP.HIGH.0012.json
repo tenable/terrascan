@@ -2,7 +2,9 @@
     "name": "kmsKeyRotationDisabled",
     "file": "kmsKeyRotationDisabled.rego",
     "policy_type": "aws",
-    "resource_type": "aws_kms_key",
+    "resource_type": {
+        "aws_kms_key": true
+    },
     "template_args": {
         "prefix": ""
     },

@@ -2,7 +2,9 @@
     "name": "authUsersReadAccess",
     "file": "s3AclGrants.rego",
     "policy_type": "aws",
-    "resource_type": "aws_s3_bucket",
+    "resource_type": {
+        "aws_s3_bucket": true
+    },
     "template_args": {
         "access": "authenticated-read",
         "name": "authUsersReadAccess",

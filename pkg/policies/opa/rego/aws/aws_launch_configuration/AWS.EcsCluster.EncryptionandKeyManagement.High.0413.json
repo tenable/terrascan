@@ -2,7 +2,9 @@
     "name": "launchConfigurationEBSBlockUnEncrypted",
     "file": "launchConfigurationEBSBlockUnEncrypted.rego",
     "policy_type": "aws",
-    "resource_type": "aws_launch_configuration",
+    "resource_type": {
+        "aws_launch_configuration": true
+    },
     "template_args": {
         "prefix": ""
     },

@@ -2,7 +2,9 @@
     "name": "cloudfrontNoGeoRestriction",
     "file": "cloudfrontNoGeoRestriction.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudfront_distribution",
+    "resource_type": {
+        "aws_cloudfront_distribution": true
+    },
     "template_args": {
         "prefix": ""
     },

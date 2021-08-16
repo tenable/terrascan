@@ -2,7 +2,9 @@
     "name": "iamRolePolicyWithFullAdminCntrl",
     "file": "iamRolePolicyWithFullAdminCntrl.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_role_policy",
+    "resource_type": {
+        "aws_iam_role_policy": true
+    },
     "template_args": {
         "prefix": ""
     },

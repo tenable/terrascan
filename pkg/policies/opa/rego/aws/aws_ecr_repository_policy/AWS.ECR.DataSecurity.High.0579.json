@@ -2,7 +2,9 @@
     "name": "ecrRepoIsPublic",
     "file": "ecrRepoIsPublic.rego",
     "policy_type": "aws",
-    "resource_type": "aws_ecr_repository_policy",
+    "resource_type": {
+        "aws_ecr_repository_policy": true
+    },
     "template_args": {
         "prefix": ""
     },

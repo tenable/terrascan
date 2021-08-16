@@ -2,7 +2,9 @@
     "name": "reme_entirelyAccessible",
     "file": "publiclyAccessible.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_redis_cache",
+    "resource_type": {
+        "azurerm_redis_cache": true
+    },
     "template_args": {
         "isEntire": true,
         "name": "entirelyAccessible",

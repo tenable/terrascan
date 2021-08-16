@@ -2,12 +2,14 @@
     "name": "checkNoPublicAccess",
     "file": "checkDatabaseSettings.rego",
     "policy_type": "gcp",
-    "resource_type": "google_sql_database_instance",
+    "resource_type": {
+        "google_sql_database_instance": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Cloud SQL database Instances are not open to the world.",
     "reference_id": "accurics.gcp.NS.102",
-    "id": "AC_GCP_0295",
     "category": "Infrastructure Security",
-    "version": 1
+    "version": 1,
+    "id": "AC_GCP_0295"
 }

@@ -2,7 +2,9 @@
     "name": "checkPubliclyAccessible",
     "file": "checkPubliclyAccessible.rego",
     "policy_type": "gcp",
-    "resource_type": "google_storage_bucket_iam_binding",
+    "resource_type": {
+        "google_storage_bucket_iam_binding": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that Cloud Storage bucket is not anonymously or publicly accessible.",

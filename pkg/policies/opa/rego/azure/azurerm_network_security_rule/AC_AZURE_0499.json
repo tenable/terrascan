@@ -2,7 +2,9 @@
 	"name": "networkPort11215ExposedToInternetUAz",
 	"file": "networkPortExposedToInternetAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort11215ExposedToInternetUAz",
@@ -14,7 +16,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Memcached SSL (Udp:11215) is not exposed to entire internet for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0499",
-	"id": "AC_AZURE_0499",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0499"
 }

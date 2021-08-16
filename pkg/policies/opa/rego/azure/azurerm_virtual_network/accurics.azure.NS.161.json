@@ -2,7 +2,9 @@
     "name": "reme_noSecurityGroupAssociated",
     "file": "noSecurityGroupAssociated.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_virtual_network",
+    "resource_type": {
+        "azurerm_virtual_network": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

@@ -2,12 +2,14 @@
     "name": "logGroupNotEncryptedWithKms",
     "file": "logGroupNotEncryptedWithKms.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudwatch",
+    "resource_type": {
+        "aws_cloudwatch": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "AWS CloudWatch log group is not encrypted with a KMS CMK",
     "reference_id": "AWS.CloudWatch.EncryptionandKeyManagement.High.0632",
     "category": "Data Protection",
-    "id": "AC_AWS_0451",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0451"
 }

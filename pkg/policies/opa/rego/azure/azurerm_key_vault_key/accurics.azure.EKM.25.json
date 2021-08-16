@@ -2,7 +2,9 @@
     "name": "reme_checkKeyExpirationIsSet",
     "file": "checkKeyExpirationIsSet.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_key_vault_key",
+    "resource_type": {
+        "azurerm_key_vault_key": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

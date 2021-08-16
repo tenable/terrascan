@@ -2,7 +2,9 @@
     "name": "nodePort",
     "file": "nodePort.rego",
     "policy_type": "k8s",
-    "resource_type": "kubernetes_service",
+    "resource_type": {
+        "kubernetes_service": true
+    },
     "template_args": {
         "name": "nodePort",
         "prefix": "",

@@ -2,16 +2,18 @@
     "name": "workdir",
     "file": "workdir.rego",
     "policy_type": "docker",
-    "resource_type": "docker_workdir",
+    "resource_type": {
+        "docker_workdir": true
+    },
     "template_args": {
+        "name": "workdir",
         "prefix": "",
-        "suffix": "",
-        "name": "workdir"
+        "suffix": ""
     },
     "severity": "HIGH",
     "description": "Ensure the use absolute paths for your WORKDIR.",
     "reference_id": "AC_DOCKER_0013",
     "category": "Infrastructure Security",
-    "id": "AC_DOCKER_0013",
-    "version": 1
+    "version": 1,
+    "id": "AC_DOCKER_0013"
 }

@@ -2,7 +2,9 @@
 	"name": "port27018AlbNetworkPortSecurityPublicScope",
 	"file": "portsAlbNetworkPortSecurityPublicScope.rego",
 	"policy_type": "aws",
-	"resource_type": "aws_security_group",
+	"resource_type": {
+		"aws_security_group": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "port27018AlbNetworkPortSecurityPublicScope",
@@ -14,7 +16,7 @@
 	"severity": "MEDIUM",
 	"description": "Ensure Mongo Web Portal (TCP,27018) is not accessible by a public CIDR block range",
 	"reference_id": "AC_AWS_0294",
-	"id": "AC_AWS_0294",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AWS_0294"
 }

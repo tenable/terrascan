@@ -2,7 +2,9 @@
 	"name": "tooOpenPrivateIPs",
 	"file": "tooOpenPrivateIPs.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"name": "tooOpenPrivateIPs",
 		"prefix": "",
@@ -11,7 +13,7 @@
 	"severity": "LOW",
 	"description": "Ensure server is not exposed to private hosts more than 32 for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0421",
-	"id": "AC_AZURE_0421",
 	"category": "Infrastructure Security",
-	"version": 1
+	"version": 1,
+	"id": "AC_AZURE_0421"
 }

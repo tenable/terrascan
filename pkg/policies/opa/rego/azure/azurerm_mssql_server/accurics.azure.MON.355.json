@@ -2,7 +2,9 @@
     "name": "mssqlServerAuditingEnabled",
     "file": "mssqlAuditing.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_mssql_server",
+    "resource_type": {
+        "azurerm_mssql_server": true
+    },
     "template_args": {
         "checkRetention": false,
         "name": "mssqlServerAuditingEnabled"

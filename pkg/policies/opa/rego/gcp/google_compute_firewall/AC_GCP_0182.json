@@ -2,7 +2,9 @@
 	"name": "networkPort9200ExposedToInternetGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": "google_compute_firewall",
+	"resource_type": {
+		"google_compute_firewall": true
+	},
 	"template_args": {
 		"name": "networkPort9200ExposedToInternetGCP",
 		"portNumber": 9200,
@@ -13,7 +15,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Elastic Search (TCP:9200) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0182",
-	"id": "AC_GCP_0182",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_GCP_0182"
 }

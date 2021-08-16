@@ -2,7 +2,9 @@
 	"name": "networkPort20ExposedToInternetGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": "google_compute_firewall",
+	"resource_type": {
+		"google_compute_firewall": true
+	},
 	"template_args": {
 		"name": "networkPort20ExposedToInternetGCP",
 		"portNumber": 20,
@@ -13,7 +15,7 @@
 	"severity": "HIGH",
 	"description": "Ensure SSH (TCP:20) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0228",
-	"id": "AC_GCP_0228",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_GCP_0228"
 }

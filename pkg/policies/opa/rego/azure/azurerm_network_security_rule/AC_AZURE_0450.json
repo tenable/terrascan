@@ -2,7 +2,9 @@
 	"name": "networkPort8140ExposedToPublicAz",
 	"file": "networkPortExposedToPublicAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort8140ExposedToPublicAz",
@@ -14,7 +16,7 @@
 	"severity": "MEDIUM",
 	"description": "Ensure Puppet Master (Tcp:8140) is not exposed to public for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0450",
-	"id": "AC_AZURE_0450",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0450"
 }

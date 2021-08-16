@@ -2,7 +2,9 @@
 	"name": "networkPort8080ExposedToInternetAz",
 	"file": "networkPortExposedToInternetAz.rego",
 	"policy_type": "azure",
-	"resource_type": "azurerm_network_security_rule",
+	"resource_type": {
+		"azurerm_network_security_rule": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "networkPort8080ExposedToInternetAz",
@@ -14,7 +16,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Known internal web port (Tcp:8080) is not exposed to entire internet for Azure Network Security Rule",
 	"reference_id": "AC_AZURE_0526",
-	"id": "AC_AZURE_0526",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AZURE_0526"
 }

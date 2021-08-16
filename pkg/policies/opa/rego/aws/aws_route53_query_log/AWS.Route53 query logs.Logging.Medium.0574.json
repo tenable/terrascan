@@ -2,7 +2,9 @@
     "name": "route53LoggingDisabled",
     "file": "route53LoggingDisabled.rego",
     "policy_type": "aws",
-    "resource_type": "aws_route53_query_log",
+    "resource_type": {
+        "aws_route53_query_log": true
+    },
     "template_args": {
         "prefix": ""
     },

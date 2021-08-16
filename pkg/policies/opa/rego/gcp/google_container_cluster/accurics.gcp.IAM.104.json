@@ -2,7 +2,9 @@
     "name": "clientCertificateEnabled",
     "file": "clientCertificateEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_container_cluster",
+    "resource_type": {
+        "google_container_cluster": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Kubernetes Cluster is created with Client Certificate disabled.",

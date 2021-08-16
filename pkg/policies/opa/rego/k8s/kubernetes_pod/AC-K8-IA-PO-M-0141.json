@@ -2,7 +2,9 @@
     "name": "secCompProfile",
     "file": "secCompProfile.rego",
     "policy_type": "k8s",
-    "resource_type": "kubernetes_pod",
+    "resource_type": {
+        "kubernetes_pod": true
+    },
     "template_args": {
         "name": "secCompProfile",
         "prefix": "",

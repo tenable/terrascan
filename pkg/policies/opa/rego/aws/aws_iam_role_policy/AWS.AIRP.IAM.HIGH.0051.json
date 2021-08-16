@@ -2,7 +2,9 @@
     "name": "iamRolePolicyWithPrivildegeEscalation",
     "file": "iamRolePolicyWithPrivildegeEscalation.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_role_policy",
+    "resource_type": {
+        "aws_iam_role_policy": true
+    },
     "template_args": {
         "prefix": ""
     },
@@ -10,6 +12,6 @@
     "description": "Ensure IAM roles do not have any policies attached that may cause privilege escalation.",
     "reference_id": "AWS.AIRP.IAM.HIGH.0051",
     "category": "Identity and Access Management",
-    "id": "AC_AWS_0473",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0473"
 }

@@ -2,7 +2,9 @@
     "name": "dynamoDbEncrypted",
     "file": "dynamoDbEncrypted.rego",
     "policy_type": "aws",
-    "resource_type": "aws_dynamodb_table",
+    "resource_type": {
+        "aws_dynamodb_table": true
+    },
     "template_args": {
         "prefix": ""
     },
@@ -10,6 +12,6 @@
     "description": "Ensure DynamoDb is encrypted at rest",
     "reference_id": "AWS.ADT.DP.MEDIUM.0025",
     "category": "Data Protection",
-    "id": "AC_AWS_0457",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0457"
 }

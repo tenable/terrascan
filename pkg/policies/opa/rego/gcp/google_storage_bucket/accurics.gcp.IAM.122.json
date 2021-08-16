@@ -2,7 +2,9 @@
     "name": "uniformBucketEnabled",
     "file": "uniformBucketEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_storage_bucket",
+    "resource_type": {
+        "google_storage_bucket": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that Cloud Storage buckets have uniform bucket-level access enabled.",

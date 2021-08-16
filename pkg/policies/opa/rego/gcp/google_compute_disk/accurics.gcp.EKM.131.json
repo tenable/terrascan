@@ -2,7 +2,9 @@
     "name": "vmEncryptedwithCsek",
     "file": "vmEncryptedwithCsek.rego",
     "policy_type": "gcp",
-    "resource_type": "google_compute_disk",
+    "resource_type": {
+        "google_compute_disk": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) .",

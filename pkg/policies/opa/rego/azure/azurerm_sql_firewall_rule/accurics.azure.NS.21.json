@@ -2,7 +2,9 @@
     "name": "reme_sqlIngressAccess",
     "file": "checkPublicAccessNotAllow.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_sql_firewall_rule",
+    "resource_type": {
+        "azurerm_sql_firewall_rule": true
+    },
     "template_args": {
         "isEntire": false,
         "name": "sqlIngressAccess",

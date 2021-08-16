@@ -2,7 +2,9 @@
 	"name": "unknownPortOpenToInternet",
 	"file": "unknownPortOpenToInternet.rego",
 	"policy_type": "aws",
-	"resource_type": "aws_security_group",
+	"resource_type": {
+		"aws_security_group": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"known_ports": [
@@ -51,7 +53,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Unknown Port is not exposed to the entire internet",
 	"reference_id": "AC_AWS_0276",
-	"id": "AC_AWS_0276",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AWS_0276"
 }

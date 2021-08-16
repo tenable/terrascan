@@ -2,7 +2,9 @@
     "name": "checkLoggingEnabled",
     "file": "checkStorageBucketConfig.rego",
     "policy_type": "gcp",
-    "resource_type": "google_storage_bucket",
+    "resource_type": {
+        "google_storage_bucket": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that logging is enabled for Cloud storage buckets.",

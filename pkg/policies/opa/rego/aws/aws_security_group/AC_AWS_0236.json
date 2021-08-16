@@ -2,7 +2,9 @@
 	"name": "port4506AlbNetworkPortSecurity",
 	"file": "portOpenToInternet.rego",
 	"policy_type": "aws",
-	"resource_type": "aws_security_group",
+	"resource_type": {
+		"aws_security_group": true
+	},
 	"template_args": {
 		"defaultValue": "<cidr>",
 		"name": "port4506AlbNetworkPortSecurity",
@@ -14,7 +16,7 @@
 	"severity": "HIGH",
 	"description": "Security Groups - Unrestricted Specific Ports - SaltStack Master (TCP,4506)",
 	"reference_id": "AC_AWS_0236",
-	"id": "AC_AWS_0236",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_AWS_0236"
 }
