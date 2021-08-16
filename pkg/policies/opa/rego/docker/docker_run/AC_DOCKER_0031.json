@@ -5,7 +5,8 @@
     "resource_type": "docker_run",
     "template_args": {
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "pipInstallKeepingCachedPackages"
     },
     "severity": "MEDIUM",
     "description": "Ensure when installing packages with pip, the '--no-cache-dir' flag should be set to make Docker images smaller",
