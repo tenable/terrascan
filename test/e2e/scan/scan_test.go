@@ -81,10 +81,10 @@ var _ = Describe("Scan", func() {
 	Describe("scan command is run", func() {
 		Context("when no iac type is provided, terrascan scans with all iac providers", func() {
 			Context("no tf files are present in the working directory", func() {
-				It("scan the directory and display results", func() {
+				It("scans the directory with all iac and display results", func() {
 					scanArgs := []string{scanUtils.ScanCommand}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeFour)
 				})
 				Context("iac loading errors would be displayed in the output, output type is json", func() {
 					It("scan the directory and display results", func() {
@@ -106,17 +106,17 @@ var _ = Describe("Scan", func() {
 				})
 			})
 			Context("tf files are present in the working directory", func() {
-				It("should scan the directory, return results and exit with status code 3", func() {
+				It("should scan the directory, return results and exit with status code 3 as there would no directory scan errors", func() {
 					workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
 					Expect(err).NotTo(HaveOccurred())
 
-					scanArgs := []string{scanUtils.ScanCommand}
+					scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "--non-recursive"}
 					session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanArgs...)
 					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 				})
 
 				When("tf file present in the dir has no violations", func() {
-					Context("when there are no violations, terrascan exits with status code 0", func() {
+					Context("when there are no violations, but has dir scan erros, terrascan exits with status code 4", func() {
 						It("should scan the directory and exit with status code 0", func() {
 							workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_db_instance_violation"))
 							Expect(err).NotTo(HaveOccurred())
@@ -127,7 +127,7 @@ var _ = Describe("Scan", func() {
 
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir}
 							session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanArgs...)
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 				})
@@ -194,10 +194,10 @@ var _ = Describe("Scan", func() {
 
 		When("--iac-version flag is supplied invalid version", func() {
 			Context("default iac type is all and --iac-version would be ignored", func() {
-				It("should error out and exit with status code 1", func() {
+				It("should error out and exit with status code 4", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "--iac-version", "test"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeFour)
 				})
 			})
 		})
@@ -276,9 +276,9 @@ var _ = Describe("Scan", func() {
 						It("should scan with the policies and exit with status code 0", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath1, "-p", validPolicyPath2}
 							session = helper.RunCommandDir(terrascanBinaryPath, workDirPath, outWriter, errWriter, scanArgs...)
-							// exits with status code 0, because all iac scan should display results
-							// and the directory doesn't have iac files for violations
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							// exits with status code 4, because there are no iac files for violations but
+							// would contain directory scan errors
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 
