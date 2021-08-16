@@ -1,4 +1,4 @@
-package kustomizev3
+package kustomizev4
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ func TestLoadIacDir(t *testing.T) {
 	table := []struct {
 		name          string
 		dirPath       string
-		kustomize     KustomizeV3
+		kustomize     KustomizeV4
 		want          output.AllResourceConfigs
 		wantErr       error
 		resourceCount int
@@ -32,58 +32,58 @@ func TestLoadIacDir(t *testing.T) {
 		{
 			name:          "invalid dirPath",
 			dirPath:       "not-there",
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			wantErr:       multierror.Append(&os.PathError{Err: syscall.ENOENT, Op: "open", Path: "not-there"}),
 			resourceCount: 0,
 		},
 		{
 			name:          "simple-deployment",
 			dirPath:       filepath.Join(testDataDir, "simple-deployment"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 4,
 		},
 		{
 			name:          "multibases",
 			dirPath:       filepath.Join(multibasesDir, "base"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       filepath.Join(multibasesDir, "dev"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       filepath.Join(multibasesDir, "prod"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 2,
 		},
 
 		{
 			name:          "multibases",
 			dirPath:       filepath.Join(multibasesDir, "stage"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 2,
 		},
 		{
 			name:          "multibases",
 			dirPath:       multibasesDir,
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			resourceCount: 4,
 		},
 		{
 			name:          "no-kustomize-directory",
 			dirPath:       filepath.Join(testDataDir, "no-kustomizefile"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			wantErr:       multierror.Append(fmt.Errorf("kustomization.y(a)ml file not found in the directory %s", filepath.Join(testDataDir, "no-kustomizefile"))),
 			resourceCount: 0,
 		},
 		{
 			name:          "kustomize-file-empty",
 			dirPath:       filepath.Join(testDataDir, "kustomize-file-empty"),
-			kustomize:     KustomizeV3{},
+			kustomize:     KustomizeV4{},
 			wantErr:       multierror.Append(fmt.Errorf("unable to read the kustomization file in the directory %s, error: yaml file is empty", filepath.Join(testDataDir, "kustomize-file-empty"))),
 			resourceCount: 0,
 		},
