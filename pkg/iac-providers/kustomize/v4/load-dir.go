@@ -1,4 +1,4 @@
-package kustomizev3
+package kustomizev4
 
 import (
 	"fmt"
@@ -23,8 +23,7 @@ var (
 )
 
 // LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
-func (k *KustomizeV3) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
-
+func (k *KustomizeV4) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
 	files, err := utils.FindFilesBySuffixInDir(absRootDir, KustomizeFileNames())

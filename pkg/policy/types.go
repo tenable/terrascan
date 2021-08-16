@@ -12,6 +12,7 @@ const (
 	version12 = "v12"
 	version1  = "v1"
 	version3  = "v3"
+	version4  = "v4"
 )
 
 // EngineInput Contains data used as input to the engine

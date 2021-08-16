@@ -19,18 +19,18 @@ package iacprovider
 import (
 	"reflect"
 
-	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
+	kustomizev4 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v4"
 )
 
 // kustomize specific constants
 const (
 	kustomize                  supportedIacType    = "kustomize"
-	kustomizeV3                supportedIacVersion = "v3"
-	kustomizeDefaultIacVersion                     = kustomizeV3
+	kustomizeV4                supportedIacVersion = "v4"
+	kustomizeDefaultIacVersion                     = kustomizeV4
 )
 
 // register kustomize as an IaC provider with terrascan
 func init() {
 	// register iac provider
-	RegisterIacProvider(kustomize, kustomizeV3, kustomizeDefaultIacVersion, reflect.TypeOf(kustomizev3.KustomizeV3{}))
+	RegisterIacProvider(kustomize, kustomizeV4, kustomizeDefaultIacVersion, reflect.TypeOf(kustomizev4.KustomizeV4{}))
 }
