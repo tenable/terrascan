@@ -1,0 +1,17 @@
+{
+    "name": "aptnotavoiding",
+    "file": "aptnotavoiding.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "aptnotavoiding"
+    },
+    "severity": "LOW",
+    "description": "Ensure any apt-get installs don't use '--no-install-recommends' flag",
+    "reference_id": "AC_DOCKER_0014",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0014",
+    "version": 1
+}
