@@ -101,7 +101,7 @@ func DownloadPolicies() error {
 	}
 
 	// checkout policies branch
-	release := r.config.GetLatestTag()
+	release := config.r.GetLatestTag()
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(fmt.Sprintf("refs/tags/%s", release)),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
