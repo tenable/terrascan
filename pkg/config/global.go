@@ -21,6 +21,10 @@ import (
 
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
+
+	"gopkg.in/src-d/go-git.v4"
+	gitConfig "gopkg.in/src-d/go-git.v4/config"
+	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
 const (
