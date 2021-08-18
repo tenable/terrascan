@@ -78,7 +78,7 @@ func DownloadPolicies() error {
 	zap.S().Debugf("cloning terrascan repo at %s", policyBasePath)
 
 	// clone the repo
-	r, err = cloneRepo()
+	var r, err = cloneRepo(policyBasePath, repoURL)
 
 	if err != nil {
 		return fmt.Errorf("failed to download policies. error: '%v'", err)
@@ -117,11 +117,10 @@ func connected(url string) bool {
 	return err == nil
 }
 
-func cloneRepo() (*Repository, error) 
-{
+func cloneRepo(policyBasePath string, repoUrl string ) (*git.Repository, error) {
 		// clone the repo
 		 r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
-			URL: repoURL,
+			URL: repoUrl,
 		})
 
 		return r, err 

@@ -27,7 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
-	"github.com/accurics/terrascan/pkg/config"
+	//"github.com/accurics/terrascan/pkg/config"
 	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
 )
@@ -189,7 +189,7 @@ func (s *ScanOptions) Run() error {
 	if err != nil {
 		return err
 	}
-
+	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error 
 	// executor output
 	results, err := executor.Execute(s.configOnly)
 	if err != nil {
