@@ -78,7 +78,7 @@ func DownloadPolicies() error {
 	zap.S().Debugf("cloning terrascan repo at %s", policyBasePath)
 
 	// clone the repo
-	var r, err = cloneRepo(policyBasePath, repoURL)
+	var r, err = getClonedRepo(policyBasePath, repoURL)
 
 	if err != nil {
 		return fmt.Errorf("failed to download policies. error: '%v'", err)
