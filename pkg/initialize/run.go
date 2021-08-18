@@ -102,14 +102,15 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
+	var tagPath := "refs/tags/" + release
 	err = w.Checkout(&git.CheckoutOptions{
-		Branch: plumbing.ReferenceName("refs/tags/v9.9.9"),
+		Branch: plumbing.ReferenceName(tagPath),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
 		//Hash: plumbing.NewHash("39401c4ca2d8377b100050ecccb037551a0b785c"),
 		Force:  true,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to checkout git branch '%s'. error: '%v'", release, err)
+		return fmt.Errorf("failed to checkout git branch '%s'. error: '%v'", tagPath, err)
 	}
 
 	return nil
