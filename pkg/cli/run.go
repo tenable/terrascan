@@ -190,10 +190,7 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-	//check if downloaded policies are up to date
-	fmt.Println("----------")
-	fmt.Sprint(s.policyPath)
-	fmt.Println("----------")
+
 
 	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error 
 
@@ -202,6 +199,11 @@ func (s *ScanOptions) Run() error {
 	if err != nil {
 		return err
 	}
+	
+	//check if downloaded policies are up to date
+	fmt.Println("----------")
+	fmt.Println(s.policyPath)
+	fmt.Println("----------")
 
 	// set the ResourcePath to remoteURL if remote directory is scanned.
 	if !s.configOnly && s.remoteURL != "" {
