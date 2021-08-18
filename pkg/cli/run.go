@@ -27,6 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
 )

@@ -78,9 +78,7 @@ func DownloadPolicies() error {
 	zap.S().Debugf("cloning terrascan repo at %s", policyBasePath)
 
 	// clone the repo
-	r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
-		URL: repoURL,
-	})
+	r, err = cloneRepo()
 
 	if err != nil {
 		return fmt.Errorf("failed to download policies. error: '%v'", err)
@@ -102,15 +100,13 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
-	var tagPath := "refs/tags/" + release
 	err = w.Checkout(&git.CheckoutOptions{
-		Branch: plumbing.ReferenceName(tagPath),
+		Branch: plumbing.ReferenceName(release),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
-		//Hash: plumbing.NewHash("39401c4ca2d8377b100050ecccb037551a0b785c"),
 		Force:  true,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to checkout git branch '%s'. error: '%v'", tagPath, err)
+		return fmt.Errorf("failed to checkout '%s'. error: '%v'", release, err)
 	}
 
 	return nil
@@ -119,4 +115,14 @@ func DownloadPolicies() error {
 func connected(url string) bool {
 	_, err := http.Get(url)
 	return err == nil
+}
+
+func cloneRepo() (*Repository, error) 
+{
+		// clone the repo
+		 r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
+			URL: repoURL,
+		})
+
+		return r, err 
 }
