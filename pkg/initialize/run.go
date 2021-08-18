@@ -64,6 +64,7 @@ func DownloadPolicies() error {
 	policyBasePath := config.GetPolicyBasePath()
 	repoURL := config.GetPolicyRepoURL()
 	branch := config.GetPolicyBranch()
+	
 
 	zap.S().Debug("downloading policies")
 
@@ -100,8 +101,9 @@ func DownloadPolicies() error {
 	}
 
 	// checkout policies branch
+	release := r.config.GetLatestTag()
 	err = w.Checkout(&git.CheckoutOptions{
-		Branch: plumbing.ReferenceName(fmt.Sprintf("refs/tags/v1.8.1")),
+		Branch: plumbing.ReferenceName(fmt.Sprintf("refs/tags/%s", release)),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
 		//Hash: plumbing.NewHash("39401c4ca2d8377b100050ecccb037551a0b785c"),
 		Force:  true,

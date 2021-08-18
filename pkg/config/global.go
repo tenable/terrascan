@@ -25,7 +25,7 @@ import (
 
 const (
 	defaultPolicyRepoURL = "https://github.com/mihirhasan/terrascan.git"
-	defaultPolicyBranch  = "pull_latest_policy"
+	defaultPolicyBranch  = "master"
 )
 
 // ConfigEnvvarName env variable
@@ -198,4 +198,43 @@ func GetK8sAdmissionControl() K8sAdmissionControl {
 		return K8sAdmissionControl{}
 	}
 	return global.K8sAdmissionControl
+}
+
+func GetLatestTag(repository *git.Repository) (string, error) {
+	tagRefs, err := repository.Tags()
+	if err != nil {
+		return "", err
+	}
+
+	var latestTagCommit *object.Commit
+	var latestTagName string
+	err = tagRefs.ForEach(func(tagRef *plumbing.Reference) error {
+		revision := plumbing.Revision(tagRef.Name().String())
+		tagCommitHash, err := repository.ResolveRevision(revision)
+		if err != nil {
+			return err
+		}
+
+		commit, err := repository.CommitObject(*tagCommitHash)
+		if err != nil {
+			return err
+		}
+
+		if latestTagCommit == nil {
+			latestTagCommit = commit
+			latestTagName = tagRef.Name().String()
+		}
+
+		if commit.Committer.When.After(latestTagCommit.Committer.When) {
+			latestTagCommit = commit
+			latestTagName = tagRef.Name().String()
+		}
+
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return latestTagName, nil
 }
