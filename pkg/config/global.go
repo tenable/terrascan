@@ -25,7 +25,7 @@ import (
 
 const (
 	defaultPolicyRepoURL = "https://github.com/mihirhasan/terrascan.git"
-	defaultPolicyBranch  = "master"
+	defaultPolicyBranch  = "pull_latest_policy"
 )
 
 // ConfigEnvvarName env variable
