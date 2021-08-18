@@ -103,7 +103,7 @@ func DownloadPolicies() error {
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
 	err = w.Checkout(&git.CheckoutOptions{
-		Branch: plumbing.ReferenceName("refs/tags/" + release),
+		Branch: plumbing.ReferenceName("refs/tags/v9.9.9"),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
 		//Hash: plumbing.NewHash("39401c4ca2d8377b100050ecccb037551a0b785c"),
 		Force:  true,
