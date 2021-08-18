@@ -23,7 +23,7 @@ import (
 	"go.uber.org/zap"
 
 	"gopkg.in/src-d/go-git.v4"
-	gitConfig "gopkg.in/src-d/go-git.v4/config"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
