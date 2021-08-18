@@ -101,8 +101,8 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	err = w.Checkout(&git.CheckoutOptions{
-		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
-		Hash: plumbing.Hash("c1083fd82199edb8e030c3b13e29907629416b8a"),
+		Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
+		//Hash: plumbing.Hash("39401c4ca2d8377b100050ecccb037551a0b785c"),
 		Force:  true,
 	})
 	if err != nil {
