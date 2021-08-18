@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	defaultPolicyRepoURL = "https://github.com/accurics/terrascan.git"
+	defaultPolicyRepoURL = "https://github.com/mihirhasan/terrascan.git"
 	defaultPolicyBranch  = "master"
 )
 
