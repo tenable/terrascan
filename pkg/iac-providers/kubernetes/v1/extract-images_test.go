@@ -34,8 +34,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 		name                       string
 		k                          *K8sV1
 		args                       args
-		wantContainerImageList     []output.ContainerNameAndImage
-		wantInitContainerImageList []output.ContainerNameAndImage
+		wantContainerImageList     []output.ContainerDetails
+		wantInitContainerImageList []output.ContainerDetails
 		wantErr                    bool
 	}{
 		{
@@ -45,8 +45,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				kind: "CRD",
 			},
 			wantErr:                    true,
-			wantContainerImageList:     []output.ContainerNameAndImage{},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "pod json document object",
@@ -57,8 +57,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "Pod",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "healthz", Image: "k8s.gcr.io/exechealthz-amd64:1.2"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "healthz", Image: "k8s.gcr.io/exechealthz-amd64:1.2"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "pod yaml document object",
@@ -69,8 +69,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "Pod",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "myapp-container", Image: "nginx"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{{Name: "myapp-container", Image: "busybox"}},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "myapp-container", Image: "nginx"}},
+			wantInitContainerImageList: []output.ContainerDetails{{Name: "myapp-container", Image: "busybox"}},
 		},
 		{
 			name: "cronjob yaml document object",
@@ -81,8 +81,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "CronJob",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "hello", Image: "busybox"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "hello", Image: "busybox"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "job yaml document object",
@@ -93,8 +93,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "Job",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "c", Image: "gcr.io/terrascan/job-wq-1"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "c", Image: "gcr.io/terrascan/job-wq-1"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "deployment yaml document object",
@@ -105,8 +105,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "Deployment",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "nginx", Image: "nginx:1.14.2"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{{Name: "init", Image: "busybox"}},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "nginx", Image: "nginx:1.14.2"}},
+			wantInitContainerImageList: []output.ContainerDetails{{Name: "init", Image: "busybox"}},
 		},
 		{
 			name: "daemonset yaml document object",
@@ -117,8 +117,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "DaemonSet",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "fluentd-elasticsearch", Image: "quay.io/fluentd_elasticsearch/fluentd:v2.5.2"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "fluentd-elasticsearch", Image: "quay.io/fluentd_elasticsearch/fluentd:v2.5.2"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "replicaset yaml document object",
@@ -129,8 +129,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "ReplicaSet",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "php-redis", Image: "gcr.io/google_samples/gb-frontend:v3"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "php-redis", Image: "gcr.io/google_samples/gb-frontend:v3"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 		{
 			name: "replicationcontroller yaml document object",
@@ -141,11 +141,11 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "ReplicationController",
 			},
-			wantContainerImageList: []output.ContainerNameAndImage{
+			wantContainerImageList: []output.ContainerDetails{
 				{Name: "nginx", Image: "nginx:latest"},
 				{Name: "sidecar1", Image: "sidecar-image-1"},
 				{Name: "sidecar2", Image: "sidecar-image-2"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{
+			wantInitContainerImageList: []output.ContainerDetails{
 				{Name: "init1", Image: "init-image-1"},
 				{Name: "init2", Image: "init-image-2"},
 				{Name: "init3", Image: "init-image-3"}},
@@ -159,8 +159,8 @@ func TestK8sV1ExtractContainerImages(t *testing.T) {
 				},
 				kind: "StatefulSet",
 			},
-			wantContainerImageList:     []output.ContainerNameAndImage{{Name: "nginx", Image: "k8s.gcr.io/nginx-slim:0.8"}},
-			wantInitContainerImageList: []output.ContainerNameAndImage{},
+			wantContainerImageList:     []output.ContainerDetails{{Name: "nginx", Image: "k8s.gcr.io/nginx-slim:0.8"}},
+			wantInitContainerImageList: []output.ContainerDetails{},
 		},
 	}
 	for _, tt := range tests {

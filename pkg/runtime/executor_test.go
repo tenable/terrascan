@@ -100,7 +100,7 @@ func (m MockVulnerabiltyEngine) ReportVulnerability(input vulnerability.EngineIn
 	return m.out
 }
 
-func (m MockVulnerabiltyEngine) FindVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
+func (m MockVulnerabiltyEngine) FetchVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
 	return out
 }
 

@@ -109,11 +109,11 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
 	severity := r.FormValue("severity")
 
-	findVulnerabilitiesValue := r.FormValue("find_vuln")
+	findVulnerabilitiesValue := r.FormValue("find_vulnerabilities")
 	if findVulnerabilitiesValue != "" {
 		findVulnerabilities, err = strconv.ParseBool(findVulnerabilitiesValue)
 		if err != nil {
-			errMsg := fmt.Sprintf("error while reading 'find_vuln' value. error: '%v'", err)
+			errMsg := fmt.Sprintf("error while reading 'find_vulnerabilities' value. error: '%v'", err)
 			zap.S().Error(errMsg)
 			apiErrorResponse(w, errMsg, http.StatusBadRequest)
 			return

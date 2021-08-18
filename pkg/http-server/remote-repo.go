@@ -44,7 +44,7 @@ type scanRemoteRepoReq struct {
 	Severity            string   `json:"severity"`
 	ShowPassed          bool     `json:"show_passed"`
 	NonRecursive        bool     `json:"non_recursive"`
-	FindVulnerabilities bool     `json:"find_vuln"`
+	FindVulnerabilities bool     `json:"find_vulnerabilities"`
 	d                   downloader.Downloader
 }
 

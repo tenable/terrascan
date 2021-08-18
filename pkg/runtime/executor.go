@@ -217,7 +217,7 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	results.ResourceConfig = resourceConfig
 
 	if e.findVulnerabilities {
-		results.ResourceConfig = e.getVulnerabilities(&results, options)
+		results.ResourceConfig = e.fetchVulnerabilities(&results, options)
 	}
 
 	if configOnly {
@@ -323,15 +323,14 @@ func (e *Executor) findViolations(results *Output) error {
 	return nil
 }
 
-// getVulnerabilities add vulnerability findings to output
-func (e *Executor) getVulnerabilities(results *Output, options map[string]interface{}) output.AllResourceConfigs {
+// fetchVulnerabilities adds vulnerability findings in resource config object
+func (e *Executor) fetchVulnerabilities(results *Output, options map[string]interface{}) output.AllResourceConfigs {
 
-	res := e.vulnerabilityEngine.FindVulnerabilities(results.ResourceConfig, options)
+	return e.vulnerabilityEngine.FetchVulnerabilities(results.ResourceConfig, options)
 
-	return res
 }
 
-// reportVulnerabilities add vulnerability data to final output
+// reportVulnerabilities adds the found vulnerability data to scan summary output
 func (e *Executor) reportVulnerabilities(results *Output, options map[string]interface{}) {
 	violations := results.Violations.AsViolationStore()
 	vulnerabilityData := e.vulnerabilityEngine.ReportVulnerability(vulnerability.EngineInput{InputData: &results.ResourceConfig}, options)
