@@ -191,9 +191,9 @@ func (s *ScanOptions) Run() error {
 	}
 
 	//check if downloaded policies are up to date
-	fmt.PrintLn("----------")
+	fmt.Println("----------")
 	fmt.Sprint(s.policyPath)
-	fmt.PrintLn("----------")
+	fmt.Println("----------")
 
 	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error 
 
