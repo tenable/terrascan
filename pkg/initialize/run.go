@@ -109,7 +109,7 @@ func DownloadPolicies() error {
 		Force:  true,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to checkout git branch '%v'. error: '%v'", branch, err)
+		return fmt.Errorf("failed to checkout git branch '%s'. error: '%v'", release, err)
 	}
 
 	return nil
