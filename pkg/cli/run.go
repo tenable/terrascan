@@ -22,12 +22,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"fmt" //remove after debug
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
-	//"github.com/accurics/terrascan/pkg/config"
 	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
 )
@@ -189,7 +189,11 @@ func (s *ScanOptions) Run() error {
 	if err != nil {
 		return err
 	}
+
+	//check if downloaded policies are up to date
+	fmt.Println(s.policyPath)
 	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error 
+
 	// executor output
 	results, err := executor.Execute(s.configOnly)
 	if err != nil {
