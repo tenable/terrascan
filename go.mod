@@ -40,7 +40,7 @@ require (
 	github.com/onsi/gomega v1.11.0
 	github.com/open-policy-agent/opa v0.22.0
 	github.com/owenrumney/go-sarif v1.0.4
-	github.com/pelletier/go-toml v1.8.1
+	github.com/pelletier/go-toml v1.9.3
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
 	github.com/spf13/cobra v1.1.1
@@ -52,7 +52,6 @@ require (
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.4.0
-	honnef.co/go/tools v0.2.0 // indirect
 	k8s.io/api v0.19.2
 	k8s.io/apimachinery v0.19.2
 	k8s.io/client-go v10.0.0+incompatible
