@@ -28,7 +28,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl v1.0.0
-	github.com/hashicorp/hcl/v2 v2.10.0
+	github.com/hashicorp/hcl/v2 v2.10.1
 	github.com/hashicorp/terraform v0.15.3
 	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/iancoleman/strcase v0.1.3
