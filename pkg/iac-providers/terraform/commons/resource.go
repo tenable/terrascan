@@ -82,7 +82,7 @@ func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclB
 	} else if isAzureConatinerResource(managedResource) {
 		containers = fetchContainersFromAzureResource(jsonBody)
 	} else if isAwsConatinerResource(managedResource) {
-		containers = fetchContainersFromAwsResource(jsonBody, managedResource.DeclRange.Filename)
+		containers = fetchContainersFromAwsResource(jsonBody, hclBody, managedResource.DeclRange.Filename)
 	}
 	return
 }

@@ -337,10 +337,6 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 					allResourcesConfig[resourceConfig.Type] = append(allResourcesConfig[resourceConfig.Type], resourceConfig)
 				}
 			}
-
-			zap.S().Infof(managedResource.Provider.ForDisplay())
-			zap.S().Infof(managedResource.Provider.Namespace)
-			zap.S().Infof(managedResource.Provider.Type)
 		}
 
 		// add all current's children to the queue

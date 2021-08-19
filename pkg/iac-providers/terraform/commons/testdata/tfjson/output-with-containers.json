@@ -1,6 +1,41 @@
 {
   "aws_ecs_task_definition": [
     {
+      "id": "aws_ecs_task_definition.service",
+      "name": "service",
+      "module_name": "root",
+      "source": "terraform-aws-provider/file_in_task_definition.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${file(\"task-definitions/service.json\")}",
+        "family": "service",
+        "proxy_configuration": [
+          {
+            "container_name": "applicationContainerName",
+            "properties": {
+              "AppPorts": "8080",
+              "EgressIgnoredIPs": "169.254.170.2,169.254.169.254",
+              "IgnoredUID": "1337",
+              "ProxyEgressPort": 15001,
+              "ProxyIngressPort": 15000
+            },
+            "type": "APPMESH"
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "jenkins",
+          "image": "jenkins"
+        }
+      ]
+    },
+    {
       "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
       "name": "demo-ecs-jsoncode-task-definition",
       "module_name": "root",
@@ -9,7 +44,7 @@
       "line": 1,
       "type": "aws_ecs_task_definition",
       "config": {
-        "container_definitions": "${jsonencode(\n[\n    {\n        \"cpu\": 10,\n        \"command\": [\"sleep\", \"10\"],\n        \"entryPoint\": [\"/\"],\n        \"environment\": [\n            {\"name\": \"VARNAME\", \"value\": \"VARVAL\"}\n        ],\n        \"essential\": true,\n        \"image\": \"jenkins\",\n        \"memory\": 128,\n        \"name\": \"jenkins\",\n        \"portMappings\": [\n            {\n                \"containerPort\": 80,\n                \"hostPort\": 8080\n            }\n        ],\n        \"resourceRequirements\":[\n            {\n                \"type\":\"InferenceAccelerator\",\n                \"value\":\"device_1\"\n            }\n        ]\n    }\n]\n  )}",
+        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
         "cpu": "512",
         "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
         "family": "ecs-task-definition-demo",
@@ -24,8 +59,12 @@
       "min_severity": "",
       "container_images": [
         {
-          "name": "jenkins",
-          "image": "jenkins"
+          "name": "first",
+          "image": "service-first"
+        },
+        {
+          "name": "second",
+          "image": "service-second"
         }
       ]
     },
@@ -46,41 +85,6 @@
         "network_mode": "awsvpc",
         "requires_compatibilities": [
           "FARGATE"
-        ]
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": "",
-      "container_images": [
-        {
-          "name": "jenkins",
-          "image": "jenkins"
-        }
-      ]
-    },
-    {
-      "id": "aws_ecs_task_definition.service",
-      "name": "service",
-      "module_name": "root",
-      "source": "terraform-aws-provider/file_in_task_definition.tf",
-      "plan_root": "terraform-aws-provider",
-      "line": 1,
-      "type": "aws_ecs_task_definition",
-      "config": {
-        "container_definitions": "${file(\"pkg/iac-providers/terraform/v12/testdata/terraform-container-extraction/terraform-aws-provider/task-definitions/service.json\")}",
-        "family": "service",
-        "proxy_configuration": [
-          {
-            "container_name": "applicationContainerName",
-            "properties": {
-              "AppPorts": "8080",
-              "EgressIgnoredIPs": "169.254.170.2,169.254.169.254",
-              "IgnoredUID": "1337",
-              "ProxyEgressPort": 15001,
-              "ProxyIngressPort": 15000
-            },
-            "type": "APPMESH"
-          }
         ]
       },
       "skip_rules": null,

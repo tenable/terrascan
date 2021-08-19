@@ -17,7 +17,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
 	github.com/aws/smithy-go v1.6.0
 	github.com/awslabs/goformation/v4 v4.19.1
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-errors/errors v1.0.1
 	github.com/google/uuid v1.2.0

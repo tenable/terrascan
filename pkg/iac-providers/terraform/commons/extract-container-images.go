@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package commons
 
 import (
@@ -29,31 +45,29 @@ const (
 	containerDefinitions   = "container_definitions"
 )
 
-var k8sResources = make(map[string]struct{})
-
 // all the type of resources which has container definitaions
-var k8sResourcesTypes = []string{"kubernetes_deployment",
-	"kubernetes_pod", "kubernetes_stateful_set", "kubernetes_job",
-	"kubernetes_cron_job", "kubernetes_daemonset", "kubernetes_replication_controller"}
-
-func init() {
-	for _, resource := range k8sResourcesTypes {
-		k8sResources[resource] = struct{}{}
-	}
+var k8sResources = map[string]struct{}{
+	"kubernetes_deployment":             {},
+	"kubernetes_pod":                    {},
+	"kubernetes_stateful_set":           {},
+	"kubernetes_job":                    {},
+	"kubernetes_cron_job":               {},
+	"kubernetes_daemonset":              {},
+	"kubernetes_replication_controller": {},
 }
 
-// isKuberneteResource - verifies resource is k8s type and can we fetch container details from it
+// isKuberneteResource - verifies resource is k8s type
 func isKuberneteResource(resource *hclConfigs.Resource) bool {
 	_, ok := k8sResources[resource.Type]
 	return ok
 }
 
-//isAzureConatinerResource verifies resource is azure type and can we fetch container details from it
+//isAzureConatinerResource verifies resource is azure type
 func isAzureConatinerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == azureContainerResource
 }
 
-//isAwsConatinerResource verifies resource is aws type and can we fetch container details from it
+//isAwsConatinerResource verifies resource is aws type
 func isAwsConatinerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == awsContainerResources
 }
@@ -63,40 +77,30 @@ func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerNameAn
 	results := []output.ContainerNameAndImage{}
 	if v, ok := resource[container]; ok {
 		if containers, vok := v.([]jsonObj); vok {
-			for _, container := range containers {
-				tempContainer := output.ContainerNameAndImage{}
-				if image, iok := container[image]; iok {
-					tempContainer.Image = image.(string)
-				}
-				if name, nok := container[name]; nok {
-					tempContainer.Name = name.(string)
-				}
-				if tempContainer.Name == "" && tempContainer.Image == "" {
-					continue
-				}
-				results = append(results, tempContainer)
-			}
+			results = getContainers(containers)
 		}
 	}
 	return results
 }
 
 //fetchConatinersFromAwsResource extracts all the containers from aws ecs resource
-func fetchContainersFromAwsResource(resource jsonObj, absRootDir string) []output.ContainerNameAndImage {
+func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, resourcePath string) []output.ContainerNameAndImage {
 	results := []output.ContainerNameAndImage{}
 	if v, ok := resource[containerDefinitions]; ok {
 		def := v.(string)
 		if strings.HasPrefix(def, jsonCodeSuffix) {
-			def = strings.TrimPrefix(def, jsonCodeSuffix)
-			def = strings.TrimSuffix(def, ")}")
+			return getContainersFromhclBody(hclBody)
 		} else if strings.HasPrefix(def, fileSuffix) {
-			file := strings.TrimPrefix(def, fileSuffix)
-			file = strings.TrimSuffix(file, `")}`)
-			dir := filepath.Dir(absRootDir)
-			file = filepath.Join(dir, file)
-			fileData, err := ioutil.ReadFile(file)
+			fileLocation := strings.TrimSpace(def)
+			fileLocation = strings.TrimPrefix(fileLocation, fileSuffix)
+			fileLocation = strings.TrimSuffix(fileLocation, `")}`)
+			dir := filepath.Dir(resourcePath)
+			if !filepath.IsAbs(fileLocation) {
+				fileLocation = filepath.Join(dir, fileLocation)
+			}
+			fileData, err := ioutil.ReadFile(fileLocation)
 			if err != nil {
-				zap.S().Errorf("error reading file: %s : %v", file, err)
+				zap.S().Errorf("error fetching containers from aws resource: %v", err)
 				return results
 			}
 			def = string(fileData)
@@ -104,24 +108,83 @@ func fetchContainersFromAwsResource(resource jsonObj, absRootDir string) []outpu
 		containers := []jsonObj{}
 		err := json.Unmarshal([]byte(def), &containers)
 		if err != nil {
-			zap.S().Errorf("error unmarshaling string: %s : %v", def, err)
+			zap.S().Errorf("error fetching containers from aws resource: %v", err)
 			return results
 		}
-		for _, container := range containers {
-			tempContainer := output.ContainerNameAndImage{}
-			if image, iok := container[image]; iok {
-				tempContainer.Image = image.(string)
-			}
-			if name, nok := container[name]; nok {
-				tempContainer.Name = name.(string)
-			}
-			if tempContainer.Name == "" && tempContainer.Image == "" {
-				continue
-			}
-			results = append(results, tempContainer)
-		}
+		results = getContainers(containers)
 	}
 	return results
+}
+
+//getContainersFromhclBody parses the attribute and creates container object
+func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.ContainerNameAndImage) {
+	for _, v := range hclBody.Attributes {
+		if v.Name == containerDefinitions {
+			switch v.Expr.(type) {
+			case *hclsyntax.FunctionCallExpr:
+				funcExp := v.Expr.(*hclsyntax.FunctionCallExpr)
+				for _, arg := range funcExp.Args {
+					re, diags := arg.Value(nil)
+					if diags.HasErrors() {
+						zap.S().Errorf("error fetching containers from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
+						return
+					}
+					if !re.CanIterateElements() {
+						return
+					}
+					it := re.ElementIterator()
+					for it.Next() {
+						_, val := it.Element()
+						containerTemp, err := ctyToMap(val)
+						if err != nil {
+							zap.S().Errorf("error fetching containers from aws resource: %v", err)
+							return
+						}
+						containerMap := containerTemp.(map[string]interface{})
+						tempContainer := output.ContainerNameAndImage{}
+						if image, iok := containerMap[image]; iok {
+							if imageName, ok := image.(string); ok {
+								tempContainer.Image = imageName
+							}
+						}
+						if name, nok := containerMap[name]; nok {
+							if containerName, ok := name.(string); ok {
+								tempContainer.Name = containerName
+							}
+						}
+						if tempContainer.Name == "" && tempContainer.Image == "" {
+							continue
+						}
+						results = append(results, tempContainer)
+					}
+				}
+			}
+			break
+		}
+	}
+	return
+}
+
+// getContainers reads and creates container config
+func getContainers(containers []jsonObj) (results []output.ContainerNameAndImage) {
+	for _, container := range containers {
+		tempContainer := output.ContainerNameAndImage{}
+		if image, iok := container[image]; iok {
+			if imageName, ok := image.(string); ok {
+				tempContainer.Image = imageName
+			}
+		}
+		if name, nok := container[name]; nok {
+			if containerName, ok := name.(string); ok {
+				tempContainer.Name = containerName
+			}
+		}
+		if tempContainer.Name == "" && tempContainer.Image == "" {
+			continue
+		}
+		results = append(results, tempContainer)
+	}
+	return
 }
 
 //extractContainerImagesFromk8sResources extracts containers from k8s resource
@@ -177,18 +240,34 @@ func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (c
 		containerImage := output.ContainerNameAndImage{}
 		for _, attr := range conatainerBlock.Body.Attributes {
 			if attr.Name == image {
-				val, _ := attr.Expr.Value(nil)
-				containerImage.Image = val.AsString()
+				containerImage.Image = getValueFromCtyExpr(attr.Expr)
 			}
 			if attr.Name == name {
-				val, _ := attr.Expr.Value(nil)
-				containerImage.Name = val.AsString()
+				containerImage.Name = getValueFromCtyExpr(attr.Expr)
 			}
 		}
 		if containerImage.Image == "" && containerImage.Name == "" {
 			continue
 		}
 		containerImages = append(containerImages, containerImage)
+	}
+	return
+}
+
+//getValueFromCtyExpr get value string from hcl expression
+func getValueFromCtyExpr(expr hclsyntax.Expression) (value string) {
+	val, diags := expr.Value(nil)
+	if diags.HasErrors() {
+		zap.S().Errorf("error fetching containers from k8s resource: %v", getErrorMessagesFromDiagnostics(diags))
+		return
+	}
+	valInterface, err := ctyToStr(val)
+	if err != nil {
+		zap.S().Errorf("error fetching containers from k8s resource: %v", err)
+		return
+	}
+	if containerName, ok := valInterface.(string); ok {
+		value = containerName
 	}
 	return
 }

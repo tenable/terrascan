@@ -158,8 +158,6 @@ References to other resources during the destroy phase can cause dependency cycl
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(testErrorString2),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction/terraform-aws-provider/task-definitions")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
 		},
@@ -273,16 +271,6 @@ References to other resources during the destroy phase can cause dependency cycl
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules-recursive.json"),
 			tfv12:       TfV12{},
 			wantErr:     multierror.Append(nestedModuleErr1, nestedModuleErr2),
-		},
-		{
-			name:        "directory with resources having container defined",
-			tfConfigDir: filepath.Join(testDataDir, "terraform-container-extraction"),
-			tfJSONFile:  filepath.Join(tfJSONDir, "output-with-containers.json"),
-			tfv12:       TfV12{},
-			wantErr: multierror.Append(
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction/terraform-aws-provider/task-definitions")),
-			),
 		},
 	}
 
