@@ -34,24 +34,12 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
 
-	detectedRequiredProviders := map[string]ResourceMetadata{}
 	// load current iac file
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if hclFile == nil {
 		errMessage := fmt.Sprintf("error occured while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
-	}
-
-	for _, reqdProvider := range hclFile.RequiredProviders {
-		for _, v := range reqdProvider.RequiredProviders {
-			temp := ResourceMetadata{
-				Namespace:    v.Type.Namespace,
-				ProviderType: v.Type.Type,
-			}
-			detectedRequiredProviders[v.Type.Type] = temp
-
-		}
 	}
 
 	if diags != nil {
@@ -67,7 +55,7 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	for _, managedResource := range hclFile.ManagedResources {
 
 		// create output.ResourceConfig from hclConfigs.Resource
-		resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
+		resourceConfig, err := CreateResourceConfig(managedResource)
 		if err != nil {
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}

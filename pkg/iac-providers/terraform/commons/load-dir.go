@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
-	"github.com/hashicorp/terraform/addrs"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/spf13/afero"
@@ -149,8 +148,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			continue
 		}
 
-		detectedRequiredProviders := getRequiedProviderMapFromProviderLocalNames(rootMod.ProviderLocalNames)
-
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 		// Get the downloader chache
@@ -193,7 +190,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			for _, managedResource := range current.Config.Module.ManagedResources {
 
 				// create output.ResourceConfig from hclConfigs.Resource
-				resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
+				resourceConfig, err := CreateResourceConfig(managedResource)
 				if err != nil {
 					t.addError(err.Error(), dir)
 					continue
@@ -267,8 +264,6 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
 	}
 
-	detectedRequiredProviders := getRequiedProviderMapFromProviderLocalNames(rootMod.ProviderLocalNames)
-
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
@@ -312,7 +307,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		for _, managedResource := range current.Config.Module.ManagedResources {
 
 			// create output.ResourceConfig from hclConfigs.Resource
-			resourceConfig, err := CreateResourceConfig(managedResource, detectedRequiredProviders)
+			resourceConfig, err := CreateResourceConfig(managedResource)
 			if err != nil {
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: "failed to create ResourceConfig"})
 			}
@@ -566,17 +561,4 @@ func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionCon
 	}
 
 	return false
-}
-
-// getRequiedProviderMapFromProviderLocalNames creates the map of provider requirements
-func getRequiedProviderMapFromProviderLocalNames(ProviderLocalNames map[addrs.Provider]string) map[string]ResourceMetadata {
-	detectedRequiredProviders := make(map[string]ResourceMetadata)
-	for k := range ProviderLocalNames {
-		temp := ResourceMetadata{
-			ProviderType: k.Type,
-			Namespace:    k.Namespace,
-		}
-		detectedRequiredProviders[k.Type] = temp
-	}
-	return detectedRequiredProviders
 }
