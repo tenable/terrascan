@@ -43,11 +43,15 @@ import (
 
 const (
 	// ExitCodeZero represents command exit code 0
-	ExitCodeZero = 0
-	// ExitCodeOne represents command exit code 0
-	ExitCodeOne = 1
-	// ExitCodeThree represents command exit code 0
-	ExitCodeThree = 3
+	ExitCodeZero = iota
+	// ExitCodeOne represents command exit code 1
+	ExitCodeOne
+	// ExitCodeThree represents command exit code 3
+	ExitCodeThree = iota + 1
+	// ExitCodeFour represents command exit code 4
+	ExitCodeFour
+	// ExitCodeFive represents command exit code 5
+	ExitCodeFive
 )
 
 var (

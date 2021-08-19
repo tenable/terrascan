@@ -139,14 +139,18 @@ var _ = Describe("Scan Command using remote types", func() {
 			It("should download the resource and generate scan results", func() {
 				scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+				// exit code is 5 because iac files in directory has violations
+				// and directory scan errors
+				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeFive))
 			})
 
 			It("should download the resource and generate scan results", func() {
 				remoteURL := "https://github.com/accurics/KaiMonkey.git//terraform/aws"
 				scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
+				// exit code is 5 because iac files in directory has violations
+				// and directory scan errors
+				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeFive))
 			})
 		})
 
@@ -175,7 +179,8 @@ var _ = Describe("Scan Command using remote types", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					// has a OR condition because we don't know if there would be violations or not
-					Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))
+					// there would be directory scan errors due to all iac type
+					Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeFive), gexec.Exit(helper.ExitCodeFour)))
 				})
 			})
 
@@ -185,7 +190,8 @@ var _ = Describe("Scan Command using remote types", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					// has a OR condition because we don't know if there would be violations or not
-					Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))
+					// there would be directory scan errors due to all iac type
+					Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeFive), gexec.Exit(helper.ExitCodeFour)))
 				})
 			})
 
@@ -193,7 +199,7 @@ var _ = Describe("Scan Command using remote types", func() {
 				When("remote type is terraform registry and remote url has a subdirectory", func() {
 					remoteURL := "terraform-aws-modules/security-group/aws//modules/http-80"
 					It("should download the remote registry and generate scan results", func() {
-						scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL}
+						scanArgs := []string{scanUtils.ScanCommand, "-r", "terraform-registry", "--remote-url", remoteURL, "-i", "terraform", "--non-recursive"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 						// has a OR condition because we don't know if there would be violations or not
 						Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))
@@ -203,7 +209,7 @@ var _ = Describe("Scan Command using remote types", func() {
 				When("remote type is git and remote url has a subdirectory", func() {
 					remoteURL := "github.com/terraform-aws-modules/terraform-aws-security-group//modules/http-80"
 					It("should download the remote registry and generate scan results", func() {
-						scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
+						scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL, "-i", "terraform", "--non-recursive"}
 						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 						// has a OR condition because we don't know if there would be violations or not
 						Eventually(session, scanUtils.RemoteScanTimeout).Should(Or(gexec.Exit(helper.ExitCodeThree), gexec.Exit(helper.ExitCodeZero)))

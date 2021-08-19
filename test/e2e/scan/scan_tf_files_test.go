@@ -128,7 +128,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 				Context("when iac type is not specified and a directory is specified, it will be scanned will all iac providers", func() {
 					It("should display violations in json format, and should have iac type as 'all'", func() {
 						scanArgs := []string{"-p", policyDir, "-d", iacDir, "-o", "json"}
-						scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_all.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+						scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_all.txt"), helper.ExitCodeFive, false, true, outWriter, errWriter, scanArgs...)
 					})
 				})
 			})
@@ -217,7 +217,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 				It("should display violations in json format", func() {
 					iacDir := filepath.Join(iacRootRelPath, "terraform_recursive")
 					scanArgs := []string{"-i", "terraform", "-p", policyDir, "-d", iacDir, "-o", "json"}
-					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_recursive.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_json_recursive.txt"), helper.ExitCodeFive, false, true, outWriter, errWriter, scanArgs...)
 				})
 			})
 		})

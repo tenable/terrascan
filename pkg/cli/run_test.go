@@ -567,3 +567,91 @@ func TestScanOptionsScan(t *testing.T) {
 		})
 	}
 }
+
+func Test_getExitCode(t *testing.T) {
+	testDirScanErrors := []results.DirScanErr{
+		{
+			IacType:    "all",
+			Directory:  "test",
+			ErrMessage: "error occurred",
+		},
+	}
+
+	testScanSummary := results.ScanSummary{
+		ViolatedPolicies: 1,
+	}
+
+	scanOutputWithDirErrorsOnly := runtime.Output{
+		Violations: policy.EngineOutput{
+			ViolationStore: &results.ViolationStore{
+				DirScanErrors: testDirScanErrors,
+			},
+		},
+	}
+
+	scanOutputWithDirErrorsAndViolatedPolicies := runtime.Output{
+		Violations: policy.EngineOutput{
+			ViolationStore: &results.ViolationStore{
+				DirScanErrors: testDirScanErrors,
+				Summary:       testScanSummary,
+			},
+		},
+	}
+
+	scanOutputWithViolatedPoliciesOnly := runtime.Output{
+		Violations: policy.EngineOutput{
+			ViolationStore: &results.ViolationStore{
+				Summary: testScanSummary,
+			},
+		},
+	}
+
+	type args struct {
+		o runtime.Output
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "has directory scan errors without violated policies",
+			args: args{
+				o: scanOutputWithDirErrorsOnly,
+			},
+			want: 4,
+		},
+		{
+			name: "has directory scan errors with violated policies",
+			args: args{
+				o: scanOutputWithDirErrorsAndViolatedPolicies,
+			},
+			want: 5,
+		},
+		{
+			name: "has violated policies but no directory scan errors",
+			args: args{
+				o: scanOutputWithViolatedPoliciesOnly,
+			},
+			want: 3,
+		},
+		{
+			name: "neither violations nor directory scan errors",
+			args: args{
+				o: runtime.Output{
+					Violations: policy.EngineOutput{
+						ViolationStore: &results.ViolationStore{},
+					},
+				},
+			},
+			want: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getExitCode(tt.args.o); got != tt.want {
+				t.Errorf("getExitCode() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -53,8 +53,9 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 				It("should scan will all iac and display violations", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-					// exit code is 3 because iac files in directory has violations
-					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeThree)
+					// exit code is 5 because iac files in directory has violations
+					// and directory scan errors
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeFive)
 				})
 			})
 		})
