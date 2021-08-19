@@ -22,8 +22,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"fmt" //remove after debug
-
+	"fmt"
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
@@ -172,7 +171,7 @@ func (s *ScanOptions) initColor() {
 
 // Run executes terrascan in CLI mode
 func (s *ScanOptions) Run() error {
-
+	fmt.Println(PolicyReleaseUsed)
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)

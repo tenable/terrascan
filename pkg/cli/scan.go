@@ -39,9 +39,6 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 		if scanOptions.configOnly {
 			return nil
 		}
-		fmt.Println("----------")
-		fmt.Println(scanOptions.policyPath)
-		fmt.Println("----------")
 		return initial(cmd, args, true)
 	},
 	RunE:          scan,

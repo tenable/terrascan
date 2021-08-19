@@ -31,9 +31,8 @@ import (
 var (
 	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
-var rel string 
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
-
+var Rel string
 // Run initializes terrascan if not done already
 func Run(isNonInitCmd bool) error {
 	// check if policy paths exist
@@ -100,7 +99,7 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
-	rel = release 
+	Rel = release 
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
@@ -125,4 +124,8 @@ func getClonedRepo(policyBasePath string, repoUrl string ) (*git.Repository, err
 		})
 
 		return r, err 
+}
+
+func GetRel() string {
+	return Rel 
 }
