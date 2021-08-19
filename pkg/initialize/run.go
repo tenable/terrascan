@@ -31,7 +31,7 @@ import (
 var (
 	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
-
+var rel string 
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
 
 // Run initializes terrascan if not done already
@@ -100,6 +100,7 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
+	rel = release 
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
