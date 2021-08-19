@@ -3,7 +3,8 @@
     "file": "resourceGroupLock.rego",
     "policy_type": "azure",
     "resource_type": {
-        "azurerm_resource_group": true
+        "azurerm_resource_group": true,
+        "azurerm_management_lock": true
     },
     "template_args": {
         "prefix": "reme_"

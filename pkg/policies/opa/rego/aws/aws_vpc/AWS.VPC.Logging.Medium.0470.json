@@ -3,7 +3,8 @@
     "file": "vpcFlowLogsNotEnabled.rego",
     "policy_type": "aws",
     "resource_type": {
-        "aws_vpc": true
+        "aws_vpc": true,
+        "aws_flow_log": true
     },
     "template_args": {
         "prefix": ""

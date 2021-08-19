@@ -1,22 +1,23 @@
 {
-	"name": "networkPort1433ExposedToPublicAz",
-	"file": "networkPortExposedToPublicAz.rego",
-	"policy_type": "azure",
-	"resource_type": {
-		"azurerm_network_security_rule": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort1433ExposedToPublicAz",
-		"portNumber": 1433,
-		"prefix": "",
-		"protocol": "Tcp",
-		"suffix": ""
-	},
-	"severity": "MEDIUM",
-	"description": "Ensure MSSQL Server (Tcp:1433) is not exposed to public for Azure Network Security Rule",
-	"reference_id": "AC_AZURE_0510",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AZURE_0510"
+    "name": "networkPort1433ExposedToPublicAz",
+    "file": "networkPortExposedToPublicAz.rego",
+    "policy_type": "azure",
+    "resource_type": {
+        "azurerm_network_security_rule": true,
+        "azurerm_network_security_group": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort1433ExposedToPublicAz",
+        "portNumber": 1433,
+        "prefix": "",
+        "protocol": "Tcp",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure MSSQL Server (Tcp:1433) is not exposed to public for Azure Network Security Rule",
+    "reference_id": "AC_AZURE_0510",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0510"
 }

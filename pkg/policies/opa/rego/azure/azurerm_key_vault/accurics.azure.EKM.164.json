@@ -3,7 +3,8 @@
     "file": "keyVaultSoftDeleteEnabled.rego",
     "policy_type": "azure",
     "resource_type": {
-        "azurerm_key_vault": true
+        "azurerm_key_vault": true,
+        "azurerm_monitor_diagnostic_setting": true
     },
     "template_args": {
         "prefix": "reme_"

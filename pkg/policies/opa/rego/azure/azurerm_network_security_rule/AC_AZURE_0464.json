@@ -1,22 +1,23 @@
 {
-	"name": "networkPort2484ExposedToPrivateUAz",
-	"file": "networkPortExposedToPrivateAz.rego",
-	"policy_type": "azure",
-	"resource_type": {
-		"azurerm_network_security_rule": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort2484ExposedToPrivateUAz",
-		"portNumber": 2484,
-		"prefix": "",
-		"protocol": "Udp",
-		"suffix": ""
-	},
-	"severity": "LOW",
-	"description": "Ensure Oracle DB SSL (Udp:2484) is not exposed to private hosts more than 32 for Azure Network Security Rule",
-	"reference_id": "AC_AZURE_0464",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AZURE_0464"
+    "name": "networkPort2484ExposedToPrivateUAz",
+    "file": "networkPortExposedToPrivateAz.rego",
+    "policy_type": "azure",
+    "resource_type": {
+        "azurerm_network_security_rule": true,
+        "azurerm_network_security_group": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort2484ExposedToPrivateUAz",
+        "portNumber": 2484,
+        "prefix": "",
+        "protocol": "Udp",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure Oracle DB SSL (Udp:2484) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+    "reference_id": "AC_AZURE_0464",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0464"
 }

@@ -3,7 +3,8 @@
     "file": "cloudFormationTerminationProtection.rego",
     "policy_type": "aws",
     "resource_type": {
-        "aws_cloudformation_stack": true
+        "aws_cloudformation_stack": true,
+        "aws_cloudformation_stack_set_instance": true
     },
     "template_args": null,
     "severity": "MEDIUM",

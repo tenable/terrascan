@@ -1,22 +1,23 @@
 {
-	"name": "networkPort2484ExposedToInternetAz",
-	"file": "networkPortExposedToInternetAz.rego",
-	"policy_type": "azure",
-	"resource_type": {
-		"azurerm_network_security_rule": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort2484ExposedToInternetAz",
-		"portNumber": 2484,
-		"prefix": "",
-		"protocol": "Tcp",
-		"suffix": ""
-	},
-	"severity": "HIGH",
-	"description": "Ensure Oracle DB SSL (Tcp:2484) is not exposed to entire internet for Azure Network Security Rule",
-	"reference_id": "AC_AZURE_0469",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AZURE_0469"
+    "name": "networkPort2484ExposedToInternetAz",
+    "file": "networkPortExposedToInternetAz.rego",
+    "policy_type": "azure",
+    "resource_type": {
+        "azurerm_network_security_rule": true,
+        "azurerm_network_security_group": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort2484ExposedToInternetAz",
+        "portNumber": 2484,
+        "prefix": "",
+        "protocol": "Tcp",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure Oracle DB SSL (Tcp:2484) is not exposed to entire internet for Azure Network Security Rule",
+    "reference_id": "AC_AZURE_0469",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0469"
 }

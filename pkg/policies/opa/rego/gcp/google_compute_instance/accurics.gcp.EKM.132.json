@@ -3,7 +3,9 @@
     "file": "encryptedwithCsek.rego",
     "policy_type": "gcp",
     "resource_type": {
-        "google_compute_instance": true
+        "google_compute_instance": true,
+        "google_compute_disk": true,
+        "google_compute_attached_disk": true
     },
     "template_args": null,
     "severity": "MEDIUM",

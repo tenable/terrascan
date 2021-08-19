@@ -3,7 +3,11 @@
     "file": "instanceExposedToInternet.rego",
     "policy_type": "aws",
     "resource_type": {
-        "aws_instance": true
+        "aws_instance": true,
+        "aws_security_group": true,
+        "aws_route_table": true,
+        "aws_subnet": true,
+        "aws_route_table_association": true
     },
     "template_args": {
         "prefix": ""

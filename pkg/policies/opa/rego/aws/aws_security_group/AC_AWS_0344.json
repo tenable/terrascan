@@ -1,22 +1,23 @@
 {
-	"name": "networkPort137ExposedToprivateU",
-	"file": "networkPortExposedToPrivate.rego",
-	"policy_type": "aws",
-	"resource_type": {
-		"aws_security_group": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort137ExposedToprivateU",
-		"portNumber": 137,
-		"prefix": "",
-		"protocol": "udp",
-		"suffix": ""
-	},
-	"severity": "LOW",
-	"description": "Ensure NetBIOSNameService' (UDP,137) is not exposed to private hosts more than 32",
-	"reference_id": "AC_AWS_0344",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AWS_0344"
+    "name": "networkPort137ExposedToprivateU",
+    "file": "networkPortExposedToPrivate.rego",
+    "policy_type": "aws",
+    "resource_type": {
+        "aws_security_group": true,
+        "aws_security_group_rule": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort137ExposedToprivateU",
+        "portNumber": 137,
+        "prefix": "",
+        "protocol": "udp",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure NetBIOSNameService' (UDP,137) is not exposed to private hosts more than 32",
+    "reference_id": "AC_AWS_0344",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AWS_0344"
 }

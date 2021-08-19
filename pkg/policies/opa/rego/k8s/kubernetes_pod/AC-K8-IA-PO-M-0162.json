@@ -3,7 +3,12 @@
     "file": "specBoolCheck.rego",
     "policy_type": "k8s",
     "resource_type": {
-        "kubernetes_pod": true
+        "kubernetes_pod": true,
+        "kubernetes_deployment": true,
+        "kubernetes_replica_set": true,
+        "kubernetes_job": true,
+        "kubernetes_replication_controller": true,
+        "kubernetes_stateful_set": true
     },
     "template_args": {
         "name": "falseHostPID",

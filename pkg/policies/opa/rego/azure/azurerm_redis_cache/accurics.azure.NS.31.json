@@ -3,7 +3,8 @@
     "file": "publiclyAccessible.rego",
     "policy_type": "azure",
     "resource_type": {
-        "azurerm_redis_cache": true
+        "azurerm_redis_cache": true,
+        "azurerm_redis_firewall_rule": true
     },
     "template_args": {
         "isEntire": false,

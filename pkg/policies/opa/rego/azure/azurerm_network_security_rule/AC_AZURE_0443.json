@@ -1,22 +1,23 @@
 {
-	"name": "networkPort161ExposedToPrivateUAz",
-	"file": "networkPortExposedToPrivateAz.rego",
-	"policy_type": "azure",
-	"resource_type": {
-		"azurerm_network_security_rule": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort161ExposedToPrivateUAz",
-		"portNumber": 161,
-		"prefix": "",
-		"protocol": "Udp",
-		"suffix": ""
-	},
-	"severity": "LOW",
-	"description": "Ensure SNMP (Udp:161) is not exposed to private hosts more than 32 for Azure Network Security Rule",
-	"reference_id": "AC_AZURE_0443",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AZURE_0443"
+    "name": "networkPort161ExposedToPrivateUAz",
+    "file": "networkPortExposedToPrivateAz.rego",
+    "policy_type": "azure",
+    "resource_type": {
+        "azurerm_network_security_rule": true,
+        "azurerm_network_security_group": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort161ExposedToPrivateUAz",
+        "portNumber": 161,
+        "prefix": "",
+        "protocol": "Udp",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure SNMP (Udp:161) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+    "reference_id": "AC_AZURE_0443",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0443"
 }

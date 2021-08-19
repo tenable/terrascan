@@ -1,22 +1,23 @@
 {
-	"name": "networkPort135ExposedToPrivateAz",
-	"file": "networkPortExposedToPrivateAz.rego",
-	"policy_type": "azure",
-	"resource_type": {
-		"azurerm_network_security_rule": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort135ExposedToPrivateAz",
-		"portNumber": 135,
-		"prefix": "",
-		"protocol": "Tcp",
-		"suffix": ""
-	},
-	"severity": "LOW",
-	"description": "Ensure MSSQL Debugger (Tcp:135) is not exposed to private hosts more than 32 for Azure Network Security Rule",
-	"reference_id": "AC_AZURE_0512",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AZURE_0512"
+    "name": "networkPort135ExposedToPrivateAz",
+    "file": "networkPortExposedToPrivateAz.rego",
+    "policy_type": "azure",
+    "resource_type": {
+        "azurerm_network_security_rule": true,
+        "azurerm_network_security_group": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort135ExposedToPrivateAz",
+        "portNumber": 135,
+        "prefix": "",
+        "protocol": "Tcp",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure MSSQL Debugger (Tcp:135) is not exposed to private hosts more than 32 for Azure Network Security Rule",
+    "reference_id": "AC_AZURE_0512",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AZURE_0512"
 }

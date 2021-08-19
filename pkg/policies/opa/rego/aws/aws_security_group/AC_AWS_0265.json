@@ -1,22 +1,23 @@
 {
-	"name": "port8140AlbNetworkPortSecurity",
-	"file": "portOpenToInternet.rego",
-	"policy_type": "aws",
-	"resource_type": {
-		"aws_security_group": true
-	},
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "port8140AlbNetworkPortSecurity",
-		"portNumber": 8140,
-		"prefix": "",
-		"protocol": "tcp",
-		"suffix": ""
-	},
-	"severity": "HIGH",
-	"description": "Security Groups - Unrestricted Specific Ports - Puppet Master (TCP,8140)",
-	"reference_id": "AC_AWS_0265",
-	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_AWS_0265"
+    "name": "port8140AlbNetworkPortSecurity",
+    "file": "portOpenToInternet.rego",
+    "policy_type": "aws",
+    "resource_type": {
+        "aws_security_group": true,
+        "aws_security_group_rule": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "port8140AlbNetworkPortSecurity",
+        "portNumber": 8140,
+        "prefix": "",
+        "protocol": "tcp",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Security Groups - Unrestricted Specific Ports - Puppet Master (TCP,8140)",
+    "reference_id": "AC_AWS_0265",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AWS_0265"
 }

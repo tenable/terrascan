@@ -3,7 +3,10 @@
     "file": "noOwnerLabel.rego",
     "policy_type": "k8s",
     "resource_type": {
-        "kubernetes_namespace": true
+        "kubernetes_namespace": true,
+        "kubernetes_deployment": true,
+        "kubernetes_pod": true,
+        "kubernetes_job": true
     },
     "template_args": {
         "name": "noOwnerLabel",

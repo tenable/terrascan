@@ -3,7 +3,8 @@
     "file": "ecr_make_tags_immutable.rego",
     "policy_type": "aws",
     "resource_type": {
-        "aws_cloudtrail": true
+        "aws_cloudtrail": true,
+        "aws_ecr_repository": true
     },
     "template_args": {
         "prefix": ""

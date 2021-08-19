@@ -3,7 +3,9 @@
     "file": "overlyPermissiveInstance.rego",
     "policy_type": "aws",
     "resource_type": {
-        "aws_instance": true
+        "aws_instance": true,
+        "aws_iam_role_policy_attachment": true,
+        "aws_iam_policy": true
     },
     "template_args": {
         "prefix": ""
