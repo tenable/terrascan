@@ -129,18 +129,19 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				Context("severity leve specified is 'low'", func() {
 					Context("iac file has only medium severity violations", func() {
 						It("should report the violations and exit with status code 3", func() {
-							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "low"}
+							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "low", "-i", "terraform"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 						})
 					})
 				})
-				Context("severity leve specified is 'high'", func() {
+				Context("severity level specified is 'high'", func() {
 					Context("iac files has only medium severity violations", func() {
-						It("should not report any violation and exit with status code 0", func() {
+						// there would not no violations but directory scan errors would be present due to all iac scan
+						It("should not report any violation and exit with status code 4", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "high"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 				})
@@ -171,7 +172,8 @@ var _ = Describe("Scan command with rule filtering options", func() {
 						It("should not report any violation and exit with status code 0", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--categories", "COMPLIANCE VALIDATION"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							// summary would contain directory scan errors due to all iac scan
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 				})

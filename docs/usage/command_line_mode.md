@@ -101,7 +101,16 @@ When scanning Terraform code, Terrascan checks for the availability of the file 
 
 By default, Terrascan output is displayed in a human friendly format. Use the `-o` flag to change this to **YAML**, **JSON**, **XML**, **JUNIT-XML** and **SARIF** formats.
 
-> **Note**: Terrascan exits with error code 3 if any issues are found during a scan.
+> **Note**: Terrascan will exit with an error code if any errors or violations are found during a scan.
+
+> #### List of possible Exit Codes
+> | Scenario      | Exit Code |
+> | ----------- | ----------- |
+> | scan summary has errors and violations | 5 |
+> | scan summary has errors but no violations | 4 |
+> | scan summary has violations but no errors | 3 |
+> | scan summary has no violations or errors | 0 |
+> | scan command errors out due to invalid inputs | 1 |
 
 
 Terrascan's output is a list of security violations present in the scanned IaC files. The example below is terrascan's output in YAML.

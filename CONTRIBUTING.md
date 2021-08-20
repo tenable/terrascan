@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/accurics/terrascan/issues.
+Report bugs at [https://github.com/accurics/terrascan/issues](https://github.com/accurics/terrascan/issues).
 
 If you are reporting a bug, please include:
 
@@ -34,7 +34,7 @@ articles, videos, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/accurics/terrascan/issues.
+The best way to send feedback is to file an issue at [https://github.com/accurics/terrascan/issues](https://github.com/accurics/terrascan/issues).
 
 If you are proposing a feature:
 
