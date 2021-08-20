@@ -73,8 +73,16 @@ To scan your code for security issues you can run the following (defaults to sca
 ```sh
 $ terrascan scan
 ```
-**Note**: Terrascan will exit with an error code 3 if any issues are found during a scan.
+**Note**: Terrascan will exit with an error code if any errors or violations are found during a scan.
 
+#### List of possible Exit Codes
+| Scenario      | Exit Code |
+| ----------- | ----------- |
+| scan summary has errors and violations | 5 |
+| scan summary has errors but no violations | 4 |
+| scan summary has violations but no errors | 3 |
+| scan summary has no violations or errors | 0 |
+| scan command errors out due to invalid inputs | 1 |
 ### Step 3: Integrate with CI\CD
 
 Terrascan can be integrated into CI/CD pipelines to enforce security best practices.

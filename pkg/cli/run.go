@@ -207,9 +207,12 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-	if !s.configOnly && results.Violations.ViolationStore.Summary.ViolatedPolicies != 0 && flag.Lookup("test.v") == nil {
+	if !s.configOnly && flag.Lookup("test.v") == nil {
 		os.RemoveAll(tempDir)
-		os.Exit(3)
+		exitCode := getExitCode(results)
+		if exitCode != 0 {
+			os.Exit(exitCode)
+		}
 	}
 	return nil
 }
@@ -246,4 +249,17 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 	}
 
 	return writer.Write(s.outputType, results.Violations, outputWriter)
+}
+
+// getExitCode returns appropriate exit code for terrascan based on scan output
+func getExitCode(o runtime.Output) int {
+	if len(o.Violations.ViolationStore.DirScanErrors) > 0 {
+		if o.Violations.ViolationStore.Summary.ViolatedPolicies > 0 {
+			return 5
+		}
+		return 4
+	} else if o.Violations.ViolationStore.Summary.ViolatedPolicies > 0 {
+		return 3
+	}
+	return 0
 }
