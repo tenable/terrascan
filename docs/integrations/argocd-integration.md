@@ -17,6 +17,12 @@ The following example of a hook yaml is nearly ready to be added to an existing 
 - Ensure that the secrets,  `known_hosts`, and `ssh_config` volume are relevant for your specific environment.
 - Specify a terrascan image.
 
+There is a prepared terrascan image available on Dockerhub that can be integrated with argo-cd immediately. It can be found and pulled from hub.docker.com/r/accurics/terrascan_argocd. You may pull the latest available docker image using bash command 
+'''bash 
+docker pull accurics/terrascan_argocd:latest
+'''
+To use the precreated image of terrascan with argo cd, replace the <terrascan-image> seen in the hook yaml below with "accurics/terrascan_argocd:latest"
+
 You can also map a slack notification script to the container which will send notifications to your Slack webhook endpoint after the embedded script scans the repo.
 
 ```yaml
@@ -52,7 +58,7 @@ spec:
            name: known-hosts-config
      containers:
      - name: terrascan-argocd
-       image: <terrscan-image>
+       image: <terrascan-image>
        resources:
          requests:
            cpu: "1"
