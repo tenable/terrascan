@@ -157,7 +157,21 @@ $ terrascan scan -i kustomize
 
 This command looks for a `kustomization.yaml` file in the current directory and scans rendered .yaml or .yml template files.
 
+Terrascan considers Kustomize v4 as the default version. Other supported version v2 and v3 of Kustomize could be scanned by specifying --iac-version flag as follows:
+
+```
+$ terrascan scan -i kustomize --iac-version v2
+```
+Scanning v2 and v3 requires the corresponding kustomize binary and the path to the binary must be specified in the `KUSTOMIZE_<VERSION>` ENV variable.
+
+e.g: For --iac-version v2, we need to have:
+
+    KUSTOMIZE_V2=path/to/kustomize/v2/binary
+
+To install kustomize one can use [this script](https://github.com/accurics/terrascan/tree/master/scriptsinstall_kustomize.sh)
+
 A specific directory to scan can be specified using the `-d` flag. The Kustomize IaC provider does not support scanning of individual files using the `-f` flag.
+
 ### Scanning a Dockerfile
 
 A Dockerfile can be scanned by specifying "docker" on the -i flag as follows:
