@@ -2,7 +2,9 @@
     "name": "autoNodeRepairEnabled",
     "file": "autoNodePropDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_container_node_pool",
+    "resource_type": {
+        "google_container_node_pool": true
+    },
     "template_args": {
         "name": "autoNodeRepairEnabled",
         "property": "auto_repair"

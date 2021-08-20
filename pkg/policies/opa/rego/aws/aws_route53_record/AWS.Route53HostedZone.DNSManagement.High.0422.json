@@ -2,7 +2,9 @@
     "name": "noRoute53RecordSet",
     "file": "noRoute53RecordSet.rego",
     "policy_type": "aws",
-    "resource_type": "aws_route53_record",
+    "resource_type": {
+        "aws_route53_record": true
+    },
     "template_args": {
         "prefix": ""
     },

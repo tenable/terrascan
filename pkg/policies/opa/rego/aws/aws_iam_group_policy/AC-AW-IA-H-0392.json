@@ -2,7 +2,9 @@
     "name": "iamGrpPolicyWithFullAdminCntrl",
     "file": "iamGrpPolicyWithFullAdminCntrl.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_group_policy",
+    "resource_type": {
+        "aws_iam_group_policy": true
+    },
     "template_args": {
         "prefix": ""
     },

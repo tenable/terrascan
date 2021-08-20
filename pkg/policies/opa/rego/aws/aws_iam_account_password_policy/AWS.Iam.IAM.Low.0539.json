@@ -2,7 +2,9 @@
     "name": "passwordReuseNotAllowed",
     "file": "passwordReuseNotAllowed.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_account_password_policy",
+    "resource_type": {
+        "aws_iam_account_password_policy": true
+    },
     "template_args": {
         "name": "passwordReuseNotAllowed",
         "parameter": "password_reuse_prevention",
@@ -13,6 +15,6 @@
     "description": "It is recommended that the password policy prevent the reuse of passwords.Preventing password reuse increases account resiliency against brute force login attempts",
     "reference_id": "AWS.Iam.IAM.Low.0539",
     "category": "Compliance Validation",
-    "id": "AC_AWS_0472",
-    "version": 2
+    "version": 2,
+    "id": "AC_AWS_0472"
 }

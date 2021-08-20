@@ -2,7 +2,9 @@
     "name": "ensurePrivateIP",
     "file": "ensurePrivateIP.rego",
     "policy_type": "k8s",
-    "resource_type": "kubernetes_service",
+    "resource_type": {
+        "kubernetes_service": true
+    },
     "template_args": {
         "name": "ensurePrivateIP",
         "prefix": "",

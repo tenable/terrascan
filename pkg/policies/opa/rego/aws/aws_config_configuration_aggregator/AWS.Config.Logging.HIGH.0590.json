@@ -2,7 +2,9 @@
     "name": "configEnabledForAllRegions",
     "file": "configEnabledForAllRegions.rego",
     "policy_type": "aws",
-    "resource_type": "aws_config_configuration_aggregator",
+    "resource_type": {
+        "aws_config_configuration_aggregator": true
+    },
     "template_args": {
         "prefix": ""
     },

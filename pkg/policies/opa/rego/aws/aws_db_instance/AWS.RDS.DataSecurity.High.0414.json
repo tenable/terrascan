@@ -2,7 +2,9 @@
     "name": "rdsHasStorageEncrypted",
     "file": "rdsHasStorageEncrypted.rego",
     "policy_type": "aws",
-    "resource_type": "aws_db_instance",
+    "resource_type": {
+        "aws_db_instance": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",

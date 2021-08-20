@@ -2,7 +2,9 @@
 	"name": "networkPort8080ExposedToPrivateGCP",
 	"file": "networkPortExposedToPrivateGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": "google_compute_firewall",
+	"resource_type": {
+		"google_compute_firewall": true
+	},
 	"template_args": {
 		"name": "networkPort8080ExposedToPrivateGCP",
 		"portNumber": 8080,
@@ -13,7 +15,7 @@
 	"severity": "LOW",
 	"description": "Ensure Known internal web port (TCP:8080) is not exposed to private hosts more than 32 for Google Compute Firewall",
 	"reference_id": "AC_GCP_0066",
-	"id": "AC_GCP_0066",
 	"category": "Infrastructure Security",
-	"version": 2
+	"version": 2,
+	"id": "AC_GCP_0066"
 }

@@ -1,20 +1,23 @@
 {
-	"name": "networkPort80ExposedToprivate",
-	"file": "networkPortExposedToPrivate.rego",
-	"policy_type": "aws",
-	"resource_type": "aws_security_group",
-	"template_args": {
-		"defaultValue": "<cidr>",
-		"name": "networkPort80ExposedToprivate",
-		"portNumber": 80,
-		"prefix": "",
-		"protocol": "tcp",
-		"suffix": ""
-	},
-	"severity": "LOW",
-	"description": "Ensure Security Groups Unrestricted Specific Ports http (TCP,80) is not exposed to private hosts more than 32",
-	"reference_id": "AC_AWS_0321",
-	"id": "AC_AWS_0321",
-	"category": "Infrastructure Security",
-	"version": 2
+    "name": "networkPort80ExposedToprivate",
+    "file": "networkPortExposedToPrivate.rego",
+    "policy_type": "aws",
+    "resource_type": {
+        "aws_security_group": true,
+        "aws_security_group_rule": true
+    },
+    "template_args": {
+        "defaultValue": "<cidr>",
+        "name": "networkPort80ExposedToprivate",
+        "portNumber": 80,
+        "prefix": "",
+        "protocol": "tcp",
+        "suffix": ""
+    },
+    "severity": "LOW",
+    "description": "Ensure Security Groups Unrestricted Specific Ports http (TCP,80) is not exposed to private hosts more than 32",
+    "reference_id": "AC_AWS_0321",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_AWS_0321"
 }

@@ -2,7 +2,9 @@
     "name": "awsConfigEncryptedVol",
     "file": "awsConfigEncryptedVol.rego",
     "policy_type": "aws",
-    "resource_type": "aws_config",
+    "resource_type": {
+        "aws_config": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure AWS Config Rule is enabled for Encrypted Volumes",

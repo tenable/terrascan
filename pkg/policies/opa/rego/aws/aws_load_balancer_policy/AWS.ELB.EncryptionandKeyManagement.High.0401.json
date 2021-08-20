@@ -2,7 +2,9 @@
     "name": "elbSsLTsLProtocol",
     "file": "elbSsLTsLProtocol.rego",
     "policy_type": "aws",
-    "resource_type": "aws_load_balancer_policy",
+    "resource_type": {
+        "aws_load_balancer_policy": true
+    },
     "template_args": {
         "prefix": "",
         "security_protocols": [

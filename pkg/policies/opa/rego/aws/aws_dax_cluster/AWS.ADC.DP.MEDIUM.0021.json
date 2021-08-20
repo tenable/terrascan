@@ -2,16 +2,18 @@
     "name": "awsDaxSseEnabledCheck",
     "file": "awsDaxSseEnabledCheck.rego",
     "policy_type": "aws",
-    "resource_type": "aws_dax_cluster",
+    "resource_type": {
+        "aws_dax_cluster": true
+    },
     "template_args": {
-        "prefix": "",
         "name": "awsDaxSseEnabledCheck",
+        "prefix": "",
         "suffix": ""
     },
     "severity": "MEDIUM",
     "description": "Ensure server-side encryption is enabled for AWS DAX Cluster",
     "reference_id": "AWS.ADC.DP.MEDIUM.0021",
-    "id": "AC_AWS_0375",
     "category": "Data Protection",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0375"
 }

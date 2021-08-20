@@ -2,7 +2,10 @@
     "name": "ec2ebsnotoptimized",
     "file": "ec2_ebs_not_optimized.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudtrail",
+    "resource_type": {
+        "aws_cloudtrail": true,
+        "aws_instance": true
+    },
     "template_args": {
         "prefix": ""
     },
@@ -10,6 +13,6 @@
     "description": "Ensure that EC2 is EBS optimized",
     "reference_id": "AWS.CloudTrail.Logging.Medium.008",
     "category": "Security Best Practices",
-    "id": "AC_AWS_0449",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0449"
 }

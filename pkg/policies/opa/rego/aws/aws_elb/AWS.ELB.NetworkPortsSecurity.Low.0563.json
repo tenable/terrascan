@@ -2,7 +2,9 @@
     "name": "elbLbProtocolNotSecured",
     "file": "elbLbProtocolNotSecured.rego",
     "policy_type": "aws",
-    "resource_type": "aws_elb",
+    "resource_type": {
+        "aws_elb": true
+    },
     "template_args": {
         "prefix": ""
     },

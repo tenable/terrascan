@@ -2,7 +2,9 @@
     "name": "reme_checkSecretExpirationIsSet",
     "file": "checkSecretExpirationIsSet.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_key_vault_secret",
+    "resource_type": {
+        "azurerm_key_vault_secret": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

@@ -2,7 +2,9 @@
     "name": "dnsStateIsNotOn",
     "file": "dnsStateIsNotOn.rego",
     "policy_type": "gcp",
-    "resource_type": "google_dns_managed_zone",
+    "resource_type": {
+        "google_dns_managed_zone": true
+    },
     "template_args": null,
     "severity": "LOW",
     "description": "Ensure that DNSSEC is enabled for Cloud DNS.",

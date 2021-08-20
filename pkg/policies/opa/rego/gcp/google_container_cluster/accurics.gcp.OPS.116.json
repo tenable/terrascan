@@ -2,7 +2,9 @@
     "name": "podSecurityPolicyEnabled",
     "file": "podSecurityPolicyEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_container_cluster",
+    "resource_type": {
+        "google_container_cluster": true
+    },
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure PodSecurityPolicy controller is enabled on the Kubernetes Engine Clusters.",

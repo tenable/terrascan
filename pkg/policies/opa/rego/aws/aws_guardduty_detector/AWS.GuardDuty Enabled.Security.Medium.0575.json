@@ -2,7 +2,9 @@
     "name": "gaurdDutyDisabled",
     "file": "gaurdDutyDisabled.rego",
     "policy_type": "aws",
-    "resource_type": "aws_guardduty_detector",
+    "resource_type": {
+        "aws_guardduty_detector": true
+    },
     "template_args": {
         "prefix": ""
     },

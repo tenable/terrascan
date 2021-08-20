@@ -2,7 +2,9 @@
     "name": "amiNotEncrypted",
     "file": "amiNotEncrypted.rego",
     "policy_type": "aws",
-    "resource_type": "aws_ami",
+    "resource_type": {
+        "aws_ami": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS AMI Encryption",

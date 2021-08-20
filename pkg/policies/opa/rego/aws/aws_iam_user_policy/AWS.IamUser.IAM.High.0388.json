@@ -2,7 +2,9 @@
     "name": "rootUserNotContainMfaTypeVirtual",
     "file": "rootUserNotContainMfaTypeVirtual.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_user_policy",
+    "resource_type": {
+        "aws_iam_user_policy": true
+    },
     "template_args": {
         "prefix": ""
     },

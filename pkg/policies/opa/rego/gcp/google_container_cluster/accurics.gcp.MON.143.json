@@ -2,7 +2,9 @@
     "name": "stackDriverMonitoringEnabled",
     "file": "stackDriverServiceDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_container_cluster",
+    "resource_type": {
+        "google_container_cluster": true
+    },
     "template_args": {
         "name": "stackDriverMonitoringEnabled",
         "service": "monitoring"

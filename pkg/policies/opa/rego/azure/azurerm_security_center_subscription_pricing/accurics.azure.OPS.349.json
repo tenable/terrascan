@@ -2,7 +2,9 @@
     "name": "reme_securityCenterPrincingTier",
     "file": "securityCenterPrincingTier.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_security_center_subscription_pricing",
+    "resource_type": {
+        "azurerm_security_center_subscription_pricing": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

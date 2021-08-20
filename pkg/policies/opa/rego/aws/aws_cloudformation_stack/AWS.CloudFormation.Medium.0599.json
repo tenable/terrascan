@@ -2,7 +2,9 @@
     "name": "awsCloudFormationInUse",
     "file": "cloudFormationNullCheck.rego",
     "policy_type": "aws",
-    "resource_type": "aws_cloudformation_stack",
+    "resource_type": {
+        "aws_cloudformation_stack": true
+    },
     "template_args": {
         "name": "awsCloudFormationInUse",
         "property": "template_url"
@@ -11,6 +13,6 @@
     "description": "AWS CloudFormation Not In Use",
     "reference_id": "AWS.CloudFormation.Medium.0599",
     "category": "Security Best Practices",
-    "id": "AC_AWS_0444",
-    "version": 1
+    "version": 1,
+    "id": "AC_AWS_0444"
 }

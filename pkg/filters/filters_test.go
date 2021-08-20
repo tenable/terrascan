@@ -264,17 +264,17 @@ func TestRegoDataFilter_Filter(t *testing.T) {
 	testRegoDataMapWithResourceType := map[string]*policy.RegoData{
 		"Rule.1": {
 			Metadata: policy.RegoMetadata{
-				ResourceType: "kubernetes_pod",
+				ResourceType: map[string]bool{"kubernetes_pod": true},
 			},
 		},
 		"Rule.2": {
 			Metadata: policy.RegoMetadata{
-				ResourceType: "ec2_instance",
+				ResourceType: map[string]bool{"ec2_instance": true},
 			},
 		},
 		"Rule.3": {
 			Metadata: policy.RegoMetadata{
-				ResourceType: "kubernetes_pod",
+				ResourceType: map[string]bool{"kubernetes_pod": true},
 			},
 		},
 	}
@@ -323,12 +323,12 @@ func TestRegoDataFilter_Filter(t *testing.T) {
 			want: map[string]*policy.RegoData{
 				"Rule.1": {
 					Metadata: policy.RegoMetadata{
-						ResourceType: "kubernetes_pod",
+						ResourceType: map[string]bool{"kubernetes_pod": true},
 					},
 				},
 				"Rule.3": {
 					Metadata: policy.RegoMetadata{
-						ResourceType: "kubernetes_pod",
+						ResourceType: map[string]bool{"kubernetes_pod": true},
 					},
 				},
 			},

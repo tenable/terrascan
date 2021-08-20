@@ -2,10 +2,12 @@
     "name": "checkDiskEncryption",
     "file": "checkDiskEncryption.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_managed_disk",
+    "resource_type": {
+        "azurerm_managed_disk": true
+    },
     "template_args": {
-        "prefix": "reme_",
         "name": "checkDiskEncryption",
+        "prefix": "reme_",
         "suffix": ""
     },
     "severity": "MEDIUM",

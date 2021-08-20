@@ -2,7 +2,9 @@
     "name": "programmaticAccessCreation",
     "file": "programmaticAccessCreation.rego",
     "policy_type": "aws",
-    "resource_type": "aws_iam_access_key",
+    "resource_type": {
+        "aws_iam_access_key": true
+    },
     "template_args": {
         "prefix": ""
     },

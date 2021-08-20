@@ -2,7 +2,9 @@
     "name": "rdsScopeIsPublic",
     "file": "rdsScopeIsPublic.rego",
     "policy_type": "aws",
-    "resource_type": "aws_db_security_group",
+    "resource_type": {
+        "aws_db_security_group": true
+    },
     "template_args": {
         "prefix": ""
     },

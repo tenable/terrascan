@@ -2,7 +2,9 @@
     "name": "shieldedVmEenabled",
     "file": "shieldedVmEenabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_compute_instance",
+    "resource_type": {
+        "google_compute_instance": true
+    },
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Compute instances are launched with Shielded VM enabled.",

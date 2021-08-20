@@ -2,7 +2,9 @@
     "name": "reme_sqlServerADPredictableAccount",
     "file": "sqlServerADPredictableAccount.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_sql_active_directory_administrator",
+    "resource_type": {
+        "azurerm_sql_active_directory_administrator": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

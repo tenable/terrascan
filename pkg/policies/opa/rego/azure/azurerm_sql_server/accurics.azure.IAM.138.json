@@ -2,7 +2,11 @@
     "name": "reme_sqlServerPredictableAccount",
     "file": "sqlServerPredictableAccount.rego",
     "policy_type": "azure",
-    "resource_type": "azurerm_sql_server",
+    "resource_type": {
+        "azurerm_sql_server": true,
+        "azurerm_mysql_server": true,
+        "azurerm_postgresql_server": true
+    },
     "template_args": {
         "prefix": "reme_"
     },

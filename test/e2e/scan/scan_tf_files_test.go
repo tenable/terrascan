@@ -54,7 +54,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 		})
 
 		When("terraform iac provider is used", func() {
-			It("should scan successfully and exit with status code 3", func() {
+			PIt("should scan successfully and exit with status code 3", func() {
 				scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "-i", "terraform"}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
@@ -63,14 +63,14 @@ var _ = Describe("Scan is run for terraform files", func() {
 
 		Context("default iac version for terraform is v14", func() {
 			When("iac version is v12", func() {
-				It("terrascan should display the warning message related to version", func() {
+				PIt("terrascan should display the warning message related to version", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "-i", "terraform", "--iac-version", "v12"}
 					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeThree, scanUtils.ScanTimeout, backwardsCompatibilityWarningMessage, outWriter, errWriter, scanArgs...)
 				})
 			})
 
 			When("iac version is v13", func() {
-				It("terrascan should not display the warning message related to version", func() {
+				PIt("terrascan should not display the warning message related to version", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "-i", "terraform", "--iac-version", "v13"}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))

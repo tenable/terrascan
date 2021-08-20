@@ -2,7 +2,10 @@
     "name": "serialPortEnabled",
     "file": "metadataDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": "google_compute_instance",
+    "resource_type": {
+        "google_compute_instance": true,
+        "google_compute_project_metadata": true
+    },
     "template_args": {
         "metaKey": "serial-port-enable",
         "name": "serialPortEnabled"
