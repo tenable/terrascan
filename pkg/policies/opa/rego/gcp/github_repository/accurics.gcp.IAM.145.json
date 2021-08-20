@@ -2,9 +2,7 @@
     "name": "privateRepoEnabled",
     "file": "privateRepoEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "github_repository": true
-    },
+    "resource_type": "github_repository",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Repository is Not Private.",

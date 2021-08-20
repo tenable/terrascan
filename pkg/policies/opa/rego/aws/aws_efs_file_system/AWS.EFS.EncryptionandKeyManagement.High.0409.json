@@ -2,9 +2,7 @@
     "name": "efsEncryptedFalse",
     "file": "efsEncryptedFalse.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_efs_file_system": true
-    },
+    "resource_type": "aws_efs_file_system",
     "template_args": {
         "name": "efsEncryptedFalse",
         "prefix": ""

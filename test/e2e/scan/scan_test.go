@@ -106,7 +106,7 @@ var _ = Describe("Scan", func() {
 				})
 			})
 			Context("tf files are present in the working directory", func() {
-				PIt("should scan the directory, return results and exit with status code 3 as there would no directory scan errors", func() {
+				It("should scan the directory, return results and exit with status code 3 as there would no directory scan errors", func() {
 					workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
 					Expect(err).NotTo(HaveOccurred())
 

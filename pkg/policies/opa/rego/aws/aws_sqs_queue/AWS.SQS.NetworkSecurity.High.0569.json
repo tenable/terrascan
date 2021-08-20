@@ -2,9 +2,7 @@
     "name": "sqsQueueExposed",
     "file": "sqsQueueExposed.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_sqs_queue": true
-    },
+    "resource_type": "aws_sqs_queue",
     "template_args": {
         "prefix": ""
     },

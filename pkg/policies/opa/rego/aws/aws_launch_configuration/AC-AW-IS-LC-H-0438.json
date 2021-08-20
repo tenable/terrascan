@@ -2,9 +2,7 @@
     "name": "securityGroupWideOpentoInternetLaunchConfig",
     "file": "securityGroupWideOpentoInternetLaunchConfig.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_launch_configuration": true
-    },
+    "resource_type": "aws_launch_configuration",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Security group attached to launch configuration is wide open to internet ",
     "reference_id": "AC-AW-IS-LC-H-0438",
     "category": "Infrastructure Security",
-    "version": 1,
-    "id": "AC_AWS_0489"
+    "id": "AC_AWS_0489",
+    "version": 1
 }

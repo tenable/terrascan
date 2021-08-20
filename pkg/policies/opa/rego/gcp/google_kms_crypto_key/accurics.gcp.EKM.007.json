@@ -2,9 +2,7 @@
     "name": "checkRotation365Days",
     "file": "checkRotation365Days.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_kms_crypto_key": true
-    },
+    "resource_type": "google_kms_crypto_key",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Encryption keys are rotated within a period of 365 days.",

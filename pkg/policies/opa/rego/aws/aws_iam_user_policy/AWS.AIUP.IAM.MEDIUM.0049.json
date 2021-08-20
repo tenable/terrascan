@@ -2,9 +2,7 @@
     "name": "iamUserInlinePolicy",
     "file": "iamUserInlinePolicy.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_iam_user_policy": true
-    },
+    "resource_type": "aws_iam_user_policy",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure IAM policies are attached only to groups or roles",
     "reference_id": "AWS.AIUP.IAM.MEDIUM.0049",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0475"
+    "id": "AC_AWS_0475",
+    "version": 1
 }

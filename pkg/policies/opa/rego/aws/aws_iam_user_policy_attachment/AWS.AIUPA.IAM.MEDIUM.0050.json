@@ -2,9 +2,7 @@
     "name": "iamUserManagedPolicyAttachment",
     "file": "iamUserManagedPolicyAttachment.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_iam_user_policy_attachment": true
-    },
+    "resource_type": "aws_iam_user_policy_attachment",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure IAM permissions are not given directly to users",
     "reference_id": "AWS.AIUPA.IAM.MEDIUM.0050",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0476"
+    "id": "AC_AWS_0476",
+    "version": 1
 }

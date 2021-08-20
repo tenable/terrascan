@@ -2,9 +2,7 @@
     "name": "lambdaXRayTracingDisabled",
     "file": "lambdaXRayTracingDisabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_lambda_function": true
-    },
+    "resource_type": "aws_lambda_function",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Lambda tracing is not enabled.",
     "reference_id": "AWS.LambdaFunction.Logging.0470",
     "category": "Logging and Monitoring",
-    "version": 2,
-    "id": "AC_AWS_0485"
+    "id": "AC_AWS_0485",
+    "version": 2
 }

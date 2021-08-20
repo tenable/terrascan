@@ -2,9 +2,7 @@
     "name": "noNodeToNodeEncryptionDomain",
     "file": "noNodeToNodeEncryptionDomain.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_elasticsearch_domain": true
-    },
+    "resource_type": "aws_elasticsearch_domain",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure Elasticsearch domains being created are set to be encrypted node-to-node",
     "reference_id": "AWS.ElasticSearch.IS.MEDIUM.0045",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": "AC_AWS_0468"
+    "id": "AC_AWS_0468",
+    "version": 2
 }

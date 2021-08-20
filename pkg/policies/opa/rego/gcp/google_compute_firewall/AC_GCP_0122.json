@@ -2,9 +2,7 @@
 	"name": "networkPort11215ExposedToInternetUGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort11215ExposedToInternetUGCP",
 		"portNumber": 11215,
@@ -15,7 +13,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Memcached SSL (UDP:11215) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0122",
+	"id": "AC_GCP_0122",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0122"
+	"version": 2
 }

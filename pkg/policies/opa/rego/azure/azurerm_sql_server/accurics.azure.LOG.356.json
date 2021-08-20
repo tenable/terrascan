@@ -2,9 +2,7 @@
     "name": "sqlAuditingRetention",
     "file": "sqlAuditingRetention.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_sql_server": true
-    },
+    "resource_type": "azurerm_sql_server",
     "template_args": null,
     "severity": "LOW",
     "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers.",

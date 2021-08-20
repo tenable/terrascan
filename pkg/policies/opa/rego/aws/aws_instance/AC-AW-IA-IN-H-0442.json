@@ -2,11 +2,7 @@
     "name": "overlyPermissiveInstance",
     "file": "overlyPermissiveInstance.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_instance": true,
-        "aws_iam_role_policy_attachment": true,
-        "aws_iam_policy": true
-    },
+    "resource_type": "aws_instance",
     "template_args": {
         "prefix": ""
     },
@@ -14,6 +10,6 @@
     "description": "Ensure that instance launched follows the least privilege principle as this can be related to delivery-exploitation-Installation phases of kill  chain",
     "reference_id": "AC-AW-IA-LC-H-0442",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0477"
+    "id": "AC_AWS_0477",
+    "version": 1
 }

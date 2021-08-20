@@ -2,14 +2,12 @@
     "name": "privateRepoEnabled",
     "file": "privateRepoEnabled.rego",
     "policy_type": "github",
-    "resource_type": {
-        "github_repository": true
-    },
+    "resource_type": "github_repository",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Repository is Not Private.",
     "reference_id": "accurics.github.IAM.1",
+    "id": "AC_GITHUB_0002",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_GITHUB_0002"
+    "version": 1
 }

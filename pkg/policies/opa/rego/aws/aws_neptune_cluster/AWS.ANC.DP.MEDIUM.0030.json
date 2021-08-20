@@ -2,9 +2,7 @@
     "name": "neptuneClusterNotEncrypted",
     "file": "neptuneClusterNotEncrypted.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_neptune_cluster": true
-    },
+    "resource_type": "aws_neptune_cluster",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure Neptune Cluster is Encrypted",
     "reference_id": "AWS.ANC.DP.MEDIUM.0030",
     "category": "Data Protection",
-    "version": 2,
-    "id": "AC_AWS_0493"
+    "id": "AC_AWS_0493",
+    "version": 2
 }

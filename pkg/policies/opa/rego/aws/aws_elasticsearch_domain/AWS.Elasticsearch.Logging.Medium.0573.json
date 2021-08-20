@@ -2,9 +2,7 @@
     "name": "esloggingdisabled",
     "file": "esloggingdisabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_elasticsearch_domain": true
-    },
+    "resource_type": "aws_elasticsearch_domain",
     "template_args": {
         "prefix": ""
     },

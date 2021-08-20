@@ -2,9 +2,7 @@
     "name": "ecsServiceAdmin",
     "file": "ecsServiceAdmin.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_ecs_service": true
-    },
+    "resource_type": "aws_ecs_service",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure there are no ECS services Admin roles",

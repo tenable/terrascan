@@ -2,9 +2,7 @@
 	"name": "networkPort9200ExposedToPrivateGCP",
 	"file": "networkPortExposedToPrivateGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort9200ExposedToPrivateGCP",
 		"portNumber": 9200,
@@ -15,7 +13,7 @@
 	"severity": "LOW",
 	"description": "Ensure Elastic Search (TCP:9200) is not exposed to private hosts more than 32 for Google Compute Firewall",
 	"reference_id": "AC_GCP_0180",
+	"id": "AC_GCP_0180",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0180"
+	"version": 2
 }

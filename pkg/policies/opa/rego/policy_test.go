@@ -99,7 +99,7 @@ func validateRequiredFields(regoMetadata *policy.RegoMetadata, filepath string, 
 	if regoMetadata.PolicyType == "" {
 		validationErrorLogger("policy_type", filepath, t)
 	}
-	if len(regoMetadata.ResourceType) == 0 {
+	if regoMetadata.ResourceType == "" {
 		validationErrorLogger("resource_type", filepath, t)
 	}
 	if regoMetadata.Severity == "" {

@@ -2,9 +2,7 @@
     "name": "stackDriverLoggingEnabled",
     "file": "stackDriverServiceDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_container_cluster": true
-    },
+    "resource_type": "google_container_cluster",
     "template_args": {
         "name": "stackDriverLoggingEnabled",
         "service": "logging"

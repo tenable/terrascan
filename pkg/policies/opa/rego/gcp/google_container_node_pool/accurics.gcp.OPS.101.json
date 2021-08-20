@@ -2,9 +2,7 @@
     "name": "autoNodeUpgradeEnabled",
     "file": "autoNodePropDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_container_node_pool": true
-    },
+    "resource_type": "google_container_node_pool",
     "template_args": {
         "name": "autoNodeUpgradeEnabled",
         "property": "auto_upgrade"

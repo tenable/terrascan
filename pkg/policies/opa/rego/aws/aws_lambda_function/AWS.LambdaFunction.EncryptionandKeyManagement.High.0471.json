@@ -2,9 +2,7 @@
     "name": "lambdaNotEncryptedWithKms",
     "file": "lambdaNotEncryptedWithKms.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_lambda_function": true
-    },
+    "resource_type": "aws_lambda_function",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Lambda does not use KMS CMK key to protect environment variables.",
     "reference_id": "AWS.LambdaFunction.EncryptionandKeyManagement.0471",
     "category": "Data Protection",
-    "version": 2,
-    "id": "AC_AWS_0483"
+    "id": "AC_AWS_0483",
+    "version": 2
 }

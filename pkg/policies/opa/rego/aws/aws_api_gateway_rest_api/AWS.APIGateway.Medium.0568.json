@@ -2,9 +2,7 @@
     "name": "apiGatewayContentEncoding",
     "file": "apiGatewayContentEncoding.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_api_gateway_rest_api": true
-    },
+    "resource_type": "aws_api_gateway_rest_api",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable Content Encoding",

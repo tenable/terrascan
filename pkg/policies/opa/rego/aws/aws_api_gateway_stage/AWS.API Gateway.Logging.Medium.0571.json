@@ -2,9 +2,7 @@
     "name": "apiGatewayTracing",
     "file": "apiGatewayTracing.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_api_gateway_stage": true
-    },
+    "resource_type": "aws_api_gateway_stage",
     "template_args": null,
     "severity": "LOW",
     "description": "Ensure AWS API Gateway has active xray tracing enabled",

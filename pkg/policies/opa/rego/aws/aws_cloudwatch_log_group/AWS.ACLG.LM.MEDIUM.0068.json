@@ -2,9 +2,7 @@
     "name": "cloudWatchLogGroupNoRetentionPolicy",
     "file": "cloudWatchLogGroupNoRetentionPolicy.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_cloudwatch_log_group": true
-    },
+    "resource_type": "aws_cloudwatch_log_group",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure AWS Cloudwatch log group has retention policy set.",
     "reference_id": "AWS.ACLG.LM.MEDIUM.0068",
     "category": "Logging and Monitoring",
-    "version": 1,
-    "id": "AC_AWS_0452"
+    "id": "AC_AWS_0452",
+    "version": 1
 }

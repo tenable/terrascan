@@ -2,9 +2,7 @@
     "name": "backupConfigEnabled",
     "file": "backupConfigEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_sql_database_instance": true
-    },
+    "resource_type": "google_sql_database_instance",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure all Cloud SQL database instance have backup configuration enabled.",

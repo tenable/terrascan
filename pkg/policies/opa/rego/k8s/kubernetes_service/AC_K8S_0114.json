@@ -2,9 +2,7 @@
     "name": "ensureServiceWithSelector",
     "file": "ensureServiceWithSelector.rego",
     "policy_type": "k8s",
-    "resource_type": {
-        "kubernetes_service": true
-    },
+    "resource_type": "kubernetes_service",
     "template_args": {
         "name": "ensureServiceWithSelector",
         "prefix": "",

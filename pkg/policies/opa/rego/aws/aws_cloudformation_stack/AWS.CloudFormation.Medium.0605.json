@@ -2,10 +2,7 @@
     "name": "cloudFormationTerminationProtection",
     "file": "cloudFormationTerminationProtection.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_cloudformation_stack": true,
-        "aws_cloudformation_stack_set_instance": true
-    },
+    "resource_type": "aws_cloudformation_stack",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable AWS CloudFormation Stack Termination Protection",

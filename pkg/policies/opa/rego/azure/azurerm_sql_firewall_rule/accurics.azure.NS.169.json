@@ -2,9 +2,7 @@
     "name": "reme_moreHostsAllowed",
     "file": "moreHostsAllowed.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_sql_firewall_rule": true
-    },
+    "resource_type": "azurerm_sql_firewall_rule",
     "template_args": {
         "prefix": "reme_"
     },

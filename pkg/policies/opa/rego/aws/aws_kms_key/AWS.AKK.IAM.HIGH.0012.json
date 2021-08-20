@@ -2,9 +2,7 @@
     "name": "kmsKeyPolicyMissingPrincipal",
     "file": "kmsKeyPolicyMissingPrincipal.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_kms_key": true
-    },
+    "resource_type": "aws_kms_key",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure IAM policies do not have 'Principal' element missing from the policy statement.",
     "reference_id": "AWS.AKK.IAM.HIGH.0012",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0481"
+    "id": "AC_AWS_0481",
+    "version": 1
 }

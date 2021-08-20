@@ -2,9 +2,7 @@
     "name": "elbWeakCipher",
     "file": "elbWeakCipher.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_load_balancer_policy": true
-    },
+    "resource_type": "aws_load_balancer_policy",
     "template_args": {
         "prefix": "",
         "weak_ciphers": [

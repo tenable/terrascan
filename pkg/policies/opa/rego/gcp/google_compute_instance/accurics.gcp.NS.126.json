@@ -2,10 +2,7 @@
     "name": "projectWideSshKeysUsed",
     "file": "metadataDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_compute_instance": true,
-        "google_compute_project_metadata": true
-    },
+    "resource_type": "google_compute_instance",
     "template_args": {
         "metaKey": "block-project-ssh-keys",
         "name": "projectWideSshKeysUsed"

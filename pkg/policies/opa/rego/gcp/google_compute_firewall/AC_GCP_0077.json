@@ -2,9 +2,7 @@
 	"name": "networkPort4505ExposedToInternetGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort4505ExposedToInternetGCP",
 		"portNumber": 4505,
@@ -15,7 +13,7 @@
 	"severity": "HIGH",
 	"description": "Ensure SaltStack Master (TCP:4505) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0077",
+	"id": "AC_GCP_0077",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0077"
+	"version": 2
 }

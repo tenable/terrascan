@@ -2,9 +2,7 @@
     "name": "emailAlertsSecurityCenterContact",
     "file": "emailAlertsSecurityCenterContact.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_security_center_contact": true
-    },
+    "resource_type": "azurerm_security_center_contact",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that 'Send email notification for high severity alerts' is set to 'On'",

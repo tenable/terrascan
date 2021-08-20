@@ -2,9 +2,7 @@
     "name": "noPasswordPolicyEnabled",
     "file": "noPasswordPolicyEnabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_iam_user_login_profile": true
-    },
+    "resource_type": "aws_iam_user_login_profile",
     "template_args": {
         "prefix": ""
     },

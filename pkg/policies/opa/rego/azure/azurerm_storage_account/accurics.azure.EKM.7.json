@@ -2,9 +2,7 @@
     "name": "reme_storageAccountEnableHttps",
     "file": "storageAccountEnableHttps.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_storage_account": true
-    },
+    "resource_type": "azurerm_storage_account",
     "template_args": {
         "prefix": "reme_"
     },

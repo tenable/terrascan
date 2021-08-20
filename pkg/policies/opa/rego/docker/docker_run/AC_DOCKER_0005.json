@@ -2,18 +2,16 @@
     "name": "lastUserRoot",
     "file": "lastUserRoot.rego",
     "policy_type": "docker",
-    "resource_type": {
-        "docker_run": true
-    },
+    "resource_type": "docker_run",
     "template_args": {
-        "name": "lastUserRoot",
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "lastUserRoot"
     },
     "severity": "MEDIUM",
     "description": "Ensure root with RUN command is not used for Docker file",
     "reference_id": "AC_DOCKER_0005",
     "category": "Infrastructure Security",
-    "version": 1,
-    "id": "AC_DOCKER_0005"
+    "id": "AC_DOCKER_0005",
+    "version": 1
 }

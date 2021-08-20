@@ -2,9 +2,7 @@
     "name": "reme_nonSslEnabled",
     "file": "nonSslEnabled.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_redis_cache": true
-    },
+    "resource_type": "azurerm_redis_cache",
     "template_args": {
         "prefix": "reme_"
     },

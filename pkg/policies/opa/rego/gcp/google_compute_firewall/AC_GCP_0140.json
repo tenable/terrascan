@@ -2,9 +2,7 @@
 	"name": "networkPort5432ExposedToInternetUGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort5432ExposedToInternetUGCP",
 		"portNumber": 5432,
@@ -15,7 +13,7 @@
 	"severity": "HIGH",
 	"description": "Ensure Postgres SQL (UDP:5432) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0140",
+	"id": "AC_GCP_0140",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0140"
+	"version": 2
 }

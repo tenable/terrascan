@@ -2,9 +2,7 @@
     "name": "reme_appGatewayWAFEnabled",
     "file": "appGatewayWAFEnabled.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_application_gateway": true
-    },
+    "resource_type": "azurerm_application_gateway",
     "template_args": {
         "prefix": "reme_"
     },

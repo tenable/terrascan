@@ -2,11 +2,7 @@
     "name": "encryptedwithCsek",
     "file": "encryptedwithCsek.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_compute_instance": true,
-        "google_compute_disk": true,
-        "google_compute_attached_disk": true
-    },
+    "resource_type": "google_compute_instance",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "VM disks attached to a compute instance should be encrypted with Customer Supplied Encryption Keys (CSEK) .",
