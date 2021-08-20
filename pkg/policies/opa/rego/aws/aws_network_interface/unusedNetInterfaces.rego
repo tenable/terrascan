@@ -11,4 +11,3 @@ package accurics
    config := netInterface.config.attachment[_]
    config.instance == ""
 }
-
