@@ -2,9 +2,7 @@
     "name": "efsEncryptedWithNoKms",
     "file": "efsEncryptedWithNoKms.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_efs_file_system": true
-    },
+    "resource_type": "aws_efs_file_system",
     "template_args": {
         "name": "efsEncryptedWithNoKms",
         "prefix": ""

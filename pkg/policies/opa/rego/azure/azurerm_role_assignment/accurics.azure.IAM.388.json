@@ -2,9 +2,7 @@
     "name": "reme_checkGuestUser",
     "file": "checkGuestUser.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_role_assignment": true
-    },
+    "resource_type": "azurerm_role_assignment",
     "template_args": {
         "prefix": "reme_"
     },

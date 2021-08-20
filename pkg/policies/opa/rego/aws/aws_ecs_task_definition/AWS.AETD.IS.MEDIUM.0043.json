@@ -2,9 +2,7 @@
     "name": "noTransitEncryptionECS",
     "file": "noTransitEncryptionECS.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_ecs_task_definition": true
-    },
+    "resource_type": "aws_ecs_task_definition",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure EFS volume used for ECS task defination has in transit encryption enabled",
     "reference_id": "AWS.AETD.IS.MEDIUM.0043",
     "category": "Infrastructure Security",
-    "version": 2,
-    "id": "AC_AWS_0463"
+    "id": "AC_AWS_0463",
+    "version": 2
 }

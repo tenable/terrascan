@@ -2,9 +2,7 @@
     "name": "reme_ipRangeFilterMissing",
     "file": "ipRangeFilterMissing.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_cosmosdb_account": true
-    },
+    "resource_type": "azurerm_cosmosdb_account",
     "template_args": {
         "prefix": "reme_"
     },

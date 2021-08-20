@@ -2,9 +2,7 @@
 	"name": "networkPort161ExposedToInternetUGCP",
 	"file": "networkPortExposedToInternetGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort161ExposedToInternetUGCP",
 		"portNumber": 161,
@@ -15,7 +13,7 @@
 	"severity": "HIGH",
 	"description": "Ensure SNMP (UDP:161) is not exposed to entire internet for Google Compute Firewall",
 	"reference_id": "AC_GCP_0089",
+	"id": "AC_GCP_0089",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0089"
+	"version": 2
 }

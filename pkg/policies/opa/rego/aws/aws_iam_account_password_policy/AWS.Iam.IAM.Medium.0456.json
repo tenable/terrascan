@@ -2,9 +2,7 @@
     "name": "passwordRequireSymbol",
     "file": "passwordPolicyRequirement.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_iam_account_password_policy": true
-    },
+    "resource_type": "aws_iam_account_password_policy",
     "template_args": {
         "name": "passwordRequireSymbol",
         "prefix": "",

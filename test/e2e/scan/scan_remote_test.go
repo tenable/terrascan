@@ -136,7 +136,7 @@ var _ = Describe("Scan Command using remote types", func() {
 	Context("valid remote type is supplied with valid remote URL", func() {
 		When("remote type is git", func() {
 			remoteURL := "github.com/accurics/KaiMonkey/terraform/aws"
-			PIt("should download the resource and generate scan results", func() {
+			It("should download the resource and generate scan results", func() {
 				scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 				// exit code is 5 because iac files in directory has violations
@@ -144,7 +144,7 @@ var _ = Describe("Scan Command using remote types", func() {
 				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeFive))
 			})
 
-			PIt("should download the resource and generate scan results", func() {
+			It("should download the resource and generate scan results", func() {
 				remoteURL := "https://github.com/accurics/KaiMonkey.git//terraform/aws"
 				scanArgs := []string{scanUtils.ScanCommand, "-r", "git", "--remote-url", remoteURL}
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)

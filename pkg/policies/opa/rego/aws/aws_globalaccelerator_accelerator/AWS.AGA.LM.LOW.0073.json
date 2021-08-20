@@ -2,9 +2,7 @@
     "name": "globalAccFlowLogsDisabled",
     "file": "globalAccFlowLogsDisabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_globalaccelerator_accelerator": true
-    },
+    "resource_type": "aws_globalaccelerator_accelerator",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure Global Accelerator accelerator has flow logs enabled.",
     "reference_id": "AWS.AGA.LM.LOW.0073",
     "category": "Logging and Monitoring",
-    "version": 1,
-    "id": "AC_AWS_0471"
+    "id": "AC_AWS_0471",
+    "version": 1
 }

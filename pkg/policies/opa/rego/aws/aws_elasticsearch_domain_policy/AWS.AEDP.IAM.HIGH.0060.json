@@ -2,9 +2,7 @@
     "name": "esDomainInsecurePolicy",
     "file": "esDomainInsecurePolicy.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_elasticsearch_domain_policy": true
-    },
+    "resource_type": "aws_elasticsearch_domain_policy",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure Elasticsearch domains do not have wildcard policies.",
     "reference_id": "AWS.AEDP.IAM.HIGH.0060",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0469"
+    "id": "AC_AWS_0469",
+    "version": 1
 }

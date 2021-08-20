@@ -2,9 +2,7 @@
     "name": "containerDefinitionContainsPASSWORD",
     "file": "containerDefinitionContainsSensitiveInfo.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_ecs_task_definition": true
-    },
+    "resource_type": "aws_ecs_task_definition",
     "template_args": {
         "keyword": "PASSWORD",
         "name": "containerDefinitionContainsPASSWORD",

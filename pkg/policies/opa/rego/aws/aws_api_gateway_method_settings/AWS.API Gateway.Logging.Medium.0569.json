@@ -2,9 +2,7 @@
     "name": "apiGatewaySettingMetrics",
     "file": "apiGatewaySettingMetrics.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_api_gateway_method_settings": true
-    },
+    "resource_type": "aws_api_gateway_method_settings",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Enable Detailed CloudWatch Metrics for APIs",

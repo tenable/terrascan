@@ -2,9 +2,7 @@
     "name": "clusterLabelsEnabled",
     "file": "clusterLabelsEnabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_container_cluster": true
-    },
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Kubernetes Clusters are configured with Labels.",

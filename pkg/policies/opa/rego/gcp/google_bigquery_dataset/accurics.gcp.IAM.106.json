@@ -2,9 +2,7 @@
     "name": "bqDatasetPubliclyAccessible",
     "file": "bqDatasetPubliclyAccessible.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_bigquery_dataset": true
-    },
+    "resource_type": "google_bigquery_dataset",
     "template_args": null,
     "severity": "HIGH",
     "description": "BigQuery datasets may be anonymously or publicly accessible.",

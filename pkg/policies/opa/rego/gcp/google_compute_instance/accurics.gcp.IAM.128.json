@@ -2,9 +2,7 @@
     "name": "osLoginEnabled",
     "file": "metadataDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_compute_instance": true
-    },
+    "resource_type": "google_compute_instance",
     "template_args": {
         "metaKey": "enable-oslogin",
         "name": "osLoginEnabled"

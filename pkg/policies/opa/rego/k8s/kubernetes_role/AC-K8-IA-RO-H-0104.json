@@ -2,11 +2,7 @@
     "name": "defaultServiceAccountUsed",
     "file": "defaultServiceAccountUsed.rego",
     "policy_type": "k8s",
-    "resource_type": {
-        "kubernetes_role": true,
-        "kubernetes_cluster_role": true,
-        "kubernetes_role_binding": true
-    },
+    "resource_type": "kubernetes_role",
     "template_args": {
         "name": "defaultServiceAccountUsed",
         "prefix": "",

@@ -2,9 +2,7 @@
     "name": "kmsKeySecurePolicyNotUsed",
     "file": "kmsKeySecurePolicyNotUsed.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_kms_key": true
-    },
+    "resource_type": "aws_kms_key",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure KMS key policy does not have wildcard policies attached.",
     "reference_id": "AWS.AKK.IAM.HIGH.0082",
     "category": "Identity and Access Management",
-    "version": 1,
-    "id": "AC_AWS_0482"
+    "id": "AC_AWS_0482",
+    "version": 1
 }

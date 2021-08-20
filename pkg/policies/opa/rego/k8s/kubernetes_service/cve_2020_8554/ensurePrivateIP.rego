@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[service.id] {
-    service := input.kubernetes_service[_]
+    service := input.{{.resource_type}}[_]
     type_check(service.config.spec)
     object.get(service.config.spec, "externalIPs", "undefined") != "undefined"
 }

@@ -2,14 +2,12 @@
     "name": "gkeControlPlanePublicAccess",
     "file": "gkeControlPlanePublicAccess.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_container_cluster": true
-    },
+    "resource_type": "google_container_cluster",
     "template_args": null,
     "severity": "Medium",
     "description": "GKE Control Plane is exposed to few public IP addresses using master-authorized-network-config",
     "reference_id": "AC-GC-IS-CC-M-0367",
+    "id": "AC_GCP_0292",
     "category": "Infrastructure Security",
-    "version": 1,
-    "id": "AC_GCP_0292"
+    "version": 1
 }

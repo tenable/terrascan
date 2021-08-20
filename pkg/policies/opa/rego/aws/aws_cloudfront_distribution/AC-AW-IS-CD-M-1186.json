@@ -2,9 +2,7 @@
     "name": "noWafEnabled",
     "file": "noWafEnabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_cloudfront_distribution": true
-    },
+    "resource_type": "aws_cloudfront_distribution",
     "template_args": null,
     "severity": "Medium",
     "description": "Ensure that cloud-front has web application firewall enabled",

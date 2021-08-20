@@ -2,9 +2,7 @@
     "name": "iamPolicyWithFullAdminControl",
     "file": "iamPolicyWithFullAdminControl.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_iam_user_policy": true
-    },
+    "resource_type": "aws_iam_user_policy",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "It is recommended and considered a standard security advice to grant least privileges that is, granting only the permissions required to perform a task. IAM policies are the means by which privileges are granted to users, groups, or roles. Determine what users need to do and then craft policies for them that let the users perform only those tasks, instead of granting full administrative privileges.",
     "reference_id": "AC-AW-IA-H-1190",
     "category": "Identity and Access Management",
-    "version": 2,
-    "id": "AC_AWS_0474"
+    "id": "AC_AWS_0474",
+    "version": 2
 }

@@ -2,9 +2,7 @@
     "name": "defaultServiceAccountUsed",
     "file": "defaultServiceAccountUsed.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_compute_instance": true
-    },
+    "resource_type": "google_compute_instance",
     "template_args": null,
     "severity": "HIGH",
     "description": "Instances may have been configured to use the default service account with full access to all Cloud APIs",

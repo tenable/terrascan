@@ -2,9 +2,7 @@
     "name": "tillerServiceDeleted",
     "file": "tillerServiceDeleted.rego",
     "policy_type": "k8s",
-    "resource_type": {
-        "kubernetes_service": true
-    },
+    "resource_type": "kubernetes_service",
     "template_args": {
         "name": "tillerServiceDeleted",
         "prefix": "",

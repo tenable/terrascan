@@ -2,9 +2,7 @@
     "name": "reme_logDisconnections",
     "file": "logDisconnections.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_postgresql_configuration": true
-    },
+    "resource_type": "azurerm_postgresql_configuration",
     "template_args": {
         "prefix": "reme_"
     },

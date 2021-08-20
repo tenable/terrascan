@@ -2,14 +2,12 @@
     "name": "apiGatewayMiconfiguredCors",
     "file": "apiGatewayMiconfiguredCors.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_apigatewayv2_api": true
-    },
+    "resource_type": "aws_apigatewayv2_api",
     "template_args": null,
     "severity": "Medium",
     "description": "Insecure Cross-Origin Resource Sharing Configuration allowing all domains",
     "reference_id": "AWS.ApiGatewayV2Api.AccessControl.0630",
     "category": "Security Best Practices",
-    "version": 2,
-    "id": "AC_AWS_0441"
+    "id": "AC_AWS_0441",
+    "version": 2
 }

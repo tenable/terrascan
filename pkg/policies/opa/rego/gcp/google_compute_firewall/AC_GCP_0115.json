@@ -2,9 +2,7 @@
 	"name": "networkPort445ExposedToPublicGCP",
 	"file": "networkPortExposedToPublicGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort445ExposedToPublicGCP",
 		"portNumber": 445,
@@ -15,7 +13,7 @@
 	"severity": "MEDIUM",
 	"description": "Ensure Microsoft-DS (TCP:445) is not exposed to public for Google Compute Firewall",
 	"reference_id": "AC_GCP_0115",
+	"id": "AC_GCP_0115",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0115"
+	"version": 2
 }

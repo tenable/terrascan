@@ -17,6 +17,8 @@
 package filters
 
 import (
+	"strings"
+
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
@@ -49,7 +51,14 @@ func (rs ResourceTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bo
 		return true
 	}
 
-	return r.ResourceType[rs.resourceType]
+	// temporary fix for kubernetes policies (https://github.com/accurics/terrascan/issues/946)
+	// TODO: modification in policy metadata (resource type (string) => resource type (map<string,bool))
+	// accordingly modify the filter specification
+	if r.PolicyType == "k8s" && strings.Contains(strings.ToLower(rs.resourceType), "kubernetes") {
+		return true
+	}
+
+	return rs.resourceType == r.ResourceType
 }
 
 // RerefenceIDFilterSpecification is reference ID based Filter Spec

@@ -2,9 +2,7 @@
     "name": "checkVersioningEnabled",
     "file": "checkStorageBucketConfig.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_storage_bucket": true
-    },
+    "resource_type": "google_storage_bucket",
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that object versioning is enabled on log-buckets.",

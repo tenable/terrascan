@@ -2,9 +2,7 @@
     "name": "autoCreateNetDisabled",
     "file": "autoCreateNetDisabled.rego",
     "policy_type": "gcp",
-    "resource_type": {
-        "google_project": true
-    },
+    "resource_type": "google_project",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that the default network does not exist in a project.",

@@ -2,9 +2,7 @@
     "name": "apiGatewayAuthorizationDisabled",
     "file": "apiGatewayAuthorizationDisabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_api_gateway_method": true
-    },
+    "resource_type": "aws_api_gateway_method",
     "template_args": {
         "prefix": ""
     },
@@ -12,6 +10,6 @@
     "description": "Ensure there is no open access to back-end resources through API",
     "reference_id": "AWS.APGM.IS.LOW.0056",
     "category": "Infrastructure Security",
-    "version": 1,
-    "id": "AC_AWS_0439"
+    "id": "AC_AWS_0439",
+    "version": 1
 }

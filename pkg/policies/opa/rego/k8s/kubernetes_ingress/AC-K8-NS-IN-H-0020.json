@@ -2,9 +2,7 @@
     "name": "noHttps",
     "file": "noHttps.rego",
     "policy_type": "k8s",
-    "resource_type": {
-        "kubernetes_ingress": true
-    },
+    "resource_type": "kubernetes_ingress",
     "template_args": {
         "name": "noHttps",
         "prefix": "",

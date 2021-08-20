@@ -2,9 +2,7 @@
 	"name": "networkPort2382ExposedToPrivateGCP",
 	"file": "networkPortExposedToPrivateGCP.rego",
 	"policy_type": "gcp",
-	"resource_type": {
-		"google_compute_firewall": true
-	},
+	"resource_type": "google_compute_firewall",
 	"template_args": {
 		"name": "networkPort2382ExposedToPrivateGCP",
 		"portNumber": 2382,
@@ -15,7 +13,7 @@
 	"severity": "LOW",
 	"description": "Ensure SQL Server Analysis Service browser (TCP:2382) is not exposed to private hosts more than 32 for Google Compute Firewall",
 	"reference_id": "AC_GCP_0051",
+	"id": "AC_GCP_0051",
 	"category": "Infrastructure Security",
-	"version": 2,
-	"id": "AC_GCP_0051"
+	"version": 2
 }

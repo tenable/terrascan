@@ -2,18 +2,16 @@
     "name": "runUsingApt",
     "file": "runUsingApt.rego",
     "policy_type": "docker",
-    "resource_type": {
-        "docker_run": true
-    },
+    "resource_type": "docker_run",
     "template_args": {
-        "name": "runUsingApt",
         "prefix": "",
-        "suffix": ""
+        "suffix": "",
+        "name": "runUsingApt"
     },
     "severity": "MEDIUM",
     "description": "Ensure apt is not used with RUN command for Docker file",
     "reference_id": "AC_DOCKER_0002",
     "category": "Infrastructure Security",
-    "version": 1,
-    "id": "AC_DOCKER_0002"
+    "id": "AC_DOCKER_0002",
+    "version": 1
 }

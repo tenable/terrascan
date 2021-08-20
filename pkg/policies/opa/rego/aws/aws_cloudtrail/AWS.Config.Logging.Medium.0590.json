@@ -2,10 +2,7 @@
     "name": "configEnabledForAllRegions",
     "file": "configEnabled.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_cloudtrail": true,
-        "aws_config_configuration_aggregator": true
-    },
+    "resource_type": "aws_cloudtrail",
     "template_args": {
         "prefix": ""
     },
@@ -13,6 +10,6 @@
     "description": "Ensure AWS Config is enabled in all regions",
     "reference_id": "AWS.Config.Logging.Medium.0590",
     "category": "Logging and Monitoring",
-    "version": 2,
-    "id": "AC_AWS_0450"
+    "id": "AC_AWS_0450",
+    "version": 2
 }

@@ -2,9 +2,7 @@
     "name": "kubeDashboardDisabled",
     "file": "kubeDashboardDisabled.rego",
     "policy_type": "azure",
-    "resource_type": {
-        "azurerm_kubernetes_cluster": true
-    },
+    "resource_type": "azurerm_kubernetes_cluster",
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Kube Dashboard is disabled",

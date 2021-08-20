@@ -2,9 +2,7 @@
     "name": "allowDeleteActionFromAllPrncpls",
     "file": "actionsFromAllPrincipals.rego",
     "policy_type": "aws",
-    "resource_type": {
-        "aws_s3_bucket_policy": true
-    },
+    "resource_type": "aws_s3_bucket_policy",
     "template_args": {
         "Action": "s3:Delete",
         "name": "allowDeleteActionFromAllPrncpls",
