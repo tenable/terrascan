@@ -18,9 +18,9 @@ The following example of a presync resource hook yaml is nearly ready to be adde
 - Specify a terrascan image.
 
 There is a prepared terrascan image available on Dockerhub that can be integrated with argo-cd immediately. It can be found and pulled from hub.docker.com/r/accurics/terrascan_argocd. You may pull the latest available docker image using bash command 
-'''bash 
+```bash 
 docker pull accurics/terrascan_argocd:latest
-'''
+```
 To use the precreated image of terrascan to scan your argo cd application, replace the <terrascan-image> seen in the presync resource hook yaml below with "accurics/terrascan_argocd:latest"
 
 Insert the resource hook below as a yaml file to the source directory of your project repository. Argo-cd will trigger this resource hook everytime the sync operation is used. 
