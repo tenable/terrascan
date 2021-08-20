@@ -23,11 +23,15 @@ docker pull accurics/terrascan_argocd:latest
 ```
 To use the precreated image of terrascan to scan your argo cd application, replace the 
 ```yaml
-<terrascan-image>
+ containers:
+     - name: terrascan-argocd
+       image: <terrascan-image>
 ```
 seen in the presync resource hook yaml below with 
 ```yaml
-"accurics/terrascan_argocd:latest"
+ containers:
+     - name: terrascan-argocd
+       image: "accurics/terrascan_argocd:latest"
 ```
 Insert the resource hook below as a yaml file to the source directory of your project repository. Argo-cd will trigger this resource hook everytime the sync operation is used. 
 
