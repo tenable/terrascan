@@ -30,6 +30,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 * Scanning of Kubernetes (JSON/YAML), Helm v3, and Kustomize v3
 * Scanning of Dockerfiles
 * Support for AWS, Azure, GCP, Kubernetes, Dockerfiles, and GitHub
+* Vulnerability Scanning for AWS, Azure, GCP container registry Docker Images.
 
 ## Quick Start
 
@@ -120,6 +121,12 @@ Terrascan policies are written using the [Rego policy language](https://www.open
 By default, Terrascan downloads policies from Terrascan repositories while scanning for the first time. However, if you want to download the latest policies, you need to run the Initialization process. See [Usage](https://runterrascan.io/docs/usage/command_line_mode/) for information about the Initialization process.
 
 Note: The scan command will implicitly run the initialization process if there are no policies found.
+## Docker Images Vulnerability Scan
+You can scan Docker images present in IaC files for vulnerabilities using following command:
+```
+$ terrascan scan -i k8s --find-vuln
+```
+See [Usage](https://runterrascan.io/docs/usage/command_line_mode/) for more information about the command. 
 
 ## Customizing scans
 

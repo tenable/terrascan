@@ -170,6 +170,17 @@ This command looks for a `Dockerfile` in the current directory and scans that fi
 
 A specific directory to scan can be specified using the `-d` flag. With the `-d` flag, it will check for all the docker files (named as `Dockerfile`) in the provided directory recursively. A specific dockerfile can be scanned using `-f` flag by providing a path to the file.
 
+### Scanning Docker Images for Vulnerabilities
+
+Docker images present in IaC files can be scanned by specifying "--find-vuln" flag along with scan command as follows:
+
+```
+$ terrascan scan -i k8s --find-vuln
+```
+
+This command looks for all the docker images present in IaC files and scans them for vulnerabilities. Supported container registries are AWS, Azure and GCP.
+See [Environment Setting](vulnerability_env_settings.md) for setting environment variables for vulnerability scanning.
+
 ### Resource Config
 While scanning a IaC, Terrascan loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, you can print this resource configs list as an output by using the `--config-only` flag to the `terrascan scan` command.
 
@@ -216,6 +227,7 @@ aws_ecr_repository:
 | |use-colours |Configure the color for output (**auto**, t, f) |
 |--non-recursive |Use this for non recursive directories and modules scan | By default directory is scanned recursively, if this flag is used then only provided root directory will be scanned|
 |--use-terraform-cache |Use this to refer terraform remote modules from terraform init cache rather than downloading | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded. Directory will be scanned non recurively if this flag is used.(applicable only with terraform IaC provider)|
+| --find-vuln | find vulnerbilities | Use this to scan docker images present in IaC files to find vulnerabilities. |
 | -v | verbose | Displays violations with all details |
 
 | Global flags | Description | Options |
@@ -242,6 +254,7 @@ Usage:
 Flags:
      --categories strings        list of categories of violations to be reported by terrascan (example: --categories="category1,category2")
       --config-only               will output resource config (should only be used for debugging purposes)
+      --find-vuln                 find vulnerabilities in IaC file container image
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file

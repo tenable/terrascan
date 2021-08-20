@@ -176,7 +176,7 @@ func defaultVulnerabilities(v results.Vulnerability) string {
 	if resourceName == "" {
 		resourceName = `""`
 	}
-	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%s\n\t",
+	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t",
 		"Description", v.Description,
 		"Vulnerability ID", v.VulnerabilityID,
 		"Resource Name", resourceName,
@@ -184,6 +184,7 @@ func defaultVulnerabilities(v results.Vulnerability) string {
 		"Image", v.Image,
 		"Package", v.Package,
 		"Line", v.LineNumber,
-		"Primary URL", v.PrimaryURL)
+		"Primary URL", v.PrimaryURL,
+		"Primary URL", v.Severity)
 	return out
 }
