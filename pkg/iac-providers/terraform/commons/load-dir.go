@@ -150,7 +150,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
-
 		// Get the downloader chache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
@@ -187,7 +186,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 			// reference resolver
 			r := NewRefResolver(current.Config, current.ParentModuleCall)
-
 			// traverse through all current's resources
 			for _, managedResource := range current.Config.Module.ManagedResources {
 
