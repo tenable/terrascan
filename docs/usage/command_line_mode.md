@@ -63,11 +63,12 @@ $ terrascan scan
 ```
 
 The `scan` command supports flags to configure the following:
-- Specify a directory to be scanned.
-- Specify a particular IaC file to be scanned.
+- Specify a directory to be scanned
+- Specify a particular IaC file to be scanned
 - Configure IaC provider type
 - Directory path to policies
-- Specify policy type.
+- Specify policy type
+- Retrieve vulnerability scanning results from docker images referenced in IaC
 
 The full list of flags for the scan command can be found by typing
 `terrascan scan -h`
@@ -158,6 +159,7 @@ $ terrascan scan -i kustomize
 This command looks for a `kustomization.yaml` file in the current directory and scans rendered .yaml or .yml template files.
 
 A specific directory to scan can be specified using the `-d` flag. The Kustomize IaC provider does not support scanning of individual files using the `-f` flag.
+
 ### Scanning a Dockerfile
 
 A Dockerfile can be scanned by specifying "docker" on the -i flag as follows:
@@ -170,16 +172,43 @@ This command looks for a `Dockerfile` in the current directory and scans that fi
 
 A specific directory to scan can be specified using the `-d` flag. With the `-d` flag, it will check for all the docker files (named as `Dockerfile`) in the provided directory recursively. A specific dockerfile can be scanned using `-f` flag by providing a path to the file.
 
-### Scanning Docker Images for Vulnerabilities
+### Retrieve Docker Image Vulnerabilities
 
-Docker images present in IaC files can be scanned by specifying "--find-vuln" flag along with scan command as follows:
+Terrascan can display vulnerabilities for Docker images present in the IaC files being scanned by specifying the `--find-vuln` flag along with the scan command as follows:
 
 ```
-$ terrascan scan -i k8s --find-vuln
+$ terrascan scan -i <IaC Provider> --find-vuln
 ```
 
-This command looks for all the docker images present in IaC files and scans them for vulnerabilities. Supported container registries are AWS, Azure and GCP.
-See [Environment Setting](vulnerability_env_settings.md) for setting environment variables for vulnerability scanning.
+This command looks for all the Docker images present in the IaC files being scanned and retrieves any vulnerabilities as reported by it's container registry. Supported container registries include: AWS Elastic Container Registry (ECR), Azure Container Registry, Google Container Registry, and Google Artifact Registry.
+
+The following environment variables are required when connecting to the container registries:
+
+#### AWS Elastic Container Registry (ECR)
+
+ECR requires your environment to be configured similar to the requirements of AWS's SDK. For example, the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION` environment variables can be set when connecting to AWS using API keys for an AWS user. More information [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).
+
+#### Google Container Registry and Artifact Registry
+
+Terrascan requires a service account with access to the Container Analysis and Container Registry permissions. The `GOOGLE_APPLICATION_CREDENTIALS` environment variable can be set to the path of the service account's key when scanning. More information about GCP authentication available [here](https://cloud.google.com/docs/authentication/getting-started).
+
+#### Azure Container Registry
+
+When integrating vulnerability results from Azure, Terrascan requires the `AZURE_AUTH_LOCATION`, and `AZURE_ACR_PASSWORD` environment variables.
+
+The `AZURE_AUTH_LOCATION` should contain the path to your azure authentication json. You can generate this as follows:
+
+ ``` Bash
+ az ad sp create-for-rbac --sdk-auth > azure.auth
+ ```
+
+After generating the file, set the `azure.auth` file path as the `AZURE_AUTH_LOCATION` environment variable. More information about using file based authentication for the Azure SDK available [here](https://docs.microsoft.com/en-us/azure/developer/go/azure-sdk-authorization#use-file-based-authentication).
+
+Terrascan also requires the password to the registry set into the `AZURE_ACR_PASSWORD` environment variable. This can be fetched using the az cli as follows:
+
+``` Bash
+az acr credential show --name RegistryName
+```
 
 ### Resource Config
 While scanning a IaC, Terrascan loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, you can print this resource configs list as an output by using the `--config-only` flag to the `terrascan scan` command.
