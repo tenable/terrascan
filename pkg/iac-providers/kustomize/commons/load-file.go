@@ -14,18 +14,21 @@
     limitations under the License.
 */
 
-package kustomizev4
+package commons
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/kustomize/commons"
+	"fmt"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"go.uber.org/zap"
 )
 
-const (
-	versionSuffix = "V4"
+var (
+	errLoadIacFileNotSupported = fmt.Errorf("load iac file is not supported for kustomize")
 )
 
-// LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
-func (k *KustomizeV4) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
-	return commons.NewKustomizeDirectoryLoader(absRootDir, options, false, versionSuffix).LoadIacDir()
+// LoadIacFile is not supported for kustomize. Only loading directories that have kustomization.y(a)ml file are supported
+func LoadIacFile() (allResourcesConfig output.AllResourceConfigs, err error) {
+	zap.S().Error(errLoadIacFileNotSupported)
+	return nil, errLoadIacFileNotSupported
 }

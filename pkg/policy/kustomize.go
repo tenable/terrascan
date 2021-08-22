@@ -6,6 +6,6 @@ const (
 )
 
 func init() {
-	// Register helm as a provider with terrascan
+	// Register kustomize as a provider with terrascan
 	RegisterCloudProvider(kubernetes, defaultKustomizeIacType, defaultKustomizeIacVersion)
 }

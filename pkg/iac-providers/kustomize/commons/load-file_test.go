@@ -14,18 +14,37 @@
     limitations under the License.
 */
 
-package kustomizev4
+package commons
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/kustomize/commons"
+	"testing"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
-const (
-	versionSuffix = "V4"
-)
+func TestLoadIacFile(t *testing.T) {
 
-// LoadIacDir loads the kustomize directory and returns the ResourceConfig mapping which is evaluated by the policy engine
-func (k *KustomizeV4) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
-	return commons.NewKustomizeDirectoryLoader(absRootDir, options, false, versionSuffix).LoadIacDir()
+	table := []struct {
+		name     string
+		filePath string
+		options  map[string]interface{}
+		typeOnly bool
+		want     output.AllResourceConfigs
+		wantErr  error
+	}{
+		{
+			name:     "load iac file is not supported for kustomize",
+			filePath: "/dummyfilepath.yaml",
+			wantErr:  errLoadIacFileNotSupported,
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			_, gotErr := LoadIacFile()
+			if gotErr != tt.wantErr {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+		})
+	}
 }

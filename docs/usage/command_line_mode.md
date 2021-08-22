@@ -158,6 +158,20 @@ $ terrascan scan -i kustomize
 
 This command looks for a `kustomization.yaml` file in the current directory and scans rendered .yaml or .yml template files.
 
+Terrascan considers Kustomize v4 as the default version. Other supported versions (v2 and v3) of Kustomize could be scanned by specifying --iac-version flag as follows:
+
+```
+$ terrascan scan -i kustomize --iac-version v2
+```
+
+Scanning v2 and v3 requires the corresponding Kustomize binary and the path to the binary must be specified in the `KUSTOMIZE_<VERSION>` ENV variable.
+
+e.g: For --iac-version v2, we need to have:
+
+    KUSTOMIZE_V2=path/to/kustomize/v2/binary
+
+To install Kustomize one can use [this script](https://github.com/accurics/terrascan/tree/master/scripts/install_kustomize.sh)
+
 A specific directory to scan can be specified using the `-d` flag. The Kustomize IaC provider does not support scanning of individual files using the `-f` flag.
 
 ### Scanning a Dockerfile
@@ -288,7 +302,7 @@ Flags:
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
   -i, --iac-type string           iac type (arm, cft, docker, helm, k8s, kustomize, terraform, tfplan)
-      --iac-version string        iac version (arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, v15, tfplan: v1)
+      --iac-version string        iac version (arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v2, v3, v4, terraform: v12, v13, v14, v15, tfplan: v1)
       --non-recursive             do not scan directories and modules recursively
   -p, --policy-path stringArray   policy path directory
   -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
