@@ -30,9 +30,9 @@ import (
 	k8scorev1 "k8s.io/api/core/v1"
 )
 
-func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]output.ContainerNameAndImage, []output.ContainerNameAndImage, error) {
-	var containerImages = make([]output.ContainerNameAndImage, 0)
-	var initContainerImages = make([]output.ContainerNameAndImage, 0)
+func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]output.ContainerDetails, []output.ContainerDetails, error) {
+	var containerImages = make([]output.ContainerDetails, 0)
+	var initContainerImages = make([]output.ContainerDetails, 0)
 	var data []byte
 	var err error
 
@@ -141,9 +141,9 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 }
 
 //readContainers prepares list of containers and init containers from k8scorev1.Container object
-func readContainers(containers []k8scorev1.Container) (containerImages []output.ContainerNameAndImage) {
+func readContainers(containers []k8scorev1.Container) (containerImages []output.ContainerDetails) {
 	for _, container := range containers {
-		containerImages = append(containerImages, output.ContainerNameAndImage{Name: container.Name, Image: container.Image})
+		containerImages = append(containerImages, output.ContainerDetails{Name: container.Name, Image: container.Image})
 	}
 	return
 }

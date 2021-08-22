@@ -73,8 +73,8 @@ func isAwsConatinerResource(resource *hclConfigs.Resource) bool {
 }
 
 //fetchConatinersFromAzureResource extracts all the containers from azure resource
-func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerNameAndImage {
-	results := []output.ContainerNameAndImage{}
+func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerDetails {
+	results := []output.ContainerDetails{}
 	if v, ok := resource[container]; ok {
 		if containers, vok := v.([]jsonObj); vok {
 			results = getContainers(containers)
@@ -84,8 +84,8 @@ func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerNameAn
 }
 
 //fetchConatinersFromAwsResource extracts all the containers from aws ecs resource
-func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, resourcePath string) []output.ContainerNameAndImage {
-	results := []output.ContainerNameAndImage{}
+func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, resourcePath string) []output.ContainerDetails {
+	results := []output.ContainerDetails{}
 	if v, ok := resource[containerDefinitions]; ok {
 		def := v.(string)
 		if strings.HasPrefix(def, jsonCodeSuffix) {
@@ -117,7 +117,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 }
 
 //getContainersFromhclBody parses the attribute and creates container object
-func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.ContainerNameAndImage) {
+func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.ContainerDetails) {
 	for _, v := range hclBody.Attributes {
 		if v.Name == containerDefinitions {
 			switch v.Expr.(type) {
@@ -141,7 +141,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 							return
 						}
 						containerMap := containerTemp.(map[string]interface{})
-						tempContainer := output.ContainerNameAndImage{}
+						tempContainer := output.ContainerDetails{}
 						if image, iok := containerMap[image]; iok {
 							if imageName, ok := image.(string); ok {
 								tempContainer.Image = imageName
@@ -166,9 +166,9 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 }
 
 // getContainers reads and creates container config
-func getContainers(containers []jsonObj) (results []output.ContainerNameAndImage) {
+func getContainers(containers []jsonObj) (results []output.ContainerDetails) {
 	for _, container := range containers {
-		tempContainer := output.ContainerNameAndImage{}
+		tempContainer := output.ContainerDetails{}
 		if image, iok := container[image]; iok {
 			if imageName, ok := image.(string); ok {
 				tempContainer.Image = imageName
@@ -188,7 +188,7 @@ func getContainers(containers []jsonObj) (results []output.ContainerNameAndImage
 }
 
 //extractContainerImagesFromk8sResources extracts containers from k8s resource
-func extractContainerImagesFromk8sResources(resource *hclConfigs.Resource, body *hclsyntax.Body) (containers, initContainers []output.ContainerNameAndImage) {
+func extractContainerImagesFromk8sResources(resource *hclConfigs.Resource, body *hclsyntax.Body) (containers, initContainers []output.ContainerDetails) {
 	for _, block := range body.Blocks {
 		if block.Type == spec {
 			containerBlocks, initContainerBlocks := getContainerAndInitContainerFromSpecBlocks(block.Body)
@@ -235,9 +235,9 @@ func getContainerAndInitContainerFromTemplateBlocks(templateBlocks []*hclsyntax.
 }
 
 //getContainerConfigFromContainerBlock creates container config from container block of resource
-func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (containerImages []output.ContainerNameAndImage) {
+func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (containerImages []output.ContainerDetails) {
 	for _, conatainerBlock := range containerBlocks {
-		containerImage := output.ContainerNameAndImage{}
+		containerImage := output.ContainerDetails{}
 		for _, attr := range conatainerBlock.Body.Attributes {
 			if attr.Name == image {
 				containerImage.Image = getValueFromCtyExpr(attr.Expr)

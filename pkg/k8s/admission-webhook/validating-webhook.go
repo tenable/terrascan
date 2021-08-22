@@ -191,10 +191,10 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 
 	if flag.Lookup("test.v") != nil {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			filePath, "", []string{testPoliciesPath}, []string{}, []string{}, []string{}, "", false, false)
+			filePath, "", []string{testPoliciesPath}, []string{}, []string{}, []string{}, "", false, false, false)
 	} else {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			filePath, "", []string{}, []string{}, []string{}, []string{}, "", false, false)
+			filePath, "", []string{}, []string{}, []string{}, []string{}, "", false, false, false)
 	}
 	if err != nil {
 		zap.S().Errorf("failed to create runtime executer: '%v'", err)

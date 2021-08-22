@@ -20,6 +20,7 @@ import (
 	"sort"
 
 	"github.com/accurics/terrascan/pkg/policy/opa"
+	"github.com/accurics/terrascan/pkg/vulnerability"
 
 	"go.uber.org/zap"
 
@@ -38,35 +39,44 @@ const (
 
 // Executor object
 type Executor struct {
-	filePath          string
-	dirPath           string
-	policyPath        []string
-	iacType           string
-	iacVersion        string
-	scanRules         []string
-	skipRules         []string
-	iacProviders      []iacProvider.IacProvider
-	policyEngines     []policy.Engine
-	notifiers         []notifications.Notifier
-	categories        []string
-	policyTypes       []string
-	severity          string
-	nonRecursive      bool
-	useTerraformCache bool
+	filePath            string
+	dirPath             string
+	policyPath          []string
+	iacType             string
+	iacVersion          string
+	scanRules           []string
+	skipRules           []string
+	iacProviders        []iacProvider.IacProvider
+	policyEngines       []policy.Engine
+	notifiers           []notifications.Notifier
+	categories          []string
+	policyTypes         []string
+	severity            string
+	nonRecursive        bool
+	useTerraformCache   bool
+	findVulnerabilities bool
+	vulnerabilityEngine vulnerability.Engine
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool) (e *Executor, err error) {
 	e = &Executor{
-		filePath:          filePath,
-		dirPath:           dirPath,
-		policyPath:        policyPath,
-		policyTypes:       policyTypes,
-		iacType:           iacType,
-		iacVersion:        iacVersion,
-		iacProviders:      make([]iacProvider.IacProvider, 0),
-		nonRecursive:      nonRecursive,
-		useTerraformCache: useTerraformCache,
+		filePath:            filePath,
+		dirPath:             dirPath,
+		policyPath:          policyPath,
+		policyTypes:         policyTypes,
+		iacType:             iacType,
+		iacVersion:          iacVersion,
+		iacProviders:        make([]iacProvider.IacProvider, 0),
+		nonRecursive:        nonRecursive,
+		useTerraformCache:   useTerraformCache,
+		findVulnerabilities: findVulnerabilities,
+	}
+
+	// assigning vulnerabilityEngine
+	vulnerabilityEngine, err := vulnerability.NewVulEngine()
+	if err == nil {
+		e.vulnerabilityEngine = vulnerabilityEngine
 	}
 
 	// read config file and update scan and skip rules
@@ -180,14 +190,13 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
-
+	options := e.buildOptions()
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
 	if e.dirPath != "" {
 		// get all resource configs in the directory
 		resourceConfig, merr = e.getResourceConfigs()
 	} else {
-		options := e.buildOptions()
 		// create results output from Iac provider
 		// iac providers will contain one element
 		resourceConfig, err = e.iacProviders[0].LoadIacFile(e.filePath, options)
@@ -207,6 +216,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	// update results with resource config
 	results.ResourceConfig = resourceConfig
 
+	if e.findVulnerabilities {
+		results.ResourceConfig = e.fetchVulnerabilities(&results, options)
+	}
+
 	if configOnly {
 		return results, nil
 	}
@@ -219,6 +232,9 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		return results, err
 	}
 
+	if e.findVulnerabilities {
+		e.reportVulnerabilities(&results, options)
+	}
 	resourcePath := e.filePath
 	if resourcePath == "" {
 		resourcePath = e.dirPath
@@ -305,6 +321,25 @@ func (e *Executor) findViolations(results *Output) error {
 
 	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 	return nil
+}
+
+// fetchVulnerabilities adds vulnerability findings in resource config object
+func (e *Executor) fetchVulnerabilities(results *Output, options map[string]interface{}) output.AllResourceConfigs {
+
+	return e.vulnerabilityEngine.FetchVulnerabilities(results.ResourceConfig, options)
+
+}
+
+// reportVulnerabilities adds the found vulnerability data to scan summary output
+func (e *Executor) reportVulnerabilities(results *Output, options map[string]interface{}) {
+	violations := results.Violations.AsViolationStore()
+	vulnerabilityData := e.vulnerabilityEngine.ReportVulnerability(vulnerability.EngineInput{InputData: &results.ResourceConfig}, options)
+	if vulnerabilityData.ViolationStore != nil {
+		violations.Vulnerabilities = vulnerabilityData.Vulnerabilities
+		vulnCount := len(vulnerabilityData.Vulnerabilities)
+		violations.Summary.Vulnerabilities = &vulnCount
+	}
+	results.Violations = policy.EngineOutputFromViolationStore(&violations)
 }
 
 // implementsSubFolderScan checks if given iac type supports sub folder scanning

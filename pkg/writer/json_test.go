@@ -66,6 +66,36 @@ const (
     }
   }
 }`
+
+	vulnerabilityScanOutputJSON = `{
+  "results": {
+    "violations": null,
+    "skipped_violations": null,
+    "vulnerabilities": [
+      {
+        "image": "test",
+        "container": "test",
+        "severity": "HIGH",
+        "cvss_score": {},
+        "description": "GNU Bash. Bash is the GNU Project's shell",
+        "vulnerability_id": "CVE-2019-18276",
+        "primary_url": "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18276",
+        "resource_name": "",
+        "resource_type": ""
+      }
+    ],
+    "scan_summary": {
+      "file/folder": "",
+      "iac_type": "",
+      "scanned_at": "",
+      "policies_validated": 0,
+      "violated_policies": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0
+    }
+  }
+}`
 )
 
 func TestJSONWriter(t *testing.T) {
@@ -84,6 +114,11 @@ func TestJSONWriter(t *testing.T) {
 			name:           "JSON Writer: Violations",
 			input:          violationsInput,
 			expectedOutput: scanTestOutputJSON,
+		},
+		{
+			name:           "JSON Writer: Vulnerabilities",
+			input:          vulnerabilitiesInput,
+			expectedOutput: vulnerabilityScanOutputJSON,
 		},
 	}
 

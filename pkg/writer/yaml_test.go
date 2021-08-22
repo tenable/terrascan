@@ -28,6 +28,21 @@ var (
 		},
 	}
 
+	vulnerabilitiesInput = policy.EngineOutput{
+		ViolationStore: &results.ViolationStore{
+			Vulnerabilities: []*results.Vulnerability{
+				{
+					Image:           "test",
+					Container:       "test",
+					VulnerabilityID: "CVE-2019-18276",
+					PrimaryURL:      "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18276",
+					Description:     "GNU Bash. Bash is the GNU Project's shell",
+					Severity:        "HIGH",
+				},
+			},
+		},
+	}
+
 	violationsInput = policy.EngineOutput{
 		ViolationStore: &results.ViolationStore{
 			Violations: []*results.Violation{
@@ -118,6 +133,28 @@ const (
         low: 0
         medium: 0
         high: 1`
+
+	vulnerabilityScanOutput = `results:
+    violations: []
+    skipped_violations: []
+    vulnerabilities:
+        - image: test
+          container: test
+          severity: HIGH
+          description: GNU Bash. Bash is the GNU Project's shell
+          vulnerability_id: CVE-2019-18276
+          primary_url: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18276
+          resource_name: ""
+          resource_type: ""
+    scan_summary:
+        file/folder: ""
+        iac_type: ""
+        scanned_at: ""
+        policies_validated: 0
+        violated_policies: 0
+        low: 0
+        medium: 0
+        high: 0`
 )
 
 func TestYAMLWriter(t *testing.T) {
@@ -136,6 +173,11 @@ func TestYAMLWriter(t *testing.T) {
 			name:           "YAML Writer: Violations",
 			input:          violationsInput,
 			expectedOutput: scanTestOutputYAML,
+		},
+		{
+			name:           "YAML Writer: Vulnerabilities",
+			input:          vulnerabilitiesInput,
+			expectedOutput: vulnerabilityScanOutput,
 		},
 	}
 
