@@ -238,8 +238,8 @@ func TestK8sV1Normalize(t *testing.T) {
 					},
 				},
 				SkipRules:           []output.SkipRule{testSkipRule},
-				ContainerImages:     []output.ContainerNameAndImage{{Name: "myapp-container", Image: "busybox"}},
-				InitContainerImages: []output.ContainerNameAndImage{},
+				ContainerImages:     []output.ContainerDetails{{Name: "myapp-container", Image: "busybox"}},
+				InitContainerImages: []output.ContainerDetails{},
 			},
 		},
 		{
@@ -274,8 +274,8 @@ func TestK8sV1Normalize(t *testing.T) {
 					},
 				},
 				SkipRules:           []output.SkipRule{testSkipRule},
-				ContainerImages:     []output.ContainerNameAndImage{},
-				InitContainerImages: []output.ContainerNameAndImage{},
+				ContainerImages:     []output.ContainerDetails{},
+				InitContainerImages: []output.ContainerDetails{},
 			},
 		},
 	}

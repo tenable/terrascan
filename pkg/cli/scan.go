@@ -73,5 +73,6 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.showPassedRules, "show-passed", "", false, "display passed rules, along with violations")
 	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "do not scan directories and modules recursively")
 	scanCmd.Flags().BoolVarP(&scanOptions.useTerraformCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)")
+	scanCmd.Flags().BoolVarP(&scanOptions.findVulnerabilities, "find-vuln", "", false, "fetches vulnerabilities identified in Docker images")
 	RegisterCommand(rootCmd, scanCmd)
 }

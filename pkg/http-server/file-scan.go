@@ -40,14 +40,15 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// get url params
 	params := mux.Vars(r)
 	var (
-		iacType    = params["iac"]
-		iacVersion = params["iacVersion"]
-		cloudType  = strings.Split(params["cloud"], ",")
-		scanRules  = []string{}
-		skipRules  = []string{}
-		configOnly = false
-		showPassed = false
-		categories = []string{}
+		iacType             = params["iac"]
+		iacVersion          = params["iacVersion"]
+		cloudType           = strings.Split(params["cloud"], ",")
+		scanRules           = []string{}
+		skipRules           = []string{}
+		configOnly          = false
+		showPassed          = false
+		findVulnerabilities = false
+		categories          = []string{}
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -108,6 +109,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// severity is the minimum severity level of violations that the user want to get informed about: low, medium or high
 	severity := r.FormValue("severity")
 
+	findVulnerabilitiesValue := r.FormValue("find_vulnerabilities")
+	if findVulnerabilitiesValue != "" {
+		findVulnerabilities, err = strconv.ParseBool(findVulnerabilitiesValue)
+		if err != nil {
+			errMsg := fmt.Sprintf("error while reading 'find_vulnerabilities' value. error: '%v'", err)
+			zap.S().Error(errMsg)
+			apiErrorResponse(w, errMsg, http.StatusBadRequest)
+			return
+		}
+	}
+
 	// read config_only from the form data
 	configOnlyValue := r.FormValue("config_only")
 	if configOnlyValue != "" {
@@ -152,10 +164,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false)
+			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false)
+			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities)
 	}
 	if err != nil {
 		zap.S().Error(err)

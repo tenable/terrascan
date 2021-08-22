@@ -19,6 +19,7 @@ package k8sv1
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
@@ -111,9 +112,9 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	}
 
 	var resourceConfig output.ResourceConfig
-	resourceConfig.ContainerImages = make([]output.ContainerNameAndImage, 0)
-	resourceConfig.InitContainerImages = make([]output.ContainerNameAndImage, 0)
-	var containerImages, initContainerImages []output.ContainerNameAndImage
+	resourceConfig.ContainerImages = make([]output.ContainerDetails, 0)
+	resourceConfig.InitContainerImages = make([]output.ContainerDetails, 0)
+	var containerImages, initContainerImages []output.ContainerDetails
 	resourceConfig.Type = k.getNormalizedName(resource.Kind)
 
 	switch resource.Kind {

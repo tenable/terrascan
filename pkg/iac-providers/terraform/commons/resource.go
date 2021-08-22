@@ -76,7 +76,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 }
 
 //findContainers finds containers defined in resource
-func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerNameAndImage, initContainers []output.ContainerNameAndImage) {
+func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerDetails, initContainers []output.ContainerDetails) {
 	if isKuberneteResource(managedResource) {
 		containers, initContainers = extractContainerImagesFromk8sResources(managedResource, hclBody)
 	} else if isAzureConatinerResource(managedResource) {
