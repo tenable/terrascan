@@ -256,7 +256,7 @@ aws_ecr_repository:
 | |use-colours |Configure the color for output (**auto**, t, f) |
 |--non-recursive |Use this for non recursive directories and modules scan | By default directory is scanned recursively, if this flag is used then only provided root directory will be scanned|
 |--use-terraform-cache |Use this to refer terraform remote modules from terraform init cache rather than downloading | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded. Directory will be scanned non recurively if this flag is used.(applicable only with terraform IaC provider)|
-| --find-vuln | find vulnerbilities | Use this to scan docker images present in IaC files to find vulnerabilities. |
+| --find-vuln | find vulnerbilities | Use this to fetch vulnerabilities identified on the registry for docker images present in IaC the files scanned |
 | -v | verbose | Displays violations with all details |
 
 | Global flags | Description | Options |
@@ -283,7 +283,7 @@ Usage:
 Flags:
      --categories strings        list of categories of violations to be reported by terrascan (example: --categories="category1,category2")
       --config-only               will output resource config (should only be used for debugging purposes)
-      --find-vuln                 find vulnerabilities in IaC file container image
+      --find-vuln                 fetches vulnerabilities identified in Docker images
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
