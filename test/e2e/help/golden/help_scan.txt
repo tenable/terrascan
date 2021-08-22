@@ -8,7 +8,7 @@ Usage:
 Flags:
       --categories strings        list of categories of violations to be reported by terrascan (example: --categories="category1,category2")
       --config-only               will output resource config (should only be used for debugging purposes)
-      --find-vuln                 find vulnerabilities in IaC file container image
+      --find-vuln                 fetches vulnerabilities identified in Docker images
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
