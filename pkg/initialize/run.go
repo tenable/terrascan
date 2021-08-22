@@ -26,6 +26,7 @@ import (
 	"gopkg.in/src-d/go-git.v4"
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
+	"terrascan/pkg/cli"
 )
 
 var (
@@ -99,6 +100,7 @@ func DownloadPolicies() error {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
+    cli.setRelease(release)
 	Rel = release 
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),

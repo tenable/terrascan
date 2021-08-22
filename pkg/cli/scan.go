@@ -46,6 +46,10 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 	SilenceErrors: true,
 }
 
+var releaseTag string 
+func setRelease(rel string) {
+	releaseTag = rel 
+}
 func scan(cmd *cobra.Command, args []string) error {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
