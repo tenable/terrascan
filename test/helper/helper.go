@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -425,4 +426,31 @@ func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, gold
 	fileContents = sarifVersionPattern.ReplaceAllString(fileContents, "")
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
+}
+
+// CheckSummaryForVulnerabilities is a helper function to check vulnerabilies exists
+func CheckSummaryForVulnerabilities(session *gexec.Session, isStdOut bool) {
+	var sessionBytes []byte
+	if isStdOut {
+		sessionBytes = session.Wait().Out.Contents()
+	} else {
+		sessionBytes = session.Wait().Err.Contents()
+	}
+
+	output := session.Wait().Err.Contents()
+	fmt.Println("<><>", string(output))
+
+	sessionBytes = bytes.TrimSpace(sessionBytes)
+
+	var sessionEngineOutput policy.EngineOutput
+
+	err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+
+	sessionOutputSummary := sessionEngineOutput.ViolationStore.Summary
+	gomega.Expect(sessionOutputSummary).NotTo(gomega.BeNil())
+	gomega.Expect(sessionOutputSummary.Vulnerabilities).NotTo(gomega.BeNil())
+	gomega.Eventually(func() int {
+		return *sessionOutputSummary.Vulnerabilities
+	}).Should(gomega.BeNumerically(">", 0))
 }
