@@ -88,7 +88,7 @@ func TestLoadIacDir(t *testing.T) {
 						MaxSeverity: "None",
 						MinSeverity: "High"}},
 				"docker_dockerfile": []output.ResourceConfig{{ID: "docker_dockerfile.96052d48e5364a05995aaec1e5d53f2d", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_dockerfile", Config: []string{"from", "cmd"}, SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}},
-				"docker_from":       []output.ResourceConfig{{ID: "docker_from.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_from", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}}},
+				"docker_from":       []output.ResourceConfig{{ID: "docker_from.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_from", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High", ContainerImages: []output.ContainerDetails{{Image: "runatlantis/atlantis:v0.16.1"}}}}},
 			wantErr: nil,
 		},
 	}
