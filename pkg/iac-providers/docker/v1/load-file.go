@@ -34,7 +34,7 @@ const (
 	docker                 string = "docker"
 	resourceTypeDockerfile string = "dockerfile"
 	underScoreSeparator    string = "_"
-	dockerInstruction_from string = "from"
+	dockerFromInstruction  string = "from"
 	dockerScratchImage     string = "scratch"
 
 	// IDConnectorString is string connector used in id creation
@@ -75,7 +75,7 @@ func (dc *DockerV1) LoadIacFile(absFilePath string, options map[string]interface
 			MinSeverity: minSeverity,
 			MaxSeverity: maxSeverity,
 		}
-		if data[i].Cmd == dockerInstruction_from && strings.Fields(data[i].Value)[0] != dockerScratchImage {
+		if data[i].Cmd == dockerFromInstruction && strings.Fields(data[i].Value)[0] != dockerScratchImage {
 			config.ContainerImages = append(config.ContainerImages, output.ContainerDetails{
 				Image: strings.Fields(data[i].Value)[0],
 			})
