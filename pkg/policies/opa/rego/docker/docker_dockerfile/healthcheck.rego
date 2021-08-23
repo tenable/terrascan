@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerFrom]{
-	dockerFrom := input.docker_from[_]
+	dockerFrom := input.docker_dockerfile[_]
     config := dockerFrom.config
-    not contains(config, "healthcheck") 
+    contains(config, "healthcheck") 
 }

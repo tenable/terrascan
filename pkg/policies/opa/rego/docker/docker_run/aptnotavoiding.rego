@@ -1,20 +1,19 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[dockerRun.id] {
+{{.prefix}}{{.name}}{{.suffix}}[dockerRun.name] {
     dockerRun := input.docker_run[_]
     is_string(dockerRun.config)
     config := dockerRun.config
-    avoidAdditionalPackages(config)
+    configArray := split(config, "&&")
+    command := configArray[_]
+    
+    startswith(command, ["sudo apt-get", "apt-get"][_])
+    contains(command, "install")
+
+    not avoidAdditionalPackages(command)
 }
 
-avoidAdditionalPackages(config) {
+avoidAdditionalPackages(arg) {
 	flags := ["--no-install-recommends", "apt::install-recommends=false"]
-	contains(config, flags[_])
-}
-
-avoidAdditionalPackages(config) {
-    arrayList := ["--no-install-recommends", "apt::install-recommends=false"]
-    some i
-    checkyumList := arrayList[i]
-    contains(config[_], checkyumList)
+	contains(arg, flags[_])
 }
