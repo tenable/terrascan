@@ -260,7 +260,7 @@ aws_ecr_repository:
 | -d | Use this to scan a specific directory. Use "." for current directory | AWS, GCP, Azure, and GitHub|
 | -f | Use this command to scan a specific file | <tbd any formats/limitations for example file size> |
 | -i type  | Use this to change the IaC provider | arm, cft, docker, helm, k8s, kustomize, **terraform**|
-| -i version  | Use this in conjunction with `- i type` to specify the version of IaC provider | Supported versions of each IaC are: `arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, v15`|
+| -i version  | Use this in conjunction with `- i type` to specify the version of IaC provider | Supported versions of each IaC are: `arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v2, v3, v4, terraform: v12, v13, v14, v15`|
 | -p | Use this to specify directory path for policies | By default policies are installed here: <tbd specify a default path> |
 | -t  | Use this to specify individual cloud providers | **all**, aws, azure, gcp, github, k8s|
 | -r | Use this to specify directory path for remote backend | git, s3, gcs, http |
