@@ -44,6 +44,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	if hclBody, ok = managedResource.Config.(*hclsyntax.Body); !ok {
 		return resourceConfig, fmt.Errorf("failed type assertion for hcl.Body in *hclConfigs.Resource. error: expected hcl.Body type is *hclsyntax.Body, but got %T", managedResource.Config)
 	}
+
 	goOut, err := c.convertBody(hclBody)
 	if err != nil {
 		zap.S().Errorf("failed to convert hcl.Body to go struct; resource '%s', file: '%s'. error: '%v'",
@@ -52,20 +53,36 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	}
 
 	minSeverity, maxSeverity := utils.GetMinMaxSeverity(c.rangeSource(hclBody.Range()))
+
+	containers, initContainers := findContainers(managedResource, goOut, hclBody)
 	// create a resource config
 	resourceConfig = output.ResourceConfig{
-		ID:          fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
-		Name:        managedResource.Name,
-		Type:        managedResource.Type,
-		Source:      managedResource.DeclRange.Filename,
-		Line:        managedResource.DeclRange.Start.Line,
-		Config:      goOut,
-		SkipRules:   utils.GetSkipRules(c.rangeSource(hclBody.Range())),
-		MaxSeverity: maxSeverity,
-		MinSeverity: minSeverity,
+		ID:                  fmt.Sprintf("%s.%s", managedResource.Type, managedResource.Name),
+		Name:                managedResource.Name,
+		Type:                managedResource.Type,
+		Source:              managedResource.DeclRange.Filename,
+		Line:                managedResource.DeclRange.Start.Line,
+		Config:              goOut,
+		SkipRules:           utils.GetSkipRules(c.rangeSource(hclBody.Range())),
+		MaxSeverity:         maxSeverity,
+		MinSeverity:         minSeverity,
+		ContainerImages:     containers,
+		InitContainerImages: initContainers,
 	}
 
 	// successful
 	zap.S().Debugf("created resource config for resource '%s', file: '%s'", resourceConfig.Name, resourceConfig.Source)
 	return resourceConfig, nil
+}
+
+//findContainers finds containers defined in resource
+func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerDetails, initContainers []output.ContainerDetails) {
+	if isKuberneteResource(managedResource) {
+		containers, initContainers = extractContainerImagesFromk8sResources(managedResource, hclBody)
+	} else if isAzureConatinerResource(managedResource) {
+		containers = fetchContainersFromAzureResource(jsonBody)
+	} else if isAwsConatinerResource(managedResource) {
+		containers = fetchContainersFromAwsResource(jsonBody, hclBody, managedResource.DeclRange.Filename)
+	}
+	return
 }

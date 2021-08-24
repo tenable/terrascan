@@ -31,6 +31,7 @@ func TestLoadIacFile(t *testing.T) {
 	testFile, _ := filepath.Abs(path.Join(testDataDir, "testfile"))
 	invalidFile, _ := filepath.Abs(path.Join(testDataDir, "deploy.yaml"))
 	validFile, _ := filepath.Abs(path.Join(testDataDir, "templates", "s3", "deploy.template"))
+	nestedFile, _ := filepath.Abs(path.Join(testDataDir, "templates", "s3", "nested.template"))
 
 	testErrString1 := fmt.Sprintf("unsupported extension for file %s", testFile)
 	testErrString2 := "unable to read file nonexistent.txt"
@@ -43,6 +44,7 @@ func TestLoadIacFile(t *testing.T) {
 		name     string
 		filePath string
 		typeOnly bool
+		options  map[string]interface{}
 	}{
 		{
 			wantErr:  fmt.Errorf(testErrString1),
@@ -72,12 +74,19 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid file",
 			filePath: validFile,
 			typeOnly: false,
+		}, {
+			wantErr:  nil,
+			want:     output.AllResourceConfigs{},
+			cftv1:    CFTV1{},
+			name:     "nested file",
+			filePath: nestedFile,
+			typeOnly: false,
 		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.cftv1.LoadIacFile(tt.filePath)
+			_, gotErr := tt.cftv1.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%+v', wantErr: '%+v'", gotErr, tt.wantErr)
 			} else if tt.typeOnly && (reflect.TypeOf(gotErr)) != reflect.TypeOf(tt.wantErr) {

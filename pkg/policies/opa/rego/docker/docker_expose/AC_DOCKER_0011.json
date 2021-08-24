@@ -1,0 +1,17 @@
+{
+    "name": "UNIXPortsOutOfRange",
+    "file": "UNIXPortsOutOfRange.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_expose",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "UNIXPortsOutOfRange"
+    },
+    "severity": "HIGH",
+    "description": "Ensure range of ports is from 0 to 65535",
+    "reference_id": "AC_DOCKER_0011",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0011",
+    "version": 1
+}

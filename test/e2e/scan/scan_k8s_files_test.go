@@ -17,7 +17,6 @@
 package scan_test
 
 import (
-	"github.com/accurics/terrascan/pkg/version"
 	"path/filepath"
 
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
@@ -54,8 +53,9 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 				It("should scan will all iac and display violations", func() {
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir}
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-					// exit code is 3 because iac files in directory has violations
-					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeThree)
+					// exit code is 5 because iac files in directory has violations
+					// and directory scan errors
+					helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeFive)
 				})
 			})
 		})
@@ -78,9 +78,7 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-d", iacDir, "-o", "sarif"}
-					path, _ := helper.GetAbsoluteFilePathForSarif(iacDir, "config.yaml")
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), path)
-					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_sarif.txt"), helper.ExitCodeThree, outWriter, errWriter, scanArgs...)
 				})
 			})
 
@@ -150,9 +148,7 @@ var _ = Describe("Scan is run for k8s directories and files", func() {
 			When("when output type is sarif", func() {
 				It("should display violations in sarif format", func() {
 					scanArgs := []string{"-i", "k8s", "-p", policyDir, "-f", iacFile, "-o", "sarif"}
-					path, _ := helper.GetAbsoluteFilePathForSarif(iacFile, "config.yaml")
-					golden := scanUtils.GetSarifGoldenString(scanUtils.SarifTemplateK8sTLSViolation, version.GetNumeric(), path)
-					scanUtils.RunScanAndAssertJSONOutputString(terrascanBinaryPath, golden, helper.ExitCodeThree, true, outWriter, errWriter, scanArgs...)
+					scanUtils.RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_sarif.txt"), helper.ExitCodeThree, outWriter, errWriter, scanArgs...)
 				})
 			})
 

@@ -237,7 +237,9 @@ func TestK8sV1Normalize(t *testing.T) {
 						},
 					},
 				},
-				SkipRules: []output.SkipRule{testSkipRule},
+				SkipRules:           []output.SkipRule{testSkipRule},
+				ContainerImages:     []output.ContainerDetails{{Name: "myapp-container", Image: "busybox"}},
+				InitContainerImages: []output.ContainerDetails{},
 			},
 		},
 		{
@@ -271,7 +273,9 @@ func TestK8sV1Normalize(t *testing.T) {
 						},
 					},
 				},
-				SkipRules: []output.SkipRule{testSkipRule},
+				SkipRules:           []output.SkipRule{testSkipRule},
+				ContainerImages:     []output.ContainerDetails{},
+				InitContainerImages: []output.ContainerDetails{},
 			},
 		},
 	}
@@ -283,8 +287,9 @@ func TestK8sV1Normalize(t *testing.T) {
 				t.Errorf("K8sV1.Normalize() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("K8sV1.Normalize() got = %+v, want = %+v", got, tt.want)
+				t.Errorf("K8sV1.Normalize() got = %+v, want = %+v", *got, *(tt.want))
 			}
 		})
 	}

@@ -17,22 +17,27 @@
 package runtime
 
 import (
+	"encoding/xml"
 	"fmt"
-	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"path/filepath"
 	"reflect"
 	"testing"
 
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/vulnerability"
+	"github.com/hashicorp/go-multierror"
+
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
 	cftv1 "github.com/accurics/terrascan/pkg/iac-providers/cft/v1"
+	dockerv1 "github.com/accurics/terrascan/pkg/iac-providers/docker/v1"
 	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
 	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
-	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
+	kustomizev4 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v4"
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
-	"github.com/hashicorp/go-multierror"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -57,17 +62,20 @@ type MockIacProvider struct {
 	err    error
 }
 
-func (m MockIacProvider) LoadIacDir(dir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacDir(dir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 
-func (m MockIacProvider) LoadIacFile(file string) (output.AllResourceConfigs, error) {
+func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
 }
 
 // mock policy engine
 type MockPolicyEngine struct {
 	err error
+}
+type MockVulnerabiltyEngine struct {
+	out vulnerability.EngineOutput
 }
 
 func (m MockPolicyEngine) Init(input string, filter policy.PreLoadFilter) error {
@@ -86,6 +94,14 @@ func (m MockPolicyEngine) Configure() error {
 
 func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreScanFilter) (out policy.EngineOutput, err error) {
 	return out, m.err
+}
+
+func (m MockVulnerabiltyEngine) ReportVulnerability(input vulnerability.EngineInput, options map[string]interface{}) (out vulnerability.EngineOutput) {
+	return m.out
+}
+
+func (m MockVulnerabiltyEngine) FetchVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
+	return out
 }
 
 func (m MockPolicyEngine) GetResults() (out policy.EngineOutput) {
@@ -175,6 +191,22 @@ func TestExecute(t *testing.T) {
 			},
 			wantErr: errMockPolicyEngine,
 		},
+		{
+			name: "test find vulnerability engine",
+			executor: Executor{
+				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
+				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
+				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
+				vulnerabilityEngine: MockVulnerabiltyEngine{
+					out: vulnerability.EngineOutput{
+						XMLName:        xml.Name{},
+						ViolationStore: results.NewViolationStore(),
+					},
+				},
+				findVulnerabilities: true,
+			},
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range table {
@@ -260,7 +292,7 @@ func TestInit(t *testing.T) {
 				policyPath:  []string{testPoliciesDir},
 			},
 			wantErr:         nil,
-			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev3.KustomizeV3{}, &tfv15.TfV15{}},
+			wantIacProvider: []iacProvider.IacProvider{&armv1.ARMV1{}, &cftv1.CFTV1{}, &dockerv1.DockerV1{}, &helmv3.HelmV3{}, &k8sv1.K8sV1{}, &kustomizev4.KustomizeV4{}, &tfv15.TfV15{}},
 			wantNotifiers:   []notifications.Notifier{},
 		},
 		{
@@ -555,7 +587,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

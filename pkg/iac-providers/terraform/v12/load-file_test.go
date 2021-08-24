@@ -59,6 +59,7 @@ References to other resources during the destroy phase can cause dependency cycl
 	table := []struct {
 		name     string
 		filePath string
+		options  map[string]interface{}
 		tfv12    TfV12
 		want     output.AllResourceConfigs
 		wantErr  error
@@ -90,7 +91,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.tfv12.LoadIacFile(tt.filePath)
+			_, gotErr := tt.tfv12.LoadIacFile(tt.filePath, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -101,6 +102,7 @@ References to other resources during the destroy phase can cause dependency cycl
 		name         string
 		tfConfigFile string
 		tfJSONFile   string
+		options      map[string]interface{}
 		tfv12        TfV12
 		wantErr      error
 	}{
@@ -122,7 +124,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 	for _, tt := range table2 {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := tt.tfv12.LoadIacFile(tt.tfConfigFile)
+			got, gotErr := tt.tfv12.LoadIacFile(tt.tfConfigFile, tt.options)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}

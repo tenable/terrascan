@@ -34,12 +34,14 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
 
+	// load current iac file
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if hclFile == nil {
 		errMessage := fmt.Sprintf("error occured while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
+
 	if diags != nil {
 		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)

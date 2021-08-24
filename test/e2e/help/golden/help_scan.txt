@@ -8,14 +8,15 @@ Usage:
 Flags:
       --categories strings        list of categories of violations to be reported by terrascan (example: --categories="category1,category2")
       --config-only               will output resource config (should only be used for debugging purposes)
+      --find-vuln                 fetches vulnerabilities identified in Docker images
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
   -f, --iac-file string           path to a single IaC file
-  -i, --iac-type string           iac type (arm, cft, helm, k8s, kustomize, terraform, tfplan)
-      --iac-version string        iac version (arm: v1, cft: v1, helm: v3, k8s: v1, kustomize: v3, terraform: v12, v13, v14, v15, tfplan: v1)
+  -i, --iac-type string           iac type (arm, cft, docker, helm, k8s, kustomize, terraform, tfplan)
+      --iac-version string        iac version (arm: v1, cft: v1, docker: v1, helm: v3, k8s: v1, kustomize: v2, v3, v4, terraform: v12, v13, v14, v15, tfplan: v1)
       --non-recursive             do not scan directories and modules recursively
   -p, --policy-path stringArray   policy path directory
-  -t, --policy-type strings       policy type (all, aws, azure, gcp, github, k8s) (default [all])
+  -t, --policy-type strings       policy type (all, aws, azure, docker, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http, terraform-registry)
   -u, --remote-url string         url pointing to remote IaC repository
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
@@ -23,6 +24,7 @@ Flags:
       --show-passed               display passed rules, along with violations
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
+      --use-terraform-cache       use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)
   -v, --verbose                   will show violations with details (applicable for default output)
 
 Global Flags:

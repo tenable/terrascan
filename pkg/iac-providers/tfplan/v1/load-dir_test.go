@@ -28,8 +28,9 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath = "some-path"
 			tfplan  = TFPlan{}
 			wantErr = errIacDirNotSupport
+			options = make(map[string]interface{})
 		)
-		_, err := tfplan.LoadIacDir(dirPath, false)
+		_, err := tfplan.LoadIacDir(dirPath, options)
 		if !reflect.DeepEqual(wantErr, err) {
 			t.Errorf("error want: '%v', got: '%v'", wantErr, err)
 		}

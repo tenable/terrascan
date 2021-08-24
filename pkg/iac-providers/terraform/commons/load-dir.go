@@ -17,10 +17,13 @@
 package commons
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
@@ -40,6 +43,24 @@ var (
 	ErrBuildTFConfigDir = fmt.Errorf("failed to build terraform allResourcesConfig")
 )
 
+const (
+	terraformModuleInstallDir             = ".terraform/modules"
+	terraformInstalledModulelMetaFileName = "modules.json"
+)
+
+// TerraformInstalledModuleMetaData metadata about the module downloaded and present in terraform cache.
+type TerraformInstalledModuleMetaData struct {
+	Key        string `json:"Key"`
+	SourceAddr string `json:"Source"`
+	VersionStr string `json:"Version,omitempty"`
+	Dir        string `json:"Dir"`
+}
+
+//TerraformModuleManifest holds details of all modules downloaded by terraform
+type TerraformModuleManifest struct {
+	Modules []TerraformInstalledModuleMetaData `json:"Modules"`
+}
+
 // ModuleConfig contains the *hclConfigs.Config for every module in the
 // unified config tree along with *hclConfig.ModuleCall made by the parent
 // module. The ParentModuleCall helps in resolving references for variables
@@ -52,21 +73,33 @@ type ModuleConfig struct {
 
 // TerraformDirectoryLoader implements terraform directory loading
 type TerraformDirectoryLoader struct {
-	absRootDir       string
-	nonRecursive     bool
-	remoteDownloader downloader.ModuleDownloader
-	parser           *hclConfigs.Parser
-	errIacLoadDirs   *multierror.Error
+	absRootDir               string
+	nonRecursive             bool
+	useTerraformCache        bool
+	remoteDownloader         downloader.ModuleDownloader
+	parser                   *hclConfigs.Parser
+	errIacLoadDirs           *multierror.Error
+	terraformInitModuleCache map[string]TerraformModuleManifest
 }
 
 // NewTerraformDirectoryLoader creates a new terraformDirectoryLoader
-func NewTerraformDirectoryLoader(rootDirectory string, nonRecursive bool) TerraformDirectoryLoader {
-	return TerraformDirectoryLoader{
-		absRootDir:       rootDirectory,
-		nonRecursive:     nonRecursive,
-		remoteDownloader: downloader.NewRemoteDownloader(),
-		parser:           hclConfigs.NewParser(afero.NewOsFs()),
+func NewTerraformDirectoryLoader(rootDirectory string, options map[string]interface{}) TerraformDirectoryLoader {
+	terraformDirectoryLoader := TerraformDirectoryLoader{
+		absRootDir:               rootDirectory,
+		remoteDownloader:         downloader.NewRemoteDownloader(),
+		parser:                   hclConfigs.NewParser(afero.NewOsFs()),
+		terraformInitModuleCache: make(map[string]TerraformModuleManifest),
 	}
+	for key, val := range options {
+		// keeping switch case in case more flags are added
+		switch key {
+		case "useTerraformCache":
+			terraformDirectoryLoader.useTerraformCache = val.(bool)
+		case "nonRecursive":
+			terraformDirectoryLoader.nonRecursive = val.(bool)
+		}
+	}
+	return terraformDirectoryLoader
 }
 
 // LoadIacDir starts traversing from the given rootDir and traverses through
@@ -76,7 +109,7 @@ func (t TerraformDirectoryLoader) LoadIacDir() (allResourcesConfig output.AllRes
 
 	defer t.remoteDownloader.CleanUp()
 
-	if t.nonRecursive {
+	if t.nonRecursive || t.useTerraformCache {
 		return t.loadDirNonRecursive()
 	}
 
@@ -117,7 +150,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
-
 		// Get the downloader chache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
@@ -154,7 +186,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 			// reference resolver
 			r := NewRefResolver(current.Config, current.ParentModuleCall)
-
 			// traverse through all current's resources
 			for _, managedResource := range current.Config.Module.ManagedResources {
 
@@ -335,22 +366,30 @@ func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module,
 
 				pathToModule = t.processLocalSource(req)
 				zap.S().Debugf("processing local module %q", pathToModule)
-			} else if downloader.IsRegistrySourceAddr(req.SourceAddr) {
-				// temp dir to download the remote repo
-				tempDir := utils.GenerateTempDir()
-
-				pathToModule, err = t.processTerraformRegistrySource(req, tempDir)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+			} else if t.useTerraformCache {
+				// check if module is present in terraform cache
+				if _, dest := t.GetRemoteModuleIfPresentInTerraformSrc(req); dest != "" {
+					pathToModule = dest
 				}
-			} else {
-				// temp dir to download the remote repo
-				tempDir := utils.GenerateTempDir()
+			}
+			if pathToModule == "" {
+				if downloader.IsRegistrySourceAddr(req.SourceAddr) {
+					// temp dir to download the remote repo
+					tempDir := utils.GenerateTempDir()
 
-				// Download remote module
-				pathToModule, err = t.remoteDownloader.DownloadModule(req.SourceAddr, tempDir)
-				if err != nil {
-					zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					pathToModule, err = t.processTerraformRegistrySource(req, tempDir)
+					if err != nil {
+						zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					}
+				} else {
+					// temp dir to download the remote repo
+					tempDir := utils.GenerateTempDir()
+
+					// Download remote module
+					pathToModule, err = t.remoteDownloader.DownloadModule(req.SourceAddr, tempDir)
+					if err != nil {
+						zap.S().Errorf("failed to download remote module %q. error: '%v'", req.SourceAddr, err)
+					}
 				}
 			}
 
@@ -458,4 +497,64 @@ func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.R
 		}
 	}
 	return source, nil
+}
+
+// GetRemoteModuleIfPresentInTerraformSrc - Gets the remote module if present in terraform init cache
+func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *hclConfigs.ModuleRequest) (src string, destpath string) {
+	terraformInitRegs := filepath.Join(t.absRootDir, terraformModuleInstallDir)
+	modules := TerraformModuleManifest{}
+	var ok bool
+	if modules, ok = t.terraformInitModuleCache[terraformInitRegs]; !ok {
+		if utils.IsDirExists(terraformInitRegs) {
+			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			if err != nil {
+				if os.IsNotExist(err) {
+					zap.S().Debug("found no terraform module metadata file in dir %s", terraformInitRegs)
+					return
+				}
+				zap.S().Error("error reading terraform module metadata file", err)
+				return
+			}
+			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			if err == nil {
+				err := json.Unmarshal(data, &modules)
+				if err != nil {
+					zap.S().Error("error unmarshalling terraform module metadata", err)
+					return
+				}
+			}
+		}
+		// if the module metadata file was read first time add that to cache against the found working directory
+		t.terraformInitModuleCache[terraformInitRegs] = modules
+	}
+	for _, m := range modules.Modules {
+		if strings.EqualFold(m.SourceAddr, req.SourceAddr) {
+			// if the module source is not registry then version check is not required
+			if !downloader.IsRegistrySourceAddr(req.SourceAddr) {
+				return req.SourceAddr, filepath.Join(t.absRootDir, m.Dir)
+			} else if versionSatisfied(m.VersionStr, req.VersionConstraint) {
+				return req.SourceAddr, filepath.Join(t.absRootDir, m.Dir)
+			}
+		}
+	}
+	zap.S().Debug("found no version matching for module: %s in terraform module cache %s", req.Name, filepath.Join(terraformInitRegs, "modules.json"))
+	return
+}
+
+//versionSatisfied - check version in terraform init cache satisfies the required version constraints
+func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
+	currentVersion, err := version.NewVersion(foundversion)
+	if err != nil {
+		return false
+	}
+
+	if requiredVersion.Required == nil && foundversion != "" {
+		return true
+	}
+
+	if requiredVersion.Required.Check(currentVersion) {
+		return true
+	}
+
+	return false
 }
