@@ -35,6 +35,7 @@ const (
 	resourceTypeDockerfile string = "dockerfile"
 	underScoreSeparator    string = "_"
 	dockerFromInstruction  string = "from"
+	dockerFromAs           string = "AS"
 	dockerScratchImage     string = "scratch"
 
 	// IDConnectorString is string connector used in id creation
@@ -76,8 +77,16 @@ func (dc *DockerV1) LoadIacFile(absFilePath string, options map[string]interface
 			MaxSeverity: maxSeverity,
 		}
 		if data[i].Cmd == dockerFromInstruction && strings.Fields(data[i].Value)[0] != dockerScratchImage {
+			// docker FROM can have an optional image name, which can be specified using AS
+			// eg: FROM ubuntu:latest AS builder
+			name := ""
+			if strings.Contains(data[i].Value, dockerFromAs) {
+				name = strings.TrimSpace(strings.Split(data[i].Value, dockerFromAs)[1])
+			}
+
 			config.ContainerImages = append(config.ContainerImages, output.ContainerDetails{
 				Image: strings.Fields(data[i].Value)[0],
+				Name:  name,
 			})
 		}
 		allResourcesConfig[config.Type] = append(allResourcesConfig[config.Type], config)

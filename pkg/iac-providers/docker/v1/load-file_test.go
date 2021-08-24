@@ -93,6 +93,7 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			ContainerImages: []output.ContainerDetails{
 				{
 					Image: "golang:alpine",
+					Name:  "builder",
 				},
 			},
 		},
