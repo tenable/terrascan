@@ -2,6 +2,11 @@ package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerFrom]{
 	dockerFrom := input.docker_dockerfile[_]
-    config := dockerFrom.config
-    contains(config, "healthcheck") 
+    is_array(dockerFrom.config)
+    config := dockerFrom.config 
+    checkHealthCheck(config)
 }
+
+checkHealthCheck(config) {
+      contains(config, "healthcheck") 
+} 
