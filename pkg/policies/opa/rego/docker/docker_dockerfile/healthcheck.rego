@@ -1,12 +1,12 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[dockerFrom]{
-	dockerFrom := input.docker_dockerfile[_]
-    is_array(dockerFrom.config)
-    config := dockerFrom.config 
+{{.prefix}}{{.name}}{{.suffix}}[vio.id]{
+	vio := input.docker_dockerfile[_]
+    is_array(vio.config)
+    config := vio.config 
     checkHealthCheck(config)
 }
 
 checkHealthCheck(config) {
-      contains(config, "healthcheck") 
+      contains(config[_], "healthcheck") 
 } 
