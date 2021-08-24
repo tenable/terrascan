@@ -90,6 +90,11 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
+			ContainerImages: []output.ContainerDetails{
+				{
+					Image: "golang:alpine",
+				},
+			},
 		},
 		{
 			ID:          "docker_from.3e7f6a412bae2c36b5e8123c0d437288",
@@ -103,6 +108,11 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
+			ContainerImages: []output.ContainerDetails{
+				{
+					Image: "alpine:3.12.0",
+				},
+			},
 		},
 	},
 	"docker_run": []output.ResourceConfig{
