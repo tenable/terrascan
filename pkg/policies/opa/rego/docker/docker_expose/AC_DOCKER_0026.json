@@ -1,0 +1,17 @@
+{
+    "name": "exposeport",
+    "file": "exposeport.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_expose",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "exposeport"
+    },
+    "severity": "LOW",
+    "description": "Ensure only the ports that your application needs are used and avoid exposing ports like SSH (22)",
+    "reference_id": "AC_DOCKER_0026",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0026",
+    "version": 1
+}
