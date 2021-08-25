@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
 	"os"
@@ -30,6 +29,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/results"
@@ -42,11 +43,15 @@ import (
 
 const (
 	// ExitCodeZero represents command exit code 0
-	ExitCodeZero = 0
-	// ExitCodeOne represents command exit code 0
-	ExitCodeOne = 1
-	// ExitCodeThree represents command exit code 0
-	ExitCodeThree = 3
+	ExitCodeZero = iota
+	// ExitCodeOne represents command exit code 1
+	ExitCodeOne
+	// ExitCodeThree represents command exit code 3
+	ExitCodeThree = iota + 1
+	// ExitCodeFour represents command exit code 4
+	ExitCodeFour
+	// ExitCodeFive represents command exit code 5
+	ExitCodeFive
 )
 
 var (
@@ -61,6 +66,12 @@ var (
 
 	// filePattern is regex for 'file' attribute in violations output
 	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
+
+	// sarifVersionPattern is regex for 'version' attribute in sarif violations output
+	sarifVersionPattern = regexp.MustCompile(`["]*[vV]ersion["][:=][ \t]*["][0-9][\.][0-9][\.][0-9]["],`)
+
+	// sarifUriPattern is regex for 'uri' attribute in sarif violations output
+	sarifURIPattern = regexp.MustCompile(`["]*[uU]ri["][:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
 	// directoryPattern is regex for 'directory' attribute in scan_errors
 	directoryPattern = regexp.MustCompile(`["]*directory["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
@@ -387,4 +398,31 @@ func GetAbsoluteFilePathForSarif(resourcePath, filePath string) (string, error) 
 		return filepath.Join(resourcePath, filePath), nil
 	}
 	return resourcePath, nil
+}
+
+// CompareActualSarifOutputWithGoldenSummaryRegex compares actual string with contents of golden file passed as parameter
+// ignores specified regex patterns from the actual and golden text
+func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPath string) {
+	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
+	if utils.IsWindowsPlatform() {
+		fileData = utils.ReplaceWinNewLineBytes(fileData)
+	}
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+	var sessionOutput, fileContents string
+
+	sessionOutput = string(session.Wait().Out.Contents())
+
+	fileContents = string(fileData)
+
+	sessionOutput = strings.TrimSpace(sessionOutput)
+	fileContents = strings.TrimSpace(fileContents)
+
+	// replace uri from the output, it will cause issues for absolute paths
+	sessionOutput = sarifURIPattern.ReplaceAllString(sessionOutput, "")
+	fileContents = sarifURIPattern.ReplaceAllString(fileContents, "")
+
+	sessionOutput = sarifVersionPattern.ReplaceAllString(sessionOutput, "")
+	fileContents = sarifVersionPattern.ReplaceAllString(fileContents, "")
+
+	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
 }

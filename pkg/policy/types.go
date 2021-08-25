@@ -12,6 +12,7 @@ const (
 	version12 = "v12"
 	version1  = "v1"
 	version3  = "v3"
+	version4  = "v4"
 )
 
 // EngineInput Contains data used as input to the engine
@@ -40,6 +41,7 @@ func (me EngineOutput) AsViolationStore() results.ViolationStore {
 	}
 	return results.ViolationStore{
 		Violations:        me.Violations,
+		Vulnerabilities:   me.Vulnerabilities,
 		SkippedViolations: me.SkippedViolations,
 		PassedRules:       me.PassedRules,
 		Summary:           me.Summary,

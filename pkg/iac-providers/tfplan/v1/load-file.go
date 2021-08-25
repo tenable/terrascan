@@ -37,7 +37,7 @@ var (
 )
 
 // LoadIacFile parses the given tfplan file from the given file path
-func (t *TFPlan) LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	zap.S().Debug("processing tfplan file")
 

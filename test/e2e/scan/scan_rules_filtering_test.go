@@ -129,18 +129,19 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				Context("severity leve specified is 'low'", func() {
 					Context("iac file has only medium severity violations", func() {
 						It("should report the violations and exit with status code 3", func() {
-							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "low"}
+							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "low", "-i", "terraform"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeThree))
 						})
 					})
 				})
-				Context("severity leve specified is 'high'", func() {
+				Context("severity level specified is 'high'", func() {
 					Context("iac files has only medium severity violations", func() {
-						It("should not report any violation and exit with status code 0", func() {
+						// there would not no violations but directory scan errors would be present due to all iac scan
+						It("should not report any violation and exit with status code 4", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--severity", "high"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 				})
@@ -171,7 +172,8 @@ var _ = Describe("Scan command with rule filtering options", func() {
 						It("should not report any violation and exit with status code 0", func() {
 							scanArgs := []string{scanUtils.ScanCommand, "-p", policyDir, "-d", iacDir, "-o", "json", "--categories", "COMPLIANCE VALIDATION"}
 							session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
-							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+							// summary would contain directory scan errors due to all iac scan
+							Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeFour))
 						})
 					})
 				})
@@ -261,6 +263,16 @@ var _ = Describe("Scan command with rule filtering options", func() {
 				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourceSkipGoldenRelPath, "kubernetes_file_resource_skipping.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})
+
+		Context("resource skipping in docker files", func() {
+			iacScanDir := filepath.Join(resourceSkipIacRelPath, "docker")
+			// the iac file has only one resource with one violation, which is skipped.
+			// hence, the exit code is 0
+			It("should display skipped violations and exit with status code 0", func() {
+				scanArgs := []string{"-p", policyDir, "-d", iacScanDir, "-i", "docker", "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourceSkipGoldenRelPath, "dockerfile_resource_skipping.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
 	})
 	Describe("resource specific rule prioritising", func() {
 		resourcePrioritisingGoldenRelPath := filepath.Join("golden", "resource_prioritising")
@@ -336,6 +348,34 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			It("should display skipped violations with change priority to High as specified by min severity for the resource and exit with status code 0", func() {
 				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json"}
 				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_with_skip_rule", "k8s", "k8s_file_setting_min_severity_with_skip_rule.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource max severity set to Low in dockerfile", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set", "docker")
+			It("should give violations for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "docker", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set", "docker", "dockerfile_max_severity_low.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High in dockerfile", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_severity_set", "docker")
+			It("should give violations for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "docker", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "docker", "dockerfile_min_severity_high.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource max severity set to None in dockerfile", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "max_severity_set_none", "docker")
+			It("should skip violations for the resource and exit with status code 0", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "docker", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "max_severity_set_none", "docker", "dockerfile_max_severity_none.txt"), helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
+			})
+		})
+		Context("resource min severity set to High and max severity set to Low in dockerfile", func() {
+			iacDir := filepath.Join(resourcePrioritisingIacRelPath, "min_max_both_severity_set", "docker")
+			It("should give violations for the resource and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "docker", "-d", iacDir, "-o", "json"}
+				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "docker", "dockerfile_min_severity_high.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})
 	})

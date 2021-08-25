@@ -1,3 +1,19 @@
+/*
+    Copyright (C) 2020 Accurics, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 package k8sv1
 
 import (
@@ -25,7 +41,7 @@ func (*K8sV1) getFileType(file string) string {
 }
 
 // LoadIacDir loads all k8s files in the current directory
-func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllResourceConfigs, error) {
+func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
 	k.absRootDir = absRootDir
 
@@ -42,7 +58,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, nonRecursive bool) (output.AllReso
 			file := filepath.Join(fileDir, *files[i])
 
 			var configData output.AllResourceConfigs
-			if configData, err = k.LoadIacFile(file); err != nil {
+			if configData, err = k.LoadIacFile(file, options); err != nil {
 				errMsg := fmt.Sprintf("error while loading iac file '%s'. err: %v", file, err)
 				zap.S().Debug("error while loading iac files", zap.String("IAC file", file), zap.Error(err))
 				k.errIacLoadDirs = multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: fileDir, ErrMessage: errMsg})

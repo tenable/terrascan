@@ -1,0 +1,804 @@
+{
+  "aws_ecs_task_definition": [
+    {
+      "id": "aws_ecs_task_definition.service",
+      "name": "service",
+      "module_name": "root",
+      "source": "terraform-aws-provider/file_in_task_definition.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${file(\"task-definitions/service.json\")}",
+        "family": "service",
+        "proxy_configuration": [
+          {
+            "container_name": "applicationContainerName",
+            "properties": {
+              "AppPorts": "8080",
+              "EgressIgnoredIPs": "169.254.170.2,169.254.169.254",
+              "IgnoredUID": "1337",
+              "ProxyEgressPort": 15001,
+              "ProxyIngressPort": 15000
+            },
+            "type": "APPMESH"
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "jenkins",
+          "image": "jenkins"
+        }
+      ]
+    },
+    {
+      "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
+      "name": "demo-ecs-jsoncode-task-definition",
+      "module_name": "root",
+      "source": "terraform-aws-provider/jsoncode_in_task_definition.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
+        "cpu": "512",
+        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+        "family": "ecs-task-definition-demo",
+        "memory": "1024",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE"
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "first",
+          "image": "service-first"
+        },
+        {
+          "name": "second",
+          "image": "service-second"
+        }
+      ]
+    },
+    {
+      "id": "aws_ecs_task_definition.demo-ecs-task-definition",
+      "name": "demo-ecs-task-definition",
+      "module_name": "root",
+      "source": "terraform-aws-provider/main.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "[\n    {\n        \"cpu\": 10,\n        \"command\": [\"sleep\", \"10\"],\n        \"entryPoint\": [\"/\"],\n        \"environment\": [\n            {\"name\": \"VARNAME\", \"value\": \"VARVAL\"}\n        ],\n        \"essential\": true,\n        \"image\": \"jenkins\",\n        \"memory\": 128,\n        \"name\": \"jenkins\",\n        \"portMappings\": [\n            {\n                \"containerPort\": 80,\n                \"hostPort\": 8080\n            }\n        ],\n        \"resourceRequirements\":[\n            {\n                \"type\":\"InferenceAccelerator\",\n                \"value\":\"device_1\"\n            }\n        ]\n    }\n]\n",
+        "cpu": "512",
+        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+        "family": "ecs-task-definition-demo",
+        "memory": "1024",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE"
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "jenkins",
+          "image": "jenkins"
+        }
+      ]
+    }
+  ],
+  "azurerm_container_group": [
+    {
+      "id": "azurerm_container_group.example",
+      "name": "example",
+      "module_name": "root",
+      "source": "terraform-azure-provider/main.tf",
+      "plan_root": "terraform-azure-provider",
+      "line": 1,
+      "type": "azurerm_container_group",
+      "config": {
+        "container": [
+          {
+            "cpu": "0.5",
+            "image": "microsoft/aci-helloworld:latest",
+            "memory": "1.5",
+            "name": "hello-world",
+            "ports": [
+              {
+                "port": 443,
+                "protocol": "TCP"
+              }
+            ]
+          },
+          {
+            "cpu": "0.5",
+            "image": "microsoft/aci-tutorial-sidecar",
+            "memory": "1.5",
+            "name": "sidecar"
+          }
+        ],
+        "dns_name_label": "aci-label",
+        "ip_address_type": "public",
+        "location": "${azurerm_resource_group.example.location}",
+        "name": "example-continst",
+        "os_type": "Linux",
+        "resource_group_name": "${azurerm_resource_group.example.name}",
+        "tags": {
+          "environment": "testing"
+        }
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "hello-world",
+          "image": "microsoft/aci-helloworld:latest"
+        },
+        {
+          "name": "sidecar",
+          "image": "microsoft/aci-tutorial-sidecar"
+        }
+      ]
+    }
+  ],
+  "kubernetes_cron_job": [
+    {
+      "id": "kubernetes_cron_job.demo",
+      "name": "demo",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/cron_job.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 1,
+      "type": "kubernetes_cron_job",
+      "config": {
+        "metadata": [
+          {
+            "name": "demo"
+          }
+        ],
+        "spec": [
+          {
+            "concurrency_policy": "Replace",
+            "failed_jobs_history_limit": 5,
+            "job_template": [
+              {
+                "metadata": [
+                  {}
+                ],
+                "spec": [
+                  {
+                    "backoff_limit": 2,
+                    "template": [
+                      {
+                        "metadata": [
+                          {}
+                        ],
+                        "spec": [
+                          {
+                            "container": [
+                              {
+                                "command": [
+                                  "/bin/sh",
+                                  "-c",
+                                  "date; echo Hello from the Kubernetes cluster"
+                                ],
+                                "image": "busybox",
+                                "name": "hello"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "ttl_seconds_after_finished": 10
+                  }
+                ]
+              }
+            ],
+            "schedule": "1 0 * * *",
+            "starting_deadline_seconds": 10,
+            "successful_jobs_history_limit": 10
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "hello",
+          "image": "busybox"
+        }
+      ]
+    }
+  ],
+  "kubernetes_deployment": [
+    {
+      "id": "kubernetes_deployment.example",
+      "name": "example",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/deployment.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 37,
+      "type": "kubernetes_deployment",
+      "config": {
+        "metadata": [
+          {
+            "labels": {
+              "test": "MyExampleApp"
+            },
+            "name": "terraform-example",
+            "namespace": "${kubernetes_namespace.test.metadata.0.name}"
+          }
+        ],
+        "spec": [
+          {
+            "replicas": 1,
+            "selector": [
+              {
+                "match_labels": {
+                  "test": "MyExampleApp"
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "test": "MyExampleApp"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "automount_service_account_token": false,
+                    "container": [
+                      {
+                        "image": "nginx:1.7.8",
+                        "name": "example1"
+                      },
+                      {
+                        "image": "nginx:1.7.8",
+                        "name": "example2"
+                      },
+                      {
+                        "image": "nginx:1.7.8",
+                        "name": "example3"
+                      }
+                    ],
+                    "service_account_name": "default"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "example1",
+          "image": "nginx:1.7.8"
+        },
+        {
+          "name": "example2",
+          "image": "nginx:1.7.8"
+        },
+        {
+          "name": "example3",
+          "image": "nginx:1.7.8"
+        }
+      ]
+    }
+  ],
+  "kubernetes_job": [
+    {
+      "id": "kubernetes_job.demo",
+      "name": "demo",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/job.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 1,
+      "type": "kubernetes_job",
+      "config": {
+        "metadata": [
+          {
+            "name": "demo"
+          }
+        ],
+        "spec": [
+          {
+            "backoff_limit": 4,
+            "template": [
+              {
+                "metadata": [
+                  {}
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "command": [
+                          "perl",
+                          "-Mbignum=bpi",
+                          "-wle",
+                          "print bpi(2000)"
+                        ],
+                        "image": "perl",
+                        "name": "pi"
+                      }
+                    ],
+                    "restart_policy": "Never"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "wait_for_completion": true
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "pi",
+          "image": "perl"
+        }
+      ]
+    }
+  ],
+  "kubernetes_namespace": [
+    {
+      "id": "kubernetes_namespace.test",
+      "name": "test",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/deployment.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 13,
+      "type": "kubernetes_namespace",
+      "config": {
+        "metadata": [
+          {
+            "name": "nginx"
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
+    }
+  ],
+  "kubernetes_pod": [
+    {
+      "id": "kubernetes_pod.test",
+      "name": "test",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/pod.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 1,
+      "type": "kubernetes_pod",
+      "config": {
+        "metadata": [
+          {
+            "name": "terraform-example"
+          }
+        ],
+        "spec": [
+          {
+            "container": [
+              {
+                "image": "nginx:1.7.9",
+                "name": "example",
+                "resources": [
+                  {
+                    "limits": {
+                      "cpu": "0.5",
+                      "memory": "512Mi",
+                      "nvidia/gpu": "1"
+                    },
+                    "requests": {
+                      "cpu": "250m",
+                      "memory": "50Mi",
+                      "nvidia/gpu": "1"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "example",
+          "image": "nginx:1.7.9"
+        }
+      ]
+    }
+  ],
+  "kubernetes_replication_controller": [
+    {
+      "id": "kubernetes_replication_controller.example",
+      "name": "example",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/rc.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 1,
+      "type": "kubernetes_replication_controller",
+      "config": {
+        "metadata": [
+          {
+            "labels": {
+              "test": "MyExampleApp"
+            },
+            "name": "terraform-example"
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "test": "MyExampleApp"
+            },
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "annotations": {
+                      "key1": "value1"
+                    },
+                    "labels": {
+                      "test": "MyExampleApp"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "image": "nginx:1.7.8",
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "http_header": [
+                                  {
+                                    "name": "X-Custom-Header",
+                                    "value": "Awesome"
+                                  }
+                                ],
+                                "path": "/nginx_status",
+                                "port": 8080
+                              }
+                            ],
+                            "initial_delay_seconds": 3,
+                            "period_seconds": 3
+                          }
+                        ],
+                        "name": "example",
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": "0.5",
+                              "memory": "512Mi"
+                            },
+                            "requests": {
+                              "cpu": "250m",
+                              "memory": "50Mi"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "example",
+          "image": "nginx:1.7.8"
+        }
+      ]
+    }
+  ],
+  "kubernetes_service": [
+    {
+      "id": "kubernetes_service.test",
+      "name": "test",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/deployment.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 19,
+      "type": "kubernetes_service",
+      "config": {
+        "metadata": [
+          {
+            "name": "nginx",
+            "namespace": "${kubernetes_namespace.test.metadata.0.name}"
+          }
+        ],
+        "spec": [
+          {
+            "port": [
+              {
+                "node_port": 30201,
+                "port": 80,
+                "target_port": 80
+              }
+            ],
+            "selector": {
+              "app": "${kubernetes_deployment.example.spec.0.template.0.metadata.0.labels.test}"
+            },
+            "type": "NodePort"
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
+    }
+  ],
+  "kubernetes_stateful_set": [
+    {
+      "id": "kubernetes_stateful_set.prometheus",
+      "name": "prometheus",
+      "module_name": "root",
+      "source": "terraform-k8s-provider/stateful_set.tf",
+      "plan_root": "terraform-k8s-provider",
+      "line": 1,
+      "type": "kubernetes_stateful_set",
+      "config": {
+        "metadata": [
+          {
+            "annotations": {
+              "SomeAnnotation": "foobar"
+            },
+            "labels": {
+              "addonmanager.kubernetes.io/mode": "Reconcile",
+              "k8s-app": "prometheus",
+              "kubernetes.io/cluster-service": "true",
+              "version": "v2.2.1"
+            },
+            "name": "prometheus"
+          }
+        ],
+        "spec": [
+          {
+            "pod_management_policy": "Parallel",
+            "replicas": 1,
+            "revision_history_limit": 5,
+            "selector": [
+              {
+                "match_labels": {
+                  "k8s-app": "prometheus"
+                }
+              }
+            ],
+            "service_name": "prometheus",
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "annotations": {},
+                    "labels": {
+                      "k8s-app": "prometheus"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "args": [
+                          "--volume-dir=/etc/config",
+                          "--webhook-url=http://localhost:9090/-/reload"
+                        ],
+                        "image": "jimmidyson/configmap-reload:v0.1",
+                        "image_pull_policy": "IfNotPresent",
+                        "name": "prometheus-server-configmap-reload",
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": "10m",
+                              "memory": "10Mi"
+                            },
+                            "requests": {
+                              "cpu": "10m",
+                              "memory": "10Mi"
+                            }
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "mount_path": "/etc/config",
+                            "name": "config-volume",
+                            "read_only": true
+                          }
+                        ]
+                      },
+                      {
+                        "args": [
+                          "--config.file=/etc/config/prometheus.yml",
+                          "--storage.tsdb.path=/data",
+                          "--web.console.libraries=/etc/prometheus/console_libraries",
+                          "--web.console.templates=/etc/prometheus/consoles",
+                          "--web.enable-lifecycle"
+                        ],
+                        "image": "prom/prometheus:v2.2.1",
+                        "image_pull_policy": "IfNotPresent",
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/-/healthy",
+                                "port": 9090,
+                                "scheme": "HTTPS"
+                              }
+                            ],
+                            "initial_delay_seconds": 30,
+                            "timeout_seconds": 30
+                          }
+                        ],
+                        "name": "prometheus-server",
+                        "port": [
+                          {
+                            "container_port": 9090
+                          }
+                        ],
+                        "readiness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/-/ready",
+                                "port": 9090
+                              }
+                            ],
+                            "initial_delay_seconds": 30,
+                            "timeout_seconds": 30
+                          }
+                        ],
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": "200m",
+                              "memory": "1000Mi"
+                            },
+                            "requests": {
+                              "cpu": "200m",
+                              "memory": "1000Mi"
+                            }
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "mount_path": "/etc/config",
+                            "name": "config-volume"
+                          },
+                          {
+                            "mount_path": "/data",
+                            "name": "prometheus-data",
+                            "sub_path": ""
+                          }
+                        ]
+                      }
+                    ],
+                    "init_container": [
+                      {
+                        "command": [
+                          "chown",
+                          "-R",
+                          "65534:65534",
+                          "/data"
+                        ],
+                        "image": "busybox:latest",
+                        "image_pull_policy": "IfNotPresent",
+                        "name": "init-chown-data",
+                        "volume_mount": [
+                          {
+                            "mount_path": "/data",
+                            "name": "prometheus-data",
+                            "sub_path": ""
+                          }
+                        ]
+                      }
+                    ],
+                    "service_account_name": "prometheus",
+                    "termination_grace_period_seconds": 300,
+                    "volume": [
+                      {
+                        "config_map": [
+                          {
+                            "name": "prometheus-config"
+                          }
+                        ],
+                        "name": "config-volume"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "update_strategy": [
+              {
+                "rolling_update": [
+                  {
+                    "partition": 1
+                  }
+                ],
+                "type": "RollingUpdate"
+              }
+            ],
+            "volume_claim_template": [
+              {
+                "metadata": [
+                  {
+                    "name": "prometheus-data"
+                  }
+                ],
+                "spec": [
+                  {
+                    "access_modes": [
+                      "ReadWriteOnce"
+                    ],
+                    "resources": [
+                      {
+                        "requests": {
+                          "storage": "16Gi"
+                        }
+                      }
+                    ],
+                    "storage_class_name": "standard"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "prometheus-server-configmap-reload",
+          "image": "jimmidyson/configmap-reload:v0.1"
+        },
+        {
+          "name": "prometheus-server",
+          "image": "prom/prometheus:v2.2.1"
+        }
+      ],
+      "init_container_images": [
+        {
+          "name": "init-chown-data",
+          "image": "busybox:latest"
+        }
+      ]
+    }
+  ]
+}

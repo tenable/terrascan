@@ -112,7 +112,9 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	}
 
 	var resourceConfig output.ResourceConfig
-
+	resourceConfig.ContainerImages = make([]output.ContainerDetails, 0)
+	resourceConfig.InitContainerImages = make([]output.ContainerDetails, 0)
+	var containerImages, initContainerImages []output.ContainerDetails
 	resourceConfig.Type = k.getNormalizedName(resource.Kind)
 
 	switch resource.Kind {
@@ -122,8 +124,13 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	// non-namespaced resources
 	case "ClusterRole":
 		fallthrough
-	case "Namespace":
-		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName()
+	// pod and all kinds of workloads
+	case "Pod", "Deployment", "ReplicaSet", "ReplicationController", "Job", "CronJob", "StatefulSet", "DaemonSet":
+		containerImages, initContainerImages, err = k.extractContainerImages(resource.Kind, doc)
+		if err != nil {
+			return nil, err
+		}
+		fallthrough
 	default:
 		// namespaced-resources
 		namespace := resource.Metadata.Namespace
@@ -133,6 +140,9 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 
 		resourceConfig.ID = resourceConfig.Type + "." + resource.Metadata.NameOrGenerateName() + "-" + namespace
 	}
+
+	resourceConfig.ContainerImages = append(resourceConfig.ContainerImages, containerImages...)
+	resourceConfig.InitContainerImages = append(resourceConfig.InitContainerImages, initContainerImages...)
 
 	// read and update skip rules, if present
 	skipRules := utils.ReadSkipRulesFromMap(resource.Metadata.Annotations, resourceConfig.ID)

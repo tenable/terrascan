@@ -93,7 +93,7 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 		Type:      YAMLDoc,
 		StartLine: startLineNumber,
 		EndLine:   currentLineNumber,
-		FilePath:  "",
+		FilePath:  filePath,
 	})
 
 	if err := scanner.Err(); err != nil {

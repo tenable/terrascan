@@ -25,21 +25,23 @@ func TestUpload(t *testing.T) {
 	testCategories := []string{"COMPLIANCE VALIDATION", "DATA PROTECTION"}
 
 	table := []struct {
-		name              string
-		path              string
-		param             string
-		iacType           string
-		iacVersion        string
-		cloudType         string
-		scanRules         []string
-		skipRules         []string
-		severity          string
-		configOnly        bool
-		invalidConfigOnly bool
-		showPassed        bool
-		invalidShowPassed bool
-		wantStatus        int
-		categories        []string
+		name                       string
+		path                       string
+		param                      string
+		iacType                    string
+		iacVersion                 string
+		cloudType                  string
+		scanRules                  []string
+		skipRules                  []string
+		severity                   string
+		configOnly                 bool
+		invalidConfigOnly          bool
+		showPassed                 bool
+		invalidShowPassed          bool
+		wantStatus                 int
+		categories                 []string
+		invalidFindVulnerabilities bool
+		findVulnerabilities        bool
 	}{
 		{
 			name:       "valid file scan",
@@ -249,6 +251,15 @@ func TestUpload(t *testing.T) {
 			cloudType:  testCloudType,
 			wantStatus: http.StatusOK,
 		},
+		{
+			name:                       "test for invalid value find vulnerability",
+			path:                       testFilePath,
+			param:                      testParamName,
+			iacType:                    testIacType,
+			cloudType:                  testCloudType,
+			wantStatus:                 http.StatusBadRequest,
+			invalidFindVulnerabilities: true,
+		},
 	}
 
 	for _, tt := range table {
@@ -324,6 +335,18 @@ func TestUpload(t *testing.T) {
 
 			if len(tt.categories) > 0 {
 				if err = writer.WriteField("categories", strings.Join(tt.categories, ",")); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if !tt.invalidFindVulnerabilities {
+				if err = writer.WriteField("find_vulnerabilities", strconv.FormatBool(tt.findVulnerabilities)); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			} else {
+				if err = writer.WriteField("find_vulnerabilities", "invalid"); err != nil {
 					writer.Close()
 					t.Error(err)
 				}

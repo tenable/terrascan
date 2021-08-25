@@ -17,15 +17,22 @@
 package commons
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/spf13/afero"
+	"go.uber.org/zap"
 )
 
 // test data
@@ -39,6 +46,10 @@ var (
 		SourceAddr: testLocalSourceAddr,
 		CallRange:  hcl.Range{Filename: testFileNamePath},
 	}
+
+	invalidDirErrStringTemplate = "directory '%s' has no terraform config files"
+	testDataDir                 = "testdata"
+	tfJSONDir                   = filepath.Join(testDataDir, "tfjson")
 )
 
 func TestProcessLocalSource(t *testing.T) {
@@ -47,9 +58,10 @@ func TestProcessLocalSource(t *testing.T) {
 		req *hclConfigs.ModuleRequest
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name    string
+		args    args
+		want    string
+		options map[string]interface{}
 	}{
 		{
 			name: "no remote module",
@@ -61,7 +73,7 @@ func TestProcessLocalSource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := NewTerraformDirectoryLoader("", false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			if got := dl.processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
@@ -83,6 +95,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 		args    args
 		want    string
 		wantErr bool
+		options map[string]interface{}
 	}{
 		{
 			name: "invalid registry host",
@@ -112,7 +125,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			dl := NewTerraformDirectoryLoader("", false)
+			dl := NewTerraformDirectoryLoader("", tt.options)
 			got, err := dl.processTerraformRegistrySource(tt.args.req, tt.args.tempDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
@@ -252,6 +265,137 @@ func TestGetConfigSource(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("GetConfigSource() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
+	absRootDir, err := filepath.Abs(filepath.Dir(filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")))
+	if err != nil {
+		zap.S().Error("error finding working directory", err)
+	}
+	terraformInitRegs := filepath.Join(absRootDir, terraformModuleInstallDir, "network")
+	type fields struct {
+		Cache map[string]TerraformModuleManifest
+	}
+	type args struct {
+		req *hclConfigs.ModuleRequest
+	}
+	tests := []struct {
+		name         string
+		fields       fields
+		args         args
+		wantSrc      string
+		wantDestpath string
+	}{
+		{
+			name: "module present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurerm",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "Azure/network/azurerm",
+			wantDestpath: terraformInitRegs,
+		},
+		{
+			name: "module not present in terraform cache",
+			fields: fields{
+				Cache: make(map[string]TerraformModuleManifest),
+			},
+			args: args{
+				req: &hclConfigs.ModuleRequest{
+					SourceAddr:      "Azure/network/azurermtest",
+					SourceAddrRange: hcl.Range{Filename: filepath.Join("testdata", "terraform_cache_use_in_scan", "remote-module.tf")},
+				},
+			},
+			wantSrc:      "",
+			wantDestpath: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tr := &TerraformDirectoryLoader{
+				absRootDir:               absRootDir,
+				terraformInitModuleCache: tt.fields.Cache,
+			}
+			gotSrc, gotDestpath := tr.GetRemoteModuleIfPresentInTerraformSrc(tt.args.req)
+			if gotSrc != tt.wantSrc {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotSrc = %v, want %v", gotSrc, tt.wantSrc)
+			}
+			if gotDestpath != tt.wantDestpath {
+				t.Errorf("TerraformModuleManifestCache.GetRemoteModuleIfPresentInTerraformSrc() gotDestpath = %v, want %v", gotDestpath, tt.wantDestpath)
+			}
+		})
+	}
+}
+
+func TestTerraformDirectoryLoaderLoadIacDir(t *testing.T) {
+	var nilMultiErr *multierror.Error = nil
+	tests := []struct {
+		name        string
+		tfConfigDir string
+		tfJSONFile  string
+		options     map[string]interface{}
+		wantErr     error
+	}{
+		{
+			name:        "directory with resources having container defined",
+			tfConfigDir: filepath.Join(testDataDir, "terraform-container-extraction"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "output-with-containers.json"),
+			wantErr: multierror.Append(
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction/terraform-aws-provider/task-definitions")),
+			),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tr := TerraformDirectoryLoader{
+				absRootDir:               tt.tfConfigDir,
+				remoteDownloader:         downloader.NewRemoteDownloader(),
+				parser:                   hclConfigs.NewParser(afero.NewOsFs()),
+				terraformInitModuleCache: make(map[string]TerraformModuleManifest),
+			}
+			got, gotErr := tr.LoadIacDir()
+			me, ok := gotErr.(*multierror.Error)
+			if !ok {
+				t.Errorf("expected multierror.Error, got %T", gotErr)
+			}
+			if tt.wantErr == nilMultiErr {
+				if err := me.ErrorOrNil(); err != nil {
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+				}
+			} else if me.Error() != tt.wantErr.Error() {
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			}
+
+			var want output.AllResourceConfigs
+
+			// Read the expected value and unmarshal into want
+			contents, _ := ioutil.ReadFile(tt.tfJSONFile)
+			if utils.IsWindowsPlatform() {
+				contents = utils.ReplaceWinNewLineBytes(contents)
+			}
+
+			err := json.Unmarshal(contents, &want)
+			if err != nil {
+				t.Errorf("unexpected error unmarshalling want: %v", err)
+			}
+
+			match, err := test.IdenticalAllResourceConfigs(got, want)
+			if err != nil {
+				t.Errorf("unexpected error checking result: %v", err)
+			}
+			if !match {
+				g, _ := json.MarshalIndent(got, "", "  ")
+				w, _ := json.MarshalIndent(want, "", "  ")
+				t.Errorf("got '%v', want: '%v'", string(g), string(w))
 			}
 		})
 	}

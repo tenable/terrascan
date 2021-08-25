@@ -1,0 +1,10 @@
+<testsuites tests="9" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="9" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/docker/dockerfile_with_platform_flag_violation">
+    <properties>
+      <property name="Terrascan Version" value="v1.8.1"></property>
+    </properties>
+    <testcase classname="Dockerfile" name="[ERROR] resource: &#34;Dockerfile&#34; at line: 1, violates: RULE - AC_DOCKER_0001" severity="MEDIUM" category="Infrastructure Security">
+      <failure message="Description: Ensure platform flag with FROM command is not used for Docker file, File: Dockerfile, Line: 1, Severity: MEDIUM, Rule Name: docFilePlatformFlag, Rule ID: AC_DOCKER_0001, Resource Name: Dockerfile, Resource Type: docker_from, Category: Infrastructure Security" type=""></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

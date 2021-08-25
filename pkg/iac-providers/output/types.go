@@ -35,9 +35,18 @@ type ResourceConfig struct {
 	// SkipRules will hold the rules to be skipped for the resource.
 	// Each iac provider should append the rules to be skipped for a resource,
 	// while extracting resource from the iac files
-	SkipRules   []SkipRule `json:"skip_rules" yaml:"skip_rules"`
-	MaxSeverity string     `json:"max_severity"`
-	MinSeverity string     `json:"min_severity"`
+	SkipRules           []SkipRule         `json:"skip_rules" yaml:"skip_rules"`
+	MaxSeverity         string             `json:"max_severity"`
+	MinSeverity         string             `json:"min_severity"`
+	ContainerImages     []ContainerDetails `json:"container_images,omitempty"`
+	InitContainerImages []ContainerDetails `json:"init_container_images,omitempty"`
+}
+
+// ContainerDetails holds information about container name, image and vulberabilities
+type ContainerDetails struct {
+	Name            string          `json:"name"`
+	Image           string          `json:"image"`
+	Vulnerabilities []Vulnerability `json:"vulnerabilities"`
 }
 
 // SkipRule struct will hold the skipped rule and any comment for the skipped rule

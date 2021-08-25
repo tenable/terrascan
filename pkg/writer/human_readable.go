@@ -59,6 +59,13 @@ Skipped Violations -
 	-----------------------------------------------------------------------
 	{{end}}
 {{end}}
+{{- if (gt (len .ViolationStore.Vulnerabilities) 0) }}
+Vulnerabilities Details - 
+    {{range $index, $element := .ViolationStore.Vulnerabilities}}
+	{{defaultVulnerabilities $element | printf "%s"}}
+	-----------------------------------------------------------------------
+	{{end}}
+{{end}}
 Scan Summary -
 
 	{{scanSummary .ViolationStore.Summary | printf "%s"}}
@@ -72,10 +79,11 @@ func init() {
 // HumanReadbleWriter display scan summary in human readable format
 func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 	tmpl, err := template.New("Report").Funcs(template.FuncMap{
-		"defaultViolations":  defaultViolations,
-		"detailedViolations": detailedViolations,
-		"scanSummary":        scanSummary,
-		"passedRules":        passedRules,
+		"defaultViolations":      defaultViolations,
+		"detailedViolations":     detailedViolations,
+		"scanSummary":            scanSummary,
+		"passedRules":            passedRules,
+		"defaultVulnerabilities": defaultVulnerabilities,
 	}).Parse(defaultTemplate)
 	if err != nil {
 		zap.S().Errorf("failed to write human readable output. error: '%v'", err)
@@ -144,6 +152,11 @@ func scanSummary(s results.ScanSummary) string {
 		"Low", s.LowCount,
 		"Medium", s.MediumCount,
 		"High", s.HighCount)
+
+	if s.Vulnerabilities != nil {
+		out += fmt.Sprintf("%-20v:\t%d\n\t", "Vulnerabilities", *s.Vulnerabilities)
+	}
+
 	return out
 }
 
@@ -154,5 +167,24 @@ func passedRules(v results.PassedRule) string {
 		"Description", v.Description,
 		"Severity", v.Severity,
 		"Category", v.Category)
+	return out
+}
+
+func defaultVulnerabilities(v results.Vulnerability) string {
+	resourceName := v.ResourceName
+	// print "" when as resource name value when it is empty
+	if resourceName == "" {
+		resourceName = `""`
+	}
+	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t",
+		"Description", v.Description,
+		"Vulnerability ID", v.VulnerabilityID,
+		"Resource Name", resourceName,
+		"Resource Type", v.ResourceType,
+		"Image", v.Image,
+		"Package", v.Package,
+		"Line", v.LineNumber,
+		"Primary URL", v.PrimaryURL,
+		"Primary URL", v.Severity)
 	return out
 }

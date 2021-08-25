@@ -1,0 +1,17 @@
+{
+    "name": "addinsteadofcopy",
+    "file": "addinsteadofcopy.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_add",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "addinsteadofcopy"
+    },
+    "severity": "LOW",
+    "description": "Ensure use of COPY instead of ADD unless, running a tar file",
+    "reference_id": "AC_DOCKER_0032",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0032",
+    "version": 1
+}
