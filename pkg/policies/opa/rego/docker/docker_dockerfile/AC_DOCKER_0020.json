@@ -1,0 +1,17 @@
+{
+    "name": "shellusingshell",
+    "file": "shellusingshell.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_shell",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "shellusingshell"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure the command SHELL to override the default shell instead of the RUN command.",
+    "reference_id": "AC_DOCKER_0020",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0020",
+    "version": 1
+}

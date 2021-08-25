@@ -1,0 +1,17 @@
+{
+    "name": "runusingcd",
+    "file": "runusingcd.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "runusingcd"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure WORKDIR command is getting used instead of proliferating instructions like RUN ",
+    "reference_id": "AC_DOCKER_0018",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0018",
+    "version": 1
+}

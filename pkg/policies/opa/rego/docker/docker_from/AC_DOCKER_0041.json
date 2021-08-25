@@ -1,0 +1,17 @@
+{
+    "name": "imageVersionnotusinglatest",
+    "file": "imageVersionnotusinglatest.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_from",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "imageVersionnotusinglatest"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure platform flag with FROM command is not used for Docker file",
+    "reference_id": "AC_DOCKER_0041",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0041",
+    "version": 1
+}

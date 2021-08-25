@@ -1,0 +1,17 @@
+{
+    "name": "useofapkupgrade",
+    "file": "useofapkupgrade.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "useofapkupgrade"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure apk upgrade is not being used.",
+    "reference_id": "AC_DOCKER_0039",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0039",
+    "version": 1
+}

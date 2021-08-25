@@ -1,0 +1,17 @@
+{
+    "name": "healthcheck",
+    "file": "healthcheck.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_from",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "healthcheck"
+    },
+    "severity": "LOW",
+    "description": "Ensure that HEALTHCHECK is being used.",
+    "reference_id": "AC_DOCKER_0047",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0047",
+    "version": 1
+}
