@@ -4,7 +4,6 @@
     "policy_type": "aws",
     "resource_type": {
         "aws_network_interface": true
-
     },
     "template_args": {
         "prefix": "",
