@@ -68,7 +68,7 @@ var (
 	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
 	// sarifVersionPattern is regex for 'version' attribute in sarif violations output
-	sarifVersionPattern = regexp.MustCompile(`["]*[vV]ersion["][:=][ \t]*["][0-9][\.][0-9][\.][0-9]["],`)
+	sarifVersionPattern = regexp.MustCompile(`["]*[vV]ersion["][:=][ \t]*["]([0-9])+[\.]([0-9])+[\.]([0-9])+["],`)
 
 	// sarifUriPattern is regex for 'uri' attribute in sarif violations output
 	sarifURIPattern = regexp.MustCompile(`["]*[uU]ri["][:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
@@ -86,7 +86,7 @@ var (
 	classnamePattern = regexp.MustCompile(`classname=["]*(.+)[\\\/](.+)["]*`)
 
 	// versionValuePattern is regex for 'value' attribute in junit-xml output (which is terrascan version)
-	versionValuePattern = regexp.MustCompile(`value="v[1][\.][0-9][\.][0-9]"`)
+	versionValuePattern = regexp.MustCompile(`value="v[0-9][\.]([0-9])+[\.]([0-9])+"`)
 
 	// sourceRegexPattern is regex for 'file/folder' attribute in violations output
 	sourceRegexPattern = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)[\\\/](.+)["]*`)
