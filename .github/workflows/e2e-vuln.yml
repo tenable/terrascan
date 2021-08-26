@@ -1,7 +1,7 @@
-name: build
+name: e2e-vuln-test
 on:
-  push:
-  pull_request:
+  pull_request_target:
+    types: [assigned, opened, synchronize, reopened, ready_for_review, edited]
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -16,11 +16,9 @@ jobs:
       AZURE_AUTH_TEST_SECRET:  ${{ secrets.AZURE_AUTH_TEST_SECRET }}
       GOOGLE_APPLICATION_CREDENTIALS_TEST_SECRET:  ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_TEST_KEY }}
     steps:
-    - name: check event types
-      run: echo ${{ github.event_name }}
     - name: Checkout Terrascan
       uses: actions/checkout@v2
-      
+
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -32,39 +30,10 @@ jobs:
     - name: Go validations
       run: make validate
 
-    - name: Build Terrascan
-      run: make build
-
-    - name: Run unit tests
-      run: make unit-tests
-    
-    - name: install kind
-      run: make install-kind
-
     - name: Run e2e tests
       run: make e2e-tests
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 
-  # push image to Docker Hub
-  push:
-    # Ensure "validate" job passes before pushing image.
-    needs: validate
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    steps:
-    - name: Checkout Terrascan
-      uses: actions/checkout@v2
-
-    - name: Build Terrascan docker image
-      run: make docker-build
-
-    - name: Login to docker hub
-      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
-
-    - name: Push Terrascan latest docker image
-      if: ${{ github.ref == 'refs/heads/master' }}
-      run: make docker-push-latest
+  

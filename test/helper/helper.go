@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -436,9 +435,6 @@ func CheckSummaryForVulnerabilities(session *gexec.Session, isStdOut bool) {
 	} else {
 		sessionBytes = session.Wait().Err.Contents()
 	}
-
-	output := session.Wait().Err.Contents()
-	fmt.Println("<><>", string(output))
 
 	sessionBytes = bytes.TrimSpace(sessionBytes)
 

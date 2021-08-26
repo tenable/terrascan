@@ -132,3 +132,6 @@ atlantis-docker-push-latest:
 # push release tag terrascan_atlantis docker image
 atlantis-docker-push-latest-tag:
 	./scripts/atlantis/docker-push-latest-tag.sh
+
+e2e-vuln-tests: build
+	./scripts/run-e2e-vuln.sh
