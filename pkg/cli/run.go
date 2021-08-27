@@ -22,13 +22,16 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"fmt"
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
+
 	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
+
+
+
 )
 
 const (
@@ -112,7 +115,6 @@ func (s *ScanOptions) Scan() error {
 		zap.S().Error("scan init failed", zap.Error(err))
 		return err
 	}
-
 	if err := s.Run(); err != nil {
 		zap.S().Error("scan run failed", zap.Error(err))
 		return err
@@ -171,7 +173,6 @@ func (s *ScanOptions) initColor() {
 
 // Run executes terrascan in CLI mode
 func (s *ScanOptions) Run() error {
-	fmt.Println(PolicyReleaseUsed)
 	// temp dir to download the remote repo
 	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
 	defer os.RemoveAll(tempDir)
@@ -190,9 +191,8 @@ func (s *ScanOptions) Run() error {
 	}
 
 
-
-	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error 
-
+	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error
+	//fmt.Println("from run" + config.Tag)
 	// executor output
 	results, err := executor.Execute(s.configOnly)
 	if err != nil {

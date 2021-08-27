@@ -15,7 +15,6 @@
 */
 
 package config
-
 import (
 	"path/filepath"
 
@@ -25,6 +24,7 @@ import (
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 	"gopkg.in/src-d/go-git.v4/plumbing"
+
 )
 
 const (
@@ -38,11 +38,17 @@ const ConfigEnvvarName = "TERRASCAN_CONFIG"
 var (
 	defaultPolicyRepoPath = filepath.Join("pkg", "policies", "opa", "rego")
 	defaultBasePolicyPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
+	defaultTempPath = filepath.Join(utils.GetHomeDir(), ".terrascan/temp")
+
+
 )
+
 
 // LoadGlobalConfig loads policy configuration from specified configFile
 // into var Global.Policy.  Members of Global.Policy that are not specified
 // in configFile will get default values
+
+
 func LoadGlobalConfig(configFile string) error {
 	// Start with the defaults
 	global = &TerrascanConfig{}
@@ -204,6 +210,10 @@ func GetK8sAdmissionControl() K8sAdmissionControl {
 	return global.K8sAdmissionControl
 }
 
+func GetTempPath() string { 
+	return defaultTempPath
+}
+
 func GetLatestTag(repository *git.Repository) (string, error) {
 	tagRefs, err := repository.Tags()
 	if err != nil {
@@ -239,6 +249,5 @@ func GetLatestTag(repository *git.Repository) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	return latestTagName, nil
 }

@@ -24,6 +24,15 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+	"github.com/accurics/terrascan/pkg/config"
+	//"github.com/accurics/terrascan/pkg/version"
+	//"github.com/accurics/terrascan/pkg/initialize"
+	"gopkg.in/src-d/go-git.v4"
+
+	"io"
+	"os"
+
+
 )
 
 var scanOptions = NewScanOptions()
@@ -39,21 +48,46 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 		if scanOptions.configOnly {
 			return nil
 		}
-		return initial(cmd, args, true)
+
+		 err :=  initial(cmd, args, true)
+		return err
 	},
 	RunE:          scan,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
 
-var releaseTag string 
-func setRelease(rel string) {
-	releaseTag = rel 
-}
+
 func scan(cmd *cobra.Command, args []string) error {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
 	scanOptions.outputType = OutputType
+	//fmt.Println("from scan" + config.Tag)
+
+	//test reading from tagversion file 
+	basePath := config.GetPolicyBasePath()
+	filename := basePath + "/TagVersion"
+	f, err := os.Open(filename)
+    if err != nil {
+        fmt.Printf("error opening %s: %s", filename, err)
+    }
+    defer f.Close()
+
+    buf := make([]byte, 16)
+    if _, err := io.ReadFull(f, buf); err != nil {
+        if err == io.EOF {
+            err = io.ErrUnexpectedEOF
+        }
+	}
+	fmt.Println(string(buf))
+	if isLatest(string(buf)) == false {
+		fmt.Println("Using an old release of your policy repo. Download the latest release of your policy repo with terrascan init and scan again")
+		return nil 
+	} else {
+		fmt.Println("You are using the latest policy release!")
+	}
+	//end of reading from tag version file 
+
 	return scanOptions.Scan()
 }
 
@@ -78,4 +112,27 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "do not scan directories and modules recursively")
 	scanCmd.Flags().BoolVarP(&scanOptions.useTerraformCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)")
 	RegisterCommand(rootCmd, scanCmd)
+}
+func isLatest(initTag string) bool { 
+	tempPath := config.GetTempPath()
+	repoURL := config.GetPolicyRepoURL()
+	// clone the repo
+	r, err := git.PlainClone(tempPath, false, &git.CloneOptions{
+		URL: repoURL,
+	})
+	if err != nil {
+		fmt.Errorf("failed to clone policy repo. error: '%v'", err)
+	}
+	latestRelease,tagerr := config.GetLatestTag(r)
+	if tagerr != nil {
+		fmt.Errorf("failed to retrieve latest tag. error: '%v'", tagerr)
+	}
+	os.RemoveAll(string(tempPath))
+
+	if (initTag != latestRelease) { 
+		return false
+	} else {
+		return true 
+	}
+
 }

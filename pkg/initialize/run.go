@@ -19,21 +19,19 @@ package initialize
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
 	"gopkg.in/src-d/go-git.v4"
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
-	"terrascan/pkg/cli"
-)
+	"os"
 
+)
 var (
 	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
-var Rel string
 // Run initializes terrascan if not done already
 func Run(isNonInitCmd bool) error {
 	// check if policy paths exist
@@ -50,7 +48,21 @@ func Run(isNonInitCmd bool) error {
 	}
 
 	// download policies
-	if err := DownloadPolicies(); err != nil {
+	release, err := DownloadPolicies()
+	//testing file write strat
+	basePath := config.GetPolicyBasePath()
+	filename := basePath +"/TagVersion"
+	destination, err := os.Create(filename)
+    if err != nil {
+        fmt.Println("os.Create:", err)
+    }
+    defer destination.Close()
+
+	fmt.Fprintf(destination, release)
+	//end of testing - delete 
+
+
+	if err != nil {
 		return err
 	}
 
@@ -59,17 +71,18 @@ func Run(isNonInitCmd bool) error {
 }
 
 // DownloadPolicies clones the policies to a local folder
-func DownloadPolicies() error {
+func DownloadPolicies() (string, error) {
 
 	policyBasePath := config.GetPolicyBasePath()
 	repoURL := config.GetPolicyRepoURL()
 	branch := config.GetPolicyBranch()
-	
+	repoPath := config.GetPolicyRepoPath()
+	dummy := ""
 
 	zap.S().Debug("downloading policies")
 
 	zap.S().Debugf("base directory path : %s", policyBasePath)
-	zap.S().Debugf("policy directory path : %s", config.GetPolicyRepoPath())
+	zap.S().Debugf("policy directory path : %s", repoPath)
 	zap.S().Debugf("policy repo url : %s", repoURL)
 	zap.S().Debugf("policy repo git branch : %s", branch)
 
@@ -81,13 +94,13 @@ func DownloadPolicies() error {
 	var r, err = getClonedRepo(policyBasePath, repoURL)
 
 	if err != nil {
-		return fmt.Errorf("failed to download policies. error: '%v'", err)
+		return dummy,fmt.Errorf("failed to download policies. error: '%v'", err)
 	}
 
 	// create working tree
 	w, err := r.Worktree()
 	if err != nil {
-		return fmt.Errorf("failed to create working tree. error: '%v'", err)
+		return dummy,fmt.Errorf("failed to create working tree. error: '%v'", err)
 	}
 
 	// fetch references
@@ -95,23 +108,28 @@ func DownloadPolicies() error {
 		RefSpecs: []gitConfig.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
 	})
 	if err != nil {
-		return fmt.Errorf("failed to fetch references from git repo. error: '%v'", err)
+		return dummy,fmt.Errorf("failed to fetch references from git repo. error: '%v'", err)
 	}
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
-    cli.setRelease(release)
-	Rel = release 
+
+
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
 		Force:  true,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to checkout '%s'. error: '%v'", release, err)
+		return dummy,fmt.Errorf("failed to checkout '%s'. error: '%v'", release, err)
 	}
 
-	return nil
+	//rev, err := r.Head()
+	//fmt.Println("here")
+	//revision := plumbing.Revision(rev.Name().String())
+	//commit,err := r.ResolveRevision(revision)
+	//fmt.Println(commit)
+	return release, nil
 }
 
 func connected(url string) bool {
@@ -128,6 +146,3 @@ func getClonedRepo(policyBasePath string, repoUrl string ) (*git.Repository, err
 		return r, err 
 }
 
-func GetRel() string {
-	return Rel 
-}
