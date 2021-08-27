@@ -17,7 +17,6 @@
 package scan_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -33,13 +32,6 @@ var (
 	terrascanConfigEnvName      string = "TERRASCAN_CONFIG"
 	severityLevelIncorrectError string = "severity level not supported"
 	categoryIncorrectError      string = "category not supported"
-)
-
-const (
-	googleApplicationKeyTestEnvName = "GOOGLE_APPLICATION_CREDENTIALS_TEST_SECRET"
-	googleApplicationKeyEnvName     = "GOOGLE_APPLICATION_CREDENTIALS"
-	azureAuthKeyTestEnvName         = "AZURE_AUTH_TEST_SECRET"
-	azureAuthKeyEnvName             = "AZURE_AUTH_LOCATION"
 )
 
 var _ = Describe("Scan command with rule filtering options", func() {
@@ -384,60 +376,6 @@ var _ = Describe("Scan command with rule filtering options", func() {
 			It("should give violations for the resource and exit with status code 3", func() {
 				scanArgs := []string{"-p", policyDir, "-i", "docker", "-d", iacDir, "-o", "json"}
 				scanUtils.RunScanAndAssertJSONOutput(terrascanBinaryPath, filepath.Join(resourcePrioritisingGoldenRelPath, "min_severity_set", "docker", "dockerfile_min_severity_high.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
-			})
-		})
-	})
-	Describe("resource with conatiner images to be scanned for vulnerabilities", func() {
-		resourceVulnerabilityIacRelPath := filepath.Join(iacRootRelPath, "resource_for_vulnerability_scan")
-		Context("resource with aws ecr registry image used which has vulnerabilities", func() {
-			iacDir := filepath.Join(resourceVulnerabilityIacRelPath, "aws_ecr_registry_used_in_resource")
-			It("should display vulnerabilities and exit with status code 0 since no violations found", func() {
-				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json", "--find-vuln"}
-				scanUtils.RunScanAndVerifyVulnerabilityOutputCount(terrascanBinaryPath, helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
-			})
-		})
-		Context("resource with azure registry image used which has vulnerabilities", func() {
-			iacDir := filepath.Join(resourceVulnerabilityIacRelPath, "azure_registry_used_in_resource")
-			var tempFile *os.File
-			JustBeforeEach(func() {
-				data := os.Getenv(azureAuthKeyTestEnvName)
-				if data != "" {
-					tempFile, err := ioutil.TempFile("", "azure.auth")
-					if err != nil {
-						Expect(err).NotTo(HaveOccurred())
-					}
-					tempFile.Write([]byte(data))
-					os.Setenv(azureAuthKeyEnvName, tempFile.Name())
-				}
-			})
-			JustAfterEach(func() {
-				os.Remove(tempFile.Name())
-			})
-			It("should display vulnerabilities and exit with status code 0 since no violations found", func() {
-				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "-o", "json", "--find-vuln"}
-				scanUtils.RunScanAndVerifyVulnerabilityOutputCount(terrascanBinaryPath, helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
-			})
-		})
-		Context("resource with google registry image used which has vulnerabilities", func() {
-			iacDir := filepath.Join(resourceVulnerabilityIacRelPath, "google_gcr_registry_used_in_resource")
-			var tempFile *os.File
-			JustBeforeEach(func() {
-				data := os.Getenv(googleApplicationKeyTestEnvName)
-				if data != "" {
-					tempFile, err := ioutil.TempFile("", "app-key.json")
-					if err != nil {
-						Expect(err).NotTo(HaveOccurred())
-					}
-					tempFile.Write([]byte(data))
-					os.Setenv(googleApplicationKeyEnvName, tempFile.Name())
-				}
-			})
-			JustAfterEach(func() {
-				os.Remove(tempFile.Name())
-			})
-			It("should display vulnerabilities and exit with status code 0 since no violations found", func() {
-				scanArgs := []string{"-p", policyDir, "-i", "k8s", "-d", iacDir, "-o", "json", "--find-vuln"}
-				scanUtils.RunScanAndVerifyVulnerabilityOutputCount(terrascanBinaryPath, helper.ExitCodeZero, false, true, outWriter, errWriter, scanArgs...)
 			})
 		})
 	})

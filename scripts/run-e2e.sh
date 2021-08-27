@@ -6,4 +6,4 @@ set -o pipefail
 
 export TERRASCAN_BIN_PATH=${PWD}/bin/terrascan
 
-go test -p 1 -v ./test/...
+go test -p 1 -v $(go list ./test/e2e/... | grep -v /vulnerability) 

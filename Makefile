@@ -31,6 +31,7 @@ help:
 	@echo "unit-tests\n\texecute unit tests"
 	@echo "e2e-tests\n\texecute e2e tests"
 	@echo "e2e-admission-control-tests\n\texecute e2e admission control tests"
+	@echo "e2e-vulnerability-tests\n\texecute e2e vulnerability tests"
 	@echo "validate\n\trun all validations"
 
 # build terrascan binary
@@ -95,6 +96,10 @@ e2e-tests: build
 e2e-admission-control-tests: build
 	./scripts/e2e-admission-control.sh
 
+# run e2e vulnerability tests
+e2e-vulnerability-tests: build
+	./scripts/e2e-vulnerability.sh
+
 # install kind
 install-kind:
 	./scripts/install-kind.sh
@@ -132,6 +137,3 @@ atlantis-docker-push-latest:
 # push release tag terrascan_atlantis docker image
 atlantis-docker-push-latest-tag:
 	./scripts/atlantis/docker-push-latest-tag.sh
-
-e2e-vuln-tests: build
-	./scripts/run-e2e-vuln.sh

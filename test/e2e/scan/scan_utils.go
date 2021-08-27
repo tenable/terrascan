@@ -19,7 +19,6 @@ package scan
 import (
 	"io"
 	"path/filepath"
-	"time"
 
 	"github.com/accurics/terrascan/test/helper"
 	"github.com/onsi/gomega"
@@ -35,9 +34,6 @@ const (
 
 	// RemoteScanTimeout is default scan command remote execution timeout
 	RemoteScanTimeout int = 30
-
-	// VulnerabilityScanTimeout is default Vulnerability Scan timeout
-	VulnerabilityScanTimeout time.Duration = 2 * time.Minute
 )
 
 // RunScanAndAssertGoldenOutputRegex runs the scan command with supplied paramters and compares actual and golden output
@@ -103,19 +99,4 @@ func RunScanCommand(terrascanBinaryPath, relGoldenFilePath string, exitCode int,
 func RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, relGoldenFilePath string, exitCode int, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualSarifOutputWithGoldenSummaryRegex(session, goldenFileAbsPath)
-}
-
-// RunScanAndVerifyVulnerabilityOutputCount runs the scan command with supplied paramters and checks scan summary output
-func RunScanAndVerifyVulnerabilityOutputCount(terrascanBinaryPath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
-	session := RunScanCommandWithFindVulnerability(terrascanBinaryPath, exitCode, outWriter, errWriter, args...)
-	helper.CheckSummaryForVulnerabilities(session, isStdOut)
-}
-
-// RunScanCommandWithFindVulnerability with --find-vuln flag executes the scan command, validates exit code
-func RunScanCommandWithFindVulnerability(terrascanBinaryPath string, exitCode int, outWriter, errWriter io.Writer, args ...string) *gexec.Session {
-	argList := []string{ScanCommand}
-	argList = append(argList, args...)
-	session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, argList...)
-	gomega.Eventually(session, VulnerabilityScanTimeout).Should(gexec.Exit(exitCode))
-	return session
 }
