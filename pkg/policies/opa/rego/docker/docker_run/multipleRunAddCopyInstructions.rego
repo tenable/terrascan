@@ -20,4 +20,8 @@ package accurics
     
     some j, k
 	Counter := [x | check[j].line - check[k].line == -1; x := check[j]]
+    
+    upperName := upper(instructions[y])
+	countCmdInst := count(Counter)
+	countCmdInst > 0
 }
