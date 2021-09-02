@@ -1,4 +1,4 @@
 mkdocs==1.2.2
-mkdocs-material==7.2.4
+mkdocs-material==7.2.6
 mkdocs-diagrams==1.0.0
 mkdocs-redirects==1.0.3
