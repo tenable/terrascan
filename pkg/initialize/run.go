@@ -133,12 +133,12 @@ func connected(url string) bool {
 	return err == nil
 }
 
+//clone repo 
 func getClonedRepo(policyBasePath string, repoUrl string ) (*git.Repository, error) {
 		// clone the repo
 		 r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
 			URL: repoUrl,
 		})
-
 		return r, err 
 }
 

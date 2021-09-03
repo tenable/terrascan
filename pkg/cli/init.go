@@ -31,8 +31,7 @@ Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		err := initial(cmd, args, false)
-		return err
+		return initial(cmd, args, false)
 	},
 	SilenceUsage:  true,
 	SilenceErrors: true,
