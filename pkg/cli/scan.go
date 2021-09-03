@@ -27,10 +27,13 @@ import (
 	"github.com/accurics/terrascan/pkg/config"
 	//"github.com/accurics/terrascan/pkg/version"
 	//"github.com/accurics/terrascan/pkg/initialize"
-	"gopkg.in/src-d/go-git.v4"
+	//"gopkg.in/src-d/go-git.v4"
 
 	"io"
 	"os"
+	"net/http"
+	"io/ioutil"
+
 
 
 )
@@ -73,16 +76,25 @@ func scan(cmd *cobra.Command, args []string) error {
     }
     defer f.Close()
 
-    buf := make([]byte, 16)
+    buf := make([]byte, 12)
     if _, err := io.ReadFull(f, buf); err != nil {
         if err == io.EOF {
             err = io.ErrUnexpectedEOF
         }
 	}
-	fmt.Println(string(buf))
-	if isLatest(string(buf)) == false {
-		fmt.Println("Using an old release of your policy repo. Download the latest release of your policy repo with terrascan init and scan again")
-		return nil 
+	tagUsed := string(buf)
+
+	if isLatest(tagUsed) == false {
+		fmt.Printf("Using an old release of policy repo (%s). Enter 'C'  to proceed with outdated scan, or enter 'Q' to exit scan. To use the latest release of your policy repo, run terrascan init and scan again. \n", tagUsed)
+		var input string 
+		fmt.Scanln(&input)
+		if input == "Q" || input == "q" {
+			return nil
+		} else if input == "C" || input == "c" {
+			return scanOptions.Scan()
+		} else {
+			fmt.Println("Input not recognized, please enter Continue or press enter")
+		}
 	} else {
 		fmt.Println("You are using the latest policy release!")
 	}
@@ -113,21 +125,31 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.useTerraformCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)")
 	RegisterCommand(rootCmd, scanCmd)
 }
+
+type tag_name struct {
+    tagName string
+}
 func isLatest(initTag string) bool { 
-	tempPath := config.GetTempPath()
-	repoURL := config.GetPolicyRepoURL()
-	// clone the repo
-	r, err := git.PlainClone(tempPath, false, &git.CloneOptions{
-		URL: repoURL,
-	})
+	address := config.GetAPI()
+	resp, err := http.Get(address)
 	if err != nil {
-		fmt.Errorf("failed to clone policy repo. error: '%v'", err)
+		fmt.Errorf("Couldn't access latest tag '%v'", err)
+
 	}
-	latestRelease,tagerr := config.GetLatestTag(r)
-	if tagerr != nil {
-		fmt.Errorf("failed to retrieve latest tag. error: '%v'", tagerr)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Errorf("Couldn't read request response '%v'", err)
 	}
-	os.RemoveAll(string(tempPath))
+	tar := "tag_name"
+	sb := string(body)
+	si := strings.Index(sb, tar) 
+	starting := si + len(tar) + 3 
+	indent := 0 
+	for string(sb[starting + indent]) != "\"" {
+		indent = indent + 1 
+	}
+	latestRelease := sb[starting:starting+indent]
+	fmt.Printf(latestRelease)
 
 	if (initTag != latestRelease) { 
 		return false

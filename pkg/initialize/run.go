@@ -26,6 +26,7 @@ import (
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"os"
+	"strings"
 
 )
 var (
@@ -49,7 +50,9 @@ func Run(isNonInitCmd bool) error {
 
 	// download policies
 	release, err := DownloadPolicies()
-	//testing file write strat
+	//trim off beginning of path 
+	tag := strings.ReplaceAll(release,"refs/tags/", "")
+	//write tag to temporary file to be accessed in scan 
 	basePath := config.GetPolicyBasePath()
 	filename := basePath +"/TagVersion"
 	destination, err := os.Create(filename)
@@ -58,7 +61,8 @@ func Run(isNonInitCmd bool) error {
     }
     defer destination.Close()
 
-	fmt.Fprintf(destination, release)
+	fmt.Fprintf(destination, tag)
+	fmt.Println("taggo:" ,tag)
 	//end of testing - delete 
 
 
@@ -113,7 +117,6 @@ func DownloadPolicies() (string, error) {
 
 	// checkout policies branch
 	release,err := config.GetLatestTag(r)
-
 
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),
