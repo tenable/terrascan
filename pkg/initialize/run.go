@@ -62,8 +62,7 @@ func Run(isNonInitCmd bool) error {
     defer destination.Close()
 
 	fmt.Fprintf(destination, tag)
-	fmt.Println("taggo:" ,tag)
-	//end of testing - delete 
+
 
 
 	if err != nil {

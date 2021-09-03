@@ -35,7 +35,6 @@ import (
 	"io/ioutil"
 
 
-
 )
 
 var scanOptions = NewScanOptions()
@@ -67,7 +66,7 @@ func scan(cmd *cobra.Command, args []string) error {
 	scanOptions.outputType = OutputType
 	//fmt.Println("from scan" + config.Tag)
 
-	//test reading from tagversion file 
+	// reading from tagversion file 
 	basePath := config.GetPolicyBasePath()
 	filename := basePath + "/TagVersion"
 	f, err := os.Open(filename)
@@ -77,32 +76,38 @@ func scan(cmd *cobra.Command, args []string) error {
     defer f.Close()
 
     buf := make([]byte, 12)
-    if _, err := io.ReadFull(f, buf); err != nil {
+	n, err := io.ReadFull(f, buf); 
+	if err != nil {
         if err == io.EOF {
             err = io.ErrUnexpectedEOF
         }
-	}
+	} 
+	buf = buf[:n] //bytes.Trim(buf, "\x00")
 	tagUsed := string(buf)
 
+	//warn user if they are using outdated policy relwAW
 	if isLatest(tagUsed) == false {
 		fmt.Printf("Using an old release of policy repo (%s). Enter 'C'  to proceed with outdated scan, or enter 'Q' to exit scan. To use the latest release of your policy repo, run terrascan init and scan again. \n", tagUsed)
 		var input string 
-		fmt.Scanln(&input)
-		if input == "Q" || input == "q" {
-			return nil
-		} else if input == "C" || input == "c" {
-			return scanOptions.Scan()
-		} else {
-			fmt.Println("Input not recognized, please enter Continue or press enter")
-		}
+		return readInput(input)
 	} else {
 		fmt.Println("You are using the latest policy release!")
 	}
-	//end of reading from tag version file 
 
 	return scanOptions.Scan()
 }
-
+func readInput(input string) error { 
+	fmt.Scanln(&input)
+	if input == "Q" || input == "q" {
+		return nil
+	} else if input == "C" || input == "c" {
+		return scanOptions.Scan()
+	} else {
+		fmt.Println("Input not recognized, please enter 'C' or 'Q'")
+		readInput(input)
+	}
+	return nil
+}
 func init() {
 	scanCmd.Flags().StringSliceVarP(&scanOptions.policyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
 	scanCmd.Flags().StringVarP(&scanOptions.iacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
@@ -148,13 +153,8 @@ func isLatest(initTag string) bool {
 	for string(sb[starting + indent]) != "\"" {
 		indent = indent + 1 
 	}
-	latestRelease := sb[starting:starting+indent]
-	fmt.Printf(latestRelease)
+	latestRelease := string(sb[starting:starting+indent])
 
-	if (initTag != latestRelease) { 
-		return false
-	} else {
-		return true 
-	}
+	return initTag == latestRelease
 
 }
