@@ -63,8 +63,6 @@ func Run(isNonInitCmd bool) error {
 
 	fmt.Fprintf(destination, tag)
 
-
-
 	if err != nil {
 		return err
 	}
@@ -114,9 +112,10 @@ func DownloadPolicies() (string, error) {
 		return dummy,fmt.Errorf("failed to fetch references from git repo. error: '%v'", err)
 	}
 
-	// checkout policies branch
+	// retrieve latest policy release
 	release,err := config.GetLatestTag(r)
 
+	//checkout latest release (rather than master branch)
 	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(release),
 		//Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
@@ -126,11 +125,6 @@ func DownloadPolicies() (string, error) {
 		return dummy,fmt.Errorf("failed to checkout '%s'. error: '%v'", release, err)
 	}
 
-	//rev, err := r.Head()
-	//fmt.Println("here")
-	//revision := plumbing.Revision(rev.Name().String())
-	//commit,err := r.ResolveRevision(revision)
-	//fmt.Println(commit)
 	return release, nil
 }
 

@@ -40,7 +40,6 @@ var (
 	defaultPolicyRepoPath = filepath.Join("pkg", "policies", "opa", "rego")
 	defaultBasePolicyPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
 
-
 )
 
 
@@ -210,13 +209,20 @@ func GetK8sAdmissionControl() K8sAdmissionControl {
 	return global.K8sAdmissionControl
 }
 
-//returns git API for latest available version 
+//returns git API for latest available release 
 func GetAPI() string { 
+//	if global == nil || global.Policy.RepoURL == defaultPolicyRepoURL {
 	return defaultGitAPI
+//	}
+//	parsedRepo := strings.Replace(global.Policy.RepoURL, "https://github.com/", "", -1) 
+//	parsedRepo = strings.Replace(global.Policy.RepoURL, ".git", "", -1) 
+//	parsedAPI := strings.Replace(defaultGitAPI, "accurics/terrascan", parsedRepo, -1) 
+//	fmt.Println(parsedAPI)
+//	return parsedAPI 
 }
 
 
-
+//returns tag of latest release of passed in repository, used for downloading policies
 func GetLatestTag(repository *git.Repository) (string, error) {
 	tagRefs, err := repository.Tags()
 	if err != nil {

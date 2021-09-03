@@ -25,10 +25,6 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"github.com/accurics/terrascan/pkg/config"
-	//"github.com/accurics/terrascan/pkg/version"
-	//"github.com/accurics/terrascan/pkg/initialize"
-	//"gopkg.in/src-d/go-git.v4"
-
 	"io"
 	"os"
 	"net/http"
@@ -64,9 +60,8 @@ func scan(cmd *cobra.Command, args []string) error {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
 	scanOptions.outputType = OutputType
-	//fmt.Println("from scan" + config.Tag)
 
-	// reading from tagversion file 
+	// reading from tagversion file created from init
 	basePath := config.GetPolicyBasePath()
 	filename := basePath + "/TagVersion"
 	f, err := os.Open(filename)
@@ -85,29 +80,13 @@ func scan(cmd *cobra.Command, args []string) error {
 	buf = buf[:n] //bytes.Trim(buf, "\x00")
 	tagUsed := string(buf)
 
-	//warn user if they are using outdated policy relwAW
+	//warn user if they are using outdated policy release
 	if isLatest(tagUsed) == false {
-		fmt.Printf("Using an old release of policy repo (%s). Enter 'C'  to proceed with outdated scan, or enter 'Q' to exit scan. To use the latest release of your policy repo, run terrascan init and scan again. \n", tagUsed)
-		var input string 
-		return readInput(input)
-	} else {
-		fmt.Println("You are using the latest policy release!")
-	}
-
+		zap.S().Warnf("Using an old release of policy repo (%s). To use the latest policy release, run terrascan init and scan again.", tagUsed)
+	} 
 	return scanOptions.Scan()
 }
-func readInput(input string) error { 
-	fmt.Scanln(&input)
-	if input == "Q" || input == "q" {
-		return nil
-	} else if input == "C" || input == "c" {
-		return scanOptions.Scan()
-	} else {
-		fmt.Println("Input not recognized, please enter 'C' or 'Q'")
-		readInput(input)
-	}
-	return nil
-}
+
 func init() {
 	scanCmd.Flags().StringSliceVarP(&scanOptions.policyType, "policy-type", "t", []string{"all"}, fmt.Sprintf("policy type (%s)", strings.Join(policy.SupportedPolicyTypes(true), ", ")))
 	scanCmd.Flags().StringVarP(&scanOptions.iacType, "iac-type", "i", "", fmt.Sprintf("iac type (%v)", strings.Join(iacProvider.SupportedIacProviders(), ", ")))
@@ -131,9 +110,8 @@ func init() {
 	RegisterCommand(rootCmd, scanCmd)
 }
 
-type tag_name struct {
-    tagName string
-}
+
+//returns whether initTag corresponds to latest release 
 func isLatest(initTag string) bool { 
 	address := config.GetAPI()
 	resp, err := http.Get(address)
@@ -147,6 +125,7 @@ func isLatest(initTag string) bool {
 	}
 	tar := "tag_name"
 	sb := string(body)
+	//parse out tag from git api 
 	si := strings.Index(sb, tar) 
 	starting := si + len(tar) + 3 
 	indent := 0 

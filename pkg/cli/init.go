@@ -20,7 +20,6 @@ import (
 	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	//"fmt"
 )
 
 var initCmd = &cobra.Command{
@@ -31,7 +30,6 @@ var initCmd = &cobra.Command{
 Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		//fmt.Println("test elsewhere" + initialize.InitializeTag)
 
 		err := initial(cmd, args, false)
 		return err
@@ -42,11 +40,7 @@ Initializes Terrascan and clones policies from the Terrascan GitHub repository.
 
 func initial(cmd *cobra.Command, args []string, nonInitCmd bool)  error {
 	// initialize terrascan
-	//fmt.Println("test initial" + initialize.InitializeTag)
-
 	err := initialize.Run(nonInitCmd);
-	//fmt.Println("dummy" + release)
-	//fmt.Println("Release from initial " + Release )
 	if err != nil {
 		zap.S().Errorf("failed to initialize terrascan. error : %v", err)
 		return err

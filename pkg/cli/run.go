@@ -190,9 +190,6 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-
-	//if s.policyPath != config.GetLatestTag(r) where r is terrascan repository, throw optional error
-	//fmt.Println("from run" + config.Tag)
 	// executor output
 	results, err := executor.Execute(s.configOnly)
 	if err != nil {
