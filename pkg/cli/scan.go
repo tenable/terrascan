@@ -47,8 +47,8 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 			return nil
 		}
 
-		 err :=  initial(cmd, args, true)
-		return err
+		return initial(cmd, args, true)
+	
 	},
 	RunE:          scan,
 	SilenceUsage:  true,
