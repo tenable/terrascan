@@ -428,13 +428,10 @@ func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, gold
 }
 
 // CheckSummaryForVulnerabilities is a helper function to check vulnerabilies exists
-func CheckSummaryForVulnerabilities(session *gexec.Session, isStdOut bool) {
+func CheckSummaryForVulnerabilities(session *gexec.Session, expectedCount int) {
 	var sessionBytes []byte
-	if isStdOut {
-		sessionBytes = session.Wait().Out.Contents()
-	} else {
-		sessionBytes = session.Wait().Err.Contents()
-	}
+
+	sessionBytes = session.Wait().Out.Contents()
 
 	sessionBytes = bytes.TrimSpace(sessionBytes)
 
@@ -448,5 +445,5 @@ func CheckSummaryForVulnerabilities(session *gexec.Session, isStdOut bool) {
 	gomega.Expect(sessionOutputSummary.Vulnerabilities).NotTo(gomega.BeNil())
 	gomega.Eventually(func() int {
 		return *sessionOutputSummary.Vulnerabilities
-	}).Should(gomega.BeNumerically(">", 0))
+	}).Should(gomega.BeNumerically(">=", expectedCount))
 }
