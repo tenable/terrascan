@@ -225,11 +225,11 @@ az acr credential show --name RegistryName
 ```
 #### Harbor Container Registry
 
-When integrating vulnerability results from Harbor, Terrascan requires the `DOCKER_USERNAME`, `DOCKER_PASSWORD`,`CERTIFICATE_PATH`, `SKIP_TLS`, and `HARBOR_REGISTRY` environment variables.
+When integrating vulnerability results from Harbor, Terrascan requires the `HARBOR_REGISTRY_USERNAME`, `HARBOR_REGISTRY_PASSWORD`,`HARBOR_REGISTRY_CACERT`, `HARBOR_SKIP_TLS`, and `HARBOR_REGISTRY_DOMAIN` environment variables.
 
-Terrascan requires `HARBOR_REGISTRY` environment variable to identify domain of harobor registry.
+Terrascan requires `HARBOR_REGISTRY_DOMAIN` environment variable to identify domain of harobor registry.
 
-In case using terrascan for development or testing purpose then to skip tls verification set `SKIP_TLS` environment variable to `true`.
+In case using terrascan for development or testing purpose then to skip tls verification set `HARBOR_SKIP_TLS` environment variable to `true`.
 
 
 ### Resource Config
