@@ -121,6 +121,11 @@ func ctyToMap(ctyVal cty.Value) (interface{}, error) {
 
 // convertCtyToGoNative converts a cty.Value to its go native type
 func convertCtyToGoNative(ctyVal cty.Value) (interface{}, error) {
+	// no need to convert variable to any type in case value is null
+	// added check here since this function is been called in recursive manner
+	if ctyVal.IsNull() {
+		return nil, nil
+	}
 	if ctyVal.Type().IsPrimitiveType() {
 		return convertPrimitiveType(ctyVal)
 	}

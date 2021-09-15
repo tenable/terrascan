@@ -135,12 +135,19 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 					it := re.ElementIterator()
 					for it.Next() {
 						_, val := it.Element()
-						containerTemp, err := ctyToMap(val)
+						containerTemp, err := convertCtyToGoNative(val)
 						if err != nil {
 							zap.S().Errorf("error fetching containers from aws resource: %v", err)
 							return
 						}
-						containerMap := containerTemp.(map[string]interface{})
+						var (
+							containerMap map[string]interface{}
+							isMap        bool
+						)
+
+						if containerMap, isMap = containerTemp.(map[string]interface{}); !isMap {
+							break
+						}
 						tempContainer := output.ContainerDetails{}
 						if image, iok := containerMap[image]; iok {
 							if imageName, ok := image.(string); ok {
@@ -261,7 +268,7 @@ func getValueFromCtyExpr(expr hclsyntax.Expression) (value string) {
 		zap.S().Errorf("error fetching containers from k8s resource: %v", getErrorMessagesFromDiagnostics(diags))
 		return
 	}
-	valInterface, err := ctyToStr(val)
+	valInterface, err := convertCtyToGoNative(val)
 	if err != nil {
 		zap.S().Errorf("error fetching containers from k8s resource: %v", err)
 		return
