@@ -2,6 +2,8 @@ name: build
 on:
   push:
   pull_request:
+  schedule:
+    - cron: 0 23 * * *
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -10,10 +12,15 @@ jobs:
       GOPATH: /home/runner/work/terrascan
       GOBIN: /home/runner/work/terrascan/bin
       GO_VERSION: 1.16
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_TEST }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_TEST }}
+      AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
+      AZURE_AUTH_TEST_SECRET:  ${{ secrets.AZURE_AUTH_TEST_KEY }}
+      GOOGLE_APPLICATION_CREDENTIALS_TEST_SECRET:  ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_TEST_KEY }}
     steps:
     - name: Checkout Terrascan
       uses: actions/checkout@v2
-
+      
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -36,6 +43,10 @@ jobs:
 
     - name: Run e2e tests
       run: make e2e-tests
+
+    - name: Run e2e vulnerability tests
+      if: ${{ github.event_name == 'push'|| github.event_name == 'schedule' }}
+      run: make e2e-vulnerability-tests
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
