@@ -9,9 +9,7 @@ The first time using Terrascan, if the `-p` flag is not specified, Terrascan wil
 
 ## Ignoring Policies on a scan
 
-Terrascan keeps a copy of policies on your local filesystem on the `~/.terrascan/pkg/policies/opa/rego` directory. You can also specify a particular directory with rego policies to scan by using the `-p` flag. To ignore a particular policy from a scan, you can remove the rule `.json` file for the policy you would like to ignore from the scan. Note that this policy would be ignored until the `.json` file is added again to the directory.
-
-In a future enhancement, Terrascan will have a better way to ignore individual policies from scans without having to modify the policies stored in the file system [#367](https://github.com/accurics/terrascan/issues/367).
+Terrascan keeps a copy of policies on your local filesystem on the `~/.terrascan/pkg/policies/opa/rego` directory. You can also specify a particular directory with rego policies to scan by using the `-p` flag. Terrascan allows you to ignore policies from scans by using the [--skip-rules](usage/command_line_mode.md#list-of-options-for-scan-command) flag or using [in-file instrumentation](usage/in-file_instrumentation.md) to skip policies on a particular resource.
 
 ## Adding policies
 
@@ -128,3 +126,5 @@ Here's an example of the contents of a rule file:
 --8<-- "docs/policies/k8s.md"
 
 --8<-- "docs/policies/github.md"
+
+--8<-- "docs/policies/docker.md"

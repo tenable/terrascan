@@ -1,10 +1,4 @@
 
-### azurerm_virtual_machine
-| Category | Resource | Severity | Description | Reference ID |
-| -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure that at least one Network Security Group is attached to all VMs and subnets that are public | accurics.azure.NS.18 |
-
-
 ### azurerm_storage_container
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
@@ -14,371 +8,289 @@
 ### azurerm_mysql_server
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server. | accurics.azure.NS.361 |
+| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server. | accurics.azure.NS.361 |
 
 
 ### azurerm_sql_firewall_rule
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Restrict Azure SQL Server accessibility to a minimal address range | accurics.azure.NS.169 |
-| Network Security | azure | HIGH | Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server | accurics.azure.NS.5 |
-| Network Security | azure | HIGH | Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP) | accurics.azure.NS.21 |
+| Infrastructure Security | azure | MEDIUM | Restrict Azure SQL Server accessibility to a minimal address range | accurics.azure.NS.169 |
+| Infrastructure Security | azure | HIGH | Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server | accurics.azure.NS.5 |
+| Infrastructure Security | azure | MEDIUM | Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP) | accurics.azure.NS.21 |
 
 
 ### azurerm_key_vault
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | azure | MEDIUM | Ensure the key vault is recoverable - enable "Soft Delete" setting for a Key Vault | accurics.azure.EKM.164 |
-| Encryption and Key Management | azure | HIGH | Ensure that logging for Azure KeyVault is 'Enabled' | accurics.azure.EKM.20 |
+| Data Protection | azure | MEDIUM | Ensure the key vault is recoverable - enable "Soft Delete" setting for a Key Vault | accurics.azure.EKM.164 |
+| Logging and Monitoring | azure | HIGH | Ensure that logging for Azure KeyVault is 'Enabled' | accurics.azure.EKM.20 |
 
 
 ### azurerm_resource_group
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | LOW | Ensure that Azure Resource Group has resource lock enabled | accurics.azure.NS.272 |
+| Identity and Access Management | azure | LOW | Ensure that Azure Resource Group has resource lock enabled | accurics.azure.NS.272 |
 
 
 ### azurerm_storage_account_network_rules
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Ensure default network access rule for Storage Accounts is set to deny. | accurics.azure.NS.370 |
+| Infrastructure Security | azure | MEDIUM | Ensure default network access rule for Storage Accounts is set to deny. | accurics.azure.NS.370 |
 
 
 ### azurerm_storage_account
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure 'Trusted Microsoft Services' is enabled for Storage Account access | accurics.azure.NS.2 |
-| Network Security | azure | HIGH | Ensure default network access rule for Storage Accounts is not open to public | accurics.azure.NS.4 |
-| Encryption and Key Management | azure | HIGH | Ensure that 'Secure transfer required' is enabled for Storage Accounts | accurics.azure.EKM.7 |
+| Infrastructure Security | azure | HIGH | Ensure 'Trusted Microsoft Services' is enabled for Storage Account access | accurics.azure.NS.2 |
+| Infrastructure Security | azure | HIGH | Ensure default network access rule for Storage Accounts is not open to public | accurics.azure.NS.4 |
+| Data Protection | azure | HIGH | Ensure that 'Secure transfer required' is enabled for Storage Accounts | accurics.azure.EKM.7 |
 
 
 ### azurerm_sql_server
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for SQL servers | accurics.azure.MON.354 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for SQL servers | accurics.azure.MON.354 |
 | Identity and Access Management | azure | HIGH | Ensure that Azure Active Directory Admin is configured for SQL Server | accurics.azure.IAM.10 |
-| Identity and Access Management | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server admin account login | accurics.azure.IAM.138 |
-| Logging | azure | MEDIUM | Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers. | accurics.azure.LOG.356 |
+| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server admin account login | accurics.azure.IAM.138 |
+| Compliance Validation | azure | LOW | Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers. | accurics.azure.LOG.356 |
 
 
 ### azurerm_postgresql_configuration
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | azure | MEDIUM | Ensure server parameter 'log_duration' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.154 |
-| Logging | azure | MEDIUM | Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server | accurics.azure.LOG.155 |
-| Logging | azure | MEDIUM | Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.152 |
-| Logging | azure | MEDIUM | Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.364 |
-| Logging | azure | MEDIUM | Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.153 |
-| Logging | azure | MEDIUM | Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.151 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_duration' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.154 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server | accurics.azure.LOG.155 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.152 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.364 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.153 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.151 |
 
 
 ### azurerm_sql_database
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Monitoring | azure | MEDIUM | Ensure that 'Threat Detection' is enabled for Azure SQL Database | accurics.azure.MON.157 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Threat Detection' is enabled for Azure SQL Database | accurics.azure.MON.157 |
 
 
 ### azurerm_redis_cache
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates.Note this feature is only available to Premium tier Redis Caches. | accurics.azure.NS.13 |
-| Encryption and Key Management | azure | MEDIUM | Ensure that the Redis Cache accepts only SSL connections | accurics.azure.EKM.23 |
-| Network Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources | accurics.azure.NS.31 |
-| Network Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet | accurics.azure.NS.30 |
-| Network Security | azure | MEDIUM | Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs | accurics.azure.NS.166 |
+| Security Best Practices | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates.Note this feature is only available to Premium tier Redis Caches. | accurics.azure.NS.13 |
+| Infrastructure Security | azure | MEDIUM | Ensure that the Redis Cache accepts only SSL connections | accurics.azure.EKM.23 |
+| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources | accurics.azure.NS.31 |
+| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet | accurics.azure.NS.30 |
+| Infrastructure Security | azure | MEDIUM | Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs | accurics.azure.NS.166 |
 
 
 ### azurerm_mssql_server
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for MSSQL servers | accurics.azure.MON.355 |
-| Monitoring | azure | MEDIUM | Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers. | accurics.azure.LOG.357 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for MSSQL servers | accurics.azure.MON.355 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers. | accurics.azure.LOG.357 |
 
 
 ### azurerm_kubernetes_cluster
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Ensure Kube Dashboard is disabled | accurics.azure.NS.383 |
-| Network Security | azure | MEDIUM | Ensure AKS cluster has Network Policy configured. | accurics.azure.NS.382 |
+| Infrastructure Security | azure | MEDIUM | Ensure Kube Dashboard is disabled | accurics.azure.NS.383 |
+| Infrastructure Security | azure | MEDIUM | Ensure AKS cluster has Network Policy configured. | accurics.azure.NS.382 |
 
 
 ### azurerm_managed_disk
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | azure | MEDIUM | Ensure that 'OS disk' are encrypted | accurics.azure.EKM.156 |
+| Data Protection | azure | MEDIUM | Ensure that 'Unattached disks' are encrypted in Azure Managed Disk | accurics.azure.EKM.156 |
 
 
 ### azurerm_network_watcher_flow_log
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Network Security Group Flow Logs should be enabled and the retention period is set to greater than or equal to 90 days. Flow logs enable capturing information about IP traffic flowing in and out of network security groups. Logs can be used to check for anomalies and give insight into suspected breaches. | accurics.azure.NS.342 |
-| Network Security | azure | HIGH | Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure. | accurics.azure.NS.11 |
+| Resilience | azure | MEDIUM | Ensure that Network Security Group Flow Log retention period is 'greater than 90 days' for Azure Network Watcher Flow Log | accurics.azure.NS.342 |
+| Logging and Monitoring | azure | HIGH | Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure. | accurics.azure.NS.11 |
 
 
 ### azurerm_key_vault_secret
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Key Management | azure | HIGH | Ensure that the expiration date is set on all secrets | accurics.azure.EKM.26 |
+| Data Protection | azure | HIGH | Ensure that the expiration date is set on all secrets | accurics.azure.EKM.26 |
 
 
 ### azurerm_key_vault_key
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Key Management | azure | HIGH | Ensure that the expiration date is set on all keys | accurics.azure.EKM.25 |
+| Data Protection | azure | HIGH | Ensure that the expiration date is set on all keys | accurics.azure.EKM.25 |
 
 
 ### azurerm_security_center_contact
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Monitoring | azure | MEDIUM | Ensure that 'Send email notification for high severity alerts' is set to 'On' | accurics.azure.MON.353 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Send email notification for high severity alerts' is set to 'On' | accurics.azure.MON.353 |
 
 
 ### azurerm_network_security_rule
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Ports Security | azure | LOW | VNC Listener (TCP:5500) is exposed to small Private network | accurics.azure.NPS.314 |
-| Network Ports Security | azure | MEDIUM | VNC Listener (TCP:5500) is exposed to small Public network | accurics.azure.NPS.251 |
-| Network Ports Security | azure | MEDIUM | Cassandra OpsCenter (TCP:61621) is exposed to wide Private network | accurics.azure.NPS.178 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (TCP:11214) is exposed to small Public network | accurics.azure.NPS.197 |
-| Network Ports Security | azure | MEDIUM | Microsoft-DS (TCP:445) is exposed to wide Private network | accurics.azure.NPS.206 |
-| Network Ports Security | azure | HIGH | NetBIOS Name Service (TCP:137) is exposed to wide Public network | accurics.azure.NPS.76 |
-| Network Ports Security | azure | HIGH | Prevalent known internal port (TCP:3000) is exposed to entire Public network | accurics.azure.NPS.99 |
-| Network Ports Security | azure | MEDIUM | MySQL (TCP:3306) is exposed to wide Private network | accurics.azure.NPS.210 |
-| Network Ports Security | azure | HIGH | MSSQL Server (TCP:1433) is exposed to wide Public network | accurics.azure.NPS.60 |
-| Network Ports Security | azure | LOW | POP3 (TCP:110) is exposed to small Private network | accurics.azure.NPS.302 |
-| Network Ports Security | azure | MEDIUM | SaltStack Master (TCP:4506) is exposed to small Public network | accurics.azure.NPS.247 |
-| Network Ports Security | azure | HIGH | SSH (TCP:22) is exposed to the wide public internet | accurics.azure.NPS.37 |
-| Network Ports Security | azure | MEDIUM | Hadoop Name Node (TCP:9000) is exposed to small Public network | accurics.azure.NPS.181 |
-| Network Ports Security | azure | HIGH | Telnet (TCP:23) is exposed to entire Public network | accurics.azure.NPS.115 |
-| Network Ports Security | azure | LOW | MSSQL Browser (UDP:1434) is exposed to small Private network | accurics.azure.NPS.284 |
-| Network Ports Security | azure | LOW | Mongo Web Portal (TCP:27018) is exposed to small Private network | accurics.azure.NPS.292 |
-| Network Ports Security | azure | HIGH | SMTP (TCP:25) is exposed to entire Public network | accurics.azure.NPS.103 |
-| Network Ports Security | azure | MEDIUM | CIFS / SMB (TCP:3020) is exposed to wide Private network | accurics.azure.NPS.174 |
-| Network Ports Security | azure | HIGH | PostgreSQL (TCP:5432) is exposed to entire Public network | accurics.azure.NPS.95 |
-| Network Ports Security | azure | HIGH | NetBIOS Datagram Service (UDP:138) is exposed to entire Public network | accurics.azure.NPS.83 |
-| Network Ports Security | azure | HIGH | VNC Server (TCP:5900) is exposed to entire Public network | accurics.azure.NPS.119 |
-| Network Ports Security | azure | HIGH | Cassandra (TCP:7001) is exposed to wide Public network | accurics.azure.NPS.40 |
-| Network Ports Security | azure | MEDIUM | PostgreSQL (TCP:5432) is exposed to wide Private network | accurics.azure.NPS.230 |
-| Network Ports Security | azure | LOW | Memcached SSL (TCP:11215) is exposed to small Private network | accurics.azure.NPS.288 |
-| Network Ports Security | azure | HIGH | MSSQL Browser (UDP:1434) is exposed to wide Public network | accurics.azure.NPS.56 |
-| Network Ports Security | azure | MEDIUM | Oracle DB SSL (UDP:2484) is exposed to wide Private network | accurics.azure.NPS.226 |
-| Network Ports Security | azure | MEDIUM | POP3 (TCP:110) is exposed to small Public network | accurics.azure.NPS.227 |
-| Network Ports Security | azure | HIGH | MSSQL Browser (UDP:1434) is exposed to entire Public network | accurics.azure.NPS.57 |
-| Network Ports Security | azure | LOW | Memcached SSL (UDP:11214) is exposed to small Private network | accurics.azure.NPS.289 |
-| Network Ports Security | azure | MEDIUM | PostgreSQL (UDP:5432) is exposed to small Public network | accurics.azure.NPS.231 |
-| Network Ports Security | azure | HIGH | VNC Server (TCP:5900) is exposed to wide Public network | accurics.azure.NPS.118 |
-| Network Ports Security | azure | HIGH | Cassandra (TCP:7001) is exposed to entire Public network | accurics.azure.NPS.41 |
-| Network Ports Security | azure | HIGH | NetBIOS Datagram Service (UDP:138) is exposed to wide Public network | accurics.azure.NPS.82 |
-| Network Ports Security | azure | HIGH | PostgreSQL (TCP:5432) is exposed to wide Public network | accurics.azure.NPS.94 |
-| Network Ports Security | azure | MEDIUM | Cassandra (TCP:7001) is exposed to small Public network | accurics.azure.NPS.175 |
-| Network Ports Security | azure | HIGH | SMTP (TCP:25) is exposed to wide Public network | accurics.azure.NPS.102 |
-| Network Ports Security | azure | LOW | MySQL (TCP:3306) is exposed to small Private network | accurics.azure.NPS.293 |
-| Network Ports Security | azure | LOW | MSSQL Debugger (TCP:135) is exposed to small Private network | accurics.azure.NPS.285 |
-| Network Ports Security | azure | HIGH | Telnet (TCP:23) is exposed to wide Public network | accurics.azure.NPS.114 |
-| Network Ports Security | azure | HIGH | Remote Desktop (TCP:3389) is exposed to the wide public internet | accurics.azure.NPS.36 |
-| Network Ports Security | azure | MEDIUM | DNS (UDP:53) is exposed to wide Private network | accurics.azure.NPS.180 |
-| Network Ports Security | azure | LOW | PostgreSQL (TCP:5432) is exposed to small Private network | accurics.azure.NPS.303 |
-| Network Ports Security | azure | MEDIUM | SaltStack Master (TCP:4505) is exposed to wide Private network | accurics.azure.NPS.246 |
-| Network Ports Security | azure | HIGH | MSSQL Server (TCP:1433) is exposed to entire Public network | accurics.azure.NPS.61 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Name Service (TCP:137) is exposed to small Public network | accurics.azure.NPS.211 |
-| Network Ports Security | azure | HIGH | NetBIOS Name Service (TCP:137) is exposed to entire Public network | accurics.azure.NPS.77 |
-| Network Ports Security | azure | HIGH | Prevalent known internal port (TCP:3000) is exposed to wide Public network | accurics.azure.NPS.98 |
-| Network Ports Security | azure | MEDIUM | Mongo Web Portal (TCP:27018) is exposed to small Public network | accurics.azure.NPS.207 |
-| Network Ports Security | azure | MEDIUM | DNS (UDP:53) is exposed to small Public network | accurics.azure.NPS.179 |
-| Network Ports Security | azure | MEDIUM | MSSQL Server (TCP:1433) is exposed to wide Private network | accurics.azure.NPS.196 |
-| Network Ports Security | azure | LOW | VNC Server (TCP:5900) is exposed to small Private network | accurics.azure.NPS.315 |
-| Network Ports Security | azure | MEDIUM | Telnet (TCP:23) is exposed to wide Private network | accurics.azure.NPS.250 |
-| Network Ports Security | azure | HIGH | SSH (TCP:22) is exposed to the entire public internet | accurics.azure.NPS.172 |
-| Network Ports Security | azure | HIGH | POP3 (TCP:110) is exposed to entire Public network | accurics.azure.NPS.93 |
-| Network Ports Security | azure | HIGH | NetBIOS Session Service (TCP:139) is exposed to entire Public network | accurics.azure.NPS.85 |
-| Network Ports Security | azure | LOW | SNMP (UDP:161) is exposed to small Private network | accurics.azure.NPS.308 |
-| Network Ports Security | azure | HIGH | Hadoop Name Node (TCP:9000) is exposed to wide Public network | accurics.azure.NPS.46 |
-| Network Ports Security | azure | MEDIUM | Puppet Master (TCP:8140) is exposed to wide Private network | accurics.azure.NPS.236 |
-| Network Ports Security | azure | LOW | Cassandra OpsCenter (TCP:61621) is exposed to small Private network | accurics.azure.NPS.277 |
-| Network Ports Security | azure | LOW | NetBIOS Session Service (TCP:139) is exposed to small Private network | accurics.azure.NPS.298 |
-| Network Ports Security | azure | HIGH | SQL Server Analysis (TCP:2383) is exposed to entire Public network | accurics.azure.NPS.109 |
-| Network Ports Security | azure | HIGH |  Known internal web port (TCP:8080) is exposed to wide Public network | accurics.azure.NPS.50 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Session Service (TCP:139) is exposed to wide Private network | accurics.azure.NPS.220 |
-| Network Ports Security | azure | LOW | SaltStack Master (TCP:4506) is exposed to small Private network | accurics.azure.NPS.312 |
-| Network Ports Security | azure | MEDIUM | MSSQL Browser (UDP:1434) is exposed to small Public network | accurics.azure.NPS.191 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (TCP:11215) is exposed to wide Private network | accurics.azure.NPS.200 |
-| Network Ports Security | azure | HIGH | Microsoft-DS (TCP:445) is exposed to wide Public network | accurics.azure.NPS.70 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Datagram Service (TCP:138) is exposed to wide Private network | accurics.azure.NPS.216 |
-| Network Ports Security | azure | HIGH | Memcached SSL (UDP:11214) is exposed to wide Public network | accurics.azure.NPS.66 |
-| Network Ports Security | azure | HIGH | Oracle DB SSL (TCP:2484) is exposed to entire Public network | accurics.azure.NPS.89 |
-| Network Ports Security | azure | LOW | PostgreSQL (UDP:5432) is exposed to small Private network | accurics.azure.NPS.304 |
-| Network Ports Security | azure | MEDIUM | SQL Server Analysis (TCP:2382) is exposed to small Public network | accurics.azure.NPS.241 |
-| Network Ports Security | azure | MEDIUM | LDAP SSL (TCP:636) is exposed to small Public network | accurics.azure.NPS.187 |
-| Network Ports Security | azure | HIGH | SaltStack Master (TCP:4506) is exposed to entire Public network | accurics.azure.NPS.113 |
-| Network Ports Security | azure | LOW | LDAP SSL (TCP:636) is exposed to small Private network | accurics.azure.NPS.282 |
-| Network Ports Security | azure | LOW | NetBIOS Name Service (TCP:137) is exposed to small Private network | accurics.azure.NPS.294 |
-| Network Ports Security | azure | HIGH | SNMP (UDP:161) is exposed to entire Public network | accurics.azure.NPS.105 |
-| Network Ports Security | azure | HIGH | SNMP (UDP:161) is exposed to wide Public network | accurics.azure.NPS.104 |
-| Network Ports Security | azure | LOW | NetBIOS Name Service (UDP:137) is exposed to small Private network | accurics.azure.NPS.295 |
-| Network Ports Security | azure | LOW | MSSQL Admin (TCP:1434) is exposed to small Private network | accurics.azure.NPS.283 |
-| Network Ports Security | azure | HIGH | SaltStack Master (TCP:4506) is exposed to wide Public network | accurics.azure.NPS.112 |
-| Network Ports Security | azure | MEDIUM |  Known internal web port (TCP:8080) is exposed to wide Private network | accurics.azure.NPS.186 |
-| Network Ports Security | azure | LOW | Prevalent known internal port (TCP:3000) is exposed to small Private network | accurics.azure.NPS.305 |
-| Network Ports Security | azure | MEDIUM | SNMP (UDP:161) is exposed to wide Private network | accurics.azure.NPS.240 |
-| Network Ports Security | azure | HIGH | Memcached SSL (UDP:11214) is exposed to entire Public network | accurics.azure.NPS.67 |
-| Network Ports Security | azure | HIGH | Oracle DB SSL (TCP:2484) is exposed to wide Public network | accurics.azure.NPS.88 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Datagram Service (UDP:138) is exposed to small Public network | accurics.azure.NPS.217 |
-| Network Ports Security | azure | HIGH | Microsoft-DS (TCP:445) is exposed to entire Public network | accurics.azure.NPS.71 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (UDP:11214) is exposed to small Public network | accurics.azure.NPS.201 |
-| Network Ports Security | azure | MEDIUM | MSSQL Admin (TCP:1434) is exposed to wide Private network | accurics.azure.NPS.190 |
-| Network Ports Security | azure | LOW | Telnet (TCP:23) is exposed to small Private network | accurics.azure.NPS.313 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Session Service (UDP:139) is exposed to small Public network | accurics.azure.NPS.221 |
-| Network Ports Security | azure | HIGH | SQL Server Analysis (TCP:2383) is exposed to wide Public network | accurics.azure.NPS.108 |
-| Network Ports Security | azure | HIGH |  Known internal web port (TCP:8080) is exposed to entire Public network | accurics.azure.NPS.51 |
-| Network Ports Security | azure | LOW | Cassandra (TCP:7001) is exposed to small Private network | accurics.azure.NPS.276 |
-| Network Ports Security | azure | LOW | NetBIOS Session Service (UDP:139) is exposed to small Private network | accurics.azure.NPS.299 |
-| Network Ports Security | azure | MEDIUM | SMTP (TCP:25) is exposed to small Public network | accurics.azure.NPS.237 |
-| Network Ports Security | azure | HIGH | Hadoop Name Node (TCP:9000) is exposed to entire Public network | accurics.azure.NPS.47 |
-| Network Ports Security | azure | LOW | SQL Server Analysis (TCP:2382) is exposed to small Private network | accurics.azure.NPS.309 |
-| Network Ports Security | azure | HIGH | NetBIOS Session Service (TCP:139) is exposed to wide Public network | accurics.azure.NPS.84 |
-| Network Ports Security | azure | HIGH | POP3 (TCP:110) is exposed to wide Public network | accurics.azure.NPS.92 |
-| Network Ports Security | azure | MEDIUM | CIFS / SMB (TCP:3020) is exposed to small Public network | accurics.azure.NPS.173 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Session Service (UDP:139) is exposed to wide Private network | accurics.azure.NPS.222 |
-| Network Ports Security | azure | HIGH | LDAP SSL (TCP:636) is exposed to wide Public network | accurics.azure.NPS.52 |
-| Network Ports Security | azure | LOW | CIFS / SMB (TCP:3020) is exposed to small Private network | accurics.azure.NPS.275 |
-| Network Ports Security | azure | MEDIUM | Prevalent known internal port (TCP:3000) is exposed to wide Private network | accurics.azure.NPS.234 |
-| Network Ports Security | azure | HIGH | DNS (UDP:53) is exposed to wide Public network | accurics.azure.NPS.44 |
-| Network Ports Security | azure | MEDIUM | MSSQL Admin (TCP:1434) is exposed to small Public network | accurics.azure.NPS.189 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Datagram Service (UDP:138) is exposed to wide Private network | accurics.azure.NPS.218 |
-| Network Ports Security | azure | HIGH | NetBIOS Session Service (UDP:139) is exposed to entire Public network | accurics.azure.NPS.87 |
-| Network Ports Security | azure | HIGH | Memcached SSL (UDP:11215) is exposed to wide Public network | accurics.azure.NPS.68 |
-| Network Ports Security | azure | HIGH | Oracle DB SSL (UDP:2484) is exposed to entire Public network | accurics.azure.NPS.91 |
-| Network Ports Security | azure | HIGH | CiscoSecure, WebSM (TCP:9090) is exposed to the entire public internet | accurics.azure.NPS.170 |
-| Network Ports Security | azure | HIGH | SQL Server Analysis (TCP:2382) is exposed to entire Public network | accurics.azure.NPS.107 |
-| Network Ports Security | azure | LOW | NetBIOS Datagram Service (TCP:138) is exposed to small Private network | accurics.azure.NPS.296 |
-| Network Ports Security | azure | LOW | Hadoop Name Node (TCP:9000) is exposed to small Private network | accurics.azure.NPS.279 |
-| Network Ports Security | azure | LOW |  Known internal web port (TCP:8000) is exposed to small Private network | accurics.azure.NPS.280 |
-| Network Ports Security | azure | HIGH |  Known internal web port (TCP:8000) is exposed to wide Public network | accurics.azure.NPS.48 |
-| Network Ports Security | azure | HIGH | SaltStack Master (TCP:4505) is exposed to entire Public network | accurics.azure.NPS.111 |
-| Network Ports Security | azure | MEDIUM | SMTP (TCP:25) is exposed to wide Private network | accurics.azure.NPS.238 |
-| Network Ports Security | azure | MEDIUM |  Known internal web port (TCP:8080) is exposed to small Public network | accurics.azure.NPS.185 |
-| Network Ports Security | azure | MEDIUM | SQL Server Analysis (TCP:2383) is exposed to small Public network | accurics.azure.NPS.243 |
-| Network Ports Security | azure | LOW | Puppet Master (TCP:8140) is exposed to small Private network | accurics.azure.NPS.306 |
-| Network Ports Security | azure | HIGH | Memcached SSL (TCP:11215) is exposed to wide Public network | accurics.azure.NPS.64 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Name Service (UDP:137) is exposed to wide Private network | accurics.azure.NPS.214 |
-| Network Ports Security | azure | HIGH | Mongo Web Portal (TCP:27018) is exposed to wide Public network | accurics.azure.NPS.72 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (UDP:11214) is exposed to wide Private network | accurics.azure.NPS.202 |
-| Network Ports Security | azure | MEDIUM | MSSQL Debugger (TCP:135) is exposed to small Public network | accurics.azure.NPS.193 |
-| Network Ports Security | azure | LOW | SQL Server Analysis (TCP:2383) is exposed to small Private network | accurics.azure.NPS.310 |
-| Network Ports Security | azure | MEDIUM | VNC Server (TCP:5900) is exposed to wide Private network | accurics.azure.NPS.254 |
-| Network Ports Security | azure | LOW | SaltStack Master (TCP:4505) is exposed to small Private network | accurics.azure.NPS.311 |
-| Network Ports Security | azure | MEDIUM | MSSQL Browser (UDP:1434) is exposed to wide Private network | accurics.azure.NPS.192 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (UDP:11215) is exposed to small Public network | accurics.azure.NPS.203 |
-| Network Ports Security | azure | HIGH | Mongo Web Portal (TCP:27018) is exposed to entire Public network | accurics.azure.NPS.73 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Datagram Service (TCP:138) is exposed to small Public network | accurics.azure.NPS.215 |
-| Network Ports Security | azure | HIGH | Memcached SSL (TCP:11215) is exposed to entire Public network | accurics.azure.NPS.65 |
-| Network Ports Security | azure | MEDIUM | SQL Server Analysis (TCP:2382) is exposed to wide Private network | accurics.azure.NPS.242 |
-| Network Ports Security | azure | LOW | SMTP (TCP:25) is exposed to small Private network | accurics.azure.NPS.307 |
-| Network Ports Security | azure | MEDIUM |  Known internal web port (TCP:8000) is exposed to wide Private network | accurics.azure.NPS.184 |
-| Network Ports Security | azure | MEDIUM | SNMP (UDP:161) is exposed to small Public network | accurics.azure.NPS.239 |
-| Network Ports Security | azure | HIGH |  Known internal web port (TCP:8000) is exposed to entire Public network | accurics.azure.NPS.49 |
-| Network Ports Security | azure | HIGH | SaltStack Master (TCP:4505) is exposed to wide Public network | accurics.azure.NPS.110 |
-| Network Ports Security | azure | LOW |  Known internal web port (TCP:8080) is exposed to small Private network | accurics.azure.NPS.281 |
-| Network Ports Security | azure | LOW | NetBIOS Datagram Service (UDP:138) is exposed to small Private network | accurics.azure.NPS.297 |
-| Network Ports Security | azure | LOW | DNS (UDP:53) is exposed to small Private network | accurics.azure.NPS.278 |
-| Network Ports Security | azure | HIGH | SQL Server Analysis (TCP:2382) is exposed to wide Public network | accurics.azure.NPS.106 |
-| Network Ports Security | azure | HIGH | Remote Desktop (TCP:3389) is exposed to the entire public internet | accurics.azure.NPS.171 |
-| Network Ports Security | azure | HIGH | Oracle DB SSL (UDP:2484) is exposed to wide Public network | accurics.azure.NPS.90 |
-| Network Ports Security | azure | HIGH | NetBIOS Session Service (UDP:139) is exposed to wide Public network | accurics.azure.NPS.86 |
-| Network Ports Security | azure | HIGH | Memcached SSL (UDP:11215) is exposed to entire Public network | accurics.azure.NPS.69 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Session Service (TCP:139) is exposed to small Public network | accurics.azure.NPS.219 |
-| Network Ports Security | azure | MEDIUM | LDAP SSL (TCP:636) is exposed to wide Private network | accurics.azure.NPS.188 |
-| Network Ports Security | azure | HIGH | DNS (UDP:53) is exposed to entire Public network | accurics.azure.NPS.45 |
-| Network Ports Security | azure | MEDIUM | Puppet Master (TCP:8140) is exposed to small Public network | accurics.azure.NPS.235 |
-| Network Ports Security | azure | HIGH | LDAP SSL (TCP:636) is exposed to entire Public network | accurics.azure.NPS.53 |
-| Network Ports Security | azure | MEDIUM | Oracle DB SSL (TCP:2484) is exposed to small Public network | accurics.azure.NPS.223 |
-| Network Ports Security | azure | HIGH | MSSQL Debugger (TCP:135) is exposed to wide Public network | accurics.azure.NPS.58 |
-| Network Ports Security | azure | HIGH | Puppet Master (TCP:8140) is exposed to entire Public network | accurics.azure.NPS.101 |
-| Network Ports Security | azure | MEDIUM | POP3 (TCP:110) is exposed to wide Private network | accurics.azure.NPS.228 |
-| Network Ports Security | azure | LOW | Memcached SSL (UDP:11215) is exposed to small Private network | accurics.azure.NPS.290 |
-| Network Ports Security | azure | LOW | MSSQL Server (TCP:1433) is exposed to small Private network | accurics.azure.NPS.286 |
-| Network Ports Security | azure | HIGH | VNC Listener (TCP:5500) is exposed to entire Public network | accurics.azure.NPS.117 |
-| Network Ports Security | azure | MEDIUM |  Known internal web port (TCP:8000) is exposed to small Public network | accurics.azure.NPS.183 |
-| Network Ports Security | azure | HIGH | CiscoSecure, WebSM (TCP:9090) is exposed to the wide public internet | accurics.azure.NPS.35 |
-| Network Ports Security | azure | MEDIUM | SaltStack Master (TCP:4505) is exposed to small Public network | accurics.azure.NPS.245 |
-| Network Ports Security | azure | LOW | Oracle DB SSL (TCP:2484) is exposed to small Private network | accurics.azure.NPS.300 |
-| Network Ports Security | azure | HIGH | Memcached SSL (TCP:11214) is exposed to wide Public network | accurics.azure.NPS.62 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Name Service (TCP:137) is exposed to wide Private network | accurics.azure.NPS.212 |
-| Network Ports Security | azure | HIGH | MySQL (TCP:3306) is exposed to wide Public network | accurics.azure.NPS.74 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (UDP:11215) is exposed to wide Private network | accurics.azure.NPS.204 |
-| Network Ports Security | azure | MEDIUM | MSSQL Server (TCP:1433) is exposed to small Public network | accurics.azure.NPS.195 |
-| Network Ports Security | azure | MEDIUM | VNC Server (TCP:5900) is exposed to small Public network | accurics.azure.NPS.253 |
-| Network Ports Security | azure | MEDIUM | Oracle DB SSL (TCP:2484) is exposed to wide Private network | accurics.azure.NPS.224 |
-| Network Ports Security | azure | HIGH | MSSQL Admin (TCP:1434) is exposed to wide Public network | accurics.azure.NPS.54 |
-| Network Ports Security | azure | MEDIUM | PostgreSQL (UDP:5432) is exposed to wide Private network | accurics.azure.NPS.232 |
-| Network Ports Security | azure | HIGH | Cassandra OpsCenter (TCP:61621) is exposed to wide Public network | accurics.azure.NPS.42 |
-| Network Ports Security | azure | MEDIUM | Telnet (TCP:23) is exposed to small Public network | accurics.azure.NPS.249 |
-| Network Ports Security | azure | HIGH | CIFS / SMB (TCP:3020) is exposed to entire Public network | accurics.azure.NPS.39 |
-| Network Ports Security | azure | HIGH | NetBIOS Datagram Service (TCP:138) is exposed to entire Public network | accurics.azure.NPS.81 |
-| Network Ports Security | azure | MEDIUM | Mongo Web Portal (TCP:27018) is exposed to wide Private network | accurics.azure.NPS.208 |
-| Network Ports Security | azure | HIGH | PostgreSQL (UDP:5432) is exposed to entire Public network | accurics.azure.NPS.97 |
-| Network Ports Security | azure | HIGH | NetBIOS Name Service (UDP:137) is exposed to wide Public network | accurics.azure.NPS.78 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (TCP:11215) is exposed to small Public network | accurics.azure.NPS.199 |
-| Network Ports Security | azure | MEDIUM | Cassandra (TCP:7001) is exposed to wide Private network | accurics.azure.NPS.176 |
-| Network Ports Security | azure | MEDIUM | Memcached SSL (TCP:11214) is exposed to wide Private network | accurics.azure.NPS.198 |
-| Network Ports Security | azure | MEDIUM | Cassandra OpsCenter (TCP:61621) is exposed to small Public network | accurics.azure.NPS.177 |
-| Network Ports Security | azure | HIGH | PostgreSQL (UDP:5432) is exposed to wide Public network | accurics.azure.NPS.96 |
-| Network Ports Security | azure | HIGH | NetBIOS Name Service (UDP:137) is exposed to entire Public network | accurics.azure.NPS.79 |
-| Network Ports Security | azure | MEDIUM | MySQL (TCP:3306) is exposed to small Public network | accurics.azure.NPS.209 |
-| Network Ports Security | azure | HIGH | NetBIOS Datagram Service (TCP:138) is exposed to wide Public network | accurics.azure.NPS.80 |
-| Network Ports Security | azure | HIGH | CIFS / SMB (TCP:3020) is exposed to wide Public network | accurics.azure.NPS.38 |
-| Network Ports Security | azure | MEDIUM | SaltStack Master (TCP:4506) is exposed to wide Private network | accurics.azure.NPS.248 |
-| Network Ports Security | azure | HIGH | Cassandra OpsCenter (TCP:61621) is exposed to entire Public network | accurics.azure.NPS.43 |
-| Network Ports Security | azure | MEDIUM | Prevalent known internal port (TCP:3000) is exposed to small Public network | accurics.azure.NPS.233 |
-| Network Ports Security | azure | HIGH | MSSQL Admin (TCP:1434) is exposed to entire Public network | accurics.azure.NPS.55 |
-| Network Ports Security | azure | MEDIUM | Oracle DB SSL (UDP:2484) is exposed to small Public network | accurics.azure.NPS.225 |
-| Network Ports Security | azure | MEDIUM | VNC Listener (TCP:5500) is exposed to wide Private network | accurics.azure.NPS.252 |
-| Network Ports Security | azure | MEDIUM | MSSQL Debugger (TCP:135) is exposed to wide Private network | accurics.azure.NPS.194 |
-| Network Ports Security | azure | MEDIUM | Microsoft-DS (TCP:445) is exposed to small Public network | accurics.azure.NPS.205 |
-| Network Ports Security | azure | HIGH | MySQL (TCP:3306) is exposed to entire Public network | accurics.azure.NPS.75 |
-| Network Ports Security | azure | MEDIUM | NetBIOS Name Service (UDP:137) is exposed to small Public network | accurics.azure.NPS.213 |
-| Network Ports Security | azure | HIGH | Memcached SSL (TCP:11214) is exposed to entire Public network | accurics.azure.NPS.63 |
-| Network Ports Security | azure | MEDIUM | SQL Server Analysis (TCP:2383) is exposed to wide Private network | accurics.azure.NPS.244 |
-| Network Ports Security | azure | LOW | Oracle DB SSL (UDP:2484) is exposed to small Private network | accurics.azure.NPS.301 |
-| Network Ports Security | azure | MEDIUM | Hadoop Name Node (TCP:9000) is exposed to wide Private network | accurics.azure.NPS.182 |
-| Network Ports Security | azure | HIGH | VNC Listener (TCP:5500) is exposed to wide Public network | accurics.azure.NPS.116 |
-| Network Ports Security | azure | LOW | Memcached SSL (TCP:11214) is exposed to small Private network | accurics.azure.NPS.287 |
-| Network Ports Security | azure | LOW | Microsoft-DS (TCP:445) is exposed to small Private network | accurics.azure.NPS.291 |
-| Network Ports Security | azure | MEDIUM | PostgreSQL (TCP:5432) is exposed to small Public network | accurics.azure.NPS.229 |
-| Network Ports Security | azure | HIGH | MSSQL Debugger (TCP:135) is exposed to entire Public network | accurics.azure.NPS.59 |
-| Network Ports Security | azure | HIGH | Puppet Master (TCP:8140) is exposed to wide Public network | accurics.azure.NPS.100 |
+| Infrastructure Security | json | MEDIUM | Ensure Known internal web port (Tcp:8000) is not exposed to public for Azure Network Security Rule | AC_AZURE_0528 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Name Service (Udp:137) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0482 |
+| Infrastructure Security | json | LOW | Ensure Microsoft-DS (Tcp:445) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0494 |
+| Infrastructure Security | json | LOW | Ensure MSSQL Debugger (Tcp:135) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0512 |
+| Infrastructure Security | json | HIGH | Ensure PostgreSQL (Udp:5432) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0457 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (Tcp:11215) is not exposed to public for Azure Network Security Rule | AC_AZURE_0504 |
+| Infrastructure Security | json | MEDIUM | Ensure SQL Server Analysis (Tcp:2382) is not exposed to public for Azure Network Security Rule | AC_AZURE_0441 |
+| Infrastructure Security | json | LOW | Ensure POP3 (Tcp:110) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0461 |
+| Infrastructure Security | json | LOW | Ensure Known internal web port (Tcp:8080) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0524 |
+| Infrastructure Security | json | HIGH | Ensure SaltStack Master (Tcp:4505) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0436 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Datagram Service (Udp:138) is not exposed to public for Azure Network Security Rule | AC_AZURE_0477 |
+| Infrastructure Security | json | HIGH | Ensure Hadoop Name Node (Tcp:9000) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0532 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (Udp:11215) is not exposed to public for Azure Network Security Rule | AC_AZURE_0498 |
+| Infrastructure Security | json | MEDIUM | Ensure CIFS / SMB (Tcp:3020) is not exposed to public for Azure Network Security Rule | AC_AZURE_0271 |
+| Infrastructure Security | json | HIGH | Ensure Memcached SSL (Tcp:11214) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0508 |
+| Infrastructure Security | json | LOW | Ensure MSSQL Server (Tcp:1433) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0509 |
+| Infrastructure Security | json | HIGH | Ensure CIFS / SMB (Tcp:3020) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0270 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Datagram Service (Udp:138) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0476 |
+| Infrastructure Security | json | LOW | Ensure DNS (Udp:53) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0533 |
+| Infrastructure Security | json | HIGH | Ensure Memcached SSL (Udp:11215) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0499 |
+| Infrastructure Security | json | LOW | Ensure server is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0421 |
+| Infrastructure Security | json | LOW | Ensure SQL Server Analysis (Tcp:2383) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0437 |
+| Infrastructure Security | json | HIGH | Ensure PostgreSQL (Tcp:5432) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0460 |
+| Infrastructure Security | json | MEDIUM | Ensure Known internal web port (Tcp:8080) is not exposed to public for Azure Network Security Rule | AC_AZURE_0525 |
+| Infrastructure Security | json | HIGH | Ensure Memcached SSL (Tcp:11215) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0505 |
+| Infrastructure Security | json | LOW | Ensure SQL Server Analysis (Tcp:2382) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0440 |
+| Infrastructure Security | json | HIGH | Ensure SSH (Tcp:22) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0285 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Debugger (Tcp:135) is not exposed to public for Azure Network Security Rule | AC_AZURE_0513 |
+| Infrastructure Security | json | MEDIUM | Ensure PostgreSQL (Udp:5432) is not exposed to public for Azure Network Security Rule | AC_AZURE_0456 |
+| Infrastructure Security | json | MEDIUM | Ensure Microsoft-DS (Tcp:445) is not exposed to public for Azure Network Security Rule | AC_AZURE_0495 |
+| Infrastructure Security | json | HIGH | Ensure that RDP access is restricted from the internet for Azure Network Security Rule | AC_AZURE_0342 |
+| Infrastructure Security | json | HIGH | Ensure Known internal web port (Tcp:8000) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0529 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Name Service (Udp:137) is not exposed to public for Azure Network Security Rule | AC_AZURE_0483 |
+| Infrastructure Security | json | LOW | Ensure Oracle DB SSL (Tcp:2484) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0467 |
+| Infrastructure Security | json | LOW | Ensure MySQL (Tcp:3306) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0488 |
+| Infrastructure Security | json | MEDIUM | Ensure LDAP SSL (Tcp:636) is not exposed to public for Azure Network Security Rule | AC_AZURE_0522 |
+| Infrastructure Security | json | HIGH | Ensure Telnet (Tcp:23) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0430 |
+| Infrastructure Security | json | MEDIUM | Ensure VNC Listener (Tcp:5500) is not exposed to public for Azure Network Security Rule | AC_AZURE_0426 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Session Service (Udp:139) is not exposed to public for Azure Network Security Rule | AC_AZURE_0471 |
+| Infrastructure Security | json | MEDIUM | Ensure DNS (Udp:53) is not exposed to public for Azure Network Security Rule | AC_AZURE_0534 |
+| Infrastructure Security | json | LOW | Ensure MSSQL Admin (Tcp:1434) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0518 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Name Service (Udp:137) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0484 |
+| Infrastructure Security | json | MEDIUM | Ensure Mongo Web Portal (Tcp:27018) is not exposed to public for Azure Network Security Rule | AC_AZURE_0492 |
+| Infrastructure Security | json | HIGH | Ensure MSSQL Debugger (Tcp:135) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0514 |
+| Infrastructure Security | json | HIGH | Ensure Puppet Master (Tcp:8140) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0451 |
+| Infrastructure Security | json | HIGH | Ensure Memcached SSL (Udp:11214) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0502 |
+| Infrastructure Security | json | MEDIUM | Ensure SMTP (Tcp:25) is not exposed to public for Azure Network Security Rule | AC_AZURE_0447 |
+| Infrastructure Security | json | LOW | Ensure Memcached SSL (Tcp:11215) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0503 |
+| Infrastructure Security | json | LOW | Ensure SMTP (Tcp:25) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0446 |
+| Infrastructure Security | json | LOW | Ensure MSSQL Browser (Udp:1434) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0515 |
+| Infrastructure Security | json | MEDIUM | Ensure Puppet Master (Tcp:8140) is not exposed to public for Azure Network Security Rule | AC_AZURE_0450 |
+| Infrastructure Security | json | HIGH | Ensure Mongo Web Portal (Tcp:27018) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0493 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Name Service (Tcp:137) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0485 |
+| Infrastructure Security | json | HIGH | Ensure Cassandra OpsCenter (Tcp:61621) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0276 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Admin (Tcp:1434) is not exposed to public for Azure Network Security Rule | AC_AZURE_0519 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Session Service (Udp:139) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0470 |
+| Infrastructure Security | json | HIGH | Ensure DNS (Udp:53) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0535 |
+| Infrastructure Security | json | HIGH | Ensure VNC Listener (Tcp:5500) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0427 |
+| Infrastructure Security | json | LOW | Ensure SaltStack Master (Tcp:4506) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0431 |
+| Infrastructure Security | json | HIGH | Ensure Oracle DB SSL (Udp:2484) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0466 |
+| Infrastructure Security | json | MEDIUM | Ensure MySQL (Tcp:3306) is not exposed to public for Azure Network Security Rule | AC_AZURE_0489 |
+| Infrastructure Security | json | HIGH | Ensure LDAP SSL (Tcp:636) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0523 |
+| Infrastructure Security | json | LOW | Ensure Puppet Master (Tcp:8140) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0449 |
+| Infrastructure Security | json | LOW | Ensure Cassandra (Tcp:7001) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0275 |
+| Infrastructure Security | json | LOW | Ensure Cassandra OpsCenter (Tcp:61621) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0536 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Session Service (Tcp:139) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0473 |
+| Infrastructure Security | json | HIGH | Ensure VNC Server (Tcp:5900) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0424 |
+| Infrastructure Security | json | MEDIUM | Ensure SaltStack Master (Tcp:4506) is not exposed to public for Azure Network Security Rule | AC_AZURE_0432 |
+| Infrastructure Security | json | HIGH | Ensure MSSQL Admin (Tcp:1434) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0520 |
+| Infrastructure Security | json | MEDIUM | Ensure Oracle DB SSL (Udp:2484) is not exposed to public for Azure Network Security Rule | AC_AZURE_0465 |
+| Infrastructure Security | json | HIGH | Ensure SNMP (Udp:161) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0445 |
+| Infrastructure Security | json | LOW | Ensure Memcached SSL (Udp:11214) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0500 |
+| Infrastructure Security | json | MEDIUM | Ensure Prevalent known internal port (Tcp:3000) is not exposed to public for Azure Network Security Rule | AC_AZURE_0453 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Browser (Udp:1434) is not exposed to public for Azure Network Security Rule | AC_AZURE_0516 |
+| Infrastructure Security | json | HIGH | Ensure MySQL (Tcp:3306) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0490 |
+| Infrastructure Security | json | LOW | Ensure Telnet (Tcp:23) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0428 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Name Service (Tcp:137) is not exposed to public for Azure Network Security Rule | AC_AZURE_0486 |
+| Infrastructure Security | json | HIGH | Ensure Oracle DB SSL (Tcp:2484) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0469 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Name Service (Tcp:137) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0487 |
+| Infrastructure Security | json | MEDIUM | Ensure Oracle DB SSL (Tcp:2484) is not exposed to public for Azure Network Security Rule | AC_AZURE_0468 |
+| Infrastructure Security | json | MEDIUM | Ensure Telnet (Tcp:23) is not exposed to public for Azure Network Security Rule | AC_AZURE_0429 |
+| Infrastructure Security | json | LOW | Ensure Mongo Web Portal (Tcp:27018) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0491 |
+| Infrastructure Security | json | LOW | Ensure Prevalent known internal port (Tcp:3000) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0452 |
+| Infrastructure Security | json | HIGH | Ensure MSSQL Browser (Udp:1434) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0517 |
+| Infrastructure Security | json | MEDIUM | Ensure SNMP (Udp:161) is not exposed to public for Azure Network Security Rule | AC_AZURE_0444 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (Udp:11214) is not exposed to public for Azure Network Security Rule | AC_AZURE_0501 |
+| Infrastructure Security | json | LOW | Ensure LDAP SSL (Tcp:636) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0521 |
+| Infrastructure Security | json | LOW | Ensure Oracle DB SSL (Udp:2484) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0464 |
+| Infrastructure Security | json | HIGH | Ensure SaltStack Master (Tcp:4506) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0433 |
+| Infrastructure Security | json | LOW | Ensure VNC Listener (Tcp:5500) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0425 |
+| Infrastructure Security | json | MEDIUM | Ensure Cassandra OpsCenter (Tcp:61621) is not exposed to public for Azure Network Security Rule | AC_AZURE_0537 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Session Service (Udp:139) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0472 |
+| Infrastructure Security | json | MEDIUM | Ensure Cassandra (Tcp:7001) is not exposed to public for Azure Network Security Rule | AC_AZURE_0274 |
+| Infrastructure Security | json | HIGH | Ensure SMTP (Tcp:25) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0448 |
+| Infrastructure Security | json | LOW | Ensure SNMP (Udp:161) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0443 |
+| Infrastructure Security | json | LOW | Ensure Memcached SSL (Tcp:11214) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0506 |
+| Infrastructure Security | json | MEDIUM | Ensure SSH (Tcp:22) is not exposed to public for Azure Network Security Rule | AC_AZURE_0286 |
+| Infrastructure Security | json | LOW | Ensure PostgreSQL (Udp:5432) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0455 |
+| Infrastructure Security | json | MEDIUM | Ensure MSSQL Server (Tcp:1433) is not exposed to public for Azure Network Security Rule | AC_AZURE_0510 |
+| Infrastructure Security | json | HIGH | Ensure Microsoft-DS (Tcp:445) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0496 |
+| Infrastructure Security | json | LOW | Ensure NetBIOS Datagram Service (Tcp:138) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0479 |
+| Infrastructure Security | json | HIGH | Ensure that request initiated from all ports (*) for all destination ports (*) is restricted from the internet for Azure Network Security Rule | AC_AZURE_0357 |
+| Infrastructure Security | json | MEDIUM | Ensure SQL Server Analysis (Tcp:2383) is not exposed to public for Azure Network Security Rule | AC_AZURE_0438 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Datagram Service (Tcp:138) is not exposed to public for Azure Network Security Rule | AC_AZURE_0480 |
+| Infrastructure Security | json | HIGH | Ensure Cassandra (Tcp:7001) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0273 |
+| Infrastructure Security | json | MEDIUM | Ensure PostgreSQL (Tcp:5432) is not exposed to public for Azure Network Security Rule | AC_AZURE_0459 |
+| Infrastructure Security | json | LOW | Ensure Hadoop Name Node (Tcp:9000) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0530 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Session Service (Tcp:139) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0475 |
+| Infrastructure Security | json | LOW | Ensure VNC Server (Tcp:5900) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0422 |
+| Infrastructure Security | json | LOW | Ensure SaltStack Master (Tcp:4505) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0434 |
+| Infrastructure Security | json | HIGH | Ensure Known internal web port (Tcp:8080) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0526 |
+| Infrastructure Security | json | HIGH | Ensure POP3 (Tcp:110) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0463 |
+| Infrastructure Security | json | LOW | Ensure Known internal web port (Tcp:8000) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0527 |
+| Infrastructure Security | json | MEDIUM | Ensure POP3 (Tcp:110) is not exposed to public for Azure Network Security Rule | AC_AZURE_0462 |
+| Infrastructure Security | json | MEDIUM | Ensure SaltStack Master (Tcp:4505) is not exposed to public for Azure Network Security Rule | AC_AZURE_0435 |
+| Infrastructure Security | json | MEDIUM | Ensure VNC Server (Tcp:5900) is not exposed to public for Azure Network Security Rule | AC_AZURE_0423 |
+| Infrastructure Security | json | MEDIUM | Ensure Hadoop Name Node (Tcp:9000) is not exposed to public for Azure Network Security Rule | AC_AZURE_0531 |
+| Infrastructure Security | json | MEDIUM | Ensure NetBIOS Session Service (Tcp:139) is not exposed to public for Azure Network Security Rule | AC_AZURE_0474 |
+| Infrastructure Security | json | LOW | Ensure PostgreSQL (Tcp:5432) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0458 |
+| Infrastructure Security | json | LOW | Ensure CIFS / SMB (Tcp:3020) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0272 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Datagram Service (Tcp:138) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0481 |
+| Infrastructure Security | json | HIGH | Ensure SQL Server Analysis (Tcp:2383) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0439 |
+| Infrastructure Security | json | LOW | Ensure Memcached SSL (Udp:11215) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0497 |
+| Infrastructure Security | json | HIGH | Ensure NetBIOS Datagram Service (Udp:138) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0478 |
+| Infrastructure Security | json | HIGH | Ensure Prevalent known internal port (Tcp:3000) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0454 |
+| Infrastructure Security | json | HIGH | Ensure MSSQL Server (Tcp:1433) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0511 |
+| Infrastructure Security | json | LOW | Ensure SSH (Tcp:22) is not exposed to private hosts more than 32 for Azure Network Security Rule | AC_AZURE_0287 |
+| Infrastructure Security | json | HIGH | Ensure SQL Server Analysis (Tcp:2382) is not exposed to entire internet for Azure Network Security Rule | AC_AZURE_0442 |
+| Infrastructure Security | json | MEDIUM | Ensure Memcached SSL (Tcp:11214) is not exposed to public for Azure Network Security Rule | AC_AZURE_0507 |
 
 
 ### azurerm_cosmosdb_account
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | HIGH | Ensure to filter source Ips for Cosmos DB Account | accurics.azure.NS.32 |
-| Cloud Assets Management | azure | MEDIUM | Ensure that Cosmos DB Account has an associated tag | accurics.azure.CAM.162 |
+| Infrastructure Security | azure | HIGH | Ensure to filter source Ips for Cosmos DB Account | accurics.azure.NS.32 |
+| Compliance Validation | azure | MEDIUM | Ensure that Cosmos DB Account has an associated tag | accurics.azure.CAM.162 |
 
 
 ### azurerm_security_center_subscription_pricing
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Operational Efficiency | azure | MEDIUM | Ensure that standard pricing tiers are selected | accurics.azure.OPS.349 |
+| Security Best Practices | azure | MEDIUM | Ensure that standard pricing tiers are selected | accurics.azure.OPS.349 |
 
 
 ### azurerm_sql_active_directory_administrator
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity and Access Management | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account | accurics.azure.IAM.137 |
+| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account | accurics.azure.IAM.137 |
 
 
 ### azurerm_container_registry
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | azure | MEDIUM | Ensure that admin user is disabled for Container Registry | accurics.azure.EKM.164 |
-| Azure Container Services | azure | HIGH | Ensure Container Registry has locks | accurics.azure.AKS.3 |
+| Identity and Access Management | azure | MEDIUM | Ensure that admin user is disabled for Container Registry | accurics.azure.EKM.164 |
+| Resilience | azure | HIGH | Ensure Container Registry has locks | accurics.azure.AKS.3 |
 
 
 ### azurerm_virtual_network
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Ensure that Azure Virtual Network subnet is configured with a Network Security Group | accurics.azure.NS.161 |
+| Infrastructure Security | azure | MEDIUM | Ensure that Azure Virtual Network subnet is configured with a Network Security Group | accurics.azure.NS.161 |
 
 
 ### azurerm_role_assignment
@@ -390,13 +302,13 @@
 ### azurerm_application_gateway
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Network Security | azure | MEDIUM | Ensure Azure Application Gateway Web application firewall (WAF) is enabled | accurics.azure.NS.147 |
+| Infrastructure Security | azure | MEDIUM | Ensure Azure Application Gateway Web application firewall (WAF) is enabled | accurics.azure.NS.147 |
 
 
 ### azurerm_postgresql_server
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Encryption and Key Management | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server | accurics.azure.EKM.1 |
-| Backup and Disaster Recovery | azure | HIGH | Ensure that Geo Redundant Backups is enabled on PostgreSQL | accurics.azure.BDR.163 |
+| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server | accurics.azure.EKM.1 |
+| Resilience | azure | MEDIUM | Ensure that Geo Redundant Backups is enabled on PostgreSQL | accurics.azure.BDR.163 |
 
 
