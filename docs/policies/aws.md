@@ -354,7 +354,7 @@
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Logging | LambdaFunction | Low | Lambda function doesn't not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 |
+| Logging | LambdaFunction | Low | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 |
 | Logging | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 |
 | Encryption and Key Management | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 |
 
