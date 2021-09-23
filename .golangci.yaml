@@ -2,14 +2,12 @@ linters:
   enable:
     - gosimple
     - deadcode
-    - typecheck
     - govet
     - errcheck
     - staticcheck
     - unused
     - structcheck
     - varcheck
-    - gosec
     - revive
     - dupl
     - gocyclo
@@ -31,7 +29,11 @@ run:
 linters-settings:
   gocritic:
     disabled-checks:
-      - ifElseChain  
+      - ifElseChain 
+      - typeSwitchVar 
+      - exitAfterDefer
+  gocyclo:
+    min-complexity: 50  
 
   
 
