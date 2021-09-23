@@ -19,6 +19,8 @@ package writer
 import (
 	"encoding/json"
 	"io"
+
+	"go.uber.org/zap"
 )
 
 const (
@@ -32,7 +34,12 @@ func init() {
 // JSONWriter prints data in JSON format
 func JSONWriter(data interface{}, writer io.Writer) error {
 	j, _ := json.MarshalIndent(data, "", "  ")
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	if _, err := writer.Write(j); err != nil {
+		zap.S().Debugf("failed to write output error: '%v'", err)
+	}
+
+	if _, err := writer.Write([]byte{'\n'}); err != nil {
+		zap.S().Debugf("failed to write nextline error: '%v'", err)
+	}
 	return nil
 }

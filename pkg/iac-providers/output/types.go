@@ -92,7 +92,7 @@ func (a AllResourceConfigs) GetResourceCount() (count int) {
 	}
 	count = 0
 	for _, list := range a {
-		count = count + len(list)
+		count += len(list)
 	}
 	return
 }

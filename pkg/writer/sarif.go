@@ -18,15 +18,16 @@ package writer
 
 import (
 	"fmt"
+	"io"
+	"path/filepath"
+	"strings"
+
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
 	"github.com/go-errors/errors"
 	"github.com/owenrumney/go-sarif/sarif"
 	"go.uber.org/zap"
-	"io"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -121,7 +122,7 @@ func getAbsoluteFilePath(resourcePath, filePath string) (string, error) {
 		}
 	}
 	fileMode := utils.GetFileMode(resourcePath)
-	if fileMode != nil && (*fileMode).IsDir() {
+	if fileMode != nil && fileMode.IsDir() {
 		return filepath.Join(resourcePath, filePath), nil
 	}
 	return resourcePath, nil

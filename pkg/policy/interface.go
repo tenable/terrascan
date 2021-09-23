@@ -18,7 +18,7 @@ package policy
 
 // Engine Policy Engine interface
 type Engine interface {
-	//Init method to initialize engine with policy path, and a pre load filter
+	// Init method to initialize engine with policy path, and a pre load filter
 	Init(string, PreLoadFilter) error
 	Configure() error
 	Evaluate(EngineInput, PreScanFilter) (EngineOutput, error)

@@ -30,7 +30,7 @@ type EcsTaskDefinitionConfig struct {
 	Volumes              []VolumeConfig `json:"volume"`
 }
 
-// VolumeConfig holds config for volume attirbute of aws_ecs_task_definition
+// VolumeConfig holds config for volume attribute of aws_ecs_task_definition
 type VolumeConfig struct {
 	EfsVolumeConfiguration EfsVolumeConfig `json:"efs_volume_configuration"`
 }

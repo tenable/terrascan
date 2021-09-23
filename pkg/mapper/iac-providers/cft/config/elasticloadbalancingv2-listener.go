@@ -32,7 +32,7 @@ type DefaultActionConfig struct {
 	RedirectConfig RedirectConfig `json:"redirect"`
 }
 
-// RedirectConfig holds the config for redirect attirbute of default_action
+// RedirectConfig holds the config for redirect attribute of default_action
 type RedirectConfig struct {
 	Protocol string `json:"protocol"`
 }

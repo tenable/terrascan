@@ -1,8 +1,9 @@
 package iacprovider
 
 import (
-	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 	"reflect"
+
+	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
 
 	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"

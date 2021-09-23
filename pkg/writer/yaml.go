@@ -19,6 +19,7 @@ package writer
 import (
 	"io"
 
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 )
 
@@ -33,7 +34,12 @@ func init() {
 // YAMLWriter prints data in YAML format
 func YAMLWriter(data interface{}, writer io.Writer) error {
 	j, _ := yaml.Marshal(data)
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	if _, err := writer.Write(j); err != nil {
+		zap.S().Debugf("failed to write output error: '%v'", err)
+	}
+
+	if _, err := writer.Write([]byte{'\n'}); err != nil {
+		zap.S().Debugf("failed to write newline error: '%v'", err)
+	}
 	return nil
 }

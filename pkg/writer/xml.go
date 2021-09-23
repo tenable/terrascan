@@ -38,7 +38,12 @@ func XMLWriter(data interface{}, writer io.Writer) error {
 		zap.S().Errorf("failed to write XML output. error: '%v'", err)
 		return err
 	}
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	if _, err := writer.Write(j); err != nil {
+		zap.S().Debugf("failed to write output error: '%v'", err)
+	}
+
+	if _, err := writer.Write([]byte{'\n'}); err != nil {
+		zap.S().Debugf("failed to write newline error: '%v'", err)
+	}
 	return nil
 }

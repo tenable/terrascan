@@ -18,13 +18,14 @@ package httpserver
 
 import (
 	"context"
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
-	gorillaHandlers "github.com/gorilla/handlers"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	httputils "github.com/accurics/terrascan/pkg/utils/http"
+	gorillaHandlers "github.com/gorilla/handlers"
+	"go.uber.org/zap"
 
 	"github.com/accurics/terrascan/pkg/logging"
 	"github.com/gorilla/mux"

@@ -52,14 +52,16 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
-	r.ParseMultipartForm(10 << 20)
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		zap.S().Debugf("failed to ParseMultipartForm: %v", err)
+	}
 
 	// FormFile returns the first file for the given key
 	// it also returns the FileHeader so we can get the Filename,
 	// the Header and the size of the file
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to retreive uploaded file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to retrieve uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
@@ -96,7 +98,9 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// write this byte array to our temporary file
-	tempFile.Write(fileBytes)
+	if _, err := tempFile.Write(fileBytes); err != nil {
+		zap.S().Debugf("failed to write tempfile error: %v", err)
+	}
 
 	// read scan and skip rules from the form data
 	// scan and skip rules are comma separated rule id's in the request body

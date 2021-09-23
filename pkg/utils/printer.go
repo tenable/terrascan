@@ -19,11 +19,18 @@ package utils
 import (
 	"encoding/json"
 	"io"
+
+	"go.uber.org/zap"
 )
 
 // PrintJSON prints data in JSON format
 func PrintJSON(data interface{}, writer io.Writer) {
 	j, _ := json.MarshalIndent(data, "", "  ")
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	if _, err := writer.Write(j); err != nil {
+		zap.S().Debug(err)
+	}
+
+	if _, err := writer.Write([]byte{'\n'}); err != nil {
+		zap.S().Debug(err)
+	}
 }

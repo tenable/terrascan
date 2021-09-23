@@ -140,7 +140,7 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 	return containerImages, initContainerImages, nil
 }
 
-//readContainers prepares list of containers and init containers from k8scorev1.Container object
+// readContainers prepares list of containers and init containers from k8scorev1.Container object
 func readContainers(containers []k8scorev1.Container) (containerImages []output.ContainerDetails) {
 	for _, container := range containers {
 		containerImages = append(containerImages, output.ContainerDetails{Name: container.Name, Image: container.Image})

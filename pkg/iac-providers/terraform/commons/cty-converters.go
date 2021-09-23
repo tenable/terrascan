@@ -58,7 +58,7 @@ func ctyToBool(ctyVal cty.Value) (interface{}, error) {
 }
 
 // ctyToSlice tries to convert the given cty.Value into golang slice of
-// interfce{}
+// interface{}
 func ctyToSlice(ctyVal cty.Value) (interface{}, error) {
 	var val []interface{}
 	var allErrs error

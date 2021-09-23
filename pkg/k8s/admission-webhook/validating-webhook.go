@@ -106,7 +106,9 @@ func (w ValidatingWebhook) DecodeAdmissionReviewRequest(requestBody []byte) (adm
 		deserializer             = codecs.UniversalDeserializer()
 		requestedAdmissionReview admissionv1.AdmissionReview
 	)
-	admissionv1.AddToScheme(scheme)
+	if err := admissionv1.AddToScheme(scheme); err != nil {
+		zap.S().Debug("error add to scheme: ", err)
+	}
 
 	// decode incoming admission request
 	_, _, err := deserializer.Decode(requestBody, nil, &requestedAdmissionReview)
@@ -212,7 +214,7 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 
 func (w ValidatingWebhook) getDenyViolations(output runtime.Output) ([]results.Violation, error) {
 
-	// Calcualte the deny violations according to the configuration specified in the config file
+	// Calculate the deny violations according to the configuration specified in the config file
 	denyViolations := w.getDeniedViolations(*output.Violations.ViolationStore, config.GetK8sAdmissionControl())
 
 	return denyViolations, nil

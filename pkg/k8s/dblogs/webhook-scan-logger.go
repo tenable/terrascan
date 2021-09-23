@@ -52,7 +52,7 @@ func NewWebhookScanLogger() *WebhookScanLogger {
 }
 
 // Log creates a new db record for the admission request
-func (g *WebhookScanLogger) Log(WebhookScanLog WebhookScanLog) error {
+func (g *WebhookScanLogger) Log(webhookScanLog WebhookScanLog) error {
 	// Insert a new Log record to the DB
 
 	db, err := g.getDbHandler()
@@ -69,12 +69,12 @@ func (g *WebhookScanLogger) Log(WebhookScanLog WebhookScanLog) error {
 		zap.S().Errorf("failed preparing SQL statement. error: '%v'", err)
 		return err
 	}
-	_, err = statement.Exec(WebhookScanLog.UID,
-		WebhookScanLog.Request,
-		WebhookScanLog.Allowed,
-		WebhookScanLog.ViolationsSummary,
-		WebhookScanLog.DeniableViolations,
-		WebhookScanLog.CreatedAt)
+	_, err = statement.Exec(webhookScanLog.UID,
+		webhookScanLog.Request,
+		webhookScanLog.Allowed,
+		webhookScanLog.ViolationsSummary,
+		webhookScanLog.DeniableViolations,
+		webhookScanLog.CreatedAt)
 	if err != nil {
 		zap.S().Errorf("failed to insert a new log. error: '%v'", err)
 		return err
@@ -109,7 +109,9 @@ func (g *WebhookScanLogger) FetchLogs() ([]WebhookScanLog, error) {
 		var violationsSummary string
 		var deniableViolations string
 		var createdAt time.Time
-		row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt)
+		if err := row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt); err != nil {
+			zap.S().Debugf("failed scan logs table. error: '%v'", err)
+		}
 
 		result = append(result, WebhookScanLog{
 			UID:                uid,
@@ -149,7 +151,9 @@ func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error)
 		var violationsSummary string
 		var deniableViolations string
 		var createdAt time.Time
-		row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt)
+		if err := row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt); err != nil {
+			zap.S().Debugf("failed scan logs table. error: '%v'", err)
+		}
 
 		return &WebhookScanLog{
 			UID:                uid,
@@ -213,7 +217,9 @@ func (g *WebhookScanLogger) initDBIfNeeded() error {
 }
 
 func (g *WebhookScanLogger) getDbHandler() (*sql.DB, error) {
-	g.initDBIfNeeded()
+	if err := g.initDBIfNeeded(); err != nil {
+		zap.S().Debugf("failed initDBIfNeeded. error: '%v'", err)
+	}
 
 	db, err := sql.Open("sqlite", g.dbFilePath())
 	if err != nil {

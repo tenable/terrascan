@@ -19,6 +19,7 @@ package cli
 import (
 	httpserver "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var (
@@ -40,7 +41,9 @@ var serverCmd = &cobra.Command{
 Run Terrascan as an API server that inspects incoming IaC (Infrastructure-as-Code) files and returns the scan results.
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		initial(cmd, args, true)
+		if err := initial(cmd, args, true); err != nil {
+			zap.S().Debug("error init:", err)
+		}
 	},
 	Run: server,
 }

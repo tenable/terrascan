@@ -17,8 +17,9 @@
 package utils
 
 import (
-	"go.uber.org/zap"
 	"os"
+
+	"go.uber.org/zap"
 )
 
 // GetFileMode fetches the filemode from a file path

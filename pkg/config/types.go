@@ -16,7 +16,7 @@
 
 package config
 
-// Global initalizes GlobalConfig struct
+// Global initializes GlobalConfig struct
 var global *TerrascanConfig
 
 // TerrascanConfig struct defines global variables/configurations across terrascan

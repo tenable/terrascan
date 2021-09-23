@@ -1,0 +1,41 @@
+linters:
+  enable:
+    - gosimple
+    - deadcode
+    - typecheck
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - structcheck
+    - varcheck
+    - gosec
+    - revive
+    - dupl
+    - gocyclo
+    - gofmt
+    - misspell
+    - gocritic
+    - goimports
+  enable-all: false
+  disable-all: true
+  fast: false
+
+run:
+  timeout: 10m
+  skip-dirs-use-default: true
+  skip-dirs:
+    - 'test'
+  tests: false 
+
+linters-settings:
+  gocritic:
+    disabled-checks:
+      - ifElseChain  
+
+  
+
+output:
+    # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+    format: tab
+

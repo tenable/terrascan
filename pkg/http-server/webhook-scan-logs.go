@@ -178,7 +178,9 @@ func (g *APIHandler) getLogByUID(w http.ResponseWriter, r *http.Request) {
 
 	t, _ := template.ParseFiles("/go/terrascan/show.html")
 
-	t.Execute(w, displayedScanLog)
+	if err := t.Execute(w, displayedScanLog); err != nil {
+		zap.S().Debugf("failed to execute scan err: ", zap.Error(err))
+	}
 }
 
 func (g *APIHandler) getLogStatus(log dblogs.WebhookScanLog) string {

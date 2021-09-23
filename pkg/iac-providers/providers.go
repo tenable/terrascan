@@ -63,7 +63,7 @@ func SupportedIacProviders() []string {
 	return iacTypes
 }
 
-// SupportedIacVersions retuns a string of Iac providers and corresponding supported versions
+// SupportedIacVersions returns a string of Iac providers and corresponding supported versions
 func SupportedIacVersions() []string {
 	var iacVersions []string
 	for iac, versions := range supportedIacProviders {

@@ -1,7 +1,7 @@
 package utils
 
 // AcceptedCategories is the list of all policy categories
-var AcceptedCategories []string = []string{
+var AcceptedCategories = []string{
 	"LOGGING AND MONITORING",
 	"COMPLIANCE VALIDATION",
 	"RESILIENCE",

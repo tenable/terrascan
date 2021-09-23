@@ -56,8 +56,11 @@ test: unit-tests e2e-tests
 
 
 # run all validation tests
-validate: gofmt govet golint gomodverify staticcheck
+validate: golangci-lint
 
+# gofmt validation
+golangci-lint:
+	./scripts/golangci-lint.sh
 
 # gofmt validation
 gofmt:

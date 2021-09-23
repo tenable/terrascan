@@ -91,13 +91,17 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 	}
 
 	buffer := bytes.Buffer{}
-	tmpl.Execute(&buffer, data)
+	if err := tmpl.Execute(&buffer, data); err != nil {
+		zap.S().Debugf("failed to execute template error: '%v'", err)
+	}
 
 	_, err = writer.Write(buffer.Bytes())
 	if err != nil {
 		return err
 	}
-	writer.Write([]byte{'\n'})
+	if _, err := writer.Write([]byte{'\n'}); err != nil {
+		zap.S().Debugf("failed to write nextline error: '%v'", err)
+	}
 	return nil
 }
 
@@ -108,19 +112,19 @@ func defaultViolations(v results.Violation, isSkipped bool) string {
 
 	if v.ModuleName != "" {
 		moduleName := fmt.Sprintf("%-15v:\t%s\n\t", "Module Name", v.ModuleName)
-		part = part + moduleName
+		part += moduleName
 	}
 
 	if v.PlanRoot != "" {
 		planRoot := fmt.Sprintf("%-15v:\t%s\n\t", "Plan Root", v.PlanRoot)
-		part = part + planRoot
+		part += planRoot
 	}
 	out := fmt.Sprintf("%-15v:\t%d\n\t%-15v:\t%s\n\t",
 		"Line", v.LineNumber,
 		"Severity", v.Severity)
 	if isSkipped {
 		skipComment := fmt.Sprintf("%-15v:\t%s\n\t", "Skip Comment", v.Comment)
-		out = out + skipComment
+		out += skipComment
 	}
 	out = part + out
 
