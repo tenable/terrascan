@@ -37,7 +37,7 @@ var _ = Describe("Scan Command using remote types", func() {
 	})
 
 	Context("remote type is supplied, but remote URL is not", func() {
-		errString := "empty remote url or type or desitnation dir path"
+		errString := "empty remote url or type or destination dir path"
 
 		When("remote type is git", func() {
 			It("should error out and exit with status code 1", func() {
