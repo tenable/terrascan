@@ -25,7 +25,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper"
-	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
+	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config" //nolint
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/awslabs/goformation/v4"
 	"github.com/awslabs/goformation/v4/cloudformation"

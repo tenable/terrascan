@@ -118,7 +118,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.ContainerDetails) {
 	for _, v := range hclBody.Attributes {
 		if v.Name == containerDefinitions {
-			switch v.Expr.(type) {
+			switch v.Expr.(type) { //nolint
 			case *hclsyntax.FunctionCallExpr:
 				funcExp := v.Expr.(*hclsyntax.FunctionCallExpr)
 				for _, arg := range funcExp.Args {

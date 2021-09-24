@@ -155,7 +155,7 @@ func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error)
 			zap.S().Debugf("failed scan logs table. error: '%v'", err)
 		}
 
-		return &WebhookScanLog{
+		return &WebhookScanLog{ //nolint
 			UID:                uid,
 			Request:            request,
 			Allowed:            allowed,

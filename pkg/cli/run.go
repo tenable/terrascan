@@ -27,7 +27,7 @@ import (
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
-	"github.com/mattn/go-isatty"
+	"github.com/mattn/go-isatty" //nolint
 	"go.uber.org/zap"
 )
 
@@ -149,7 +149,7 @@ func (s ScanOptions) validate() error {
 func (s *ScanOptions) initColor() {
 	switch strings.ToLower(s.useColors) {
 	case "auto":
-		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) { //nolint
 			s.UseColors = true
 		} else {
 			s.UseColors = false
@@ -213,7 +213,7 @@ func (s *ScanOptions) Run() error {
 		os.RemoveAll(tempDir)
 		exitCode := getExitCode(results)
 		if exitCode != 0 {
-			os.Exit(exitCode)
+			os.Exit(exitCode) //nolint
 		}
 	}
 	return nil

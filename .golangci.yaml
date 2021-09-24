@@ -30,8 +30,6 @@ linters-settings:
   gocritic:
     disabled-checks:
       - ifElseChain 
-      - typeSwitchVar 
-      - exitAfterDefer
   gocyclo:
     min-complexity: 50  
 

@@ -47,24 +47,24 @@ func HexToColor256(hex string) uint8 {
 
 // RgbToColor256 converts the red, green, blue tuple into an ANSI color
 // code (xterm-256)
-func RgbToColor256(redValue, green, blue uint8) uint8 {
+func RgbToColor256(red, green, blue uint8) uint8 {
 	// redValue, green, blue range 0-255 on input
 
-	if redValue == green && redValue == blue {
+	if red == green && red == blue { //nolint
 		// Grayscale
 		switch {
-		case redValue == 255:
+		case red == 255:
 			// Bright white
 			return 15
-		case redValue == 0:
+		case red == 0:
 			// Black
 			return 0
 		}
 
-		return 232 + uint8(math.Round(float64(redValue)/10.65))
+		return 232 + uint8(math.Round(float64(red)/10.65))
 	}
 
-	return (36*ColorToAnsiIndex(redValue) +
+	return (36*ColorToAnsiIndex(red) +
 		6*ColorToAnsiIndex(green) +
 		ColorToAnsiIndex(blue)) + 16
 }
