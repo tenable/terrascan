@@ -54,8 +54,9 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.8.3
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069
-	golang.org/x/tools v0.1.5 // indirect
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
+	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e
+	golang.org/x/tools v0.1.6 // indirect
 	google.golang.org/api v0.34.0
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
 	gopkg.in/src-d/go-git.v4 v4.13.1
