@@ -31,7 +31,7 @@ import (
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
-	"github.com/hashicorp/hcl/v2" //nolint
+	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/spf13/afero"
@@ -348,19 +348,19 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 }
 
 // buildUnifiedConfig builds a unified config from *hclConfigs.Module object specified for a dir
-func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module, dir string) (*hclConfigs.Config, hcl.Diagnostics) { //nolint
+func (t TerraformDirectoryLoader) buildUnifiedConfig(rootMod *hclConfigs.Module, dir string) (*hclConfigs.Config, hcl.Diagnostics) {
 	// using the BuildConfig and ModuleWalkerFunc to traverse through all
 	// descendant modules from the root module and create a unified
 	// configuration of type *configs.Config
 	versionI := 0
 	return hclConfigs.BuildConfig(rootMod, hclConfigs.ModuleWalkerFunc(
-		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) { //nolint
+		func(req *hclConfigs.ModuleRequest) (*hclConfigs.Module, *version.Version, hcl.Diagnostics) {
 
 			// figure out path sub module directory, if it's remote then download it locally
 			var (
 				pathToModule   string
 				err            error
-				moduleDirDiags hcl.Diagnostics //nolint
+				moduleDirDiags hcl.Diagnostics
 			)
 			if downloader.IsLocalSourceAddr(req.SourceAddr) {
 

@@ -114,7 +114,7 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	var resourceConfig output.ResourceConfig
 	resourceConfig.ContainerImages = make([]output.ContainerDetails, 0)
 	resourceConfig.InitContainerImages = make([]output.ContainerDetails, 0)
-	var containerImages, initContainerImages []output.ContainerDetails //nolint
+	var containerImages, initContainerImages []output.ContainerDetails
 	resourceConfig.Type = k.getNormalizedName(resource.Kind)
 
 	switch resource.Kind {

@@ -23,7 +23,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/hashicorp/hcl/v2/hclsyntax" //nolint
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"go.uber.org/zap"
 )
 

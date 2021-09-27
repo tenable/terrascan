@@ -122,7 +122,7 @@ func getAbsoluteFilePath(resourcePath, filePath string) (string, error) {
 		}
 	}
 	fileMode := utils.GetFileMode(resourcePath)
-	if fileMode != nil && (*fileMode).IsDir() { //nolint
+	if fileMode != nil && fileMode.IsDir() {
 		return filepath.Join(resourcePath, filePath), nil
 	}
 	return resourcePath, nil

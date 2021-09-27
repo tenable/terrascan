@@ -23,7 +23,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
-	"gopkg.in/src-d/go-git.v4" //nolint
+	"gopkg.in/src-d/go-git.v4"
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
@@ -77,7 +77,7 @@ func DownloadPolicies() error {
 	zap.S().Debugf("cloning terrascan repo at %s", policyBasePath)
 
 	// clone the repo
-	r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{ //nolint
+	r, err := git.PlainClone(policyBasePath, false, &git.CloneOptions{
 		URL: repoURL,
 	})
 
@@ -92,7 +92,7 @@ func DownloadPolicies() error {
 	}
 
 	// fetch references
-	err = r.Fetch(&git.FetchOptions{ //nolint
+	err = r.Fetch(&git.FetchOptions{
 		RefSpecs: []gitConfig.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
 	})
 	if err != nil {
@@ -100,7 +100,7 @@ func DownloadPolicies() error {
 	}
 
 	// checkout policies branch
-	err = w.Checkout(&git.CheckoutOptions{ //nolint
+	err = w.Checkout(&git.CheckoutOptions{
 		Branch: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),
 		Force:  true,
 	})

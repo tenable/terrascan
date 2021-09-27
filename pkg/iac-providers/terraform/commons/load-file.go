@@ -22,7 +22,7 @@ import (
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/hashicorp/hcl/v2" //nolint
+	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
@@ -86,7 +86,7 @@ func getFileName(path string) string {
 }
 
 // getErrorMessagesFromDiagnostics should be called when diags.HasErrors is true
-func getErrorMessagesFromDiagnostics(diags hcl.Diagnostics) string { //nolint
+func getErrorMessagesFromDiagnostics(diags hcl.Diagnostics) string {
 	var errMsgs []string
 	for _, v := range diags {
 		errMsgs = append(errMsgs, v.Error())
