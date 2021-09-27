@@ -31,7 +31,7 @@ linters-settings:
     disabled-checks:
       - ifElseChain 
   gocyclo:
-    min-complexity: 50  
+    min-complexity: 30  
 
   
 
