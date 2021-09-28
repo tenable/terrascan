@@ -20,12 +20,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
 	"github.com/iancoleman/strcase"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 const (

@@ -22,7 +22,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl"
 	svchost "github.com/hashicorp/terraform-svchost"
@@ -34,6 +33,8 @@ import (
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/hashicorp/terraform/registry/response"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 // newRemoteModuleInstaller returns a RemoteModuleInstaller initialized with a

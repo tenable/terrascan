@@ -22,8 +22,9 @@ import (
 
 	"github.com/accurics/terrascan/pkg/utils"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // LoadIacFile loads the k8s file specified

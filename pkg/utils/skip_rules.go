@@ -22,8 +22,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 const (

@@ -21,8 +21,9 @@ import (
 	"fmt"
 	"net/http"
 
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
 	"go.uber.org/zap"
+
+	httputils "github.com/accurics/terrascan/pkg/utils/http"
 )
 
 var (

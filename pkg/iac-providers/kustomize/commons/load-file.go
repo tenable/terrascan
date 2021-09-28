@@ -19,8 +19,9 @@ package commons
 import (
 	"fmt"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 var (

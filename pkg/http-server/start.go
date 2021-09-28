@@ -23,12 +23,14 @@ import (
 	"os/signal"
 	"time"
 
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
 	gorillaHandlers "github.com/gorilla/handlers"
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/logging"
+	httputils "github.com/accurics/terrascan/pkg/utils/http"
+
 	"github.com/gorilla/mux"
+
+	"github.com/accurics/terrascan/pkg/logging"
 )
 
 // Start initializes api routes and starts http server

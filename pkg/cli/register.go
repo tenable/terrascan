@@ -22,10 +22,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/logging"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/config"
+	"github.com/accurics/terrascan/pkg/logging"
 )
 
 // RegisterCommand Registers a new command under the base command

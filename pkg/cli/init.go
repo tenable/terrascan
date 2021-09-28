@@ -17,9 +17,10 @@
 package cli
 
 import (
-	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/initialize"
 )
 
 var initCmd = &cobra.Command{

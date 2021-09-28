@@ -21,10 +21,11 @@ import (
 	"os"
 	"strings"
 
+	"go.uber.org/zap"
+
 	IacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
-	"go.uber.org/zap"
 )
 
 var (

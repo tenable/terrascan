@@ -23,14 +23,15 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 	"sigs.k8s.io/kustomize/api/krusty"
 	"sigs.k8s.io/kustomize/kyaml/filesys"
+
+	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 const (

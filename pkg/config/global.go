@@ -19,8 +19,9 @@ package config
 import (
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 const (

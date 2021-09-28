@@ -6,9 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	getter "github.com/hashicorp/go-getter"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 // ResolveLinkedTemplate downloads temlate for the given uri and returns its path

@@ -17,9 +17,10 @@
 package tfv12
 
 import (
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	commons "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
-	"go.uber.org/zap"
 )
 
 // LoadIacFile parses the given terraform file from the given file path

@@ -17,9 +17,10 @@
 package cli
 
 import (
-	httpserver "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+
+	httpserver "github.com/accurics/terrascan/pkg/http-server"
 )
 
 var (

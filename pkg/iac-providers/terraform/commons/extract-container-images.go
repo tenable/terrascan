@@ -22,10 +22,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 const (

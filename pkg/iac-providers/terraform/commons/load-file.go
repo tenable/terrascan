@@ -21,11 +21,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
 )
 
 // LoadIacFile parses the given terraform file from the given file path

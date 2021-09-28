@@ -22,10 +22,11 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/hashicorp/go-multierror"
 )
 
 // LoadIacDir loads all CFT template files in the current directory.

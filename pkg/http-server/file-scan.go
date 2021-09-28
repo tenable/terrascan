@@ -26,11 +26,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 )
 
 // scanFile accepts uploaded file and runs scan on it

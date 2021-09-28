@@ -48,7 +48,7 @@ func HexToColor256(hex string) uint8 {
 // RgbToColor256 converts the red, green, blue tuple into an ANSI color
 // code (xterm-256)
 func RgbToColor256(red, green, blue uint8) uint8 {
-	// redValue, green, blue range 0-255 on input
+	// red, green, blue range 0-255 on input
 
 	if red == green && red == blue { //nolint
 		// Grayscale

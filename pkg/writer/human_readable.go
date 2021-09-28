@@ -22,8 +22,9 @@ import (
 	"io"
 	"text/template"
 
-	"github.com/accurics/terrascan/pkg/results"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/results"
 )
 
 const (

@@ -22,12 +22,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
 	"github.com/go-errors/errors"
 	"github.com/owenrumney/go-sarif/sarif"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/accurics/terrascan/pkg/version"
 )
 
 const (

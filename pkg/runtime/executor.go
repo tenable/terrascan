@@ -24,12 +24,13 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/accurics/terrascan/pkg/filters"
 	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/hashicorp/go-multierror"
 )
 
 const (

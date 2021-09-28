@@ -23,12 +23,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/config"
 	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/accurics/terrascan/pkg/results"
-	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 )
 
 // ErrDashboardDisabled would be the error returned back when log endpoint

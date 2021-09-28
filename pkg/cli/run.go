@@ -23,12 +23,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mattn/go-isatty"
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/downloader"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/writer"
-	"github.com/mattn/go-isatty"
-	"go.uber.org/zap"
 )
 
 const (

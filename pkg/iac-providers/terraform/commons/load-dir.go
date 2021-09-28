@@ -25,10 +25,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/downloader"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
 	version "github.com/hashicorp/go-version"
 	"github.com/hashicorp/hcl/v2"
@@ -36,6 +32,11 @@ import (
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/spf13/afero"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/downloader"
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/results"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 var (

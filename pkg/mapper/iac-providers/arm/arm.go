@@ -19,13 +19,14 @@ package arm
 import (
 	"errors"
 
+	"github.com/google/uuid"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper/core"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/config"
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/google/uuid"
 )
 
 type armMapper struct{}

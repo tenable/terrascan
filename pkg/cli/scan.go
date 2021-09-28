@@ -20,10 +20,11 @@ import (
 	"fmt"
 	"strings"
 
-	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+
+	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
+	"github.com/accurics/terrascan/pkg/policy"
 )
 
 var scanOptions = NewScanOptions()

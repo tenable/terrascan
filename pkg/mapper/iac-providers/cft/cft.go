@@ -40,11 +40,6 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/ecs"
 	"github.com/awslabs/goformation/v4/cloudformation/logs"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/awslabs/goformation/v4/cloudformation"
 	"github.com/awslabs/goformation/v4/cloudformation/amazonmq"
 	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
@@ -61,6 +56,12 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/redshift"
 	"github.com/awslabs/goformation/v4/cloudformation/route53"
 	"github.com/awslabs/goformation/v4/cloudformation/s3"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/mapper/core"
+	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
+	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 const errUnsupportedDoc = "unsupported document type"
@@ -122,7 +123,7 @@ func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) (
 	return configs, nil
 }
 
-func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSResourceConfig {
+func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSResourceConfig { //nolint
 	switch resource := r.(type) {
 	case *docdb.DBCluster:
 		return config.GetDocDBConfig(resource)

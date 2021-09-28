@@ -23,10 +23,11 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/hashicorp/go-multierror"
 )
 
 func (*K8sV1) getFileType(file string) string {

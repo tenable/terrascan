@@ -19,8 +19,6 @@ package k8sv1
 import (
 	"encoding/json"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -28,6 +26,9 @@ import (
 	k8sbatchv1 "k8s.io/api/batch/v1"
 	k8sbatchv1beta1 "k8s.io/api/batch/v1beta1"
 	k8scorev1 "k8s.io/api/core/v1"
+
+	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]output.ContainerDetails, []output.ContainerDetails, error) {

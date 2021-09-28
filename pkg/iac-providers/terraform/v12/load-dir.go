@@ -17,9 +17,10 @@
 package tfv12
 
 import (
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	commons "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
-	"go.uber.org/zap"
 )
 
 // LoadIacDir starts traversing from the given rootDir and traverses through

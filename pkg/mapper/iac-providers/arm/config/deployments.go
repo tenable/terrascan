@@ -19,10 +19,11 @@ package config
 import (
 	"encoding/json"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/mapper/convert"
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
-	"go.uber.org/zap"
 )
 
 const (

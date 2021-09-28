@@ -23,13 +23,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/mapper"
 	"github.com/accurics/terrascan/pkg/mapper/convert"
 	"github.com/accurics/terrascan/pkg/mapper/core"
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
-	"go.uber.org/zap"
 )
 
 // LoadIacFile loads the specified ARM template file.

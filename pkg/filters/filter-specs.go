@@ -19,9 +19,10 @@ package filters
 import (
 	"strings"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
-	"go.uber.org/zap"
 )
 
 // PolicyTypesFilterSpecification is policy type based Filter Spec

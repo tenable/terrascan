@@ -24,13 +24,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/downloader"
 	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 )
 
 // scanRemoteRepoReq contains request body for remote repository scanning

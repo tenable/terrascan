@@ -20,9 +20,10 @@ import (
 	"fmt"
 	"reflect"
 
+	"go.uber.org/zap"
+
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/utils"
-	"go.uber.org/zap"
 )
 
 var (

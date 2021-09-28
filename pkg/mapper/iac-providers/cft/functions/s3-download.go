@@ -26,12 +26,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	getter "github.com/hashicorp/go-getter"
 	"go.uber.org/zap"
+
+	"github.com/accurics/terrascan/pkg/utils"
 )
 
 // HeadBucketAPIClient is an S3 API client that can invoke the HeadBucket operation.

@@ -33,6 +33,11 @@ linters-settings:
       - ifElseChain 
   gocyclo:
     min-complexity: 30  
+  goimports:
+  # to run goimports locally to fix this linter issue use this:
+  # goimports -w -local="github.com/accurics/terrascan" </path/to/file>
+    local-prefixes: "github.com/accurics/terrascan"
+  
 
   
 
