@@ -41,6 +41,7 @@ const (
 	jsonCodeSuffix         = "${jsonencode("
 	fileSuffix             = `${file("`
 	containerDefinitions   = "container_definitions"
+	testConstant           = "usefortest"
 )
 
 // all the type of resources which has container definitaions
@@ -163,8 +164,6 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 						results = append(results, tempContainer)
 					}
 				}
-			default:
-				zap.S().Debug("no info")
 			}
 			break
 		}
