@@ -194,7 +194,7 @@ Terrascan can display vulnerabilities for Docker images present in the IaC files
 $ terrascan scan -i <IaC Provider> --find-vuln
 ```
 
-This command looks for all the Docker images present in the IaC files being scanned and retrieves any vulnerabilities as reported by it's container registry. Supported container registries include: AWS Elastic Container Registry (ECR), Azure Container Registry, Google Container Registry, and Google Artifact Registry.
+This command looks for all the Docker images present in the IaC files being scanned and retrieves any vulnerabilities as reported by it's container registry. Supported container registries include: AWS Elastic Container Registry (ECR), Azure Container Registry, Google Container Registry, Google Artifact Registry and Harbor Container Registry.
 
 The following environment variables are required when connecting to the container registries:
 
@@ -223,6 +223,14 @@ Terrascan also requires the password to the registry set into the `AZURE_ACR_PAS
 ``` Bash
 az acr credential show --name RegistryName
 ```
+#### Harbor Container Registry
+
+When integrating vulnerability results from Harbor, Terrascan requires the `HARBOR_REGISTRY_USERNAME`, `HARBOR_REGISTRY_PASSWORD`,`HARBOR_REGISTRY_CACERT`, `HARBOR_SKIP_TLS`, and `HARBOR_REGISTRY_DOMAIN` environment variables.
+
+Terrascan requires `HARBOR_REGISTRY_DOMAIN` environment variable to identify domain of harobor registry.
+
+In case using terrascan for development or testing purpose then to skip tls verification set `HARBOR_SKIP_TLS` environment variable to `true`.
+
 
 ### Resource Config
 While scanning a IaC, Terrascan loads all the IaC files, creates a list of resource configs and then processes this list to report violations. For debugging purposes, you can print this resource configs list as an output by using the `--config-only` flag to the `terrascan scan` command.
