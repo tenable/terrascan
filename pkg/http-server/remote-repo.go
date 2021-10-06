@@ -46,8 +46,8 @@ type scanRemoteRepoReq struct {
 	NonRecursive             bool     `json:"non_recursive"`
 	FindVulnerabilities      bool     `json:"find_vulnerabilities"`
 	d                        downloader.Downloader
-	NotificationWebhookURL   string `json:"webhook_url"`
-	NotificationWebhookToken string `json:"webhook_token"`
+	NotificationWebhookURL   string `json:"notification_webhook_url"`
+	NotificationWebhookToken string `json:"notification_webhook_token"`
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
