@@ -11,7 +11,6 @@ replace (
 
 require (
 	cloud.google.com/go v0.65.0
-	github.com/Azure/azure-sdk-for-go v56.2.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.18
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
 	github.com/BurntSushi/toml v0.4.1 // indirect
@@ -24,7 +23,7 @@ require (
 	github.com/aws/smithy-go v1.6.0
 	github.com/awslabs/goformation/v4 v4.19.1
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-errors/errors v1.0.1
+	github.com/go-errors/errors v1.4.1
 	github.com/google/go-containerregistry v0.1.2
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/handlers v1.5.1
@@ -54,9 +53,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.8.3
 	go.uber.org/zap v1.16.0
-	golang.org/x/mod v0.5.1 // indirect
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/sys v0.0.0-20211004093028-2c5d950f24ef
-	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/api v0.34.0
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
 	gopkg.in/src-d/go-git.v4 v4.13.1
