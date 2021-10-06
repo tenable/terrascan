@@ -418,6 +418,22 @@ func TestInit(t *testing.T) {
 			wantErr:         config.ErrNotPresent,
 			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 		},
+		{
+			name: "notification webhook configs passed as CLI args",
+			executor: Executor{
+				filePath:                 filepath.Join(testDataDir, "testfile"),
+				dirPath:                  "",
+				policyTypes:              []string{"aws"},
+				iacType:                  "terraform",
+				iacVersion:               "v12",
+				notificationWebhookURL:   "http://some-host.url",
+				notificationWebhookToken: "token",
+			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
+			wantErr:         nil,
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
 	}
 
 	for _, tt := range table {
@@ -449,16 +465,18 @@ func TestInit(t *testing.T) {
 }
 
 type flagSet struct {
-	iacType     string
-	iacVersion  string
-	filePath    string
-	dirPath     string
-	policyPath  []string
-	policyTypes []string
-	categories  []string
-	severity    string
-	scanRules   []string
-	skipRules   []string
+	iacType                  string
+	iacVersion               string
+	filePath                 string
+	dirPath                  string
+	policyPath               []string
+	policyTypes              []string
+	categories               []string
+	severity                 string
+	scanRules                []string
+	skipRules                []string
+	notificationWebhookURL   string
+	notificationWebhookToken string
 }
 
 func TestNewExecutor(t *testing.T) {
@@ -587,7 +605,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false, tt.flags.notificationWebhookURL, tt.flags.notificationWebhookToken)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

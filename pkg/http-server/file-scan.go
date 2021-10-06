@@ -102,6 +102,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// scan and skip rules are comma separated rule id's in the request body
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
+	notificationWebhookURL := r.FormValue("notificationWebhookURL")
+	notificationWebhookToken := r.FormValue("notificationWebhookToken")
 
 	// categories is the list categories of violations that the user want to get informed about: low, medium or high
 	categoriesValue := r.FormValue("categories")
@@ -164,10 +166,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false)
+			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false, notificationWebhookURL, notificationWebhookToken)
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities)
+			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities, notificationWebhookURL, notificationWebhookToken)
 	}
 	if err != nil {
 		zap.S().Error(err)
