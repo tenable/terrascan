@@ -79,6 +79,7 @@ func (w *Webhook) SendNotification(data interface{}) error {
 
 	// validate http response
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+
 		zap.S().Errorf("failed to webhook notification. Incorrect status code: '%v'", resp.StatusCode)
 		return fmt.Errorf("webhook notification failed")
 	}
