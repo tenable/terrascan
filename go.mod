@@ -10,8 +10,7 @@ replace (
 )
 
 require (
-	cloud.google.com/go v0.65.0
-	github.com/Azure/azure-sdk-for-go v56.2.0+incompatible
+	cloud.google.com/go v0.81.0
 	github.com/Azure/go-autorest/autorest v0.11.18
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
 	github.com/BurntSushi/toml v0.4.1 // indirect
@@ -50,19 +49,17 @@ require (
 	github.com/pelletier/go-toml v1.9.3
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.8.3
-	go.uber.org/zap v1.16.0
-	golang.org/x/mod v0.5.1 // indirect
+	go.uber.org/zap v1.17.0
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/sys v0.0.0-20211004093028-2c5d950f24ef
-	golang.org/x/tools v0.1.7 // indirect
-	google.golang.org/api v0.34.0
-	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
+	google.golang.org/api v0.44.0
+	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.6.1
-	honnef.co/go/tools v0.2.1 // indirect
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/client-go v10.0.0+incompatible
