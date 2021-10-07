@@ -28,8 +28,8 @@ RUN addgroup --gid 101 terrascan && \
     apk add --no-cache git openssh
 
 # create ~/.ssh & ~/bin folder and change owner to terrascan
-RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin && \
-    chown -R terrascan:terrascan /home/terrascan
+RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin /data && \
+    chown -R terrascan:terrascan /home/terrascan /data
 
 # run as non root user
 USER 101
