@@ -7,6 +7,7 @@
 **Implemented enhancements:**
 
 - How to ignore rules onto whole module included into HCL file [\#983](https://github.com/accurics/terrascan/issues/983)
+- Adds: support for harbor registry vulnerability  fetching [\#1015](https://github.com/accurics/terrascan/pull/1015) ([Rchanger](https://github.com/Rchanger))
 
 **Fixed bugs:**
 
@@ -25,7 +26,6 @@
 - Optimized disk encryption check code on the azurerm\_managed\_disk resource [\#1037](https://github.com/accurics/terrascan/pull/1037) ([IrinaRaza](https://github.com/IrinaRaza))
 - Update docs for AWS.LambdaFunction.Logging.Low.0472 policy [\#1027](https://github.com/accurics/terrascan/pull/1027) ([brandysnaps](https://github.com/brandysnaps))
 - fix: added null check before value conversion to avoid panic [\#1020](https://github.com/accurics/terrascan/pull/1020) ([Rchanger](https://github.com/Rchanger))
-- Adds: support for harbor registry vulnerability  fetching [\#1015](https://github.com/accurics/terrascan/pull/1015) ([Rchanger](https://github.com/Rchanger))
 - Update mkdocs-material to 7.2.6 [\#1012](https://github.com/accurics/terrascan/pull/1012) ([pyup-bot](https://github.com/pyup-bot))
 - Update README.md [\#1011](https://github.com/accurics/terrascan/pull/1011) ([enmanuelmoreira](https://github.com/enmanuelmoreira))
 - Adds: e2e tests for vulnerability [\#1009](https://github.com/accurics/terrascan/pull/1009) ([Rchanger](https://github.com/Rchanger))
