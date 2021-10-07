@@ -46,7 +46,7 @@ spec:
 {{- $globconfig := .Files.Glob "data/config.toml" }}
 {{- if $globconfig }}
             - "-c"
-            - "/etc/config/terrascan-config"
+            - "/etc/config/terrascan-config.toml"
 {{- end }}
           env:
             - name: "K8S_WEBHOOK_API_KEY"
