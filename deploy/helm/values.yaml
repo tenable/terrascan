@@ -1,5 +1,5 @@
 terrascan_webhook_key: terrakey
-terrascan_container_image: accurics/terrascan:1.6.0
+terrascan_container_image: accurics/terrascan:1.11.0
 terrascan_service_type: ClusterIP
 use_debug: true
 # provide secrets for admission controller
