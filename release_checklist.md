@@ -44,3 +44,7 @@ Run the commands below to update Brew to the latest Terrascan version.
 $ export TERRASCAN_VERSION=<release_version_number>
 $ brew bump-formula-pr --no-browse --url https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
 ```
+
+### Update helm chart and kustomize directory
+
+Manually change the version for the terrascan container image in files `deploy/helm/values.yaml` and `deploy/kustomize/base/deployment.yaml`.

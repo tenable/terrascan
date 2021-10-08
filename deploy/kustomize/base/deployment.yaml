@@ -20,7 +20,7 @@ spec:
               name: terrascan-data-sync
       containers:
       - name: terrascan-server
-        image: accurics/terrascan:1.6.0
+        image: accurics/terrascan:1.11.0
         imagePullPolicy: IfNotPresent
         resources:
           limits:
