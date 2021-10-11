@@ -256,6 +256,12 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 
 // getExitCode returns appropriate exit code for terrascan based on scan output
 func getExitCode(o runtime.Output) int {
+
+	// if SoftFail is set to true then we return 0 for any policy violation errors
+	if SoftFail {
+		return 0
+	}
+
 	if len(o.Violations.ViolationStore.DirScanErrors) > 0 {
 		if o.Violations.ViolationStore.Summary.ViolatedPolicies > 0 {
 			return 5

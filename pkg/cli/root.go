@@ -32,6 +32,9 @@ var (
 
 	// ConfigFile Config file path
 	ConfigFile string
+
+	// SoftFail option allows you to exit checks with 0 status.
+	SoftFail bool
 )
 
 var rootCmd = &cobra.Command{

@@ -295,4 +295,25 @@ var _ = Describe("Scan", func() {
 			})
 		})
 	})
+
+	Describe("scan is run with --soft-fail flag", func() {
+		Context("no tf files are present in the working directory", func() {
+			It("scans the directory with all iac and display results with exit code 0", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "--soft-fail"}
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				helper.ValidateExitCode(session, scanUtils.ScanTimeout, helper.ExitCodeZero)
+			})
+
+		})
+		Context("tf files are present in the working directory", func() {
+			It("should scan the directory, return results and exit with status code 0", func() {
+				workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err).NotTo(HaveOccurred())
+
+				scanArgs := []string{scanUtils.ScanCommand, "--soft-fail", "-i", "terraform", "--non-recursive"}
+				session = helper.RunCommandDir(terrascanBinaryPath, workDir, outWriter, errWriter, scanArgs...)
+				Eventually(session, scanUtils.ScanTimeout).Should(gexec.Exit(helper.ExitCodeZero))
+			})
+		})
+	})
 })

@@ -39,7 +39,7 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
-
+	rootCmd.PersistentFlags().BoolVarP(&SoftFail, "soft-fail", "s", false, "exits checks with status code 0")
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
 		// Set up the logger
@@ -77,6 +77,9 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
+		if SoftFail {
+			os.Exit(0)
+		}
 		os.Exit(1)
 	}
 }
