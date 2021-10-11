@@ -9,9 +9,9 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/build"
     schedule:
-      interval: "weekly"
+      interval: "daily"
