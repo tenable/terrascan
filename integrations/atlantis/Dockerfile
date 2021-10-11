@@ -1,5 +1,5 @@
-FROM runatlantis/atlantis:v0.16.1
-ENV DEFAULT_TERRASCAN_VERSION=1.5.1
+FROM runatlantis/atlantis:v0.17.4
+ENV DEFAULT_TERRASCAN_VERSION=1.11.0
 ENV PLANFILE tfplan
 ADD setup.sh terrascan.sh launch-atlantis.sh entrypoint.sh /usr/local/bin/
 RUN mkdir -p /etc/atlantis/ && \
