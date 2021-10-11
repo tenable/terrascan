@@ -45,7 +45,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 		return resourceConfig, fmt.Errorf("failed type assertion for hcl.Body in *hclConfigs.Resource. error: expected hcl.Body type is *hclsyntax.Body, but got %T", managedResource.Config)
 	}
 
-	goOut, err := c.convertBody(hclBody)
+	goOut, lineOut, err := c.convertBody(hclBody)
 	if err != nil {
 		zap.S().Errorf("failed to convert hcl.Body to go struct; resource '%s', file: '%s'. error: '%v'",
 			managedResource.Name, managedResource.DeclRange.Filename, err)
@@ -63,6 +63,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 		Source:              managedResource.DeclRange.Filename,
 		Line:                managedResource.DeclRange.Start.Line,
 		Config:              goOut,
+		LineConfig:          lineOut,
 		SkipRules:           utils.GetSkipRules(c.rangeSource(hclBody.Range())),
 		MaxSeverity:         maxSeverity,
 		MinSeverity:         minSeverity,

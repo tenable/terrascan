@@ -80,7 +80,7 @@ func (r *RefResolver) ResolveLocalRef(localRef, callerRef string) interface{} {
 
 	// extract values from attribute expressions as golang interface{}
 	c := converter{bytes: fileBytes}
-	val, err := c.convertExpression(localAttr.Expr.(hclsyntax.Expression))
+	val, _, err := c.convertExpression(localAttr.Expr.(hclsyntax.Expression))
 	if err != nil {
 		zap.S().Errorf("failed to convert expression '%v', ref: '%v'", localAttr.Expr, localRef)
 		return localRef
