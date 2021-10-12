@@ -75,15 +75,21 @@ func (c *converter) convertBody(body *hclsyntax.Body) (jsonObj, lineObj, error) 
 		blockConfig := bcfg[block.Type].(jsonObj)
 		if _, present := cfg[block.Type]; !present {
 			cfg[block.Type] = []jsonObj{blockConfig}
-			lcfg[block.Type] = []lineObj{blcfg[block.Type].(lineObj)}
+			if lineCfg, ok := blcfg[block.Type].(lineObj); ok {
+				lcfg[block.Type] = []lineObj{lineCfg}
+			}
+
 		} else {
 			list := cfg[block.Type].([]jsonObj)
 			list = append(list, blockConfig)
 			cfg[block.Type] = list
 
-			lineList := lcfg[block.Type].([]lineObj)
-			lineList = append(lineList, blcfg[block.Type].(lineObj))
-			lcfg[block.Type] = lineList
+			if lineList, ok := lcfg[block.Type].([]lineObj); ok {
+				if lineCfg, ok := blcfg[block.Type].(lineObj); ok {
+					lineList = append(lineList, lineCfg)
+				}
+				lcfg[block.Type] = lineList
+			}
 		}
 	}
 
