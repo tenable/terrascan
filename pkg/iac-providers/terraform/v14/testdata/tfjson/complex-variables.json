@@ -114,7 +114,25 @@
           }
         ]
       },
-      "skip_rules": null
+      "line_config": {
+        "boolList": 5,
+        "floatList": 4,
+        "intList": 3,
+        "listTuple": 9,
+        "list_no_type": 6,
+        "mapVar": 12,
+        "mapVarComplex": 13,
+        "objecVar": 11,
+        "objectList": 14,
+        "objectListComplex": 15,
+        "setVar": 7,
+        "stringList": 2,
+        "tupleVar": 8,
+        "tupleVarComplex": 10
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }
