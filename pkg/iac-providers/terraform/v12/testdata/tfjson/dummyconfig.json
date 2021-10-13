@@ -18,7 +18,12 @@
       },
       "line_config": {
         "backend": 42,
-        "config": 47
+        "config": {
+          "bucket": 46,
+          "key": 47,
+          "profile": 44,
+          "region": 45
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -86,7 +91,16 @@
         }
       },
       "line_config": {
-        "other": 22
+        "other": {
+          "3": 18,
+          "a.b.c": 22,
+          "a.b.c[\"hi\"][3].*": 20,
+          "local.test1": 19,
+          "local.test3": 17,
+          "loop": 21,
+          "num": 15,
+          "thing": 16
+        }
       },
       "skip_rules": null,
       "max_severity": "",
