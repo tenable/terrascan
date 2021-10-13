@@ -31,7 +31,13 @@
         "proxy_configuration": [
           {
             "container_name": 7,
-            "properties": 13,
+            "properties": {
+              "AppPorts": 9,
+              "EgressIgnoredIPs": 10,
+              "IgnoredUID": 11,
+              "ProxyEgressPort": 12,
+              "ProxyIngressPort": 13
+            },
             "type": 6
           }
         ]
@@ -198,7 +204,9 @@
         "name": 2,
         "os_type": 7,
         "resource_group_name": 4,
-        "tags": 29
+        "tags": {
+          "environment": 29
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -406,7 +414,9 @@
       "line_config": {
         "metadata": [
           {
-            "labels": 42,
+            "labels": {
+              "test": 42
+            },
             "name": 39,
             "namespace": 40
           }
@@ -416,14 +426,18 @@
             "replicas": 47,
             "selector": [
               {
-                "match_labels": 51
+                "match_labels": {
+                  "test": 51
+                }
               }
             ],
             "template": [
               {
                 "metadata": [
                   {
-                    "labels": 58
+                    "labels": {
+                      "test": 58
+                    }
                   }
                 ],
                 "spec": [
@@ -647,8 +661,16 @@
                 "name": 9,
                 "resources": [
                   {
-                    "limits": 15,
-                    "requests": 21
+                    "limits": {
+                      "cpu": 13,
+                      "memory": 14,
+                      "nvidia/gpu": 15
+                    },
+                    "requests": {
+                      "cpu": 19,
+                      "memory": 20,
+                      "nvidia/gpu": 21
+                    }
                   }
                 ]
               }
@@ -751,19 +773,27 @@
       "line_config": {
         "metadata": [
           {
-            "labels": 5,
+            "labels": {
+              "test": 5
+            },
             "name": 3
           }
         ],
         "spec": [
           {
-            "selector": 11,
+            "selector": {
+              "test": 11
+            },
             "template": [
               {
                 "metadata": [
                   {
-                    "annotations": 19,
-                    "labels": 16
+                    "annotations": {
+                      "key1": 19
+                    },
+                    "labels": {
+                      "test": 16
+                    }
                   }
                 ],
                 "spec": [
@@ -792,8 +822,14 @@
                         "name": 26,
                         "resources": [
                           {
-                            "limits": 46,
-                            "requests": 50
+                            "limits": {
+                              "cpu": 45,
+                              "memory": 46
+                            },
+                            "requests": {
+                              "cpu": 49,
+                              "memory": 50
+                            }
                           }
                         ]
                       }
@@ -865,7 +901,9 @@
                 "target_port": 32
               }
             ],
-            "selector": 26,
+            "selector": {
+              "app": 26
+            },
             "type": 28
           }
         ]
@@ -1096,8 +1134,15 @@
       "line_config": {
         "metadata": [
           {
-            "annotations": 4,
-            "labels": 11,
+            "annotations": {
+              "SomeAnnotation": 4
+            },
+            "labels": {
+              "addonmanager.kubernetes.io/mode": 10,
+              "k8s-app": 8,
+              "kubernetes.io/cluster-service": 9,
+              "version": 11
+            },
             "name": 14
           }
         ],
@@ -1108,7 +1153,9 @@
             "revision_history_limit": 20,
             "selector": [
               {
-                "match_labels": 24
+                "match_labels": {
+                  "k8s-app": 24
+                }
               }
             ],
             "service_name": 28,
@@ -1116,8 +1163,11 @@
               {
                 "metadata": [
                   {
-                    "annotations": 36,
-                    "labels": 33
+                    "annotations": {
+                    },
+                    "labels": {
+                      "k8s-app": 33
+                    }
                   }
                 ],
                 "spec": [
@@ -1130,8 +1180,14 @@
                         "name": 56,
                         "resources": [
                           {
-                            "limits": 74,
-                            "requests": 79
+                            "limits": {
+                              "cpu": 73,
+                              "memory": 74
+                            },
+                            "requests": {
+                              "cpu": 78,
+                              "memory": 79
+                            }
                           }
                         ],
                         "volume_mount": [
@@ -1179,8 +1235,14 @@
                         ],
                         "resources": [
                           {
-                            "limits": 104,
-                            "requests": 109
+                            "limits": {
+                              "cpu": 103,
+                              "memory": 104
+                            },
+                            "requests": {
+                              "cpu": 108,
+                              "memory": 109
+                            }
                           }
                         ],
                         "volume_mount": [
@@ -1249,7 +1311,9 @@
                     "access_modes": 172,
                     "resources": [
                       {
-                        "requests": 177
+                        "requests": {
+                          "storage": 177
+                        }
                       }
                     ],
                     "storage_class_name": 173
