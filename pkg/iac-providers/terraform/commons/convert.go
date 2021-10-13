@@ -73,23 +73,18 @@ func (c *converter) convertBody(body *hclsyntax.Body) (jsonObj, lineObj, error) 
 		}
 
 		blockConfig := bcfg[block.Type].(jsonObj)
+		lineCfg := blcfg[block.Type].(lineObj)
 		if _, present := cfg[block.Type]; !present {
 			cfg[block.Type] = []jsonObj{blockConfig}
-			if lineCfg, ok := blcfg[block.Type].(lineObj); ok {
-				lcfg[block.Type] = []lineObj{lineCfg}
-			}
-
+			lcfg[block.Type] = []lineObj{lineCfg}
 		} else {
 			list := cfg[block.Type].([]jsonObj)
 			list = append(list, blockConfig)
 			cfg[block.Type] = list
 
-			if lineList, ok := lcfg[block.Type].([]lineObj); ok {
-				if lineCfg, ok := blcfg[block.Type].(lineObj); ok {
-					lineList = append(lineList, lineCfg)
-				}
-				lcfg[block.Type] = lineList
-			}
+			lineList := lcfg[block.Type].([]lineObj)
+			lineList = append(lineList, lineCfg)
+			lcfg[block.Type] = lineList
 		}
 	}
 
@@ -112,10 +107,26 @@ func (c *converter) convertBlock(block *hclsyntax.Block, cfg jsonObj, lcfg lineO
 				// TODO: better diagnostics
 				return fmt.Errorf("unable to convert Block to JSON: %v.%v", block.Type, strings.Join(block.Labels, "."))
 			}
+
+			if innerLineObj := lcfg[key]; exists {
+				lcfg, ok = innerLineObj.(lineObj)
+				if !ok {
+					return fmt.Errorf("unable to convert Block to JSON: %v.%v", block.Type, strings.Join(block.Labels, "."))
+				}
+			}
+
 		} else {
-			obj := make(jsonObj)
+			var (
+				obj  = make(jsonObj)
+				lobj = make(lineObj)
+			)
+
 			cfg[key] = obj
 			cfg = obj
+
+			lcfg[key] = lobj
+			lcfg = lobj
+
 		}
 		key = label
 	}
@@ -145,7 +156,7 @@ func (c *converter) convertBlock(block *hclsyntax.Block, cfg jsonObj, lcfg lineO
 	return nil
 }
 
-func (c *converter) convertExpression(expr hclsyntax.Expression) (ret interface{}, line int, err error) {
+func (c *converter) convertExpression(expr hclsyntax.Expression) (ret interface{}, line interface{}, err error) {
 	// assume it is hcl syntax (because, um, it is)
 	line = expr.StartRange().Start.Line
 	switch value := expr.(type) {
@@ -168,17 +179,18 @@ func (c *converter) convertExpression(expr hclsyntax.Expression) (ret interface{
 		return list, line, nil
 	case *hclsyntax.ObjectConsExpr:
 		m := make(jsonObj)
+		l := make(lineObj)
 		for _, item := range value.Items {
 			key, err := c.convertKey(item.KeyExpr)
 			if err != nil {
 				return nil, line, err
 			}
-			m[key], line, err = c.convertExpression(item.ValueExpr)
+			m[key], l[key], err = c.convertExpression(item.ValueExpr)
 			if err != nil {
 				return nil, line, err
 			}
 		}
-		return m, line, nil
+		return m, l, nil
 	default:
 		return c.wrapExpr(expr), line, nil
 	}
