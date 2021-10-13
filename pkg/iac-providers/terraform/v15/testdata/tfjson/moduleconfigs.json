@@ -285,7 +285,9 @@
       },
       "line_config": {
         "creation_token": 2,
-        "tags": 5
+        "tags": {
+          "Name": 5
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -396,7 +398,9 @@
         "retention_period": 4,
         "shard_count": 3,
         "shard_level_metrics": 6,
-        "tags": 15
+        "tags": {
+          "Environment": 15
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -423,7 +427,10 @@
       "line_config": {
         "description": 2,
         "is_enabled": 3,
-        "tags": 6
+        "tags": {
+          "Name": 5,
+          "Setup": 6
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -486,7 +493,10 @@
       "line_config": {
         "acl": 3,
         "bucket": 2,
-        "tags": 7
+        "tags": {
+          "Environment": 7,
+          "Name": 6
+        }
       },
       "skip_rules": null,
       "max_severity": "",
@@ -551,7 +561,9 @@
           }
         ],
         "name": 2,
-        "tags": 7,
+        "tags": {
+          "Name": 7
+        },
         "vpc_id": 4
       },
       "skip_rules": null,

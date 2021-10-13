@@ -44,8 +44,25 @@
         "ami": 78,
         "instance_type": 79,
         "key_name": 82,
+        "provisioner": [
+          {
+            "remote-exec": {
+              "connection": [
+                {
+                  "host": 96,
+                  "private_key": 99,
+                  "type": 97,
+                  "user": 98
+                }
+              ],
+              "inline": 88
+            }
+          }
+        ],
         "subnet_id": 80,
-        "tags": 84,
+        "tags": {
+          "Environment": 84
+        },
         "vpc_security_group_ids": 81
       },
       "skip_rules": null,
@@ -68,7 +85,9 @@
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
       "line_config": {
-        "tags": 17,
+        "tags": {
+          "Environment": 17
+        },
         "vpc_id": 15
       },
       "skip_rules": null,
@@ -124,7 +143,9 @@
             "gateway_id": 34
           }
         ],
-        "tags": 37,
+        "tags": {
+          "Environment": 37
+        },
         "vpc_id": 31
       },
       "skip_rules": null,
@@ -220,7 +241,9 @@
           }
         ],
         "name": 47,
-        "tags": 68,
+        "tags": {
+          "Environment": 68
+        },
         "vpc_id": 48
       },
       "skip_rules": null,
@@ -247,7 +270,9 @@
       "line_config": {
         "cidr_block": 23,
         "map_public_ip_on_launch": 24,
-        "tags": 26,
+        "tags": {
+          "Environment": 26
+        },
         "vpc_id": 22
       },
       "skip_rules": null,
@@ -275,7 +300,9 @@
         "cidr_block": 6,
         "enable_dns_hostnames": 8,
         "enable_dns_support": 7,
-        "tags": 10
+        "tags": {
+          "Environment": 10
+        }
       },
       "skip_rules": null,
       "max_severity": "",
