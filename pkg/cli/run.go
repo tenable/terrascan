@@ -108,6 +108,12 @@ type ScanOptions struct {
 
 	// notificationWebhookToken is the auth token to call the notification webhook URL
 	notificationWebhookToken string
+
+	// repoURL lets us specify URL of the repository being scanned
+	repoURL string
+
+	// repoRef lets us specify the branch of the repository being scanned
+	repoRef string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -192,8 +198,10 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken)
+	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType, s.iacFilePath, s.iacDirPath,
+		s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache,
+		s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken, s.repoURL, s.repoRef,
+	)
 	if err != nil {
 		return err
 	}

@@ -48,6 +48,7 @@ type scanRemoteRepoReq struct {
 	d                        downloader.Downloader
 	NotificationWebhookURL   string `json:"webhook_url"`
 	NotificationWebhookToken string `json:"webhook_token"`
+	RepoRef                  string `json:"repo-ref"`
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -131,7 +132,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive, false, s.FindVulnerabilities, s.NotificationWebhookURL, s.NotificationWebhookToken)
+		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive, false, s.FindVulnerabilities, s.NotificationWebhookURL, s.NotificationWebhookToken, s.RemoteURL, s.RepoRef)
 	if err != nil {
 		zap.S().Error(err)
 		return output, isAdmissionDenied, err

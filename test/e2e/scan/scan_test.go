@@ -17,11 +17,14 @@
 package scan_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
@@ -292,6 +295,53 @@ var _ = Describe("Scan", func() {
 						})
 					})
 				})
+			})
+		})
+	})
+
+	Describe("terrascan scan command is run with notification webhook and repo detail flags", func() {
+
+		notificationURL := "https://httpbin.org/post"
+		notificationToken := "token"
+
+		tfGoldenRelPath := filepath.Join("golden", "terraform_scans")
+		tfAwsAmiGoldenRelPath := filepath.Join(tfGoldenRelPath, "aws", "aws_ami_violations")
+
+		iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+		policyDir, err2 := filepath.Abs(policyRootRelPath)
+		It("should not error out while getting absolute path", func() {
+			Expect(err1).NotTo(HaveOccurred())
+			Expect(err2).NotTo(HaveOccurred())
+		})
+		Context("valid --webhook-url and --webhook-token flag is supplied", func() {
+			It("should scan and display violations in human output format and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL, "--webhook-token", notificationToken}
+				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+
+			})
+		})
+
+		Context("only --webhook-url flag is supplied", func() {
+			It("should scan and display violations in human output format and exit with status code 3", func() {
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL}
+				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+
+			})
+		})
+		Context("terrascan scan command is run with --repo-url and --repo-ref flag", func() {
+			It("should scan and result in json output format and exit with status code 3", func() {
+				scanArgs := []string{"scan", "-p", policyDir, "-i", "terraform", "-d", iacDir, "--repo-url", "https://github.com/accurics/terrascan.git", "--repo-ref", "main", "-o", "json"}
+				// scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human_with_repo_detail.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeThree))
+				sessionBytes := session.Wait().Out.Contents()
+				sessionBytes = bytes.TrimSpace(sessionBytes)
+				var sessionEngineOutput policy.EngineOutput
+
+				err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(sessionEngineOutput.Summary.ResourcePath).To((Equal("https://github.com/accurics/terrascan.git")))
+				Expect(sessionEngineOutput.Summary.Branch).To((Equal("main")))
 			})
 		})
 	})

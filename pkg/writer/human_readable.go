@@ -143,15 +143,23 @@ func detailedViolations(v results.Violation) string {
 }
 
 func scanSummary(s results.ScanSummary) string {
-	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
-		"File/Folder", s.ResourcePath,
+
+	out := fmt.Sprintf("%-20v:\t%s\n\t",
+		"File/Folder", s.ResourcePath)
+
+	if s.Branch != "" {
+		out += fmt.Sprintf("%-20v:\t%s\n\t", "Branch", s.Branch)
+	}
+
+	out += fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
 		"IaC Type", s.IacType,
 		"Scanned At", s.Timestamp,
 		"Policies Validated", s.TotalPolicies,
 		"Violated Policies", s.ViolatedPolicies,
 		"Low", s.LowCount,
 		"Medium", s.MediumCount,
-		"High", s.HighCount)
+		"High", s.HighCount,
+	)
 
 	if s.Vulnerabilities != nil {
 		out += fmt.Sprintf("%-20v:\t%d\n\t", "Vulnerabilities", *s.Vulnerabilities)
