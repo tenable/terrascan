@@ -156,7 +156,7 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef, callerRef string
 
 	// extract values from attribute expressions as golang interface{}
 	c := converter{bytes: fileBytes}
-	val, err := c.convertExpression(varAttr.Expr)
+	val, _, err := c.convertExpression(varAttr.Expr)
 	if err != nil {
 		zap.S().Errorf("failed to convert expression '%v', ref: '%v'", varAttr.Expr, varRef)
 		return varRef

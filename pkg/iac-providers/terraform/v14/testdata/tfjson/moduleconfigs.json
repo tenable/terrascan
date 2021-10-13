@@ -127,6 +127,92 @@
           }
         ]
       },
+      "line_config": {
+        "default_cache_behavior": [
+          {
+            "allowed_methods": 19,
+            "cached_methods": 20,
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": 27
+                  }
+                ],
+                "query_string": 24
+              }
+            ],
+            "target_origin_id": 21,
+            "viewer_protocol_policy": 30
+          }
+        ],
+        "enabled": 16,
+        "ordered_cache_behavior": [
+          {
+            "allowed_methods": 35,
+            "cached_methods": 36,
+            "compress": 48,
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": 44
+                  }
+                ],
+                "headers": 41,
+                "query_string": 40
+              }
+            ],
+            "path_pattern": 34,
+            "target_origin_id": 37,
+            "viewer_protocol_policy": 49
+          },
+          {
+            "allowed_methods": 54,
+            "cached_methods": 55,
+            "forwarded_values": [
+              {
+                "cookies": [
+                  {
+                    "forward": 62
+                  }
+                ],
+                "query_string": 59
+              }
+            ],
+            "path_pattern": 53,
+            "target_origin_id": 56,
+            "viewer_protocol_policy": 66
+          }
+        ],
+        "origin": [
+          {
+            "domain_name": 8,
+            "origin_id": 9,
+            "s3_origin_config": [
+              {
+                "origin_access_identity": 12
+              }
+            ]
+          }
+        ],
+        "restrictions": [
+          {
+            "geo_restriction": [
+              {
+                "locations": 72,
+                "restriction_type": 71
+              }
+            ]
+          }
+        ],
+        "viewer_certificate": [
+          {
+            "cloudfront_default_certificate": 77,
+            "minimum_protocol_version": 78
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -147,6 +233,12 @@
         "s3_bucket_name": "some-s3-bucket",
         "s3_key_prefix": "prefix"
       },
+      "line_config": {
+        "include_global_service_events": 5,
+        "name": 2,
+        "s3_bucket_name": 3,
+        "s3_key_prefix": 4
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -166,6 +258,11 @@
         "family": "service",
         "network_mode": "bridge"
       },
+      "line_config": {
+        "container_definitions": 4,
+        "family": 2,
+        "network_mode": 3
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -184,6 +281,12 @@
         "creation_token": "my-product",
         "tags": {
           "Name": "not-encrypted"
+        }
+      },
+      "line_config": {
+        "creation_token": 2,
+        "tags": {
+          "Name": 5
         }
       },
       "skip_rules": null,
@@ -208,6 +311,14 @@
         "parameter_group_name": "default.memcached1.4",
         "port": 11211
       },
+      "line_config": {
+        "cluster_id": 2,
+        "engine": 3,
+        "node_type": 4,
+        "num_cache_nodes": 5,
+        "parameter_group_name": 6,
+        "port": 7
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -224,6 +335,9 @@
       "type": "aws_guardduty_detector",
       "config": {
         "enable": false
+      },
+      "line_config": {
+        "enable": 2
       },
       "skip_rules": null,
       "max_severity": "",
@@ -243,6 +357,11 @@
         "pgp_key": "keybase:some_person_that_exists",
         "status": "Inactive",
         "user": "root"
+      },
+      "line_config": {
+        "pgp_key": 3,
+        "status": 4,
+        "user": 2
       },
       "skip_rules": null,
       "max_severity": "",
@@ -272,6 +391,17 @@
           "Environment": "kinesisEncryptedWithKms"
         }
       },
+      "line_config": {
+        "encryption_type": 11,
+        "kms_key_id": 12,
+        "name": 2,
+        "retention_period": 4,
+        "shard_count": 3,
+        "shard_level_metrics": 6,
+        "tags": {
+          "Environment": 15
+        }
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -292,6 +422,14 @@
         "tags": {
           "Name": "kmsKeyDisabled",
           "Setup": "self-healing"
+        }
+      },
+      "line_config": {
+        "description": 2,
+        "is_enabled": 3,
+        "tags": {
+          "Name": 5,
+          "Setup": 6
         }
       },
       "skip_rules": null,
@@ -319,6 +457,17 @@
         "policy_name": "wu-tang-ssl",
         "policy_type_name": "SSLNegotiationPolicyType"
       },
+      "line_config": {
+        "load_balancer_name": 2,
+        "policy_attribute": [
+          {
+            "name": 7,
+            "value": 8
+          }
+        ],
+        "policy_name": 3,
+        "policy_type_name": 4
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -339,6 +488,14 @@
         "tags": {
           "Environment": "Dev",
           "Name": "nos3BucketSseRules"
+        }
+      },
+      "line_config": {
+        "acl": 3,
+        "bucket": 2,
+        "tags": {
+          "Environment": 7,
+          "Name": 6
         }
       },
       "skip_rules": null,
@@ -385,6 +542,30 @@
         },
         "vpc_id": "some_dummy_vpc"
       },
+      "line_config": {
+        "description": 3,
+        "egress": [
+          {
+            "cidr_blocks": 23,
+            "from_port": 20,
+            "protocol": 22,
+            "to_port": 21
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": 15,
+            "from_port": 12,
+            "protocol": 14,
+            "to_port": 13
+          }
+        ],
+        "name": 2,
+        "tags": {
+          "Name": 7
+        },
+        "vpc_id": 4
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -415,6 +596,12 @@
           ],
           "Version": "2012-10-17"
         }
+      },
+      "line_config": {
+        "kms_data_key_reuse_period_seconds": 4,
+        "kms_master_key_id": 3,
+        "name": 2,
+        "policy": 6
       },
       "skip_rules": null,
       "max_severity": "",

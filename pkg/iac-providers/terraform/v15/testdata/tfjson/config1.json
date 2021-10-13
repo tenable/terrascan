@@ -40,6 +40,31 @@
           "${aws_security_group.sg_playground.id}"
         ]
       },
+      "line_config": {
+        "ami": 78,
+        "instance_type": 79,
+        "key_name": 82,
+        "provisioner": [
+          {
+            "remote-exec": {
+              "connection": [
+                {
+                  "host": 96,
+                  "private_key": 99,
+                  "type": 97,
+                  "user": 98
+                }
+              ],
+              "inline": 88
+            }
+          }
+        ],
+        "subnet_id": 80,
+        "tags": {
+          "Environment": 84
+        },
+        "vpc_security_group_ids": 81
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -59,6 +84,12 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
+      "line_config": {
+        "tags": {
+          "Environment": 17
+        },
+        "vpc_id": 15
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -75,6 +106,10 @@
       "config": {
         "key_name": "testKey",
         "public_key": "${file(var.public_key_path)}"
+      },
+      "line_config": {
+        "key_name": 73,
+        "public_key": 74
       },
       "skip_rules": null,
       "max_severity": "",
@@ -101,6 +136,18 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
+      "line_config": {
+        "route": [
+          {
+            "cidr_block": 33,
+            "gateway_id": 34
+          }
+        ],
+        "tags": {
+          "Environment": 37
+        },
+        "vpc_id": 31
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -117,6 +164,10 @@
       "config": {
         "route_table_id": "${aws_route_table.rtb_public_playground.id}",
         "subnet_id": "${aws_subnet.subnet_public_playground.id}"
+      },
+      "line_config": {
+        "route_table_id": 43,
+        "subnet_id": 42
       },
       "skip_rules": null,
       "max_severity": "",
@@ -166,6 +217,35 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
+      "line_config": {
+        "egress": [
+          {
+            "cidr_blocks": 65,
+            "from_port": 62,
+            "protocol": 64,
+            "to_port": 63
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": 53,
+            "from_port": 50,
+            "protocol": 52,
+            "to_port": 51
+          },
+          {
+            "cidr_blocks": 59,
+            "from_port": 56,
+            "protocol": 58,
+            "to_port": 57
+          }
+        ],
+        "name": 47,
+        "tags": {
+          "Environment": 68
+        },
+        "vpc_id": 48
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -187,6 +267,14 @@
         },
         "vpc_id": "${aws_vpc.vpc_playground.id}"
       },
+      "line_config": {
+        "cidr_block": 23,
+        "map_public_ip_on_launch": 24,
+        "tags": {
+          "Environment": 26
+        },
+        "vpc_id": 22
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -206,6 +294,14 @@
         "enable_dns_support": true,
         "tags": {
           "Environment": "${var.environment_tag}"
+        }
+      },
+      "line_config": {
+        "cidr_block": 6,
+        "enable_dns_hostnames": 8,
+        "enable_dns_support": 7,
+        "tags": {
+          "Environment": 10
         }
       },
       "skip_rules": null,

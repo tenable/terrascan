@@ -11,7 +11,12 @@
       "config": {
         "name": "${lower(bar != null ? bar : bar)}"
       },
-      "skip_rules": null
+      "line_config": {
+        "name": 14
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }
