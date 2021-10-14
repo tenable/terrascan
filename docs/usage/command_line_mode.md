@@ -39,6 +39,7 @@ Flags:
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
   -o, --output string        output type (human, json, yaml, xml) (default "human")
+  -s, --soft-fail            exits checks with status code 0
 
 Use "terrascan [command] --help" for more information about a command.
 ```
@@ -287,6 +288,7 @@ aws_ecr_repository:
 | -l | Use this to specify what log settings | debug, **info**, warn, error, panic, fatal  |
 | -x | Use this to specify the log file format | **console**, json |
 | -o | Use this to specify the scan output type | **human**, json, yaml, xml, junit-xml, sarif, github-sarif |
+| -s | Use this to exit checks with status code 0 | true, false |
 
 
 
