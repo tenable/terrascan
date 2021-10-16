@@ -74,7 +74,7 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.nonRecursive, "non-recursive", "", false, "do not scan directories and modules recursively")
 	scanCmd.Flags().BoolVarP(&scanOptions.useTerraformCache, "use-terraform-cache", "", false, "use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)")
 	scanCmd.Flags().BoolVarP(&scanOptions.findVulnerabilities, "find-vuln", "", false, "fetches vulnerabilities identified in Docker images")
-	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookURL, "notification-webhook-url", "", "", "the URL where terrascan will send the scan report and normalized config json")
-	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookToken, "notification-webhook-token", "", "", "the auth token to call the notification webhook URL")
+	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookURL, "notification-webhook-url", "", "", "webhook URL where Terrascan will send JSON scan report and normalized IaC JSON")
+	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookToken, "notification-webhook-token", "", "", "optional token used when sending authenticated requests to the notification webhook")
 	RegisterCommand(rootCmd, scanCmd)
 }
