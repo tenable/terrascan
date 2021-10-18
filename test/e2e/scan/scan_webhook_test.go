@@ -43,7 +43,7 @@ var _ = Describe("Scan Command using webhook args", func() {
 	notificationURL := "https://httpbin.org/post"
 	notificationToken := "token"
 
-	Describe("terrascan scan command is run with --notification-webhook-url and --notification-webhook-token flag", func() {
+	Describe("terrascan scan command is run with --webhook-url and --webhook-token flag", func() {
 		tfGoldenRelPath := filepath.Join("golden", "terraform_scans")
 		tfAwsAmiGoldenRelPath := filepath.Join(tfGoldenRelPath, "aws", "aws_ami_violations")
 
@@ -57,17 +57,17 @@ var _ = Describe("Scan Command using webhook args", func() {
 			Expect(err).NotTo(HaveOccurred())
 		})
 
-		Context("valid --notification-webhook-url and --notification-webhook-token flag is supplied", func() {
+		Context("valid --webhook-url and --webhook-token flag is supplied", func() {
 			It("should exit with status code 5", func() {
-				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--notification-webhook-url", notificationURL, "--notification-webhook-token", notificationToken}
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL, "--webhook-token", notificationToken}
 				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 
 			})
 		})
 
-		Context("only --notification-webhook-url flag is supplied", func() {
+		Context("only --webhook-url flag is supplied", func() {
 			It("should exit with status code 5", func() {
-				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--notification-webhook-url", notificationURL}
+				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL}
 				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 
 			})
