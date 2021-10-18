@@ -18,7 +18,7 @@ $ terrascan scan -c <config file path>
     [notifications.webhook]
     url = "https://httpbin.org/post"
     token = "my_auth_token"
-   
+
 [severity]
 level = "medium"
 [rules]
@@ -41,7 +41,7 @@ You can specify the following configurations:
 *  **skip-rules** - Specify one or more rules to skip while scanning. All other rules in the policy pack will be applied.
 *  **severity** - the minimal level of severity of the policies to be scanned and displayed. Options are high, medium and low
 *  **category** - the list of type of categories of the policies to be scanned and displayed
-*  **notifications** - Use these configuration as seen in the example above to send the output of scans as a webhook to a remote server. 
+*  **notifications** - This configuration can be used, as seen in the example above, to send the output of scans as a webhook to a remote server. Note that the `--webhook-url` CLI flag will override any URLs configured through a configuration file.
 
 
 **k8s-admission-control** - Config options for K8s Admission Controllers and GitOps workflows:

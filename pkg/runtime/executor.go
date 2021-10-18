@@ -19,6 +19,7 @@ package runtime
 import (
 	"sort"
 
+	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy/opa"
 	"github.com/accurics/terrascan/pkg/vulnerability"
 
@@ -39,38 +40,42 @@ const (
 
 // Executor object
 type Executor struct {
-	filePath            string
-	dirPath             string
-	policyPath          []string
-	iacType             string
-	iacVersion          string
-	scanRules           []string
-	skipRules           []string
-	iacProviders        []iacProvider.IacProvider
-	policyEngines       []policy.Engine
-	notifiers           []notifications.Notifier
-	categories          []string
-	policyTypes         []string
-	severity            string
-	nonRecursive        bool
-	useTerraformCache   bool
-	findVulnerabilities bool
-	vulnerabilityEngine vulnerability.Engine
+	filePath                 string
+	dirPath                  string
+	policyPath               []string
+	iacType                  string
+	iacVersion               string
+	scanRules                []string
+	skipRules                []string
+	iacProviders             []iacProvider.IacProvider
+	policyEngines            []policy.Engine
+	notifiers                []notifications.Notifier
+	categories               []string
+	policyTypes              []string
+	severity                 string
+	nonRecursive             bool
+	useTerraformCache        bool
+	findVulnerabilities      bool
+	vulnerabilityEngine      vulnerability.Engine
+	notificationWebhookURL   string
+	notificationWebhookToken string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken string) (e *Executor, err error) {
 	e = &Executor{
-		filePath:            filePath,
-		dirPath:             dirPath,
-		policyPath:          policyPath,
-		policyTypes:         policyTypes,
-		iacType:             iacType,
-		iacVersion:          iacVersion,
-		iacProviders:        make([]iacProvider.IacProvider, 0),
-		nonRecursive:        nonRecursive,
-		useTerraformCache:   useTerraformCache,
-		findVulnerabilities: findVulnerabilities,
+		filePath:                 filePath,
+		dirPath:                  dirPath,
+		policyPath:               policyPath,
+		policyTypes:              policyTypes,
+		iacType:                  iacType,
+		iacVersion:               iacVersion,
+		iacProviders:             make([]iacProvider.IacProvider, 0),
+		nonRecursive:             nonRecursive,
+		useTerraformCache:        useTerraformCache,
+		findVulnerabilities:      findVulnerabilities,
+		notificationWebhookURL:   notificationWebhookURL,
+		notificationWebhookToken: notificationWebhookToken,
 	}
 
 	// assigning vulnerabilityEngine
@@ -147,13 +152,22 @@ func (e *Executor) Init() error {
 	}
 
 	// create new notifiers
-	e.notifiers, err = notifications.NewNotifiers()
-	if err != nil {
-		zap.S().Debug("failed to create notifier(s).", zap.Error(err))
-		// do not return an error if a key is not present in the config file
-		if err != notifications.ErrNotificationNotPresent {
-			zap.S().Error("failed to create notifier(s).", zap.Error(err))
-			return err
+	if e.notificationWebhookURL != "" {
+		e.notifiers = []notifications.Notifier{
+			&webhook.Webhook{
+				URL:   e.notificationWebhookURL,
+				Token: e.notificationWebhookToken,
+			},
+		}
+	} else {
+		e.notifiers, err = notifications.NewNotifiers()
+		if err != nil {
+			zap.S().Debug("failed to create notifier(s).", zap.Error(err))
+			// do not return an error if a key is not present in the config file
+			if err != notifications.ErrNotificationNotPresent {
+				zap.S().Error("failed to create notifier(s).", zap.Error(err))
+				return err
+			}
 		}
 	}
 

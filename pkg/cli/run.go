@@ -102,6 +102,12 @@ type ScanOptions struct {
 
 	// FindVulnerabilities gives option to scan container images for vulnerabilities
 	findVulnerabilities bool
+
+	// notificationWebhookURL is the URL where terrascan will send the scan report and normalized config json
+	notificationWebhookURL string
+
+	// notificationWebhookToken is the auth token to call the notification webhook URL
+	notificationWebhookToken string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -187,7 +193,7 @@ func (s *ScanOptions) Run() error {
 
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities)
+		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken)
 	if err != nil {
 		return err
 	}

@@ -23,6 +23,7 @@ import (
 // SendNotifications sends notifications via all the configured notifiers
 func (e *Executor) SendNotifications(data interface{}) error {
 	var allErrs error
+
 	// send notifications using configured notifiers
 	for _, notifier := range e.notifiers {
 		err := notifier.SendNotification(data)

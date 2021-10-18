@@ -42,6 +42,8 @@ func TestUpload(t *testing.T) {
 		categories                 []string
 		invalidFindVulnerabilities bool
 		findVulnerabilities        bool
+		notificationWebhookURL     string
+		notificationWebhookToken   string
 	}{
 		{
 			name:       "valid file scan",
@@ -260,6 +262,17 @@ func TestUpload(t *testing.T) {
 			wantStatus:                 http.StatusBadRequest,
 			invalidFindVulnerabilities: true,
 		},
+		{
+			name:                     "valid file scan with notification webhook",
+			path:                     testFilePath,
+			param:                    testParamName,
+			iacType:                  testIacType,
+			iacVersion:               testIacVersion,
+			cloudType:                testCloudType,
+			wantStatus:               http.StatusOK,
+			notificationWebhookURL:   "https://httpbin.org/post",
+			notificationWebhookToken: "token",
+		},
 	}
 
 	for _, tt := range table {
@@ -347,6 +360,19 @@ func TestUpload(t *testing.T) {
 				}
 			} else {
 				if err = writer.WriteField("find_vulnerabilities", "invalid"); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if tt.notificationWebhookURL != "" {
+				if err = writer.WriteField("webhook_url", tt.notificationWebhookURL); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+			if tt.notificationWebhookToken != "" {
+				if err = writer.WriteField("webhook_token", tt.notificationWebhookToken); err != nil {
 					writer.Close()
 					t.Error(err)
 				}
