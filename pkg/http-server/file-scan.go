@@ -102,8 +102,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// scan and skip rules are comma separated rule id's in the request body
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
-	notificationWebhookURL := r.FormValue("notificationWebhookURL")
-	notificationWebhookToken := r.FormValue("notificationWebhookToken")
+	notificationWebhookURL := r.FormValue("webhook_url")
+	notificationWebhookToken := r.FormValue("webhook_token")
 
 	// categories is the list categories of violations that the user want to get informed about: low, medium or high
 	categoriesValue := r.FormValue("categories")

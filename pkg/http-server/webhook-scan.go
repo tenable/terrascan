@@ -37,8 +37,8 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 		params                   = mux.Vars(r)
 		apiKey                   = params["apiKey"]
 		qP                       = r.URL.Query()
-		notificationWebhookURL   = qP.Get("notificationWebhookURL")
-		notificationWebhookToken = qP.Get("notificationWebhookToken")
+		notificationWebhookURL   = qP.Get("webhook-url")
+		notificationWebhookToken = qP.Get("webhook-token")
 	)
 
 	// Read the request into byte array
