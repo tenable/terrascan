@@ -257,11 +257,6 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	// add other summary details after policies are evaluated
 	results.Violations.ViolationStore.AddSummary(e.iacType, resourcePath)
 
-	// send notifications, if configured
-	if err = e.SendNotifications(results); err != nil {
-		return results, err
-	}
-
 	// we want to display the dir scan errors with all the iac providers
 	// that support sub folder scanning, which includes 'all' iac scan
 	if err := merr.ErrorOrNil(); err != nil {
@@ -269,6 +264,9 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		sort.Sort(merr)
 		results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
 	}
+
+	// send notifications, if configured
+	e.SendNotifications(results)
 
 	// successful
 	return results, nil
