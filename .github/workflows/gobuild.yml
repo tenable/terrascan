@@ -29,6 +29,9 @@ jobs:
     - name: Install golint
       run: go get -u golang.org/x/lint/golint
 
+    - name: Build Terrascan docker image
+      run: make docker-build
+
     - name: Go validations
       run: make validate
 
@@ -50,9 +53,6 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
-
-    - name: Build Terrascan docker image
-      run: make docker-build
 
   # push image to Docker Hub
   push:
