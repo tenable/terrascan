@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Checkout Terrascan
       uses: actions/checkout@v2
-      
+
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -37,7 +37,7 @@ jobs:
 
     - name: Run unit tests
       run: make unit-tests
-    
+
     - name: install kind
       run: make install-kind
 
@@ -50,6 +50,9 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
+
+    - name: Build Terrascan docker image
+      run: make docker-build
 
   # push image to Docker Hub
   push:
