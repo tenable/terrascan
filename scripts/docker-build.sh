@@ -8,4 +8,8 @@ GIT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
 DOCKER_REPO="accurics/terrascan"
 DOCKERFILE="./build/Dockerfile"
 
-docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_REPO}:${GIT_COMMIT} -f ${DOCKERFILE} .
+docker buildx create --platform linux/amd64,linux/arm64 --name terrascan-builder --use
+
+docker buildx build -t ${DOCKER_REPO}:${GIT_COMMIT} -f ${DOCKERFILE} .
+
+docker buildx rm terrascan-builder
