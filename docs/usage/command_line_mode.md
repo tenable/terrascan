@@ -280,7 +280,9 @@ aws_ecr_repository:
 |--webhook-token string| Token used for sending authenticated requests to the notification webhook | This flag is optional when using the notification webhook|
 |--webhook-url | A webhook URL where Terrascan will send JSON scan report and normalized IaC JSON | This overrides any notification webhook URLs configured in config TOML file specified with the `-c` flag|
 |--use-terraform-cache |Use this to refer terraform remote modules from terraform init cache rather than downloading | By default remote module will be downloaded in temporary directory. If this flag is set then modules will be refered from terraform init cache if module is not present in terraform init cache it will be downloaded. Directory will be scanned non recurively if this flag is used.(applicable only with terraform IaC provider)|
-| --find-vuln | find vulnerbilities | Use this to fetch vulnerabilities identified on the registry for docker images present in IaC the files scanned |
+| --find-vuln | find vulnerabilities | Use this to fetch vulnerabilities identified on the registry for docker images present in IaC the files scanned |
+| --repo-url | repository url | This flag can be used to include the repository URL as part of scan results and notifications |
+| --repo-ref | repository branch name | This flag can be used to include the repository branch name as part of scan results and notifications |
 | -v | verbose | Displays violations with all details |
 
 | Global flags | Description | Options |
@@ -319,7 +321,9 @@ Flags:
   -p, --policy-path stringArray             policy path directory
   -t, --policy-type strings                 policy type (all, aws, azure, docker, gcp, github, k8s) (default [all])
   -r, --remote-type string                  type of remote backend (git, s3, gcs, http, terraform-registry)
-  -u, --remote-url string                   url pointing to remote IaC repository
+  -u, --remote-url string         url pointing to remote IaC repository
+      --repo-ref string           branch of the repo being scanned
+      --repo-url string           URL of the repo being scanned, will be reflected in scan summary
       --scan-rules strings                  one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --severity string                     minimum severity level of the policy violations to be reported by terrascan
       --show-passed                         display passed rules, along with violations
