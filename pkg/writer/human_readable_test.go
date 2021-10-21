@@ -61,6 +61,17 @@ var (
 			},
 		},
 	}
+	summaryWithRepoURLRepoRef = results.ScanSummary{
+		ResourcePath:     "https://github.com/user/repository.git",
+		Branch:           "main",
+		IacType:          "terraform",
+		Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+		TotalPolicies:    566,
+		LowCount:         0,
+		MediumCount:      0,
+		HighCount:        1,
+		ViolatedPolicies: 1,
+	}
 )
 
 const (
@@ -165,6 +176,18 @@ Scan Summary -
 	Medium              :	0
 	High                :	1
 	Vulnerabilities     :	1`
+
+	expectedOutput4 = `Scan Summary -
+
+	File/Folder         :	https://github.com/user/repository.git
+	Branch              :	main
+	IaC Type            :	terraform
+	Scanned At          :	2020-12-12 11:21:29.902796 +0000 UTC
+	Policies Validated  :	566
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1`
 )
 
 func TestHumanReadbleWriter(t *testing.T) {
@@ -199,6 +222,15 @@ func TestHumanReadbleWriter(t *testing.T) {
 			name:           "Human Readable Writer: With Vulnerabilities",
 			input:          vulnerabilitiesInputHumanReadable,
 			expectedOutput: vulnerabilityScanOutputHumanReadable,
+		},
+		{
+			name: "Human Readable Writer: with repository url and branch",
+			input: policy.EngineOutput{
+				ViolationStore: &results.ViolationStore{
+					Summary: summaryWithRepoURLRepoRef,
+				},
+			},
+			expectedOutput: expectedOutput4,
 		},
 	}
 

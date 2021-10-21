@@ -66,6 +66,16 @@ func TestJUnitXMLWriter(t *testing.T) {
 </testsuites>
 	`, version.Get())
 
+	testOutputRepoURLRepoRef := fmt.Sprintf(`
+<testsuites tests="566" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="566" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="https://github.com/user/repository.git" branch="main">
+    <properties>
+      <property name="Terrascan Version" value="%s"></property>
+    </properties>
+  </testsuite>
+</testsuites>
+	`, version.Get())
+
 	type args struct {
 		data interface{}
 	}
@@ -107,6 +117,17 @@ func TestJUnitXMLWriter(t *testing.T) {
 				data: outputWithPassedRules,
 			},
 			wantWriter: testOutputPassedRules,
+		},
+		{
+			name: "data with repository url and branch",
+			args: args{
+				policy.EngineOutput{
+					ViolationStore: &results.ViolationStore{
+						Summary: summaryWithRepoURLRepoRef,
+					},
+				},
+			},
+			wantWriter: testOutputRepoURLRepoRef,
 		},
 	}
 	for _, tt := range tests {

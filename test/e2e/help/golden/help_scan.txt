@@ -19,6 +19,8 @@ Flags:
   -t, --policy-type strings       policy type (all, aws, azure, docker, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http, terraform-registry)
   -u, --remote-url string         url pointing to remote IaC repository
+      --repo-ref string           branch of the repo being scanned
+      --repo-url string           URL of the repo being scanned, will be reflected in scan summary
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --severity string           minimum severity level of the policy violations to be reported by terrascan
       --show-passed               display passed rules, along with violations

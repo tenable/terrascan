@@ -52,6 +52,7 @@ type JUnitTestSuite struct {
 	Time       string          `xml:"time,attr"`
 	Name       string          `xml:"name,attr"`
 	Package    string          `xml:"package,attr"`
+	Branch     string          `xml:"branch,attr,omitempty"`
 	Properties []JUnitProperty `xml:"properties>property,omitempty"`
 	TestCases  []JUnitTestCase
 }
@@ -103,6 +104,7 @@ func newJunitTestSuite(summary results.ScanSummary) JUnitTestSuite {
 		Time:     fmt.Sprint(summary.TotalTime),
 		Failures: summary.ViolatedPolicies,
 		Package:  summary.ResourcePath,
+		Branch:   summary.Branch,
 		Properties: []JUnitProperty{
 			{
 				Name:  "Terrascan Version",

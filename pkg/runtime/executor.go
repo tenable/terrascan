@@ -59,10 +59,12 @@ type Executor struct {
 	vulnerabilityEngine      vulnerability.Engine
 	notificationWebhookURL   string
 	notificationWebhookToken string
+	repoURL                  string
+	repoRef                  string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:                 filePath,
 		dirPath:                  dirPath,
@@ -76,6 +78,8 @@ func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dir
 		findVulnerabilities:      findVulnerabilities,
 		notificationWebhookURL:   notificationWebhookURL,
 		notificationWebhookToken: notificationWebhookToken,
+		repoURL:                  repoURL,
+		repoRef:                  repoRef,
 	}
 
 	// assigning vulnerabilityEngine
@@ -266,6 +270,10 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	}
 
 	// send notifications, if configured
+	if e.repoURL != "" {
+		results.Violations.Summary.ResourcePath = e.repoURL
+		results.Violations.Summary.Branch = e.repoRef
+	}
 	e.SendNotifications(results)
 
 	// successful

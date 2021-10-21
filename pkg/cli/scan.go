@@ -76,5 +76,7 @@ func init() {
 	scanCmd.Flags().BoolVarP(&scanOptions.findVulnerabilities, "find-vuln", "", false, "fetches vulnerabilities identified in Docker images")
 	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookURL, "webhook-url", "", "", "webhook URL where Terrascan will send JSON scan report and normalized IaC JSON")
 	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookToken, "webhook-token", "", "", "optional token used when sending authenticated requests to the notification webhook")
+	scanCmd.Flags().StringVarP(&scanOptions.repoURL, "repo-url", "", "", "URL of the repo being scanned, will be reflected in scan summary")
+	scanCmd.Flags().StringVarP(&scanOptions.repoRef, "repo-ref", "", "", "branch of the repo being scanned")
 	RegisterCommand(rootCmd, scanCmd)
 }

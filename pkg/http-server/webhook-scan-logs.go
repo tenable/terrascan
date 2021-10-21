@@ -82,7 +82,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 	)
 
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
-	validatingWebhook := admissionWebhook.NewValidatingWebhook([]byte(""), "", "")
+	validatingWebhook := admissionWebhook.NewValidatingWebhook([]byte(""), "", "", "", "")
 	if err := validatingWebhook.Authorize(apiKey); err != nil {
 		switch err {
 		case admissionWebhook.ErrAPIKeyMissing:
