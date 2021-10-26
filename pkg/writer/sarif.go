@@ -17,7 +17,6 @@
 package writer
 
 import (
-	"fmt"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
@@ -82,7 +81,11 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 			if err != nil {
 				return errors.Errorf("unable to create absolute path, error: %v", err)
 			}
-			artifactLocation = sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))
+			uriFilePath, err := utils.GetFileURI(absFilePath)
+			if err != nil {
+				return errors.Errorf("unable to create uri path, error: %v", err)
+			}
+			artifactLocation = sarif.NewSimpleArtifactLocation(uriFilePath)
 		}
 
 		location := sarif.NewLocation().WithPhysicalLocation(sarif.NewPhysicalLocation().
