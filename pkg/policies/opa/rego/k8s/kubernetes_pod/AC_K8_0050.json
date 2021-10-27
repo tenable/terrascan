@@ -1,15 +1,15 @@
 {
-    "name": "allowedCustomSnippetAnnotations",
-    "file": "allowedCustomSnippetAnnotations.rego",
+    "name": "allowedCustomSnippetAnnotationsWithWrongVersion",
+    "file": "allowedCustomSnippetAnnotationsWithWrongVersion.rego",
     "policy_type": "k8s",
     "resource_type": "kubernetes_deployment",
     "template_args": {
-        "name": "allowedCustomSnippetAnnotations",
+        "name": "allowedCustomSnippetAnnotationsWithWrongVersion",
         "prefix": "",
         "suffix": ""
     },
     "severity": "HIGH",
-    "description": "CVE-2021-25742: Ingress-nginx custom snippets allows retrieval of ingress-nginx serviceaccount token and secrets across all namespaces.",
+    "description": "CVE-2021-25742: Ingress-nginx with custom snippets with a version that does not support mitigation and allows retrieval of ingress-nginx serviceaccount token and secrets across all namespaces.",
     "category": "Configuration and Vulnerability Analysis",
     "reference_id": "AC_K8S_0050",
     "version": 1,
