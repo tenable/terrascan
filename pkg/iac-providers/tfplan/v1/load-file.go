@@ -20,21 +20,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
-const (
-	jqQuery             = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
-	tfPlanFormatVersion = "0.1"
-)
+const jqQuery = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
 
 var (
-	errIncorrectFormatVersion = fmt.Errorf("terraform format version shoule be '%s'", tfPlanFormatVersion)
+	errIncorrectFormatVersion = fmt.Errorf("terraform format version shoule be one of '%s'", strings.Join(getTfPlanFormatVersions(), ", "))
 	errEmptyTerraformVersion  = fmt.Errorf("terraform version cannot be empty in tfplan json")
 )
+
+func getTfPlanFormatVersions() []string {
+	return []string{"0.1", "0.2"}
+}
 
 // LoadIacFile parses the given tfplan file from the given file path
 func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
@@ -93,7 +95,7 @@ func (t *TFPlan) isValidTFPlanJSON(tfjson []byte) error {
 	}
 
 	// check format version
-	if t.FormatVersion != tfPlanFormatVersion {
+	if !isValidVersion(t.FormatVersion) {
 		return errIncorrectFormatVersion
 	}
 
@@ -103,4 +105,16 @@ func (t *TFPlan) isValidTFPlanJSON(tfjson []byte) error {
 	}
 
 	return nil
+}
+
+func isValidVersion(v string) bool {
+	var result bool = false
+	var validVersions = getTfPlanFormatVersions()
+	for _, x := range validVersions {
+		if x == v {
+			result = true
+			break
+		}
+	}
+	return result
 }
