@@ -80,8 +80,10 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		containerImages = append(containerImages, readContainers(rc.Spec.Template.Spec.Containers)...)
-		initContainerImages = append(initContainerImages, readContainers(rc.Spec.Template.Spec.InitContainers)...)
+		if rc.Spec.Template != nil {
+			containerImages = append(containerImages, readContainers(rc.Spec.Template.Spec.Containers)...)
+			initContainerImages = append(initContainerImages, readContainers(rc.Spec.Template.Spec.InitContainers)...)
+		}
 
 	case "Job":
 		job := k8sbatchv1.Job{}
