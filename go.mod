@@ -46,13 +46,13 @@ require (
 	github.com/onsi/ginkgo v1.15.1
 	github.com/onsi/gomega v1.11.0
 	github.com/open-policy-agent/opa v0.22.0
-	github.com/owenrumney/go-sarif v1.0.4
+	github.com/owenrumney/go-sarif v1.0.12
 	github.com/pelletier/go-toml v1.9.3
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
 	github.com/spf13/cobra v1.1.3
 	github.com/stretchr/testify v1.7.0
-	github.com/zclconf/go-cty v1.8.3
+	github.com/zclconf/go-cty v1.9.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/sys v0.0.0-20211004093028-2c5d950f24ef

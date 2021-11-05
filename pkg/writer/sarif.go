@@ -54,22 +54,22 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 	report.AddRun(run)
 
 	for _, passedRule := range outputData.PassedRules {
-		m := make(map[string]string)
-		m["category"] = passedRule.Category
-		m["severity"] = passedRule.Severity
+		m := sarif.NewPropertyBag()
+		m.Properties["category"] = passedRule.Category
+		m.Properties["severity"] = passedRule.Severity
 
 		run.AddRule(passedRule.RuleID).
-			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
+			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m.Properties)
 	}
 
 	// for each result add the rule, location and result to the report
 	for _, violation := range outputData.Violations {
-		m := make(map[string]string)
-		m["category"] = violation.Category
-		m["severity"] = violation.Severity
+		m := sarif.NewPropertyBag()
+		m.Properties["category"] = violation.Category
+		m.Properties["severity"] = violation.Severity
 
 		rule := run.AddRule(violation.RuleID).
-			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
+			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m.Properties)
 
 		var artifactLocation *sarif.ArtifactLocation
 
