@@ -18,7 +18,7 @@ var testpathForGH = violationsInput.Violations[0].File
 
 const violationTemplate = `{
           "version": "2.1.0",
-          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
           "runs": [
             {
               "tool": {
@@ -76,7 +76,7 @@ var expectedSarifOutput1 = fmt.Sprintf(violationTemplate, version.GetNumeric(), 
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",
-          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
           "runs": [
             {
               "tool": {
@@ -93,7 +93,7 @@ var expectedSarifOutput2 = fmt.Sprintf(`{
 
 var expectedSarifOutput3 = fmt.Sprintf(`{
           "version": "2.1.0",
-          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
           "runs": [
             {
               "tool": {
