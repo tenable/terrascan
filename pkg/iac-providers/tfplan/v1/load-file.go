@@ -108,13 +108,10 @@ func (t *TFPlan) isValidTFPlanJSON(tfjson []byte) error {
 }
 
 func isValidVersion(v string) bool {
-	var result bool = false
-	var validVersions = getTfPlanFormatVersions()
-	for _, x := range validVersions {
+	for _, x := range getTfPlanFormatVersions() {
 		if x == v {
-			result = true
-			break
+			return true
 		}
 	}
-	return result
+	return false
 }
