@@ -16,6 +16,7 @@ require (
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
 	github.com/BurntSushi/toml v0.4.1 // indirect
 	github.com/GoogleCloudPlatform/docker-credential-gcr v2.0.5+incompatible
+	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/VerbalExpressions/GoVerbalExpressions v0.0.0-20200410162751-4d76a1099a6e
 	github.com/aws/aws-sdk-go v1.37.0
 	github.com/aws/aws-sdk-go-v2/config v1.5.0
@@ -23,6 +24,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
 	github.com/aws/smithy-go v1.6.0
 	github.com/awslabs/goformation/v4 v4.19.1
+	github.com/docker/cli v20.10.5+incompatible // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-errors/errors v1.0.1
 	github.com/google/go-containerregistry v0.1.2
@@ -40,6 +42,7 @@ require (
 	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/iancoleman/strcase v0.1.3
 	github.com/itchyny/gojq v0.12.1
+	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moby/buildkit v0.8.3
@@ -55,10 +58,12 @@ require (
 	github.com/zclconf/go-cty v1.8.3
 	go.uber.org/zap v1.16.0
 	golang.org/x/mod v0.5.1 // indirect
+	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
 	golang.org/x/sys v0.0.0-20211004093028-2c5d950f24ef
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/api v0.34.0
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
+	google.golang.org/grpc v1.31.1 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.6.1
