@@ -153,3 +153,15 @@ func FilterHiddenDirectories(dirList []string, rootDir string) []string {
 	}
 	return filteredDirs
 }
+
+// GetFileURI returns the rfc3986 format file uri from a path string
+// https://tools.ietf.org/html/rfc3986
+// always use / and for windows it starts three ///
+func GetFileURI(path string) (string, error) {
+	path = strings.ReplaceAll(path, "\\", "/")
+	prefix := "file://"
+	if IsWindowsPlatform() {
+		prefix += "/"
+	}
+	return prefix + path, nil
+}
