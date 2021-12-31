@@ -61,7 +61,7 @@ func TestLoadIacFile(t *testing.T) {
 			filePath: "nonexistent.txt",
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf(testErrString3),
+			wantErr:  fmt.Errorf("error while resolving intrinsic functions, error %w", fmt.Errorf(testErrString3)),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid file",
