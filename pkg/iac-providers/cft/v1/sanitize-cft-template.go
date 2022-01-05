@@ -134,8 +134,6 @@ func inspectAndSanitizeResource(r interface{}) (shouldRemoveResource bool) {
 
 	goformationCftObj, ok := cloudformation.AllResources()[tVal]
 	if !ok {
-		// delete Version field if present, becuase for custom parameter goformation throws error
-		// revisit this
 		shouldRemoveResource = true
 		zap.S().Debug(fmt.Sprintf("not goformation resource present for '%s'", tVal))
 		return
