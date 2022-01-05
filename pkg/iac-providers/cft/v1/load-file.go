@@ -93,16 +93,28 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 
 	switch fileExt {
 	case YAMLExtension, YAMLExtension2:
-		template, err := goformation.ParseYAML(*data)
+		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
+		sanitized, err := a.sanitizeCftTemplate(*data, true)
 		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", file))
+			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
+			return nil, err
+		}
+		template, err := goformation.ParseYAML(sanitized)
+		if err != nil {
+			zap.S().Debug("failed to parse file", zap.String("file", file), zap.Error(err))
 			return nil, err
 		}
 		return template, nil
 	case JSONExtension:
-		template, err := goformation.ParseJSON(*data)
+		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
+		sanitized, err := a.sanitizeCftTemplate(*data, false)
 		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", file))
+			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
+			return nil, err
+		}
+		template, err := goformation.ParseJSON(sanitized)
+		if err != nil {
+			zap.S().Debug("failed to parse file", zap.String("file", file), zap.Error(err))
 			return nil, err
 		}
 		return template, nil
