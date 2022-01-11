@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/logging"
@@ -80,8 +81,11 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
-		// log error before terminating the process so user gets idea about the error
-		zap.S().Error("error while executing command ", zap.Error(err))
+		// check if the error is related to flag argument missing and
+		// log it before terminating the process so user gets idea about the incorrect flag value
+		if strings.Contains(err.Error(), "flag needs an argument") {
+			zap.S().Error("error while executing command ", zap.Error(err))
+		}
 		os.Exit(1)
 	}
 }
