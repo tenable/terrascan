@@ -40,6 +40,9 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 
+	//Added init here in case flag parsing failed we should log which flag was incorrect.
+	logging.Init(LogType, LogLevel)
+
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
 		// Set up the logger
@@ -77,6 +80,8 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
+		// log error before terminating the process so user gets idea about the error
+		zap.S().Error("error while executing command ", zap.Error(err))
 		os.Exit(1)
 	}
 }
