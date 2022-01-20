@@ -30,8 +30,8 @@ type EbsBlockDeviceBlock struct {
 
 // MetadataOptionsBlock hold config for MetadataOptions
 type MetadataOptionsBlock struct {
-	HttpEndpoint string `json:"http_endpoint"`
-	HttpTokens   string `json:"http_tokens"`
+	HTTPEndpoint string `json:"http_endpoint"`
+	HTTPTokens   string `json:"http_tokens"`
 }
 
 // AutoScalingLaunchConfigurationConfig hold config for AutoScalingLaunchConfiguration
@@ -57,8 +57,8 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 	}
 
 	var metadataOptions MetadataOptionsBlock
-	metadataOptions.HttpEndpoint = l.MetadataOptions.HttpEndpoint
-	metadataOptions.HttpTokens = l.MetadataOptions.HttpTokens
+	metadataOptions.HTTPEndpoint = l.MetadataOptions.HttpEndpoint
+	metadataOptions.HTTPTokens = l.MetadataOptions.HttpTokens
 
 	cf := AutoScalingLaunchConfigurationConfig{
 		Config: Config{

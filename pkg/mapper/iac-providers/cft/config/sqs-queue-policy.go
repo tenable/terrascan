@@ -25,7 +25,7 @@ import (
 // SqsQueuePolicyConfig holds config for SqsQueuePolicy
 type SqsQueuePolicyConfig struct {
 	Config
-	QueueUrl string `json:"queue_url"`
+	QueueURL string `json:"queue_url"`
 	Policy   string `json:"policy"`
 }
 
@@ -38,7 +38,7 @@ func GetSqsQueuePolicyConfig(p *sqs.QueuePolicy) []AWSResourceConfig {
 
 	for i := range cflist {
 		cflist[i].Config.Name = p.Queues[i]
-		cflist[i].QueueUrl = p.Queues[i]
+		cflist[i].QueueURL = p.Queues[i]
 		cflist[i].Policy = string(policyDoc)
 
 		resourcelist[i].Resource = cflist[i]
