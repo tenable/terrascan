@@ -18,12 +18,14 @@ package config
 
 import "github.com/awslabs/goformation/v4/cloudformation/sns"
 
+// SnsTopicConfig hold config for SnsTopic
 type SnsTopicConfig struct {
 	Config
 	Name        string `json:"name"`
 	KmsMasterID string `json:"kms_master_id"`
 }
 
+// GetSnsTopicConfig returns config for SnsTopic
 func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
 	cf := SnsTopicConfig{
 		Config: Config{

@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/sqs"
 )
 
+// SqsQueueConfig holds config for SqsQueue
 type SqsQueueConfig struct {
 	Config
 	Name                         string `json:"name"`
@@ -28,6 +29,7 @@ type SqsQueueConfig struct {
 	MessageRetentionSeconds      int    `json:"message_retention_seconds"`
 }
 
+// GetSqsQueueConfig returns config for SqsQueue
 func GetSqsQueueConfig(q *sqs.Queue) []AWSResourceConfig {
 	cf := SqsQueueConfig{
 		Config: Config{

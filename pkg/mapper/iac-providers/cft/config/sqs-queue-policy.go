@@ -22,12 +22,14 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/sqs"
 )
 
+// SqsQueuePolicyConfig holds config for SqsQueuePolicy
 type SqsQueuePolicyConfig struct {
 	Config
 	QueueUrl string `json:"queue_url"`
 	Policy   string `json:"policy"`
 }
 
+// GetSqsQueuePolicyConfig returns config for SqsQueuePolicy
 func GetSqsQueuePolicyConfig(p *sqs.QueuePolicy) []AWSResourceConfig {
 	policyDoc, _ := json.Marshal(p.PolicyDocument)
 

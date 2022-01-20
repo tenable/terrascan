@@ -22,16 +22,19 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/autoscaling"
 )
 
+// EbsBlockDeviceBlock hold config for EbsBlockDevice
 type EbsBlockDeviceBlock struct {
 	DeviceName string `json:"device_name"`
 	Encrypted  bool   `json:"encrypted"`
 }
 
+// MetadataOptionsBlock hold config for MetadataOptions
 type MetadataOptionsBlock struct {
 	HttpEndpoint string `json:"http_endpoint"`
 	HttpTokens   string `json:"http_tokens"`
 }
 
+// AutoScalingLaunchConfigurationConfig hold config for AutoScalingLaunchConfiguration
 type AutoScalingLaunchConfigurationConfig struct {
 	Config
 	EnableMonitoring bool                  `json:"enable_monitoring"`
@@ -40,6 +43,7 @@ type AutoScalingLaunchConfigurationConfig struct {
 	EbsBlockDevice   []EbsBlockDeviceBlock `json:"ebs_block_device"`
 }
 
+// GetAutoScalingLaunchConfigurationConfig returns config for AutoScalingLaunchConfiguration
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
 	userDataBase64 := base64.StdEncoding.EncodeToString([]byte(l.UserData))
 

@@ -22,12 +22,14 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/sns"
 )
 
+// SnsTopicPolicyConfig hold config for SnsTopicPolicy
 type SnsTopicPolicyConfig struct {
 	Config
 	ARN    string `json:"arn"`
 	Policy string `json:"policy"`
 }
 
+// GetSnsTopicPolicyConfig returns config for SnsTopicPolicy
 func GetSnsTopicPolicyConfig(p *sns.TopicPolicy) []AWSResourceConfig {
 	policyDoc, _ := json.Marshal(p.PolicyDocument)
 
