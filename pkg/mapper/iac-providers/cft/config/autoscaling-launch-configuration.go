@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/base64"
+	"unicode"
 
 	"github.com/awslabs/goformation/v4/cloudformation/autoscaling"
 )
@@ -39,14 +40,13 @@ type AutoScalingLaunchConfigurationConfig struct {
 	Config
 	EnableMonitoring bool                  `json:"enable_monitoring"`
 	UserDataBase64   string                `json:"user_data_base64"`
+	UserData         string                `json:"user_data"`
 	MetadataOptions  MetadataOptionsBlock  `json:"metadata_options"`
 	EbsBlockDevice   []EbsBlockDeviceBlock `json:"ebs_block_device"`
 }
 
 // GetAutoScalingLaunchConfigurationConfig returns config for AutoScalingLaunchConfiguration
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
-	userDataBase64 := base64.StdEncoding.EncodeToString([]byte(l.UserData))
-
 	ebsBlockDevice := make([]EbsBlockDeviceBlock, len(l.BlockDeviceMappings))
 
 	for i := range l.BlockDeviceMappings {
@@ -57,21 +57,40 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 	}
 
 	var metadataOptions MetadataOptionsBlock
-	metadataOptions.HTTPEndpoint = l.MetadataOptions.HttpEndpoint
-	metadataOptions.HTTPTokens = l.MetadataOptions.HttpTokens
+	if l.MetadataOptions != nil {
+		metadataOptions.HTTPEndpoint = l.MetadataOptions.HttpEndpoint
+		metadataOptions.HTTPTokens = l.MetadataOptions.HttpTokens
+	}
 
 	cf := AutoScalingLaunchConfigurationConfig{
 		Config: Config{
 			Name: l.LaunchConfigurationName,
 		},
 		EnableMonitoring: l.InstanceMonitoring,
-		UserDataBase64:   userDataBase64,
 		MetadataOptions:  metadataOptions,
 		EbsBlockDevice:   ebsBlockDevice,
+	}
+
+	data, err := base64.StdEncoding.Strict().DecodeString(l.UserData)
+	datastr := string(data)
+
+	if isASCII(datastr) && err == nil {
+		cf.UserDataBase64 = datastr
+	} else {
+		cf.UserData = l.UserData
 	}
 
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: l.AWSCloudFormationMetadata,
 	}}
+}
+
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] > unicode.MaxASCII {
+			return false
+		}
+	}
+	return true
 }
