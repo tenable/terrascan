@@ -70,4 +70,9 @@ const (
 	AwsS3Bucket                      = "aws_s3_bucket"
 	AwsS3BucketPublicAccessBlock     = "aws_s3_bucket_public_access_block"
 	AwsS3BucketPolicy                = "aws_s3_bucket_policy"
+	AwsSqsQueue                      = "aws_sqs_queue"
+	AwsSqsQueuePolicy                = "aws_sqs_queue_policy"
+	AwsSnsTopic                      = "aws_sns_topic"
+	AwsSnsTopicPolicy                = "aws_sns_topic_policy"
+	AwsLaunchConfiguration           = "aws_launch_configuration"
 )

@@ -19,8 +19,11 @@ package cft
 import (
 	"errors"
 
+	"github.com/awslabs/goformation/v4/cloudformation/autoscaling"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudfront"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v4/cloudformation/sns"
+	"github.com/awslabs/goformation/v4/cloudformation/sqs"
 
 	cf "github.com/awslabs/goformation/v4/cloudformation/cloudformation"
 	cnf "github.com/awslabs/goformation/v4/cloudformation/config"
@@ -214,6 +217,16 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSR
 		return config.GetS3BucketConfig(resource)
 	case *s3.BucketPolicy:
 		return config.GetS3BucketPolicyConfig(resource)
+	case *sqs.Queue:
+		return config.GetSqsQueueConfig(resource)
+	case *sqs.QueuePolicy:
+		return config.GetSqsQueuePolicyConfig(resource)
+	case *sns.Topic:
+		return config.GetSnsTopicConfig(resource)
+	case *sns.TopicPolicy:
+		return config.GetSnsTopicPolicyConfig(resource)
+	case *autoscaling.LaunchConfiguration:
+		return config.GetAutoScalingLaunchConfigurationConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}

@@ -70,4 +70,9 @@ var ResourceTypes = map[string]string{
 	"AWS::S3::Bucket":                          AwsS3Bucket,
 	"AWS::S3::Bucket.PublicAccessBlock":        AwsS3BucketPublicAccessBlock,
 	"AWS::S3::BucketPolicy":                    AwsS3BucketPolicy,
+	"AWS::SQS::Queue":                          AwsSqsQueue,
+	"AWS::SQS::QueuePolicy":                    AwsSqsQueuePolicy,
+	"AWS::SNS::Topic":                          AwsSnsTopic,
+	"AWS::SNS::TopicPolicy":                    AwsSnsTopicPolicy,
+	"AWS::AutoScaling::LaunchConfiguration":    AwsLaunchConfiguration,
 }
