@@ -21,7 +21,7 @@ var ResourceTypes = map[string]string{
 	"AWS::DocDB::DBCluster":                    AwsDocDBCluster,
 	"AWS::ApiGatewayV2::Stage":                 AwsAPIGatewayV2Stage,
 	"AWS::ApiGateway::Stage":                   AwsAPIGatewayStage,
-	"AWS::ApiGateway::Stage.MethodSetting":     AwsAPIGatewayStageMethodSettings,
+	"AWS::ApiGateway::Stage.MethodSettings":    AwsAPIGatewayStageMethodSettings,
 	"AWS::ApiGateway::RestApi":                 AwsAPIGatewayRestAPI,
 	"AWS::ECS::Service":                        AwsEcsService,
 	"AWS::Logs::LogGroup":                      AwsLogGroup,
