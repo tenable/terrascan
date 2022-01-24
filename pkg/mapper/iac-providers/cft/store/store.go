@@ -75,4 +75,8 @@ var ResourceTypes = map[string]string{
 	"AWS::SNS::Topic":                          AwsSnsTopic,
 	"AWS::SNS::TopicPolicy":                    AwsSnsTopicPolicy,
 	"AWS::AutoScaling::LaunchConfiguration":    AwsLaunchConfiguration,
+	"AWS::EC2::Instance":                       AwsEc2Instance,
+	"AWS::Cognito::UserPool":                   AwsCognitoUserPool,
+	"AWS::Lambda::Function":                    AwsLambdaFunction,
+	"AWS::CertificateManager::Certificate":     AwsAcmCertificate,
 }

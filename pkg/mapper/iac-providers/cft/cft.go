@@ -20,8 +20,11 @@ import (
 	"errors"
 
 	"github.com/awslabs/goformation/v4/cloudformation/autoscaling"
+	"github.com/awslabs/goformation/v4/cloudformation/certificatemanager"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudfront"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v4/cloudformation/cognito"
+	"github.com/awslabs/goformation/v4/cloudformation/lambda"
 	"github.com/awslabs/goformation/v4/cloudformation/sns"
 	"github.com/awslabs/goformation/v4/cloudformation/sqs"
 
@@ -227,6 +230,14 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSR
 		return config.GetSnsTopicPolicyConfig(resource)
 	case *autoscaling.LaunchConfiguration:
 		return config.GetAutoScalingLaunchConfigurationConfig(resource)
+	case *ec2.Instance:
+		return config.GetEC2InstanceConfig(resource)
+	case *cognito.UserPool:
+		return config.GetCognitoUserPoolConfig(resource)
+	case *lambda.Function:
+		return config.GetLambdaFunctionConfig(resource)
+	case *certificatemanager.Certificate:
+		return config.GetCertificateManagerCertificateConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}

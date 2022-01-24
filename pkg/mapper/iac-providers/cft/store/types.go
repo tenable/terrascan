@@ -75,4 +75,8 @@ const (
 	AwsSnsTopic                      = "aws_sns_topic"
 	AwsSnsTopicPolicy                = "aws_sns_topic_policy"
 	AwsLaunchConfiguration           = "aws_launch_configuration"
+	AwsEc2Instance                   = "aws_instance"
+	AwsCognitoUserPool               = "aws_cognito_user_pool"
+	AwsLambdaFunction                = "aws_lambda_function"
+	AwsAcmCertificate                = "aws_acm_certificate"
 )
