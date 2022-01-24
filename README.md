@@ -210,3 +210,13 @@ We believe having an open and inclusive community benefits all of us. Please not
 ## License
 
 Terrascan is licensed under the [Apache 2.0 License](LICENSE).
+
+### Stargazers
+
+[![Stargazers @accurics/terrascan](https://reporoster.com/stars/accurics/terrascan)](https://github.com/accurics/terrascan/stargazers)
+
+### Forkers
+
+[![Forkers @accurics/terrascan](https://reporoster.com/forks/accurics/terrascan)](https://github.com/accurics/terrascan/network/members)
+
+
