@@ -22,7 +22,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/sns"
 )
 
-// SnsTopicPolicyConfig hold config for SnsTopicPolicy
+// SnsTopicPolicyConfig holds config for SnsTopicPolicy
 type SnsTopicPolicyConfig struct {
 	Config
 	ARN    string `json:"arn"`
