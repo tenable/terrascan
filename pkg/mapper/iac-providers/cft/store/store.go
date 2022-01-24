@@ -73,6 +73,6 @@ var ResourceTypes = map[string]string{
 	"AWS::SQS::Queue":                          AwsSqsQueue,
 	"AWS::SQS::QueuePolicy":                    AwsSqsQueuePolicy,
 	"AWS::SNS::Topic":                          AwsSnsTopic,
-	"AWS:SNS::TopicPolicy":                     AwsSnsTopicPolicy,
+	"AWS::SNS::TopicPolicy":                    AwsSnsTopicPolicy,
 	"AWS::AutoScaling::LaunchConfiguration":    AwsLaunchConfiguration,
 }
