@@ -25,8 +25,9 @@ import (
 
 // EbsBlockDeviceBlock hold config for EbsBlockDevice
 type EbsBlockDeviceBlock struct {
-	DeviceName string `json:"device_name"`
-	Encrypted  bool   `json:"encrypted"`
+	DeviceName          string `json:"device_name"`
+	Encrypted           bool   `json:"encrypted"`
+	DeleteOnTermination bool   `json:"delete_on_termination"`
 }
 
 // MetadataOptionsBlock hold config for MetadataOptions
@@ -52,6 +53,7 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 	for i := range l.BlockDeviceMappings {
 		if l.BlockDeviceMappings[i].Ebs != nil {
 			ebsBlockDevice[i].Encrypted = l.BlockDeviceMappings[i].Ebs.Encrypted
+			ebsBlockDevice[i].DeleteOnTermination = l.BlockDeviceMappings[i].Ebs.DeleteOnTermination
 		}
 		ebsBlockDevice[i].DeviceName = l.BlockDeviceMappings[i].DeviceName
 	}
@@ -75,7 +77,7 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 	datastr := string(data)
 
 	if isASCII(datastr) && err == nil {
-		cf.UserDataBase64 = datastr
+		cf.UserDataBase64 = l.UserData
 	} else {
 		cf.UserData = l.UserData
 	}
