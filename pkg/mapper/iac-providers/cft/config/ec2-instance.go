@@ -17,13 +17,30 @@
 package config
 
 import (
-	"crypto/rand"
-	"encoding/base32"
 	"fmt"
 	"strconv"
 
+	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/awslabs/goformation/v4/cloudformation/ec2"
 )
+
+const (
+	GetNetworkInterface = "NetworkInterface"
+)
+
+// AttachmentBlock holds config for Attachment
+type AttachmentBlock struct {
+	Instance    string `json:"instance"`
+	DeviceIndex int    `json:"device_index"`
+}
+
+// NetworkInterfaceConfig holds config for NetworkInterface
+type NetworkInterfaceConfig struct {
+	Config
+	SubnetID   string            `json:"subnet_id"`
+	PrivateIPs []string          `json:"private_ips"`
+	Attachment []AttachmentBlock `json:"attachment"`
+}
 
 // NetworkInterfaceBlock holds config for NetworkInterface
 type NetworkInterfaceBlock struct {
@@ -32,74 +49,72 @@ type NetworkInterfaceBlock struct {
 	DeleteOnTermination bool   `json:"delete_on_termination"`
 }
 
-// TagBlock holds config for Tag
-type TagBlock struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
-
 // EC2InstanceConfig holds config for EC2Instance
 type EC2InstanceConfig struct {
 	Config
-	AMI                      string                  `json:"ami"`
-	InstanceType             string                  `json:"instance_type"`
-	EBSOptimized             bool                    `json:"ebs_optimized"`
-	Hibernation              bool                    `json:"hibernation"`
-	Monitoring               bool                    `json:"monitoring"`
-	IAMInstanceProfile       string                  `json:"iam_instance_profile"`
-	VPCSecurityGroupIDs      []string                `json:"vpc_security_group_ids"`
-	AssociatePublicIPAddress bool                    `json:"associate_public_ip_address"`
-	NetworkInterface         []NetworkInterfaceBlock `json:"network_interface"`
-	Tags                     []TagBlock              `json:"tags"`
+	AMI                 string                  `json:"ami"`
+	InstanceType        string                  `json:"instance_type"`
+	EBSOptimized        bool                    `json:"ebs_optimized"`
+	Hibernation         bool                    `json:"hibernation"`
+	Monitoring          bool                    `json:"monitoring"`
+	IAMInstanceProfile  string                  `json:"iam_instance_profile"`
+	VPCSecurityGroupIDs []string                `json:"vpc_security_group_ids"`
+	NetworkInterface    []NetworkInterfaceBlock `json:"network_interface"`
 }
 
 // GetEC2InstanceConfig returns config for EC2Instance
-func GetEC2InstanceConfig(i *ec2.Instance) []AWSResourceConfig {
-	name := fmt.Sprintf("aws_instance_%s", getname(10))
-
-	var publicIp bool
+func GetEC2InstanceConfig(instanceName string, i *ec2.Instance) []AWSResourceConfig {
 	nics := make([]NetworkInterfaceBlock, len(i.NetworkInterfaces))
+	niconfigs := make([]NetworkInterfaceConfig, len(i.NetworkInterfaces))
+	awsconfig := make([]AWSResourceConfig, len(i.NetworkInterfaces))
+
 	for index := range i.NetworkInterfaces {
 		nics[index].NetworkInterfaceID = i.NetworkInterfaces[index].NetworkInterfaceId
-		nics[index].DeviceIndex, _ = strconv.Atoi(i.NetworkInterfaces[index].DeviceIndex)
 		nics[index].DeleteOnTermination = i.NetworkInterfaces[index].DeleteOnTermination
+		var devindex int
+		devindex, err := strconv.Atoi(i.NetworkInterfaces[index].DeviceIndex)
+		if err != nil {
+			devindex = 0
+		}
+		nics[index].DeviceIndex = devindex
 
-		publicIp = i.NetworkInterfaces[index].AssociatePublicIpAddress
+		// create aws_network_interface resource on the fly for every network interface used in aws_instance
+		niconfigs[index].SubnetID = i.NetworkInterfaces[index].SubnetId
+		if i.NetworkInterfaces[index].PrivateIpAddress != "" {
+			niconfigs[index].PrivateIPs = []string{i.NetworkInterfaces[index].PrivateIpAddress}
+		}
+
+		nicname := fmt.Sprintf("%s%d", instanceName, index)
+		niconfigs[index].Attachment = make([]AttachmentBlock, 1)
+		niconfigs[index].Attachment[0].DeviceIndex = devindex
+		niconfigs[index].Attachment[0].Instance = store.AwsEc2Instance + "." + instanceName
+		niconfigs[index].Config.Name = nicname
+
+		awsconfig[index].Type = GetNetworkInterface
+		awsconfig[index].Name = nicname
+		awsconfig[index].Resource = niconfigs[index]
+		awsconfig[index].Metadata = i.AWSCloudFormationMetadata
 	}
 
-	tags := make([]TagBlock, len(i.Tags))
-	for index := range i.Tags {
-		tags[index].Key = i.Tags[index].Key
-		tags[index].Value = i.Tags[index].Value
-	}
-
-	cf := EC2InstanceConfig{
+	ec2Config := EC2InstanceConfig{
 		Config: Config{
-			Name: name,
+			Tags: i.Tags,
+			Name: instanceName,
 		},
-		AMI:                      i.ImageId,
-		InstanceType:             i.InstanceType,
-		EBSOptimized:             i.EbsOptimized,
-		Hibernation:              i.HibernationOptions.Configured,
-		Monitoring:               i.Monitoring,
-		IAMInstanceProfile:       i.IamInstanceProfile,
-		VPCSecurityGroupIDs:      i.SecurityGroupIds,
-		AssociatePublicIPAddress: publicIp,
-		NetworkInterface:         nics,
-		Tags:                     tags,
+		AMI:                 i.ImageId,
+		InstanceType:        i.InstanceType,
+		EBSOptimized:        i.EbsOptimized,
+		Hibernation:         i.HibernationOptions.Configured,
+		Monitoring:          i.Monitoring,
+		IAMInstanceProfile:  i.IamInstanceProfile,
+		VPCSecurityGroupIDs: i.SecurityGroupIds,
+		NetworkInterface:    nics,
 	}
 
-	return []AWSResourceConfig{{
-		Resource: cf,
-		Metadata: i.AWSCloudFormationMetadata,
-	}}
-}
+	var awsconfigec2 AWSResourceConfig
+	awsconfigec2.Resource = ec2Config
+	awsconfigec2.Metadata = i.AWSCloudFormationMetadata
+	awsconfig = append(awsconfig, awsconfigec2)
 
-func getname(length int) string {
-	randomBytes := make([]byte, 32)
-	_, err := rand.Read(randomBytes)
-	if err != nil {
-		panic(err)
-	}
-	return base32.StdEncoding.EncodeToString(randomBytes)[:length]
+	return awsconfig
 }
