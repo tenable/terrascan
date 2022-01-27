@@ -88,7 +88,7 @@ func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) (
 		return nil, errors.New(errUnsupportedDoc)
 	}
 	for name, untypedRes := range template.Resources {
-		for _, resourceConfig := range m.mapConfigForResource(untypedRes) {
+		for _, resourceConfig := range m.mapConfigForResource(name, untypedRes) {
 			if resourceConfig.Resource != nil {
 				config := output.ResourceConfig{
 					Name:      name,
@@ -128,7 +128,7 @@ func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) (
 	return configs, nil
 }
 
-func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSResourceConfig {
+func (m cftMapper) mapConfigForResource(rscname string, r cloudformation.Resource) []config.AWSResourceConfig {
 	switch resource := r.(type) {
 	case *docdb.DBCluster:
 		return config.GetDocDBConfig(resource)
@@ -231,7 +231,7 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource) []config.AWSR
 	case *autoscaling.LaunchConfiguration:
 		return config.GetAutoScalingLaunchConfigurationConfig(resource)
 	case *ec2.Instance:
-		return config.GetEC2InstanceConfig(resource)
+		return config.GetEC2InstanceConfig(rscname, resource)
 	case *cognito.UserPool:
 		return config.GetCognitoUserPoolConfig(resource)
 	case *lambda.Function:
