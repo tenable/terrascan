@@ -13,9 +13,27 @@ ___
 
 #### Configure a PreSync hook
 
-The following example of a hook yaml is nearly ready to be added to an existing kubernetes configuration. To complete the configutation, you need to:
+The following example of a presync resource hook yaml is nearly ready to be added to an existing kubernetes configuration. To complete the configutation, you need to:
 - Ensure that the secrets,  `known_hosts`, and `ssh_config` volume are relevant for your specific environment.
 - Specify a terrascan image.
+
+There is a prepared terrascan image available on Dockerhub that can be integrated with argo-cd immediately. It can be found and pulled from hub.docker.com/r/accurics/terrascan_argocd. You may pull the latest available docker image using bash command 
+```bash 
+docker pull accurics/terrascan_argocd:latest
+```
+To use the precreated image of terrascan to scan your argo cd application, replace the 
+```yaml
+ containers:
+     - name: terrascan-argocd
+       image: <terrascan-image>
+```
+seen in the presync resource hook yaml below with 
+```yaml
+ containers:
+     - name: terrascan-argocd
+       image: "accurics/terrascan_argocd:latest"
+```
+Insert the resource hook below as a yaml file to the source directory of your project repository. Argo-cd will trigger this resource hook everytime the sync operation is used. 
 
 You can also map a slack notification script to the container which will send notifications to your Slack webhook endpoint after the embedded script scans the repo.
 
@@ -52,7 +70,7 @@ spec:
            name: known-hosts-config
      containers:
      - name: terrascan-argocd
-       image: <terrscan-image>
+       image: <terrascan-image>
        resources:
          requests:
            cpu: "1"
