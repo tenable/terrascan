@@ -24,6 +24,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/ec2"
 )
 
+// GetNetworkInterface represents subresource aws_network_interface for NetworkInterface attribute
 const (
 	GetNetworkInterface = "NetworkInterface"
 )

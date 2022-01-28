@@ -18,6 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v4/cloudformation/cognito"
 
+// PasswordPolicyBlock holds config for PasswordPolicy
 type PasswordPolicyBlock struct {
 	MinimumLength                 int  `json:"minimum_length"`
 	RequireLowercase              bool `json:"require_lowercase"`
