@@ -35,6 +35,7 @@ type VPCConfigBlock struct {
 	SubnetIDs        []string `json:"subnet_ids"`
 }
 
+// EnvironmentBlock holds config for Environment variables
 type EnvironmentBlock struct {
 	Variables map[string]string `json:"variables"`
 }
