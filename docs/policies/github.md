@@ -2,7 +2,7 @@
 ### github_repository
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity & Access Management | github | MEDIUM | Repository is Not Private. | accurics.github.IAM.1 |
+| Identity & Access Management | github | MEDIUM | Repository is Not Private or Internal. | accurics.github.IAM.1 |
 
 
 ### github_repository_webhook

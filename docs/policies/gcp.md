@@ -10,7 +10,7 @@
 ### github_repository
 | Category | Resource | Severity | Description | Reference ID |
 | -------- | -------- | -------- | ----------- | ------------ |
-| Identity & Access Management | gcp | MEDIUM | Repository is Not Private. | accurics.gcp.IAM.145 |
+| Identity & Access Management | gcp | MEDIUM | Repository is Not Private or Internal. | accurics.gcp.IAM.145 |
 
 
 ### google_bigquery_dataset
