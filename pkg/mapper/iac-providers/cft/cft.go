@@ -88,7 +88,7 @@ func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) (
 		return nil, errors.New(errUnsupportedDoc)
 	}
 	for name, untypedRes := range template.Resources {
-		for _, resourceConfig := range m.mapConfigForResource(name, untypedRes) {
+		for _, resourceConfig := range m.mapConfigForResource(untypedRes, name) {
 			if resourceConfig.Resource != nil {
 				config := output.ResourceConfig{
 					Name:      name,
