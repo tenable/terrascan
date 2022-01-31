@@ -128,7 +128,7 @@ func (m cftMapper) Map(resource interface{}, params ...map[string]interface{}) (
 	return configs, nil
 }
 
-func (m cftMapper) mapConfigForResource(rscname string, r cloudformation.Resource) []config.AWSResourceConfig {
+func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName string) []config.AWSResourceConfig {
 	switch resource := r.(type) {
 	case *docdb.DBCluster:
 		return config.GetDocDBConfig(resource)
@@ -231,7 +231,7 @@ func (m cftMapper) mapConfigForResource(rscname string, r cloudformation.Resourc
 	case *autoscaling.LaunchConfiguration:
 		return config.GetAutoScalingLaunchConfigurationConfig(resource)
 	case *ec2.Instance:
-		return config.GetEC2InstanceConfig(rscname, resource)
+		return config.GetEC2InstanceConfig(resource, resourceName)
 	case *cognito.UserPool:
 		return config.GetCognitoUserPoolConfig(resource)
 	case *lambda.Function:

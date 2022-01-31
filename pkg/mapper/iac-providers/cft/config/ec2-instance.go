@@ -64,7 +64,7 @@ type EC2InstanceConfig struct {
 }
 
 // GetEC2InstanceConfig returns config for EC2Instance
-func GetEC2InstanceConfig(instanceName string, i *ec2.Instance) []AWSResourceConfig {
+func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
 	nics := make([]NetworkInterfaceBlock, len(i.NetworkInterfaces))
 	niconfigs := make([]NetworkInterfaceConfig, len(i.NetworkInterfaces))
 	awsconfig := make([]AWSResourceConfig, len(i.NetworkInterfaces))
