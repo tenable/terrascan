@@ -21,8 +21,8 @@ def dir_size(dir):
                                 severity = policy['severity']
                                 description = policy['description'].replace('\n','')
                                 reference_id = policy['reference_id']
-                                id = policy['id']
-                                f.write(f"| {category} | {resource} | {severity} | {description} | {reference_id} | {id} |\n")
+                                policy_id = policy['id']
+                                f.write(f"| {category} | {resource} | {severity} | {description} | {reference_id} | {policy_id} |\n")
                 f.write("\n\n")
 
 if __name__ == '__main__':
