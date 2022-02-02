@@ -27,7 +27,7 @@ const (
 	GatewayMethodSettings = "MethodSettings"
 )
 
-// MethodSettingConfig holds the config for aws_api_gateway_method_settings
+// MethodSettingConfig holds config for aws_api_gateway_method_settings
 type MethodSettingConfig struct {
 	Config
 	MethodSettings []Settings `json:"settings"`

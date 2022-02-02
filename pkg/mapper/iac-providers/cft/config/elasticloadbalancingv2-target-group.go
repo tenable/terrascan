@@ -20,7 +20,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancingv2"
 )
 
-// ElasticLoadBalancingV2TargetGroupConfig holds the config for aws_lb_target_group
+// ElasticLoadBalancingV2TargetGroupConfig holds config for aws_lb_target_group
 type ElasticLoadBalancingV2TargetGroupConfig struct {
 	Config
 	Protocol string `json:"protocol"`

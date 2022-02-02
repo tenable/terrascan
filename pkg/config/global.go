@@ -120,7 +120,7 @@ func LoadGlobalConfig(configFile string) error {
 	return nil
 }
 
-// GetPolicyBasePath returns the configured policy base path
+// GetPolicyBasePath returns configured policy base path
 func GetPolicyBasePath() string {
 	if global == nil {
 		return defaultBasePolicyPath
@@ -136,7 +136,7 @@ func GetPolicyRepoPath() string {
 	return global.Policy.RepoPath
 }
 
-// GetPolicyRepoURL returns the configured policy repo url
+// GetPolicyRepoURL returns configured policy repo url
 func GetPolicyRepoURL() string {
 	if global == nil {
 		return defaultPolicyRepoURL
@@ -144,7 +144,7 @@ func GetPolicyRepoURL() string {
 	return global.Policy.RepoURL
 }
 
-// GetPolicyBranch returns the configured policy repo url
+// GetPolicyBranch returns configured policy repo url
 func GetPolicyBranch() string {
 	if global == nil {
 		return defaultPolicyBranch
@@ -152,7 +152,7 @@ func GetPolicyBranch() string {
 	return global.Policy.Branch
 }
 
-// GetScanRules returns the configured scan rules
+// GetScanRules returns configured scan rules
 func GetScanRules() []string {
 	if global == nil {
 		return nil
@@ -160,7 +160,7 @@ func GetScanRules() []string {
 	return global.Rules.ScanRules
 }
 
-// GetSkipRules returns the configured skips rules
+// GetSkipRules returns configured skips rules
 func GetSkipRules() []string {
 	if global == nil {
 		return nil
@@ -168,7 +168,7 @@ func GetSkipRules() []string {
 	return global.Rules.SkipRules
 }
 
-// GetSeverityLevel returns the configured severity level
+// GetSeverityLevel returns configured severity level
 func GetSeverityLevel() string {
 	if global == nil {
 		return ""
@@ -176,7 +176,7 @@ func GetSeverityLevel() string {
 	return global.Severity.Level
 }
 
-// GetCategoryList returns the configured list of category of violations
+// GetCategoryList returns configured list of category of violations
 func GetCategoryList() []string {
 	if global == nil {
 		return nil
@@ -184,7 +184,7 @@ func GetCategoryList() []string {
 	return global.Category.List
 }
 
-// GetNotifications returns the configured notifier map
+// GetNotifications returns configured notifier map
 func GetNotifications() map[string]Notifier {
 	if global == nil {
 		return nil

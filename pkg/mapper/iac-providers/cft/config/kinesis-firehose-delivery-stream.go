@@ -20,7 +20,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/kinesisfirehose"
 )
 
-// KinesisFirehoseDeliveryStreamConfig holds the config for aws_kinesis_firehose_delivery_stream
+// KinesisFirehoseDeliveryStreamConfig holds config for aws_kinesis_firehose_delivery_stream
 type KinesisFirehoseDeliveryStreamConfig struct {
 	ServerSideEncryption interface{} `json:"server_side_encryption"`
 	Config

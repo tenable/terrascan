@@ -40,7 +40,7 @@ type EfsVolumeConfig struct {
 	TransitEncryption string `json:"transit_encryption"`
 }
 
-// ContainerDefinitionConfig holds the config for container_definitions
+// ContainerDefinitionConfig holds config for container_definitions
 type ContainerDefinitionConfig struct {
 	Environment []EnvironmentConfig `json:"environment"`
 }

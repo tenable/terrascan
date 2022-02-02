@@ -22,7 +22,7 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/kms"
 )
 
-// KmsKeyConfig holds the config for aws_kms_key
+// KmsKeyConfig holds config for aws_kms_key
 type KmsKeyConfig struct {
 	Config
 	Description         string `json:"description"`
