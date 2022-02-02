@@ -37,8 +37,10 @@ type CognitoUserPoolConfig struct {
 
 // GetCognitoUserPoolConfig returns config for CognitoUserPool
 func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
-	passwordPolicy := make([]PasswordPolicyBlock, 1)
+	var passwordPolicy []PasswordPolicyBlock
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {
+		passwordPolicy := make([]PasswordPolicyBlock, 1)
+
 		passwordPolicy[0].MinimumLength = u.Policies.PasswordPolicy.MinimumLength
 		passwordPolicy[0].RequireLowercase = u.Policies.PasswordPolicy.RequireLowercase
 		passwordPolicy[0].RequireUppercase = u.Policies.PasswordPolicy.RequireUppercase
