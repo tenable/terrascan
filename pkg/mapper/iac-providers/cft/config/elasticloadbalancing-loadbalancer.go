@@ -17,8 +17,29 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancing"
 )
+
+const (
+	GetPolicies = "Policies"
+)
+
+// PolicyTypeBlock holds config for PolicyTypeBlock
+type PolicyAttributeBlock struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// ElasticLoadBalancingLoadBalancerPoliciesConfig holds config for ElasticLoadBalancingLoadBalancerPolicies
+type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
+	Config
+	LoadBalancerName string                 `json:"load_balancer_name"`
+	PolicyName       string                 `json:"policy_name"`
+	PolicyTypeName   string                 `jons:"policy_type_name"`
+	PolicyAttribute  []PolicyAttributeBlock `json:"policy_attribute"`
+}
 
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
@@ -39,10 +60,26 @@ type ELBListenerConfig struct {
 }
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
-func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer) []AWSResourceConfig {
+func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
+	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
+	awsconfig := make([]AWSResourceConfig, len(e.Policies))
+
+	for index := range e.Policies {
+		indexedElbName := fmt.Sprintf("%s%d", elbname, index)
+
+		elbpolicies[index].LoadBalancerName = indexedElbName
+		elbpolicies[index].PolicyName = e.Policies[index].PolicyName
+		elbpolicies[index].PolicyTypeName = e.Policies[index].PolicyType
+		e.Policies[index].Attributes = e.Policies[index].Attributes
+
+		awsconfig[index].Type = GetPolicies
+		awsconfig[index].Name = indexedElbName
+		awsconfig[index].Resource = elbpolicies[index]
+		awsconfig[index].Metadata = e.AWSCloudFormationMetadata
+	}
+
 	cf := ElasticLoadBalancingLoadBalancerConfig{
 		Config: Config{
-			Name: e.LoadBalancerName,
 			Tags: e.Tags,
 		},
 	}
@@ -64,8 +101,10 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		cf.Listeners = lc
 	}
 
-	return []AWSResourceConfig{{
-		Resource: cf,
-		Metadata: e.AWSCloudFormationMetadata,
-	}}
+	var awsconfigElb AWSResourceConfig
+	awsconfigElb.Resource = cf
+	awsconfigElb.Metadata = e.AWSCloudFormationMetadata
+	awsconfig = append(awsconfig, awsconfigElb)
+
+	return awsconfig
 }

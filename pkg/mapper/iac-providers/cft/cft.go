@@ -23,8 +23,13 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/certificatemanager"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudfront"
 	"github.com/awslabs/goformation/v4/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v4/cloudformation/codebuild"
 	"github.com/awslabs/goformation/v4/cloudformation/cognito"
+	"github.com/awslabs/goformation/v4/cloudformation/dms"
+	"github.com/awslabs/goformation/v4/cloudformation/emr"
 	"github.com/awslabs/goformation/v4/cloudformation/lambda"
+	"github.com/awslabs/goformation/v4/cloudformation/msk"
+	"github.com/awslabs/goformation/v4/cloudformation/sagemaker"
 	"github.com/awslabs/goformation/v4/cloudformation/sns"
 	"github.com/awslabs/goformation/v4/cloudformation/sqs"
 
@@ -209,7 +214,7 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	case *elasticloadbalancingv2.TargetGroup:
 		return config.GetElasticLoadBalancingV2TargetGroupConfig(resource)
 	case *elasticloadbalancing.LoadBalancer:
-		return config.GetElasticLoadBalancingLoadBalancerConfig(resource)
+		return config.GetElasticLoadBalancingLoadBalancerConfig(resource, resourceName)
 	case *elasticsearch.Domain:
 		return config.GetElasticsearchDomainConfig(resource)
 	case *secretsmanager.ResourcePolicy:
@@ -238,6 +243,16 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetLambdaFunctionConfig(resource)
 	case *certificatemanager.Certificate:
 		return config.GetCertificateManagerCertificateConfig(resource)
+	case *sagemaker.NotebookInstance:
+		return config.GetSagemakerNotebookInstanceConfig(resource)
+	case *dms.ReplicationInstance:
+		return config.GetDmsReplicationInstanceConfig(resource)
+	case *codebuild.Project:
+		return config.GetCodebuildProjectConfig(resource)
+	case *emr.Cluster:
+		return config.GetEmrClusterConfig(resource)
+	case *msk.Cluster:
+		return config.GetMskClusterConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}
