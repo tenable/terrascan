@@ -22,11 +22,12 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancing"
 )
 
+// GetPolicies represents subresource aws_load_balancer_policy for Policies attribute
 const (
 	GetPolicies = "Policies"
 )
 
-// PolicyTypeBlock holds config for PolicyTypeBlock
+// PolicyAttributeBlock holds config for PolicyTypeBlock
 type PolicyAttributeBlock struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
@@ -64,18 +65,25 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
 	awsconfig := make([]AWSResourceConfig, len(e.Policies))
 
-	for index := range e.Policies {
-		indexedElbName := fmt.Sprintf("%s%d", elbname, index)
+	for i := range e.Policies {
+		indexedElbName := fmt.Sprintf("%s%d", elbname, i)
 
-		elbpolicies[index].LoadBalancerName = indexedElbName
-		elbpolicies[index].PolicyName = e.Policies[index].PolicyName
-		elbpolicies[index].PolicyTypeName = e.Policies[index].PolicyType
-		e.Policies[index].Attributes = e.Policies[index].Attributes
+		elbpolicies[i].LoadBalancerName = indexedElbName
+		elbpolicies[i].PolicyName = e.Policies[i].PolicyName
+		elbpolicies[i].PolicyTypeName = e.Policies[i].PolicyType
 
-		awsconfig[index].Type = GetPolicies
-		awsconfig[index].Name = indexedElbName
-		awsconfig[index].Resource = elbpolicies[index]
-		awsconfig[index].Metadata = e.AWSCloudFormationMetadata
+		elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(e.Policies[i].Attributes))
+		for ai := range e.Policies[i].Attributes {
+			attribVals := e.Policies[i].Attributes[ai].(map[string]interface{})
+
+			elbpolicies[i].PolicyAttribute[ai].Name = attribVals["Name"].(string)
+			elbpolicies[i].PolicyAttribute[ai].Value = attribVals["Value"].(string)
+		}
+
+		awsconfig[i].Type = GetPolicies
+		awsconfig[i].Name = indexedElbName
+		awsconfig[i].Resource = elbpolicies[i]
+		awsconfig[i].Metadata = e.AWSCloudFormationMetadata
 	}
 
 	cf := ElasticLoadBalancingLoadBalancerConfig{
