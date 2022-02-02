@@ -66,6 +66,9 @@ type ScanOptions struct {
 	// configOnly will output resource config (should only be used for debugging purposes)
 	configOnly bool
 
+	// configWithError will output resource config and encountered errors
+	configWithError bool
+
 	// config file path
 	configFile string
 
@@ -207,7 +210,7 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// executor output
-	results, err := executor.Execute(s.configOnly)
+	results, err := executor.Execute(s.configOnly, s.configWithError)
 	if err != nil {
 		return err
 	}
@@ -224,7 +227,7 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-	if !s.configOnly && flag.Lookup("test.v") == nil {
+	if !s.configOnly && flag.Lookup("test.v") == nil && !s.configWithError {
 		os.RemoveAll(tempDir)
 		exitCode := getExitCode(results)
 		if exitCode != 0 {
@@ -256,6 +259,10 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 
 	if s.configOnly {
 		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+	}
+
+	if s.configWithError {
+		return writer.Write(s.outputType, results, outputWriter)
 	}
 
 	// add verbose flag to the scan summary

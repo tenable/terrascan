@@ -209,7 +209,7 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 		return result, err
 	}
 
-	result, err = executor.Execute(false)
+	result, err = executor.Execute(false, false)
 	if err != nil {
 		zap.S().Error("failed to scan resource object. error: '%v'", err)
 		return result, err

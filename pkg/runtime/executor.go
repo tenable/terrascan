@@ -30,6 +30,7 @@ import (
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/notifications"
 	"github.com/accurics/terrascan/pkg/policy"
+	res "github.com/accurics/terrascan/pkg/results"
 	"github.com/hashicorp/go-multierror"
 )
 
@@ -204,7 +205,7 @@ func (e *Executor) initPolicyEngines() (err error) {
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute(configOnly bool) (results Output, err error) {
+func (e *Executor) Execute(configOnly, configWithError bool) (results Output, err error) {
 
 	var merr *multierror.Error
 	var resourceConfig output.AllResourceConfigs
@@ -236,6 +237,15 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 
 	if e.findVulnerabilities {
 		results.ResourceConfig = e.fetchVulnerabilities(&results, options)
+	}
+
+	if configWithError {
+		results.Violations.ViolationStore = res.NewViolationStore()
+		if err := merr.ErrorOrNil(); err != nil {
+			sort.Sort(merr)
+			results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
+		}
+		return results, nil
 	}
 
 	if configOnly {
