@@ -3,12 +3,14 @@ import json
 
 def dir_size(dir):
     for policy_type in os.listdir(dir):
+        if not os.path.isdir(f"{dir}/{policy_type}"):
+            continue
         with open(f"docs/policies/{policy_type}.md", "w") as f:
             f.write(f"\n")
             for resource_type in os.listdir(os.path.join(dir,policy_type)):
                 f.write(f"### {resource_type}\n")
-                f.write("| Category | Resource | Severity | Description | Reference ID |\n")
-                f.write("| -------- | -------- | -------- | ----------- | ------------ |\n")
+                f.write("| Category | Resource | Severity | Description | Reference ID | ID |\n")
+                f.write("| -------- | -------- | -------- | ----------- | ------------ | -- |\n")
                 for (dirpath, dirs, files) in os.walk(os.path.join(dir, policy_type, resource_type)):
                     for filename in files:
                         if '.json' in filename:
@@ -19,7 +21,8 @@ def dir_size(dir):
                                 severity = policy['severity']
                                 description = policy['description'].replace('\n','')
                                 reference_id = policy['reference_id']
-                                f.write(f"| {category} | {resource} | {severity} | {description} | {reference_id} |\n")
+                                id = policy['id']
+                                f.write(f"| {category} | {resource} | {severity} | {description} | {reference_id} | {id} |\n")
                 f.write("\n\n")
 
 if __name__ == '__main__':
