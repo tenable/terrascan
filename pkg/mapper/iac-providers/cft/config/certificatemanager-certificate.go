@@ -16,26 +16,27 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/sns"
+import "github.com/awslabs/goformation/v4/cloudformation/certificatemanager"
 
-// SnsTopicConfig holds config for SnsTopic
-type SnsTopicConfig struct {
+// CertificateManagerCertificateConfig holds config for CertificateManagerCertificate
+type CertificateManagerCertificateConfig struct {
 	Config
-	Name        string `json:"name"`
-	KmsMasterID string `json:"kms_master_id"`
+	DomainName       string `json:"domain_name"`
+	ValidationMethod string `json:"validation_method"`
 }
 
-// GetSnsTopicConfig returns config for SnsTopic
-func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
-	cf := SnsTopicConfig{
+// GetCertificateManagerCertificateConfig returns config for CertificateManagerCertificate
+func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) []AWSResourceConfig {
+	cf := CertificateManagerCertificateConfig{
 		Config: Config{
-			Name: t.TopicName,
+			Tags: c.Tags,
 		},
-		Name:        t.TopicName,
-		KmsMasterID: t.KmsMasterKeyId,
+		DomainName:       c.DomainName,
+		ValidationMethod: c.ValidationMethod,
 	}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: t.AWSCloudFormationMetadata,
+		Metadata: c.AWSCloudFormationMetadata,
 	}}
 }
