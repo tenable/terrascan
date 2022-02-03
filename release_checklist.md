@@ -27,7 +27,7 @@ Once complete, commit changes and submit a pull request. This should be the last
 ### Tag the new release with git
 Once the changelog PR has been merged, pull the updated code, tag it with the new version number, and push the tag back to the repo:
 
-(again, subsitute v1.5.0 for the appropriate version being released)
+(again, substitute v1.5.0 for the appropriate version being released)
 ```
 git pull
 git tag v1.5.0
