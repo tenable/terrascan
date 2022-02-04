@@ -21,7 +21,7 @@ import (
 	"encoding/base64"
 	"io/ioutil"
 
-	"github.com/awslabs/goformation/v4/cloudformation/lambda"
+	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 )
 
 // TracingConfigBlock holds config for TracingConfig

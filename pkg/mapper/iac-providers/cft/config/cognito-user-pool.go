@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/cognito"
+import "github.com/awslabs/goformation/v5/cloudformation/cognito"
 
 // PasswordPolicyBlock holds config for PasswordPolicy
 type PasswordPolicyBlock struct {

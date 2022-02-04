@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/dms"
+import "github.com/awslabs/goformation/v5/cloudformation/dms"
 
 // DmsReplicationInstanceConfig holds config for DmsReplicationInstance
 type DmsReplicationInstanceConfig struct {

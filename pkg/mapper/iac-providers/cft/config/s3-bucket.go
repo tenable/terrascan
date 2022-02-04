@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/awslabs/goformation/v4/cloudformation/s3"
+	"github.com/awslabs/goformation/v5/cloudformation/s3"
 )
 
 const (

@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/emr"
+import "github.com/awslabs/goformation/v5/cloudformation/emr"
 
 // KerberosAttributesBlock holds config for KerberosAttributes
 type KerberosAttributesBlock struct {

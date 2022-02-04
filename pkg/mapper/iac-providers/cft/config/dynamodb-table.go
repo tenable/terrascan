@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/dynamodb"
+	"github.com/awslabs/goformation/v5/cloudformation/dynamodb"
 )
 
 // DynamoDBTableConfig holds config for aws_dynamodb_table

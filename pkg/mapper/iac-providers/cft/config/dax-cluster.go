@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/dax"
+	"github.com/awslabs/goformation/v5/cloudformation/dax"
 )
 
 // DaxClusterConfig holds config for aws_dax_cluster

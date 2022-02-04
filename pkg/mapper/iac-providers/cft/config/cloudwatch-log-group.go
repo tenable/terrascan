@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/logs"
+	"github.com/awslabs/goformation/v5/cloudformation/logs"
 )
 
 // LogCloudWatchGroupConfig holds config for aws_cloudwatch_log_group

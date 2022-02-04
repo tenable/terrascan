@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
 )
 
 // APIGatewayRestAPIConfig holds config for aws_api_gateway_rest_api

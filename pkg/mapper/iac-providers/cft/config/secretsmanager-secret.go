@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/secretsmanager"
+	"github.com/awslabs/goformation/v5/cloudformation/secretsmanager"
 )
 
 // SecretsManagerSecretConfig holds config for aws_secretsmanager_secret

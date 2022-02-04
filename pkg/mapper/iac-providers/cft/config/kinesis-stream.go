@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/kinesis"
+	"github.com/awslabs/goformation/v5/cloudformation/kinesis"
 )
 
 // KinesisStreamConfig holds config for aws_kinesis_stream

@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/sqs"
+	"github.com/awslabs/goformation/v5/cloudformation/sqs"
 )
 
 // SqsQueuePolicyConfig holds config for SqsQueuePolicy

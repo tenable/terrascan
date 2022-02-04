@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancingv2"
+	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancingv2"
 )
 
 // ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener

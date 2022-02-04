@@ -20,7 +20,7 @@ import (
 	"encoding/base64"
 	"unicode"
 
-	"github.com/awslabs/goformation/v4/cloudformation/autoscaling"
+	"github.com/awslabs/goformation/v5/cloudformation/autoscaling"
 )
 
 // EbsBlockDeviceBlock holds config for EbsBlockDevice

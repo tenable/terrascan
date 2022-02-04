@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/sns"
+import "github.com/awslabs/goformation/v5/cloudformation/sns"
 
 // SnsTopicConfig holds config for SnsTopic
 type SnsTopicConfig struct {

@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/elasticsearch"
+	"github.com/awslabs/goformation/v5/cloudformation/elasticsearch"
 )
 
 const (

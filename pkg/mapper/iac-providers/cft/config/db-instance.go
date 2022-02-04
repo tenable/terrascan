@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/rds"
+	"github.com/awslabs/goformation/v5/cloudformation/rds"
 )
 
 // DBInstanceConfig holds config for aws_db_instance

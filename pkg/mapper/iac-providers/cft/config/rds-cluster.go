@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/rds"
+	"github.com/awslabs/goformation/v5/cloudformation/rds"
 )
 
 // RDSClusterConfig holds config for aws_rds_cluster
