@@ -26,6 +26,7 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/codebuild"
 	"github.com/awslabs/goformation/v5/cloudformation/cognito"
 	"github.com/awslabs/goformation/v5/cloudformation/dms"
+	"github.com/awslabs/goformation/v5/cloudformation/eks"
 	"github.com/awslabs/goformation/v5/cloudformation/emr"
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 	"github.com/awslabs/goformation/v5/cloudformation/msk"
@@ -169,6 +170,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetSecurityGroupConfig(resource)
 	case *ec2.Volume:
 		return config.GetEbsVolumeConfig(resource)
+	case *ec2.VPC:
+		return config.GetEc2VpcConfig(resource)
 	case *efs.FileSystem:
 		return config.GetEfsFileSystemConfig(resource)
 	case *elasticache.CacheCluster:
@@ -253,6 +256,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetEmrClusterConfig(resource)
 	case *msk.Cluster:
 		return config.GetMskClusterConfig(resource)
+	case *eks.Cluster:
+		return config.GetEksClusterConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}
