@@ -74,10 +74,20 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 
 		elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(e.Policies[i].Attributes))
 		for ai := range e.Policies[i].Attributes {
-			attribVals := e.Policies[i].Attributes[ai].(map[string]interface{})
+			attribVals, ok := e.Policies[i].Attributes[ai].(map[string]interface{})
+			if !ok {
+				continue
+			}
 
-			elbpolicies[i].PolicyAttribute[ai].Name = attribVals["Name"].(string)
-			elbpolicies[i].PolicyAttribute[ai].Value = attribVals["Value"].(string)
+			elbpolicies[i].PolicyAttribute[ai].Name, ok = attribVals["Name"].(string)
+			if !ok {
+				continue
+			}
+
+			elbpolicies[i].PolicyAttribute[ai].Value, ok = attribVals["Value"].(string)
+			if !ok {
+				continue
+			}
 		}
 
 		awsconfig[i].Type = GetPolicies
