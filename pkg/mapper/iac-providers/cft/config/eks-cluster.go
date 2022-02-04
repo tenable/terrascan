@@ -37,8 +37,10 @@ type EksClusterConfig struct {
 
 // GetEksClusterConfig returns config for EksCluster
 func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
-	vpcConfig := make([]EKSVPCConfigBlock, 1)
+	var vpcConfig []EKSVPCConfigBlock
 	if c.ResourcesVpcConfig != nil {
+		vpcConfig := make([]EKSVPCConfigBlock, 1)
+
 		vpcConfig[0].SubnetIDs = c.ResourcesVpcConfig.SubnetIds
 		vpcConfig[0].SecurityGroupIDs = c.ResourcesVpcConfig.SecurityGroupIds
 		vpcConfig[0].EndpointPrivateAccess = c.ResourcesVpcConfig.EndpointPrivateAccess
