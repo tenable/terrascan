@@ -284,8 +284,9 @@ github.com/aws/aws-sdk-go-v2/service/sts v1.6.0 h1:Y9r6mrzOyAYz4qKaluSH19zqH1236
 github.com/aws/aws-sdk-go-v2/service/sts v1.6.0/go.mod h1:q7o0j7d7HrJk/vr9uUt3BVRASvcU7gYZB9PUgPiByXg=
 github.com/aws/smithy-go v1.6.0 h1:T6puApfBcYiTIsaI+SYWqanjMt5pc3aoyyDrI+0YH54=
 github.com/aws/smithy-go v1.6.0/go.mod h1:SObp3lf9smib00L/v3U2eAKG8FyQ7iLrJnQiAmR5n+E=
-github.com/awslabs/goformation/v5 v5.0.0 h1:n2ctW7hb+CDXvqLpJlHxecwLdW5+U3gGOufjJnfBIag=
-github.com/awslabs/goformation/v5 v5.0.0/go.mod h1:Ox2Y1ZhLaFo/nQt/m2f9fzVdcV7QjSm1+OeS0t5Hfdo=
+github.com/awslabs/goformation/v4 v4.19.5/go.mod h1:JoNpnVCBOUtEz9bFxc9sjy8uBUCLF5c4D1L7RhRTVM8=
+github.com/awslabs/goformation/v5 v5.4.5 h1:uX3o2Z9BC5R0YUw+vPac/sj0mfMBcz8VBqurL85KHpg=
+github.com/awslabs/goformation/v5 v5.4.5/go.mod h1:zGVZfdzJB7z7Uxm0YhWvx77qnNT8b9kc78twJ/TOtdk=
 github.com/aybabtme/rgbterm v0.0.0-20170906152045-cc83f3b3ce59/go.mod h1:q/89r3U2H7sSsE2t6Kca0lfwTK8JdoNGS/yzM/4iH5I=
 github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f/go.mod h1:AuiFmCCPBSrqvVMvuqFuk0qogytodnVFVSN5CeJB8Gc=
 github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
