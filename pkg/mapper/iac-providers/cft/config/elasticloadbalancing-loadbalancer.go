@@ -88,6 +88,9 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 			if !ok {
 				continue
 			}
+
+			// variable "ok" is only used for safe type conversion
+			_ = ok
 		}
 
 		awsconfig[i].Type = GetPolicies
