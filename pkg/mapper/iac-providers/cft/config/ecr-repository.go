@@ -27,7 +27,7 @@ type EcrRepositoryConfig struct {
 	AERP                       interface{}                       `json:"aws_ecr_repository_policy,omitempty"`
 }
 
-// ISCBlock holds config for image_scanning_configuration attribute
+// ImageScanningConfigurationBlock holds config for image_scanning_configuration attribute
 type ImageScanningConfigurationBlock struct {
 	ScanOnPush bool `json:"scan_on_push"`
 }
