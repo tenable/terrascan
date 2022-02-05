@@ -167,10 +167,8 @@ func violationsToTestCases(violations []*results.Violation, isSkipped bool) []JU
 			testCase = JUnitTestCase{SkipMessage: new(JUnitSkipMessage)}
 			// since junitXML doesn't contain the attributes we want to show as violations
 			// we would add details of violations in the skip message, with any provided skip comment
-			if v.Comment == "" {
-				testCase.SkipMessage.Message = getViolationString(*v)
-			} else {
-				testCase.SkipMessage.Message = fmt.Sprintf("(skip comment: %s) %s", v.Comment, getViolationString(*v))
+			if v.Comment != "" {
+				testCase.SkipMessage.Message = v.Comment
 			}
 		} else {
 			testCase = JUnitTestCase{Failure: new(JUnitFailure)}

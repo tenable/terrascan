@@ -38,7 +38,7 @@ func TestJUnitXMLWriter(t *testing.T) {
       <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: modules/m1/main.tf, Line: 20, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: bucket, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
     </testcase>
     <testcase classname="modules/m1/main.tf" name="[ERROR] resource: &#34;bucket&#34; at line: 20, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
-      <skipped message="Description: S3 bucket Access is allowed to all AWS Account Users., File: modules/m1/main.tf, Line: 20, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: bucket, Resource Type: aws_s3_bucket, Category: S3"></skipped>
+      <skipped message=""></skipped>
     </testcase>
   </testsuite>
 </testsuites>
