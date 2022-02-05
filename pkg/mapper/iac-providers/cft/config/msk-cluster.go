@@ -26,7 +26,7 @@ type EncryptionInTransitBlock struct {
 
 // EncryptionInfoBlock holds config for EncryptionInfo
 type EncryptionInfoBlock struct {
-	EncryptionAtRestKmsKeyArn string                     `json"encryption_at_rest_kms_key_arn"`
+	EncryptionAtRestKmsKeyArn string                     `json:"encryption_at_rest_kms_key_arn"`
 	EncryptionInTransit       []EncryptionInTransitBlock `json:"encryption_in_transit"`
 }
 
