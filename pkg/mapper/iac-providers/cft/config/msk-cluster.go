@@ -64,7 +64,9 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	if c.EncryptionInfo != nil {
 		encryptionInfo = make([]EncryptionInfoBlock, 1)
 
-		encryptionInfo[0].EncryptionAtRestKmsKeyArn = c.EncryptionInfo.EncryptionAtRest.DataVolumeKMSKeyId
+		if c.EncryptionInfo.EncryptionAtRest != nil {
+			encryptionInfo[0].EncryptionAtRestKmsKeyArn = c.EncryptionInfo.EncryptionAtRest.DataVolumeKMSKeyId
+		}
 
 		if c.EncryptionInfo.EncryptionInTransit != nil {
 			encryptionInfo[0].EncryptionInTransit = make([]EncryptionInTransitBlock, 1)
