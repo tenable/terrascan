@@ -21,7 +21,7 @@ import (
 	"strconv"
 
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
-	"github.com/awslabs/goformation/v4/cloudformation/ec2"
+	"github.com/awslabs/goformation/v5/cloudformation/ec2"
 )
 
 // GetNetworkInterface represents subresource aws_network_interface for NetworkInterface attribute

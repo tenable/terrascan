@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/msk"
+import "github.com/awslabs/goformation/v5/cloudformation/msk"
 
 // EncryptionInTransitBlock holds config for EncryptionInTransit
 type EncryptionInTransitBlock struct {
@@ -26,7 +26,8 @@ type EncryptionInTransitBlock struct {
 
 // EncryptionInfoBlock holds config for EncryptionInfo
 type EncryptionInfoBlock struct {
-	EncryptionInTransit []EncryptionInTransitBlock `json:"encryption_in_transit"`
+	EncryptionAtRestKmsKeyArn string                     `json:"encryption_at_rest_kms_key_arn"`
+	EncryptionInTransit       []EncryptionInTransitBlock `json:"encryption_in_transit"`
 }
 
 // BrokerNodeGroupInfoBlock holds config for BrokerNodeGroupInfo
@@ -62,6 +63,10 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	var encryptionInfo []EncryptionInfoBlock
 	if c.EncryptionInfo != nil {
 		encryptionInfo = make([]EncryptionInfoBlock, 1)
+
+		if c.EncryptionInfo.EncryptionAtRest != nil {
+			encryptionInfo[0].EncryptionAtRestKmsKeyArn = c.EncryptionInfo.EncryptionAtRest.DataVolumeKMSKeyId
+		}
 
 		if c.EncryptionInfo.EncryptionInTransit != nil {
 			encryptionInfo[0].EncryptionInTransit = make([]EncryptionInTransitBlock, 1)

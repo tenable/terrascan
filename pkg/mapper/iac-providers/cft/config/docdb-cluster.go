@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/docdb"
+	"github.com/awslabs/goformation/v5/cloudformation/docdb"
 )
 
 // DocDBClusterConfig holds config for aws_docdb_cluster

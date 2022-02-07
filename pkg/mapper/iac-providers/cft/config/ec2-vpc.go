@@ -16,26 +16,31 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/sns"
+import "github.com/awslabs/goformation/v5/cloudformation/ec2"
 
-// SnsTopicConfig holds config for SnsTopic
-type SnsTopicConfig struct {
+// Ec2VpcConfig holds config for Ec2Vpc
+type Ec2VpcConfig struct {
 	Config
-	Name        string `json:"name"`
-	KmsMasterID string `json:"kms_master_id"`
+	CIDRBlock          string `json:"cidr_block"`
+	EnableDNSSupport   bool   `json:"enable_dns_support"`
+	EnableDNSHostnames bool   `json:"enable_dns_hostnames"`
+	InstanceTenancy    string `json:"instance_tenancy"`
 }
 
-// GetSnsTopicConfig returns config for SnsTopic
-func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
-	cf := SnsTopicConfig{
+// GetEc2VpcConfig returns config for Ec2Vpc
+func GetEc2VpcConfig(v *ec2.VPC) []AWSResourceConfig {
+	cf := Ec2VpcConfig{
 		Config: Config{
-			Name: t.TopicName,
+			Tags: v.Tags,
 		},
-		Name:        t.TopicName,
-		KmsMasterID: t.KmsMasterKeyId,
+		CIDRBlock:          v.CidrBlock,
+		EnableDNSSupport:   v.EnableDnsSupport,
+		EnableDNSHostnames: v.EnableDnsHostnames,
+		InstanceTenancy:    v.InstanceTenancy,
 	}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: t.AWSCloudFormationMetadata,
+		Metadata: v.AWSCloudFormationMetadata,
 	}}
 }

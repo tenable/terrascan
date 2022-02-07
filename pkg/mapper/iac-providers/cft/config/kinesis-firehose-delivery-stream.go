@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/kinesisfirehose"
+	"github.com/awslabs/goformation/v5/cloudformation/kinesisfirehose"
 )
 
 // KinesisFirehoseDeliveryStreamConfig holds config for aws_kinesis_firehose_delivery_stream

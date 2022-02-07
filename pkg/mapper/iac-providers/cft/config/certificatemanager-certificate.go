@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/certificatemanager"
+import "github.com/awslabs/goformation/v5/cloudformation/certificatemanager"
 
 // CertificateManagerCertificateConfig holds config for CertificateManagerCertificate
 type CertificateManagerCertificateConfig struct {

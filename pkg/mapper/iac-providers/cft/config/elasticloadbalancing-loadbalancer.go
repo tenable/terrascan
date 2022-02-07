@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancing"
+	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancing"
 )
 
 // GetPolicies represents subresource aws_load_balancer_policy for Policies attribute

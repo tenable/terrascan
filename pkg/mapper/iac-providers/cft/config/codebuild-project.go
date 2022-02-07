@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/codebuild"
+import "github.com/awslabs/goformation/v5/cloudformation/codebuild"
 
 // ArtifactBlock holds config for ArtifactBlock
 type ArtifactBlock struct {

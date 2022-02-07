@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/efs"
+	"github.com/awslabs/goformation/v5/cloudformation/efs"
 )
 
 const (

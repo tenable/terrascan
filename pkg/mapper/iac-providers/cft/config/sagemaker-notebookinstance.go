@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v4/cloudformation/sagemaker"
+import "github.com/awslabs/goformation/v5/cloudformation/sagemaker"
 
 // SagemakerNotebookInstanceConfig holds config for SagemakerNotebookInstance
 type SagemakerNotebookInstanceConfig struct {

@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/awslabs/goformation/v4"
+	"github.com/awslabs/goformation/v5"
 )
 
 func TestCFTV1_sanitizeCftTemplate(t *testing.T) {

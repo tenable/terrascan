@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/kms"
+	"github.com/awslabs/goformation/v5/cloudformation/kms"
 )
 
 // KmsKeyConfig holds config for aws_kms_key

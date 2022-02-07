@@ -27,8 +27,8 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper"
 	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
-	"github.com/awslabs/goformation/v4"
-	"github.com/awslabs/goformation/v4/cloudformation"
+	"github.com/awslabs/goformation/v5"
+	"github.com/awslabs/goformation/v5/cloudformation"
 	"go.uber.org/zap"
 )
 

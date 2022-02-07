@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/apigatewayv2"
+	"github.com/awslabs/goformation/v5/cloudformation/apigatewayv2"
 )
 
 // APIGatewayV2StageConfig holds config for aws_api_gatewayv2_stage

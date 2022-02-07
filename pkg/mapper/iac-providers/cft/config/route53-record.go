@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/route53"
+	"github.com/awslabs/goformation/v5/cloudformation/route53"
 )
 
 // Route53RecordConfig holds config for aws_route53_record

@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/ecs"
+	"github.com/awslabs/goformation/v5/cloudformation/ecs"
 )
 
 // EcsTaskDefinitionConfig holds config for aws_ecs_task_definition

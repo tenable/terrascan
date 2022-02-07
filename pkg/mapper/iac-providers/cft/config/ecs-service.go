@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/ecs"
+	"github.com/awslabs/goformation/v5/cloudformation/ecs"
 )
 
 // EcsServiceConfig holds config for aws_ecs_service

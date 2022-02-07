@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
 )
 
 const (

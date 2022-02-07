@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/cloudfront"
+	"github.com/awslabs/goformation/v5/cloudformation/cloudfront"
 )
 
 // CloudFrontDistributionConfig holds config for aws_cloudfront_distribution
