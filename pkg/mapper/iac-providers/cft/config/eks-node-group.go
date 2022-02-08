@@ -18,7 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/eks"
 
-// EksNodeGroupScalingConfig holds config for EksNodeGroupScalingConfig
+// EksNodeGroupScalingConfigBlock holds config for EksNodeGroupScalingConfig
 type EksNodeGroupScalingConfigBlock struct {
 	DesiredSize float64 `json:"desired_size"`
 	MaxSize     float64 `json:"max_size"`

@@ -22,7 +22,7 @@ import "github.com/awslabs/goformation/v5/cloudformation/backup"
 type BackupVaultConfig struct {
 	Config
 	Name      string `json:"name"`
-	KMSKeyARN string `json"kms_key_arn"`
+	KMSKeyARN string `json:"kms_key_arn"`
 }
 
 // GetBackupVaultConfig returns config for BackupVault
