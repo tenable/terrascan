@@ -140,8 +140,6 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	switch resource := r.(type) {
 	case *docdb.DBCluster:
 		return config.GetDocDBConfig(resource)
-	case *apigateway.RestApi:
-		return config.GetAPIGatewayRestAPIConfig(resource, resourceName)
 	case *apigateway.Stage:
 		return config.GetAPIGatewayStageConfig(resource)
 	case *apigatewayv2.Stage:
