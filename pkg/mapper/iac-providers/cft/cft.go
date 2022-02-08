@@ -19,7 +19,9 @@ package cft
 import (
 	"errors"
 
+	"github.com/awslabs/goformation/v5/cloudformation/appmesh"
 	"github.com/awslabs/goformation/v5/cloudformation/autoscaling"
+	"github.com/awslabs/goformation/v5/cloudformation/backup"
 	"github.com/awslabs/goformation/v5/cloudformation/certificatemanager"
 	"github.com/awslabs/goformation/v5/cloudformation/cloudfront"
 	"github.com/awslabs/goformation/v5/cloudformation/cloudtrail"
@@ -139,7 +141,7 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	case *docdb.DBCluster:
 		return config.GetDocDBConfig(resource)
 	case *apigateway.RestApi:
-		return config.GetAPIGatewayRestAPIConfig(resource)
+		return config.GetAPIGatewayRestAPIConfig(resource, resourceName)
 	case *apigateway.Stage:
 		return config.GetAPIGatewayStageConfig(resource)
 	case *apigatewayv2.Stage:
@@ -184,6 +186,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetGuardDutyDetectorConfig(resource)
 	case *redshift.Cluster:
 		return config.GetRedshiftClusterConfig(resource)
+	case *redshift.ClusterParameterGroup:
+		return config.GetRedshiftParameterGroupConfig(resource, resourceName)
 	case *rds.DBCluster:
 		return config.GetRDSClusterConfig(resource)
 	case *route53.RecordSet:
@@ -248,6 +252,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetCertificateManagerCertificateConfig(resource)
 	case *sagemaker.NotebookInstance:
 		return config.GetSagemakerNotebookInstanceConfig(resource)
+	case *sagemaker.Model:
+		return config.GetSagemakerModelConfig(resource)
 	case *dms.ReplicationInstance:
 		return config.GetDmsReplicationInstanceConfig(resource)
 	case *codebuild.Project:
@@ -258,6 +264,12 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetMskClusterConfig(resource)
 	case *eks.Cluster:
 		return config.GetEksClusterConfig(resource)
+	case *eks.Nodegroup:
+		return config.GetEksNodeGroupConfig(resource)
+	case *backup.BackupVault:
+		return config.GetBackupVaultConfig(resource)
+	case *appmesh.Mesh:
+		return config.GetAppMeshMeshConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}
