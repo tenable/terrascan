@@ -46,13 +46,13 @@ type SagemakerModelConfig struct {
 func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	container := make([]ContainerBlock, len(m.Containers))
 	for i := range m.Containers {
-		container[i] = getContainerConfig(m.Containers[i])
+		container[i] = getContainer(m.Containers[i])
 	}
 
 	var primaryContainer []ContainerBlock
 	if m.PrimaryContainer != nil {
 		primaryContainer = make([]ContainerBlock, 1)
-		primaryContainer[0] = getContainerConfig(*m.PrimaryContainer)
+		primaryContainer[0] = getContainer(*m.PrimaryContainer)
 	}
 
 	cf := SagemakerModelConfig{
@@ -72,7 +72,7 @@ func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	}}
 }
 
-func getContainerConfig(gftContainer sagemaker.Model_ContainerDefinition) ContainerBlock {
+func getContainer(gftContainer sagemaker.Model_ContainerDefinition) ContainerBlock {
 	var container ContainerBlock
 
 	container.Image = gftContainer.Image
