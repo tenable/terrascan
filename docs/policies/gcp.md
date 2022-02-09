@@ -24,6 +24,10 @@
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Identity and Access Management | gcp | HIGH | Ensure oslogin is enabled for a Project | accurics.gcp.IAM.127 | AC_GCP_0291 |
 
+### google_compute_service_attachment
+| Category | Resource | Severity | Description | Reference ID | ID |
+| -------- | -------- | -------- | ----------- | ------------ | -- |
+| Infrastructure Security | gcp | MEDIUM | Service Attachment with connection_preference ACCEPT_AUTOMATIC allow any project to connect. | accurics.gcp.NS.134 | AC_GCP_0296 |
 
 ### google_compute_subnetwork
 | Category | Resource | Severity | Description | Reference ID | ID |
