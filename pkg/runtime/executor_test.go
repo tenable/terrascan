@@ -116,9 +116,11 @@ func TestExecute(t *testing.T) {
 
 	// TODO: add tests to validate output of Execute()
 	table := []struct {
-		name     string
-		executor Executor
-		wantErr  error
+		name            string
+		configOnly      bool
+		configWithError bool
+		executor        Executor
+		wantErr         error
 	}{
 		{
 			name: "test LoadIacDir error",
@@ -198,11 +200,30 @@ func TestExecute(t *testing.T) {
 			},
 			wantErr: nil,
 		},
+		{
+			name: "has scan errors with all the iac providers",
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "all",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
+		{
+			name:            "test config with error",
+			configWithError: true,
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "terraform",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.executor.Execute(false, false)
+			_, gotErr := tt.executor.Execute(tt.configOnly, tt.configWithError)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
