@@ -32,8 +32,8 @@ import (
 )
 
 const (
-	humanOutputFormat = "human"
-	sarifOutputFormat = "sarif"
+	yamlOutputFormat = "yaml"
+	jsonOutputFormat = "json"
 )
 
 // ScanOptions represents scan command and its optional flags
@@ -151,13 +151,12 @@ func (s *ScanOptions) Init() error {
 // validate config only for human readable output
 // rest command options are validated by the executor
 func (s ScanOptions) validate() error {
-	// human readable output doesn't support --config-only flag
-	// if --config-only flag is set, then exit with an error
+	// human readable output doesn't support --config-only and --config-with-error flag
+	// if --config-only/--config-with-error flag is set, then exit with an error
 	// asking the user to use yaml or json output format
-	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
-		return errors.New("please use yaml or json output format when using --config-only flag")
+	if (s.configOnly || s.configWithError) && !(strings.EqualFold(s.outputType, yamlOutputFormat) || strings.EqualFold(s.outputType, jsonOutputFormat)) {
+		return errors.New("please use yaml or json output format when using --config-only or --config-with-error flags")
 	}
-
 	return nil
 }
 
@@ -227,7 +226,7 @@ func (s *ScanOptions) Run() error {
 		return err
 	}
 
-	if !s.configOnly && flag.Lookup("test.v") == nil && !s.configWithError {
+	if !s.configOnly && flag.Lookup("test.v") == nil {
 		os.RemoveAll(tempDir)
 		exitCode := getExitCode(results)
 		if exitCode != 0 {

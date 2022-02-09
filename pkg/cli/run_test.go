@@ -484,9 +484,10 @@ func TestScanOptionsInitColor(t *testing.T) {
 
 func TestScanOptionsInit(t *testing.T) {
 	type fields struct {
-		configOnly bool
-		outputType string
-		useColors  string
+		configOnly      bool
+		configWithError bool
+		outputType      string
+		useColors       string
 	}
 	tests := []struct {
 		name    string
@@ -510,13 +511,41 @@ func TestScanOptionsInit(t *testing.T) {
 				configOnly: false,
 			},
 		},
+		{
+			name: "init fail for --config-with-error with human readable output",
+			fields: fields{
+				useColors:       "auto",
+				outputType:      "human",
+				configWithError: true,
+			},
+			wantErr: true,
+		},
+		{
+			name: "init fail for --config-with-error with yaml readable output",
+			fields: fields{
+				useColors:       "auto",
+				outputType:      "yaml",
+				configWithError: true,
+			},
+			wantErr: false,
+		},
+		{
+			name: "init fail for --config-with-error with json readable output",
+			fields: fields{
+				useColors:       "auto",
+				outputType:      "json",
+				configWithError: true,
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &ScanOptions{
-				configOnly: tt.fields.configOnly,
-				outputType: tt.fields.outputType,
-				useColors:  tt.fields.useColors,
+				configOnly:      tt.fields.configOnly,
+				configWithError: tt.fields.configWithError,
+				outputType:      tt.fields.outputType,
+				useColors:       tt.fields.useColors,
 			}
 			if err := s.Init(); (err != nil) != tt.wantErr {
 				t.Errorf("ScanOptions.Init() error = %v, wantErr %v", err, tt.wantErr)
