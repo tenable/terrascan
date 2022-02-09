@@ -97,20 +97,20 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			},
 		},
 		{
-			ID:          "docker_from.3e7f6a412bae2c36b5e8123c0d437288",
+			ID:          "docker_from.aaa14f2bb7549c35cdb047282de7e26b",
 			Name:        "dockerfile-withmultiple-stages",
 			ModuleName:  "",
 			Source:      "dockerfile-withmultiple-stages",
 			PlanRoot:    "",
 			Line:        6,
 			Type:        "docker_from",
-			Config:      "alpine:3.12.0",
+			Config:      "alpine:3.14",
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
 			ContainerImages: []output.ContainerDetails{
 				{
-					Image: "alpine:3.12.0",
+					Image: "alpine:3.14",
 				},
 			},
 		},
