@@ -105,11 +105,14 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		AMI:                 i.ImageId,
 		InstanceType:        i.InstanceType,
 		EBSOptimized:        i.EbsOptimized,
-		Hibernation:         i.HibernationOptions.Configured,
 		Monitoring:          i.Monitoring,
 		IAMInstanceProfile:  i.IamInstanceProfile,
 		VPCSecurityGroupIDs: i.SecurityGroupIds,
 		NetworkInterface:    nics,
+	}
+
+	if i.HibernationOptions != nil {
+		ec2Config.Hibernation = i.HibernationOptions.Configured
 	}
 
 	var awsconfigec2 AWSResourceConfig
