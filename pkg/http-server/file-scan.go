@@ -139,7 +139,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	if configWithErrorValue != "" {
 		configWithError, err = strconv.ParseBool(configWithErrorValue)
 		if err != nil {
-			errMsg := fmt.Sprintf("error while reading 'config_only' value. error: '%v'", err)
+			errMsg := fmt.Sprintf("error while reading 'config_with_error' value. error: '%v'", err)
 			zap.S().Error(errMsg)
 			apiErrorResponse(w, errMsg, http.StatusBadRequest)
 			return

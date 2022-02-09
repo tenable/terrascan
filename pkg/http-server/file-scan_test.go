@@ -44,6 +44,8 @@ func TestUpload(t *testing.T) {
 		findVulnerabilities        bool
 		notificationWebhookURL     string
 		notificationWebhookToken   string
+		configWithError            bool
+		invalidConfigWithError     bool
 	}{
 		{
 			name:       "valid file scan",
@@ -273,6 +275,25 @@ func TestUpload(t *testing.T) {
 			notificationWebhookURL:   "https://httpbin.org/post",
 			notificationWebhookToken: "token",
 		},
+		{
+			name:                   "test for config with erorr invalid",
+			path:                   testFilePath,
+			param:                  testParamName,
+			iacType:                testIacType,
+			cloudType:              testCloudType,
+			wantStatus:             http.StatusBadRequest,
+			invalidConfigWithError: true,
+		},
+		{
+			name:                   "test for config with eror",
+			path:                   testFilePath,
+			param:                  testParamName,
+			iacType:                testIacType,
+			cloudType:              testCloudType,
+			wantStatus:             http.StatusOK,
+			invalidConfigWithError: false,
+			configWithError:        true,
+		},
 	}
 
 	for _, tt := range table {
@@ -373,6 +394,18 @@ func TestUpload(t *testing.T) {
 			}
 			if tt.notificationWebhookToken != "" {
 				if err = writer.WriteField("webhook_token", tt.notificationWebhookToken); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			}
+
+			if !tt.invalidConfigWithError {
+				if err = writer.WriteField("config_with_error", strconv.FormatBool(tt.configWithError)); err != nil {
+					writer.Close()
+					t.Error(err)
+				}
+			} else {
+				if err = writer.WriteField("config_with_error", "invalid"); err != nil {
 					writer.Close()
 					t.Error(err)
 				}
