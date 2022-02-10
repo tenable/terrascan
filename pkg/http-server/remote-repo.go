@@ -49,6 +49,7 @@ type scanRemoteRepoReq struct {
 	NotificationWebhookURL   string `json:"webhook_url"`
 	NotificationWebhookToken string `json:"webhook_token"`
 	RepoRef                  string `json:"repo-ref"`
+	ConfigWithError          bool   `json:"config_with_error"`
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -139,15 +140,17 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	}
 
 	// evaluate policies IaC for violations
-	results, err := executor.Execute(s.ConfigOnly)
+	results, err := executor.Execute(s.ConfigOnly, s.ConfigWithError)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		return output, isAdmissionDenied, err
 	}
 
-	// if config only, return only config else return only violations
-	if s.ConfigOnly {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if s.ConfigWithError {
+		output = results
+	} else if s.ConfigOnly {
 		output = results.ResourceConfig
 	} else {
 		// set remote url in case remote repo is scanned
