@@ -32,6 +32,7 @@ Once the changelog PR has been merged, pull the updated code, tag it with the ne
 git pull
 git tag v1.5.0
 git push --tags
+git push upstream v1.5.0
 ```
 
 This will kick off the GitHub workflow to run goreleaser to perform the release.
