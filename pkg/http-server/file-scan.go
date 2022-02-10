@@ -134,7 +134,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	// read config_only from the form data
+	// read config_with_error from the form data
 	configWithErrorValue := r.FormValue("config_with_error")
 	if configWithErrorValue != "" {
 		configWithError, err = strconv.ParseBool(configWithErrorValue)
@@ -198,11 +198,11 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	var output interface{}
 
-	// if config only, return resource config else return violations
-	if configOnly {
-		output = normalized.ResourceConfig
-	} else if configWithError {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if configWithError {
 		output = normalized
+	} else if configOnly {
+		output = normalized.ResourceConfig
 	} else {
 		if !showPassed {
 			normalized.Violations.ViolationStore.PassedRules = nil

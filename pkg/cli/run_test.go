@@ -521,7 +521,7 @@ func TestScanOptionsInit(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "init fail for --config-with-error with yaml readable output",
+			name: "init success for --config-with-error with yaml readable output",
 			fields: fields{
 				useColors:       "auto",
 				outputType:      "yaml",
@@ -530,7 +530,7 @@ func TestScanOptionsInit(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "init fail for --config-with-error with json readable output",
+			name: "init success for --config-with-error with json readable output",
 			fields: fields{
 				useColors:       "auto",
 				outputType:      "json",

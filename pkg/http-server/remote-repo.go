@@ -147,11 +147,11 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 		return output, isAdmissionDenied, err
 	}
 
-	// if config only, return only config else return only violations
-	if s.ConfigOnly {
-		output = results.ResourceConfig
-	} else if s.ConfigWithError {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if s.ConfigWithError {
 		output = results
+	} else if s.ConfigOnly {
+		output = results.ResourceConfig
 	} else {
 		// set remote url in case remote repo is scanned
 		if s.RemoteURL != "" {
