@@ -30,6 +30,7 @@ const (
 	AwsDBInstance                    = "aws_db_instance"
 	AwsIamRole                       = "aws_iam_role"
 	AwsIamRolePolicy                 = "aws_iam_role_policy"
+	AwsIamGroup                      = "aws_iam_group"
 	AwsIamGroupPolicy                = "aws_iam_group_policy"
 	AwsIamPolicy                     = "aws_iam_policy"
 	AwsIamAccessKey                  = "aws_iam_access_key"
@@ -51,6 +52,7 @@ const (
 	AwsWorkspacesWorkspace           = "aws_workspaces_workspace"
 	AwsNeptuneCluster                = "aws_neptune_cluster"
 	AwsSecretsManagerSecret          = "aws_secretsmanager_secret"
+	AwsSecretsManagerSecretRotation  = "aws_secretsmanager_secret_rotation"
 	AwsEcrRepository                 = "aws_ecr_repository"
 	AwsKmsKey                        = "aws_kms_key"
 	AwsKinesisStream                 = "aws_kinesis_stream"
@@ -93,4 +95,6 @@ const (
 	AwsMskCluster                    = "aws_msk_cluster"
 	AwsBackupVault                   = "aws_backup_vault"
 	AwsAppMeshMesh                   = "aws_appmesh_mesh"
+	AwsRamResourceShare              = "aws_ram_resource_share"
+	AwsAppAutoscalingPolicy          = "aws_appautoscaling_policy"
 )
