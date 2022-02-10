@@ -18,6 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/rds"
 
+// DBEventSubscriptionConfig holds config for aws_db_event_subscription resource
 type DBEventSubscriptionConfig struct {
 	Config
 	SnsTopicArn     string   `json:"sns_topic"`
@@ -27,6 +28,7 @@ type DBEventSubscriptionConfig struct {
 	SourceType      string   `json:"source_type,omitempty"`
 }
 
+// GetDBEventSubscriptionConfig returns config for aws_db_event_subscription resource
 func GetDBEventSubscriptionConfig(db *rds.EventSubscription) []AWSResourceConfig {
 
 	cf := DBEventSubscriptionConfig{

@@ -18,6 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/apigatewayv2"
 
+// CorsConfigurationBlock holds config for cors_configuration attribute
 type CorsConfigurationBlock struct {
 	AllowCredentials bool     `json:"allow_credentials,omitempty"`
 	MaxAge           int      `json:"max_age,omitempty"`
@@ -27,6 +28,7 @@ type CorsConfigurationBlock struct {
 	AllowHeaders     []string `json:"allow_headers,omitempty"`
 }
 
+// APIGatewayV2ApiConfig holds config for aws_apigatewayv2_api resource
 type APIGatewayV2ApiConfig struct {
 	Config
 	Name                      string                   `json:"name"`
@@ -43,6 +45,7 @@ type APIGatewayV2ApiConfig struct {
 	CorsConfiguration         []CorsConfigurationBlock `json:"cors_configuration,omitempty"`
 }
 
+// GetAPIGatewayV2ApiConfig returns config for aws_apigatewayv2_api resource
 func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 
 	corsConfigData := make([]CorsConfigurationBlock, 1)

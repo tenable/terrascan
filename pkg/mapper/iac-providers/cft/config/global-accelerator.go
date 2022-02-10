@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/globalaccelerator"
 )
 
+// GlobalAcceleratorConfig holds config for aws_globalaccelerator_accelerator resource
 type GlobalAcceleratorConfig struct {
 	Config
 	Name          string `json:"name"`
@@ -27,6 +28,7 @@ type GlobalAcceleratorConfig struct {
 	Enabled       bool   `json:"enabled"`
 }
 
+// GetGlobalAcceleratorConfig returns config for aws_globalaccelerator_accelerator resource
 func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceConfig {
 	cf := GlobalAcceleratorConfig{
 		Config: Config{

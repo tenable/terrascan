@@ -18,6 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/neptune"
 
+// NeptuneClusterInstanceConfig holds config for aws_neptune_cluster_instance resource
 type NeptuneClusterInstanceConfig struct {
 	Config
 	AutoMinorVersionUpgrade    bool   `json:"auto_minor_version_upgrade,omitempty"`
@@ -29,6 +30,7 @@ type NeptuneClusterInstanceConfig struct {
 	PreferredMaintenanceWindow string `json:"preferred_backup_window,omitempty"`
 }
 
+// GetNeptuneClusterInstanceConfig returns config for aws_neptune_cluster_instance resource
 func GetNeptuneClusterInstanceConfig(n *neptune.DBInstance) []AWSResourceConfig {
 	cf := NeptuneClusterInstanceConfig{
 		Config: Config{

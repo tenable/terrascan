@@ -18,17 +18,20 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/ecs"
 
+// ClusterSettingsBlock holds config for settings attribute
 type ClusterSettingsBlock struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
+// CapacityProviderStrategyBlock holds config for default_capacity_provider_strategy attribute
 type CapacityProviderStrategyBlock struct {
 	Base             int    `json:"base"`
 	CapacityProvider string `json:"capacity_provider"`
 	Weight           int    `json:"weight"`
 }
 
+// LogConfigurationBlock holds config for log_configuration attribute
 type LogConfigurationBlock struct {
 	CloudWatchEncryptionEnabled bool   `json:"cloud_watch_encryption_enabled"`
 	CloudWatchLogGroupName      string `json:"cloud_watch_log_group_name"`
@@ -37,16 +40,19 @@ type LogConfigurationBlock struct {
 	S3KeyPrefix                 string `json:"s3_key_prefix"`
 }
 
+// ExecuteCommandConfiguration holds config for execute_command_configuration attribute
 type ExecuteCommandConfiguration struct {
 	KmsKeyId         string                  `json:"kms_key_id"`
 	Logging          string                  `json:"logging"`
 	LogConfiguration []LogConfigurationBlock `json:"log_configuration"`
 }
 
+// ConfigurationBlock holds config for configuration attribute
 type ConfigurationBlock struct {
 	ExecuteCommandConfig []ExecuteCommandConfiguration `json:"execute_command_configuration"`
 }
 
+// EcsClusterConfig holds config for aws_ecs_cluster resource
 type EcsClusterConfig struct {
 	Config
 	ClusterName                     string                          `json:"name"`
@@ -55,6 +61,7 @@ type EcsClusterConfig struct {
 	Configuration                   []ConfigurationBlock            `json:"configuration"`
 }
 
+// GetEcsClusterConfig returns config for aws_ecs_cluster resource
 func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 
 	clusterSettingsData := make([]ClusterSettingsBlock, len(e.ClusterSettings))

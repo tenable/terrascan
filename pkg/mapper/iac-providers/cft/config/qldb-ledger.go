@@ -18,6 +18,7 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/qldb"
 
+// QldbLedgerConfig holds config for aws_qldb_ledger resource
 type QldbLedgerConfig struct {
 	Config
 	Name               string `json:"name,omitempty"`
@@ -25,6 +26,7 @@ type QldbLedgerConfig struct {
 	DeletionProtection bool   `json:"deletion_protection"`
 }
 
+// GetQldbLedgerConfig returns config for aws_qldb_ledger resource
 func GetQldbLedgerConfig(q *qldb.Ledger) []AWSResourceConfig {
 
 	cf := QldbLedgerConfig{

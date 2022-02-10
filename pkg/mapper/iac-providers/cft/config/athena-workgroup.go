@@ -20,11 +20,13 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/athena"
 )
 
+// EncryptionConfigurationBlock holds config for encryption_configuration attribute
 type EncryptionConfigurationBlock struct {
 	EncryptionOption string `json:"encryption_option"`
 	KmsKeyArn        string `json:"kms_key_arn"`
 }
 
+// ResultConfigurationBlock holds config for ResultConfigurationBlock attribute
 type ResultConfigurationBlock struct {
 	EncryptionConfiguration []EncryptionConfigurationBlock `json:"encryption_configuration"`
 	OutputLocation          string                         `json:"output_location"`
@@ -34,6 +36,7 @@ type EnginerVersionBlock struct {
 	SelectedEngineVersion string `json:"selected_version"`
 }
 
+// WorkgroupConfigurationBlock holds config for configuration attribute
 type WorkgroupConfigurationBlock struct {
 	BytesScannedCutoffPerQuery      int                        `json:"bytes_scanned_cutoff_per_query,omitempty"`
 	EnforceWorkgroupConfiguration   bool                       `json:"enforce_workgroup_configuration"`
@@ -43,12 +46,14 @@ type WorkgroupConfigurationBlock struct {
 	ResultConfiguration             []ResultConfigurationBlock `json:"result_configuration"`
 }
 
+// AthenaWorkGroupConfig holds config for aws_athena_workgroup resource
 type AthenaWorkGroupConfig struct {
 	Config
 	Name          string                        `json:"name"`
 	Configuration []WorkgroupConfigurationBlock `json:"configuration"`
 }
 
+// GetAthenaWorkGroupConfig returns config for aws_athena_workgroup resource
 func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 	var workGroupConfig []WorkgroupConfigurationBlock
 

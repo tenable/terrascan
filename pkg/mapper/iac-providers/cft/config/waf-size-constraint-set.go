@@ -18,11 +18,13 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/waf"
 
+// FieldToMatchBlock holds field_to_match attribute
 type FieldToMatchBlock struct {
 	Data string `json:"data,omitempty"`
 	Type string `json:"type"`
 }
 
+// SizeConstraintSetBlock holds size_constraints attribute
 type SizeConstraintSetBlock struct {
 	ComparisonOperator string              `json:"comparison_operator"`
 	Size               int                 `json:"size"`
@@ -30,12 +32,14 @@ type SizeConstraintSetBlock struct {
 	FieldToMatch       []FieldToMatchBlock `json:"field_to_match"`
 }
 
+// WafSizeConstraintSetConfig holds Config for aws_waf_size_constraint_set
 type WafSizeConstraintSetConfig struct {
 	Config
 	Name              string                   `json:"name"`
 	SizeConstraintSet []SizeConstraintSetBlock `json:"size_constraints,omitempty"`
 }
 
+// GetWafSizeConstraintSetConfig returns config for aws_waf_size_constraint_set
 func GetWafSizeConstraintSetConfig(w *waf.SizeConstraintSet) []AWSResourceConfig {
 	sizeConstraintSet := setSizeConstraintSet(w)
 
