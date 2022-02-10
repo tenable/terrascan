@@ -96,5 +96,5 @@ var ResourceTypes = map[string]string{
 	"AWS::Backup::BackupVault":                         AwsBackupVault,
 	"AWS::AppMesh::Mesh":                               AwsAppMeshMesh,
 	"AWS::ApplicationAutoScaling::ScalingPolicy":       AwsAppAutoscalingPolicy,
-	"AWS::RAM::ResourceShare":                          AwsRamResourceShare,
+	"AWS::RAM::ResourceShare":                          AwsRAMResourceShare,
 }

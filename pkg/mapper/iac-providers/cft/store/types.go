@@ -95,6 +95,6 @@ const (
 	AwsMskCluster                    = "aws_msk_cluster"
 	AwsBackupVault                   = "aws_backup_vault"
 	AwsAppMeshMesh                   = "aws_appmesh_mesh"
-	AwsRamResourceShare              = "aws_ram_resource_share"
+	AwsRAMResourceShare              = "aws_ram_resource_share"
 	AwsAppAutoscalingPolicy          = "aws_appautoscaling_policy"
 )

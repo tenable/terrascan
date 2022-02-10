@@ -18,16 +18,16 @@ package config
 
 import "github.com/awslabs/goformation/v5/cloudformation/ram"
 
-// RamResourceShareConfig holds config for RamResourceShare
-type RamResourceShareConfig struct {
+// RAMResourceShareConfig holds config for RAMResourceShare
+type RAMResourceShareConfig struct {
 	Config
 	Name                    string `json:"name"`
 	AllowExternalPrincipals bool   `json:"allow_external_principals"`
 }
 
-// GetRamResourceShareConfig returns config for RamResourceShare
-func GetRamResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
-	cf := RamResourceShareConfig{
+// GetRAMResourceShareConfig returns config for RAMResourceShare
+func GetRAMResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
+	cf := RAMResourceShareConfig{
 		Config: Config{
 			Name: r.Name,
 			Tags: r.Tags,

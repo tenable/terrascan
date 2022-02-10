@@ -273,7 +273,7 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	case *appmesh.Mesh:
 		return config.GetAppMeshMeshConfig(resource)
 	case *ram.ResourceShare:
-		return config.GetRamResourceShareConfig(resource)
+		return config.GetRAMResourceShareConfig(resource)
 	case *applicationautoscaling.ScalingPolicy:
 		return config.GetAppAutoScalingPolicyConfig(resource)
 	case *secretsmanager.RotationSchedule:
