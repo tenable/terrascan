@@ -31,7 +31,7 @@ type SecretsManagerSecretRotationConfig struct {
 	RotationRules     []SecretRotationRulesBlock `json:"rotation_rules"`
 }
 
-// GetSecretsManagerSecretRotation returns config for SecretsManagerSecretRotation
+// GetSecretsManagerSecretRotationConfig returns config for SecretsManagerSecretRotation
 func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) []AWSResourceConfig {
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {
