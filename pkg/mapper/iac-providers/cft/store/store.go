@@ -20,7 +20,7 @@ package store
 var ResourceTypes = map[string]string{
 	"AWS::DocDB::DBCluster":                            AwsDocDBCluster,
 	"AWS::ApiGatewayV2::Stage":                         AwsAPIGatewayV2Stage,
-	"AWS::ApiGatewayV2::Api":                           AwsApiGatewayV2Api,
+	"AWS::ApiGatewayV2::Api":                           AwsAPIGatewayV2Api,
 	"AWS::ApiGateway::Stage":                           AwsAPIGatewayStage,
 	"AWS::ApiGateway::Stage.MethodSettings":            AwsAPIGatewayStageMethodSettings,
 	"AWS::ApiGateway::RestApi":                         AwsAPIGatewayRestAPI,

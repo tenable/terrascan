@@ -24,7 +24,7 @@ const (
 	AwsAPIGatewayStage               = "aws_api_gateway_stage"
 	AwsAPIGatewayStageMethodSettings = "aws_api_gateway_method_settings"
 	AwsAPIGatewayV2Stage             = "aws_apigatewayv2_stage"
-	AwsApiGatewayV2Api               = "aws_apigatewayv2_api"
+	AwsAPIGatewayV2Api               = "aws_apigatewayv2_api"
 	AwsAthenaWorkGroup               = "aws_athena_workgroup"
 	AwsQldbLedger                    = "aws_qldb_ledger"
 	AwsEcsService                    = "aws_ecs_service"

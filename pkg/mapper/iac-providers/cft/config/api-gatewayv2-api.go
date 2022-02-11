@@ -39,8 +39,8 @@ type APIGatewayV2ApiConfig struct {
 	RouteSelectionExpression  string                   `json:"route_selection_expression,omitempty"`
 	Target                    string                   `json:"target,omitempty"`
 	Version                   string                   `json:"version,omitempty"`
-	ApiKeySelectionExpression string                   `json:"api_key_selection_expression,omitempty"`
-	DisableExecuteApiEndpoint bool                     `json:"disable_execute_api_endpoint,omitempty"`
+	APIKeySelectionExpression string                   `json:"api_key_selection_expression,omitempty"`
+	DisableExecuteAPIEndpoint bool                     `json:"disable_execute_api_endpoint,omitempty"`
 	FailOnWarnings            bool                     `json:"fail_on_warnings,omitempty"`
 	CorsConfiguration         []CorsConfigurationBlock `json:"cors_configuration,omitempty"`
 }
@@ -72,8 +72,8 @@ func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 		RouteSelectionExpression:  a.RouteSelectionExpression,
 		Target:                    a.Target,
 		Version:                   a.Version,
-		ApiKeySelectionExpression: a.ApiKeySelectionExpression,
-		DisableExecuteApiEndpoint: a.DisableExecuteApiEndpoint,
+		APIKeySelectionExpression: a.ApiKeySelectionExpression,
+		DisableExecuteAPIEndpoint: a.DisableExecuteApiEndpoint,
 		FailOnWarnings:            a.FailOnWarnings,
 		CorsConfiguration:         corsConfigData,
 	}

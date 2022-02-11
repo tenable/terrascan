@@ -26,12 +26,13 @@ type EncryptionConfigurationBlock struct {
 	KmsKeyArn        string `json:"kms_key_arn"`
 }
 
-// ResultConfigurationBlock holds config for ResultConfigurationBlock attribute
+// ResultConfigurationBlock holds config for result_configuration attribute
 type ResultConfigurationBlock struct {
 	EncryptionConfiguration []EncryptionConfigurationBlock `json:"encryption_configuration"`
 	OutputLocation          string                         `json:"output_location"`
 }
 
+// EnginerVersionBlock holds config for engine_version attribute
 type EnginerVersionBlock struct {
 	SelectedEngineVersion string `json:"selected_version"`
 }

@@ -24,7 +24,7 @@ import (
 type GlobalAcceleratorConfig struct {
 	Config
 	Name          string `json:"name"`
-	IpAddressType string `json:"ip_address_type"`
+	IPAddressType string `json:"ip_address_type"`
 	Enabled       bool   `json:"enabled"`
 }
 
@@ -37,7 +37,7 @@ func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceC
 		},
 		Name:          g.Name,
 		Enabled:       g.Enabled,
-		IpAddressType: g.IpAddressType,
+		IPAddressType: g.IpAddressType,
 	}
 
 	return []AWSResourceConfig{{

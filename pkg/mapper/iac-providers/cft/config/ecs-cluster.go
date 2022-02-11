@@ -42,7 +42,7 @@ type LogConfigurationBlock struct {
 
 // ExecuteCommandConfiguration holds config for execute_command_configuration attribute
 type ExecuteCommandConfiguration struct {
-	KmsKeyId         string                  `json:"kms_key_id"`
+	KmsKeyID         string                  `json:"kms_key_id"`
 	Logging          string                  `json:"logging"`
 	LogConfiguration []LogConfigurationBlock `json:"log_configuration"`
 }
@@ -107,7 +107,7 @@ func setExecCommandConfigBlock(e *ecs.Cluster) []ExecuteCommandConfiguration {
 
 	execCommandConfigData := make([]ExecuteCommandConfiguration, 1)
 
-	execCommandConfigData[0].KmsKeyId = e.Configuration.ExecuteCommandConfiguration.KmsKeyId
+	execCommandConfigData[0].KmsKeyID = e.Configuration.ExecuteCommandConfiguration.KmsKeyId
 	execCommandConfigData[0].Logging = e.Configuration.ExecuteCommandConfiguration.Logging
 	execCommandConfigData[0].LogConfiguration = setLogConfigurationBlock(e)
 
