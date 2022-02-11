@@ -98,7 +98,13 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 }
 
 func setConfigurationBlock(e *ecs.Cluster) []ConfigurationBlock {
-	configurationData := make([]ConfigurationBlock, 1)
+	var configurationData []ConfigurationBlock
+
+	if e.Configuration == nil {
+		return configurationData
+	}
+
+	configurationData = make([]ConfigurationBlock, 1)
 	configurationData[0].ExecuteCommandConfig = setExecCommandConfigBlock(e)
 
 	return configurationData
