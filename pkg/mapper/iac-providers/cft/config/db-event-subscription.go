@@ -29,20 +29,20 @@ type DBEventSubscriptionConfig struct {
 }
 
 // GetDBEventSubscriptionConfig returns config for aws_db_event_subscription resource
-func GetDBEventSubscriptionConfig(db *rds.EventSubscription) []AWSResourceConfig {
+func GetDBEventSubscriptionConfig(d *rds.EventSubscription) []AWSResourceConfig {
 
 	cf := DBEventSubscriptionConfig{
 		Config:          Config{},
-		SnsTopicArn:     db.SnsTopicArn,
-		Enabled:         db.Enabled,
-		EventCategories: db.EventCategories,
-		SourceIds:       db.SourceIds,
-		SourceType:      db.SourceType,
+		SnsTopicArn:     d.SnsTopicArn,
+		Enabled:         d.Enabled,
+		EventCategories: d.EventCategories,
+		SourceIds:       d.SourceIds,
+		SourceType:      d.SourceType,
 	}
 
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: db.AWSCloudFormationMetadata,
+		Metadata: d.AWSCloudFormationMetadata,
 	}}
 
 }

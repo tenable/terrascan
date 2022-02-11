@@ -47,14 +47,17 @@ type APIGatewayV2ApiConfig struct {
 
 // GetAPIGatewayV2ApiConfig returns config for aws_apigatewayv2_api resource
 func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
+	var corsConfigData []CorsConfigurationBlock
 
-	corsConfigData := make([]CorsConfigurationBlock, 1)
-	corsConfigData[0].AllowCredentials = a.CorsConfiguration.AllowCredentials
-	corsConfigData[0].AllowHeaders = a.CorsConfiguration.AllowHeaders
-	corsConfigData[0].AllowMethods = a.CorsConfiguration.AllowMethods
-	corsConfigData[0].AllowOrigins = a.CorsConfiguration.AllowOrigins
-	corsConfigData[0].ExposeHeaders = a.CorsConfiguration.ExposeHeaders
-	corsConfigData[0].MaxAge = a.CorsConfiguration.MaxAge
+	if a.CorsConfiguration != nil {
+		corsConfigData = make([]CorsConfigurationBlock, 1)
+		corsConfigData[0].AllowCredentials = a.CorsConfiguration.AllowCredentials
+		corsConfigData[0].AllowHeaders = a.CorsConfiguration.AllowHeaders
+		corsConfigData[0].AllowMethods = a.CorsConfiguration.AllowMethods
+		corsConfigData[0].AllowOrigins = a.CorsConfiguration.AllowOrigins
+		corsConfigData[0].ExposeHeaders = a.CorsConfiguration.ExposeHeaders
+		corsConfigData[0].MaxAge = a.CorsConfiguration.MaxAge
+	}
 
 	cf := APIGatewayV2ApiConfig{
 		Config: Config{
