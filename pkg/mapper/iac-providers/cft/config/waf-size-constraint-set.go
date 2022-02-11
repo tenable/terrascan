@@ -59,7 +59,7 @@ func GetWafSizeConstraintSetConfig(w *waf.SizeConstraintSet) []AWSResourceConfig
 func setSizeConstraintSet(w *waf.SizeConstraintSet) []SizeConstraintSetBlock {
 	sizeConstraintSet := make([]SizeConstraintSetBlock, len(w.SizeConstraints))
 
-	for i := 0; i < len(w.SizeConstraints); i++ {
+	for i := range w.SizeConstraints {
 		sizeConstraintSet[i].Size = w.SizeConstraints[i].Size
 		sizeConstraintSet[i].TextTransformation = w.SizeConstraints[i].TextTransformation
 		sizeConstraintSet[i].ComparisonOperator = w.SizeConstraints[i].ComparisonOperator
