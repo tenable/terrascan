@@ -65,13 +65,13 @@ type EcsClusterConfig struct {
 func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 
 	clusterSettingsData := make([]ClusterSettingsBlock, len(e.ClusterSettings))
-	for i := 0; i < len(e.ClusterSettings); i++ {
+	for i := range e.ClusterSettings {
 		clusterSettingsData[i].Name = e.ClusterSettings[i].Name
 		clusterSettingsData[i].Value = e.ClusterSettings[i].Value
 	}
 
 	capacityProviderStrategyData := make([]CapacityProviderStrategyBlock, len(e.DefaultCapacityProviderStrategy))
-	for i := 0; i < len(e.DefaultCapacityProviderStrategy); i++ {
+	for i := range e.DefaultCapacityProviderStrategy {
 		capacityProviderStrategyData[i].Base = e.DefaultCapacityProviderStrategy[i].Base
 		capacityProviderStrategyData[i].CapacityProvider = e.DefaultCapacityProviderStrategy[i].CapacityProvider
 		capacityProviderStrategyData[i].Weight = e.DefaultCapacityProviderStrategy[i].Weight
