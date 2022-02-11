@@ -19,6 +19,7 @@ package cft
 import (
 	"errors"
 
+	"github.com/awslabs/goformation/v5/cloudformation/applicationautoscaling"
 	"github.com/awslabs/goformation/v5/cloudformation/appmesh"
 	"github.com/awslabs/goformation/v5/cloudformation/athena"
 	"github.com/awslabs/goformation/v5/cloudformation/autoscaling"
@@ -35,6 +36,7 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 	"github.com/awslabs/goformation/v5/cloudformation/msk"
 	"github.com/awslabs/goformation/v5/cloudformation/qldb"
+	"github.com/awslabs/goformation/v5/cloudformation/ram"
 	"github.com/awslabs/goformation/v5/cloudformation/sagemaker"
 	"github.com/awslabs/goformation/v5/cloudformation/sns"
 	"github.com/awslabs/goformation/v5/cloudformation/sqs"
@@ -290,6 +292,12 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetBackupVaultConfig(resource)
 	case *appmesh.Mesh:
 		return config.GetAppMeshMeshConfig(resource)
+	case *ram.ResourceShare:
+		return config.GetRAMResourceShareConfig(resource)
+	case *applicationautoscaling.ScalingPolicy:
+		return config.GetAppAutoScalingPolicyConfig(resource)
+	case *secretsmanager.RotationSchedule:
+		return config.GetSecretsManagerSecretRotationConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}

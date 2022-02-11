@@ -35,6 +35,7 @@ var ResourceTypes = map[string]string{
 	"AWS::RDS::EventSubscription":                      AwsDBEventSubscription,
 	"AWS::IAM::Role":                                   AwsIamRole,
 	"AWS::IAM::Role.Policy":                            AwsIamRolePolicy,
+	"AWS::IAM::Group":                                  AwsIamGroup,
 	"AWS::IAM::Group.Policy":                           AwsIamGroupPolicy,
 	"AWS::IAM::Policy":                                 AwsIamPolicy,
 	"AWS::IAM::AccessKey":                              AwsIamAccessKey,
@@ -56,6 +57,7 @@ var ResourceTypes = map[string]string{
 	"AWS::WorkSpaces::Workspace":                       AwsWorkspacesWorkspace,
 	"AWS::Neptune::DBCluster":                          AwsNeptuneCluster,
 	"AWS::SecretsManager::Secret":                      AwsSecretsManagerSecret,
+	"AWS::SecretsManager::RotationSchedule":            AwsSecretsManagerSecretRotation,
 	"AWS::ECR::Repository":                             AwsEcrRepository,
 	"AWS::KMS::Key":                                    AwsKmsKey,
 	"AWS::Kinesis::Stream":                             AwsKinesisStream,
@@ -101,4 +103,6 @@ var ResourceTypes = map[string]string{
 	"AWS::MSK::Cluster":                                AwsMskCluster,
 	"AWS::Backup::BackupVault":                         AwsBackupVault,
 	"AWS::AppMesh::Mesh":                               AwsAppMeshMesh,
+	"AWS::ApplicationAutoScaling::ScalingPolicy":       AwsAppAutoscalingPolicy,
+	"AWS::RAM::ResourceShare":                          AwsRAMResourceShare,
 }
