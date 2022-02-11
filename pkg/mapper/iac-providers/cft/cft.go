@@ -21,6 +21,7 @@ import (
 
 	"github.com/awslabs/goformation/v5/cloudformation/applicationautoscaling"
 	"github.com/awslabs/goformation/v5/cloudformation/appmesh"
+	"github.com/awslabs/goformation/v5/cloudformation/athena"
 	"github.com/awslabs/goformation/v5/cloudformation/autoscaling"
 	"github.com/awslabs/goformation/v5/cloudformation/backup"
 	"github.com/awslabs/goformation/v5/cloudformation/certificatemanager"
@@ -31,12 +32,15 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/dms"
 	"github.com/awslabs/goformation/v5/cloudformation/eks"
 	"github.com/awslabs/goformation/v5/cloudformation/emr"
+	"github.com/awslabs/goformation/v5/cloudformation/globalaccelerator"
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 	"github.com/awslabs/goformation/v5/cloudformation/msk"
+	"github.com/awslabs/goformation/v5/cloudformation/qldb"
 	"github.com/awslabs/goformation/v5/cloudformation/ram"
 	"github.com/awslabs/goformation/v5/cloudformation/sagemaker"
 	"github.com/awslabs/goformation/v5/cloudformation/sns"
 	"github.com/awslabs/goformation/v5/cloudformation/sqs"
+	"github.com/awslabs/goformation/v5/cloudformation/waf"
 
 	cf "github.com/awslabs/goformation/v5/cloudformation/cloudformation"
 	cnf "github.com/awslabs/goformation/v5/cloudformation/config"
@@ -148,6 +152,10 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetAPIGatewayStageConfig(resource)
 	case *apigatewayv2.Stage:
 		return config.GetAPIGatewayV2StageConfig(resource)
+	case *apigatewayv2.Api:
+		return config.GetAPIGatewayV2ApiConfig(resource)
+	case *athena.WorkGroup:
+		return config.GetAthenaWorkGroupConfig(resource)
 	case *logs.LogGroup:
 		return config.GetLogCloudWatchGroupConfig(resource)
 	case *ecs.Service:
@@ -158,6 +166,12 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetDaxClusterConfig(resource)
 	case *rds.DBInstance:
 		return config.GetDBInstanceConfig(resource)
+	case *rds.EventSubscription:
+		return config.GetDBEventSubscriptionConfig(resource)
+	case *qldb.Ledger:
+		return config.GetQldbLedgerConfig(resource)
+	case *ecs.Cluster:
+		return config.GetEcsClusterConfig(resource)
 	case *iam.Role:
 		return config.GetIamRoleConfig(resource)
 	case *iam.Policy:
@@ -198,6 +212,12 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetWorkspacesWorkspaceConfig(resource)
 	case *neptune.DBCluster:
 		return config.GetNeptuneClusterConfig(resource)
+	case *neptune.DBInstance:
+		return config.GetNeptuneClusterInstanceConfig(resource)
+	case *globalaccelerator.Accelerator:
+		return config.GetGlobalAcceleratorConfig(resource)
+	case *waf.SizeConstraintSet:
+		return config.GetWafSizeConstraintSetConfig(resource)
 	case *secretsmanager.Secret:
 		return config.GetSecretsManagerSecretConfig(resource)
 	case *ecr.Repository:
