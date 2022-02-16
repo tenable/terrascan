@@ -1,10 +1,10 @@
 package accurics
 
 {{.prefix}}noS3BucketSseRules[bucket.id] {
-	bucket := input.aws_s3_bucket[_]
+    bucket := input.aws_s3_bucket[_]
     object.get(bucket.config, "server_side_encryption_configuration", "undefined") == [[], null, "undefined"][_]
 
-	sse := input.aws_s3_bucket_server_side_encryption_configuration[_]
+    sse := input.aws_s3_bucket_server_side_encryption_configuration[_]
     cleanID := cleanSSEBucketID(sse.config.bucket)
     bucket.id == cleanID
     checkSSE(sse.config)
@@ -19,9 +19,9 @@ cleanSSEBucketID(sseBucketID) = cleanID {
 }
 
 checkSSE(config) {
-	object.get(config, "rule", "undefined") == [[], null, "undefined"][_]
+    object.get(config, "rule", "undefined") == [[], null, "undefined"][_]
 }
 
 checkSSE(config) {
-	object.get(config.rule[_], "apply_server_side_encryption_by_default", "undefined") == [[], null, "undefined"][_]
+    object.get(config.rule[_], "apply_server_side_encryption_by_default", "undefined") == [[], null, "undefined"][_]
 }

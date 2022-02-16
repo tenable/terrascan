@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}s3Versioning[bucket.id] {
-	bucket := input.aws_s3_bucket[_]
+    bucket := input.aws_s3_bucket[_]
     checkBucketVersioning(bucket)
 }
 
