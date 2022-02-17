@@ -28,5 +28,15 @@ cleanVersioningBucketID(sseBucketID) = cleanID {
     v1 := trim_left(sseBucketID, "$")
     v2 := trim_left(v1, "{")
     v3 := trim_right(v2, "}")
-    cleanID := trim_right(v3, ".id")
+    cleanID = cleanEnd(v3)
+}
+
+cleanEnd(sseBucketID_v3) = cleanID {
+    endswith(sseBucketID_v3, ".id")
+    cleanID = trim_right(sseBucketID_v3, ".id")
+}
+
+cleanEnd(sseBucketID_v3) = cleanID {
+    endswith(sseBucketID_v3, ".bucket")
+    cleanID = trim_right(sseBucketID_v3, ".bucket")
 }
