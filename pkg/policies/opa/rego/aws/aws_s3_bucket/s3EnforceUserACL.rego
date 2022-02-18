@@ -33,8 +33,7 @@ checkPolicy(inobj, bucket_config) {
 
 checkPrincipals(policy) {
     statement := policy.statement[_]
-    principal := statement.principals[_]
-    identifier := principal.identifiers[_]
+    identifier := statement.principals.identifiers[_]
     identifier == "*"
 }
 
@@ -63,5 +62,6 @@ json_unmarshal(s) = result {
 
 json_unmarshal(s) = result {
 	s != null
-	result := json.unmarshal(s)
+    s1 := lower(s)
+	result := json.unmarshal(s1)
 }
