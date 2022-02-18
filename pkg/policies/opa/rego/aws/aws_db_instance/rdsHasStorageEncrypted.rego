@@ -1,21 +1,14 @@
 package accurics
 
 rdsHasStorageEncrypted[rds.id] {
-    rds := input.aws_db_instance[_]
-    rds.config.storage_encrypted == null
+	rds := input.aws_db_instance[_]
+	encryptionCheck(rds.config)
 }
 
-rdsHasStorageEncrypted[rds.id] {
-    rds := input.aws_db_instance[_]
-    rds.config.storage_encrypted == false
+encryptionCheck(rds_config) {
+	object.get(rds_config, "storage_encrypted", "undefined") == [[], null, "undefined"]
 }
 
-rdsHasStorageEncrypted[rds.id] {
-    rds := input.aws_db_instance[_]
-    not rds.config.kms_key_id
-}
-
-rdsHasStorageEncrypted[rds.id] {
-    rds := input.aws_db_instance[_]
-    rds.config.kms_key_id == null
+encryptionCheck(rds_config) {
+	rds_config.storage_encrypted != true
 }
