@@ -29,7 +29,7 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
-	"github.com/ghodss/yaml"
+	"github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 )
 
@@ -90,38 +90,19 @@ func (a *CFTV1) getConfig(absFilePath string, fileData *[]byte, parameters *map[
 }
 
 func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Template, error) {
+	var multiErr multierror.Error
+
 	fileExt := a.getFileType(file, data)
-	var err error
-	var sanitized []byte
+	isYaml := fileExt == YAMLExtension || fileExt == YAMLExtension2
 
-	switch fileExt {
-	case YAMLExtension, YAMLExtension2:
-		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-		sanitizedYaml, err := a.sanitizeCftTemplate(*data, true)
-		if err != nil {
-			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
-			return nil, err
-		}
-		sanitized, err = yaml.YAMLToJSON(sanitizedYaml)
-		if err != nil {
-			zap.S().Debug("invalid yaml", zap.String("file", file), zap.Error(err))
-			return nil, err
-		}
-
-	case JSONExtension:
-		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-		sanitized, err = a.sanitizeCftTemplate(*data, false)
-		if err != nil {
-			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
-			return nil, err
-		}
-
-	default:
-		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
-		return nil, fmt.Errorf("unsupported extension for file %s", file)
+	zap.S().Debug("sanitizing cft template file", zap.String("file", file))
+	sanitized, err := a.sanitizeCftTemplate(*data, isYaml)
+	if err != nil {
+		zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
+		return nil, err
 	}
 
-	resourcesList, err := getResourcesList(sanitized)
+	preParsedList, err := preParse(sanitized)
 	if err != nil {
 		zap.S().Debug("failed to unmarshal sanitized json", zap.String("file", file), zap.Error(err))
 		return nil, err
@@ -129,22 +110,23 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 
 	var onetemplate cloudformation.Template
 	onetemplate.Resources = make(map[string]cloudformation.Resource, 1)
-
-	for i := range resourcesList {
+	for i := range preParsedList {
 		var resourceName string
-		for key := range resourcesList[i].Resources {
+		for key := range preParsedList[i].Resources {
 			resourceName = key
 		}
 
-		resourceData, err := json.Marshal(resourcesList[i])
+		resourceData, err := json.Marshal(preParsedList[i])
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
+			multiErr.Errors = append(multiErr.Errors, err)
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
+			multiErr.Errors = append(multiErr.Errors, err)
 			continue
 		}
 
@@ -152,6 +134,10 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 		for key := range template.Resources {
 			onetemplate.Resources[key] = template.Resources[key]
 		}
+	}
+
+	if multiErr.Errors != nil {
+		a.errIacLoadDirs = &multiErr
 	}
 
 	return &onetemplate, nil
@@ -167,7 +153,7 @@ type cftResource struct {
 	Resources                map[string]interface{} `json:"Resources"`
 }
 
-func getResourcesList(sanitized []byte) ([]cftResource, error) {
+func preParse(sanitized []byte) ([]cftResource, error) {
 	var err error
 	var jsonMap map[string]interface{}
 	var resourcesList []cftResource
@@ -180,6 +166,7 @@ func getResourcesList(sanitized []byte) ([]cftResource, error) {
 	resourceMap := jsonMap[resources].(map[string]interface{})
 	for key := range resourceMap {
 		var resourceInfo cftResource
+
 		resourceInfo.AWSTemplateFormatVersion = jsonMap[awsTemplateFormatVersion].(string)
 		resourceInfo.Resources = make(map[string]interface{}, 1)
 		resourceInfo.Resources[key] = resourceMap[key]
