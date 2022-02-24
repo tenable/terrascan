@@ -29,6 +29,7 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
+	"github.com/ghodss/yaml"
 	"go.uber.org/zap"
 )
 
@@ -90,38 +91,103 @@ func (a *CFTV1) getConfig(absFilePath string, fileData *[]byte, parameters *map[
 
 func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Template, error) {
 	fileExt := a.getFileType(file, data)
+	var err error
+	var sanitized []byte
 
 	switch fileExt {
 	case YAMLExtension, YAMLExtension2:
 		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-		sanitized, err := a.sanitizeCftTemplate(*data, true)
+		sanitizedYaml, err := a.sanitizeCftTemplate(*data, true)
 		if err != nil {
 			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
 			return nil, err
 		}
-		template, err := goformation.ParseYAML(sanitized)
+		sanitized, err = yaml.YAMLToJSON(sanitizedYaml)
 		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", file), zap.Error(err))
+			zap.S().Debug("invalid yaml", zap.String("file", file), zap.Error(err))
 			return nil, err
 		}
-		return template, nil
+
 	case JSONExtension:
 		zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-		sanitized, err := a.sanitizeCftTemplate(*data, false)
+		sanitized, err = a.sanitizeCftTemplate(*data, false)
 		if err != nil {
 			zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
 			return nil, err
 		}
-		template, err := goformation.ParseJSON(sanitized)
-		if err != nil {
-			zap.S().Debug("failed to parse file", zap.String("file", file), zap.Error(err))
-			return nil, err
-		}
-		return template, nil
+
 	default:
 		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
 		return nil, fmt.Errorf("unsupported extension for file %s", file)
 	}
+
+	resourcesList, err := getResourcesList(sanitized)
+	if err != nil {
+		zap.S().Debug("failed to unmarshal sanitized json", zap.String("file", file), zap.Error(err))
+		return nil, err
+	}
+
+	var onetemplate cloudformation.Template
+	onetemplate.Resources = make(map[string]cloudformation.Resource, 1)
+
+	for i := range resourcesList {
+		var resourceName string
+		for key := range resourcesList[i].Resources {
+			resourceName = key
+		}
+
+		resourceData, err := json.Marshal(resourcesList[i])
+		if err != nil {
+			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
+			continue
+		}
+
+		template, err := goformation.ParseJSON(resourceData)
+		if err != nil {
+			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
+			continue
+		}
+
+		onetemplate.AWSTemplateFormatVersion = template.AWSTemplateFormatVersion
+		for key := range template.Resources {
+			onetemplate.Resources[key] = template.Resources[key]
+		}
+	}
+
+	return &onetemplate, nil
+}
+
+const (
+	AWSTemplateFormatVersion = "AWSTemplateFormatVersion"
+	Resources                = "Resources"
+)
+
+type cftResource struct {
+	AWSTemplateFormatVersion string                 `json:"AWSTemplateFormatVersion"`
+	Resources                map[string]interface{} `json:"Resources"`
+}
+
+func getResourcesList(sanitized []byte) ([]cftResource, error) {
+	var err error
+	var jsonMap map[string]interface{}
+	var resourcesList []cftResource
+
+	err = json.Unmarshal(sanitized, &jsonMap)
+	if err != nil {
+		return nil, err
+	}
+
+	resourceMap := jsonMap[Resources].(map[string]interface{})
+	for key := range resourceMap {
+		var resourceInfo cftResource
+		resourceInfo.AWSTemplateFormatVersion = jsonMap[AWSTemplateFormatVersion].(string)
+		resourceInfo.Resources = make(map[string]interface{}, 1)
+		resourceInfo.Resources[key] = resourceMap[key]
+
+		resourcesList = append(resourcesList, resourceInfo)
+	}
+
+	return resourcesList, nil
 }
 
 func (a *CFTV1) translateResources(template *cloudformation.Template, absFilePath string) ([]output.ResourceConfig, error) {
