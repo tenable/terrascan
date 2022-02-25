@@ -91,9 +91,18 @@ func (a *CFTV1) getConfig(absFilePath string, fileData *[]byte, parameters *map[
 
 func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Template, error) {
 	var multiErr multierror.Error
-
 	fileExt := a.getFileType(file, data)
-	isYaml := fileExt == YAMLExtension || fileExt == YAMLExtension2
+	var isYaml bool
+
+	switch fileExt {
+	case YAMLExtension, YAMLExtension2:
+		isYaml = true
+	case JSONExtension:
+		isYaml = false
+	default:
+		zap.S().Debug("unknown extension found", zap.String("extension", fileExt))
+		return nil, fmt.Errorf("unsupported extension for file %s", file)
+	}
 
 	zap.S().Debug("sanitizing cft template file", zap.String("file", file))
 	sanitized, err := a.sanitizeCftTemplate(*data, isYaml)
