@@ -144,8 +144,9 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 }
 
 const (
-	awsTemplateFormatVersion = "AWSTemplateFormatVersion"
-	resources                = "Resources"
+	awsTemplateFormatVersion       = "AWSTemplateFormatVersion"
+	awsTemplateFormatVersionString = "2010-09-09"
+	resources                      = "Resources"
 )
 
 type cftResource struct {
@@ -163,11 +164,22 @@ func preParse(sanitized []byte) ([]cftResource, error) {
 		return nil, err
 	}
 
-	resourceMap := jsonMap[resources].(map[string]interface{})
+	var resourceMap map[string]interface{}
+	if jsonMap[resources] != nil {
+		resourceMap = jsonMap[resources].(map[string]interface{})
+	} else {
+		resourceMap = jsonMap
+	}
+
 	for key := range resourceMap {
 		var resourceInfo cftResource
 
-		resourceInfo.AWSTemplateFormatVersion = jsonMap[awsTemplateFormatVersion].(string)
+		if jsonMap[awsTemplateFormatVersion] != nil {
+			resourceInfo.AWSTemplateFormatVersion = jsonMap[awsTemplateFormatVersion].(string)
+		} else {
+			resourceInfo.AWSTemplateFormatVersion = awsTemplateFormatVersionString
+		}
+
 		resourceInfo.Resources = make(map[string]interface{}, 1)
 		resourceInfo.Resources[key] = resourceMap[key]
 
