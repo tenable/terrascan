@@ -8,7 +8,8 @@ package accurics
 checkBucketVersioning(bucket) {
     object.get(bucket.config, "versioning", "undefined") != [[], null, "undefined"][_]
 
-    bucket.config.versioning[_] != true
+    versioning := bucket.config.versioning[_]
+    not versioning.enabled == true
 }
 
 checkBucketVersioning(bucket) {
