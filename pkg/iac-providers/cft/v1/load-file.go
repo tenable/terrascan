@@ -27,9 +27,10 @@ import (
 	"github.com/accurics/terrascan/pkg/mapper"
 	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
 	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
+	"github.com/accurics/terrascan/pkg/results"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
-	"github.com/hashicorp/go-multierror"
+	"go.uber.org/multierr"
 	"go.uber.org/zap"
 )
 
@@ -90,7 +91,6 @@ func (a *CFTV1) getConfig(absFilePath string, fileData *[]byte, parameters *map[
 }
 
 func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Template, error) {
-	var multiErr multierror.Error
 	fileExt := a.getFileType(file, data)
 	var isYaml bool
 
@@ -126,16 +126,18 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 		}
 
 		resourceData, err := json.Marshal(preParsedList[i])
+		dirErr := results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()}
+
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multiErr.Errors = append(multiErr.Errors, err)
+			multierr.Append(a.errIacLoadDirs, dirErr)
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multiErr.Errors = append(multiErr.Errors, err)
+			multierr.Append(a.errIacLoadDirs, dirErr)
 			continue
 		}
 
@@ -145,18 +147,8 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 		}
 	}
 
-	if multiErr.Errors != nil {
-		a.errIacLoadDirs = &multiErr
-	}
-
 	return &onetemplate, nil
 }
-
-const (
-	awsTemplateFormatVersion       = "AWSTemplateFormatVersion"
-	awsTemplateFormatVersionString = "2010-09-09"
-	resources                      = "Resources"
-)
 
 type cftResource struct {
 	AWSTemplateFormatVersion string                 `json:"AWSTemplateFormatVersion"`
@@ -174,8 +166,8 @@ func preParse(sanitized []byte) ([]cftResource, error) {
 	}
 
 	var resourceMap map[string]interface{}
-	if jsonMap[resources] != nil {
-		resourceMap = jsonMap[resources].(map[string]interface{})
+	if jsonMap["Resources"] != nil {
+		resourceMap = jsonMap["Resources"].(map[string]interface{})
 	} else {
 		resourceMap = jsonMap
 	}
@@ -183,10 +175,10 @@ func preParse(sanitized []byte) ([]cftResource, error) {
 	for key := range resourceMap {
 		var resourceInfo cftResource
 
-		if jsonMap[awsTemplateFormatVersion] != nil {
-			resourceInfo.AWSTemplateFormatVersion = jsonMap[awsTemplateFormatVersion].(string)
+		if jsonMap["AWSTemplateFormatVersion"] != nil {
+			resourceInfo.AWSTemplateFormatVersion = jsonMap["AWSTemplateFormatVersion"].(string)
 		} else {
-			resourceInfo.AWSTemplateFormatVersion = awsTemplateFormatVersionString
+			resourceInfo.AWSTemplateFormatVersion = "2010-09-09"
 		}
 
 		resourceInfo.Resources = make(map[string]interface{}, 1)
