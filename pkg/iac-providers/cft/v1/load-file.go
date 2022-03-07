@@ -126,7 +126,10 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 		}
 
 		resourceData, err := json.Marshal(preParsedList[i])
-		dirErr := results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()}
+		var dirErr results.DirScanErr
+		if err != nil {
+			dirErr = results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()}
+		}
 
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
