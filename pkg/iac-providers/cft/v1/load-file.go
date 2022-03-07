@@ -18,6 +18,7 @@ package cftv1
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -169,20 +170,29 @@ func preParse(sanitized []byte) ([]cftResource, error) {
 	}
 
 	var resourceMap map[string]interface{}
+	resourceMap = jsonMap
+
+	var jsonMapCheck bool
 	if jsonMap["Resources"] != nil {
-		resourceMap = jsonMap["Resources"].(map[string]interface{})
-	} else {
-		resourceMap = jsonMap
+		resourceMap, jsonMapCheck = jsonMap["Resources"].(map[string]interface{})
+		if !jsonMapCheck {
+			zap.S().Debug("unable to find Resources map[string]interface{} in cft file")
+			return resourcesList, errors.New("unable to find Resources map[string]interface{} in cft file")
+		}
 	}
 
 	for key := range resourceMap {
 		var resourceInfo cftResource
 
+		var awsFormatVersion string
+		formatStringCheck := true
 		if jsonMap["AWSTemplateFormatVersion"] != nil {
-			resourceInfo.AWSTemplateFormatVersion = jsonMap["AWSTemplateFormatVersion"].(string)
-		} else {
-			resourceInfo.AWSTemplateFormatVersion = "2010-09-09"
+			awsFormatVersion, formatStringCheck = jsonMap["AWSTemplateFormatVersion"].(string)
 		}
+		if jsonMap["AWSTemplateFormatVersion"] == nil || !formatStringCheck {
+			awsFormatVersion = "2010-09-09"
+		}
+		resourceInfo.AWSTemplateFormatVersion = awsFormatVersion
 
 		resourceInfo.Resources = make(map[string]interface{}, 1)
 		resourceInfo.Resources[key] = resourceMap[key]
