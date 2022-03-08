@@ -157,7 +157,7 @@ func verifyResponseObject(want, got output.AllResourceConfigs) error {
 
 			flag := false
 			for gotIndex := range got[wantKey] {
-				if got[wantKey][gotIndex].ID == want[wantKey][gotIndex].ID {
+				if got[wantKey][gotIndex].ID == want[wantKey][wantIndex].ID {
 					flag = true
 				}
 			}
