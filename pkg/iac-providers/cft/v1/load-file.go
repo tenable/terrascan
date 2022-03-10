@@ -18,7 +18,6 @@ package cftv1
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -31,7 +30,7 @@ import (
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
-	multierr "github.com/hashicorp/go-multierror"
+	"go.uber.org/multierr"
 	"go.uber.org/zap"
 )
 
@@ -106,52 +105,13 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 	}
 
 	zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-	sanitized, err := a.sanitizeCftTemplate(*data, isYaml)
+	sanitized, version, err := a.sanitizeCftTemplate(*data, isYaml)
 	if err != nil {
 		zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
 		return nil, err
 	}
 
-	preParsedList, err := preParse(sanitized)
-	if err != nil {
-		zap.S().Debug("failed to unmarshal sanitized json", zap.String("file", file), zap.Error(err))
-		return nil, err
-	}
-
-	var onetemplate cloudformation.Template
-	onetemplate.Resources = make(map[string]cloudformation.Resource, 1)
-	for i := range preParsedList {
-		var resourceName string
-		for key := range preParsedList[i].Resources {
-			resourceName = key
-		}
-
-		resourceData, err := json.Marshal(preParsedList[i])
-		var dirErr results.DirScanErr
-		if err != nil {
-			dirErr = results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()}
-		}
-
-		if err != nil {
-			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, dirErr)
-			continue
-		}
-
-		template, err := goformation.ParseJSON(resourceData)
-		if err != nil {
-			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, dirErr)
-			continue
-		}
-
-		onetemplate.AWSTemplateFormatVersion = template.AWSTemplateFormatVersion
-		for key := range template.Resources {
-			onetemplate.Resources[key] = template.Resources[key]
-		}
-	}
-
-	return &onetemplate, nil
+	return a.cleanTemplate(sanitized, version, file)
 }
 
 type cftResource struct {
@@ -159,48 +119,36 @@ type cftResource struct {
 	Resources                map[string]interface{} `json:"Resources"`
 }
 
-func preParse(sanitized []byte) ([]cftResource, error) {
-	var err error
-	var jsonMap map[string]interface{}
-	var resourcesList []cftResource
+func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFilePath string) (*cloudformation.Template, error) {
+	var onetemplate cloudformation.Template
 
-	err = json.Unmarshal(sanitized, &jsonMap)
-	if err != nil {
-		return nil, err
-	}
-
-	var resourceMap map[string]interface{}
-	resourceMap = jsonMap
-
-	var jsonMapCheck bool
-	if jsonMap["Resources"] != nil {
-		resourceMap, jsonMapCheck = jsonMap["Resources"].(map[string]interface{})
-		if !jsonMapCheck {
-			zap.S().Debug("unable to find Resources map[string]interface{} in cft file")
-			return resourcesList, errors.New("unable to find Resources map[string]interface{} in cft file")
-		}
-	}
-
-	for key := range resourceMap {
+	for resourceName := range resourceMap {
 		var resourceInfo cftResource
 
-		var awsFormatVersion string
-		formatStringCheck := true
-		if jsonMap["AWSTemplateFormatVersion"] != nil {
-			awsFormatVersion, formatStringCheck = jsonMap["AWSTemplateFormatVersion"].(string)
-		}
-		if jsonMap["AWSTemplateFormatVersion"] == nil || !formatStringCheck {
-			awsFormatVersion = "2010-09-09"
-		}
-		resourceInfo.AWSTemplateFormatVersion = awsFormatVersion
-
+		resourceInfo.AWSTemplateFormatVersion = version
 		resourceInfo.Resources = make(map[string]interface{}, 1)
-		resourceInfo.Resources[key] = resourceMap[key]
+		resourceInfo.Resources[resourceName] = resourceMap[resourceName]
 
-		resourcesList = append(resourcesList, resourceInfo)
+		resourceData, err := json.Marshal(resourceInfo)
+		if err != nil {
+			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFilePath, ErrMessage: err.Error()})
+			continue
+		}
+
+		template, err := goformation.ParseJSON(resourceData)
+		if err != nil {
+			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()})
+			continue
+		}
+
+		for key := range template.Resources {
+			onetemplate.Resources[key] = template.Resources[key]
+		}
 	}
 
-	return resourcesList, nil
+	return &onetemplate, nil
 }
 
 func (a *CFTV1) translateResources(template *cloudformation.Template, absFilePath string) ([]output.ResourceConfig, error) {
