@@ -66,15 +66,10 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 				t.Error("CFTV1.sanitizeCftTemplate() got no error, expected parsing error")
 			}
 
-			got, err := a.sanitizeCftTemplate(data, tt.args.isYAML)
+			_, _, err = a.sanitizeCftTemplate(data, tt.args.isYAML)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CFTV1.sanitizeCftTemplate() error = %v, wantErr %v", err, tt.wantErr)
 				return
-			}
-
-			_, err = goformation.ParseJSON(got)
-			if err != nil {
-				t.Error("CFTV1.sanitizeCftTemplate() got error, expected no error")
 			}
 		})
 	}
