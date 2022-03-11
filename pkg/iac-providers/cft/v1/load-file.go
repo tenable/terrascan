@@ -111,15 +111,10 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 		return nil, err
 	}
 
-	return a.cleanTemplate(sanitized, version, file)
+	return a.cleanTemplate(sanitized, version, filepath.Dir(file))
 }
 
-type cftResource struct {
-	AWSTemplateFormatVersion string                 `json:"AWSTemplateFormatVersion"`
-	Resources                map[string]interface{} `json:"Resources"`
-}
-
-func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFilePath string) (*cloudformation.Template, error) {
+func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFileDir string) (*cloudformation.Template, error) {
 	var onetemplate cloudformation.Template
 	onetemplate.Resources = make(cloudformation.Resources, len(resourceMap))
 
@@ -133,14 +128,14 @@ func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFi
 		resourceData, err := json.Marshal(resourceInfo)
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFilePath, ErrMessage: err.Error()})
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFileDir, ErrMessage: err.Error()})
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: err.Error()})
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFileDir, ErrMessage: err.Error()})
 			continue
 		}
 
