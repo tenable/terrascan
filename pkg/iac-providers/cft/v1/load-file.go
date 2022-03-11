@@ -30,7 +30,7 @@ import (
 	"github.com/accurics/terrascan/pkg/results"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
-	"go.uber.org/multierr"
+	multierr "github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 )
 
