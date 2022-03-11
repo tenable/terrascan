@@ -66,11 +66,24 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 				t.Error("CFTV1.sanitizeCftTemplate() got no error, expected parsing error")
 			}
 
-			_, _, err = a.sanitizeCftTemplate(data, tt.args.isYAML)
+			resMap, version, err := a.sanitizeCftTemplate(data, tt.args.isYAML)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CFTV1.sanitizeCftTemplate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
+			resMap["AWSTemplateFormatVersion"] = version
+			resData, err := json.Marshal(resMap)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("resourseMap marshalling error error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			_, err = goformation.ParseJSON(resData)
+			if err != nil {
+				t.Error("CFTV1.sanitizeCftTemplate() got error, expected no error")
+			}
+
 		})
 	}
 }
