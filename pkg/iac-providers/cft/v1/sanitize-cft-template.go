@@ -29,7 +29,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, string, error) {
+func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
 	var (
 		intrinsified []byte
 		err          error
@@ -39,13 +39,13 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
 		intrinsified, err = intrinsics.ProcessYAML(data, nil)
 		if err != nil {
-			return nil, "", fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
 		}
 	} else {
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
 		intrinsified, err = intrinsics.ProcessJSON(data, nil)
 		if err != nil {
-			return nil, "", fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
 		}
 	}
 
@@ -53,7 +53,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 
 	err = json.Unmarshal(intrinsified, &templateFileMap)
 	if err != nil {
-		return nil, "", err
+		return nil, err
 	}
 
 	// sanitize Parameters
@@ -80,22 +80,10 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 					delete(rMap, rName)
 				}
 			}
-
-			if templateFileMap["AWSTemplateFormatVersion"] == nil {
-				return rMap, "2010-09-09", nil
-			}
-
-			version, ok := templateFileMap["AWSTemplateFormatVersion"].(string)
-			if !ok {
-				return rMap, "2010-09-09", nil
-			}
-
-			return rMap, version, nil
 		}
-		return nil, "", nil
 	}
 
-	return nil, "", nil
+	return templateFileMap, nil
 }
 
 func inspectAndSanitizeParameters(p interface{}) {

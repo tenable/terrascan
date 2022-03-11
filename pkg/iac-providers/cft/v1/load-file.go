@@ -18,6 +18,7 @@ package cftv1
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -105,37 +106,43 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 	}
 
 	zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-	sanitized, version, err := a.sanitizeCftTemplate(*data, isYaml)
+	sanitized, err := a.sanitizeCftTemplate(*data, isYaml)
 	if err != nil {
 		zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
 		return nil, err
 	}
 
-	return a.cleanTemplate(sanitized, version, filepath.Dir(file))
+	return a.cleanTemplate(sanitized, file)
 }
 
-func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFileDir string) (*cloudformation.Template, error) {
+func (a *CFTV1) cleanTemplate(templateMap map[string]interface{}, absFilePath string) (*cloudformation.Template, error) {
 	var onetemplate cloudformation.Template
+
+	resourceMap, ok := templateMap["Resources"].(map[string]interface{})
+	if !ok {
+		zap.S().Debug("failed to find valid Resources key", zap.String("file", absFilePath))
+		return nil, errors.New("failed to find valid Resources key in file: " + absFilePath)
+	}
+
 	onetemplate.Resources = make(cloudformation.Resources, len(resourceMap))
 
 	for resourceName := range resourceMap {
 		var resourceInfo cftResource
 
-		resourceInfo.AWSTemplateFormatVersion = version
 		resourceInfo.Resources = make(map[string]interface{}, 1)
 		resourceInfo.Resources[resourceName] = resourceMap[resourceName]
 
 		resourceData, err := json.Marshal(resourceInfo)
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFileDir, ErrMessage: err.Error()})
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absFileDir, ErrMessage: err.Error()})
+			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 
