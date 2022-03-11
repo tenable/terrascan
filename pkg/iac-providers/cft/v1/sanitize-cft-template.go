@@ -29,7 +29,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) ([]byte, error) {
+func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
 	var (
 		intrinsified []byte
 		err          error
@@ -83,11 +83,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) ([]byte, error) {
 		}
 	}
 
-	sanitized, err := json.Marshal(templateFileMap)
-	if err != nil {
-		return nil, err
-	}
-	return sanitized, nil
+	return templateFileMap, nil
 }
 
 func inspectAndSanitizeParameters(p interface{}) {
