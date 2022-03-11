@@ -121,6 +121,7 @@ type cftResource struct {
 
 func (a *CFTV1) cleanTemplate(resourceMap map[string]interface{}, version, absFilePath string) (*cloudformation.Template, error) {
 	var onetemplate cloudformation.Template
+	onetemplate.Resources = make(cloudformation.Resources, len(resourceMap))
 
 	for resourceName := range resourceMap {
 		var resourceInfo cftResource
