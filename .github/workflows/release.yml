@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
-      GO_VERSION: 1.17
+      GO_VERSION: 1.18
     steps:
       -
         name: Checkout
