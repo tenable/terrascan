@@ -51,6 +51,13 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 
+    # Analyze code with SonarCloud
+    - name: SonarCloud Analysis
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   # push image to Docker Hub
   push:
     # Ensure "validate" job passes before pushing image.
