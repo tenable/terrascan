@@ -1,14 +1,14 @@
 # Security Policies and Procedures
 
-This document outlines security procedures and general policies for the `pyTenable`
+This document outlines security procedures and general policies for the `Terrascan`
 project.
 
-  * [Contributing](./CONTRIBUTING.md)
+  * [Contributing](../CONTRIBUTING.md)
 
 ## Reporting an Issue
 
-The `pyTenable` team and community take all security issues in `pyTenable` seriously.
-Thank you for improving the security of `pyTenable`. We appreciate your efforts and
+The `Terrascan` team and community take all security issues in `Terrascan` seriously.
+Thank you for improving the security of `Terrascan`. We appreciate your efforts and
 responsible disclosure and will make every effort to acknowledge your
 contributions.
 
