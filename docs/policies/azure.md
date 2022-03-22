@@ -112,7 +112,7 @@
 ### azurerm_key_vault_secret
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | azure | HIGH | Ensure that the expiration date is set on all secrets | accurics.azure.EKM.26 | AC_AZURE_0163 |
+| Data Protection | azure | HIGH | Ensure that all secrets have an expiration date set which must expire within 2 years | accurics.azure.EKM.26 | AC_AZURE_0163 |
 
 
 ### azurerm_key_vault_key

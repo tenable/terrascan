@@ -7,7 +7,7 @@
         "prefix": "reme_"
     },
     "severity": "HIGH",
-    "description": "Ensure that the expiration date is set on all secrets",
+    "description": "Ensure that all secrets have an expiration date set which must expire within 2 years",
     "reference_id": "accurics.azure.EKM.26",
     "category": "Data Protection",
     "version": 2,
