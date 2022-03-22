@@ -44,7 +44,7 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 	// make request
 	resp, err = client.Do(req)
 	if err != nil {
-		zap.S().Errorf("failed to make http request; method: '%v', url: '%v'")
+		zap.S().Errorf("failed to make http request; method: '%v', url: '%v'", method, url)
 		return resp, errDoRequest
 	}
 
