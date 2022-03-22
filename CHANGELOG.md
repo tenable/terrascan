@@ -1,5 +1,75 @@
 # Changelog
 
+## [v1.13.2](https://github.com/accurics/terrascan/tree/v1.13.2) (2022-02-22)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.1...v1.13.2)
+
+**Implemented enhancements:**
+
+- Feature/s3 policy update [\#1153](https://github.com/accurics/terrascan/pull/1153) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Fixed bugs:**
+
+- Bugfix/coginto pool [\#1159](https://github.com/accurics/terrascan/pull/1159) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Is it possible to use terrascan in an offline environment [\#1154](https://github.com/accurics/terrascan/issues/1154)
+- Support AWS provider version 4.0.0 [\#1152](https://github.com/accurics/terrascan/issues/1152)
+- False positives and false negatives - AC\_AWS\_0215 / AWS.S3Bucket.DS.High.1043 [\#1139](https://github.com/accurics/terrascan/issues/1139)
+- False positive: AWS.RDS.DataSecurity.High.0414 / AC\_AWS\_0058 [\#1135](https://github.com/accurics/terrascan/issues/1135)
+- AC\_GCP\_0014 \(dnsStateIsNotOn\) false positive [\#1033](https://github.com/accurics/terrascan/issues/1033)
+
+**Merged pull requests:**
+
+- skip terrascan init for --config-with-error flag [\#1160](https://github.com/accurics/terrascan/pull/1160) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Bugfix/s3 user policy [\#1157](https://github.com/accurics/terrascan/pull/1157) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fix rds encryptionc check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Update mkdocs-material to 8.2.1 [\#1155](https://github.com/accurics/terrascan/pull/1155) ([pyup-bot](https://github.com/pyup-bot))
+- Adds: missing release tag push step [\#1151](https://github.com/accurics/terrascan/pull/1151) ([Rchanger](https://github.com/Rchanger))
+- Adding CFT scanning support for the resources: [\#1149](https://github.com/accurics/terrascan/pull/1149) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+
+# Changelog
+
+## [v1.13.1](https://github.com/accurics/terrascan/tree/v1.13.1) (2022-02-10)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.0...v1.13.1)
+
+**Implemented enhancements:**
+
+- update cft mapper [\#1148](https://github.com/accurics/terrascan/pull/1148) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- update cft mapper [\#1143](https://github.com/accurics/terrascan/pull/1143) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/eks msk vpc version [\#1140](https://github.com/accurics/terrascan/pull/1140) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/rds sage dms load emr msk [\#1133](https://github.com/accurics/terrascan/pull/1133) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/ec2 cog lambda acm cft [\#1129](https://github.com/accurics/terrascan/pull/1129) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Updates CloudFormation mapper to support additional resources [\#1120](https://github.com/accurics/terrascan/pull/1120) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Issue with skipped violations using CircleCI and JUnit output format [\#1122](https://github.com/accurics/terrascan/issues/1122)
+
+**Merged pull requests:**
+
+- Add Policy AC\_GCP\_0296 - Service Attachment with ACCEPT\_AUTOMATIC [\#1147](https://github.com/accurics/terrascan/pull/1147) ([hoexter](https://github.com/hoexter))
+- fix panic in cft [\#1146](https://github.com/accurics/terrascan/pull/1146) ([patilpankaj212](https://github.com/patilpankaj212))
+- Fixes failing docker IaC provider test [\#1145](https://github.com/accurics/terrascan/pull/1145) ([Rchanger](https://github.com/Rchanger))
+- \[Snyk\] Security upgrade alpine from 3.12.0 to 3.14 [\#1144](https://github.com/accurics/terrascan/pull/1144) ([snyk-bot](https://github.com/snyk-bot))
+- Update mkdocs-material to 8.1.10 [\#1141](https://github.com/accurics/terrascan/pull/1141) ([pyup-bot](https://github.com/pyup-bot))
+- Fix typos in docs and release\_checklist [\#1138](https://github.com/accurics/terrascan/pull/1138) ([myersg86](https://github.com/myersg86))
+- add rule id to docs [\#1136](https://github.com/accurics/terrascan/pull/1136) ([jrobison-sb](https://github.com/jrobison-sb))
+- add ability to output normalized resource config with errors [\#1134](https://github.com/accurics/terrascan/pull/1134) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Update mkdocs-material to 8.1.9 [\#1132](https://github.com/accurics/terrascan/pull/1132) ([pyup-bot](https://github.com/pyup-bot))
+- Allow internal github repos to pass AC\_GCP\_0231 & AC\_GITHUB\_0002 [\#1131](https://github.com/accurics/terrascan/pull/1131) ([briankanya](https://github.com/briankanya))
+- Update mkdocs-material to 8.1.8 [\#1124](https://github.com/accurics/terrascan/pull/1124) ([pyup-bot](https://github.com/pyup-bot))
+- Prevent adding both skipped and failure elements [\#1123](https://github.com/accurics/terrascan/pull/1123) ([gchappel](https://github.com/gchappel))
+- Updated discord link in readme [\#1118](https://github.com/accurics/terrascan/pull/1118) ([sangam14](https://github.com/sangam14))
+- Adds: logger in case of flag parsing fails [\#1115](https://github.com/accurics/terrascan/pull/1115) ([Rchanger](https://github.com/Rchanger))
+- Update README.md [\#1109](https://github.com/accurics/terrascan/pull/1109) ([sangam14](https://github.com/sangam14))
+- Fix gcp policy AC\_GCP\_0014 - dnsStateIsNotOn \(\#1033\) [\#1107](https://github.com/accurics/terrascan/pull/1107) ([hoexter](https://github.com/hoexter))
+- Allow tfplan format version 0.2 [\#1074](https://github.com/accurics/terrascan/pull/1074) ([mtranter](https://github.com/mtranter))
+
+# Changelog
+
 ## [v1.13.0](https://github.com/accurics/terrascan/tree/v1.13.0) (2022-01-05)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.12.0...v1.13.0)
@@ -854,6 +924,12 @@ Major updates to Terrascan and the underlying architecture including:
 
 ## 0.1.0 (2017-11-26)
 - First release on PyPI.
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
 
 \* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
 

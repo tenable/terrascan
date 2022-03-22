@@ -32,13 +32,14 @@ Once the changelog PR has been merged, pull the updated code, tag it with the ne
 git pull
 git tag v1.5.0
 git push --tags
+git push upstream v1.5.0
 ```
 
 This will kick off the GitHub workflow to run goreleaser to perform the release.
 
 ### Brew PR
 
-Run the commands below to update Brew to the latest Terrascan version.
+Run the commands below to update Brew to the latest Terrascan version. If you are on macOS use `shasum -a 256` instead of `sha256sum` in below command. Release version number in below command for example should be v1.5.0
 
 ```
 $ export TERRASCAN_VERSION=<release_version_number>

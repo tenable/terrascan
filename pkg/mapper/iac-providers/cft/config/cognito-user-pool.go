@@ -39,7 +39,7 @@ type CognitoUserPoolConfig struct {
 func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
 	var passwordPolicy []PasswordPolicyBlock
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {
-		passwordPolicy := make([]PasswordPolicyBlock, 1)
+		passwordPolicy = make([]PasswordPolicyBlock, 1)
 
 		passwordPolicy[0].MinimumLength = u.Policies.PasswordPolicy.MinimumLength
 		passwordPolicy[0].RequireLowercase = u.Policies.PasswordPolicy.RequireLowercase

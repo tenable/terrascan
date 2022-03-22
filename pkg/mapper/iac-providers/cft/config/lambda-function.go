@@ -60,19 +60,25 @@ type LambdaFunctionConfig struct {
 
 // GetLambdaFunctionConfig returns config for LambdaFunction
 func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
-	tracingConfig := make([]TracingConfigBlock, 1)
+	var tracingConfig []TracingConfigBlock
 	if f.TracingConfig != nil {
+		tracingConfig = make([]TracingConfigBlock, 1)
+
 		tracingConfig[0].Mode = f.TracingConfig.Mode
 	}
 
-	vpcConfig := make([]VPCConfigBlock, 1)
+	var vpcConfig []VPCConfigBlock
 	if f.VpcConfig != nil {
+		vpcConfig = make([]VPCConfigBlock, 1)
+
 		vpcConfig[0].SecurityGroupIDs = f.VpcConfig.SecurityGroupIds
 		vpcConfig[0].SubnetIDs = f.VpcConfig.SubnetIds
 	}
 
-	environment := make([]EnvironmentBlock, 1)
+	var environment []EnvironmentBlock
 	if f.Environment != nil {
+		environment = make([]EnvironmentBlock, 1)
+
 		environment[0].Variables = f.Environment.Variables
 	}
 
