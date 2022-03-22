@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  deadpool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      Name: dead
+  goodpool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: good
+  riverstream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: river
+      RetentionPeriodHours: 168
+      ShardCount: 3
+  livestream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: live
+      RetentionPeriodHours: 50
+      ShardCount: 1
