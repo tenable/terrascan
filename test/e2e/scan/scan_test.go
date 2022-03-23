@@ -101,6 +101,17 @@ var _ = Describe("Scan", func() {
 						helper.ContainsDirScanErrorSubString(session, errString2)
 					})
 				})
+				Context("iac loading errors would be displayed in the output, output type is human readable", func() {
+					It("scan the directory and display results", func() {
+						scanArgs := []string{scanUtils.ScanCommand, "-p", policyRootRelPath}
+						// these errors would come from terraform, helm, and kustomize iac providers
+						errString1 := "kustomization.y(a)ml file not found in the directory"
+						errString2 := "no helm charts found in directory"
+						session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+						helper.ContainsDirScanErrorSubString(session, errString1)
+						helper.ContainsDirScanErrorSubString(session, errString2)
+					})
+				})
 				When("iac type is terraform and --non-recursive flag is used", func() {
 					It("should error out if no terraform files are present in working directory", func() {
 						scanArgs := []string{scanUtils.ScanCommand, "-i", "terraform", "--non-recursive"}

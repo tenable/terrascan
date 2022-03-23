@@ -36,6 +36,32 @@ var (
 			Summary: summaryWithNoViolations,
 		},
 	}
+	outputWithDirScanErrors = policy.EngineOutput{
+		ViolationStore: &results.ViolationStore{
+			DirScanErrors: []results.DirScanErr{
+				{
+					IacType:    "kustomize",
+					Directory:  "test/e2e/test_data/iac/aws/aws_db_instance_violation",
+					ErrMessage: "kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation",
+				},
+				{
+					IacType:    "helm",
+					Directory:  "test/e2e/test_data/iac/aws/aws_db_instance_violation",
+					ErrMessage: "no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation",
+				},
+			},
+			PassedRules: []*results.PassedRule{
+				{
+					RuleName:    "s3EnforceUserACL",
+					Description: "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:      "AWS.S3Bucket.DS.High.1043",
+					Severity:    "HIGH",
+					Category:    "S3",
+				},
+			},
+			Summary: summaryWithNoViolations,
+		},
+	}
 	vulnerabilitiesInputHumanReadable = policy.EngineOutput{
 		ViolationStore: &results.ViolationStore{
 			Vulnerabilities: []*results.Vulnerability{
@@ -150,6 +176,44 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
+	expectedOutputWithDirScanError = `Scan Errors - 
+
+	IaC Type            :	kustomize
+	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
+	Error Message       :	kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation
+	
+	-----------------------------------------------------------------------
+	
+	IaC Type            :	helm
+	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
+	Error Message       :	no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation
+	
+	-----------------------------------------------------------------------
+	
+	
+
+Passed Rules - 
+    
+	Rule ID        :	AWS.S3Bucket.DS.High.1043
+	Rule Name      :	s3EnforceUserACL
+	Description    :	S3 bucket Access is allowed to all AWS Account Users.
+	Severity       :	HIGH
+	Category       :	S3
+	
+	-----------------------------------------------------------------------
+	
+
+Scan Summary -
+
+	File/Folder         :	test
+	IaC Type            :	terraform
+	Scanned At          :	2020-12-12 11:21:29.902796 +0000 UTC
+	Policies Validated  :	566
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1`
+
 	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details - 
     
 	Description         :	GNU Bash. Bash is the GNU Project's shell
@@ -231,6 +295,11 @@ func TestHumanReadbleWriter(t *testing.T) {
 				},
 			},
 			expectedOutput: expectedOutput4,
+		},
+		{
+			name:           "Human Readable Writer: with directory scan error",
+			input:          outputWithDirScanErrors,
+			expectedOutput: expectedOutputWithDirScanError,
 		},
 	}
 

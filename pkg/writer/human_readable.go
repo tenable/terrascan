@@ -30,6 +30,13 @@ const (
 	humanReadbleFormat supportedFormat = "human"
 
 	defaultTemplate string = `
+{{if (gt (len .ViolationStore.DirScanErrors) 0)}}	
+Scan Errors - 
+{{range $index, $element := .ViolationStore.DirScanErrors}}
+	{{dirScanErrors $element | printf "%s"}}
+	-----------------------------------------------------------------------
+	{{end}}
+{{end}}	
 {{if (gt (len .ViolationStore.PassedRules) 0) }}
 Passed Rules - 
     {{range $index, $element := .ViolationStore.PassedRules}}
@@ -84,6 +91,7 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 		"scanSummary":            scanSummary,
 		"passedRules":            passedRules,
 		"defaultVulnerabilities": defaultVulnerabilities,
+		"dirScanErrors":          dirScanErrors,
 	}).Parse(defaultTemplate)
 	if err != nil {
 		zap.S().Errorf("failed to write human readable output. error: '%v'", err)
@@ -194,5 +202,13 @@ func defaultVulnerabilities(v results.Vulnerability) string {
 		"Line", v.LineNumber,
 		"Primary URL", v.PrimaryURL,
 		"Primary URL", v.Severity)
+	return out
+}
+
+func dirScanErrors(d results.DirScanErr) string {
+	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t",
+		"IaC Type", d.IacType,
+		"Directory", d.Directory,
+		"Error Message", d.ErrMessage)
 	return out
 }
