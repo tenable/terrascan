@@ -39,7 +39,11 @@ type EnvironmentBlock struct {
 // LambdaFunctionConfig holds config for LambdaFunction
 type LambdaFunctionConfig struct {
 	Config
-	FileName                     string               `json:"filename"`
+	ImageURI                     string               `json:"image_uri,omitempty"`
+	FileName                     string               `json:"filename,omitempty"`
+	S3Bucket                     string               `json:"s3_bucket,omitempty"`
+	S3Key                        string               `json:"s3_key,omitempty"`
+	S3ObjectVersion              string               `json:"s3_object_version,omitempty"`
 	FunctionName                 string               `json:"function_name"`
 	Role                         string               `json:"role"`
 	Handler                      string               `json:"handler"`
@@ -82,7 +86,6 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 		Config: Config{
 			Name: f.FunctionName,
 		},
-		FileName:                     f.Code.ZipFile,
 		FunctionName:                 f.FunctionName,
 		Role:                         f.Role,
 		Handler:                      f.Handler,
@@ -96,8 +99,22 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 		KMSKeyARN:                    f.KmsKeyArn,
 	}
 
+	cf = setCodePackage(cf, f)
+
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: f.AWSCloudFormationMetadata,
 	}}
+}
+
+func setCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
+	if f.Code.ImageUri != "" {
+		cf.ImageURI = f.Code.ImageUri
+		return cf
+	}
+
+	cf.S3Bucket = f.Code.S3Bucket
+	cf.S3Key = f.Code.S3Key
+	cf.S3ObjectVersion = f.Code.S3ObjectVersion
+	return cf
 }
