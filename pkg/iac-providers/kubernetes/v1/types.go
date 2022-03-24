@@ -39,8 +39,9 @@ const (
 	// UnknownExtension unknown
 	UnknownExtension = "unknown"
 
-	kubernetesTypeName = "kubernetes"
-	defaultNamespace   = "default"
+	kubernetesTypeName      = "kubernetes"
+	defaultNamespace        = "default"
+	kubernetesTypeNameShort = "k8s"
 )
 
 // K8sFileExtensions returns the valid extensions for k8s (yaml, yml, json)

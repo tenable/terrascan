@@ -29,3 +29,7 @@ const (
 func (k *KustomizeV4) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return commons.NewKustomizeDirectoryLoader(absRootDir, options, false, versionSuffix).LoadIacDir()
 }
+
+func (a *KustomizeV4) Name() string {
+	return "kustomize"
+}

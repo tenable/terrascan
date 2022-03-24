@@ -28,6 +28,11 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
+const (
+	iacSearchError string = "error while searching for iac files"
+	strRootDir     string = "root dir"
+)
+
 // LoadIacDir loads all CFT template files in the current directory.
 func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	a.absRootDir = absRootDir
@@ -38,6 +43,12 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absRootDir, ErrMessage: err.Error()})
+	}
+
+	if len(fileMap) == 0 {
+		errMsg := fmt.Sprintf("CFT files not found in the directory %s", a.absRootDir)
+		zap.S().Debug(iacSearchError, zap.String(strRootDir, a.absRootDir), zap.Error(err))
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 
 	for fileDir, files := range fileMap {
@@ -59,4 +70,8 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	}
 
 	return allResourcesConfig, a.errIacLoadDirs
+}
+
+func (a *CFTV1) Name() string {
+	return "cft"
 }

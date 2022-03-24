@@ -31,3 +31,7 @@ var (
 func (k *TFPlan) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return output.AllResourceConfigs{}, errIacDirNotSupport
 }
+
+func (*TFPlan) Name() string {
+	return "tfplan"
+}

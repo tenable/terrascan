@@ -32,7 +32,11 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
-const iacFile = "IAC file"
+const (
+	iacSearchError string = "error while searching for iac files"
+	strRootDir     string = "root dir"
+	iacFile               = "IAC file"
+)
 
 // LoadIacDir loads all ARM template files in the current directory.
 func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
@@ -45,6 +49,12 @@ func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: absRootDir, ErrMessage: err.Error()})
+	}
+
+	if len(fileMap) == 0 {
+		errMsg := fmt.Sprintf("ARM files not found in the directory %s", a.absRootDir)
+		zap.S().Debug(iacSearchError, zap.String(strRootDir, a.absRootDir), zap.Error(err))
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 
 	for fileDir, files := range fileMap {
@@ -143,4 +153,8 @@ func (a *ARMV1) extractParameterValues(params map[string]interface{}) error {
 		a.templateParameters[key] = value.Value
 	}
 	return nil
+}
+
+func (a *ARMV1) Name() string {
+	return "arm"
 }

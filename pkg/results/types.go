@@ -51,12 +51,13 @@ type PassedRule struct {
 
 // ViolationStore Storage area for violation data
 type ViolationStore struct {
-	DirScanErrors     []DirScanErr     `json:"scan_errors,omitempty" yaml:"scan_errors,omitempty" xml:"scan_errors>scan_error,omitempty"`
-	PassedRules       []*PassedRule    `json:"passed_rules,omitempty" yaml:"passed_rules,omitempty" xml:"passed_rules>passed_rule,omitempty"`
-	Violations        []*Violation     `json:"violations" yaml:"violations" xml:"violations>violation"`
-	SkippedViolations []*Violation     `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
-	Vulnerabilities   []*Vulnerability `json:"vulnerabilities,omitempty" yaml:"vulnerabilities,omitempty"`
-	Summary           ScanSummary      `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
+	DirScanErrors      []DirScanErr     `json:"scan_errors,omitempty" yaml:"scan_errors,omitempty" xml:"scan_errors>scan_error,omitempty"`
+	IacTypesIdentified []string         `json:"iac_types_identified,omitempty" yaml:"iac_types_identified,omitempty"`
+	PassedRules        []*PassedRule    `json:"passed_rules,omitempty" yaml:"passed_rules,omitempty" xml:"passed_rules>passed_rule,omitempty"`
+	Violations         []*Violation     `json:"violations" yaml:"violations" xml:"violations>violation"`
+	SkippedViolations  []*Violation     `json:"skipped_violations" yaml:"skipped_violations" xml:"skipped_violations>violation"`
+	Vulnerabilities    []*Vulnerability `json:"vulnerabilities,omitempty" yaml:"vulnerabilities,omitempty"`
+	Summary            ScanSummary      `json:"scan_summary" yaml:"scan_summary" xml:"scan_summary"`
 }
 
 // ScanSummary will hold the default scan summary data

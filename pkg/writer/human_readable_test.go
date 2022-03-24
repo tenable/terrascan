@@ -62,6 +62,12 @@ var (
 			Summary: summaryWithNoViolations,
 		},
 	}
+	outputWithIacTypes = policy.EngineOutput{
+		ViolationStore: &results.ViolationStore{
+			IacTypesIdentified: []string{"k8s"},
+			Summary:            summaryWithNoViolations,
+		},
+	}
 	vulnerabilitiesInputHumanReadable = policy.EngineOutput{
 		ViolationStore: &results.ViolationStore{
 			Vulnerabilities: []*results.Vulnerability{
@@ -176,6 +182,21 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
+	expectedOutputWithIaCTypes = `IaC Types Identified - 
+	IaC's               :	[k8s]
+	
+
+
+Scan Summary -
+
+	File/Folder         :	test
+	IaC Type            :	terraform
+	Scanned At          :	2020-12-12 11:21:29.902796 +0000 UTC
+	Policies Validated  :	566
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1`
 	expectedOutputWithDirScanError = `Scan Errors - 
 
 	IaC Type            :	kustomize
@@ -191,6 +212,7 @@ Scan Summary -
 	-----------------------------------------------------------------------
 	
 	
+
 
 Passed Rules - 
     
@@ -300,6 +322,11 @@ func TestHumanReadbleWriter(t *testing.T) {
 			name:           "Human Readable Writer: with directory scan error",
 			input:          outputWithDirScanErrors,
 			expectedOutput: expectedOutputWithDirScanError,
+		},
+		{
+			name:           "Human Readable Writer: with iac types identified",
+			input:          outputWithIacTypes,
+			expectedOutput: expectedOutputWithIaCTypes,
 		},
 	}
 

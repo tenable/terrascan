@@ -25,4 +25,5 @@ import (
 type IacProvider interface {
 	LoadIacFile(string, map[string]interface{}) (output.AllResourceConfigs, error)
 	LoadIacDir(string, map[string]interface{}) (output.AllResourceConfigs, error)
+	Name() string
 }

@@ -27,6 +27,11 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	iacSearchError string = "error while searching for iac files"
+	strRootDir     string = "root dir"
+)
+
 // LoadIacDir loads the docker file specified in given folder.
 func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	// set the root directory being scanned
@@ -42,7 +47,9 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}
 	}
 
 	if len(fileMap) == 0 {
-		zap.S().Warnf("directory '%s' has no files named Dockerfile. Use -f flag if Dockerfiles follow a different naming convention.", absRootDir)
+		errMsg := fmt.Sprintf("Dockerfile not found in the directory %s", dc.absRootDir)
+		zap.S().Debug(iacSearchError, zap.String(strRootDir, dc.absRootDir), zap.Error(err))
+		return allResourcesConfig, multierror.Append(dc.errIacLoadDirs, results.DirScanErr{IacType: "Docker", Directory: dc.absRootDir, ErrMessage: errMsg})
 	}
 
 	for fileDir, files := range fileMap {
@@ -64,4 +71,8 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}
 
 	return allResourcesConfig, dc.errIacLoadDirs
 
+}
+
+func (dc *DockerV1) Name() string {
+	return "docker"
 }

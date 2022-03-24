@@ -309,3 +309,7 @@ func (h *HelmV3) getHelmTemplateExtensions() []string {
 func (h *HelmV3) getHelmChartFilenames() []string {
 	return []string{"Chart.yaml"}
 }
+
+func (h *HelmV3) Name() string {
+	return "helm"
+}

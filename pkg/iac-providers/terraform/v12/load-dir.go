@@ -29,3 +29,7 @@ func (*TfV12) LoadIacDir(absRootDir string, options map[string]interface{}) (all
 	zap.S().Warn("There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/accurics/terrascan/releases/v1.3.0")
 	return commons.NewTerraformDirectoryLoader(absRootDir, options).LoadIacDir()
 }
+
+func (*TfV12) Name() string {
+	return "terraform"
+}
