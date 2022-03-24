@@ -45,7 +45,7 @@ jobs:
       run: make e2e-tests
 
     - name: Run e2e vulnerability tests
-      if: ${{ github.event_name == 'push'|| github.event_name == 'schedule' }}
+      if: ${{  (github.event_name == 'push'|| github.event_name == 'schedule') && github.actor != 'dependabot[bot]' }}
       run: make e2e-vulnerability-tests
 
     - name: Upload coverage to Codecov

@@ -1,0 +1,13 @@
+# .github/CODEOWNERS
+# This file designates required PR reviewers for this repository
+# https://help.github.com/articles/about-codeowners/
+
+*       @accurics/terrascan-maintainers @bkizer-tenable
+
+*.rego  @accurics/terrascan-policy-maintainers
+
+*.go    @accurics/terrascan-maintainers
+
+/pkg/   @accurics/terrascan-maintainers
+
+/pkg/policies/opa/rego/ @accurics/terrascan-policy-maintainers
