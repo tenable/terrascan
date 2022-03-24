@@ -17,6 +17,7 @@
 package initialize
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/fs"
@@ -112,6 +113,10 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error downloading commercial policies. error: '%v', response code: '%d'", err, res.StatusCode)
 	}
 
+	if res == nil {
+		return fmt.Errorf("error could not download policies, please check your network connection")
+	}
+
 	policies, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("error reading api call response for commercial policies. error: '%v'", err)
@@ -147,7 +152,7 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	var policy commercialPolicy
 	var templateArgs map[string]interface{}
 
-	policy.regoTemplate = "package tenable\n\n" + ruleMetadata.RuleTemplate
+	policy.regoTemplate = "package accurics\n\n" + ruleMetadata.RuleTemplate
 	policy.metadataFileName = ruleMetadata.RuleReferenceId + ".json"
 	policy.resourceType = ruleMetadata.ResourceType
 
@@ -177,8 +182,8 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) error {
 	const tabSpace = "    "
 
-	csp := getCSP(policy.resourceType)
-	cspDir := filepath.Join(policyRepoPath, csp)
+	policy.policyMetadata.PolicyType = getCSP(policy.resourceType)
+	cspDir := filepath.Join(policyRepoPath, policy.policyMetadata.PolicyType)
 	err := ensureDir(cspDir)
 	if err != nil {
 		return err
@@ -190,10 +195,17 @@ func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) erro
 		return err
 	}
 
-	metadata, err := json.MarshalIndent(policy.policyMetadata, "", tabSpace)
+	var buffer bytes.Buffer
+	encoder := json.NewEncoder(&buffer)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", tabSpace)
+	err = encoder.Encode(policy.policyMetadata)
 	if err != nil {
 		return fmt.Errorf("error could not marshal json object into byte array: '%v'", err)
 	}
+
+	metadata := buffer.Bytes()
+	metadata = bytes.TrimRight(metadata, "\n")
 	metaDataPath := filepath.Join(resourceDir, policy.metadataFileName)
 	err = ioutil.WriteFile(metaDataPath, metadata, os.ModePerm)
 	if err != nil {
