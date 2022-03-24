@@ -86,6 +86,12 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return err
 	}
 
+	policyRepoPath := config.GetPolicyRepoPath()
+	err = os.MkdirAll(policyRepoPath, filePermissionBits)
+	if err != nil {
+		return err
+	}
+
 	const apiPath = "/v1/api/app/rules?default=true"
 	environment := config.GetPolicyEnvironment()
 
@@ -111,10 +117,10 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error reading api call response for commercial policies. error: '%v'", err)
 	}
 
-	return convertCommercialPolicies(policies, policyBasePath)
+	return convertCommercialPolicies(policies, policyRepoPath)
 }
 
-func convertCommercialPolicies(policies []byte, policyBasePath string) error {
+func convertCommercialPolicies(policies []byte, policyRepoPath string) error {
 	var ruleMetadataList []commercialPolicyMetadata
 
 	err := json.Unmarshal(policies, &ruleMetadataList)
@@ -128,7 +134,7 @@ func convertCommercialPolicies(policies []byte, policyBasePath string) error {
 			return err
 		}
 
-		err = saveCommercialPolicies(policy, policyBasePath)
+		err = saveCommercialPolicies(policy, policyRepoPath)
 		if err != nil {
 			return err
 		}
@@ -141,7 +147,7 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	var policy commercialPolicy
 	var templateArgs map[string]interface{}
 
-	policy.regoTemplate = ruleMetadata.RuleTemplate
+	policy.regoTemplate = "package tenable\n\n" + ruleMetadata.RuleTemplate
 	policy.metadataFileName = ruleMetadata.RuleReferenceId + ".json"
 	policy.resourceType = ruleMetadata.ResourceType
 
@@ -168,11 +174,11 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	return policy, nil
 }
 
-func saveCommercialPolicies(policy commercialPolicy, policyBasePath string) error {
+func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) error {
 	const tabSpace = "    "
-	csp := strings.ToLower(strings.Split(policy.resourceType, "_")[0])
 
-	cspDir := filepath.Join(policyBasePath, csp)
+	csp := getCSP(policy.resourceType)
+	cspDir := filepath.Join(policyRepoPath, csp)
 	err := ensureDir(cspDir)
 	if err != nil {
 		return err
@@ -201,6 +207,24 @@ func saveCommercialPolicies(policy commercialPolicy, policyBasePath string) erro
 	}
 
 	return nil
+}
+
+func getCSP(resourceType string) string {
+	csp := strings.ToLower(resourceType)
+
+	if strings.HasPrefix(csp, "azure") {
+		return "azure"
+	}
+
+	if strings.HasPrefix(csp, "google") {
+		return "gcp"
+	}
+
+	if strings.HasPrefix(csp, "kubernetes") {
+		return "k8s"
+	}
+
+	return strings.Split(csp, "_")[0]
 }
 
 func ensureDir(path string) error {
