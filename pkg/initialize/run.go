@@ -19,6 +19,7 @@ package initialize
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -37,6 +38,7 @@ var (
 )
 
 const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
+const filePermissionBits fs.FileMode = 0755
 
 // Run initializes terrascan if not done already
 func Run(isNonInitCmd bool) error {
@@ -84,7 +86,7 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return err
 	}
 
-	const apiPath = "/v1/api/rule?default=true"
+	const apiPath = "/v1/api/app/rules?default=true"
 	environment := config.GetPolicyEnvironment()
 
 	zap.S().Debugf("policy environment : %s", environment)
@@ -97,10 +99,7 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error constructing request object. error: '%v'", err)
 	}
 
-	var cookie http.Cookie
-	cookie.Name = "x-siac-session"
-	cookie.Value = accessToken
-	req.AddCookie(&cookie)
+	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -116,34 +115,18 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 }
 
 func convertCommercialPolicies(policies []byte, policyBasePath string) error {
-	var rules []commercialPolicyMetadata
+	var ruleMetadataList []commercialPolicyMetadata
 
-	err := json.Unmarshal(policies, &rules)
+	err := json.Unmarshal(policies, &ruleMetadataList)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal policies into structure. error: '%v'", err)
 	}
 
-	var policy commercialPolicy
-	for _, rule := range rules {
-		policy.regoTemplate = rule.RuleTemplate
-		policy.metadataFileName = rule.RuleReferenceId + ".json"
-		policy.resourceType = rule.ResourceType
-
-		policy.policyMetadata.Name = rule.RuleName
-		policy.policyMetadata.File = rule.RuleTemplateID + ".rego"
-		policy.policyMetadata.ResourceType = rule.ResourceType
-		policy.policyMetadata.Severity = rule.Severity
-		policy.policyMetadata.Description = rule.RuleDisplayName
-		policy.policyMetadata.ReferenceID = rule.RuleReferenceId
-		policy.policyMetadata.ID = rule.RuleReferenceId
-		policy.policyMetadata.Category = rule.Category
-		policy.policyMetadata.Version = rule.Version
-
-		templateArgs, ok := rule.RuleArgument.(map[string]interface{})
-		if !ok && templateArgs != nil {
-			return fmt.Errorf("incorrect rule argument type, must be a map[string]interface{}")
+	for _, ruleMetadata := range ruleMetadataList {
+		policy, err := getCommercialPolicy(ruleMetadata)
+		if err != nil {
+			return err
 		}
-		policy.policyMetadata.TemplateArgs = templateArgs
 
 		err = saveCommercialPolicies(policy, policyBasePath)
 		if err != nil {
@@ -154,9 +137,40 @@ func convertCommercialPolicies(policies []byte, policyBasePath string) error {
 	return nil
 }
 
+func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolicy, error) {
+	var policy commercialPolicy
+	var templateArgs map[string]interface{}
+
+	policy.regoTemplate = ruleMetadata.RuleTemplate
+	policy.metadataFileName = ruleMetadata.RuleReferenceId + ".json"
+	policy.resourceType = ruleMetadata.ResourceType
+
+	policy.policyMetadata.Name = ruleMetadata.RuleName
+	policy.policyMetadata.File = ruleMetadata.RegoName + ".rego"
+	policy.policyMetadata.ResourceType = ruleMetadata.ResourceType
+	policy.policyMetadata.Severity = ruleMetadata.Severity
+	policy.policyMetadata.Description = ruleMetadata.RuleDisplayName
+	policy.policyMetadata.ReferenceID = ruleMetadata.RuleReferenceId
+	policy.policyMetadata.ID = ruleMetadata.RuleReferenceId
+	policy.policyMetadata.Category = ruleMetadata.Category
+	policy.policyMetadata.Version = ruleMetadata.Version
+
+	templateString, ok := ruleMetadata.RuleArgument.(string)
+	if !ok && templateString != "" {
+		return policy, fmt.Errorf("incorrect rule argument type, must be a []byte")
+	}
+	err := json.Unmarshal([]byte(templateString), &templateArgs)
+	if err != nil {
+		return policy, fmt.Errorf("error could not unmarshal rule arguments into map[string]interface{}: '%v'", err)
+	}
+	policy.policyMetadata.TemplateArgs = templateArgs
+
+	return policy, nil
+}
+
 func saveCommercialPolicies(policy commercialPolicy, policyBasePath string) error {
 	const tabSpace = "    "
-	csp := strings.ToLower(strings.Split(policy.policyMetadata.ReferenceID, "_")[1])
+	csp := strings.ToLower(strings.Split(policy.resourceType, "_")[0])
 
 	cspDir := filepath.Join(policyBasePath, csp)
 	err := ensureDir(cspDir)
@@ -175,13 +189,13 @@ func saveCommercialPolicies(policy commercialPolicy, policyBasePath string) erro
 		return fmt.Errorf("error could not marshal json object into byte array: '%v'", err)
 	}
 	metaDataPath := filepath.Join(resourceDir, policy.metadataFileName)
-	err = ioutil.WriteFile(metaDataPath, metadata, FilePermissionBits)
+	err = ioutil.WriteFile(metaDataPath, metadata, os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("error could not write rule metadata file on disk: '%v'", err)
 	}
 
 	regoPath := filepath.Join(resourceDir, policy.policyMetadata.File)
-	err = ioutil.WriteFile(regoPath, []byte(policy.regoTemplate), FilePermissionBits)
+	err = ioutil.WriteFile(regoPath, []byte(policy.regoTemplate), filePermissionBits)
 	if err != nil {
 		return fmt.Errorf("error could not write rego code file on disk: '%v'", err)
 	}
@@ -192,7 +206,7 @@ func saveCommercialPolicies(policy commercialPolicy, policyBasePath string) erro
 func ensureDir(path string) error {
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		err = os.Mkdir(path, FilePermissionBits)
+		err = os.Mkdir(path, filePermissionBits)
 		if err != nil {
 			return fmt.Errorf("error unable to create requested directory: '%v'", err)
 		}

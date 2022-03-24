@@ -13,8 +13,7 @@ type commercialPolicy struct {
 
 type commercialPolicyMetadata struct {
 	RuleName        string      `json:"ruleName"`
-	RegoName        string      `json:"rule"`
-	RuleTemplateID  string      `json:"ruleTemplateId"`
+	RegoName        string      `json:"ruleTemplateName"`
 	RuleArgument    interface{} `json:"ruleArgument"`
 	Severity        string      `json:"severity"`
 	RuleDisplayName string      `json:"ruleDisplayName"`
