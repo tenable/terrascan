@@ -17,7 +17,11 @@
 package config
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
+	"github.com/awslabs/goformation/v5/cloudformation/serverless"
 )
 
 // TracingConfigBlock holds config for TracingConfig
@@ -59,7 +63,80 @@ type LambdaFunctionConfig struct {
 }
 
 // GetLambdaFunctionConfig returns config for LambdaFunction
-func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
+func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
+	if l, ok := sf.(*lambda.Function); ok {
+		return getLambdaConfig(l)
+	}
+
+	if s, ok := sf.(*serverless.Function); ok {
+		return getServerlessConfig(s)
+	}
+
+	return []AWSResourceConfig{{}}
+}
+
+func getServerlessConfig(f *serverless.Function) []AWSResourceConfig {
+	tracingConfig := make([]TracingConfigBlock, 1)
+	tracingConfig[0].Mode = f.Tracing
+
+	var vpcConfig []VPCConfigBlock
+	if f.VpcConfig != nil {
+		vpcConfig = make([]VPCConfigBlock, 1)
+
+		vpcConfig[0].SecurityGroupIDs = f.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = f.VpcConfig.SubnetIds
+	}
+
+	var environment []EnvironmentBlock
+	if f.Environment != nil {
+		environment = make([]EnvironmentBlock, 1)
+
+		environment[0].Variables = f.Environment.Variables
+	}
+
+	cf := LambdaFunctionConfig{
+		Config: Config{
+			Name: f.FunctionName,
+		},
+		FunctionName:                 f.FunctionName,
+		Role:                         f.Role,
+		Handler:                      f.Handler,
+		MemorySize:                   f.MemorySize,
+		ReservedConcurrentExecutions: f.ReservedConcurrentExecutions,
+		Runtime:                      f.Runtime,
+		Timeout:                      f.Timeout,
+		TracingConfig:                tracingConfig,
+		VPCConfig:                    vpcConfig,
+		Environment:                  environment,
+		KMSKeyARN:                    f.KmsKeyArn,
+	}
+
+	cf = setServerlessCodePackage(cf, f)
+
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: f.AWSCloudFormationMetadata,
+	}}
+}
+
+func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) LambdaFunctionConfig {
+	if f.ImageUri != "" {
+		cf.ImageURI = f.ImageUri
+		return cf
+	}
+
+	if *f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
+		cf.FileName = *f.CodeUri.String
+		return cf
+	}
+
+	cf.S3Bucket = f.CodeUri.S3Location.Bucket
+	cf.S3Key = f.CodeUri.S3Location.Key
+	cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
+	return cf
+}
+
+func getLambdaConfig(f *lambda.Function) []AWSResourceConfig {
 	var tracingConfig []TracingConfigBlock
 	if f.TracingConfig != nil {
 		tracingConfig = make([]TracingConfigBlock, 1)
@@ -99,7 +176,7 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 		KMSKeyARN:                    f.KmsKeyArn,
 	}
 
-	cf = setCodePackage(cf, f)
+	cf = setLambdaCodePackage(cf, f)
 
 	return []AWSResourceConfig{{
 		Resource: cf,
@@ -107,7 +184,7 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 	}}
 }
 
-func setCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
+func setLambdaCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
 	if f.Code.ImageUri != "" {
 		cf.ImageURI = f.Code.ImageUri
 		return cf
