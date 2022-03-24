@@ -17,10 +17,6 @@
 package config
 
 import (
-	"crypto/sha256"
-	"encoding/base64"
-	"io/ioutil"
-
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 )
 
@@ -90,7 +86,6 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 		FunctionName:                 f.FunctionName,
 		Role:                         f.Role,
 		Handler:                      f.Handler,
-		SourceCodeHash:               gethash(f.Code.ZipFile),
 		MemorySize:                   f.MemorySize,
 		ReservedConcurrentExecutions: f.ReservedConcurrentExecutions,
 		Runtime:                      f.Runtime,
@@ -105,10 +100,4 @@ func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
 		Resource: cf,
 		Metadata: f.AWSCloudFormationMetadata,
 	}}
-}
-
-func gethash(codefile string) string {
-	data, _ := ioutil.ReadFile(codefile)
-	hash := sha256.Sum256(data)
-	return base64.StdEncoding.EncodeToString(hash[:])
 }
