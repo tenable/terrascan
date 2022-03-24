@@ -51,7 +51,6 @@ type LambdaFunctionConfig struct {
 	FunctionName                 string               `json:"function_name"`
 	Role                         string               `json:"role"`
 	Handler                      string               `json:"handler"`
-	SourceCodeHash               string               `json:"source_code_hash"`
 	MemorySize                   int                  `json:"memory_size"`
 	ReservedConcurrentExecutions int                  `json:"reserved_concurrent_executions"`
 	Runtime                      string               `json:"runtime"`
