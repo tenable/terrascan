@@ -30,6 +30,7 @@ func (k *KustomizeV3) LoadIacDir(absRootDir string, options map[string]interface
 	return commons.NewKustomizeDirectoryLoader(absRootDir, options, true, versionSuffix).LoadIacDir()
 }
 
-func (a *KustomizeV3) Name() string {
+// Name returns name of the provider
+func (k *KustomizeV3) Name() string {
 	return "kustomize"
 }

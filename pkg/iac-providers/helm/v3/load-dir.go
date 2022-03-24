@@ -310,6 +310,7 @@ func (h *HelmV3) getHelmChartFilenames() []string {
 	return []string{"Chart.yaml"}
 }
 
+// Name returns name of the provider
 func (h *HelmV3) Name() string {
 	return "helm"
 }

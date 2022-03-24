@@ -33,9 +33,7 @@ import (
 )
 
 const (
-	iacSearchError string = "error while searching for iac files"
-	strRootDir     string = "root dir"
-	iacFile               = "IAC file"
+	iacFile = "IAC file"
 )
 
 // LoadIacDir loads all ARM template files in the current directory.
@@ -53,7 +51,7 @@ func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("ARM files not found in the directory %s", a.absRootDir)
-		zap.S().Debug(iacSearchError, zap.String(strRootDir, a.absRootDir), zap.Error(err))
+		zap.S().Debug(output.IacSearchError, zap.String(output.StrRootDir, a.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 
@@ -155,6 +153,7 @@ func (a *ARMV1) extractParameterValues(params map[string]interface{}) error {
 	return nil
 }
 
+// Name returns name of the provider
 func (a *ARMV1) Name() string {
 	return "arm"
 }

@@ -29,11 +29,6 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
-const (
-	iacSearchError string = "error while searching for iac files"
-	strRootDir     string = "root dir"
-)
-
 func (*K8sV1) getFileType(file string) string {
 	if strings.HasSuffix(file, YAMLExtension) {
 		return YAMLExtension
@@ -59,7 +54,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	}
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("kubernetes files not found in the directory %s", k.absRootDir)
-		zap.S().Debug(iacSearchError, zap.String(strRootDir, k.absRootDir), zap.Error(err))
+		zap.S().Debug(output.IacSearchError, zap.String(output.StrRootDir, k.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: k.absRootDir, ErrMessage: errMsg})
 	}
 
@@ -84,6 +79,7 @@ func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	return allResourcesConfig, k.errIacLoadDirs
 }
 
-func (k *K8sV1) Name() string {
+// Name returns name of the provider
+func (*K8sV1) Name() string {
 	return kubernetesTypeNameShort
 }

@@ -32,6 +32,7 @@ func (k *TFPlan) LoadIacDir(absRootDir string, options map[string]interface{}) (
 	return output.AllResourceConfigs{}, errIacDirNotSupport
 }
 
+// Name returns name of the provider
 func (*TFPlan) Name() string {
 	return "tfplan"
 }

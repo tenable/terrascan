@@ -29,6 +29,7 @@ func (tfv14 *TfV14) LoadIacDir(absRootDir string, options map[string]interface{}
 	return commons.NewTerraformDirectoryLoader(absRootDir, options).LoadIacDir()
 }
 
+// Name returns name of the provider
 func (*TfV14) Name() string {
 	return "terraform"
 }

@@ -18,6 +18,7 @@ package runtime
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/notifications/webhook"
 	"github.com/accurics/terrascan/pkg/policy/opa"
@@ -243,7 +244,7 @@ func (e *Executor) Execute(configOnly, configWithError bool) (results Output, er
 	if configWithError {
 		results.Violations.ViolationStore = res.NewViolationStore()
 		if e.iacType == "all" {
-			results.Violations.ViolationStore.IacTypesIdentified = iacTypes
+			results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
 		}
 		if err := merr.ErrorOrNil(); err != nil {
 			sort.Sort(merr)
@@ -284,7 +285,7 @@ func (e *Executor) Execute(configOnly, configWithError bool) (results Output, er
 	}
 
 	if e.iacType == "all" {
-		results.Violations.ViolationStore.IacTypesIdentified = iacTypes
+		results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
 	}
 
 	// send notifications, if configured
