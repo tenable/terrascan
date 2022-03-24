@@ -74,47 +74,47 @@ func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
 	return []AWSResourceConfig{{}}
 }
 
-func getServerlessConfig(f *serverless.Function) []AWSResourceConfig {
+func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 	tracingConfig := make([]TracingConfigBlock, 1)
-	tracingConfig[0].Mode = f.Tracing
+	tracingConfig[0].Mode = sf.Tracing
 
 	var vpcConfig []VPCConfigBlock
-	if f.VpcConfig != nil {
+	if sf.VpcConfig != nil {
 		vpcConfig = make([]VPCConfigBlock, 1)
 
-		vpcConfig[0].SecurityGroupIDs = f.VpcConfig.SecurityGroupIds
-		vpcConfig[0].SubnetIDs = f.VpcConfig.SubnetIds
+		vpcConfig[0].SecurityGroupIDs = sf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = sf.VpcConfig.SubnetIds
 	}
 
 	var environment []EnvironmentBlock
-	if f.Environment != nil {
+	if sf.Environment != nil {
 		environment = make([]EnvironmentBlock, 1)
 
-		environment[0].Variables = f.Environment.Variables
+		environment[0].Variables = sf.Environment.Variables
 	}
 
 	cf := LambdaFunctionConfig{
 		Config: Config{
-			Name: f.FunctionName,
+			Name: sf.FunctionName,
 		},
-		FunctionName:                 f.FunctionName,
-		Role:                         f.Role,
-		Handler:                      f.Handler,
-		MemorySize:                   f.MemorySize,
-		ReservedConcurrentExecutions: f.ReservedConcurrentExecutions,
-		Runtime:                      f.Runtime,
-		Timeout:                      f.Timeout,
+		FunctionName:                 sf.FunctionName,
+		Role:                         sf.Role,
+		Handler:                      sf.Handler,
+		MemorySize:                   sf.MemorySize,
+		ReservedConcurrentExecutions: sf.ReservedConcurrentExecutions,
+		Runtime:                      sf.Runtime,
+		Timeout:                      sf.Timeout,
 		TracingConfig:                tracingConfig,
 		VPCConfig:                    vpcConfig,
 		Environment:                  environment,
-		KMSKeyARN:                    f.KmsKeyArn,
+		KMSKeyARN:                    sf.KmsKeyArn,
 	}
 
-	cf = setServerlessCodePackage(cf, f)
+	cf = setServerlessCodePackage(cf, sf)
 
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: f.AWSCloudFormationMetadata,
+		Metadata: sf.AWSCloudFormationMetadata,
 	}}
 }
 
@@ -135,51 +135,51 @@ func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) L
 	return cf
 }
 
-func getLambdaConfig(f *lambda.Function) []AWSResourceConfig {
+func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 	var tracingConfig []TracingConfigBlock
-	if f.TracingConfig != nil {
+	if lf.TracingConfig != nil {
 		tracingConfig = make([]TracingConfigBlock, 1)
 
-		tracingConfig[0].Mode = f.TracingConfig.Mode
+		tracingConfig[0].Mode = lf.TracingConfig.Mode
 	}
 
 	var vpcConfig []VPCConfigBlock
-	if f.VpcConfig != nil {
+	if lf.VpcConfig != nil {
 		vpcConfig = make([]VPCConfigBlock, 1)
 
-		vpcConfig[0].SecurityGroupIDs = f.VpcConfig.SecurityGroupIds
-		vpcConfig[0].SubnetIDs = f.VpcConfig.SubnetIds
+		vpcConfig[0].SecurityGroupIDs = lf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = lf.VpcConfig.SubnetIds
 	}
 
 	var environment []EnvironmentBlock
-	if f.Environment != nil {
+	if lf.Environment != nil {
 		environment = make([]EnvironmentBlock, 1)
 
-		environment[0].Variables = f.Environment.Variables
+		environment[0].Variables = lf.Environment.Variables
 	}
 
 	cf := LambdaFunctionConfig{
 		Config: Config{
-			Name: f.FunctionName,
+			Name: lf.FunctionName,
 		},
-		FunctionName:                 f.FunctionName,
-		Role:                         f.Role,
-		Handler:                      f.Handler,
-		MemorySize:                   f.MemorySize,
-		ReservedConcurrentExecutions: f.ReservedConcurrentExecutions,
-		Runtime:                      f.Runtime,
-		Timeout:                      f.Timeout,
+		FunctionName:                 lf.FunctionName,
+		Role:                         lf.Role,
+		Handler:                      lf.Handler,
+		MemorySize:                   lf.MemorySize,
+		ReservedConcurrentExecutions: lf.ReservedConcurrentExecutions,
+		Runtime:                      lf.Runtime,
+		Timeout:                      lf.Timeout,
 		TracingConfig:                tracingConfig,
 		VPCConfig:                    vpcConfig,
 		Environment:                  environment,
-		KMSKeyARN:                    f.KmsKeyArn,
+		KMSKeyARN:                    lf.KmsKeyArn,
 	}
 
-	cf = setLambdaCodePackage(cf, f)
+	cf = setLambdaCodePackage(cf, lf)
 
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: f.AWSCloudFormationMetadata,
+		Metadata: lf.AWSCloudFormationMetadata,
 	}}
 }
 
