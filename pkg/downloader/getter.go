@@ -31,7 +31,7 @@ import (
 var (
 	ErrEmptyURLType      = fmt.Errorf("empty remote url and type")
 	ErrEmptyURLDest      = fmt.Errorf("remote url or destination dir path cannot be empty")
-	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or desitnation dir path")
+	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or destination dir path")
 	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not supported")
 )
 
