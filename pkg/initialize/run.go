@@ -100,11 +100,13 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 	zap.S().Debugf("downloading commercial policies in %s", policyBasePath)
 
 	var client http.Client
+
 	req, err := http.NewRequest(http.MethodGet, environment+apiPath, nil)
 	if err != nil {
 		return fmt.Errorf("error constructing request object. error: '%v'", err)
 	}
 	req.Header.Add("Authorization", "Bearer "+accessToken)
+
 	res, err := client.Do(req)
 	if err != nil || res.StatusCode != 200 {
 		return fmt.Errorf("error downloading commercial policies. error: '%v', response status code: '%d'", err, res.StatusCode)

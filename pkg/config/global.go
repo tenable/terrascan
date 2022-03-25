@@ -160,6 +160,7 @@ func GetPolicyBranch() string {
 	return global.Policy.Branch
 }
 
+// GetPolicyEnvironment returns the configured policy environment url
 func GetPolicyEnvironment() string {
 	if global == nil {
 		return defaultPolicyEnvironment
@@ -167,6 +168,7 @@ func GetPolicyEnvironment() string {
 	return strings.TrimRight(global.Policy.Environment, "/")
 }
 
+// GetPolicyAccessToken returns the configured policy access token
 func GetPolicyAccessToken() string {
 	if global == nil {
 		return ""
