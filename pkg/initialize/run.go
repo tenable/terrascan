@@ -153,7 +153,7 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	var templateArgs map[string]interface{}
 
 	policy.regoTemplate = "package accurics\n\n" + ruleMetadata.RuleTemplate
-	policy.metadataFileName = ruleMetadata.RuleReferenceId + ".json"
+	policy.metadataFileName = ruleMetadata.RuleReferenceID + ".json"
 	policy.resourceType = ruleMetadata.ResourceType
 
 	policy.policyMetadata.Name = ruleMetadata.RuleName
@@ -161,8 +161,8 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	policy.policyMetadata.ResourceType = ruleMetadata.ResourceType
 	policy.policyMetadata.Severity = ruleMetadata.Severity
 	policy.policyMetadata.Description = ruleMetadata.RuleDisplayName
-	policy.policyMetadata.ReferenceID = ruleMetadata.RuleReferenceId
-	policy.policyMetadata.ID = ruleMetadata.RuleReferenceId
+	policy.policyMetadata.ReferenceID = ruleMetadata.RuleReferenceID
+	policy.policyMetadata.ID = ruleMetadata.RuleReferenceID
 	policy.policyMetadata.Category = ruleMetadata.Category
 	policy.policyMetadata.Version = ruleMetadata.Version
 

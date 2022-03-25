@@ -18,7 +18,7 @@ type commercialPolicyMetadata struct {
 	Severity        string      `json:"severity"`
 	RuleDisplayName string      `json:"ruleDisplayName"`
 	Category        string      `json:"category"`
-	RuleReferenceId string      `json:"ruleReferenceId"`
+	RuleReferenceID string      `json:"ruleReferenceId"`
 	Version         int         `json:"version"`
 	RuleTemplate    string      `json:"ruleTemplate"`
 	ResourceType    string      `json:"resourceType"`
