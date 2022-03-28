@@ -172,12 +172,12 @@ func getEnvironmentPolicy(ruleMetadata environmentPolicyMetadata) (environmentPo
 	policy.policyMetadata.Version = ruleMetadata.Version
 
 	templateString, ok := ruleMetadata.RuleArgument.(string)
-	if !ok && templateString != "" {
-		return policy, fmt.Errorf("incorrect rule argument type, must be a []byte")
+	if !ok {
+		return policy, fmt.Errorf("incorrect rule argument type, must be a string")
 	}
 	err := json.Unmarshal([]byte(templateString), &templateArgs)
 	if err != nil {
-		return policy, fmt.Errorf("could not unmarshal rule arguments into map[string]interface{}, error: '%w'", err)
+		return policy, fmt.Errorf("error occurred while unmarshaling rule arguments into map[string]interface{}, error: '%w'", err)
 	}
 	policy.policyMetadata.TemplateArgs = templateArgs
 
@@ -185,7 +185,7 @@ func getEnvironmentPolicy(ruleMetadata environmentPolicyMetadata) (environmentPo
 }
 
 func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) error {
-	policy.policyMetadata.PolicyType = getCSP(policy.resourceType)
+	policy.policyMetadata.PolicyType = getCloudServiceProviderName(policy.resourceType)
 	cspDir := filepath.Join(policyRepoPath, policy.policyMetadata.PolicyType)
 	err := ensureDir(cspDir)
 	if err != nil {
@@ -224,7 +224,7 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 	return nil
 }
 
-func getCSP(resourceType string) string {
+func getCloudServiceProviderName(resourceType string) string {
 	csp := strings.ToLower(resourceType)
 
 	if strings.HasPrefix(csp, "azure") {
@@ -247,7 +247,7 @@ func ensureDir(path string) error {
 	if os.IsNotExist(err) {
 		err = os.Mkdir(path, filePermissionBits)
 		if err != nil {
-			return fmt.Errorf("unable to create requested directory error: '%w'", err)
+			return fmt.Errorf("unable to create requested directory error: '%w' for path: '%s'", err, path)
 		}
 	}
 	return nil

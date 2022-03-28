@@ -27,10 +27,11 @@ import (
 	"testing"
 )
 
-const TESTDIR = "./test_data/"
+const TESTDIR = "test_data"
 
 func TestGetCommercialPolicy(t *testing.T) {
-	policies, err := ioutil.ReadFile("./test_data/policies.json")
+	policiesPath := filepath.Join(TESTDIR, "policies.json")
+	policies, err := ioutil.ReadFile(policiesPath)
 	if err != nil {
 		t.Errorf("unable to read test file")
 	}
