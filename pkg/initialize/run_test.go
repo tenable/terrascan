@@ -133,12 +133,12 @@ func verifyFiles(files []fs.DirEntry, rscdir string) error {
 
 		testbytes, err := ioutil.ReadFile(testpath)
 		if err != nil {
-			return fmt.Errorf("unable to read test file: '%s', err: '%v'", testpath, err)
+			return fmt.Errorf("unable to read test file: '%s', err: '%w'", testpath, err)
 		}
 
 		databytes, err := ioutil.ReadFile(convpath)
 		if err != nil {
-			return fmt.Errorf("unable to read converted file: '%s', err: '%v'", convpath, err)
+			return fmt.Errorf("unable to read converted file: '%s', err: '%w'", convpath, err)
 		}
 
 		if bytes.Compare(testbytes, databytes) != 0 {
