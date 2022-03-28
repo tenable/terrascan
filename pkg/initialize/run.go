@@ -71,17 +71,17 @@ func DownloadPolicies() error {
 
 	err := os.RemoveAll(policyBasePath)
 	if err != nil {
-		return fmt.Errorf("unable to delete base folder. error: '%v'", err)
+		return fmt.Errorf("unable to delete base folder. error: '%w'", err)
 	}
 
 	if accessToken == "" {
-		return downloadTerrascanPolicies(policyBasePath)
+		return downloadDefaultPolicies(policyBasePath)
 	}
 
-	return downloadCommercialPolicies(policyBasePath, accessToken)
+	return dowloadEnvironmentPolicies(policyBasePath, accessToken)
 }
 
-func downloadCommercialPolicies(policyBasePath, accessToken string) error {
+func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 	err := ensureDir(policyBasePath)
 	if err != nil {
 		return err
@@ -103,24 +103,24 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 
 	req, err := http.NewRequest(http.MethodGet, environment+apiPath, nil)
 	if err != nil {
-		return fmt.Errorf("error constructing request object. error: '%v'", err)
+		return fmt.Errorf("error constructing request object. error: '%w'", err)
 	}
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	res, err := client.Do(req)
-	if err != nil || res.StatusCode != 200 {
-		return fmt.Errorf("error downloading commercial policies. error: '%v', response status code: '%d'", err, res.StatusCode)
+	if err != nil {
+		return fmt.Errorf("error downloading commercial policies. error: '%w'", err)
 	}
-	if res == nil {
-		return fmt.Errorf("error could not download policies, please check your network connection")
+	if res.StatusCode != 200 {
+		return fmt.Errorf("error downloading commercial policies. error: '%w', response status code: '%d'", err, res.StatusCode)
 	}
 
 	policies, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return fmt.Errorf("error reading api call response for commercial policies. error: '%v'", err)
+		return fmt.Errorf("error reading api call response for commercial policies. error: '%w'", err)
 	}
 
-	err = convertCommercialPolicies(policies, policyRepoPath)
+	err = convertEnvironmentPolicies(policies, policyRepoPath)
 	if err != nil {
 		return err
 	}
@@ -130,21 +130,21 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 	return os.Mkdir(dockerPath, filePermissionBits)
 }
 
-func convertCommercialPolicies(policies []byte, policyRepoPath string) error {
-	var ruleMetadataList []commercialPolicyMetadata
+func convertEnvironmentPolicies(policies []byte, policyRepoPath string) error {
+	var ruleMetadataList []environmentPolicyMetadata
 
 	err := json.Unmarshal(policies, &ruleMetadataList)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal policies into structure. error: '%v'", err)
+		return fmt.Errorf("failed to unmarshal policies into structure. error: '%w'", err)
 	}
 
 	for _, ruleMetadata := range ruleMetadataList {
-		policy, err := getCommercialPolicy(ruleMetadata)
+		policy, err := getEnvironmentPolicy(ruleMetadata)
 		if err != nil {
 			return err
 		}
 
-		err = saveCommercialPolicies(policy, policyRepoPath)
+		err = saveEnvironmentPolicies(policy, policyRepoPath)
 		if err != nil {
 			return err
 		}
@@ -153,8 +153,8 @@ func convertCommercialPolicies(policies []byte, policyRepoPath string) error {
 	return nil
 }
 
-func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolicy, error) {
-	var policy commercialPolicy
+func getEnvironmentPolicy(ruleMetadata environmentPolicyMetadata) (environmentPolicy, error) {
+	var policy environmentPolicy
 	var templateArgs map[string]interface{}
 
 	policy.regoTemplate = "package accurics\n\n" + ruleMetadata.RuleTemplate
@@ -177,14 +177,14 @@ func getCommercialPolicy(ruleMetadata commercialPolicyMetadata) (commercialPolic
 	}
 	err := json.Unmarshal([]byte(templateString), &templateArgs)
 	if err != nil {
-		return policy, fmt.Errorf("error could not unmarshal rule arguments into map[string]interface{}: '%v'", err)
+		return policy, fmt.Errorf("could not unmarshal rule arguments into map[string]interface{}, error: '%w'", err)
 	}
 	policy.policyMetadata.TemplateArgs = templateArgs
 
 	return policy, nil
 }
 
-func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) error {
+func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) error {
 	const tabSpace = "    "
 
 	policy.policyMetadata.PolicyType = getCSP(policy.resourceType)
@@ -206,7 +206,7 @@ func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) erro
 	encoder.SetIndent("", tabSpace)
 	err = encoder.Encode(policy.policyMetadata)
 	if err != nil {
-		return fmt.Errorf("error could not marshal json object into byte array: '%v'", err)
+		return fmt.Errorf("could not marshal json object into byte array error: '%w'", err)
 	}
 
 	metadata := buffer.Bytes()
@@ -214,13 +214,13 @@ func saveCommercialPolicies(policy commercialPolicy, policyRepoPath string) erro
 	metaDataPath := filepath.Join(resourceDir, policy.metadataFileName)
 	err = ioutil.WriteFile(metaDataPath, metadata, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("error could not write rule metadata file on disk: '%v'", err)
+		return fmt.Errorf("could not write rule metadata file on disk error: '%w'", err)
 	}
 
 	regoPath := filepath.Join(resourceDir, policy.policyMetadata.File)
 	err = ioutil.WriteFile(regoPath, []byte(policy.regoTemplate), filePermissionBits)
 	if err != nil {
-		return fmt.Errorf("error could not write rego code file on disk: '%v'", err)
+		return fmt.Errorf("could not write rego code file on disk error: '%w'", err)
 	}
 
 	return nil
@@ -249,13 +249,13 @@ func ensureDir(path string) error {
 	if os.IsNotExist(err) {
 		err = os.Mkdir(path, filePermissionBits)
 		if err != nil {
-			return fmt.Errorf("error unable to create requested directory: '%v'", err)
+			return fmt.Errorf("unable to create requested directory error: '%w'", err)
 		}
 	}
 	return nil
 }
 
-func downloadTerrascanPolicies(policyBasePath string) error {
+func downloadDefaultPolicies(policyBasePath string) error {
 	if !connected(terrascanReadmeURL) {
 		return errNoConnection
 	}
@@ -274,13 +274,13 @@ func downloadTerrascanPolicies(policyBasePath string) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed to download policies. error: '%v'", err)
+		return fmt.Errorf("failed to download policies. error: '%w'", err)
 	}
 
 	// create working tree
 	w, err := r.Worktree()
 	if err != nil {
-		return fmt.Errorf("failed to create working tree. error: '%v'", err)
+		return fmt.Errorf("failed to create working tree. error: '%w'", err)
 	}
 
 	// fetch references
@@ -288,7 +288,7 @@ func downloadTerrascanPolicies(policyBasePath string) error {
 		RefSpecs: []gitConfig.RefSpec{"refs/*:refs/*", "HEAD:refs/heads/HEAD"},
 	})
 	if err != nil {
-		return fmt.Errorf("failed to fetch references from git repo. error: '%v'", err)
+		return fmt.Errorf("failed to fetch references from git repo. error: '%w'", err)
 	}
 
 	// checkout policies branch
@@ -297,7 +297,7 @@ func downloadTerrascanPolicies(policyBasePath string) error {
 		Force:  true,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to checkout git branch '%v'. error: '%v'", branch, err)
+		return fmt.Errorf("failed to checkout git branch '%s'. error: '%w'", branch, err)
 	}
 
 	return nil
