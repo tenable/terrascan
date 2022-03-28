@@ -4,14 +4,14 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 )
 
-type commercialPolicy struct {
+type environmentPolicy struct {
 	regoTemplate     string
 	metadataFileName string
 	resourceType     string
 	policyMetadata   policy.RegoMetadata
 }
 
-type commercialPolicyMetadata struct {
+type environmentPolicyMetadata struct {
 	RuleName        string      `json:"ruleName"`
 	RegoName        string      `json:"ruleTemplateName"`
 	RuleArgument    interface{} `json:"ruleArgument"`

@@ -47,7 +47,7 @@ func TestGetCommercialPolicy(t *testing.T) {
 		"gcp":   "google_compute_firewall",
 	}
 
-	err = convertCommercialPolicies(policies, tempDir)
+	err = convertEnvironmentPolicies(policies, tempDir)
 	if err != nil {
 		t.Errorf("unable to convert and save policies: '%v'", err)
 	}
