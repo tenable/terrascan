@@ -185,8 +185,6 @@ func getEnvironmentPolicy(ruleMetadata environmentPolicyMetadata) (environmentPo
 }
 
 func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) error {
-	const tabSpace = "    "
-
 	policy.policyMetadata.PolicyType = getCSP(policy.resourceType)
 	cspDir := filepath.Join(policyRepoPath, policy.policyMetadata.PolicyType)
 	err := ensureDir(cspDir)
@@ -203,7 +201,7 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 	var buffer bytes.Buffer
 	encoder := json.NewEncoder(&buffer)
 	encoder.SetEscapeHTML(false)
-	encoder.SetIndent("", tabSpace)
+	encoder.SetIndent("", "    ")
 	err = encoder.Encode(policy.policyMetadata)
 	if err != nil {
 		return fmt.Errorf("could not marshal json object into byte array error: '%w'", err)
