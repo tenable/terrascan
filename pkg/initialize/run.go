@@ -120,7 +120,14 @@ func downloadCommercialPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error reading api call response for commercial policies. error: '%v'", err)
 	}
 
-	return convertCommercialPolicies(policies, policyRepoPath)
+	err = convertCommercialPolicies(policies, policyRepoPath)
+	if err != nil {
+		return err
+	}
+
+	// creating empty docker folder to satisfy folder structure dep
+	dockerPath := filepath.Join(policyRepoPath, "docker")
+	return os.Mkdir(dockerPath, filePermissionBits)
 }
 
 func convertCommercialPolicies(policies []byte, policyRepoPath string) error {
