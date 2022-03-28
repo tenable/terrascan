@@ -17,9 +17,6 @@
 package config
 
 import (
-	"strconv"
-	"strings"
-
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
 	"github.com/awslabs/goformation/v5/cloudformation/serverless"
 )
@@ -43,11 +40,6 @@ type EnvironmentBlock struct {
 // LambdaFunctionConfig holds config for LambdaFunction
 type LambdaFunctionConfig struct {
 	Config
-	ImageURI                     string               `json:"image_uri,omitempty"`
-	FileName                     string               `json:"filename,omitempty"`
-	S3Bucket                     string               `json:"s3_bucket,omitempty"`
-	S3Key                        string               `json:"s3_key,omitempty"`
-	S3ObjectVersion              string               `json:"s3_object_version,omitempty"`
 	FunctionName                 string               `json:"function_name"`
 	Role                         string               `json:"role"`
 	Handler                      string               `json:"handler"`
@@ -110,29 +102,10 @@ func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 		KMSKeyARN:                    sf.KmsKeyArn,
 	}
 
-	cf = setServerlessCodePackage(cf, sf)
-
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: sf.AWSCloudFormationMetadata,
 	}}
-}
-
-func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) LambdaFunctionConfig {
-	if f.ImageUri != "" {
-		cf.ImageURI = f.ImageUri
-		return cf
-	}
-
-	if *f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
-		cf.FileName = *f.CodeUri.String
-		return cf
-	}
-
-	cf.S3Bucket = f.CodeUri.S3Location.Bucket
-	cf.S3Key = f.CodeUri.S3Location.Key
-	cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
-	return cf
 }
 
 func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
@@ -175,22 +148,8 @@ func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 		KMSKeyARN:                    lf.KmsKeyArn,
 	}
 
-	cf = setLambdaCodePackage(cf, lf)
-
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: lf.AWSCloudFormationMetadata,
 	}}
-}
-
-func setLambdaCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
-	if f.Code.ImageUri != "" {
-		cf.ImageURI = f.Code.ImageUri
-		return cf
-	}
-
-	cf.S3Bucket = f.Code.S3Bucket
-	cf.S3Key = f.Code.S3Key
-	cf.S3ObjectVersion = f.Code.S3ObjectVersion
-	return cf
 }
