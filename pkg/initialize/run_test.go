@@ -142,7 +142,7 @@ func verifyFiles(files []fs.DirEntry, rscdir string) error {
 			return fmt.Errorf("unable to read converted file: '%s', err: '%w'", convpath, err)
 		}
 
-		if bytes.Compare(testbytes, databytes) != 0 {
+		if !bytes.Equal(testbytes, databytes) {
 			return fmt.Errorf("test file and converted file do not match")
 		}
 	}
