@@ -21,10 +21,20 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 - Mitigate risks before provisioning cloud native infrastructure.
 - Offers flexibility to run locally or integrate with your CI\CD.
 
+
+
 ### Resources
 
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
-* Join The Terrascan Community on Discord : https://discord.gg/ScUPMzyG3n 
+
+<p align="center">
+    Join our community
+<br/>
+<a href="https://discord.gg/ScUPMzyG3n">
+    <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" /> 
+</a>
+</p>
+
 
 ## Key features
 * 500+ Policies for security best practices
