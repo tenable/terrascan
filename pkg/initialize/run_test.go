@@ -18,6 +18,7 @@ package initialize
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io/fs"
 	"io/ioutil"
@@ -30,10 +31,31 @@ import (
 const TESTDIR = "test_data"
 
 func TestGetCommercialPolicy(t *testing.T) {
-	policiesPath := filepath.Join(TESTDIR, "policies.json")
-	policies, err := ioutil.ReadFile(policiesPath)
-	if err != nil {
-		t.Errorf("unable to read test file")
+	table := []struct {
+		name       string
+		configFile string
+		wantErr    error
+	}{
+		{
+			name:       "invalid policy json",
+			configFile: filepath.Join(TESTDIR, "invalid_policies.json"),
+			wantErr:    errors.New("failed to unmarshal policies into structure"),
+		},
+		{
+			name:       "invalid ruleArgument data type",
+			configFile: filepath.Join(TESTDIR, "invalid_ruleArg_type_policies.json"),
+			wantErr:    errors.New("incorrect rule argument type, must be a string"),
+		},
+		{
+			name:       "invalid ruleArgument format",
+			configFile: filepath.Join(TESTDIR, "invalid_ruleArg_policies.json"),
+			wantErr:    errors.New("error occurred while unmarshaling rule arguments into map[string]interface{}"),
+		},
+		{
+			name:       "valid policy json",
+			configFile: filepath.Join(TESTDIR, "policies.json"),
+			wantErr:    nil,
+		},
 	}
 
 	tempDir, err := os.MkdirTemp("", "test_policies")
@@ -42,45 +64,58 @@ func TestGetCommercialPolicy(t *testing.T) {
 	}
 	defer os.RemoveAll(tempDir)
 
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			policies, err := ioutil.ReadFile(tt.configFile)
+			if err != nil {
+				t.Errorf("unable to read test file")
+			}
+
+			err = convertEnvironmentPolicies(policies, tempDir)
+			if err == nil {
+				validPoliciesTest(t, tempDir)
+				return
+			}
+
+			if !strings.HasPrefix(err.Error(), tt.wantErr.Error()) {
+				t.Errorf("convertEnvironmentPolicies() error = %v, wantErr = %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func validPoliciesTest(t *testing.T, tempDir string) {
 	expectedCspMap := map[string]string{
 		"aws":   "aws_cloudwatch_log_group",
 		"azure": "azurerm_security_center_setting",
 		"gcp":   "google_compute_firewall",
 	}
 
-	err = convertEnvironmentPolicies(policies, tempDir)
-	if err != nil {
-		t.Errorf("unable to convert and save policies: '%v'", err)
-	}
-
-	csps, err := os.ReadDir(tempDir)
+	providers, err := os.ReadDir(tempDir)
 	if err != nil {
 		t.Errorf("unable to read temp dir: '%v'", err)
 	}
-	if len(csps) != 3 {
-		t.Errorf("expected length 3; got: '%d'", len(csps))
+	if len(providers) != 3 {
+		t.Errorf("expected length 3; got: '%d'", len(providers))
 	}
 
-	for _, csp := range csps {
-		cspdir := filepath.Join(tempDir, csp.Name())
+	for _, provider := range providers {
+		cspdir := filepath.Join(tempDir, provider.Name())
 		rscs, err := os.ReadDir(cspdir)
 		if err != nil {
 			t.Errorf("unable to read csp dir: '%v'", err)
-			break
 		}
 		if len(rscs) != 1 {
 			t.Errorf("expected length 1; got '%d'", len(rscs))
-			break
 		}
 
-		val, ok := expectedCspMap[csp.Name()]
+		val, ok := expectedCspMap[provider.Name()]
 		if !ok {
 			t.Errorf("unable to find expected csp")
-			break
+
 		}
 		if rscs[0].Name() != val {
 			t.Errorf("unable to find expected resource type")
-			break
 		}
 
 		rscdir := filepath.Join(cspdir, rscs[0].Name())
@@ -92,7 +127,7 @@ func TestGetCommercialPolicy(t *testing.T) {
 		err = verifyFiles(files, rscdir)
 		if err != nil {
 			t.Error(err)
-			break
+
 		}
 	}
 }
