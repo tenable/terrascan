@@ -25,7 +25,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"go.uber.org/zap"
@@ -90,14 +89,14 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 	policyRepoPath := config.GetPolicyRepoPath()
 	err = os.MkdirAll(policyRepoPath, filePermissionBits)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to prepare directories representing policyRepoPath. err: '%w', policyRepoPath: '%s'", err, policyRepoPath)
 	}
 
 	const apiPath = "/v1/api/app/rules?default=true"
 	environment := config.GetPolicyEnvironment()
 
 	zap.S().Debugf("policy environment : %s", environment)
-	zap.S().Debugf("downloading commercial policies in %s", policyBasePath)
+	zap.S().Debugf("downloading environment policies in %s", policyBasePath)
 
 	var client http.Client
 
@@ -109,15 +108,15 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 
 	res, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("error downloading commercial policies. error: '%w'", err)
+		return fmt.Errorf("error downloading environment policies. error: '%w'", err)
 	}
 	if res.StatusCode != 200 {
-		return fmt.Errorf("error downloading commercial policies. error: '%w', response status code: '%d'", err, res.StatusCode)
+		return fmt.Errorf("error downloading environment policies. error: '%w', response status code: '%d'", err, res.StatusCode)
 	}
 
 	policies, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return fmt.Errorf("error reading api call response for commercial policies. error: '%w'", err)
+		return fmt.Errorf("error reading api call response for environment policies. error: '%w'", err)
 	}
 
 	err = convertEnvironmentPolicies(policies, policyRepoPath)
@@ -127,7 +126,8 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 
 	// creating empty docker folder to satisfy folder structure dep
 	dockerPath := filepath.Join(policyRepoPath, "docker")
-	return os.Mkdir(dockerPath, filePermissionBits)
+	err = os.Mkdir(dockerPath, filePermissionBits)
+	return fmt.Errorf("unable to create empty docker dir. error: '%w'", err)
 }
 
 func convertEnvironmentPolicies(policies []byte, policyRepoPath string) error {
@@ -139,7 +139,7 @@ func convertEnvironmentPolicies(policies []byte, policyRepoPath string) error {
 	}
 
 	for _, ruleMetadata := range ruleMetadataList {
-		policy, err := getEnvironmentPolicy(ruleMetadata)
+		policy, err := newPolicy(ruleMetadata)
 		if err != nil {
 			return err
 		}
@@ -153,39 +153,8 @@ func convertEnvironmentPolicies(policies []byte, policyRepoPath string) error {
 	return nil
 }
 
-func getEnvironmentPolicy(ruleMetadata environmentPolicyMetadata) (environmentPolicy, error) {
-	var policy environmentPolicy
-	var templateArgs map[string]interface{}
-
-	policy.regoTemplate = "package accurics\n\n" + ruleMetadata.RuleTemplate
-	policy.metadataFileName = ruleMetadata.RuleReferenceID + ".json"
-	policy.resourceType = ruleMetadata.ResourceType
-
-	policy.policyMetadata.Name = ruleMetadata.RuleName
-	policy.policyMetadata.File = ruleMetadata.RegoName + ".rego"
-	policy.policyMetadata.ResourceType = ruleMetadata.ResourceType
-	policy.policyMetadata.Severity = ruleMetadata.Severity
-	policy.policyMetadata.Description = ruleMetadata.RuleDisplayName
-	policy.policyMetadata.ReferenceID = ruleMetadata.RuleReferenceID
-	policy.policyMetadata.ID = ruleMetadata.RuleReferenceID
-	policy.policyMetadata.Category = ruleMetadata.Category
-	policy.policyMetadata.Version = ruleMetadata.Version
-
-	templateString, ok := ruleMetadata.RuleArgument.(string)
-	if !ok {
-		return policy, fmt.Errorf("incorrect rule argument type, must be a string")
-	}
-	err := json.Unmarshal([]byte(templateString), &templateArgs)
-	if err != nil {
-		return policy, fmt.Errorf("error occurred while unmarshaling rule arguments into map[string]interface{}, error: '%w'", err)
-	}
-	policy.policyMetadata.TemplateArgs = templateArgs
-
-	return policy, nil
-}
-
 func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) error {
-	policy.policyMetadata.PolicyType = getCloudServiceProviderName(policy.resourceType)
+	policy.policyMetadata.PolicyType = policy.getType()
 	cspDir := filepath.Join(policyRepoPath, policy.policyMetadata.PolicyType)
 	err := ensureDir(cspDir)
 	if err != nil {
@@ -204,7 +173,7 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 	encoder.SetIndent("", "    ")
 	err = encoder.Encode(policy.policyMetadata)
 	if err != nil {
-		return fmt.Errorf("could not marshal json object into byte array error: '%w'", err)
+		return fmt.Errorf("could not marshal json object into byte array. error: '%w'", err)
 	}
 
 	metadata := buffer.Bytes()
@@ -212,34 +181,22 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 	metaDataPath := filepath.Join(resourceDir, policy.metadataFileName)
 	err = ioutil.WriteFile(metaDataPath, metadata, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("could not write rule metadata file on disk error: '%w'", err)
+		return fmt.Errorf("could not write rule metadata file on disk. error: '%w'", err)
 	}
 
 	regoPath := filepath.Join(resourceDir, policy.policyMetadata.File)
+
+	if _, err := os.Stat(regoPath); os.IsExist(err) {
+		zap.S().Debug("rego code file %s exists, skipping", regoPath)
+		return nil
+	}
+
 	err = ioutil.WriteFile(regoPath, []byte(policy.regoTemplate), filePermissionBits)
 	if err != nil {
-		return fmt.Errorf("could not write rego code file on disk error: '%w'", err)
+		return fmt.Errorf("could not write rego code file on disk. error: '%w'", err)
 	}
 
 	return nil
-}
-
-func getCloudServiceProviderName(resourceType string) string {
-	csp := strings.ToLower(resourceType)
-
-	if strings.HasPrefix(csp, "azure") {
-		return "azure"
-	}
-
-	if strings.HasPrefix(csp, "google") {
-		return "gcp"
-	}
-
-	if strings.HasPrefix(csp, "kubernetes") {
-		return "k8s"
-	}
-
-	return strings.Split(csp, "_")[0]
 }
 
 func ensureDir(path string) error {
