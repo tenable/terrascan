@@ -15,17 +15,22 @@
 */
 
 package config
-
 import (
 	"path/filepath"
 
 	"github.com/accurics/terrascan/pkg/utils"
 	"go.uber.org/zap"
+
+	"gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
+	"gopkg.in/src-d/go-git.v4/plumbing"
+
 )
 
 const (
 	defaultPolicyRepoURL = "https://github.com/accurics/terrascan.git"
 	defaultPolicyBranch  = "master"
+	defaultGitAPI = "https://api.github.com/repos/accurics/terrascan/releases/latest"
 )
 
 // ConfigEnvvarName env variable
@@ -34,11 +39,15 @@ const ConfigEnvvarName = "TERRASCAN_CONFIG"
 var (
 	defaultPolicyRepoPath = filepath.Join("pkg", "policies", "opa", "rego")
 	defaultBasePolicyPath = filepath.Join(utils.GetHomeDir(), ".terrascan")
+
 )
+
 
 // LoadGlobalConfig loads policy configuration from specified configFile
 // into var Global.Policy.  Members of Global.Policy that are not specified
 // in configFile will get default values
+
+
 func LoadGlobalConfig(configFile string) error {
 	// Start with the defaults
 	global = &TerrascanConfig{}
@@ -198,4 +207,56 @@ func GetK8sAdmissionControl() K8sAdmissionControl {
 		return K8sAdmissionControl{}
 	}
 	return global.K8sAdmissionControl
+}
+
+//returns git API for latest available release 
+func GetAPI() string { 
+//	if global == nil || global.Policy.RepoURL == defaultPolicyRepoURL {
+	return defaultGitAPI
+//	}
+//	parsedRepo := strings.Replace(global.Policy.RepoURL, "https://github.com/", "", -1) 
+//	parsedRepo = strings.Replace(global.Policy.RepoURL, ".git", "", -1) 
+//	parsedAPI := strings.Replace(defaultGitAPI, "accurics/terrascan", parsedRepo, -1) 
+//	fmt.Println(parsedAPI)
+//	return parsedAPI 
+}
+
+
+//returns tag of latest release of passed in repository, used for downloading policies
+func GetLatestTag(repository *git.Repository) (string, error) {
+	tagRefs, err := repository.Tags()
+	if err != nil {
+		return "", err
+	}
+
+	var latestTagCommit *object.Commit
+	var latestTagName string
+	err = tagRefs.ForEach(func(tagRef *plumbing.Reference) error {
+		revision := plumbing.Revision(tagRef.Name().String())
+		tagCommitHash, err := repository.ResolveRevision(revision)
+		if err != nil {
+			return err
+		}
+
+		commit, err := repository.CommitObject(*tagCommitHash)
+		if err != nil {
+			return err
+		}
+
+		if latestTagCommit == nil {
+			latestTagCommit = commit
+			latestTagName = tagRef.Name().String()
+		}
+
+		if commit.Committer.When.After(latestTagCommit.Committer.When) {
+			latestTagCommit = commit
+			latestTagName = tagRef.Name().String()
+		}
+
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+	return latestTagName, nil
 }

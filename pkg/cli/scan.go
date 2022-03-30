@@ -24,6 +24,13 @@ import (
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+	"github.com/accurics/terrascan/pkg/config"
+	"io"
+	"os"
+	"net/http"
+	"io/ioutil"
+
+
 )
 
 var scanOptions = NewScanOptions()
@@ -39,17 +46,44 @@ Detect compliance and security violations across Infrastructure as Code to mitig
 		if scanOptions.configOnly || scanOptions.configWithError {
 			return nil
 		}
+
 		return initial(cmd, args, true)
+	
 	},
 	RunE:          scan,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
 
+
 func scan(cmd *cobra.Command, args []string) error {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
 	scanOptions.outputType = OutputType
+
+	// reading from tagversion file created from init
+	basePath := config.GetPolicyBasePath()
+	filename := basePath + "/TagVersion"
+	f, err := os.Open(filename)
+    if err != nil {
+        fmt.Printf("error opening %s: %s", filename, err)
+    }
+    defer f.Close()
+
+    buf := make([]byte, 12)
+	n, err := io.ReadFull(f, buf); 
+	if err != nil {
+        if err == io.EOF {
+            err = io.ErrUnexpectedEOF
+        }
+	} 
+	buf = buf[:n] //bytes.Trim(buf, "\x00")
+	tagUsed := string(buf)
+
+	//warn user if they are using outdated policy release
+	if isLatest(tagUsed) == false {
+		zap.S().Warnf("Using an old release of policy repo (%s). To use the latest policy release, run terrascan init and scan again.", tagUsed)
+	} 
 	return scanOptions.Scan()
 }
 
@@ -80,4 +114,32 @@ func init() {
 	scanCmd.Flags().StringVarP(&scanOptions.repoURL, "repo-url", "", "", "URL of the repo being scanned, will be reflected in scan summary")
 	scanCmd.Flags().StringVarP(&scanOptions.repoRef, "repo-ref", "", "", "branch of the repo being scanned")
 	RegisterCommand(rootCmd, scanCmd)
+}
+
+
+//returns whether initTag corresponds to latest release 
+func isLatest(initTag string) bool { 
+	address := config.GetAPI()
+	resp, err := http.Get(address)
+	if err != nil {
+		fmt.Errorf("Couldn't access latest tag '%v'", err)
+
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Errorf("Couldn't read request response '%v'", err)
+	}
+	tar := "tag_name"
+	sb := string(body)
+	//parse out tag from git api 
+	si := strings.Index(sb, tar) 
+	starting := si + len(tar) + 3 
+	indent := 0 
+	for string(sb[starting + indent]) != "\"" {
+		indent = indent + 1 
+	}
+	latestRelease := string(sb[starting:starting+indent])
+
+	return initTag == latestRelease
+
 }
