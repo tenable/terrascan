@@ -67,8 +67,11 @@ func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
 		return getLambdaConfig(l)
 	}
 
-	s := sf.(*serverless.Function)
-	return getServerlessConfig(s)
+	if s, ok := sf.(*serverless.Function); ok {
+		return getServerlessConfig(s)
+	}
+
+	return nil
 }
 
 func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
