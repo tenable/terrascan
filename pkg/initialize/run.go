@@ -127,7 +127,11 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 	// creating empty docker folder to satisfy folder structure dep
 	dockerPath := filepath.Join(policyRepoPath, "docker")
 	err = os.Mkdir(dockerPath, filePermissionBits)
-	return fmt.Errorf("unable to create empty docker dir. error: '%w'", err)
+	if err != nil {
+		return fmt.Errorf("unable to create empty docker dir. error: '%w'", err)
+	}
+
+	return nil
 }
 
 func convertEnvironmentPolicies(policies []byte, policyRepoPath string) error {
