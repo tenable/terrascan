@@ -10,7 +10,7 @@ replace (
 )
 
 require (
-	cloud.google.com/go v0.65.0
+	cloud.google.com/go v0.81.0
 	github.com/Azure/azure-sdk-for-go v56.2.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.18
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
@@ -50,24 +50,23 @@ require (
 	github.com/pelletier/go-toml v1.9.3
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.9.1
-	go.uber.org/zap v1.16.0
+	go.uber.org/zap v1.17.0
 	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d
 	golang.org/x/tools v0.1.8 // indirect
-	google.golang.org/api v0.34.0
-	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
+	google.golang.org/api v0.44.0
+	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	helm.sh/helm/v3 v3.6.1
-	honnef.co/go/tools v0.2.2 // indirect
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/client-go v10.0.0+incompatible
 	modernc.org/sqlite v1.11.1
-	sigs.k8s.io/kustomize/api v0.8.11
-	sigs.k8s.io/kustomize/kyaml v0.11.0
+	sigs.k8s.io/kustomize/api v0.11.4
+	sigs.k8s.io/kustomize/kyaml v0.13.6
 )
 
 require (
@@ -137,7 +136,7 @@ require (
 	github.com/itchyny/timefmt-go v0.1.1 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
@@ -171,22 +170,22 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca // indirect
 	github.com/yashtewari/glob-intersection v0.0.0-20180916065949-5c77d914dd0b // indirect
-	go.opencensus.io v0.22.4 // indirect
+	go.opencensus.io v0.23.0 // indirect
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
-	go.uber.org/atomic v1.6.0 // indirect
-	go.uber.org/multierr v1.5.0 // indirect
+	go.uber.org/atomic v1.7.0 // indirect
+	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
-	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
-	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
+	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/appengine v1.6.6 // indirect
-	google.golang.org/grpc v1.31.1 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/grpc v1.38.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
