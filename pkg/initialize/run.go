@@ -111,7 +111,7 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error downloading environment policies. error: '%w'", err)
 	}
 	if res.StatusCode != 200 {
-		return fmt.Errorf("error downloading environment policies. error: '%w', response status code: '%d'", err, res.StatusCode)
+		return fmt.Errorf("error downloading environment policies, response status code: '%d'", res.StatusCode)
 	}
 
 	policies, err := ioutil.ReadAll(res.Body)
