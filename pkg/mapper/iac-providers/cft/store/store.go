@@ -91,6 +91,7 @@ var ResourceTypes = map[string]string{
 	"AWS::EC2::Instance.NetworkInterface":              AwsEc2NetworkInterface,
 	"AWS::Cognito::UserPool":                           AwsCognitoUserPool,
 	"AWS::Lambda::Function":                            AwsLambdaFunction,
+	"AWS::Serverless::Function":                        AwsLambdaFunction,
 	"AWS::CertificateManager::Certificate":             AwsAcmCertificate,
 	"AWS::SageMaker::NotebookInstance":                 AwsSagemakerNotebookInstance,
 	"AWS::SageMaker::Model":                            AwsSagemakerModel,

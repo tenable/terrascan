@@ -17,7 +17,11 @@
 package config
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/awslabs/goformation/v5/cloudformation/lambda"
+	"github.com/awslabs/goformation/v5/cloudformation/serverless"
 )
 
 // TracingConfigBlock holds config for TracingConfig
@@ -39,11 +43,14 @@ type EnvironmentBlock struct {
 // LambdaFunctionConfig holds config for LambdaFunction
 type LambdaFunctionConfig struct {
 	Config
-	FileName                     string               `json:"filename"`
+	ImageURI                     string               `json:"image_uri,omitempty"`
+	FileName                     string               `json:"filename,omitempty"`
+	S3Bucket                     string               `json:"s3_bucket,omitempty"`
+	S3Key                        string               `json:"s3_key,omitempty"`
+	S3ObjectVersion              string               `json:"s3_object_version,omitempty"`
 	FunctionName                 string               `json:"function_name"`
 	Role                         string               `json:"role"`
 	Handler                      string               `json:"handler"`
-	SourceCodeHash               string               `json:"source_code_hash"`
 	MemorySize                   int                  `json:"memory_size"`
 	ReservedConcurrentExecutions int                  `json:"reserved_concurrent_executions"`
 	Runtime                      string               `json:"runtime"`
@@ -55,49 +62,135 @@ type LambdaFunctionConfig struct {
 }
 
 // GetLambdaFunctionConfig returns config for LambdaFunction
-func GetLambdaFunctionConfig(f *lambda.Function) []AWSResourceConfig {
-	var tracingConfig []TracingConfigBlock
-	if f.TracingConfig != nil {
-		tracingConfig = make([]TracingConfigBlock, 1)
-
-		tracingConfig[0].Mode = f.TracingConfig.Mode
+func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
+	if l, ok := sf.(*lambda.Function); ok {
+		return getLambdaConfig(l)
 	}
 
+	if s, ok := sf.(*serverless.Function); ok {
+		return getServerlessConfig(s)
+	}
+
+	return nil
+}
+
+func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
+	tracingConfig := make([]TracingConfigBlock, 1)
+	tracingConfig[0].Mode = sf.Tracing
+
 	var vpcConfig []VPCConfigBlock
-	if f.VpcConfig != nil {
+	if sf.VpcConfig != nil {
 		vpcConfig = make([]VPCConfigBlock, 1)
 
-		vpcConfig[0].SecurityGroupIDs = f.VpcConfig.SecurityGroupIds
-		vpcConfig[0].SubnetIDs = f.VpcConfig.SubnetIds
+		vpcConfig[0].SecurityGroupIDs = sf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = sf.VpcConfig.SubnetIds
 	}
 
 	var environment []EnvironmentBlock
-	if f.Environment != nil {
+	if sf.Environment != nil {
 		environment = make([]EnvironmentBlock, 1)
 
-		environment[0].Variables = f.Environment.Variables
+		environment[0].Variables = sf.Environment.Variables
 	}
 
 	cf := LambdaFunctionConfig{
 		Config: Config{
-			Name: f.FunctionName,
+			Name: sf.FunctionName,
 		},
-		FileName:                     f.Code.ZipFile,
-		FunctionName:                 f.FunctionName,
-		Role:                         f.Role,
-		Handler:                      f.Handler,
-		MemorySize:                   f.MemorySize,
-		ReservedConcurrentExecutions: f.ReservedConcurrentExecutions,
-		Runtime:                      f.Runtime,
-		Timeout:                      f.Timeout,
+		FunctionName:                 sf.FunctionName,
+		Role:                         sf.Role,
+		Handler:                      sf.Handler,
+		MemorySize:                   sf.MemorySize,
+		ReservedConcurrentExecutions: sf.ReservedConcurrentExecutions,
+		Runtime:                      sf.Runtime,
+		Timeout:                      sf.Timeout,
 		TracingConfig:                tracingConfig,
 		VPCConfig:                    vpcConfig,
 		Environment:                  environment,
-		KMSKeyARN:                    f.KmsKeyArn,
+		KMSKeyARN:                    sf.KmsKeyArn,
 	}
+
+	cf = setServerlessCodePackage(cf, sf)
 
 	return []AWSResourceConfig{{
 		Resource: cf,
-		Metadata: f.AWSCloudFormationMetadata,
+		Metadata: sf.AWSCloudFormationMetadata,
 	}}
+}
+
+func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) LambdaFunctionConfig {
+	if f.ImageUri != "" {
+		cf.ImageURI = f.ImageUri
+		return cf
+	}
+
+	if *f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
+		cf.FileName = *f.CodeUri.String
+		return cf
+	}
+
+	cf.S3Bucket = f.CodeUri.S3Location.Bucket
+	cf.S3Key = f.CodeUri.S3Location.Key
+	cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
+	return cf
+}
+
+func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
+	var tracingConfig []TracingConfigBlock
+	if lf.TracingConfig != nil {
+		tracingConfig = make([]TracingConfigBlock, 1)
+
+		tracingConfig[0].Mode = lf.TracingConfig.Mode
+	}
+
+	var vpcConfig []VPCConfigBlock
+	if lf.VpcConfig != nil {
+		vpcConfig = make([]VPCConfigBlock, 1)
+
+		vpcConfig[0].SecurityGroupIDs = lf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = lf.VpcConfig.SubnetIds
+	}
+
+	var environment []EnvironmentBlock
+	if lf.Environment != nil {
+		environment = make([]EnvironmentBlock, 1)
+
+		environment[0].Variables = lf.Environment.Variables
+	}
+
+	cf := LambdaFunctionConfig{
+		Config: Config{
+			Name: lf.FunctionName,
+		},
+		FunctionName:                 lf.FunctionName,
+		Role:                         lf.Role,
+		Handler:                      lf.Handler,
+		MemorySize:                   lf.MemorySize,
+		ReservedConcurrentExecutions: lf.ReservedConcurrentExecutions,
+		Runtime:                      lf.Runtime,
+		Timeout:                      lf.Timeout,
+		TracingConfig:                tracingConfig,
+		VPCConfig:                    vpcConfig,
+		Environment:                  environment,
+		KMSKeyARN:                    lf.KmsKeyArn,
+	}
+
+	cf = setLambdaCodePackage(cf, lf)
+
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: lf.AWSCloudFormationMetadata,
+	}}
+}
+
+func setLambdaCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
+	if f.Code.ImageUri != "" {
+		cf.ImageURI = f.Code.ImageUri
+		return cf
+	}
+
+	cf.S3Bucket = f.Code.S3Bucket
+	cf.S3Key = f.Code.S3Key
+	cf.S3ObjectVersion = f.Code.S3ObjectVersion
+	return cf
 }

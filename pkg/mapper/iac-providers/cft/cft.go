@@ -38,6 +38,7 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/qldb"
 	"github.com/awslabs/goformation/v5/cloudformation/ram"
 	"github.com/awslabs/goformation/v5/cloudformation/sagemaker"
+	"github.com/awslabs/goformation/v5/cloudformation/serverless"
 	"github.com/awslabs/goformation/v5/cloudformation/sns"
 	"github.com/awslabs/goformation/v5/cloudformation/sqs"
 	"github.com/awslabs/goformation/v5/cloudformation/waf"
@@ -269,6 +270,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	case *cognito.UserPool:
 		return config.GetCognitoUserPoolConfig(resource)
 	case *lambda.Function:
+		return config.GetLambdaFunctionConfig(resource)
+	case *serverless.Function:
 		return config.GetLambdaFunctionConfig(resource)
 	case *certificatemanager.Certificate:
 		return config.GetCertificateManagerCertificateConfig(resource)
