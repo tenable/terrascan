@@ -49,7 +49,7 @@
         "ruleName": "ensureMcasInArm_25082021",
         "ruleTemplate": "{{.prefix}}{{.name}}{{.suffix}}[retval] {\n    security_center_settings := input.azurerm_security_center_setting[_]\n    upper(security_center_settings.config.setting_name) != \"{{.value}}\"\n    security_center_settings.config.enabled != true\n\n    retval := {\n        \"Id\": security_center_settings.id,\n        \"ReplaceType\": \"edit\",\n        \"CodeType\": \"attribute\",\n        \"Traverse\": \"enabled\",\n        \"Attribute\": \"enabled\",\n        \"AttributeDataType\": \"bool\",\n        \"Expected\": true,\n        \"Actual\": security_center_settings.config.enabled\n    }\n}",
         "ruleTemplateName": "ensureProperSettings_25082021",
-        "ruleArgument": "{\"wrongKey\":\"ensureMcasInArm\",\"wrongvalue\":\"MCAS\"}",
+        "ruleArgument": "\"name\":\"ensureMcasInArm\"\"prefix\"\"\",[]\"suffix\":\"_25082021\",\"value\":\"MCAS\"}",
         "severity": "MEDIUM",
         "vulnerability": "Disabled MCAS in Azure Security Center Setting goes against compliance.",
         "remediation": "Ensure MCAS setting is enabled in Azure Security Center Setting.",

@@ -127,7 +127,6 @@ func validPoliciesTest(t *testing.T, tempDir string) {
 		err = verifyFiles(files, rscdir)
 		if err != nil {
 			t.Error(err)
-
 		}
 	}
 }
