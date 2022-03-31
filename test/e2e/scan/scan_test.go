@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
@@ -342,6 +343,25 @@ var _ = Describe("Scan", func() {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(sessionEngineOutput.Summary.ResourcePath).To((Equal("https://github.com/accurics/terrascan.git")))
 				Expect(sessionEngineOutput.Summary.Branch).To((Equal("main")))
+			})
+		})
+	})
+	Describe("terrascan scan command run with policy-path", func() {
+		Context("terrascan scan command is run with --p flag", func() {
+			It("should scan and should use provided policies without downloading any from default repo", func() {
+				if path, err := os.Stat(config.GetPolicyRepoPath()); err == nil && path.IsDir() {
+					os.RemoveAll(config.GetPolicyRepoPath())
+				}
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				policyDir, err2 := filepath.Abs(policyRootRelPath)
+				Expect(err1).NotTo(HaveOccurred())
+				Expect(err2).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-p", policyDir, "-i", "terraform", "-d", iacDir}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeThree))
+				_, err := os.Stat(config.GetPolicyRepoPath())
+				Expect(err).To(HaveOccurred())
+				Expect(err.Error()).To(ContainSubstring("no such file or directory"))
 			})
 		})
 	})
