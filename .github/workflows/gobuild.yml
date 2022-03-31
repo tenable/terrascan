@@ -67,6 +67,8 @@ jobs:
       run: make docker-build
 
     - name: Login to docker hub
+    #  login to docker hub only from master 
+      if: ${{ github.ref == 'refs/heads/master' }}
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
 
     - name: Push Terrascan latest docker image

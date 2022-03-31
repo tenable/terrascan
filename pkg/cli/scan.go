@@ -36,7 +36,8 @@ var scanCmd = &cobra.Command{
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		if scanOptions.configOnly || scanOptions.configWithError {
+		if scanOptions.configOnly || scanOptions.configWithError ||
+			len(scanOptions.policyPath) > 0 {
 			return nil
 		}
 		return initial(cmd, args, true)
