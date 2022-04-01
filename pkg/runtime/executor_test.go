@@ -70,6 +70,10 @@ func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}
 	return m.output, m.err
 }
 
+func (m MockIacProvider) Name() string {
+	return "mock-iac"
+}
+
 // mock policy engine
 type MockPolicyEngine struct {
 	err error

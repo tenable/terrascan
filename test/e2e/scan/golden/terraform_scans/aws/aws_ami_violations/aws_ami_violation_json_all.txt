@@ -2,14 +2,34 @@
   "results": {
     "scan_errors": [
       {
+        "iac_type": "arm",
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "ARM files not found in the directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      },
+      {
+        "iac_type": "docker",
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "Dockerfile not found in the directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      },
+      {
+        "iac_type": "cft",
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "cft files not found in the directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      },
+      {
+        "iac_type": "k8s",
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "kubernetes files not found in the directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+      },
+      {
         "iac_type": "kustomize",
-        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
-        "errMsg": "kustomization.y(a)ml file not found in the directory /Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "kustomization.y(a)ml file not found in the directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
       },
       {
         "iac_type": "helm",
-        "directory": "/Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
-        "errMsg": "no helm charts found in directory /Users/pankajpatil/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
+        "directory": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+        "errMsg": "no helm charts found in directory /Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation"
       }
     ],
     "violations": [
@@ -29,9 +49,9 @@
     ],
     "skipped_violations": null,
     "scan_summary": {
-      "file/folder": "/Users/apple/go/src/github.com/patilpankaj212/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
-      "iac_type": "all",
-      "scanned_at": "2021-03-02 15:45:55.603722 +0000 UTC",
+      "file/folder": "/Users/suvarna/go/src/github.com/rchanger/terrascan/test/e2e/test_data/iac/aws/aws_ami_violation",
+      "iac_type": "terraform",
+      "scanned_at": "2022-03-25 06:40:14.665143 +0000 UTC",
       "policies_validated": 8,
       "violated_policies": 1,
       "low": 0,

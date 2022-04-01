@@ -35,8 +35,6 @@ import (
 
 const (
 	kustomizedirectory string = "kustomization"
-	iacSearchError     string = "error while searching for iac files"
-	strRootDir         string = "root dir"
 )
 
 var (
@@ -62,19 +60,16 @@ func (t KustomizeDirectoryLoader) LoadIacDir() (output.AllResourceConfigs, error
 
 	files, err := utils.FindFilesBySuffixInDir(t.absRootDir, KustomizeFileNames())
 	if err != nil {
-		zap.S().Debug(iacSearchError, zap.String(strRootDir, t.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: t.absRootDir, ErrMessage: err.Error()})
 	}
 
 	if len(files) == 0 {
 		errMsg := fmt.Sprintf("kustomization.y(a)ml file not found in the directory %s", t.absRootDir)
-		zap.S().Debug(iacSearchError, zap.String(strRootDir, t.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: t.absRootDir, ErrMessage: errMsg})
 	}
 
 	if len(files) > 1 {
 		errMsg := fmt.Sprintf("multiple kustomization.y(a)ml found in the directory %s", t.absRootDir)
-		zap.S().Debug(iacSearchError, zap.String(strRootDir, t.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "kustomize", Directory: t.absRootDir, ErrMessage: errMsg})
 	}
 

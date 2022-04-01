@@ -52,6 +52,10 @@ func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: absRootDir, ErrMessage: err.Error()})
 	}
+	if len(fileMap) == 0 {
+		errMsg := fmt.Sprintf("kubernetes files not found in the directory %s", k.absRootDir)
+		return allResourcesConfig, multierror.Append(k.errIacLoadDirs, results.DirScanErr{IacType: "k8s", Directory: k.absRootDir, ErrMessage: errMsg})
+	}
 
 	for fileDir, files := range fileMap {
 		for i := range files {
@@ -72,4 +76,9 @@ func (k *K8sV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	}
 
 	return allResourcesConfig, k.errIacLoadDirs
+}
+
+// Name returns name of the provider
+func (*K8sV1) Name() string {
+	return kubernetesTypeNameShort
 }
