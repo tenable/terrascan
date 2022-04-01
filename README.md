@@ -7,7 +7,6 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=accurics_terrascan&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=accurics_terrascan)
 [![AUR package](https://repology.org/badge/version-for-repo/aur/terrascan.svg)](https://repology.org/project/terrascan/versions)
 [![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
-[![community](https://img.shields.io/discourse/status?server=https%3A%2F%2Fcommunity.accurics.com)](https://community.accurics.com)
 [![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://docs.accurics.com/projects/accurics-terrascan/en/latest/?badge=latest)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
@@ -21,10 +20,20 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 - Mitigate risks before provisioning cloud native infrastructure.
 - Offers flexibility to run locally or integrate with your CI\CD.
 
+
+
 ### Resources
 
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
-* Join The Terrascan Community on Discord : https://discord.gg/ScUPMzyG3n 
+
+<p align="center">
+    Join our community
+<br/>
+<a href="https://discord.gg/ScUPMzyG3n">
+    <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" /> 
+</a>
+</p>
+
 
 ## Key features
 * 500+ Policies for security best practices
