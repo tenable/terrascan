@@ -254,4 +254,19 @@ var _ = Describe("Scan Command using remote types", func() {
 			})
 		})
 	})
+	Context("when scan is run on remote dir and using flag --temp-dir to set custom temp dir", func() {
+		When("remote type is git", func() {
+			remoteURL := "github.com/accurics/KaiMonkey/terraform/aws"
+			tmpDir, err := filepath.Abs(filepath.Join(iacRootRelPath, "temp_dir"))
+			Expect(err).NotTo(HaveOccurred())
+			It("should download the resource in provided custom temp dir and generate scan results", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-r", "git", "--remote-url", remoteURL, "--temp-dir", tmpDir}
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				// exit code is 5 because iac files in directory has violations
+				// and directory scan errors
+				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeFive))
+				helper.ContainsDirScanErrorSubString(session, tmpDir)
+			})
+		})
+	})
 })

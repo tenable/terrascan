@@ -25,6 +25,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/logging"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -40,6 +41,7 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
+	rootCmd.PersistentFlags().StringVarP(&CustomTempDir, "temp-dir", "", "", "temporary directory path to download remote repository,module and templates")
 
 	//Added init here in case flag parsing failed we should log which flag was incorrect.
 	logging.Init(LogType, LogLevel)
@@ -58,6 +60,9 @@ func Execute() {
 		if err := config.LoadGlobalConfig(ConfigFile); err != nil {
 			zap.S().Error("error while loading global config", zap.Error(err))
 			os.Exit(1)
+		}
+		if CustomTempDir != "" {
+			utils.CustomTempDir = CustomTempDir
 		}
 	})
 
