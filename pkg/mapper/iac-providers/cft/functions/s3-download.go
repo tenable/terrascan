@@ -136,7 +136,7 @@ func downloadPrivateTemplate(url *url.URL, s3c *S3Client) ([]byte, error) {
 }
 
 func downloadPublicTemplate(uri string) ([]byte, error) {
-	dst := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	dst := utils.GenerateTempDir()
 	defer os.RemoveAll(dst)
 	parts := strings.Split(uri, "/")
 	path := filepath.Join(dst, parts[len(parts)-1])

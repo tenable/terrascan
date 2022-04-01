@@ -17,6 +17,9 @@
 package scan_test
 
 import (
+	"os"
+	"path/filepath"
+
 	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
 	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
@@ -224,6 +227,30 @@ var _ = Describe("Scan Command using remote types", func() {
 					session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 					Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeOne))
 				})
+			})
+		})
+	})
+	Context("when scan is run using custom temp directory with env variable", func() {
+		When("remote type is git", func() {
+			remoteURL := "github.com/accurics/KaiMonkey/terraform/aws"
+			tmpDir, err := filepath.Abs(filepath.Join(iacRootRelPath, "temp_dir"))
+			Expect(err).NotTo(HaveOccurred())
+			JustBeforeEach(func() {
+				err = os.Setenv("TERRRASCAN_CUSTOM_TEMP_DIR", tmpDir)
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			JustAfterEach(func() {
+				err := os.Unsetenv("TERRRASCAN_CUSTOM_TEMP_DIR")
+				Expect(err).NotTo(HaveOccurred())
+			})
+			It("should download the resource in provided custom temp dir and generate scan results", func() {
+				scanArgs := []string{scanUtils.ScanCommand, "-o", "json", "-r", "git", "--remote-url", remoteURL}
+				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				// exit code is 5 because iac files in directory has violations
+				// and directory scan errors
+				Eventually(session, scanUtils.RemoteScanTimeout).Should(gexec.Exit(helper.ExitCodeFive))
+				helper.ContainsDirScanErrorSubString(session, tmpDir)
 			})
 		})
 	})

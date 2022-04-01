@@ -24,6 +24,10 @@ import (
 	"go.uber.org/zap"
 )
 
+// customTempDir env variable if set all the repository/module/template
+// download will happen in the provided directory
+const customTempDir = "TERRRASCAN_CUSTOM_TEMP_DIR"
+
 // GetHomeDir returns the home directory path
 func GetHomeDir() (terrascanDir string) {
 	zap.S().Debug("looking up for the home directory path")
@@ -39,7 +43,12 @@ func GetHomeDir() (terrascanDir string) {
 
 // GenerateTempDir generates a temporary directory
 func GenerateTempDir() string {
-	return filepath.Join(os.TempDir(), GenRandomString(6))
+	// if env variable custom temp directory is set will be used for download/clone.
+	tempDir := os.Getenv(customTempDir)
+	if tempDir == "" {
+		tempDir = os.TempDir()
+	}
+	return filepath.Join(tempDir, GenRandomString(6))
 }
 
 // IsDirExists checks wether the provided directory exists or not

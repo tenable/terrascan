@@ -20,7 +20,6 @@ import (
 	"errors"
 	"flag"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
@@ -190,7 +189,7 @@ func (s *ScanOptions) initColor() {
 func (s *ScanOptions) Run() error {
 
 	// temp dir to download the remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
