@@ -43,7 +43,6 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("Dockerfile not found in the directory %s", dc.absRootDir)
-		zap.S().Debug(output.IacSearchError, zap.String(output.StrRootDir, dc.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(dc.errIacLoadDirs, results.DirScanErr{IacType: "docker", Directory: dc.absRootDir, ErrMessage: errMsg})
 	}
 

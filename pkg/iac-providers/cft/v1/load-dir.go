@@ -42,7 +42,6 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 
 	if len(cftFileMap) == 0 {
 		errMsg := fmt.Sprintf("cft files not found in the directory %s", a.absRootDir)
-		zap.S().Debug(output.IacSearchError, zap.String(output.StrRootDir, a.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 

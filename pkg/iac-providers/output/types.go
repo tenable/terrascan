@@ -50,13 +50,6 @@ type ContainerDetails struct {
 	Vulnerabilities []Vulnerability `json:"vulnerabilities"`
 }
 
-const (
-	// IacSearchError common error when files are not found.
-	IacSearchError string = "error while searching for iac files"
-	// StrRootDir root directory details when files are not found.
-	StrRootDir string = "root dir"
-)
-
 // SkipRule struct will hold the skipped rule and any comment for the skipped rule
 type SkipRule struct {
 	Rule    string `json:"rule"`

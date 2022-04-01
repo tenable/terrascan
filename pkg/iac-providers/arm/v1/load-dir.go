@@ -51,7 +51,6 @@ func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("ARM files not found in the directory %s", a.absRootDir)
-		zap.S().Debug(output.IacSearchError, zap.String(output.StrRootDir, a.absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 

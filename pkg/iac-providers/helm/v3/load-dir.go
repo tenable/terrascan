@@ -55,7 +55,6 @@ func (h *HelmV3) LoadIacDir(absRootDir string, options map[string]interface{}) (
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("no helm charts found in directory %s", absRootDir)
-		zap.S().Debug(zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
