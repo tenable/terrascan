@@ -1,5 +1,54 @@
 # Changelog
 
+## [v1.14.0](https://github.com/accurics/terrascan/tree/v1.14.0) (2022-04-01)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.2...v1.14.0)
+
+**Implemented enhancements:**
+
+- \[Feature\]Option to provide temp directory path for download [\#1214](https://github.com/accurics/terrascan/pull/1214) ([Rchanger](https://github.com/Rchanger))
+- Feature/endpoint policy download [\#1200](https://github.com/accurics/terrascan/pull/1200) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/best effort cft file load [\#1168](https://github.com/accurics/terrascan/pull/1168) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Fixed bugs:**
+
+- update lambda function mapper [\#1199](https://github.com/accurics/terrascan/pull/1199) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- remove undefined template variable [\#1179](https://github.com/accurics/terrascan/pull/1179) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Terrascan creates ~/.terrascan even though policy directory is supplied [\#1209](https://github.com/accurics/terrascan/issues/1209)
+- Terrascan 1.13.2 version uses go 1.16.14 which has High vulnerability. When is the release with go 1.17 version expected? [\#1183](https://github.com/accurics/terrascan/issues/1183)
+-  Blocks of type "moved" not supported [\#1182](https://github.com/accurics/terrascan/issues/1182)
+- Intermittent error running terrascan - rego\_parse\_error: unexpected assign token: non-terminated set [\#1180](https://github.com/accurics/terrascan/issues/1180)
+- cli/run.go:110	scan run failed{error 26 0  failed to initialize OPA policy engine} [\#1178](https://github.com/accurics/terrascan/issues/1178)
+- Can't parse Terraform variable field: `nullable` [\#1176](https://github.com/accurics/terrascan/issues/1176)
+- AC\_AWS\_0214 not backward compatible [\#1172](https://github.com/accurics/terrascan/issues/1172)
+- azurerm\_key\_vault\_secret error not in line with tests [\#1163](https://github.com/accurics/terrascan/issues/1163)
+- Support AWS Terraform provider v4 for S3 buckets [\#1162](https://github.com/accurics/terrascan/issues/1162)
+
+**Merged pull requests:**
+
+- terraform iac provider should proceed with static analysis when rootMod is not `nil` [\#1211](https://github.com/accurics/terrascan/pull/1211) ([patilpankaj212](https://github.com/patilpankaj212))
+- skip policy download if -p flag used  [\#1210](https://github.com/accurics/terrascan/pull/1210) ([Rchanger](https://github.com/Rchanger))
+- Update README.md [\#1206](https://github.com/accurics/terrascan/pull/1206) ([sangam14](https://github.com/sangam14))
+- Update mkdocs to 1.3.0 [\#1203](https://github.com/accurics/terrascan/pull/1203) ([pyup-bot](https://github.com/pyup-bot))
+- remove source\_code\_hash mapping [\#1197](https://github.com/accurics/terrascan/pull/1197) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds: dir scan errors in human readable output format [\#1196](https://github.com/accurics/terrascan/pull/1196) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs-material to 8.2.6 [\#1195](https://github.com/accurics/terrascan/pull/1195) ([pyup-bot](https://github.com/pyup-bot))
+- add CODEOWNERS for terrascan [\#1194](https://github.com/accurics/terrascan/pull/1194) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds: git in container which is required for go build [\#1193](https://github.com/accurics/terrascan/pull/1193) ([Rchanger](https://github.com/Rchanger))
+- typo: Change "desitnation" to "destination". [\#1192](https://github.com/accurics/terrascan/pull/1192) ([adyavanapalli](https://github.com/adyavanapalli))
+- Add security policy [\#1189](https://github.com/accurics/terrascan/pull/1189) ([bkizer-tenable](https://github.com/bkizer-tenable))
+- skip vuln test for dependabot [\#1185](https://github.com/accurics/terrascan/pull/1185) ([Rchanger](https://github.com/Rchanger))
+- Perform: go mod tidy [\#1184](https://github.com/accurics/terrascan/pull/1184) ([Rchanger](https://github.com/Rchanger))
+- updating s3 bucket policies for v4 aws provider [\#1175](https://github.com/accurics/terrascan/pull/1175) ([harkirat22](https://github.com/harkirat22))
+- Add backward compatible implementation of AC\_AWS\_0214 [\#1173](https://github.com/accurics/terrascan/pull/1173) ([HorizonNet](https://github.com/HorizonNet))
+- fix: reworded error to explain tests performed [\#1164](https://github.com/accurics/terrascan/pull/1164) ([beararmy](https://github.com/beararmy))
+-  Bump go 1.17 [\#1026](https://github.com/accurics/terrascan/pull/1026) ([Rchanger](https://github.com/Rchanger))
+
+# Changelog
+
 ## [v1.13.2](https://github.com/accurics/terrascan/tree/v1.13.2) (2022-02-22)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.1...v1.13.2)
@@ -924,6 +973,9 @@ Major updates to Terrascan and the underlying architecture including:
 
 ## 0.1.0 (2017-11-26)
 - First release on PyPI.
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
 
 \* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
 
