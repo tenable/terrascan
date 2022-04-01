@@ -28,6 +28,9 @@ import (
 // download will happen in the provided directory
 const customTempDir = "TERRRASCAN_CUSTOM_TEMP_DIR"
 
+// CustomTempDir store the global flag --temp-dir value which will be used to download repository,module and template.
+var CustomTempDir string
+
 // GetHomeDir returns the home directory path
 func GetHomeDir() (terrascanDir string) {
 	zap.S().Debug("looking up for the home directory path")
@@ -45,6 +48,9 @@ func GetHomeDir() (terrascanDir string) {
 func GenerateTempDir() string {
 	// if env variable custom temp directory is set will be used for download/clone.
 	tempDir := os.Getenv(customTempDir)
+	if CustomTempDir != "" {
+		tempDir = CustomTempDir
+	}
 	if tempDir == "" {
 		tempDir = os.TempDir()
 	}

@@ -32,6 +32,9 @@ var (
 
 	// ConfigFile Config file path
 	ConfigFile string
+
+	// CustomTempDir Temporary directory path to download remote repository,module and templates
+	CustomTempDir string
 )
 
 var rootCmd = &cobra.Command{
