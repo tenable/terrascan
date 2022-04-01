@@ -140,12 +140,20 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 		// load current config directory
 		rootMod, diags := t.parser.LoadConfigDir(dir)
-		if diags.HasErrors() {
+		if rootMod == nil && diags.HasErrors() {
 			// log a debug message and continue with other directories
 			errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
 			zap.S().Debug(errMessage)
 			t.addError(errMessage, dir)
 			continue
+		}
+
+		// rootMod can be considered for static analysis
+		if rootMod != nil && diags.HasErrors() {
+			// log a debug message and continue with analysis of the root mod.
+			errMessage := fmt.Sprintf("diagnostic errors while loading terraform config dir '%s'. error from terraform:\n%+v\n", dir, getErrorMessagesFromDiagnostics(diags))
+			zap.S().Debug(errMessage)
+			t.addError(errMessage, dir)
 		}
 
 		// get unified config for the current directory
@@ -257,11 +265,19 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 
 	// load current config directory
 	rootMod, diags := t.parser.LoadConfigDir(t.absRootDir)
-	if diags.HasErrors() {
+	if rootMod == nil && diags.HasErrors() {
 		// log a debug message and continue with other directories
 		errMessage := fmt.Sprintf("failed to load terraform config dir '%s'. error from terraform:\n%+v\n", t.absRootDir, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
+	}
+
+	// rootMod can be considered for static analysis
+	if rootMod != nil && diags.HasErrors() {
+		// log a debug message and continue with analysis of the root mod.
+		errMessage := fmt.Sprintf("diagnostic errors while loading terraform config dir '%s'. error from terraform:\n%+v\n", t.absRootDir, getErrorMessagesFromDiagnostics(diags))
+		zap.S().Debug(errMessage)
+		t.addError(errMessage, t.absRootDir)
 	}
 
 	// get unified config for the current directory
