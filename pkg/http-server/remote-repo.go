@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -120,7 +119,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	)
 
 	// temp destination directory to download remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository

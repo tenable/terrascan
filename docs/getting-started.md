@@ -153,6 +153,7 @@ You should see a total of 9 violations, which are detailed in the output.
 
 Now that you understand how to run Terrascan, you can explore various options available. The [usage page](usage/usage.md) covers the options in detail. For more information, see [Related resources](#related_resources).
 
+If you do not want terrascan to use `os.TempDir()` for downloading/cloning of remote repository, terraform module or template files you can specify the directory to use by setting `TERRRASCAN_CUSTOM_TEMP_DIR` environment variable.
 # Related resources
 
 * The [usage guide](usage/usage.md) explains general usage, how to scan other types of IaC (such as: Kubernetes, Helm, and Kustomize), List of other IaC providers (e.g. Kubernetes, Helm, etc.), instructions to limit the scan to specific directories or files, and generating the output in different formats.
