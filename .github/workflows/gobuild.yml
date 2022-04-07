@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Checkout Terrascan
       uses: actions/checkout@v2
-      
+
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -28,6 +28,9 @@ jobs:
 
     - name: Install golint
       run: go get -u golang.org/x/lint/golint
+
+    - name: Build Terrascan docker image
+      run: make docker-build
 
     - name: Go validations
       run: make validate
@@ -37,7 +40,7 @@ jobs:
 
     - name: Run unit tests
       run: make unit-tests
-    
+
     - name: install kind
       run: make install-kind
 
