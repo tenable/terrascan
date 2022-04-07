@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/iam"
+	"github.com/awslabs/goformation/v5/cloudformation/iam"
 )
 
 // IamAccessKeyConfig holds config for aws_iam_access_key

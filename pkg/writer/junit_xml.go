@@ -52,6 +52,7 @@ type JUnitTestSuite struct {
 	Time       string          `xml:"time,attr"`
 	Name       string          `xml:"name,attr"`
 	Package    string          `xml:"package,attr"`
+	Branch     string          `xml:"branch,attr,omitempty"`
 	Properties []JUnitProperty `xml:"properties>property,omitempty"`
 	TestCases  []JUnitTestCase
 }
@@ -103,6 +104,7 @@ func newJunitTestSuite(summary results.ScanSummary) JUnitTestSuite {
 		Time:     fmt.Sprint(summary.TotalTime),
 		Failures: summary.ViolatedPolicies,
 		Package:  summary.ResourcePath,
+		Branch:   summary.Branch,
 		Properties: []JUnitProperty{
 			{
 				Name:  "Terrascan Version",
@@ -162,18 +164,22 @@ func violationsToTestCases(violations []*results.Violation, isSkipped bool) []JU
 	for _, v := range violations {
 		var testCase JUnitTestCase
 		if isSkipped {
-			testCase = JUnitTestCase{Failure: new(JUnitFailure), SkipMessage: new(JUnitSkipMessage)}
-			testCase.SkipMessage.Message = v.Comment
+			testCase = JUnitTestCase{SkipMessage: new(JUnitSkipMessage)}
+			// since junitXML doesn't contain the attributes we want to show as violations
+			// we would add details of violations in the skip message, with any provided skip comment
+			if v.Comment != "" {
+				testCase.SkipMessage.Message = v.Comment
+			}
 		} else {
 			testCase = JUnitTestCase{Failure: new(JUnitFailure)}
+			// since junitXML doesn't contain the attributes we want to show as violations
+			// we would add details of violations in the failure message
+			testCase.Failure.Message = getViolationString(*v)
 		}
 		testCase.Classname = v.File
 		testCase.Name = fmt.Sprintf(testNameFormatFailed, v.ResourceName, v.LineNumber, v.RuleID)
 		testCase.Severity = v.Severity
 		testCase.Category = v.Category
-		// since junitXML doesn't contain the attributes we want to show as violations
-		// we would add details of violations in the failure message
-		testCase.Failure.Message = getViolationString(*v)
 		testCases = append(testCases, testCase)
 	}
 	return testCases

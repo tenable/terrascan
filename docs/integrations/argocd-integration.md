@@ -13,7 +13,7 @@ ___
 
 #### Configure a PreSync hook
 
-The following example of a hook yaml is nearly ready to be added to an existing kubernetes configuration. To complete the configutation, you need to:
+The following example of a hook yaml is nearly ready to be added to an existing kubernetes configuration. To complete the configuration, you need to:
 - Ensure that the secrets,  `known_hosts`, and `ssh_config` volume are relevant for your specific environment.
 - Specify a terrascan image.
 
@@ -117,7 +117,7 @@ To allow users to check for violations in the web interface, configure the job t
 ```sh
 #!/bin/sh
 
-function send_slack_notificaton {
+function send_slack_notification {
   channel=$1
   username=$2
   slack_hook=$3
@@ -133,7 +133,7 @@ if [ -p /dev/stdin ]; then
 
   cat results.out
 
-  send_slack_notificaton $1 $2 $3
+  send_slack_notification $1 $2 $3
 
   echo "notification exit code: $?"
 else

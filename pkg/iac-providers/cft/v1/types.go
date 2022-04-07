@@ -50,3 +50,8 @@ const (
 func CFTFileExtensions() []string {
 	return []string{YAMLExtension, YAMLExtension2, JSONExtension, TemplateExtension, TXTExtension}
 }
+
+type cftResource struct {
+	AWSTemplateFormatVersion string                 `json:"AWSTemplateFormatVersion"`
+	Resources                map[string]interface{} `json:"Resources"`
+}

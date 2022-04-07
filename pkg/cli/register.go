@@ -21,9 +21,11 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/accurics/terrascan/pkg/config"
 	"github.com/accurics/terrascan/pkg/logging"
+	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -39,6 +41,10 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&LogType, "log-type", "x", "console", "log output type (console, json)")
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
+	rootCmd.PersistentFlags().StringVarP(&CustomTempDir, "temp-dir", "", "", "temporary directory path to download remote repository,module and templates")
+
+	//Added init here in case flag parsing failed we should log which flag was incorrect.
+	logging.Init(LogType, LogLevel)
 
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
@@ -54,6 +60,9 @@ func Execute() {
 		if err := config.LoadGlobalConfig(ConfigFile); err != nil {
 			zap.S().Error("error while loading global config", zap.Error(err))
 			os.Exit(1)
+		}
+		if CustomTempDir != "" {
+			utils.CustomTempDir = CustomTempDir
 		}
 	})
 
@@ -77,6 +86,11 @@ func Execute() {
 	}
 
 	if err := rootCmd.Execute(); err != nil {
+		// check if the error is related to flag argument missing and
+		// log it before terminating the process so user gets idea about the incorrect flag value
+		if strings.Contains(err.Error(), "flag needs an argument") {
+			zap.S().Error("error while executing command ", zap.Error(err))
+		}
 		os.Exit(1)
 	}
 }

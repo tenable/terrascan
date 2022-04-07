@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/config"
+	"github.com/awslabs/goformation/v5/cloudformation/config"
 )
 
 // AWSConfigConfigRuleConfig holds config for aws_config_config_rule

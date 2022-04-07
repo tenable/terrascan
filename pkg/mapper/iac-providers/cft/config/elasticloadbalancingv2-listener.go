@@ -17,22 +17,22 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancingv2"
+	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancingv2"
 )
 
-// ElasticLoadBalancingV2ListenerConfig holds the config for aws_lb_listener
+// ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener
 type ElasticLoadBalancingV2ListenerConfig struct {
 	Config
 	Protocol      string              `json:"protocol"`
 	DefaultAction DefaultActionConfig `json:"default_action"`
 }
 
-// DefaultActionConfig holds the config for default_action attribute of aws_lb_listener
+// DefaultActionConfig holds config for default_action attribute of aws_lb_listener
 type DefaultActionConfig struct {
 	RedirectConfig RedirectConfig `json:"redirect"`
 }
 
-// RedirectConfig holds the config for redirect attirbute of default_action
+// RedirectConfig holds config for redirect attirbute of default_action
 type RedirectConfig struct {
 	Protocol string `json:"protocol"`
 }

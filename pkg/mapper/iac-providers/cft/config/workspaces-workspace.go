@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/workspaces"
+	"github.com/awslabs/goformation/v5/cloudformation/workspaces"
 )
 
 // WorkspacesWorkspaceConfig holds config for aws_workspaces_workspace

@@ -34,13 +34,18 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
-	fileMap, err := utils.FindFilesBySuffix(absRootDir, CFTFileExtensions())
+	cftFileMap, err := utils.FindFilesBySuffix(absRootDir, CFTFileExtensions())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
-	for fileDir, files := range fileMap {
+	if len(cftFileMap) == 0 {
+		errMsg := fmt.Sprintf("cft files not found in the directory %s", a.absRootDir)
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: errMsg})
+	}
+
+	for fileDir, files := range cftFileMap {
 		for i := range files {
 			file := filepath.Join(fileDir, *files[i])
 
@@ -59,4 +64,9 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	}
 
 	return allResourcesConfig, a.errIacLoadDirs
+}
+
+// Name returns name of the provider
+func (*CFTV1) Name() string {
+	return "cft"
 }

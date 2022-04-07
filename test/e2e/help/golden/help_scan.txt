@@ -8,6 +8,7 @@ Usage:
 Flags:
       --categories strings        list of categories of violations to be reported by terrascan (example: --categories="category1,category2")
       --config-only               will output resource config (should only be used for debugging purposes)
+      --config-with-error         will output resource config and errors (if any)
       --find-vuln                 fetches vulnerabilities identified in Docker images
   -h, --help                      help for scan
   -d, --iac-dir string            path to a directory containing one or more IaC files (default ".")
@@ -19,6 +20,8 @@ Flags:
   -t, --policy-type strings       policy type (all, aws, azure, docker, gcp, github, k8s) (default [all])
   -r, --remote-type string        type of remote backend (git, s3, gcs, http, terraform-registry)
   -u, --remote-url string         url pointing to remote IaC repository
+      --repo-ref string           branch of the repo being scanned
+      --repo-url string           URL of the repo being scanned, will be reflected in scan summary
       --scan-rules strings        one or more rules to scan (example: --scan-rules="ruleID1,ruleID2")
       --severity string           minimum severity level of the policy violations to be reported by terrascan
       --show-passed               display passed rules, along with violations
@@ -34,3 +37,4 @@ Global Flags:
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
   -o, --output string        output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
+      --temp-dir string      temporary directory path to download remote repository,module and templates

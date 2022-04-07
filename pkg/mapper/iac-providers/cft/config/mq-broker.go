@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/amazonmq"
+	"github.com/awslabs/goformation/v5/cloudformation/amazonmq"
 )
 
 // MqBrokerConfig holds config for aws_mq_broker

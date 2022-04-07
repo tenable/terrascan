@@ -35,6 +35,7 @@ type engineEvalResult struct {
 
 // dirScanResp represents a directory scan response
 type dirScanResp struct {
-	err error
-	rc  output.AllResourceConfigs
+	err     error
+	rc      output.AllResourceConfigs
+	iacType string
 }

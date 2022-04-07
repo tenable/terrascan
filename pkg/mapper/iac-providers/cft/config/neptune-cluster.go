@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/neptune"
+	"github.com/awslabs/goformation/v5/cloudformation/neptune"
 )
 
 // NeptuneClusterConfig holds config for aws_neptune_cluster

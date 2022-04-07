@@ -36,6 +36,32 @@ var (
 			Summary: summaryWithNoViolations,
 		},
 	}
+	outputWithDirScanErrors = policy.EngineOutput{
+		ViolationStore: &results.ViolationStore{
+			DirScanErrors: []results.DirScanErr{
+				{
+					IacType:    "kustomize",
+					Directory:  "test/e2e/test_data/iac/aws/aws_db_instance_violation",
+					ErrMessage: "kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation",
+				},
+				{
+					IacType:    "helm",
+					Directory:  "test/e2e/test_data/iac/aws/aws_db_instance_violation",
+					ErrMessage: "no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation",
+				},
+			},
+			PassedRules: []*results.PassedRule{
+				{
+					RuleName:    "s3EnforceUserACL",
+					Description: "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:      "AWS.S3Bucket.DS.High.1043",
+					Severity:    "HIGH",
+					Category:    "S3",
+				},
+			},
+			Summary: summaryWithNoViolations,
+		},
+	}
 	vulnerabilitiesInputHumanReadable = policy.EngineOutput{
 		ViolationStore: &results.ViolationStore{
 			Vulnerabilities: []*results.Vulnerability{
@@ -60,6 +86,17 @@ var (
 				Vulnerabilities:  &summaryWithNoViolations.ViolatedPolicies,
 			},
 		},
+	}
+	summaryWithRepoURLRepoRef = results.ScanSummary{
+		ResourcePath:     "https://github.com/user/repository.git",
+		Branch:           "main",
+		IacType:          "terraform",
+		Timestamp:        "2020-12-12 11:21:29.902796 +0000 UTC",
+		TotalPolicies:    566,
+		LowCount:         0,
+		MediumCount:      0,
+		HighCount:        1,
+		ViolatedPolicies: 1,
 	}
 )
 
@@ -139,6 +176,44 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
+	expectedOutputWithDirScanError = `Scan Errors - 
+
+	IaC Type            :	kustomize
+	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
+	Error Message       :	kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation
+	
+	-----------------------------------------------------------------------
+	
+	IaC Type            :	helm
+	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
+	Error Message       :	no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation
+	
+	-----------------------------------------------------------------------
+	
+	
+
+Passed Rules - 
+    
+	Rule ID        :	AWS.S3Bucket.DS.High.1043
+	Rule Name      :	s3EnforceUserACL
+	Description    :	S3 bucket Access is allowed to all AWS Account Users.
+	Severity       :	HIGH
+	Category       :	S3
+	
+	-----------------------------------------------------------------------
+	
+
+Scan Summary -
+
+	File/Folder         :	test
+	IaC Type            :	terraform
+	Scanned At          :	2020-12-12 11:21:29.902796 +0000 UTC
+	Policies Validated  :	566
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1`
+
 	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details - 
     
 	Description         :	GNU Bash. Bash is the GNU Project's shell
@@ -165,6 +240,18 @@ Scan Summary -
 	Medium              :	0
 	High                :	1
 	Vulnerabilities     :	1`
+
+	expectedOutput4 = `Scan Summary -
+
+	File/Folder         :	https://github.com/user/repository.git
+	Branch              :	main
+	IaC Type            :	terraform
+	Scanned At          :	2020-12-12 11:21:29.902796 +0000 UTC
+	Policies Validated  :	566
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	0
+	High                :	1`
 )
 
 func TestHumanReadbleWriter(t *testing.T) {
@@ -199,6 +286,20 @@ func TestHumanReadbleWriter(t *testing.T) {
 			name:           "Human Readable Writer: With Vulnerabilities",
 			input:          vulnerabilitiesInputHumanReadable,
 			expectedOutput: vulnerabilityScanOutputHumanReadable,
+		},
+		{
+			name: "Human Readable Writer: with repository url and branch",
+			input: policy.EngineOutput{
+				ViolationStore: &results.ViolationStore{
+					Summary: summaryWithRepoURLRepoRef,
+				},
+			},
+			expectedOutput: expectedOutput4,
+		},
+		{
+			name:           "Human Readable Writer: with directory scan error",
+			input:          outputWithDirScanErrors,
+			expectedOutput: expectedOutputWithDirScanError,
 		},
 	}
 

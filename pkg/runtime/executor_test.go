@@ -70,6 +70,10 @@ func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}
 	return m.output, m.err
 }
 
+func (m MockIacProvider) Name() string {
+	return "mock-iac"
+}
+
 // mock policy engine
 type MockPolicyEngine struct {
 	err error
@@ -116,9 +120,11 @@ func TestExecute(t *testing.T) {
 
 	// TODO: add tests to validate output of Execute()
 	table := []struct {
-		name     string
-		executor Executor
-		wantErr  error
+		name            string
+		configOnly      bool
+		configWithError bool
+		executor        Executor
+		wantErr         error
 	}{
 		{
 			name: "test LoadIacDir error",
@@ -198,11 +204,30 @@ func TestExecute(t *testing.T) {
 			},
 			wantErr: nil,
 		},
+		{
+			name: "has scan errors with all the iac providers",
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "all",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
+		{
+			name:            "test config with error",
+			configWithError: true,
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "terraform",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.executor.Execute(false)
+			_, gotErr := tt.executor.Execute(tt.configOnly, tt.configWithError)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -468,6 +493,8 @@ type flagSet struct {
 	skipRules                []string
 	notificationWebhookURL   string
 	notificationWebhookToken string
+	repoURL                  string
+	repoRef                  string
 }
 
 func TestNewExecutor(t *testing.T) {
@@ -596,7 +623,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false, tt.flags.notificationWebhookURL, tt.flags.notificationWebhookToken)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false, tt.flags.notificationWebhookURL, tt.flags.notificationWebhookToken, tt.flags.repoURL, tt.flags.repoRef)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

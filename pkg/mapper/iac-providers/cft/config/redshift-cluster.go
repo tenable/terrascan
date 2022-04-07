@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/redshift"
+	"github.com/awslabs/goformation/v5/cloudformation/redshift"
 )
 
 // RedshiftClusterConfig holds config for aws_redshift_cluster

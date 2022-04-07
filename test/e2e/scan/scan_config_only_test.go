@@ -52,7 +52,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 			Context("it doesn't support --config-only flag", func() {
 				Context("human readable output format is the default output format", func() {
 					It("should result in an error and exit with status code 1", func() {
-						errString := "please use yaml or json output format when using --config-only flag"
+						errString := "please use yaml or json output format when using --config-only or --config-with-error flags"
 						scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only"}
 						scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 					})
@@ -63,7 +63,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		When("output type is xml", func() {
 			Context("it doesn't support --config-only flag", func() {
 				It("should result in an error and exit with status code 1", func() {
-					errString := "failed to write XML output. error: 'xml: unsupported type: output.AllResourceConfigs'"
+					errString := "please use yaml or json output format when using --config-only or --config-with-error flags"
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "xml"}
 					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
@@ -73,7 +73,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		When("output type is junit-xml", func() {
 			Context("it doesn't support --config-only flag", func() {
 				It("should result in an error and exit with status code 1", func() {
-					errString := "incorrect input for JunitXML writer, supported type is policy.EngineOutput"
+					errString := "please use yaml or json output format when using --config-only or --config-with-error flags"
 					scanArgs := []string{scanUtils.ScanCommand, "-d", iacDir, "--config-only", "-o", "junit-xml"}
 					scanUtils.RunScanAndAssertErrorMessage(terrascanBinaryPath, helper.ExitCodeOne, scanUtils.ScanTimeout, errString, outWriter, errWriter, scanArgs...)
 				})
@@ -81,7 +81,7 @@ var _ = Describe("Scan With Config Only Flag", func() {
 		})
 	})
 
-	Describe("scan command is run using the --config-only flag for unsupported output types", func() {
+	Describe("scan command is run using the --config-only flag for supported output types", func() {
 		Context("for terraform files", func() {
 			When("output type is json", func() {
 				Context("it supports --config-only flag", func() {

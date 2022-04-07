@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/elasticache"
+	"github.com/awslabs/goformation/v5/cloudformation/elasticache"
 )
 
 // ElastiCacheReplicationGroupConfig holds config for aws_elasticache_replication_group

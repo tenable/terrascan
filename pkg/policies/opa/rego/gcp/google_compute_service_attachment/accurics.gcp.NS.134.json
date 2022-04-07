@@ -1,0 +1,13 @@
+{
+    "name": "serviceAttachmentAcceptAutomatic",
+    "file": "serviceAttachmentAcceptAutomatic.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_service_attachment",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "Service Attachment with connection_preference ACCEPT_AUTOMATIC allow any project to connect.",
+    "reference_id": "accurics.gcp.NS.134",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_GCP_0296"
+}

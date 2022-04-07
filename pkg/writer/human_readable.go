@@ -27,9 +27,20 @@ import (
 )
 
 const (
+	oneLineCommonFormat = "%-20v:\t%s\n\t"
+)
+
+const (
 	humanReadbleFormat supportedFormat = "human"
 
 	defaultTemplate string = `
+{{if (gt (len .ViolationStore.DirScanErrors) 0)}}	
+Scan Errors - 
+{{range $index, $element := .ViolationStore.DirScanErrors}}
+	{{dirScanErrors $element | printf "%s"}}
+	-----------------------------------------------------------------------
+	{{end}}
+{{end}}	
 {{if (gt (len .ViolationStore.PassedRules) 0) }}
 Passed Rules - 
     {{range $index, $element := .ViolationStore.PassedRules}}
@@ -84,6 +95,7 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 		"scanSummary":            scanSummary,
 		"passedRules":            passedRules,
 		"defaultVulnerabilities": defaultVulnerabilities,
+		"dirScanErrors":          dirScanErrors,
 	}).Parse(defaultTemplate)
 	if err != nil {
 		zap.S().Errorf("failed to write human readable output. error: '%v'", err)
@@ -143,15 +155,23 @@ func detailedViolations(v results.Violation) string {
 }
 
 func scanSummary(s results.ScanSummary) string {
-	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
-		"File/Folder", s.ResourcePath,
+
+	out := fmt.Sprintf(oneLineCommonFormat,
+		"File/Folder", s.ResourcePath)
+
+	if s.Branch != "" {
+		out += fmt.Sprintf(oneLineCommonFormat, "Branch", s.Branch)
+	}
+
+	out += fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t%-20v:\t%d\n\t",
 		"IaC Type", s.IacType,
 		"Scanned At", s.Timestamp,
 		"Policies Validated", s.TotalPolicies,
 		"Violated Policies", s.ViolatedPolicies,
 		"Low", s.LowCount,
 		"Medium", s.MediumCount,
-		"High", s.HighCount)
+		"High", s.HighCount,
+	)
 
 	if s.Vulnerabilities != nil {
 		out += fmt.Sprintf("%-20v:\t%d\n\t", "Vulnerabilities", *s.Vulnerabilities)
@@ -186,5 +206,13 @@ func defaultVulnerabilities(v results.Vulnerability) string {
 		"Line", v.LineNumber,
 		"Primary URL", v.PrimaryURL,
 		"Primary URL", v.Severity)
+	return out
+}
+
+func dirScanErrors(d results.DirScanErr) string {
+	out := fmt.Sprintf("%-20v:\t%s\n\t%-20v:\t%s\n\t%-20v:\t%s\n\t",
+		"IaC Type", d.IacType,
+		"Directory", d.Directory,
+		"Error Message", d.ErrMessage)
 	return out
 }

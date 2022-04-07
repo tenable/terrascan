@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v4/cloudformation/iam"
+	"github.com/awslabs/goformation/v5/cloudformation/iam"
 )
 
 const (
@@ -33,6 +33,12 @@ type IamGroupPolicyConfig struct {
 	Config
 	PolicyName     string `json:"name"`
 	PolicyDocument string `json:"policy"`
+}
+
+// IamGroupConfig holds config for aws_iam_group
+type IamGroupConfig struct {
+	Config
+	Name string `json:"name"`
 }
 
 // GetIamGroupConfig returns config for aws_iam_group_policy
@@ -60,6 +66,18 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 			})
 		}
 	}
+
+	groupConfig := IamGroupConfig{
+		Config: Config{
+			Name: r.GroupName,
+		},
+		Name: r.GroupName,
+	}
+
+	var groupPolicyConfig AWSResourceConfig
+	groupPolicyConfig.Resource = groupConfig
+	groupPolicyConfig.Metadata = r.AWSCloudFormationMetadata
+	policyConfigs = append(policyConfigs, groupPolicyConfig)
 
 	return policyConfigs
 }

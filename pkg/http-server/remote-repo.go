@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/config"
@@ -48,6 +47,8 @@ type scanRemoteRepoReq struct {
 	d                        downloader.Downloader
 	NotificationWebhookURL   string `json:"webhook_url"`
 	NotificationWebhookToken string `json:"webhook_token"`
+	RepoRef                  string `json:"repo-ref"`
+	ConfigWithError          bool   `json:"config_with_error"`
 }
 
 // scanRemoteRepo downloads the remote Iac repository and scans it for
@@ -118,7 +119,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	)
 
 	// temp destination directory to download remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
@@ -131,22 +132,24 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 
 	// create a new runtime executor for scanning the remote repo
 	executor, err := runtime.NewExecutor(iacType, iacVersion, cloudType,
-		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive, false, s.FindVulnerabilities, s.NotificationWebhookURL, s.NotificationWebhookToken)
+		"", iacDirPath, policyPath, s.ScanRules, s.SkipRules, s.Categories, s.Severity, s.NonRecursive, false, s.FindVulnerabilities, s.NotificationWebhookURL, s.NotificationWebhookToken, s.RemoteURL, s.RepoRef)
 	if err != nil {
 		zap.S().Error(err)
 		return output, isAdmissionDenied, err
 	}
 
 	// evaluate policies IaC for violations
-	results, err := executor.Execute(s.ConfigOnly)
+	results, err := executor.Execute(s.ConfigOnly, s.ConfigWithError)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		return output, isAdmissionDenied, err
 	}
 
-	// if config only, return only config else return only violations
-	if s.ConfigOnly {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if s.ConfigWithError {
+		output = results
+	} else if s.ConfigOnly {
 		output = results.ResourceConfig
 	} else {
 		// set remote url in case remote repo is scanned

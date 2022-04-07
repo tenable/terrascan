@@ -13,7 +13,7 @@ import (
 
 // ResolveLinkedTemplate downloads temlate for the given uri and returns its path
 func ResolveLinkedTemplate(uri string) ([]byte, error) {
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 	path, err := downloadTemplate(uri, tempDir)
 	if err != nil {

@@ -55,7 +55,6 @@ func (h *HelmV3) LoadIacDir(absRootDir string, options map[string]interface{}) (
 
 	if len(fileMap) == 0 {
 		errMsg := fmt.Sprintf("no helm charts found in directory %s", absRootDir)
-		zap.S().Debug(zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(h.errIacLoadDirs, results.DirScanErr{IacType: "helm", Directory: absRootDir, ErrMessage: errMsg})
 	}
 
@@ -308,4 +307,9 @@ func (h *HelmV3) getHelmTemplateExtensions() []string {
 // getHelmChartFilenames returns valid chart filenames
 func (h *HelmV3) getHelmChartFilenames() []string {
 	return []string{"Chart.yaml"}
+}
+
+// Name returns name of the provider
+func (h *HelmV3) Name() string {
+	return "helm"
 }

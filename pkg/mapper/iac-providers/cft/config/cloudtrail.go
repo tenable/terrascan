@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v5/cloudformation/cloudtrail"
 )
 
 // CloudTrailConfig holds config for aws_cloudtrail

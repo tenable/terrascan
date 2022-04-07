@@ -1,5 +1,179 @@
 # Changelog
 
+## [v1.14.0](https://github.com/accurics/terrascan/tree/v1.14.0) (2022-04-01)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.2...v1.14.0)
+
+**Implemented enhancements:**
+
+- \[Feature\]Option to provide temp directory path for download [\#1214](https://github.com/accurics/terrascan/pull/1214) ([Rchanger](https://github.com/Rchanger))
+- Feature/endpoint policy download [\#1200](https://github.com/accurics/terrascan/pull/1200) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/best effort cft file load [\#1168](https://github.com/accurics/terrascan/pull/1168) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Fixed bugs:**
+
+- update lambda function mapper [\#1199](https://github.com/accurics/terrascan/pull/1199) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- remove undefined template variable [\#1179](https://github.com/accurics/terrascan/pull/1179) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Terrascan creates ~/.terrascan even though policy directory is supplied [\#1209](https://github.com/accurics/terrascan/issues/1209)
+- Terrascan 1.13.2 version uses go 1.16.14 which has High vulnerability. When is the release with go 1.17 version expected? [\#1183](https://github.com/accurics/terrascan/issues/1183)
+-  Blocks of type "moved" not supported [\#1182](https://github.com/accurics/terrascan/issues/1182)
+- Intermittent error running terrascan - rego\_parse\_error: unexpected assign token: non-terminated set [\#1180](https://github.com/accurics/terrascan/issues/1180)
+- cli/run.go:110	scan run failed{error 26 0  failed to initialize OPA policy engine} [\#1178](https://github.com/accurics/terrascan/issues/1178)
+- Can't parse Terraform variable field: `nullable` [\#1176](https://github.com/accurics/terrascan/issues/1176)
+- AC\_AWS\_0214 not backward compatible [\#1172](https://github.com/accurics/terrascan/issues/1172)
+- azurerm\_key\_vault\_secret error not in line with tests [\#1163](https://github.com/accurics/terrascan/issues/1163)
+- Support AWS Terraform provider v4 for S3 buckets [\#1162](https://github.com/accurics/terrascan/issues/1162)
+
+**Merged pull requests:**
+
+- terraform iac provider should proceed with static analysis when rootMod is not `nil` [\#1211](https://github.com/accurics/terrascan/pull/1211) ([patilpankaj212](https://github.com/patilpankaj212))
+- skip policy download if -p flag used  [\#1210](https://github.com/accurics/terrascan/pull/1210) ([Rchanger](https://github.com/Rchanger))
+- Update README.md [\#1206](https://github.com/accurics/terrascan/pull/1206) ([sangam14](https://github.com/sangam14))
+- Update mkdocs to 1.3.0 [\#1203](https://github.com/accurics/terrascan/pull/1203) ([pyup-bot](https://github.com/pyup-bot))
+- remove source\_code\_hash mapping [\#1197](https://github.com/accurics/terrascan/pull/1197) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds: dir scan errors in human readable output format [\#1196](https://github.com/accurics/terrascan/pull/1196) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs-material to 8.2.6 [\#1195](https://github.com/accurics/terrascan/pull/1195) ([pyup-bot](https://github.com/pyup-bot))
+- add CODEOWNERS for terrascan [\#1194](https://github.com/accurics/terrascan/pull/1194) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds: git in container which is required for go build [\#1193](https://github.com/accurics/terrascan/pull/1193) ([Rchanger](https://github.com/Rchanger))
+- typo: Change "desitnation" to "destination". [\#1192](https://github.com/accurics/terrascan/pull/1192) ([adyavanapalli](https://github.com/adyavanapalli))
+- Add security policy [\#1189](https://github.com/accurics/terrascan/pull/1189) ([bkizer-tenable](https://github.com/bkizer-tenable))
+- skip vuln test for dependabot [\#1185](https://github.com/accurics/terrascan/pull/1185) ([Rchanger](https://github.com/Rchanger))
+- Perform: go mod tidy [\#1184](https://github.com/accurics/terrascan/pull/1184) ([Rchanger](https://github.com/Rchanger))
+- updating s3 bucket policies for v4 aws provider [\#1175](https://github.com/accurics/terrascan/pull/1175) ([harkirat22](https://github.com/harkirat22))
+- Add backward compatible implementation of AC\_AWS\_0214 [\#1173](https://github.com/accurics/terrascan/pull/1173) ([HorizonNet](https://github.com/HorizonNet))
+- fix: reworded error to explain tests performed [\#1164](https://github.com/accurics/terrascan/pull/1164) ([beararmy](https://github.com/beararmy))
+-  Bump go 1.17 [\#1026](https://github.com/accurics/terrascan/pull/1026) ([Rchanger](https://github.com/Rchanger))
+
+# Changelog
+
+## [v1.13.2](https://github.com/accurics/terrascan/tree/v1.13.2) (2022-02-22)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.1...v1.13.2)
+
+**Implemented enhancements:**
+
+- Feature/s3 policy update [\#1153](https://github.com/accurics/terrascan/pull/1153) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Fixed bugs:**
+
+- Bugfix/coginto pool [\#1159](https://github.com/accurics/terrascan/pull/1159) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Is it possible to use terrascan in an offline environment [\#1154](https://github.com/accurics/terrascan/issues/1154)
+- Support AWS provider version 4.0.0 [\#1152](https://github.com/accurics/terrascan/issues/1152)
+- False positives and false negatives - AC\_AWS\_0215 / AWS.S3Bucket.DS.High.1043 [\#1139](https://github.com/accurics/terrascan/issues/1139)
+- False positive: AWS.RDS.DataSecurity.High.0414 / AC\_AWS\_0058 [\#1135](https://github.com/accurics/terrascan/issues/1135)
+- AC\_GCP\_0014 \(dnsStateIsNotOn\) false positive [\#1033](https://github.com/accurics/terrascan/issues/1033)
+
+**Merged pull requests:**
+
+- skip terrascan init for --config-with-error flag [\#1160](https://github.com/accurics/terrascan/pull/1160) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Bugfix/s3 user policy [\#1157](https://github.com/accurics/terrascan/pull/1157) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fix rds encryptionc check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Update mkdocs-material to 8.2.1 [\#1155](https://github.com/accurics/terrascan/pull/1155) ([pyup-bot](https://github.com/pyup-bot))
+- Adds: missing release tag push step [\#1151](https://github.com/accurics/terrascan/pull/1151) ([Rchanger](https://github.com/Rchanger))
+- Adding CFT scanning support for the resources: [\#1149](https://github.com/accurics/terrascan/pull/1149) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+
+# Changelog
+
+## [v1.13.1](https://github.com/accurics/terrascan/tree/v1.13.1) (2022-02-10)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.13.0...v1.13.1)
+
+**Implemented enhancements:**
+
+- update cft mapper [\#1148](https://github.com/accurics/terrascan/pull/1148) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- update cft mapper [\#1143](https://github.com/accurics/terrascan/pull/1143) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/eks msk vpc version [\#1140](https://github.com/accurics/terrascan/pull/1140) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/rds sage dms load emr msk [\#1133](https://github.com/accurics/terrascan/pull/1133) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Feature/ec2 cog lambda acm cft [\#1129](https://github.com/accurics/terrascan/pull/1129) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- Updates CloudFormation mapper to support additional resources [\#1120](https://github.com/accurics/terrascan/pull/1120) ([gaurav-gogia](https://github.com/gaurav-gogia))
+
+**Closed issues:**
+
+- Issue with skipped violations using CircleCI and JUnit output format [\#1122](https://github.com/accurics/terrascan/issues/1122)
+
+**Merged pull requests:**
+
+- Add Policy AC\_GCP\_0296 - Service Attachment with ACCEPT\_AUTOMATIC [\#1147](https://github.com/accurics/terrascan/pull/1147) ([hoexter](https://github.com/hoexter))
+- fix panic in cft [\#1146](https://github.com/accurics/terrascan/pull/1146) ([patilpankaj212](https://github.com/patilpankaj212))
+- Fixes failing docker IaC provider test [\#1145](https://github.com/accurics/terrascan/pull/1145) ([Rchanger](https://github.com/Rchanger))
+- \[Snyk\] Security upgrade alpine from 3.12.0 to 3.14 [\#1144](https://github.com/accurics/terrascan/pull/1144) ([snyk-bot](https://github.com/snyk-bot))
+- Update mkdocs-material to 8.1.10 [\#1141](https://github.com/accurics/terrascan/pull/1141) ([pyup-bot](https://github.com/pyup-bot))
+- Fix typos in docs and release\_checklist [\#1138](https://github.com/accurics/terrascan/pull/1138) ([myersg86](https://github.com/myersg86))
+- add rule id to docs [\#1136](https://github.com/accurics/terrascan/pull/1136) ([jrobison-sb](https://github.com/jrobison-sb))
+- add ability to output normalized resource config with errors [\#1134](https://github.com/accurics/terrascan/pull/1134) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Update mkdocs-material to 8.1.9 [\#1132](https://github.com/accurics/terrascan/pull/1132) ([pyup-bot](https://github.com/pyup-bot))
+- Allow internal github repos to pass AC\_GCP\_0231 & AC\_GITHUB\_0002 [\#1131](https://github.com/accurics/terrascan/pull/1131) ([briankanya](https://github.com/briankanya))
+- Update mkdocs-material to 8.1.8 [\#1124](https://github.com/accurics/terrascan/pull/1124) ([pyup-bot](https://github.com/pyup-bot))
+- Prevent adding both skipped and failure elements [\#1123](https://github.com/accurics/terrascan/pull/1123) ([gchappel](https://github.com/gchappel))
+- Updated discord link in readme [\#1118](https://github.com/accurics/terrascan/pull/1118) ([sangam14](https://github.com/sangam14))
+- Adds: logger in case of flag parsing fails [\#1115](https://github.com/accurics/terrascan/pull/1115) ([Rchanger](https://github.com/Rchanger))
+- Update README.md [\#1109](https://github.com/accurics/terrascan/pull/1109) ([sangam14](https://github.com/sangam14))
+- Fix gcp policy AC\_GCP\_0014 - dnsStateIsNotOn \(\#1033\) [\#1107](https://github.com/accurics/terrascan/pull/1107) ([hoexter](https://github.com/hoexter))
+- Allow tfplan format version 0.2 [\#1074](https://github.com/accurics/terrascan/pull/1074) ([mtranter](https://github.com/mtranter))
+
+# Changelog
+
+## [v1.13.0](https://github.com/accurics/terrascan/tree/v1.13.0) (2022-01-05)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.12.0...v1.13.0)
+
+**Closed issues:**
+
+- AC\_DOCKER\_0001 Trigger for no reason [\#1103](https://github.com/accurics/terrascan/issues/1103)
+- Rule ID mismatch for \#ts:skip annotation [\#1097](https://github.com/accurics/terrascan/issues/1097)
+
+**Merged pull requests:**
+
+- Update mkdocs-material to 8.1.4 [\#1106](https://github.com/accurics/terrascan/pull/1106) ([pyup-bot](https://github.com/pyup-bot))
+- fix input CFT templates based on goformation structs [\#1105](https://github.com/accurics/terrascan/pull/1105) ([patilpankaj212](https://github.com/patilpankaj212))
+- Update mkdocs-material to 8.1.3 [\#1101](https://github.com/accurics/terrascan/pull/1101) ([pyup-bot](https://github.com/pyup-bot))
+- Update mkdocs-material to 8.0.5 [\#1095](https://github.com/accurics/terrascan/pull/1095) ([pyup-bot](https://github.com/pyup-bot))
+- fix: update go mod to add missing dependencies  [\#1094](https://github.com/accurics/terrascan/pull/1094) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs-material to 8.0.3 [\#1092](https://github.com/accurics/terrascan/pull/1092) ([pyup-bot](https://github.com/pyup-bot))
+- fix: handles nil pointer while extracting container images [\#1076](https://github.com/accurics/terrascan/pull/1076) ([Rchanger](https://github.com/Rchanger))
+- Update mkdocs-material to 7.3.6 [\#1075](https://github.com/accurics/terrascan/pull/1075) ([pyup-bot](https://github.com/pyup-bot))
+- updating policies to detect cve-2021-25742 [\#1071](https://github.com/accurics/terrascan/pull/1071) ([harkirat22](https://github.com/harkirat22))
+- Fix Sarif file uri path invalid in Windows and update go-sarif to latest [\#1070](https://github.com/accurics/terrascan/pull/1070) ([shaopeng-gh](https://github.com/shaopeng-gh))
+- New k8s policy to detect CVE-2021-25742 [\#1069](https://github.com/accurics/terrascan/pull/1069) ([harkirat22](https://github.com/harkirat22))
+- making change in imageVersionnotusinglatest.rego [\#1068](https://github.com/accurics/terrascan/pull/1068) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
+
+# Changelog
+
+## [v1.12.0](https://github.com/accurics/terrascan/tree/v1.12.0) (2021-10-21)
+
+[Full Changelog](https://github.com/accurics/terrascan/compare/v1.11.0...v1.12.0)
+
+**Fixed bugs:**
+
+- A scan should NOT crash if the notification doesn't work as expected [\#1044](https://github.com/accurics/terrascan/issues/1044)
+- Rotation period for KMS keys not correctly interpreted \(GCP\) [\#699](https://github.com/accurics/terrascan/issues/699)
+
+**Closed issues:**
+
+- pre-commit hook reporting error with terrascan [\#1053](https://github.com/accurics/terrascan/issues/1053)
+- Terrascan: Not working in a Repository referencing other repository [\#1030](https://github.com/accurics/terrascan/issues/1030)
+- vulnerabilities found in accurics/terrascan\_atlantis image [\#1029](https://github.com/accurics/terrascan/issues/1029)
+
+**Merged pull requests:**
+
+- Update mkdocs-material to 7.3.4 [\#1060](https://github.com/accurics/terrascan/pull/1060) ([pyup-bot](https://github.com/pyup-bot))
+- Add support for repo-url and branch name in CLI flags and scan output [\#1059](https://github.com/accurics/terrascan/pull/1059) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Update mkdocs to 1.2.3 [\#1058](https://github.com/accurics/terrascan/pull/1058) ([pyup-bot](https://github.com/pyup-bot))
+- Update mkdocs-material to 7.3.3 [\#1057](https://github.com/accurics/terrascan/pull/1057) ([pyup-bot](https://github.com/pyup-bot))
+- Add support for getting line numbers for all attributes [\#1055](https://github.com/accurics/terrascan/pull/1055) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
+- Update atlantis base image [\#1054](https://github.com/accurics/terrascan/pull/1054) ([cesar-rodriguez](https://github.com/cesar-rodriguez))
+- Fix notification webhook flow [\#1051](https://github.com/accurics/terrascan/pull/1051) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- update container image version in helm and kustomize sources [\#1050](https://github.com/accurics/terrascan/pull/1050) ([dev-gaur](https://github.com/dev-gaur))
+- Accept notification webhook configs as CLI args [\#1042](https://github.com/accurics/terrascan/pull/1042) ([nasir-rabbani](https://github.com/nasir-rabbani))
+
+# Changelog
+
 ## [v1.11.0](https://github.com/accurics/terrascan/tree/v1.11.0) (2021-10-07)
 
 [Full Changelog](https://github.com/accurics/terrascan/compare/v1.10.0...v1.11.0)
@@ -799,6 +973,21 @@ Major updates to Terrascan and the underlying architecture including:
 
 ## 0.1.0 (2017-11-26)
 - First release on PyPI.
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+
 
 \* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
 

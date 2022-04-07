@@ -18,7 +18,7 @@ package config
 
 import (
 	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/functions"
-	"github.com/awslabs/goformation/v4/cloudformation/cloudformation"
+	"github.com/awslabs/goformation/v5/cloudformation/cloudformation"
 )
 
 // CloudFormationStackConfig holds config for aws_cloudformation_stack

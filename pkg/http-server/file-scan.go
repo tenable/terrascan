@@ -49,6 +49,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		showPassed          = false
 		findVulnerabilities = false
 		categories          = []string{}
+		configWithError     = false
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -133,6 +134,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	// read config_with_error from the form data
+	configWithErrorValue := r.FormValue("config_with_error")
+	if configWithErrorValue != "" {
+		configWithError, err = strconv.ParseBool(configWithErrorValue)
+		if err != nil {
+			errMsg := fmt.Sprintf("error while reading 'config_with_error' value. error: '%v'", err)
+			zap.S().Error(errMsg)
+			apiErrorResponse(w, errMsg, http.StatusBadRequest)
+			return
+		}
+	}
 
 	// read show_passed from the form data
 	showPassedValue := r.FormValue("show_passed")
@@ -166,17 +178,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false, notificationWebhookURL, notificationWebhookToken)
+			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false, notificationWebhookURL, notificationWebhookToken, "", "")
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities, notificationWebhookURL, notificationWebhookToken)
+			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities, notificationWebhookURL, notificationWebhookToken, "", "")
 	}
 	if err != nil {
 		zap.S().Error(err)
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	normalized, err := executor.Execute(configOnly)
+	normalized, err := executor.Execute(configOnly, configWithError)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -186,8 +198,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	var output interface{}
 
-	// if config only, return resource config else return violations
-	if configOnly {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if configWithError {
+		output = normalized
+	} else if configOnly {
 		output = normalized.ResourceConfig
 	} else {
 		if !showPassed {

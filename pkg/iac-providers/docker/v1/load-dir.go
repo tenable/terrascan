@@ -42,7 +42,8 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}
 	}
 
 	if len(fileMap) == 0 {
-		zap.S().Warnf("directory '%s' has no files named Dockerfile. Use -f flag if Dockerfiles follow a different naming convention.", absRootDir)
+		errMsg := fmt.Sprintf("Dockerfile not found in the directory %s", dc.absRootDir)
+		return allResourcesConfig, multierror.Append(dc.errIacLoadDirs, results.DirScanErr{IacType: "docker", Directory: dc.absRootDir, ErrMessage: errMsg})
 	}
 
 	for fileDir, files := range fileMap {
@@ -64,4 +65,9 @@ func (dc *DockerV1) LoadIacDir(absRootDir string, options map[string]interface{}
 
 	return allResourcesConfig, dc.errIacLoadDirs
 
+}
+
+// Name returns name of the provider
+func (dc *DockerV1) Name() string {
+	return "docker"
 }

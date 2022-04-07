@@ -1,0 +1,19 @@
+{
+    "name": "networkPort139ExposedToInternetGCP_25082021",
+    "file": "networkPortExposedToInternetGCP_25082021.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_compute_firewall",
+    "template_args": {
+        "name": "networkPort139ExposedToInternetGCP",
+        "portNumber": 139,
+        "prefix": "",
+        "protocol": "tcp",
+        "suffix": "_25082021"
+    },
+    "severity": "HIGH",
+    "description": "Ensure NetBios Session Service (TCP:139) is not exposed to entire internet for Google Compute Firewall",
+    "reference_id": "AC_GCP_0095",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_GCP_0095"
+}

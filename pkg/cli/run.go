@@ -20,7 +20,6 @@ import (
 	"errors"
 	"flag"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/accurics/terrascan/pkg/downloader"
@@ -32,8 +31,8 @@ import (
 )
 
 const (
-	humanOutputFormat = "human"
-	sarifOutputFormat = "sarif"
+	yamlOutputFormat = "yaml"
+	jsonOutputFormat = "json"
 )
 
 // ScanOptions represents scan command and its optional flags
@@ -65,6 +64,9 @@ type ScanOptions struct {
 
 	// configOnly will output resource config (should only be used for debugging purposes)
 	configOnly bool
+
+	// configWithError will output resource config and encountered errors
+	configWithError bool
 
 	// config file path
 	configFile string
@@ -108,6 +110,12 @@ type ScanOptions struct {
 
 	// notificationWebhookToken is the auth token to call the notification webhook URL
 	notificationWebhookToken string
+
+	// repoURL lets us specify URL of the repository being scanned
+	repoURL string
+
+	// repoRef lets us specify the branch of the repository being scanned
+	repoRef string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -142,13 +150,12 @@ func (s *ScanOptions) Init() error {
 // validate config only for human readable output
 // rest command options are validated by the executor
 func (s ScanOptions) validate() error {
-	// human readable output doesn't support --config-only flag
-	// if --config-only flag is set, then exit with an error
+	// human readable output doesn't support --config-only and --config-with-error flag
+	// if --config-only/--config-with-error flag is set, then exit with an error
 	// asking the user to use yaml or json output format
-	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
-		return errors.New("please use yaml or json output format when using --config-only flag")
+	if (s.configOnly || s.configWithError) && !(strings.EqualFold(s.outputType, yamlOutputFormat) || strings.EqualFold(s.outputType, jsonOutputFormat)) {
+		return errors.New("please use yaml or json output format when using --config-only or --config-with-error flags")
 	}
-
 	return nil
 }
 
@@ -182,7 +189,7 @@ func (s *ScanOptions) initColor() {
 func (s *ScanOptions) Run() error {
 
 	// temp dir to download the remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
@@ -192,14 +199,16 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken)
+	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType, s.iacFilePath, s.iacDirPath,
+		s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache,
+		s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken, s.repoURL, s.repoRef,
+	)
 	if err != nil {
 		return err
 	}
 
 	// executor output
-	results, err := executor.Execute(s.configOnly)
+	results, err := executor.Execute(s.configOnly, s.configWithError)
 	if err != nil {
 		return err
 	}
@@ -248,6 +257,10 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 
 	if s.configOnly {
 		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+	}
+
+	if s.configWithError {
+		return writer.Write(s.outputType, results, outputWriter)
 	}
 
 	// add verbose flag to the scan summary

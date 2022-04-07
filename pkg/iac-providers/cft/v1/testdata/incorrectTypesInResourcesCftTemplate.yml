@@ -1,0 +1,1427 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  EKS for us-east-1 with Kubernetes Object deployment support.
+Resources:
+  ##### START VPC RESOURCES #####
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: BelongsTo
+          Value: !Ref "AWS::StackName"
+        - Key: Name
+          Value: GremlinGameDay/Gremlin/DefaultVpc
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref "AWS::StackName"
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref "VPC"
+      InternetGatewayId: !Ref "InternetGateway"
+  PrivateSubnet1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.0.0/19
+      AvailabilityZone: us-east-1a
+      Tags:
+        - Key: kubernetes.io/role/internal-elb
+          Value: 1
+  PrivateSubnet2A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.32.0/19
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: kubernetes.io/role/internal-elb
+          Value: 1
+  PrivateSubnet3A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.64.0/19
+      AvailabilityZone: us-east-1c
+      Tags:
+        - Key: kubernetes.io/role/internal-elb
+          Value: 1
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.96.0/19
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: kubernetes.io/role/elb
+          Value: 1
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.128.0/19
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: kubernetes.io/role/elb
+          Value: 1
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref "VPC"
+      CidrBlock: 10.0.160.0/19
+      AvailabilityZone: us-east-1c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: kubernetes.io/role/elb
+          Value: 1
+  PrivateSubnet1ARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref "VPC"
+      Tags:
+        - Key: Name
+          Value: Private subnet 1A
+        - Key: Network
+          Value: Private
+  PrivateSubnet1ARoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref "PrivateSubnet1ARouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref "NATGateway1"
+  PrivateSubnet1ARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PrivateSubnet1A"
+      RouteTableId: !Ref "PrivateSubnet1ARouteTable"
+  PrivateSubnet2ARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref "VPC"
+      Tags:
+        - Key: Name
+          Value: Private subnet 2A
+        - Key: Network
+          Value: Private
+  PrivateSubnet2ARoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref "PrivateSubnet2ARouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref "NATGateway2"
+  PrivateSubnet2ARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PrivateSubnet2A"
+      RouteTableId: !Ref "PrivateSubnet2ARouteTable"
+  PrivateSubnet3ARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref "VPC"
+      Tags:
+        - Key: Name
+          Value: Private subnet 3A
+        - Key: Network
+          Value: Private
+  PrivateSubnet3ARoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref "PrivateSubnet3ARouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref "NATGateway3"
+  PrivateSubnet3ARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PrivateSubnet3A"
+      RouteTableId: !Ref "PrivateSubnet3ARouteTable"
+  PublicSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref "VPC"
+      Tags:
+        - Key: Name
+          Value: Public Subnets
+        - Key: Network
+          Value: Public
+  PublicSubnetRoute:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref "PublicSubnetRouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref "InternetGateway"
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PublicSubnet1"
+      RouteTableId: !Ref "PublicSubnetRouteTable"
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PublicSubnet2"
+      RouteTableId: !Ref "PublicSubnetRouteTable"
+  PublicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref "PublicSubnet3"
+      RouteTableId: !Ref "PublicSubnetRouteTable"
+  NAT1EIP:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  NAT2EIP:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  NAT3EIP:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  NATGateway1:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt "NAT1EIP.AllocationId"
+      SubnetId: !Ref "PublicSubnet1"
+  NATGateway2:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt "NAT2EIP.AllocationId"
+      SubnetId: !Ref "PublicSubnet2"
+  NATGateway3:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt "NAT3EIP.AllocationId"
+      SubnetId: !Ref "PublicSubnet3"
+
+  ##### END VPC RESOURCES #####
+
+  ##### START SECURITY GROUPS #####
+  ClusterControlPlaneSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cluster communication
+      VpcId: !Ref "VPC"
+
+  NodeSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Security group for all nodes in the cluster
+      Tags:
+        - Key:
+            Fn::Sub:
+              - kubernetes.io/cluster/${KubeName}
+              - KubeName: !GetAtt KubeCreate.Name
+          Value: owned
+      VpcId: !Ref "VPC"
+
+  BastionSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Security group for bastion enabling SSH access with EC2 Instance Connect
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      VpcId: !Ref "VPC"
+
+  NodeSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow node to communicate with each other
+      FromPort: 0
+      GroupId: !Ref NodeSecurityGroup
+      IpProtocol: "-1"
+      SourceSecurityGroupId: !Ref NodeSecurityGroup
+      ToPort: 65535
+
+  ClusterControlPlaneSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow pods to communicate with the cluster API Server
+      FromPort: 443
+      GroupId: !Ref ClusterControlPlaneSecurityGroup
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref NodeSecurityGroup
+      ToPort: 443
+
+  NodeSecurityGroupFromControlPlaneIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow worker Kubelets and pods to receive communication from the cluster control plane
+      FromPort: 1025
+      GroupId: !Ref NodeSecurityGroup
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref ClusterControlPlaneSecurityGroup
+      ToPort: 65535
+
+  NodeSecurityGroupFromControlPlaneOn443Ingress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow pods running extension API servers on port 443 to receive communication from cluster control plane
+      FromPort: 443
+      GroupId: !Ref NodeSecurityGroup
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref ClusterControlPlaneSecurityGroup
+      ToPort: 443
+
+  ControlPlaneEgressToNodeSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow the cluster control plane to communicate with worker Kubelet and pods
+      DestinationSecurityGroupId: !Ref NodeSecurityGroup
+      FromPort: 1025
+      GroupId: !Ref ClusterControlPlaneSecurityGroup
+      IpProtocol: tcp
+      ToPort: 65535
+
+  ControlPlaneEgressToNodeSecurityGroupOn443:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    DependsOn: NodeSecurityGroup
+    Properties:
+      Description: Allow the cluster control plane to communicate with pods running extension API servers on port 443
+      DestinationSecurityGroupId: !Ref NodeSecurityGroup
+      FromPort: 443
+      GroupId: !Ref ClusterControlPlaneSecurityGroup
+      IpProtocol: tcp
+      ToPort: 443
+
+  ##### END SECURITY GROUPS #####
+
+  ##### START IAM ROLES #####
+
+  ControlPlaneProvisionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              AWS: !GetAtt BastionHostRole.Arn
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: eksStackPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:*
+                  - eks:*
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeSubnets
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                Resource:
+                  - "*"
+              - Action: "kms:decrypt"
+                Effect: Allow
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - lambda:AddPermission
+                  - lambda:RemovePermission
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - events:PutRule
+                  - events:DeleteRule
+                  - events:PutTargets
+                  - events:RemoveTargets
+                Resource: "*"
+
+  ControlPlaneRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: eks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+
+  ControlPlanePassRole:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: iam:PassRole
+            Resource: !GetAtt ControlPlaneRole.Arn
+      PolicyName: !Sub "${AWS::StackName}-ControlPlanePassRole"
+      Roles: [!Ref ControlPlaneProvisionRole]
+
+  BastionHostRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - "sts:AssumeRole"
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+      Policies:
+        - PolicyName: "ec2-connect-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DescribeInstances"
+                  - "ec2-instance-connect:SendSSHPublicKey"
+                  - ec2:AssociateAddress
+                  - ec2:DescribeAddresses
+                  - cloudformation:*
+                  - eks:*
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeSubnets
+                Resource: "*"
+
+  BastionHostProfile:
+    DependsOn: BastionHostRole
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref BastionHostRole
+      Path: /
+
+  CleanupLoadBalancersRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: ["sts:AssumeRole"]
+            Effect: Allow
+            Principal:
+              Service: [lambda.amazonaws.com]
+        Version: "2012-10-17"
+      Path: /
+      Policies:
+        - PolicyName: LambdaRole
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Effect: Allow
+                Resource: "arn:aws:logs:*:*:*"
+              - Action:
+                  - "elasticloadbalancing:DescribeLoadBalancers"
+                  - "elasticloadbalancing:DescribeTags"
+                  - "elasticloadbalancing:DeleteLoadBalancer"
+                  - "ec2:DescribeTags"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:RevokeSecurityGroupEgress"
+                  - "ec2:RevokeSecurityGroupIngress"
+                Effect: Allow
+                Resource: "*"
+
+  ##### END IAM ROLES #####
+
+  ##### START EKS RESOURCES #####
+
+  BastionHost:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0b69ea66ff7391e80
+      IamInstanceProfile: !Ref BastionHostProfile
+      InstanceType: t2.micro
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 10
+            VolumeType: gp2
+            DeleteOnTermination: true
+      SecurityGroupIds:
+        - Ref: BastionSecurityGroup
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-bastion"
+      UserData:
+        Fn::Base64:
+          Fn::Sub:
+            - |
+              #!/bin/bash -xe
+              exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+              yum update -y && yum install -y unzip make wget tar gzip python3 git
+
+              curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl \
+              && chmod +x ./kubectl \
+              && cp ./kubectl /usr/local/bin/kubectl
+
+              wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
+              && mv jq-linux64 /usr/local/bin/jq \
+              && chmod +x /usr/local/bin/jq
+
+              curl -o helm.tar.gz https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz \
+              && tar -zxvf helm.tar.gz  \
+              && mv linux-amd64/helm /usr/local/bin/helm \
+              && chmod +x /usr/local/bin/helm
+
+              curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator \
+              && mv aws-iam-authenticator /usr/local/bin/aws-iam-authenticator \
+              && chmod +x /usr/local/bin/aws-iam-authenticator
+
+              su ec2-user -c 'aws eks update-kubeconfig --name ${KubeName} --role-arn ${ControlRole} --region ${AWS::Region}'
+
+              cat <<EOF >> /home/ec2-user/.bashrc
+              export K8S_ROLE_ARN=${ControlRole}
+              export K8S_CLUSTER_NAME=${KubeName}
+              export K8S_CA_DATA=${CAData}
+              export K8S_ENDPOINT=${Endpoint}
+              export PATH=/usr/local/bin:$PATH
+              EOF
+
+              /opt/aws/bin/cfn-signal --exit-code $? \
+                    --stack  ${AWS::StackName} \
+                    --resource BastionHost  \
+                    --region ${AWS::Region}
+            - KubeName: !GetAtt KubeCreate.Name
+              CAData: !GetAtt KubeCreate.CertificateAuthorityData
+              Endpoint: !GetAtt KubeCreate.Endpoint
+              ControlRole: !GetAtt ControlPlaneProvisionRole.Arn
+
+  NodeInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref NodeInstanceRole
+
+  NodeInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: clusterAutoScalingPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "autoscaling:DescribeAutoScalingGroups"
+                  - "autoscaling:DescribeAutoScalingInstances"
+                  - "autoscaling:DescribeLaunchConfigurations"
+                  - "autoscaling:DescribeTags"
+                  - "autoscaling:SetDesiredCapacity"
+                  - "autoscaling:TerminateInstanceInAutoScalingGroup"
+                  - "ec2:DescribeLaunchTemplateVersions"
+                Resource: "*"
+  NodeGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      DesiredCapacity: "3"
+      LaunchTemplate:
+        LaunchTemplateName: !Sub "${AWS::StackName}"
+        Version: !GetAtt "NodeGroupLaunchTemplate.LatestVersionNumber"
+      MaxSize: "10"
+      MinSize: "3"
+      Tags:
+        - Key: Name
+          PropagateAtLaunch: "true"
+          Value: !Sub "${AWS::StackName}-ng"
+        - Key:
+            Fn::Sub:
+              - kubernetes.io/cluster/${KubeName}
+              - KubeName: !GetAtt KubeCreate.Name
+          PropagateAtLaunch: "true"
+          Value: owned
+        - Key:
+            Fn::Sub:
+              - k8s.io/cluster-autoscaler/${KubeName}
+              - KubeName: !GetAtt KubeCreate.Name
+          PropagateAtLaunch: "true"
+          Value: owned
+        - Key: k8s.io/cluster-autoscaler/enabled
+          PropagateAtLaunch: "true"
+          Value: true
+      VPCZoneIdentifier:
+        - !Ref PrivateSubnet1A
+        - !Ref PrivateSubnet2A
+        - !Ref PrivateSubnet3A
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MaxBatchSize: "1"
+        MinInstancesInService: "0"
+
+  NodeGroupLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: !GetAtt "NodeInstanceProfile.Arn"
+        ImageId: ami-0062c1c8b255c0bb6
+        InstanceType: m5.large
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: true
+            DeviceIndex: 0
+            Groups:
+              - !Ref NodeSecurityGroup
+              - !Ref ClusterControlPlaneSecurityGroup
+        UserData:
+          Fn::Base64:
+            Fn::Sub:
+              - |
+                #!/bin/bash
+                set -o xtrace
+                /etc/eks/bootstrap.sh ${KubeName}
+                /opt/aws/bin/cfn-signal --exit-code $? \
+                      --stack  ${AWS::StackName} \
+                      --resource NodeGroup  \
+                      --region ${AWS::Region}
+              - KubeName: !GetAtt KubeCreate.Name
+      LaunchTemplateName: !Sub "${AWS::StackName}"
+
+  ##### START CUSTOM RESOURCES #####
+
+  KubeCreateLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import botocore.session
+          import logging
+          import subprocess
+          import os
+          import json
+          import logging
+          from crhelper import CfnResource
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:' + os.environ['PATH']
+
+          outdir = os.environ.get('TEST_OUTDIR', '/tmp')
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG', polling_interval=15)
+
+          def lambda_handler(event, context):
+              helper(event, context)
+
+          @helper.poll_delete
+          def delete(event, context):
+              # delete is a special case
+              session = botocore.session.get_session()
+              eks = session.create_client('eks')
+              physical_id = event.get('PhysicalResourceId', None)
+
+              cluster_name = ''
+              if physical_id:
+                  cluster_name = physical_id
+              else:
+                  raise Exception(
+                      "unexpected error. cannot determine cluster name")
+              
+              logger.info("request to delete: %s" % cluster_name)
+              logger.info('deleting cluster')
+
+              eks.delete_cluster(name=cluster_name)
+              logger.info('waiting for cluster to be deleted...')
+              waiter = eks.get_waiter('cluster_deleted')
+              waiter.wait(name=cluster_name, WaiterConfig={
+                  'Delay': 30,
+                  'MaxAttempts': 28
+              })
+              return
+
+          @helper.poll_create
+          @helper.poll_update
+          def poll_create_update(event, context):
+              try:
+                  logger.info(json.dumps(event))
+
+                  request_id = event['RequestId']  # used to generate cluster name
+                  request_type = event['RequestType']
+                  props = event['ResourceProperties']
+                  old_props = event.get('OldResourceProperties', {})
+                  config = props['Config']
+
+                  logger.info(json.dumps(config))
+
+                  session = botocore.session.get_session()
+                  eks = session.create_client('eks')
+
+                  cluster_name = f"{config.get('name', 'EKS')}{request_id}"
+                  config['name'] = cluster_name
+                  logger.info("request: %s" % config)
+
+                  if request_type == 'Create':
+                      logger.info("creating cluster %s" % cluster_name)
+                      try:
+                          resp = eks.create_cluster(**config)
+                          logger.info("create response: %s" % resp)
+                      except Exception as e:
+                          logger.error('Failed at creating cluster, moving on...')
+                          logger.error(e)
+                  elif request_type == 'Update':
+                      logger.info("updating cluster %s" % cluster_name)
+                      resp = eks.update_cluster_config(**config)
+                      logger.info("update response: %s" % resp)
+                  else:
+                      raise Exception("Invalid request type %s" % request_type)
+
+                  # wait for the cluster to become active (14min timeout)
+                  logger.info('waiting for cluster to become active...')
+                  waiter = eks.get_waiter('cluster_active')
+                  waiter.wait(name=cluster_name, WaiterConfig={
+                      'Delay': 30,
+                      'MaxAttempts': 28
+                  })
+
+                  resp = eks.describe_cluster(name=cluster_name)
+                  logger.info("describe response: %s" % resp)
+                  attrs = {
+                      'Name': cluster_name,
+                      'Endpoint': resp['cluster']['endpoint'],
+                      'Arn': resp['cluster']['arn'],
+                      'CertificateAuthorityData': resp['cluster']['certificateAuthority']['data']
+                  }
+                  logger.info("attributes: %s" % attrs)
+                  helper.Data['Name'] = cluster_name
+                  helper.Data['Endpoint'] = resp['cluster']['endpoint']
+                  helper.Data['Arn'] = resp['cluster']['arn']
+                  helper.Data['CertificateAuthorityData'] = resp['cluster']['certificateAuthority']['data']
+                  return cluster_name
+              except botocore.exceptions.WaiterError as e:
+                  logger.exception(e)
+                  return None
+              except KeyError as e:
+                  logger.exception(e)
+                  raise Exception("invalid request. Missing '%s'" % str(e))
+              except Exception as e:
+                  logger.exception(e)
+                  raise Exception(e.output)
+
+  KubeCreate:
+    Type: "Custom::KubeCreate"
+    Version: "1.0"
+    Properties:
+      ServiceToken: !GetAtt KubeCreateLambda.Arn
+      Config:
+        version: "1.15"
+        roleArn: !GetAtt ControlPlaneRole.Arn
+        name: GremlinGameDay
+        resourcesVpcConfig:
+          securityGroupIds:
+            - !GetAtt ClusterControlPlaneSecurityGroup.GroupId
+          subnetIds:
+            - !Ref PrivateSubnet1A
+            - !Ref PrivateSubnet2A
+            - !Ref PrivateSubnet3A
+            - !Ref PublicSubnet1
+            - !Ref PublicSubnet2
+            - !Ref PublicSubnet3
+
+  KubeNodeJoinLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import subprocess
+          import os
+          import time
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          outdir = '/tmp'
+          manifest_path = '/tmp'
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:' + os.environ['PATH']
+
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          def create_kubeconfig():
+              subprocess.check_call(['aws', 'eks', 'update-kubeconfig',
+                                    '--name', cluster_name,
+                                    '--kubeconfig', kubeconfig
+                                    ])
+
+          @helper.create
+          @helper.update
+          def create_handler(event, _):
+              print('Received event: %s' % json.dumps(event))
+              request_type = event['RequestType']
+              manifest_text = event['ResourceProperties']['Manifest']
+
+              manifest_list = json.loads(manifest_text)
+              manifest_file = os.path.join(outdir, 'manifest.yaml')
+              with open(manifest_file, "w") as f:
+                  f.writelines(map(lambda obj: json.dumps(obj), manifest_list))
+
+              logger.info("manifest written to: %s" % manifest_file)
+
+              create_kubeconfig()
+              keep_going = True
+              retries = 0
+              max_tries = 20
+              while keep_going:
+                try:
+                    kubectl('apply', manifest_file)
+                    keep_going = False
+                except Exception as e:
+                    print(e)
+                    if max_tries > retries:
+                      retries += 1
+                      time.sleep(30)
+                      continue
+                    else:
+                      raise Exception(e.output)
+              return True
+
+          def kubectl(verb, file):
+              try:
+                  cmnd = ['kubectl', verb, '--kubeconfig', kubeconfig, '-f', file]
+                  output = subprocess.check_output(cmnd, stderr=subprocess.STDOUT)
+                  return output
+              except subprocess.CalledProcessError as exc:
+                  raise Exception(exc.output)
+              else:
+                  logger.info(output)
+
+          def lambda_handler(event, context):
+              helper(event, context)
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+
+  KubeNodeJoin:
+    DependsOn: [NodeInstanceRole, KubeCreate, NodeGroup]
+    Type: Custom::KubeNodeJoin
+    Properties:
+      ServiceToken: !GetAtt KubeNodeJoinLambda.Arn
+      Manifest:
+        Fn::Join:
+          - ""
+          - - '[{"apiVersion":"v1","kind":"ConfigMap","metadata":{"name":"aws-auth","namespace":"kube-system"},"data":{"mapRoles":"[{\"rolearn\":\"'
+            - Fn::GetAtt:
+                - NodeInstanceRole
+                - Arn
+            - \",\"username\":\"system:node:{{EC2PrivateDNSName}}\",\"groups\":[\"system:bootstrappers\",\"system:nodes\"]}]","mapUsers":"[]","mapAccounts":"[]"}}]
+
+  KubeSetupClusterLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import subprocess
+          import os
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          outdir = '/tmp'
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:/opt/helm:' + os.environ['PATH']
+
+          container_insights_url = 'https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/master/k8s-yaml-templates/quickstart/cwagent-fluentd-quickstart.yaml'
+          cluster_autoscale_url = 'https://gist.githubusercontent.com/allenmichael/8e2db8b62bdd4d9ec1d1ca3963f71644/raw/afc7a63fccb308c908783b4e34caf9e352f524f3/cluster-autoscaler.yaml'
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+          region = os.environ.get('REGION', None)
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          def create_kubeconfig():
+              subprocess.check_call(['aws', 'eks', 'update-kubeconfig',
+                                    '--name', cluster_name,
+                                    '--kubeconfig', kubeconfig
+                                    ])
+                
+          @helper.delete
+          def delete(event, _):
+            try:
+              print('Received event: %s' % json.dumps(event))
+
+              create_kubeconfig()
+
+              setup_cluster('insights', 'delete')
+              setup_cluster('autoscale', 'delete')
+            except subprocess.CalledProcessError as exc:
+                logger.info(exc.output)
+            else:
+              logger.info('passed creating and deleting manifests')
+            return
+
+          @helper.create
+          def create_handler(event, _):
+              try:
+                print('Received event: %s' % json.dumps(event))
+                
+                create_kubeconfig()
+                
+                setup_cluster('insights', 'apply')
+                setup_cluster('autoscale', 'apply')
+              except subprocess.CalledProcessError as exc:
+                raise Exception(exc.output)
+              else:
+                logger.info('passed creating and deleting manifests')
+              return True
+
+          def setup_cluster(type, verb):
+            try:
+              replace_text = []
+              cmnd = []
+              if type == 'insights':
+                cmnd = ['curl', container_insights_url]
+                replace_text = ['sed', 's/{{cluster_name}}/'+cluster_name+'/;s/{{region_name}}/'+region+'/']
+              elif type == 'autoscale':
+                cmnd = ['curl', cluster_autoscale_url]
+                replace_text = ['sed', 's/{{cluster_name}}/'+cluster_name+'/']
+              ps = subprocess.Popen(cmnd, stdout=subprocess.PIPE)
+              sed_output = subprocess.Popen(replace_text, stdin=ps.stdout, stdout=subprocess.PIPE)
+              kube_cmnd = ['kubectl', verb, '--kubeconfig', kubeconfig, '-f', '-']
+              kube_output = subprocess.check_output(kube_cmnd, stdin=sed_output.stdout, stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as exc:
+              raise Exception(exc.output)
+            else:
+                logger.info(kube_output)
+
+          def lambda_handler(event, context):
+              helper(event, context)
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+          REGION: !Ref AWS::Region
+
+  KubeSetupCluster:
+    DependsOn: [KubeCreate, KubeNodeJoin]
+    Type: Custom::KubeSetupCluster
+    Properties:
+      ServiceToken: !GetAtt KubeSetupClusterLambda.Arn
+
+  KubeApplyManifestsLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import subprocess
+          import os
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          outdir = '/tmp'
+          manifest_path = '/tmp'
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:/opt/helm:' + os.environ['PATH']
+
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          def create_kubeconfig():
+              subprocess.check_call(['aws', 'eks', 'update-kubeconfig',
+                                    '--name', cluster_name,
+                                    '--kubeconfig', kubeconfig
+                                    ])
+                
+          @helper.delete
+          def delete(event, _):
+            try:
+              print('Received event: %s' % json.dumps(event))
+
+              manifests = event['ResourceProperties']['Manifests']
+              create_kubeconfig()
+              for i, manifest_text in enumerate(manifests):
+                manifest_list = json.loads(manifest_text)
+                manifest_file = os.path.join(outdir, f'manifest-{i}.yaml')
+                with open(manifest_file, "w") as f:
+                    f.writelines(map(lambda obj: json.dumps(obj), manifest_list))
+
+                logger.info("manifest written to: %s" % manifest_file)
+                kubectl('delete', manifest_file)
+            except subprocess.CalledProcessError as exc:
+                logger.info(exc.output)
+            else:
+              logger.info('passed creating and deleting manifests')
+            return
+
+          @helper.create
+          def create_handler(event, _):
+              try:
+                print('Received event: %s' % json.dumps(event))
+
+                manifests = event['ResourceProperties']['Manifests']
+                create_kubeconfig()
+                for i, manifest_text in enumerate(manifests):
+                  manifest_list = json.loads(manifest_text)
+                  manifest_file = os.path.join(outdir, f'manifest-{i}.yaml')
+                  with open(manifest_file, "w") as f:
+                      f.writelines(map(lambda obj: json.dumps(obj), manifest_list))
+
+                  logger.info("manifest written to: %s" % manifest_file)
+                  kubectl('apply', manifest_file)
+              except subprocess.CalledProcessError as exc:
+                raise Exception(exc.output)
+              else:
+                logger.info('passed creating and deleting manifests')
+              return True
+
+          def kubectl(verb, file):
+            try:
+                cmnd = ['kubectl', verb, '--kubeconfig', kubeconfig, '-f', file]
+                output = subprocess.check_output(cmnd, stderr=subprocess.STDOUT)
+                return output
+            except subprocess.CalledProcessError as exc:
+                raise Exception(exc.output)
+            else:
+                logger.info(output)
+
+          def lambda_handler(event, context):
+              helper(event, context)
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+
+  KubeApplyManifests:
+    DependsOn: [KubeCreate, KubeNodeJoin, KubeApply]
+    Type: Custom::KubeApplyManifests
+    Properties:
+      ServiceToken: !GetAtt KubeApplyManifestsLambda.Arn
+      Manifests:
+        - '[{"apiVersion": "v1","kind": "ServiceAccount","metadata":{"name": "tiller","namespace": "kube-system"}}]'
+        - '[{"apiVersion": "rbac.authorization.k8s.io/v1beta1","kind": "ClusterRoleBinding","metadata":{"name": "tiller"},"roleRef":{"apiGroup": "rbac.authorization.k8s.io","kind": "ClusterRole", "name": "cluster-admin"}, "subjects":[{"kind": "ServiceAccount","name": "tiller","namespace": "kube-system"}]}]'
+        - '[{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"gremlin"}}]'
+
+  KubeApplyLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import subprocess
+          import os
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          outdir = '/tmp'
+          manifest_path = '/tmp'
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:' + os.environ['PATH']
+
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          def create_kubeconfig():
+              subprocess.check_call(['aws', 'eks', 'update-kubeconfig',
+                                    '--name', cluster_name,
+                                    '--kubeconfig', kubeconfig
+                                    ])
+
+          def get_config_details(event):
+              urls = event['ResourceProperties']['Urls']
+              return urls
+
+          @helper.delete
+          def delete_hanlder(event, _):
+              urls = get_config_details(event)
+              create_kubeconfig()
+              for u in urls:
+                  kubectl('delete', u)
+              return
+
+          @helper.create
+          @helper.update
+          def create_handler(event, _):
+              print('Received event: %s' % json.dumps(event))
+              urls = get_config_details(event)
+              create_kubeconfig()
+              for u in urls:
+                  kubectl('apply', u)
+              return True
+
+
+          def kubectl(verb, file):
+              try:
+                  cmnd = ['kubectl', verb, '--kubeconfig', kubeconfig, '-f', file]
+                  output = subprocess.check_output(cmnd, stderr=subprocess.STDOUT)
+                  return output
+              except subprocess.CalledProcessError as exc:
+                  raise Exception(exc.output)
+              else:
+                  logger.info(output)
+
+
+          def lambda_handler(event, context):
+              helper(event, context)
+
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+
+  KubeApply:
+    DependsOn: [KubeCreate, KubeNodeJoin]
+    Type: "Custom::KubeApply"
+    Version: "1.0"
+    Properties:
+      ServiceToken: !GetAtt KubeApplyLambda.Arn
+      Urls:
+        - "https://gist.githubusercontent.com/allenmichael/c7c15d97a4234c1cf70c791d9ed3a5f9/raw/c56bad1dc709ade416840f0ddbde66306ed6fe61/sock-shop.yaml"
+
+  RetrievePublicEndpointsLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt ControlPlaneProvisionRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import json
+          import logging
+          import subprocess
+          import os
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          outdir = '/tmp'
+
+          os.environ['PATH'] = '/opt/kubectl:/opt/awscli:' + os.environ['PATH']
+
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+          kubeconfig = os.path.join(outdir, 'kubeconfig')
+
+          def create_kubeconfig():
+              subprocess.check_call(['aws', 'eks', 'update-kubeconfig',
+                                    '--name', cluster_name,
+                                    '--kubeconfig', kubeconfig
+                                    ])
+
+          @helper.delete
+          def delete_handler(event, _):
+            return
+
+          @helper.create
+          def create_handler(event, _):
+              try:
+                print('Received event: %s' % json.dumps(event))
+                create_kubeconfig()
+                frontendCmd = ['kubectl', 'get','svc/front-end', '-n', 'sock-shop', '-o', 'jsonpath="{.status.loadBalancer.ingress[0].hostname}"', '--kubeconfig', kubeconfig]
+                frontendOutput = subprocess.check_output(frontendCmd, stderr=subprocess.STDOUT).decode("utf-8")
+                helper.Data['FrontendEndpoint'] = f'http://{frontendOutput[1:-1]}'
+              except subprocess.CalledProcessError as exc:
+                raise Exception(exc.output)
+              else:
+                logger.info(frontendOutput)
+              return True
+
+          def lambda_handler(event, context):
+              helper(event, context)
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+  RetrievePublicEndpoints:
+    DependsOn: [KubeApply, KubeApplyManifests]
+    Type: "Custom::RetrievePublicEndpoints"
+    Version: "1.0"
+    Properties:
+      ServiceToken: !GetAtt RetrievePublicEndpointsLambda.Arn
+
+  CleanELBsLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      MemorySize: 1024
+      Role: !GetAtt CleanupLoadBalancersRole.Arn
+      Runtime: python3.7
+      Timeout: 900
+      Layers:
+        - arn:aws:lambda:us-east-1:812570870442:layer:k8sfull:1
+        - arn:aws:lambda:us-east-1:812570870442:layer:crhelper:1
+      Code:
+        ZipFile: |
+          import boto3
+          import logging
+          import os
+          from crhelper import CfnResource
+
+          logger = logging.getLogger(__name__)
+          helper = CfnResource(json_logging=True, log_level='DEBUG')
+
+          cluster_name = os.environ.get('CLUSTER_NAME', None)
+
+          def delete_dependencies(sg_id, c):
+              filters = [{'Name': 'ip-permission.group-id', 'Values': [sg_id]}]
+              for sg in c.describe_security_groups(Filters=filters)['SecurityGroups']:
+                  for p in sg['IpPermissions']:
+                      if 'UserIdGroupPairs' in p.keys():
+                          if sg_id in [x['GroupId'] for x in p['UserIdGroupPairs']]:
+                              try:
+                                  c.revoke_security_group_ingress(GroupId=sg['GroupId'], IpPermissions=[p])
+                              except Exception as e:
+                                  logger.error("ERROR: %s %s" % (sg['GroupId'], str(e)))
+              filters = [{'Name': 'egress.ip-permission.group-id', 'Values': [sg_id]}]
+              for sg in c.describe_security_groups(Filters=filters)['SecurityGroups']:
+                  for p in sg['IpPermissionsEgress']:
+                      if 'UserIdGroupPairs' in p.keys():
+                          if sg_id in [x['GroupId'] for x in p['UserIdGroupPairs']]:
+                              try:
+                                  c.revoke_security_group_egress(GroupId=sg['GroupId'], IpPermissions=[p])
+                              except Exception as e:
+                                  logger.error("ERROR: %s %s" % (sg['GroupId'], str(e)))
+              filters = [{'Name': 'group-id', 'Values': [sg_id]}]
+              for eni in c.describe_network_interfaces(Filters=filters)['NetworkInterfaces']:
+                  try:
+                      c.delete_network_interface(NetworkInterfaceId=eni['NetworkInterfaceId'])
+                  except Exception as e:
+                      logger.error("ERROR: %s %s" % (eni['NetworkInterfaceId'], str(e)))
+
+
+          @helper.delete
+          def delete_handler(event, _):
+              tag_key = f"kubernetes.io/cluster/{cluster_name}"
+              lb_types = [
+                  ["elb", "LoadBalancerName", "LoadBalancerNames", "LoadBalancerDescriptions", "LoadBalancerName"],
+                  ["elbv2", "LoadBalancerArn", "ResourceArns", "LoadBalancers", "ResourceArn"]
+              ]
+              for lt in lb_types:
+                  elb = boto3.client(lt[0])
+                  lbs = []
+                  response = elb.describe_load_balancers()
+                  while True:
+                      lbs += [l[lt[1]] for l in response[lt[3]]]
+                      if "NextMarker" in response.keys():
+                          response = elb.describe_load_balancers(Marker=response["NextMarker"])
+                      else:
+                          break
+                  lbs_to_remove = []
+                  if lbs:
+                      lbs = elb.describe_tags(**{lt[2]: lbs})["TagDescriptions"]
+                      for tags in lbs:
+                          for tag in tags['Tags']:
+                              if tag["Key"] == tag_key and tag['Value'] == "owned":
+                                  lbs_to_remove.append(tags[lt[4]])
+                  if lbs_to_remove:
+                      for lb in lbs_to_remove:
+                          print("removing elb %s" % lb)
+                          elb.delete_load_balancer(**{lt[1]: lb})
+              ec2 = boto3.client('ec2')
+              response = ec2.describe_tags(Filters=[
+                  {'Name': 'tag:%s' % tag_key, 'Values': ['owned']},
+                  {'Name': 'resource-type', 'Values': ['security-group']}
+              ])
+              for t in [r['ResourceId'] for r in response['Tags']]:
+                  try:
+                      ec2.delete_security_group(GroupId=t)
+                  except ec2.exceptions.ClientError as e:
+                      if 'DependencyViolation' in str(e):
+                          print("Dependency error on %s" % t)
+                          delete_dependencies(t, ec2)
+                      else:
+                          raise
+
+          def lambda_handler(event, context):
+              helper(event, context)
+      Environment:
+        Variables:
+          CLUSTER_NAME: !GetAtt KubeCreate.Name
+  CleanELBs:
+    Type: "Custom::CleanELBs"
+    Version: "1.0"
+    Properties:
+      ServiceToken: !GetAtt CleanELBsLambda.Arn
+  ##### END CUSTOM RESOURCES #####
+Outputs:
+  BastionHost:
+    Description: Bastion Host Instance ID
+    Value: !Ref BastionHost
+  FrontendEndpoint:
+    Description: Public frontend endpoint in EKS for the Sock Shop
+    Value: !GetAtt RetrievePublicEndpoints.FrontendEndpoint
+  EKSClusterName:
+    Description: EKS Cluster Name
+    Value: !GetAtt KubeCreate.Name
+  NAT1EIP:
+    Description: NAT 1 IP address
+    Value: !Ref "NAT1EIP"
+    Export:
+      Name: !Sub "${AWS::StackName}-NAT1EIP"
+  NAT2EIP:
+    Description: NAT 2 IP address
+    Value: !Ref "NAT2EIP"
+    Export:
+      Name: !Sub "${AWS::StackName}-NAT2EIP"
+  NAT3EIP:
+    Description: NAT 3 IP address
+    Value: !Ref "NAT3EIP"
+    Export:
+      Name: !Sub "${AWS::StackName}-NAT3EIP"
+  PrivateSubnet1AID:
+    Description: Private subnet 1A ID in Availability Zone 1
+    Value: !Ref "PrivateSubnet1A"
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet1AID"
+  PrivateSubnet2AID:
+    Description: Private subnet 2A ID in Availability Zone 2
+    Value: !Ref "PrivateSubnet2A"
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet2AID"
+  PrivateSubnet3AID:
+    Description: Private subnet 3A ID in Availability Zone 3
+    Value: !Ref "PrivateSubnet3A"
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet3AID"
+  PublicSubnet1ID:
+    Description: Public subnet 1 ID in Availability Zone 1
+    Value: !Ref "PublicSubnet1"
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet1ID"
+  PublicSubnet2ID:
+    Description: Public subnet 2 ID in Availability Zone 2
+    Value: !Ref "PublicSubnet2"
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet2ID"
+  PublicSubnet3ID:
+    Description: Public subnet 3 ID in Availability Zone 3
+    Value: !Ref "PublicSubnet3"
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet3ID"
+  PrivateSubnet1ARouteTable:
+    Value: !Ref "PrivateSubnet1ARouteTable"
+    Description: Private subnet 1A route table
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet1ARouteTable"
+  PrivateSubnet2ARouteTable:
+    Value: !Ref "PrivateSubnet2ARouteTable"
+    Description: Private subnet 2A route table
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet2ARouteTable"
+  PrivateSubnet3ARouteTable:
+    Value: !Ref "PrivateSubnet3ARouteTable"
+    Description: Private subnet 3A route table
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet3ARouteTable"
+  PublicSubnetRouteTable:
+    Value: !Ref "PublicSubnetRouteTable"
+    Description: Public subnet route table
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnetRouteTable"
+  VPCID:
+    Value: !Ref "VPC"
+    Description: VPC ID
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID"

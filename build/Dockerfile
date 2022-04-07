@@ -16,11 +16,12 @@ RUN apk add -U build-base
 COPY . .
 
 # build binary
-RUN CGO_ENABLED=${CGO_ENABLED_VAL} GOOS=${GOOS_VAL} GOARCH=${GOARCH_VAL} go build -v -ldflags "-w -s" -o /go/bin/terrascan ./cmd/terrascan
+RUN apk update && apk add git && \
+    CGO_ENABLED=${CGO_ENABLED_VAL} GOOS=${GOOS_VAL} GOARCH=${GOARCH_VAL} go build -v -ldflags "-w -s" -o /go/bin/terrascan ./cmd/terrascan
 
 
 # -------- prod stage -------- #
-FROM alpine:3.12.0
+FROM alpine:3.12.8
 
 # create non root user
 RUN addgroup --gid 101 terrascan && \
