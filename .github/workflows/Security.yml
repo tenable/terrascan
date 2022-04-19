@@ -10,6 +10,6 @@ jobs:
         with:
           go-version: '1.17'
       - name: Go Dependency Scanning
-        run: snyk monitor --all-projects --severity-threshold=high
+        run: snyk monitor --severity-threshold=high
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
