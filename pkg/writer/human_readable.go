@@ -88,7 +88,7 @@ func init() {
 }
 
 // HumanReadbleWriter display scan summary in human readable format
-func HumanReadbleWriter(data interface{}, writer io.Writer) error {
+func HumanReadbleWriter(data interface{}, writers []io.Writer) error {
 	tmpl, err := template.New("Report").Funcs(template.FuncMap{
 		"defaultViolations":      defaultViolations,
 		"detailedViolations":     detailedViolations,
@@ -105,11 +105,14 @@ func HumanReadbleWriter(data interface{}, writer io.Writer) error {
 	buffer := bytes.Buffer{}
 	tmpl.Execute(&buffer, data)
 
-	_, err = writer.Write(buffer.Bytes())
-	if err != nil {
-		return err
+	for _, writer := range writers {
+		_, err = writer.Write(buffer.Bytes())
+		if err != nil {
+			return err
+		}
+		writer.Write([]byte{'\n'})
 	}
-	writer.Write([]byte{'\n'})
+
 	return nil
 }
 

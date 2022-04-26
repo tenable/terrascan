@@ -29,6 +29,6 @@ func init() {
 }
 
 // GithubSarifWriter writes sarif formatted violation results report that are well suited for github codescanning alerts display
-func GithubSarifWriter(data interface{}, writer io.Writer) error {
-	return writeSarif(data, writer, true)
+func GithubSarifWriter(data interface{}, writers []io.Writer) error {
+	return writeSarif(data, writers, true)
 }

@@ -2,6 +2,7 @@ package writer
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 
@@ -305,11 +306,12 @@ func TestHumanReadbleWriter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := HumanReadbleWriter(tt.input, writer); (err != nil) != tt.expectedError {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			if err := HumanReadbleWriter(tt.input, w); (err != nil) != tt.expectedError {
 				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
-			outputBytes := writer.Bytes()
+			outputBytes := bf.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 			if !strings.EqualFold(gotOutput, strings.TrimSpace(tt.expectedOutput)) {
 				t.Errorf("HumanReadbleWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)

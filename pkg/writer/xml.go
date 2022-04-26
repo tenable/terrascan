@@ -32,13 +32,15 @@ func init() {
 }
 
 // XMLWriter prints data in XML format
-func XMLWriter(data interface{}, writer io.Writer) error {
+func XMLWriter(data interface{}, writers []io.Writer) error {
 	j, err := xml.MarshalIndent(data, "", "  ")
 	if err != nil {
 		zap.S().Errorf("failed to write XML output. error: '%v'", err)
 		return err
 	}
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	for _, writer := range writers {
+		writer.Write(j)
+		writer.Write([]byte{'\n'})
+	}
 	return nil
 }

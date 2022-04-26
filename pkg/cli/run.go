@@ -19,6 +19,7 @@ package cli
 import (
 	"errors"
 	"flag"
+	"io"
 	"os"
 	"strings"
 
@@ -71,7 +72,7 @@ type ScanOptions struct {
 	// config file path
 	configFile string
 
-	// the output format for wring the results
+	// the output format for writing the results
 	outputType string
 
 	// UseColors indicates whether to use color output
@@ -116,6 +117,9 @@ type ScanOptions struct {
 
 	// repoRef lets us specify the branch of the repository being scanned
 	repoRef string
+
+	// outputDir lets us specify the directory to write scan result and log files
+	outputDir string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -253,14 +257,23 @@ func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 
 func (s ScanOptions) writeResults(results runtime.Output) error {
 
+	var writers []io.Writer
+
 	outputWriter := NewOutputWriter(s.UseColors)
+	writers = append(writers, outputWriter)
+
+	fileWriter, closeFile := NewFileWriter(s.outputDir, s.outputType)
+	if fileWriter != nil {
+		writers = append(writers, fileWriter)
+		defer closeFile()
+	}
 
 	if s.configOnly {
-		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+		return writer.Write(s.outputType, results.ResourceConfig, writers)
 	}
 
 	if s.configWithError {
-		return writer.Write(s.outputType, results, outputWriter)
+		return writer.Write(s.outputType, results, writers)
 	}
 
 	// add verbose flag to the scan summary
@@ -270,7 +283,7 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
-	return writer.Write(s.outputType, results.Violations, outputWriter)
+	return writer.Write(s.outputType, results.Violations, writers)
 }
 
 // getExitCode returns appropriate exit code for terrascan based on scan output
