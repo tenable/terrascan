@@ -23,7 +23,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-const LogFileName = "terrascan.log"
+const logFileName = "terrascan.log"
 
 var globalLogger *zap.SugaredLogger
 
@@ -86,7 +86,7 @@ func GetLogger(logLevel, encoding, logDir string, encodingLevel func(zapcore.Lev
 	}
 
 	if logDir != "" {
-		zapConfig.OutputPaths = append(zapConfig.OutputPaths, filepath.Join(logDir, LogFileName))
+		zapConfig.OutputPaths = append(zapConfig.OutputPaths, filepath.Join(logDir, logFileName))
 	}
 
 	// create zap logger
