@@ -8,9 +8,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type lineObj map[string]interface{}
+// LineObj ...
+type LineObj map[string]interface{}
 
-func GetLineConfig(data []byte) (lineObj, error) {
+// GetLineConfig ...
+func GetLineConfig(data []byte) (LineObj, error) {
 	docNode := yaml.Node{}
 	if len(data) == 0 {
 		return nil, nil
@@ -24,10 +26,10 @@ func GetLineConfig(data []byte) (lineObj, error) {
 	if len(docNode.Content) == 0 {
 		return nil, err
 	}
-	return ParseNodes(*docNode.Content[0]), nil
+	return parseNodes(*docNode.Content[0]), nil
 }
 
-func ParseNodes(nodes yaml.Node) lineObj {
+func parseNodes(nodes yaml.Node) LineObj {
 	obj := make(map[string]interface{})
 	for i := 0; i < len(nodes.Content)-1; i = i + 2 {
 		if nodes.Content[i+1].Kind == yaml.ScalarNode {
@@ -35,41 +37,42 @@ func ParseNodes(nodes yaml.Node) lineObj {
 			continue
 		}
 		if nodes.Content[i+1].Kind == yaml.SequenceNode {
-			obj[nodes.Content[i].Value] = []lineObj{}
+			obj[nodes.Content[i].Value] = []LineObj{}
 			for _, cont := range nodes.Content[i+1].Content {
-				val := obj[nodes.Content[i].Value].([]lineObj)
+				val := obj[nodes.Content[i].Value].([]LineObj)
 				if len(cont.Content) == 0 {
 					obj[nodes.Content[i].Value] = append(val,
-						lineObj{
+						LineObj{
 							cont.Value: cont.Line,
 						},
 					)
 					continue
 				}
-				obj[nodes.Content[i].Value] = append(val, ParseNodes(*cont))
+				obj[nodes.Content[i].Value] = append(val, parseNodes(*cont))
 			}
 			continue
 		}
 		if nodes.Content[i+1].Kind == yaml.MappingNode {
-			obj[nodes.Content[i].Value] = ParseNodes(*nodes.Content[i+1])
+			obj[nodes.Content[i].Value] = parseNodes(*nodes.Content[i+1])
 		}
 	}
 	return obj
 }
 
+// GetAttributeLineNo ...
 func GetAttributeLineNo(linesData interface{}, traversalPath string) int {
-	lines := linesData.(lineObj)
+	lines := linesData.(LineObj)
 	TraverseEelement, _ := getTraverseElements(traversalPath)
 	for _, elem := range TraverseEelement {
 		if elem.Position == nil {
 			val := lines[elem.Name]
 			if val != nil {
-				lines = val.(lineObj)
+				lines = val.(LineObj)
 				continue
 			}
 			break
 		}
-		linesArray := lines[elem.Name].([]lineObj)
+		linesArray := lines[elem.Name].([]LineObj)
 		lines = linesArray[*elem.Position]
 	}
 
@@ -81,20 +84,20 @@ func GetAttributeLineNo(linesData interface{}, traversalPath string) int {
 	return -1
 }
 
-type TraverseEelement struct {
+type traverseEelement struct {
 	Name     string
 	Position *int64
 }
 
-func getTraverseElements(traversalPath string) ([]*TraverseEelement, error) {
-	traverseElems := make([]*TraverseEelement, 0)
+func getTraverseElements(traversalPath string) ([]*traverseEelement, error) {
+	traverseElems := make([]*traverseEelement, 0)
 	if len(traversalPath) == 0 {
 		return nil, fmt.Errorf("traversal information not available")
 	}
 	pathElems := strings.Split(traversalPath, ".")
 	for i := range pathElems {
 		elems := strings.Split(pathElems[i], "[")
-		t := TraverseEelement{
+		t := traverseEelement{
 			Name: elems[0],
 		}
 		if len(elems) > 1 {
