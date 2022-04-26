@@ -22,6 +22,7 @@ import (
 
 	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/accurics/terrascan/pkg/utils/linenumber"
 	yamltojson "github.com/ghodss/yaml"
 	"github.com/iancoleman/strcase"
 	"go.uber.org/zap"
@@ -104,7 +105,7 @@ func (k *K8sV1) getNormalizedName(kind string) string {
 }
 
 // Normalize takes the input document and normalizes it
-func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error) {
+func (k *K8sV1) Normalize(doc *utils.IacDocument, findLineConfig bool) (*output.ResourceConfig, error) {
 
 	resource, jsonData, err := k.extractResource(doc)
 	if err != nil {
@@ -163,6 +164,12 @@ func (k *K8sV1) Normalize(doc *utils.IacDocument) (*output.ResourceConfig, error
 	resourceConfig.Name = resource.Metadata.NameOrGenerateName()
 	resourceConfig.Config = configData
 
+	if findLineConfig {
+		resourceConfig.LineConfig, err = linenumber.GetLineConfig(doc.RawData)
+		if err != nil {
+			zap.S().Errorf("error computing line no for config for resource %s", resourceConfig.Name)
+		}
+	}
 	return &resourceConfig, nil
 }
 

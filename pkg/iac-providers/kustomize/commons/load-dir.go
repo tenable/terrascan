@@ -106,7 +106,7 @@ func (t KustomizeDirectoryLoader) LoadIacDir() (output.AllResourceConfigs, error
 		var k k8sv1.K8sV1
 		var config *output.ResourceConfig
 
-		config, err = k.Normalize(doc)
+		config, err = k.Normalize(doc, false)
 		if err != nil {
 			zap.S().Warn("unable to normalize data", zap.Error(err), zap.String("file", doc.FilePath))
 			continue

@@ -74,6 +74,7 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 	// First pass determines line number data
 	startLineNumber := 1
 	currentLineNumber := 1
+	rawBytes := []byte{}
 	for scanner.Scan() {
 		if strings.HasPrefix(scanner.Text(), "---") {
 			// We've found the end-of-directives marker, so record results for the current document
@@ -82,9 +83,12 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 				StartLine: startLineNumber,
 				EndLine:   currentLineNumber,
 				FilePath:  filePath,
+				RawData:   rawBytes,
 			})
+			rawBytes = []byte{}
 			startLineNumber = currentLineNumber + 1
 		}
+		rawBytes = append(rawBytes, []byte(scanner.Text()+"\n")...)
 		currentLineNumber++
 	}
 
@@ -94,6 +98,7 @@ func ScanIacDocumentsFromYaml(scanner *bufio.Scanner, byteArray []byte, filePath
 		StartLine: startLineNumber,
 		EndLine:   currentLineNumber,
 		FilePath:  filePath,
+		RawData:   rawBytes,
 	})
 
 	if err := scanner.Err(); err != nil {

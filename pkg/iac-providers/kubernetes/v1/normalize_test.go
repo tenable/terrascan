@@ -282,7 +282,7 @@ func TestK8sV1Normalize(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			k := &K8sV1{}
-			got, err := k.Normalize(tt.args.doc)
+			got, err := k.Normalize(tt.args.doc, false)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("K8sV1.Normalize() error = %v, wantErr %v", err, tt.wantErr)
 				return
