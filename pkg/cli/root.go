@@ -46,6 +46,6 @@ var rootCmd = &cobra.Command{
 	Long: `Terrascan
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
-For more information, please visit https://docs.accurics.com
+For more information, please visit https://runterrascan.io/
 `,
 }
