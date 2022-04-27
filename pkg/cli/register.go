@@ -42,7 +42,7 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 	rootCmd.PersistentFlags().StringVarP(&CustomTempDir, "temp-dir", "", "", "temporary directory path to download remote repository,module and templates")
-	rootCmd.PersistentFlags().StringVarP(&OutputDir, "output-dir", "", "", "directory path to over-write the default logs and output files ( default directory is user's home directory)")
+	rootCmd.PersistentFlags().StringVarP(&OutputDir, "output-dir", "", "", "directory path to over-write the default logs and output files ( default directory is user home directory)")
 
 	//Added init here in case flag parsing failed we should log which flag was incorrect.
 	logging.Init(LogType, LogLevel, OutputDir)

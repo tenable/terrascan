@@ -19,7 +19,7 @@ Flags:
   -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
   -x, --log-type string      log output type (console, json) (default "console")
   -o, --output string        output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
-      --output-dir string    directory path to over-write the default logs and output files ( default directory is user's home directory)
+      --output-dir string    directory path to over-write the default logs and output files ( default directory is user home directory)
       --temp-dir string      temporary directory path to download remote repository,module and templates
 
 Use "terrascan [command] --help" for more information about a command.
