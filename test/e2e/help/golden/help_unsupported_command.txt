@@ -11,7 +11,6 @@ Available Commands:
 
 Flags:
   -c, --config-path string      config file path
-  -h, --help                    help for terrascan
   -l, --log-level string        log level (debug, info, warn, error, panic, fatal) (default "info")
       --log-output-dir string   directory path to write the log and output files
   -x, --log-type string         log output type (console, json) (default "console")
