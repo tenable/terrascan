@@ -34,13 +34,13 @@ Available Commands:
   version     Shows the Terrascan version you are currently using.
 
 Flags:
-  -c, --config-path string   config file path
-  -h, --help                 help for terrascan
-  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
-  -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output string        output type (human, json, yaml, xml) (default "human")
-      --output-dir string    directory path to over-write the default logs and output files ( default directory is user home directory)
-      --temp-dir string      temporary directory path to download remote repository,module and templates
+  -c, --config-path string      config file path
+  -h, --help                    help for terrascan
+  -l, --log-level string        log level (debug, info, warn, error, panic, fatal) (default "info")
+      --log-output-dir string   directory path to write the log and output files
+  -x, --log-type string         log output type (console, json) (default "console")
+  -o, --output string           output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
+      --temp-dir string         temporary directory path to download remote repository,module and templates
 
 Use "terrascan [command] --help" for more information about a command.
 ```
@@ -291,9 +291,9 @@ aws_ecr_repository:
 | ----------- | ----------- |------------|
 | -c | Use this to specify config file settings | Format supported is `*.TOML` |
 | -l | Use this to specify what log settings | debug, **info**, warn, error, panic, fatal  |
+| --log-output-dir | Use this to specify the directory path for writing scan logs and output files along with console output. In case the directory could not be resolved, the scan logs and results will be printed on console only. |
 | -x | Use this to specify the log file format | **console**, json |
 | -o | Use this to specify the scan output type | **human**, json, yaml, xml, junit-xml, sarif, github-sarif |
-| --output-dir | Use this to over-write the directory path for writing scan logs and output files, default directory is user's HOME directory. If the provided directory path doesn't exist, Terrascan will try to create the path. On failure to make the directory, it will fall back to default. In case the HOME directory could not be resolved, the scan logs and results will be printed on console only. |
 | --temp-dir | Use this to specify temporary directory path to download remote repository,module and templates |
 
 
@@ -337,10 +337,10 @@ Flags:
   -v, --verbose                             will show violations with details (applicable for default output)
 
 Global Flags:
-  -c, --config-path string   config file path
-  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
-  -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output string        output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
-      --output-dir string    directory path to over-write the default logs and output files ( default directory is user home directory)
-      --temp-dir string      temporary directory path to download remote repository,module and templates
+  -c, --config-path string      config file path
+  -l, --log-level string        log level (debug, info, warn, error, panic, fatal) (default "info")
+      --log-output-dir string   directory path to write the log and output files
+  -x, --log-type string         log output type (console, json) (default "console")
+  -o, --output string           output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
+      --temp-dir string         temporary directory path to download remote repository,module and templates
 ```

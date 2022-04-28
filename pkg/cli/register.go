@@ -42,30 +42,25 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 	rootCmd.PersistentFlags().StringVarP(&CustomTempDir, "temp-dir", "", "", "temporary directory path to download remote repository,module and templates")
-	rootCmd.PersistentFlags().StringVarP(&OutputDir, "output-dir", "", "", "directory path to over-write the default logs and output files ( default directory is user home directory)")
+	rootCmd.PersistentFlags().StringVarP(&LogOutputDir, "log-output-dir", "", "", "directory path to write the log and output files")
 
 	//Added init here in case flag parsing failed we should log which flag was incorrect.
-	logging.Init(LogType, LogLevel, OutputDir)
+	logging.Init(LogType, LogLevel, LogOutputDir)
 
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
 		// validate OutputDir
-		// make sure the OutputDir Exist, on failure setting OutputDir to user's HOME as default location
-		if OutputDir != "" {
-			err := os.MkdirAll(OutputDir, 0755)
+		// make sure the OutputDir Exist, on failure set OutputDir to user's HOME as default location
+		if LogOutputDir != "" {
+			err := os.MkdirAll(LogOutputDir, 0755)
 			if err != nil {
-				zap.S().Warnf("failed to resolve the output directory: %s, writing results to user's HOME", OutputDir)
-				OutputDir = ""
+				zap.S().Warnf("failed to resolve the log output directory: %s", LogOutputDir)
+				LogOutputDir = ""
 			}
 		}
-		if OutputDir == "" {
-			OutputDir = utils.GetHomeDir()
-		}
-		if OutputDir == "" {
-			zap.S().Warn("failed to resolve the user's HOME directory, skipped writing logs/results to file")
-		}
+
 		// Set up the logger
-		logging.Init(LogType, LogLevel, OutputDir)
+		logging.Init(LogType, LogLevel, LogOutputDir)
 
 		if len(ConfigFile) == 0 {
 			ConfigFile = os.Getenv(config.ConfigEnvvarName)

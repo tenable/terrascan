@@ -36,8 +36,8 @@ var (
 	// CustomTempDir Temporary directory path to download remote repository,module and templates
 	CustomTempDir string
 
-	// OutputDir Directory to write scan logs and result files
-	OutputDir string
+	// LogOutputDir Directory to write scan logs and result files
+	LogOutputDir string
 )
 
 var rootCmd = &cobra.Command{
