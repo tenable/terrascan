@@ -20,7 +20,8 @@ func NewOutputWriter(useColors bool) io.Writer {
 	return os.Stdout
 }
 
-// NewFileWriter gets a new io.Writer based on file output.
+// NewFileWriter gets a new io.Writer based on file output and closing function.
+// It returns `nil nil` if the value of dir is empty or if the file can't be opened
 func NewFileWriter(dir string, outputType string) (io.Writer, func() error) {
 
 	// if no directory resolved
@@ -38,6 +39,8 @@ func NewFileWriter(dir string, outputType string) (io.Writer, func() error) {
 		fileName = "scan-result.yaml"
 	case "xml", "junit-xml":
 		fileName = "scan-result.xml"
+	case "sarif", "github-sarif":
+		fileName = "scan-result.sarif"
 	}
 
 	filePath := filepath.Join(dir, fileName)

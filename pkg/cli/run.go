@@ -118,8 +118,8 @@ type ScanOptions struct {
 	// repoRef lets us specify the branch of the repository being scanned
 	repoRef string
 
-	// outputDir lets us specify the directory to write scan result and log files
-	outputDir string
+	// logOutputDir lets us specify the directory to write scan result and log files
+	logOutputDir string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -262,7 +262,7 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 	outputWriter := NewOutputWriter(s.UseColors)
 	writers = append(writers, outputWriter)
 
-	fileWriter, closeFile := NewFileWriter(s.outputDir, s.outputType)
+	fileWriter, closeFile := NewFileWriter(s.logOutputDir, s.outputType)
 	if fileWriter != nil {
 		writers = append(writers, fileWriter)
 		defer closeFile()

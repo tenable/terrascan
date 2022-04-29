@@ -49,8 +49,7 @@ func Execute() {
 
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
-		// validate OutputDir
-		// make sure the OutputDir Exist, on failure set OutputDir to user's HOME as default location
+		// making sure the LogOutputDir Exist
 		if LogOutputDir != "" {
 			err := os.MkdirAll(LogOutputDir, 0755)
 			if err != nil {

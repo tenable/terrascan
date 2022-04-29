@@ -103,9 +103,14 @@ func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 			WithLocation(location)
 	}
 
-	// print the report to anything that implements `io.Writer`
-	// Sarif already writes the result in a file hence we are ignoring the file output writer
-	return report.PrettyWrite(writers[0])
+	for _, writer := range writers {
+		// print the report to anything that implements `io.Writer`
+		err = report.PrettyWrite(writer)
+		if err != nil {
+			zap.S().Warnf("failed to write result, error :%w", err)
+		}
+	}
+	return nil
 }
 
 func getSarifLevel(severity string) string {
