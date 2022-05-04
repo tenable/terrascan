@@ -30,9 +30,11 @@ func init() {
 }
 
 // JSONWriter prints data in JSON format
-func JSONWriter(data interface{}, writer io.Writer) error {
+func JSONWriter(data interface{}, writers []io.Writer) error {
 	j, _ := json.MarshalIndent(data, "", "  ")
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	for _, writer := range writers {
+		writer.Write(j)
+		writer.Write([]byte{'\n'})
+	}
 	return nil
 }

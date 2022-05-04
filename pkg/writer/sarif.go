@@ -17,15 +17,16 @@
 package writer
 
 import (
+	"io"
+	"path/filepath"
+	"strings"
+
 	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/accurics/terrascan/pkg/version"
 	"github.com/go-errors/errors"
 	"github.com/owenrumney/go-sarif/sarif"
 	"go.uber.org/zap"
-	"io"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -37,11 +38,11 @@ func init() {
 }
 
 // SarifWriter writes sarif formatted violation results report
-func SarifWriter(data interface{}, writer io.Writer) error {
-	return writeSarif(data, writer, false)
+func SarifWriter(data interface{}, writers []io.Writer) error {
+	return writeSarif(data, writers, false)
 }
 
-func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
+func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 	outputData := data.(policy.EngineOutput)
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
@@ -102,8 +103,14 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 			WithLocation(location)
 	}
 
-	// print the report to anything that implements `io.Writer`
-	return report.PrettyWrite(writer)
+	for _, writer := range writers {
+		// print the report to anything that implements `io.Writer`
+		err = report.PrettyWrite(writer)
+		if err != nil {
+			zap.S().Warnf("failed to write result, error :%w", err)
+		}
+	}
+	return nil
 }
 
 func getSarifLevel(severity string) string {

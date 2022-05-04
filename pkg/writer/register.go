@@ -24,9 +24,9 @@ import (
 type supportedFormat string
 
 // writerMap stores mapping of supported writer formats with respective functions
-var writerMap = make(map[supportedFormat](func(interface{}, io.Writer) error))
+var writerMap = make(map[supportedFormat](func(interface{}, []io.Writer) error))
 
 // RegisterWriter registers a writer for terrascan
-func RegisterWriter(format supportedFormat, writerFunc func(interface{}, io.Writer) error) {
+func RegisterWriter(format supportedFormat, writerFunc func(interface{}, []io.Writer) error) {
 	writerMap[format] = writerFunc
 }
