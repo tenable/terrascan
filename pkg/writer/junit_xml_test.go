@@ -19,6 +19,7 @@ package writer
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"strings"
 	"testing"
 
@@ -131,12 +132,13 @@ func TestJUnitXMLWriter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := JUnitXMLWriter(tt.args.data, writer); (err != nil) != tt.wantErr {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			if err := JUnitXMLWriter(tt.args.data, w); (err != nil) != tt.wantErr {
 				t.Errorf("JUnitXMLWriter() got error = %v, wantErr = %v", err, tt.wantErr)
 				return
 			}
-			if gotWriter := writer.String(); !strings.EqualFold(strings.TrimSpace(gotWriter), strings.TrimSpace(tt.wantWriter)) {
+			if gotWriter := bf.String(); !strings.EqualFold(strings.TrimSpace(gotWriter), strings.TrimSpace(tt.wantWriter)) {
 				t.Errorf("JUnitXMLWriter() got = %v, want = %v", gotWriter, tt.wantWriter)
 			}
 		})

@@ -328,7 +328,7 @@ Host github.com
 
 After making changes to the webhook deployment file, apply this yaml in your cluster.
 
-You can also run terrascan admission controller server outside cluster, for more information and instructions on configuring terrascan as an admission controller webhook, see https://docs.accurics.com/projects/accurics-terrascan/en/latest/integrations/admission-controller-webhooks-usage.
+You can also run terrascan admission controller server outside cluster, for more information and instructions on configuring terrascan as an admission controller webhook, see https://runterrascan.io/docs/integrations/k8s/.
 
 #### Step 2: Create a Dockerfile
 

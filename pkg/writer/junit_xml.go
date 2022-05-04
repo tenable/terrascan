@@ -118,7 +118,7 @@ func init() {
 }
 
 // JUnitXMLWriter writes scan summary in junit xml format
-func JUnitXMLWriter(data interface{}, writer io.Writer) error {
+func JUnitXMLWriter(data interface{}, writers []io.Writer) error {
 	output, ok := data.(policy.EngineOutput)
 	if !ok {
 		return fmt.Errorf("incorrect input for JunitXML writer, supported type is policy.EngineOutput")
@@ -126,7 +126,7 @@ func JUnitXMLWriter(data interface{}, writer io.Writer) error {
 
 	junitXMLOutput := convert(output)
 
-	return XMLWriter(junitXMLOutput, writer)
+	return XMLWriter(junitXMLOutput, writers)
 }
 
 // convert is helper func to convert engine output to JUnitTestSuites

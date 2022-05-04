@@ -376,4 +376,98 @@ var _ = Describe("Scan", func() {
 			})
 		})
 	})
+	Describe("terrascan scan, write logs and results in file", func() {
+		Context("terrascan scan command is run with --log-output-dir flag", func() {
+			It("should scan and use the directory path to write the logs and result", func() {
+				logOutputdir := "/tmp/terrascan"
+				logFile := filepath.Join(logOutputdir, "terrascan.log")
+				resultFile := filepath.Join(logOutputdir, "scan-result.txt")
+
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err1).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-d", iacDir, "--log-output-dir", logOutputdir}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeFive))
+				_, err := os.Stat(logFile)
+				Expect(err).NotTo(HaveOccurred())
+				_, err = os.Stat(resultFile)
+				Expect(err).NotTo(HaveOccurred())
+
+				// clean up
+				os.RemoveAll(logOutputdir)
+			})
+			It("should scan and use the directory path to write the logs and result in json file", func() {
+				logOutputdir := "/tmp/terrascan"
+				logFile := filepath.Join(logOutputdir, "terrascan.log")
+				resultFile := filepath.Join(logOutputdir, "scan-result.json")
+
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err1).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-d", iacDir, "--log-output-dir", logOutputdir, "-o", "json"}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeFive))
+				_, err := os.Stat(logFile)
+				Expect(err).NotTo(HaveOccurred())
+				_, err = os.Stat(resultFile)
+				Expect(err).NotTo(HaveOccurred())
+
+				// clean up
+				os.RemoveAll(logOutputdir)
+			})
+			It("should scan and use the directory path to write the logs and result in yaml file", func() {
+				logOutputdir := "/tmp/terrascan"
+				logFile := filepath.Join(logOutputdir, "terrascan.log")
+				resultFile := filepath.Join(logOutputdir, "scan-result.yaml")
+
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err1).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-d", iacDir, "--log-output-dir", logOutputdir, "-o", "yaml"}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeFive))
+				_, err := os.Stat(logFile)
+				Expect(err).NotTo(HaveOccurred())
+				_, err = os.Stat(resultFile)
+				Expect(err).NotTo(HaveOccurred())
+
+				// clean up
+				os.RemoveAll(logOutputdir)
+			})
+			It("should scan and use the directory path to write the logs and result in xml file", func() {
+				logOutputdir := "/tmp/terrascan"
+				logFile := filepath.Join(logOutputdir, "terrascan.log")
+				resultFile := filepath.Join(logOutputdir, "scan-result.xml")
+
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err1).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-d", iacDir, "--log-output-dir", logOutputdir, "-o", "xml"}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeFive))
+				_, err := os.Stat(logFile)
+				Expect(err).NotTo(HaveOccurred())
+				_, err = os.Stat(resultFile)
+				Expect(err).NotTo(HaveOccurred())
+
+				// clean up
+				os.RemoveAll(logOutputdir)
+			})
+			It("should scan and use the directory path to write the logs and result in sarif file", func() {
+				logOutputdir := "/tmp/terrascan"
+				logFile := filepath.Join(logOutputdir, "terrascan.log")
+				resultFile := filepath.Join(logOutputdir, "scan-result.sarif")
+
+				iacDir, err1 := filepath.Abs(filepath.Join(awsIacRelPath, "aws_ami_violation"))
+				Expect(err1).NotTo(HaveOccurred())
+				scanArgs := []string{"scan", "-d", iacDir, "--log-output-dir", logOutputdir, "-o", "sarif"}
+				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
+				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeFive))
+				_, err := os.Stat(logFile)
+				Expect(err).NotTo(HaveOccurred())
+				_, err = os.Stat(resultFile)
+				Expect(err).NotTo(HaveOccurred())
+
+				// clean up
+				os.RemoveAll(logOutputdir)
+			})
+		})
+	})
 })

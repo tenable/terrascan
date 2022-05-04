@@ -35,6 +35,9 @@ var (
 
 	// CustomTempDir Temporary directory path to download remote repository,module and templates
 	CustomTempDir string
+
+	// LogOutputDir Directory to write scan logs and result files
+	LogOutputDir string
 )
 
 var rootCmd = &cobra.Command{
@@ -43,6 +46,6 @@ var rootCmd = &cobra.Command{
 	Long: `Terrascan
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
-For more information, please visit https://docs.accurics.com
+For more information, please visit https://runterrascan.io/
 `,
 }
