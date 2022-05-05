@@ -1,30 +1,50 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
 	pod := input.kubernetes_pod[_]
-    container := pod.config.spec.containers[_]
+
+    some i
+    container := pod.config.spec.containers[i]
     container.securityContext.capabilities.add == "-SYS_ADMIN"
+
+    traverse := sprintf("spec.containers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
 	pod := input.kubernetes_pod[_]
-    initcontainer := pod.config.spec.initContainers[_]
+
+    some i
+    initcontainer := pod.config.spec.initContainers[i]
     initcontainer.securityContext.capabilities.add == "-SYS_ADMIN"
+
+    traverse := sprintf("spec.initContainers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
 	pod := input.kubernetes_cron_job[_]
-    container := pod.config.spec.jobTemplate.spec.template.spec.containers[_]
+
+    some i
+    container := pod.config.spec.jobTemplate.spec.template.spec.containers[i]
     container.securityContext.capabilities.add == "-SYS_ADMIN"
+
+    traverse := sprintf("spec.jobTemplate.spec.template.spec.containers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
 	pod := input.kubernetes_cron_job[_]
-    initcontainer := pod.config.spec.jobTemplate.spec.template.spec.initContainers[_]
+
+    some i
+    initcontainer := pod.config.spec.jobTemplate.spec.template.spec.initContainers[i]
     initcontainer.securityContext.capabilities.add == "-SYS_ADMIN"
+
+    traverse := sprintf("spec.jobTemplate.spec.template.spec.initContainers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     item_list := [
         object.get(input, "kubernetes_daemonset", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
@@ -38,10 +58,16 @@ package accurics
     item != "undefined"
 
     pod := item[_]
-    containerCheck(pod.config.spec.template.spec)
+
+    some i
+    container := pod.config.spec.template.spec.containers[i]
+    container.securityContext.capabilities.add == "-SYS_ADMIN"
+
+    traverse := sprintf("spec.template.spec.containers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     item_list := [
         object.get(input, "kubernetes_daemonset", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
@@ -55,15 +81,11 @@ package accurics
     item != "undefined"
 
     pod := item[_]
-    initContainerCheck(pod.config.spec.template.spec)
-}
 
-initContainerCheck(spec) {
-    container := spec.initContainers[_]
+    some i
+    container := pod.config.spec.template.spec.initContainers[i]
     container.securityContext.capabilities.add == "-SYS_ADMIN"
-}
 
-containerCheck(spec) {
-    container := spec.containers[_]
-    container.securityContext.capabilities.add == "-SYS_ADMIN"
+    traverse := sprintf("spec.template.spec.initContainers[%d].securityContext.capabilities.add", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }

@@ -1,13 +1,19 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     pod := input.kubernetes_pod[_]
     pod.config.spec.automountServiceAccountToken == true
+
+    traverse := "spec.automountServiceAccountToken"
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     pod := input.kubernetes_service_account[_]
     pod.config.automountServiceAccountToken == true
+
+    traverse := "automountServiceAccountToken"
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {
@@ -25,9 +31,14 @@ package accurics
 
     pod := item[_]
     pod.config.spec.template.spec.automountServiceAccountToken == true
+
+    traverse := "spec.template.spec.automountServiceAccountToken"
+    retVal := {"Id": kind.id, "Traverse": traverse}
 }
 
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {
     pod := input.kubernetes_cron_job[_]
     pod.config.spec.jobTemplate.spec.template.spec.automountServiceAccountToken == true
+    traverse := "spec.jobTemplate.spec.template.spec.automountServiceAccountToken"
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }

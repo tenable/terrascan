@@ -2,17 +2,22 @@
 package accurics
 
 #rule for pod
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     pod := input.kubernetes_pod[_]
-    vols := pod.config.spec.volumes[_]
+
+    some i
+    vols := pod.config.spec.volumes[i]
     parameters := {}
     has_field(vols, "hostPath")
     allowedPaths := get_allowed_paths(parameters)
     input_hostpath_violation(allowedPaths, vols)
+
+    traverse := sprintf("spec.volumes[%d]", [i])
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
 #rule for deployment, daemonset, job, replica_set, stateful_set, replication_controller
-{{.prefix}}{{.name}}{{.suffix}}[kind.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     item_list := [
         object.get(input, "kubernetes_daemonset", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
@@ -26,23 +31,33 @@ package accurics
     item != "undefined"
 
     kind := item[_]
-    vols := kind.config.spec.template.spec.volumes[_]
+
+    some i
+    vols := kind.config.spec.template.spec.volumes[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     has_field(vols, "hostPath")
     allowedPaths := get_allowed_paths(parameters)
     input_hostpath_violation(allowedPaths, vols)
+
+    traverse := sprintf("spec.template.spec.volumes[%d]", [i])
+    retVal := {"Id": kind.id, "Traverse": traverse}
 }
 
 #rule for cron_job
-{{.prefix}}{{.name}}{{.suffix}}[cron_job.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     cron_job := input.kubernetes_cron_job[_]
-    vols := cron_job.config.spec.jobTemplate.spec.template.spec.volumes[_]
+
+    some i
+    vols := cron_job.config.spec.jobTemplate.spec.template.spec.volumes[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     has_field(vols, "hostPath")
     allowedPaths := get_allowed_paths(parameters)
     input_hostpath_violation(allowedPaths, vols)
+
+    traverse := sprintf("spec.jobTemplate.spec.template.spec.volumes", [i])
+    retVal := {"Id": cron_job.id, "Traverse": traverse}
 }
 
 #function for all KINDs
