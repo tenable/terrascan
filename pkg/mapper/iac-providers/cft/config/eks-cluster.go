@@ -47,19 +47,21 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		vpcConfig[0].EndpointPublicAccess = c.ResourcesVpcConfig.EndpointPublicAccess
 	}
 
-	enabledClusterLogTypes := make([]string, len(c.Logging.ClusterLogging.EnabledTypes))
-	for i := range c.Logging.ClusterLogging.EnabledTypes {
-		enabledClusterLogTypes[i] = c.Logging.ClusterLogging.EnabledTypes[i].Type
-	}
-
 	cf := EksClusterConfig{
 		Config: Config{
 			Name: c.Name,
 		},
-		Name:                   c.Name,
-		RoleARN:                c.RoleArn,
-		VPCConfig:              vpcConfig,
-		EnabledClusterLogTypes: enabledClusterLogTypes,
+		Name:      c.Name,
+		RoleARN:   c.RoleArn,
+		VPCConfig: vpcConfig,
+	}
+
+	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(c.Logging.ClusterLogging.EnabledTypes) > 0 {
+		enabledClusterLogTypes := make([]string, len(c.Logging.ClusterLogging.EnabledTypes))
+		for i := range c.Logging.ClusterLogging.EnabledTypes {
+			enabledClusterLogTypes[i] = c.Logging.ClusterLogging.EnabledTypes[i].Type
+		}
+		cf.EnabledClusterLogTypes = enabledClusterLogTypes
 	}
 
 	return []AWSResourceConfig{{
