@@ -31,9 +31,11 @@ func init() {
 }
 
 // YAMLWriter prints data in YAML format
-func YAMLWriter(data interface{}, writer io.Writer) error {
+func YAMLWriter(data interface{}, writers []io.Writer) error {
 	j, _ := yaml.Marshal(data)
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	for _, writer := range writers {
+		writer.Write(j)
+		writer.Write([]byte{'\n'})
+	}
 	return nil
 }

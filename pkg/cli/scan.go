@@ -51,6 +51,7 @@ func scan(cmd *cobra.Command, args []string) error {
 	zap.S().Debug("running terrascan in cli mode")
 	scanOptions.configFile = ConfigFile
 	scanOptions.outputType = OutputType
+	scanOptions.logOutputDir = LogOutputDir
 	return scanOptions.Scan()
 }
 

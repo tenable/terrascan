@@ -28,7 +28,7 @@ var (
 )
 
 // Write method writes in the given format using the respective writer func
-func Write(format string, data interface{}, writer io.Writer) error {
+func Write(format string, data interface{}, writers []io.Writer) error {
 
 	writerFunc, present := writerMap[supportedFormat(format)]
 	if !present {
@@ -36,5 +36,5 @@ func Write(format string, data interface{}, writer io.Writer) error {
 		return errNotSupported
 	}
 
-	return writerFunc(data, writer)
+	return writerFunc(data, writers)
 }

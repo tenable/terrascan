@@ -3,10 +3,12 @@ package writer
 import (
 	"bytes"
 	"fmt"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
+	"io"
 	"strings"
 	"testing"
+
+	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/accurics/terrascan/pkg/version"
 )
 
 const violationTemplateForGH = `{
@@ -86,11 +88,12 @@ func TestGithubSarifWriter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := GithubSarifWriter(tt.input, writer); (err != nil) != tt.expectedError {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			if err := GithubSarifWriter(tt.input, w); (err != nil) != tt.expectedError {
 				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
-			outputBytes := writer.Bytes()
+			outputBytes := bf.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 
 			if equal, _ := utils.AreEqualJSON(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)); !equal {

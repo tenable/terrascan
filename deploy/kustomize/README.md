@@ -1,26 +1,26 @@
-## INSTALLING TERRASCAN IN A KUBERNETES CLUSTER USING KUSTOMIZE
+## Installing terrascan in a Kubernetes cluster using Kustomize
 
 This guide will help you install terrascan server inside your kubernetes cluster.
 We have covered the following use cases in the sections below.
 
-  - #####[Deploying Terrascan Server](deploying-terrascan-server)
+  - [Deploying Terrascan Server](#deploying-terrascan-server)  
     Terrascan operating in http server mode.
 
-  - ####[Deploying Terrascan Server in TLS Mode](deploying-terrascan-server-in-tls-mode)
+  - [Deploying Terrascan Server in TLS Mode](#deploying-terrascan-server-in-tls-mode)  
     Terrascan operating in https server mode. This deployment is also a foundation for the terrascan webhook setup.
 
-  - ####[Deploying Terrascan Server for Remote Repository Scan](deploying-terrascan-server-for-remote-repository-scan)
+  - [Deploying Terrascan Server for Remote Repository Scan](#deploying-terrascan-server-for-private-remote-repository-scan)  
     Terrascan in https server mode installed with ssh capabilities, to scan ***private*** remote repositories. For remote
     scanning public repos, deploying `Terrascan Server in TLS Mode` is sufficient.
     This deployment can be handy for use-cases like an argocd pre-sync hook that sends remote repository scan requests to the server.
 
-  - ####[Setting Up Terrascan Webhook](setting-up-terrascan-webhook)
+  - [Setting Up Terrascan Webhook](#setting-up-terrascan-webhook)  
     A Kubernetes Validating Webhook, that safeguards your cluster by denying the creation of kubernetes resources that
     can cause potential security violations.
 
-  - ####[Clean Up](clean-up)
+  - [Clean Up](#clean-up)
 
-###PRE-REQUISITE
+### Pre-requisite
 1. Make sure you have required access on the kubernetes cluster to create and update the following resources:
 
   - Secrets
@@ -63,7 +63,7 @@ terrascan server. The string replacement will be required in the following files
   kubectl create namespace terrascan
   ```
 
-###Deploying Terrascan Server
+### Deploying Terrascan Server
 
 Deploy terrascan in server mode operating in plain HTTP mode.
 
@@ -78,7 +78,7 @@ Deploy terrascan in server mode operating in plain HTTP mode.
     kustomize build server/ | kubectl apply -f -
     ```
 
-###Deploying Terrascan Server in TLS Mode
+### Deploying Terrascan Server in TLS Mode
 
 Deploy terrascan in server mode operating in HTTPS mode.
 
@@ -126,7 +126,7 @@ Deploy terrascan in server mode operating in HTTPS mode.
     kustomize build server-tls/ | kubectl apply -f -
     ```
 
-###Deploying Terrascan Server For Private Remote Repository Scan
+### Deploying Terrascan Server For Private Remote Repository Scan
 
 For scanning ***Private*** remote IaC file repositories, Terrascan must be provided with the required SSH keys to connect and clone the
 repository locally to scan it. The following steps will help in setting up for that.
@@ -170,7 +170,7 @@ repository locally to scan it. The following steps will help in setting up for t
    kustomize build server-remote-repo-scan/ | kubectl apply -f -
     ```
 
-###Setting Up Terrascan Webhook
+### Setting Up Terrascan Webhook
 If you want to setup a Validating Webhook that scans your incoming kubernetes resources using terrascan,
 follow the steps below.
 
@@ -245,7 +245,7 @@ follow the steps below.
     kubectl apply -f webhook/validating-webhook.yaml
     ```
 
-###Clean Up
+### Clean Up
 
   Deleting the namespace that you used, will delete all the resources itself.
   ```bash
