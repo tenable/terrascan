@@ -30,7 +30,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
     Join our community
 <br/>
 <a href="https://discord.gg/ScUPMzyG3n">
-    <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" /> 
+    <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" />
 </a>
 </p>
 
@@ -83,7 +83,7 @@ $ brew install terrascan
 Terrascan is also available as a Docker image and can be used as follows
 
 ```sh
-$ docker run accurics/terrascan
+$ docker run tenable/terrascan
 ```
 Refer to [documentation](https://runterrascan.io/docs/getting-started/) for information.
 
