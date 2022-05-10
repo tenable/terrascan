@@ -6,7 +6,6 @@ set -o pipefail
 
 GIT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
 DOCKER_REPO="tenable/terrascan"
-DOCKERFILE="./build/Dockerfile"
 LATEST_TAG=$(git describe --abbrev=0 --tags)
 LATEST_TAG_SHORT=$(echo "${LATEST_TAG//v}")
 
