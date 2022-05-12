@@ -39,7 +39,7 @@ var (
 	terrascanGitURL        = "https://github.com/tenable/terrascan.git"
 	terrascanDefaultBranch = "master"
 	terrascanConfigEnvName = "TERRASCAN_CONFIG"
-	kaiMoneyGitURL         = "https://github.com/tenable/kaimonkey.git"
+	kaiMoneyGitURL         = "https://github.com/tenable/KaiMonkey.git"
 
 	testPolicyRepoPath = filepath.Join(utils.GetHomeDir(), ".terrascan-test")
 	testRegoSubDirPath = filepath.Join(testPolicyRepoPath, "pkg", "policies", "opa", "rego")
