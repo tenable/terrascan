@@ -194,7 +194,7 @@ Terrascan's default output is a list of violations present in the scanned IaC. A
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan.
 
 ```sh
-$ git clone git@github.com:accurics/terrascan.git
+$ git clone git@github.com:tenable/terrascan.git
 $ cd terrascan
 $ make build
 $ ./bin/terrascan

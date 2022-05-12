@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at [https://github.com/accurics/terrascan/issues](https://github.com/accurics/terrascan/issues).
+Report bugs at [https://github.com/tenable/terrascan/issues](https://github.com/tenable/terrascan/issues).
 
 If you are reporting a bug, please include:
 
@@ -30,11 +30,11 @@ and "help wanted" is open to whoever wants to implement it.
 
 Terrascan could always use more documentation, whether as part of the
 official Terrascan docs, or even on the web in blog posts,
-articles, videos, and such.
+articles, videos, and such. Documentation for Terrascan is located in [tenable/runterrascan.io](https://github.com/tenable/runterrascan.io) and accessible through [runterrascan.io](www.runterrascan.io). Any PRs with changes in functionality or the CLIs user interface should include a corresponding PR for documentation updates.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at [https://github.com/accurics/terrascan/issues](https://github.com/accurics/terrascan/issues).
+The best way to send feedback is to file an issue at [https://github.com/tenable/terrascan/issues](https://github.com/tenable/terrascan/issues).
 
 If you are proposing a feature:
 
