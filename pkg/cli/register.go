@@ -23,10 +23,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/logging"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/spf13/cobra"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/logging"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 

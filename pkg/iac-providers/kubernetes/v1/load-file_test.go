@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 var testDataDir = "testdata"

@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
 )
 

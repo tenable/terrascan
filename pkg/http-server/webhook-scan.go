@@ -22,8 +22,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/gorilla/mux"
+	admissionWebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
 	"go.uber.org/zap"
 
 	v1 "k8s.io/api/admission/v1"

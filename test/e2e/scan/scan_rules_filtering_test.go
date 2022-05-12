@@ -20,12 +20,12 @@ import (
 	"os"
 	"path/filepath"
 
-	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	scanUtils "github.com/tenable/terrascan/test/e2e/scan"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var (

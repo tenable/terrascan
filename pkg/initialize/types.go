@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/policy"
 )
 
 type environmentPolicy struct {

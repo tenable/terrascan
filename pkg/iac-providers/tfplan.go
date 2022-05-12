@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	tfplanv1 "github.com/accurics/terrascan/pkg/iac-providers/tfplan/v1"
+	tfplanv1 "github.com/tenable/terrascan/pkg/iac-providers/tfplan/v1"
 )
 
 // tfplan specific constants

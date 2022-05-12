@@ -23,12 +23,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/downloader"
-	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/downloader"
+	admissionwebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 

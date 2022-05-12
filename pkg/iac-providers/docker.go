@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	dockerv1 "github.com/accurics/terrascan/pkg/iac-providers/docker/v1"
+	dockerv1 "github.com/tenable/terrascan/pkg/iac-providers/docker/v1"
 )
 
 // docker specific constants

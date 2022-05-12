@@ -23,11 +23,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/config"
-	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
-	"github.com/accurics/terrascan/pkg/k8s/dblogs"
-	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	admissionWebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
+	"github.com/tenable/terrascan/pkg/k8s/dblogs"
+	"github.com/tenable/terrascan/pkg/results"
 	"go.uber.org/zap"
 )
 

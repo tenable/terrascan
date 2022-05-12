@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	cftv1 "github.com/accurics/terrascan/pkg/iac-providers/cft/v1"
+	cftv1 "github.com/tenable/terrascan/pkg/iac-providers/cft/v1"
 )
 
 // terraform specific constants

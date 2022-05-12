@@ -20,7 +20,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/policy"
 )
 
 // EngineStats Contains misc stats

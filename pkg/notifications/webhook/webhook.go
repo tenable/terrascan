@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
+	httputils "github.com/tenable/terrascan/pkg/utils/http"
 	"go.uber.org/zap"
 )
 

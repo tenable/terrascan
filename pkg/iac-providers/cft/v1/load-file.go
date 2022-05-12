@@ -24,14 +24,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/mapper"
-	cftRes "github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
-	"github.com/accurics/terrascan/pkg/results"
 	"github.com/awslabs/goformation/v5"
 	"github.com/awslabs/goformation/v5/cloudformation"
 	multierr "github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/mapper"
+	cftRes "github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/config"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/store"
+	"github.com/tenable/terrascan/pkg/results"
 	"go.uber.org/zap"
 )
 

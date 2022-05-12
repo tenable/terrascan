@@ -20,12 +20,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
 const (
-	defaultPolicyRepoURL     = "https://github.com/accurics/terrascan.git"
+	defaultPolicyRepoURL     = "https://github.com/tenable/terrascan.git"
 	defaultPolicyBranch      = "master"
 	defaultPolicyEnvironment = "https://cloud.tenable.com"
 )

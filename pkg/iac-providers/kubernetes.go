@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
+	k8sv1 "github.com/tenable/terrascan/pkg/iac-providers/kubernetes/v1"
 )
 
 // terraform specific constants

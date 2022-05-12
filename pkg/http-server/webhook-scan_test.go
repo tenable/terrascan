@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/k8s/dblogs"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/k8s/dblogs"
 	v1 "k8s.io/api/admission/v1"
 )
 

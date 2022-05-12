@@ -17,7 +17,7 @@
 package helper
 
 import (
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/results"
 )
 
 type violations []*results.Violation

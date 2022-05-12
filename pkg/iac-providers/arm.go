@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
+	armv1 "github.com/tenable/terrascan/pkg/iac-providers/arm/v1"
 )
 
 // terraform specific constants

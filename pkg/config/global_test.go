@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestLoadGlobalConfig(t *testing.T) {

@@ -23,9 +23,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/version"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/version"
 )
 
 func TestJUnitXMLWriter(t *testing.T) {

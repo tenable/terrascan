@@ -21,11 +21,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
 	"github.com/go-errors/errors"
 	"github.com/owenrumney/go-sarif/sarif"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/version"
 	"go.uber.org/zap"
 )
 
@@ -49,7 +49,7 @@ func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 		return err
 	}
 
-	run := sarif.NewRun("terrascan", "https://github.com/accurics/terrascan")
+	run := sarif.NewRun("terrascan", "https://github.com/tenable/terrascan")
 	run.Tool.Driver.WithVersion(version.GetNumeric())
 	// add a run to the report
 	report.AddRun(run)

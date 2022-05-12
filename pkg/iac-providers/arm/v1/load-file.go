@@ -23,12 +23,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/mapper"
-	"github.com/accurics/terrascan/pkg/mapper/convert"
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/mapper"
+	"github.com/tenable/terrascan/pkg/mapper/convert"
+	"github.com/tenable/terrascan/pkg/mapper/core"
+	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
 	"go.uber.org/zap"
 )
 

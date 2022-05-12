@@ -20,9 +20,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1/testdata"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/iac-providers/kubernetes/v1/testdata"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestK8sV1ExtractContainerImages(t *testing.T) {

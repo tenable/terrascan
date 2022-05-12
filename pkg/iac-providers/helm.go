@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
+	helmv3 "github.com/tenable/terrascan/pkg/iac-providers/helm/v3"
 )
 
 // terraform specific constants

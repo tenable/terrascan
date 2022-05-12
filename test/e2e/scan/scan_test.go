@@ -24,15 +24,15 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
-	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
+	scanUtils "github.com/tenable/terrascan/test/e2e/scan"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var (
@@ -342,7 +342,7 @@ var _ = Describe("Scan", func() {
 		})
 		Context("terrascan scan command is run with --repo-url and --repo-ref flag", func() {
 			It("should scan and result in json output format and exit with status code 3", func() {
-				scanArgs := []string{"scan", "-p", policyDir, "-i", "terraform", "-d", iacDir, "--repo-url", "https://github.com/accurics/terrascan.git", "--repo-ref", "main", "-o", "json"}
+				scanArgs := []string{"scan", "-p", policyDir, "-i", "terraform", "-d", iacDir, "--repo-url", "https://github.com/tenable/terrascan.git", "--repo-ref", "main", "-o", "json"}
 				// scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human_with_repo_detail.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
 				session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, scanArgs...)
 				Eventually(session, 3).Should(gexec.Exit(helper.ExitCodeThree))
@@ -352,7 +352,7 @@ var _ = Describe("Scan", func() {
 
 				err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
 				Expect(err).NotTo(HaveOccurred())
-				Expect(sessionEngineOutput.Summary.ResourcePath).To((Equal("https://github.com/accurics/terrascan.git")))
+				Expect(sessionEngineOutput.Summary.ResourcePath).To((Equal("https://github.com/tenable/terrascan.git")))
 				Expect(sessionEngineOutput.Summary.Branch).To((Equal("main")))
 			})
 		})

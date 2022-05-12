@@ -17,8 +17,8 @@
 package config
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/convert"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/convert"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
 const (

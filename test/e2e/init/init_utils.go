@@ -17,11 +17,12 @@
 package init
 
 import (
-	"github.com/accurics/terrascan/test/helper"
+	"io"
+
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/test/helper"
 	"gopkg.in/src-d/go-git.v4"
-	"io"
 )
 
 // InitCommandTimeout timeout

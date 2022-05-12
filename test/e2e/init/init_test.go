@@ -18,27 +18,28 @@ package init_test
 
 import (
 	"fmt"
-	"github.com/accurics/terrascan/pkg/utils"
-	initUtil "github.com/accurics/terrascan/test/e2e/init"
-	"github.com/accurics/terrascan/test/helper"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
-	"github.com/onsi/gomega/gexec"
-	"gopkg.in/src-d/go-git.v4"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gbytes"
+	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/utils"
+	initUtil "github.com/tenable/terrascan/test/e2e/init"
+	"github.com/tenable/terrascan/test/helper"
+	"gopkg.in/src-d/go-git.v4"
 )
 
 var (
 	initCommand            = "init"
 	defaultPolicyRepoPath  = filepath.Join(utils.GetHomeDir(), ".terrascan")
-	terrascanGitURL        = "https://github.com/accurics/terrascan.git"
+	terrascanGitURL        = "https://github.com/tenable/terrascan.git"
 	terrascanDefaultBranch = "master"
 	terrascanConfigEnvName = "TERRASCAN_CONFIG"
-	kaiMoneyGitURL         = "https://github.com/accurics/KaiMonkey.git"
+	kaiMoneyGitURL         = "https://github.com/tenable/kaimonkey.git"
 
 	testPolicyRepoPath = filepath.Join(utils.GetHomeDir(), ".terrascan-test")
 	testRegoSubDirPath = filepath.Join(testPolicyRepoPath, "pkg", "policies", "opa", "rego")

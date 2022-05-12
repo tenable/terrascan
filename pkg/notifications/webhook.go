@@ -19,7 +19,7 @@ package notifications
 import (
 	"reflect"
 
-	webhookNotifier "github.com/accurics/terrascan/pkg/notifications/webhook"
+	webhookNotifier "github.com/tenable/terrascan/pkg/notifications/webhook"
 )
 
 // terraform specific constants

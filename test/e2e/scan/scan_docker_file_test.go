@@ -19,11 +19,11 @@ package scan_test
 import (
 	"path/filepath"
 
-	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
+	scanUtils "github.com/tenable/terrascan/test/e2e/scan"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var _ = Describe("Scan is run for dockerfile directories and files", func() {

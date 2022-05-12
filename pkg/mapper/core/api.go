@@ -16,7 +16,7 @@
 
 package core
 
-import "github.com/accurics/terrascan/pkg/iac-providers/output"
+import "github.com/tenable/terrascan/pkg/iac-providers/output"
 
 // Mapper defines the base API that each IaC provider mapper must implement.
 type Mapper interface {

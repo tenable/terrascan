@@ -21,8 +21,8 @@ import (
 	"sort"
 	"testing"
 
-	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
-	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
+	tfv12 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v12"
+	tfv14 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v14"
 )
 
 func TestNewIacProvider(t *testing.T) {

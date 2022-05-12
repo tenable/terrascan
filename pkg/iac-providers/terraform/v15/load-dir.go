@@ -17,9 +17,9 @@
 package tfv15
 
 import (
-	commons "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
+	commons "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 // LoadIacDir starts traversing from the given rootDir and traverses through

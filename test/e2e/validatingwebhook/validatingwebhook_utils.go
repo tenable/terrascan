@@ -24,9 +24,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/pelletier/go-toml"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 // CreateTerrascanConfigFile creates a config file with test policy path

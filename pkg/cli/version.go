@@ -19,8 +19,8 @@ package cli
 import (
 	"fmt"
 
-	"github.com/accurics/terrascan/pkg/version"
 	"github.com/spf13/cobra"
+	"github.com/tenable/terrascan/pkg/version"
 )
 
 var versionCmd = &cobra.Command{

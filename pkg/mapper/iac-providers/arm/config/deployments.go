@@ -19,9 +19,9 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/accurics/terrascan/pkg/mapper/convert"
-	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/convert"
+	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
 	"go.uber.org/zap"
 )
 

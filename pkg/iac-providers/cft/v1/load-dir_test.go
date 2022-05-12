@@ -31,13 +31,13 @@ import (
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 const (
-	repoURL  = "https://github.com/accurics/KaiMonkey.git"
+	repoURL  = "https://github.com/tenable/kaimonkey.git"
 	branch   = "master"
 	basePath = "artifacts"
 	provider = "cft"

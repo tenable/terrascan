@@ -20,19 +20,19 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/notifications/webhook"
-	"github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/accurics/terrascan/pkg/vulnerability"
+	"github.com/tenable/terrascan/pkg/notifications/webhook"
+	"github.com/tenable/terrascan/pkg/policy/opa"
+	"github.com/tenable/terrascan/pkg/vulnerability"
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/filters"
-	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/notifications"
-	"github.com/accurics/terrascan/pkg/policy"
-	res "github.com/accurics/terrascan/pkg/results"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/filters"
+	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/notifications"
+	"github.com/tenable/terrascan/pkg/policy"
+	res "github.com/tenable/terrascan/pkg/results"
 )
 
 const (

@@ -25,8 +25,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 var metaDataReferenceIDPattern = regexp.MustCompile(fmt.Sprintf("(%s|%s)", utils.MetaDataReferenceIDRegex, utils.MetaDataIDRegex))

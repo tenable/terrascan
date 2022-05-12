@@ -17,7 +17,7 @@
 package iacprovider
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 // IacProvider defines the interface which every IaC provider needs to implement

@@ -25,11 +25,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-version"
 	hclConfigs "github.com/hashicorp/terraform/configs"
 	"github.com/hashicorp/terraform/registry/regsrc"
 	"github.com/hashicorp/terraform/registry/response"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 var (

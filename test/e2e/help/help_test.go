@@ -19,11 +19,11 @@ import (
 	"io"
 	"path/filepath"
 
-	helpUtils "github.com/accurics/terrascan/test/e2e/help"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	helpUtils "github.com/tenable/terrascan/test/e2e/help"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var (

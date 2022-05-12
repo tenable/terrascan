@@ -17,9 +17,9 @@
 package mapper
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft"
+	"github.com/tenable/terrascan/pkg/mapper/core"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft"
 )
 
 // NewMapper returns a mapper based on IaC provider.

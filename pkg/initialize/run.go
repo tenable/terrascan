@@ -26,7 +26,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/config"
 	"go.uber.org/zap"
 	"gopkg.in/src-d/go-git.v4"
 	gitConfig "gopkg.in/src-d/go-git.v4/config"

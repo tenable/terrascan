@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/policy"
 )
 
 // LoadRegoMetadata reads rego meta data file

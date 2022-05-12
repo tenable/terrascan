@@ -19,8 +19,8 @@ package filters
 import (
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -51,7 +51,7 @@ func (rs ResourceTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bo
 		return true
 	}
 
-	// temporary fix for kubernetes policies (https://github.com/accurics/terrascan/issues/946)
+	// temporary fix for kubernetes policies (https://github.com/tenable/terrascan/issues/946)
 	// TODO: modification in policy metadata (resource type (string) => resource type (map<string,bool))
 	// accordingly modify the filter specification
 	if r.PolicyType == "k8s" && strings.Contains(strings.ToLower(rs.resourceType), "kubernetes") {

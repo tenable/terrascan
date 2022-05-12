@@ -17,8 +17,8 @@
 package cli
 
 import (
-	"github.com/accurics/terrascan/pkg/initialize"
 	"github.com/spf13/cobra"
+	"github.com/tenable/terrascan/pkg/initialize"
 	"go.uber.org/zap"
 )
 

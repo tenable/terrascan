@@ -25,14 +25,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/policy"
-	serverUtils "github.com/accurics/terrascan/test/e2e/server"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/policy"
+	serverUtils "github.com/tenable/terrascan/test/e2e/server"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var _ = Describe("Server Remote Scan", func() {
@@ -59,7 +59,7 @@ var _ = Describe("Server Remote Scan", func() {
 		Context("scan remote terraform git repo", func() {
 			requestURL := fmt.Sprintf("%s:%s/v1/terraform/v12/all/remote/dir/scan", host, port)
 
-			awsAmiRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/aws/aws_ami_violation"
+			awsAmiRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/aws/aws_ami_violation"
 			When("remote repo violates aws_ami", func() {
 				It("should report violations", func() {
 
@@ -77,7 +77,7 @@ var _ = Describe("Server Remote Scan", func() {
 
 			When("remote repo violates aws_db_instance", func() {
 				It("should report violations", func() {
-					remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
+					remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
 
 					goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
@@ -113,7 +113,7 @@ var _ = Describe("Server Remote Scan", func() {
 				When("show_passed attribute is present", func() {
 
 					It("should receive resource config response", func() {
-						remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
+						remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/aws/aws_db_instance_violation"
 
 						goldenFilePath, err := filepath.Abs(filepath.Join(awsDbInstanceGoldenRelPath, "aws_db_instance_json_show_passed.txt"))
 						Expect(err).NotTo(HaveOccurred())
@@ -161,7 +161,7 @@ var _ = Describe("Server Remote Scan", func() {
 
 							bodyAttrs := make(map[string]interface{})
 							bodyAttrs["remote_type"] = "git"
-							bodyAttrs["remote_url"] = "https://github.com/accurics/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
+							bodyAttrs["remote_url"] = "https://github.com/tenable/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
 							bodyAttrs["non_recursive"] = true
 
 							serverUtils.MakeRemoteScanRequest(requestURL, bodyAttrs, http.StatusBadRequest)
@@ -338,7 +338,7 @@ var _ = Describe("Server Remote Scan", func() {
 
 			When("remote repo violates kubernetes_ingress", func() {
 				It("should report violations", func() {
-					remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
+					remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/k8s/kubernetes_ingress_violation"
 
 					goldenFilePath, err := filepath.Abs(filepath.Join(k8sGoldenRelPath, "kubernetes_ingress_violations", "kubernetes_ingress_json.txt"))
 					Expect(err).NotTo(HaveOccurred())
@@ -384,7 +384,7 @@ var _ = Describe("Server Remote Scan", func() {
 
 		Context("rules filtering options for remote scan", func() {
 			requestURL := fmt.Sprintf("%s:%s/v1/terraform/v14/all/remote/dir/scan", host, port)
-			remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/resource_skipping/terraform"
+			remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/resource_skipping/terraform"
 
 			When("scan_rules is used", func() {
 				It("should receive violations and 200 OK resopnse", func() {
@@ -486,7 +486,7 @@ var _ = Describe("Server Remote Scan", func() {
 				When("k8s file has resource skipped", func() {
 					It("should receive violations result with 200 OK response", func() {
 						requestURL := fmt.Sprintf("%s:%s/v1/k8s/v1/all/remote/dir/scan", host, port)
-						remoteRepoURL := "https://github.com/accurics/terrascan//test/e2e/test_data/iac/resource_skipping/kubernetes"
+						remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/resource_skipping/kubernetes"
 						bodyAttrs := make(map[string]interface{})
 						bodyAttrs["remote_type"] = "git"
 						bodyAttrs["remote_url"] = remoteRepoURL
