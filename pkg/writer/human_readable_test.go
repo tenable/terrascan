@@ -103,7 +103,7 @@ var (
 
 const (
 	expectedOutput1 = `Violation Details -
-
+    
 	Description    :	S3 bucket Access is allowed to all AWS Account Users.
 	File           :	modules/m1/main.tf
 	Line           :	20
@@ -113,25 +113,25 @@ const (
 	Resource Name  :	bucket
 	Resource Type  :	aws_s3_bucket
 	Category       :	S3
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 Skipped Violations -
-
+	
 	Description    :	S3 bucket Access is allowed to all AWS Account Users.
 	File           :	modules/m1/main.tf
 	Line           :	20
 	Severity       :	HIGH
-	Skip Comment   :
+	Skip Comment   :	
 	Rule Name      :	s3EnforceUserACL
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Resource Name  :	bucket
 	Resource Type  :	aws_s3_bucket
 	Category       :	S3
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 Scan Summary -
 
@@ -156,15 +156,15 @@ Scan Summary -
 	High                :	1`
 
 	expectedOutput3 = `Passed Rules -
-
+    
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
 	Description    :	S3 bucket Access is allowed to all AWS Account Users.
 	Severity       :	HIGH
 	Category       :	S3
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 Scan Summary -
 
@@ -182,27 +182,27 @@ Scan Summary -
 	IaC Type            :	kustomize
 	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
 	Error Message       :	kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation
-
+	
 	-----------------------------------------------------------------------
-
+	
 	IaC Type            :	helm
 	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
 	Error Message       :	no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 
 Passed Rules -
-
+    
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
 	Description    :	S3 bucket Access is allowed to all AWS Account Users.
 	Severity       :	HIGH
 	Category       :	S3
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 Scan Summary -
 
@@ -216,19 +216,19 @@ Scan Summary -
 	High                :	1`
 
 	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details -
-
+    
 	Description         :	GNU Bash. Bash is the GNU Project's shell
 	Vulnerability ID    :	CVE-2019-18276
 	Resource Name       :	""
-	Resource Type       :
+	Resource Type       :	
 	Image               :	test
-	Package             :
+	Package             :	
 	Line                :	0
 	Primary URL         :	http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-18276
 	Primary URL         :	HIGH
-
+	
 	-----------------------------------------------------------------------
-
+	
 
 Scan Summary -
 
