@@ -7,4 +7,5 @@ type IacDocument struct {
 	EndLine   int
 	FilePath  string
 	Data      []byte
+	RawData   []byte
 }

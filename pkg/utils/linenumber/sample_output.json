@@ -1,0 +1,119 @@
+{
+  "kubernetes_pod": [
+    {
+      "id": "kubernetes_pod.backend-server-default",
+      "name": "backend-server",
+      "source": "deployment.yaml",
+      "line": 1,
+      "type": "kubernetes_pod",
+      "config": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "metadata": {
+          "labels": {
+            "app": "goserver",
+            "tier": "backend"
+          },
+          "name": "backend-server"
+        },
+        "spec": {
+          "containers": [
+            {
+              "image": "gcr.io/accurics/terrascan-e2e-test:terrascan@sha256:a7185142bbef5ccad92fc9bca0e09a522c2d163efcaa472fd31987d68ff9c61d",
+              "name": "goserver",
+              "readinessProbe": {
+                "command": [
+                  "go",
+                  "version"
+                ],
+                "exec": null,
+                "initialDelaySeconds": 10,
+                "periodSeconds": 10
+              },
+              "resources": {
+                "limits": {
+                  "cpu": "1",
+                  "memory": "256Mi"
+                },
+                "requests": {
+                  "cpu": "1",
+                  "memory": "256Mi"
+                }
+              },
+              "securityContext": {
+                "readOnlyRootFilesystem": true,
+                "runAsNonRoot": true
+              }
+            }
+          ],
+          "securityContext": {
+            "seccompProfile": {
+              "type": "RuntimeDefault"
+            }
+          }
+        }
+      },
+      "line_config": {
+        "apiVersion": 1,
+        "kind": 2,
+        "metadata": {
+          "labels": {
+            "app": 7,
+            "tier": 6
+          },
+          "name": 4
+        },
+        "spec": {
+          "containers": [
+            {
+              "image": 14,
+              "name": 13,
+              "readinessProbe": {
+                "command": [
+                  {
+                    "go": 28
+                  },
+                  {
+                    "version": 29
+                  }
+                ],
+                "exec": 26,
+                "initialDelaySeconds": 31,
+                "periodSeconds": 30
+              },
+              "resources": {
+                "limits": {
+                  "cpu": 23,
+                  "memory": 24
+                },
+                "requests": {
+                  "cpu": 20,
+                  "memory": 21
+                }
+              },
+              "securityContext": {
+                "readOnlyRootFilesystem": 16,
+                "runAsNonRoot": 17
+              }
+            }
+          ],
+          "securityContext": {
+            "seccompProfile": {
+              "type": 11
+            }
+          }
+        }
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "goserver",
+          "image": "gcr.io/accurics/terrascan-e2e-test:terrascan@sha256:a7185142bbef5ccad92fc9bca0e09a522c2d163efcaa472fd31987d68ff9c61d",
+          "vulnerabilities": null
+        }
+      ]
+    }
+  ]
+}

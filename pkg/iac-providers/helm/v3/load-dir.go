@@ -97,7 +97,7 @@ func (h *HelmV3) LoadIacDir(absRootDir string, options map[string]interface{}) (
 			// helmv3 supports the kubernetes v1 api
 			var k k8sv1.K8sV1
 			var config *output.ResourceConfig
-			config, err = k.Normalize(doc)
+			config, err = k.Normalize(doc, false)
 			if err != nil {
 				// ignore logging errors when the "kind" field is not available because helm chart rendering can create an empty file
 				// in that case, we should not output an error as it was the user's intention to prevent rendering the resource
@@ -232,6 +232,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 			Type:      utils.YAMLDoc,
 			StartLine: 1,
 			EndLine:   1,
+			RawData:   []byte(renderData[renderFile]),
 			FilePath:  renderFile,
 		})
 	}

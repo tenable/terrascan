@@ -1,38 +1,54 @@
 package accurics
 
 #rule for pod_security_policy
-{{.prefix}}{{.name}}{{.suffix}}[psp.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     psp := input.kubernetes_pod_security_policy[_]
     psp.config.spec.allowProcMountTypes != "Default"
+
+    traverse := "spec.allowProcMountTypes"
+    retVal := {"Id": psp.id, "Traverse": traverse}
 }
 
 #rule for pod_security_policy terraform
-{{.prefix}}{{.name}}{{.suffix}}[psp.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     psp := input.kubernetes_pod_security_policy[_]
     psp.config.spec.allow_proc_mount_types != "Default"
+
+    traverse := "spec.allow_proc_mount_types"
+    retVal := {"Id": psp.id, "Traverse": traverse}
 }
 
 #rule for pod
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     pod := input.kubernetes_pod[_]
     parameters := {}
-    container := pod.config.spec.containers[_]
+
+    some i
+    container := pod.config.spec.containers[i]
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.containers[%d].securityContext.procMount"
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[pod.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     pod := input.kubernetes_pod[_]
     parameters := {}
-    container := pod.config.spec.initContainers[_]
+
+    some i
+    container := pod.config.spec.initContainers[i]
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.initcontainers[%d].securityContext.procMount"
+    retVal := {"Id": pod.id, "Traverse": traverse}
 }
 
 #rule for deployment, daemonset, job, replica_set, stateful_set, replication_controller
-{{.prefix}}{{.name}}{{.suffix}}[kind.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     item_list := [
         object.get(input, "kubernetes_daemonset", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
@@ -46,15 +62,20 @@ package accurics
     item != "undefined"
 
     kind := item[_]
-    container := kind.config.spec.template.spec.containers[_]
+
+    some i
+    container := kind.config.spec.template.spec.containers[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.template.spec.containers[%d].securityContext.procMount"
+    retVal := {"Id": kind.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[kind.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     item_list := [
         object.get(input, "kubernetes_daemonset", "undefined"),
         object.get(input, "kubernetes_deployment", "undefined"),
@@ -68,33 +89,48 @@ package accurics
     item != "undefined"
 
     kind := item[_]
-    container := kind.config.spec.template.spec.initContainers[_]
+
+    some i
+    container := kind.config.spec.template.spec.initContainers[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.template.spec.initContainers[%d].securityContext.procMount"
+    retVal := {"Id": kind.id, "Traverse": traverse}
 }
 
 #rule for cron_job
-{{.prefix}}{{.name}}{{.suffix}}[cron_job.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     cron_job := input.kubernetes_cron_job[_]
-    container := cron_job.config.spec.jobTemplate.spec.template.spec.containers[_]
+
+    some i
+    container := cron_job.config.spec.jobTemplate.spec.template.spec.containers[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.jobTemplate.spec.template.spec.containers[%d].securityContext.procMount"
+    retVal := {"Id": cron_job.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[cron_job.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     cron_job := input.kubernetes_cron_job[_]
-    container := cron_job.config.spec.jobTemplate.spec.template.spec.initContainers[_]
+
+    some i
+    container := cron_job.config.spec.jobTemplate.spec.template.spec.initContainers[i]
     #parameters := {  'allowedHostPath' :[{ 'readOnly': true, 'pathPrefix': '/foo' }] }
     parameters := {}
     container.securityContext.procMount
     allowedProcMount := get_allowed_proc_mount(parameters)
     not input_proc_mount_type_allowed(allowedProcMount, container)
+
+    traverse := "spec.jobTemplate.spec.template.spec.initContainers[%d].securityContext.procMount"
+    retVal := {"Id": cron_job.id, "Traverse": traverse}
 }
 
 ###this will get satisfied as no parameters are provided, thus checking with the baseline configuration which is checking that the procmount is default####

@@ -65,6 +65,7 @@ func LoadJSON(filePath string) ([]*IacDocument, error) {
 		FilePath:  filePath,
 		EndLine:   currentLineNumber,
 		Data:      fileBytes,
+		RawData:   fileBytes,
 	})
 
 	return iacDocumentList, nil

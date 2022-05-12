@@ -1,47 +1,34 @@
 package accurics
 
-{{.prefix}}{{.name}}{{.suffix}}[deployment.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     deployment := input.kubernetes_deployment[_]
-    image := deployment.config.spec.template.spec.containers[_].image
+
+    some i
+    image := deployment.config.spec.template.spec.containers[i].image
 
     contains(image, "ingress-nginx/controller")
     contains(image, "@sha")
     version := split(split(image, ":v")[1], "@")
     isVulnerableVersion(version)
     isAllowSnippetAnnotations(deployment.config.metadata.namespace)
+    traverse := sprintf("deployment.config.spec.template.spec.containers[%d].image", [i])
+    retVal := {"Id": deployment.id, "Traverse": traverse}
 }
 
-{{.prefix}}{{.name}}{{.suffix}}[deployment.id] {
+{{.prefix}}{{.name}}{{.suffix}}[retVal] {
     deployment := input.kubernetes_deployment[_]
-    image := deployment.config.spec.template.spec.containers[_].image
+
+    some i
+    image := deployment.config.spec.template.spec.containers[i].image
 
     contains(image, "ingress-nginx/controller")
     not contains(image, "@sha")
     version := split(image, ":v")
     isVulnerableVersion(version)
     isAllowSnippetAnnotations(deployment.metadata.namespace)
-}
 
-{{.prefix}}{{.name}}{{.suffix}}[deployment.id] {
-    deployment := input.kubernetes_deployment[_]
-    image := deployment.config.spec.template.spec.containers[_].image
-
-    contains(image, "ingress-nginx/controller")
-    contains(image, "@sha")
-    version := split(split(image, ":v")[1], "@")
-    isVulnerableVersion(version)
-    isAllowSnippetAnnotations(deployment.config.metadata.namespace)
-}
-
-{{.prefix}}{{.name}}{{.suffix}}[deployment.id] {
-    deployment := input.kubernetes_deployment[_]
-    image := deployment.config.spec.template.spec.containers[_].image
-
-    contains(image, "ingress-nginx/controller")
-    not contains(image, "@sha")
-    version := split(image, ":v")
-    isVulnerableVersion(version)
-    isAllowSnippetAnnotations(deployment.metadata.namespace)
+    traverse := sprintf("spec.template.spec.containers[%d].image", [i])
+    retVal := {"Id": deployment.id, "Traverse": traverse}
 }
 
 isVulnerableVersion(ver) {
