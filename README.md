@@ -27,7 +27,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
 
 <p align="center">
-    Join our community
+    Join Tenable community
 <br/>
 <a href="https://discord.gg/ScUPMzyG3n">
     <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" />
@@ -51,12 +51,12 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 
 ### Step 1: Install
 Terrascan supports multiple ways to install and is also available as a Docker image.
-See Terrascan's [releases](https://github.com/accurics/terrascan/releases) page for the latest version of builds in all supported platforms. Select the correct binary for your platform.
+See Terrascan's [releases](https://github.com/tenable/terrascan/releases) page for the latest version of builds in all supported platforms. Select the correct binary for your platform.
 
 #### Install as a native executable
 
 ```sh
-$ curl -L "$(curl -s https://api.github.com/repos/accurics/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
+$ curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
 $ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
 $ install terrascan /usr/local/bin && rm terrascan
 $ terrascan
@@ -223,10 +223,10 @@ Terrascan is licensed under the [Apache 2.0 License](LICENSE).
 
 ### Stargazers
 
-[![Stargazers @accurics/terrascan](https://reporoster.com/stars/accurics/terrascan)](https://github.com/accurics/terrascan/stargazers)
+[![Stargazers @tenable/terrascan](https://reporoster.com/stars/tenable/terrascan)](https://github.com/tenable/terrascan/stargazers)
 
 ### Forkers
 
-[![Forkers @accurics/terrascan](https://reporoster.com/forks/accurics/terrascan)](https://github.com/accurics/terrascan/network/members)
+[![Forkers @tenable/terrascan](https://reporoster.com/forks/tenable/terrascan)](https://github.com/tenable/terrascan/network/members)
 
 
