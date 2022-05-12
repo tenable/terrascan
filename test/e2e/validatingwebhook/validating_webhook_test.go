@@ -41,7 +41,7 @@ import (
 const (
 	certsFolder      = "certs"
 	k8sWebhookAPIKey = "K8S_WEBHOOK_API_KEY"
-	apiKeyValue      = "accurics"
+	apiKeyValue      = "tenable"
 	defaultTimeout   = 10
 )
 

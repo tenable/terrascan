@@ -37,7 +37,7 @@ var (
 	errNoConnection = fmt.Errorf("could not connect to github.com")
 )
 
-const terrascanReadmeURL string = "https://raw.githubusercontent.com/accurics/terrascan/master/README.md"
+const terrascanReadmeURL string = "https://raw.githubusercontent.com/tenable/terrascan/master/README.md"
 const filePermissionBits fs.FileMode = 0755
 
 // Run initializes terrascan if not done already

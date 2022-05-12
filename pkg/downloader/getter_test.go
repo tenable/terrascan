@@ -69,7 +69,7 @@ func TestGetURLSubDir(t *testing.T) {
 		},
 		{
 			name:       "github ssh url",
-			URL:        "git@github.com:accurics/terrascan.git//some-subdir",
+			URL:        "git@github.com:tenable/terrascan.git//some-subdir",
 			dest:       someDest,
 			wantURL:    "git::ssh://git@github.com/tenable/terrascan.git",
 			wantSubDir: someSubdir,
