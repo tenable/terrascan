@@ -1,4 +1,4 @@
-module github.com/accurics/terrascan
+module github.com/tenable/terrascan
 
 go 1.17
 

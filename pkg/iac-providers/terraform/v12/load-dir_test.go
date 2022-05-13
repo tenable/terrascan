@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	commons_test "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestLoadIacDir(t *testing.T) {

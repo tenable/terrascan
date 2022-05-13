@@ -20,7 +20,7 @@ spec:
             - clone
             - --single-branch
             - --branch=master
-            - https://github.com/accurics/terrascan.git
+            - https://github.com/tenable/terrascan.git
             - /data
           volumeMounts:
             - mountPath: /data

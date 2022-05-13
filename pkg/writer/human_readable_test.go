@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
 )
 
 // test data
@@ -155,7 +155,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	expectedOutput3 = `Passed Rules - 
+	expectedOutput3 = `Passed Rules -
     
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
@@ -177,7 +177,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	expectedOutputWithDirScanError = `Scan Errors - 
+	expectedOutputWithDirScanError = `Scan Errors -
 
 	IaC Type            :	kustomize
 	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
@@ -191,9 +191,9 @@ Scan Summary -
 	
 	-----------------------------------------------------------------------
 	
-	
 
-Passed Rules - 
+
+Passed Rules -
     
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
@@ -215,7 +215,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details - 
+	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details -
     
 	Description         :	GNU Bash. Bash is the GNU Project's shell
 	Vulnerability ID    :	CVE-2019-18276

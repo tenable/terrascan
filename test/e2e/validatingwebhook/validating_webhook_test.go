@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,15 +25,15 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/test/e2e/server"
-	"github.com/accurics/terrascan/test/e2e/validatingwebhook"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/test/e2e/server"
+	"github.com/tenable/terrascan/test/e2e/validatingwebhook"
+	"github.com/tenable/terrascan/test/helper"
 	admissionv1 "k8s.io/api/admissionregistration/v1"
 	k8serr "k8s.io/apimachinery/pkg/api/errors"
 )
@@ -41,7 +41,7 @@ import (
 const (
 	certsFolder      = "certs"
 	k8sWebhookAPIKey = "K8S_WEBHOOK_API_KEY"
-	apiKeyValue      = "accurics"
+	apiKeyValue      = "tenable"
 	defaultTimeout   = 10
 )
 

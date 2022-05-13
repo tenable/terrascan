@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#    Copyright (C) 2021 Accurics, Inc.
+#    Copyright (C) 2022 Tenable, Inc.
 #
 #	Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ SCAN_URL="${TERRASCAN_SERVER}:$TERRASCAN_PORT/v1/${IAC}/${IAC_VERSION}/${CLOUD_P
 ALLSCANS=$(mktemp terrascan_outputs.XXXX)
 CURRENTSCAN=$(mktemp terrascan_output.XXXX)
 
-for f in `find . -name *.tf`; do 
+for f in `find . -name *.tf`; do
     curl --silent -F "file=@$f" --output $CURRENTSCAN $SCAN_URL
     cat $CURRENTSCAN >> $ALLSCANS
     rm $CURRENTSCAN
-done 
+done
 
 SCAN_RESULTS=0
 # "severity:" only shows up if a rule was violated, so decent way to search multiple files for violations
@@ -40,7 +40,7 @@ if [[ $IGNORE_LOW_SEVERITY == "true" ]]; then
 fi
 if [ -n $SEVERITIES ]; then
     SCAN_RESULTS=1
-    echo 
+    echo
     echo '- Terrascan identified IAC policy violations:'
     echo
     echo 'Scan Results:'
@@ -52,7 +52,7 @@ if [ -n $SEVERITIES ]; then
     echo '<details>'
     echo
     echo '```diff'
-    echo 
+    echo
 fi
 rm $ALLSCANS
 exit $SCAN_RESULTS

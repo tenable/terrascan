@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/version"
 )
 
 const violationTemplateForGH = `{
@@ -20,7 +20,7 @@ const violationTemplateForGH = `{
                 "driver": {
                   "name": "terrascan",
                   "version": "%s",
-                  "informationUri": "https://github.com/accurics/terrascan",
+                  "informationUri": "https://github.com/tenable/terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
