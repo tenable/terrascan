@@ -51,12 +51,12 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 
 ### Step 1: Install
 Terrascan supports multiple ways to install and is also available as a Docker image.
-See Terrascan's [releases](https://github.com/accurics/terrascan/releases) page for the latest version of builds in all supported platforms. Select the correct binary for your platform.
+See Terrascan's [releases](https://github.com/tenable/terrascan/releases) page for the latest version of builds in all supported platforms. Select the correct binary for your platform.
 
 #### Install as a native executable
 
 ```sh
-$ curl -L "$(curl -s https://api.github.com/repos/accurics/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
+$ curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
 $ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
 $ install terrascan /usr/local/bin && rm terrascan
 $ terrascan
@@ -206,7 +206,7 @@ FROM golang:alpine AS build-env
 
 RUN apk add --update git
 
-RUN git clone https://github.com/accurics/terrascan && cd terrascan \
+RUN git clone https://github.com/tenable/terrascan && cd terrascan \
   && CGO_ENABLED=0 GO111MODULE=on go build -o /go/bin/terrascan cmd/terrascan/main.go
 
 ```
