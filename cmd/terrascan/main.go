@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2020 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package main
 
-import "github.com/accurics/terrascan/pkg/cli"
+import "github.com/tenable/terrascan/pkg/cli"
 
 func main() {
 	cli.Execute()

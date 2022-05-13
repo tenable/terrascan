@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package iacprovider
 import (
 	"reflect"
 
-	kustomizev2 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v2"
-	kustomizev3 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v3"
-	kustomizev4 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v4"
+	kustomizev2 "github.com/tenable/terrascan/pkg/iac-providers/kustomize/v2"
+	kustomizev3 "github.com/tenable/terrascan/pkg/iac-providers/kustomize/v3"
+	kustomizev4 "github.com/tenable/terrascan/pkg/iac-providers/kustomize/v4"
 )
 
 // kustomize specific constants

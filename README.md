@@ -1,13 +1,13 @@
-![Terrascan](https://raw.githubusercontent.com/accurics/runterrascan.io/main/static/images/TerrascanTM_BY_Logo.png)
+![Terrascan](https://raw.githubusercontent.com/tenable/runterrascan.io/main/static/images/TerrascanTM_BY_Logo.png)
 
-[![GitHub release](https://img.shields.io/github/release/accurics/terrascan)](https://github.com/accurics/terrascan/releases/latest)
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/accurics/terrascan/blob/master/LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/accurics/terrascan/pulls)
-![CI](https://github.com/accurics/terrascan/workflows/build/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=accurics_terrascan&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=accurics_terrascan)
+[![GitHub release](https://img.shields.io/github/release/tenable/terrascan)](https://github.com/tenable/terrascan/releases/latest)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/tenable/terrascan/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/tenable/terrascan/pulls)
+![CI](https://github.com/tenable/terrascan/workflows/build/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tenable_terrascan&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tenable_terrascan)
 [![AUR package](https://repology.org/badge/version-for-repo/aur/terrascan.svg)](https://repology.org/project/terrascan/versions)
-[![codecov](https://codecov.io/gh/accurics/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/accurics/terrascan)
-[![Documentation Status](https://readthedocs.com/projects/accurics-terrascan/badge/?version=latest)](https://runterrascan.io/)
+[![codecov](https://codecov.io/gh/tenable/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/tenable/terrascan)
+[![Documentation Status](https://readthedocs.com/projects/tenable-terrascan/badge/?version=latest)](https://runterrascan.io/)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
 ## Introduction
@@ -38,6 +38,8 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 ## Key features
 * 500+ Policies for security best practices
 * Scanning of [Terraform](https://runterrascan.io/docs/usage/command_line_mode/#scanning-current-directory-containing-terraform-files-for-aws-resources) (HCL2)
+* Scanning of AWS CloudFormation Templates (CFT)
+* * Scanning of Azure Resource Manager (ARM)
 * Scanning of [Kubernetes](https://runterrascan.io/docs/usage/command_line_mode/#scanning-for-a-specific-iac-provider) (JSON/YAML), [Helm](https://runterrascan.io/docs/usage/command_line_mode/#scanning-a-helm-chart) v3, and [Kustomize](https://runterrascan.io/docs/usage/command_line_mode/#scanning-a-kustomize-chart)
 * Scanning of [Dockerfiles](https://runterrascan.io/docs/usage/command_line_mode/#scanning-a-dockerfile)
 * Support for [AWS](https://runterrascan.io/docs/policies/aws/), [Azure](https://runterrascan.io/docs/policies/azure/), [GCP](https://runterrascan.io/docs/policies/gcp/), [Kubernetes](https://runterrascan.io/docs/policies/k8s/), [Dockerfile](https://runterrascan.io/docs/policies/docker/), and [GitHub](https://runterrascan.io/docs/policies/github/)
@@ -223,10 +225,10 @@ Terrascan is licensed under the [Apache 2.0 License](LICENSE).
 
 ### Stargazers
 
-[![Stargazers @accurics/terrascan](https://reporoster.com/stars/accurics/terrascan)](https://github.com/accurics/terrascan/stargazers)
+[![Stargazers @tenable/terrascan](https://reporoster.com/stars/tenable/terrascan)](https://github.com/tenable/terrascan/stargazers)
 
 ### Forkers
 
-[![Forkers @accurics/terrascan](https://reporoster.com/forks/accurics/terrascan)](https://github.com/accurics/terrascan/network/members)
+[![Forkers @tenable/terrascan](https://reporoster.com/forks/tenable/terrascan)](https://github.com/tenable/terrascan/network/members)
 
 

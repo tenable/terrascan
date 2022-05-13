@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/termcolor"
+	"github.com/tenable/terrascan/pkg/termcolor"
 	"go.uber.org/zap"
 )
 

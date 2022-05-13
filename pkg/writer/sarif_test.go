@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/version"
 )
 
 var abstestpath, _ = getAbsoluteFilePath(violationsInput.Summary.ResourcePath, violationsInput.Violations[0].File)
@@ -26,7 +26,7 @@ const violationTemplate = `{
                 "driver": {
                   "name": "terrascan",
                   "version": "%s",
-                  "informationUri": "https://github.com/accurics/terrascan",
+                  "informationUri": "https://github.com/tenable/terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
@@ -84,7 +84,7 @@ var expectedSarifOutput2 = fmt.Sprintf(`{
                 "driver": {
                   "name": "terrascan",
                   "version": "%s",
-                  "informationUri": "https://github.com/accurics/terrascan"
+                  "informationUri": "https://github.com/tenable/terrascan"
                 }
               },
               "results": []
@@ -101,7 +101,7 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
                 "driver": {
                   "name": "terrascan",
                   "version": "%s",
-                  "informationUri": "https://github.com/accurics/terrascan",
+                  "informationUri": "https://github.com/tenable/terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
