@@ -119,19 +119,28 @@ func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 }
 
 func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) LambdaFunctionConfig {
+	if f == nil {
+		return cf
+	}
+
 	if f.ImageUri != "" {
 		cf.ImageURI = f.ImageUri
 		return cf
 	}
 
-	if *f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
+	if f.CodeUri != nil && f.CodeUri.String != nil &&
+		*f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
 		cf.FileName = *f.CodeUri.String
 		return cf
 	}
 
-	cf.S3Bucket = f.CodeUri.S3Location.Bucket
-	cf.S3Key = f.CodeUri.S3Location.Key
-	cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
+	if f.CodeUri != nil && f.CodeUri.S3Location != nil {
+		cf.S3Bucket = f.CodeUri.S3Location.Bucket
+		cf.S3Key = f.CodeUri.S3Location.Key
+		cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
+
+	}
+
 	return cf
 }
 
