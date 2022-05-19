@@ -48,6 +48,21 @@ func newRemoteModuleInstaller() *remoteModuleInstaller {
 
 // newTerraformRegistryClient returns a client to query terraform registries
 func newTerraformRegistryClient() terraformRegistryClient {
+
+	// as terraform supports passing terraformrc file location through TF_CLI_CONFIG_FILE env
+	// we can make use of the same
+	// check for TF_CLI_CONFIG_FILE env if found use
+	// else check for default location which is home dir
+	configFile := os.Getenv("TF_CLI_CONFIG_FILE")
+	if configFile != "" {
+		if _, err := os.Stat(configFile); os.IsNotExist(err) {
+			return registry.NewClient(nil, nil)
+		}
+		zap.S().Debugf("Found terraform rc file at %s, attempting to parse", configFile)
+
+		return NewAuthenticatedRegistryClient(configFile)
+	}
+
 	// get terraform registry client.
 	// terraform registry client provides methods for querying the terraform module registry
 	// if terraformrc file is found, attempt to load credentials from it
