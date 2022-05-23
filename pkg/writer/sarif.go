@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package writer
 
 import (
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
-	"github.com/go-errors/errors"
-	"github.com/owenrumney/go-sarif/sarif"
-	"go.uber.org/zap"
 	"io"
 	"path/filepath"
 	"strings"
+
+	"github.com/go-errors/errors"
+	"github.com/owenrumney/go-sarif/sarif"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/version"
+	"go.uber.org/zap"
 )
 
 const (
@@ -37,18 +38,18 @@ func init() {
 }
 
 // SarifWriter writes sarif formatted violation results report
-func SarifWriter(data interface{}, writer io.Writer) error {
-	return writeSarif(data, writer, false)
+func SarifWriter(data interface{}, writers []io.Writer) error {
+	return writeSarif(data, writers, false)
 }
 
-func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
+func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 	outputData := data.(policy.EngineOutput)
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
 		return err
 	}
 
-	run := sarif.NewRun("terrascan", "https://github.com/accurics/terrascan")
+	run := sarif.NewRun("terrascan", "https://github.com/tenable/terrascan")
 	run.Tool.Driver.WithVersion(version.GetNumeric())
 	// add a run to the report
 	report.AddRun(run)
@@ -102,8 +103,14 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 			WithLocation(location)
 	}
 
-	// print the report to anything that implements `io.Writer`
-	return report.PrettyWrite(writer)
+	for _, writer := range writers {
+		// print the report to anything that implements `io.Writer`
+		err = report.PrettyWrite(writer)
+		if err != nil {
+			zap.S().Warnf("failed to write result, error :%w", err)
+		}
+	}
+	return nil
 }
 
 func getSarifLevel(severity string) string {

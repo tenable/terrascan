@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/logging"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/spf13/cobra"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/logging"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -42,14 +42,24 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&OutputType, "output", "o", "human", "output type (human, json, yaml, xml, junit-xml, sarif, github-sarif)")
 	rootCmd.PersistentFlags().StringVarP(&ConfigFile, "config-path", "c", "", "config file path")
 	rootCmd.PersistentFlags().StringVarP(&CustomTempDir, "temp-dir", "", "", "temporary directory path to download remote repository,module and templates")
+	rootCmd.PersistentFlags().StringVarP(&LogOutputDir, "log-output-dir", "", "", "directory path to write the log and output files")
 
 	//Added init here in case flag parsing failed we should log which flag was incorrect.
-	logging.Init(LogType, LogLevel)
+	logging.Init(LogType, LogLevel, LogOutputDir)
 
 	// Function to execute before processing commands
 	cobra.OnInitialize(func() {
+		// making sure the LogOutputDir Exist
+		if LogOutputDir != "" {
+			err := os.MkdirAll(LogOutputDir, 0755)
+			if err != nil {
+				zap.S().Warnf("failed to resolve the log output directory: %s", LogOutputDir)
+				LogOutputDir = ""
+			}
+		}
+
 		// Set up the logger
-		logging.Init(LogType, LogLevel)
+		logging.Init(LogType, LogLevel, LogOutputDir)
 
 		if len(ConfigFile) == 0 {
 			ConfigFile = os.Getenv(config.ConfigEnvvarName)

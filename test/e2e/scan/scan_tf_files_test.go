@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@ package scan_test
 import (
 	"path/filepath"
 
-	scanUtils "github.com/accurics/terrascan/test/e2e/scan"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	scanUtils "github.com/tenable/terrascan/test/e2e/scan"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 const (
-	backwardsCompatibilityWarningMessage = "There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/accurics/terrascan/releases/v1.3.0"
+	backwardsCompatibilityWarningMessage = "There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/tenable/terrascan/releases/v1.3.0"
 )
 
 var _ = Describe("Scan is run for terraform files", func() {

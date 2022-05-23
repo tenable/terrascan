@@ -2,11 +2,12 @@ package writer
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
 )
 
 // test data
@@ -154,7 +155,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	expectedOutput3 = `Passed Rules - 
+	expectedOutput3 = `Passed Rules -
     
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
@@ -176,7 +177,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	expectedOutputWithDirScanError = `Scan Errors - 
+	expectedOutputWithDirScanError = `Scan Errors -
 
 	IaC Type            :	kustomize
 	Directory           :	test/e2e/test_data/iac/aws/aws_db_instance_violation
@@ -190,9 +191,9 @@ Scan Summary -
 	
 	-----------------------------------------------------------------------
 	
-	
 
-Passed Rules - 
+
+Passed Rules -
     
 	Rule ID        :	AWS.S3Bucket.DS.High.1043
 	Rule Name      :	s3EnforceUserACL
@@ -214,7 +215,7 @@ Scan Summary -
 	Medium              :	0
 	High                :	1`
 
-	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details - 
+	vulnerabilityScanOutputHumanReadable = `Vulnerabilities Details -
     
 	Description         :	GNU Bash. Bash is the GNU Project's shell
 	Vulnerability ID    :	CVE-2019-18276
@@ -305,11 +306,12 @@ func TestHumanReadbleWriter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := HumanReadbleWriter(tt.input, writer); (err != nil) != tt.expectedError {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			if err := HumanReadbleWriter(tt.input, w); (err != nil) != tt.expectedError {
 				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
-			outputBytes := writer.Bytes()
+			outputBytes := bf.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 			if !strings.EqualFold(gotOutput, strings.TrimSpace(tt.expectedOutput)) {
 				t.Errorf("HumanReadbleWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)

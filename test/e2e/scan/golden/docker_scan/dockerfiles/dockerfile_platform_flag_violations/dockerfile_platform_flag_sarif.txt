@@ -7,7 +7,7 @@
         "driver": {
           "name": "terrascan",
           "version": "1.9.0",
-          "informationUri": "https://github.com/accurics/terrascan",
+          "informationUri": "https://github.com/tenable/terrascan",
           "rules": [
             {
               "id": "AC_DOCKER_0001",

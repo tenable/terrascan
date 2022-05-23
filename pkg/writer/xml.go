@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,13 +32,15 @@ func init() {
 }
 
 // XMLWriter prints data in XML format
-func XMLWriter(data interface{}, writer io.Writer) error {
+func XMLWriter(data interface{}, writers []io.Writer) error {
 	j, err := xml.MarshalIndent(data, "", "  ")
 	if err != nil {
 		zap.S().Errorf("failed to write XML output. error: '%v'", err)
 		return err
 	}
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	for _, writer := range writers {
+		writer.Write(j)
+		writer.Write([]byte{'\n'})
+	}
 	return nil
 }

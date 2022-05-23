@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@
 package logging
 
 import (
+	"path/filepath"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
+
+const logFileName = "terrascan.log"
 
 var globalLogger *zap.SugaredLogger
 
@@ -44,7 +48,7 @@ func getLoggerLevel(lvl string) zapcore.Level {
 }
 
 // Init initializes global custom zap logger
-func Init(encoding, level string) {
+func Init(encoding, level, logDir string) {
 
 	// select encoding level
 	encodingLevel := zapcore.LowercaseColorLevelEncoder
@@ -53,7 +57,7 @@ func Init(encoding, level string) {
 	}
 
 	// get logger
-	logger := GetLogger(level, encoding, encodingLevel)
+	logger := GetLogger(level, encoding, logDir, encodingLevel)
 
 	// set global Logger as well
 	globalLogger = logger.Sugar()
@@ -63,7 +67,7 @@ func Init(encoding, level string) {
 }
 
 // GetLogger creates a customer zap logger
-func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)) *zap.Logger {
+func GetLogger(logLevel, encoding, logDir string, encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)) *zap.Logger {
 
 	// build zap config
 	zapConfig := zap.Config{
@@ -79,6 +83,10 @@ func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapc
 			EncodeTime:   zapcore.ISO8601TimeEncoder,
 			EncodeCaller: zapcore.ShortCallerEncoder,
 		},
+	}
+
+	if logDir != "" {
+		zapConfig.OutputPaths = append(zapConfig.OutputPaths, filepath.Join(logDir, logFileName))
 	}
 
 	// create zap logger

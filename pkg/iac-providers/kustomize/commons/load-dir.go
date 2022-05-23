@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	k8sv1 "github.com/tenable/terrascan/pkg/iac-providers/kubernetes/v1"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 	"sigs.k8s.io/kustomize/api/krusty"
 	"sigs.k8s.io/kustomize/kyaml/filesys"

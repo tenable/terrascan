@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	getter "github.com/hashicorp/go-getter"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 

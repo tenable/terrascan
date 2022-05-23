@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -66,23 +66,26 @@ func TestGetLogger(t *testing.T) {
 		logLevel      string
 		encoding      string
 		encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)
+		logDir        string
 	}{
 		{
 			name:          "check debug log level",
 			logLevel:      "debug",
 			encoding:      "json",
 			encodingLevel: zapcore.LowercaseLevelEncoder,
+			logDir:        "",
 		},
 		{
 			name:          "check log level",
 			logLevel:      "panic",
 			encoding:      "console",
 			encodingLevel: zapcore.LowercaseLevelEncoder,
+			logDir:        "",
 		},
 	}
 
 	for _, tt := range table {
-		got := GetLogger(tt.logLevel, tt.encoding, tt.encodingLevel)
+		got := GetLogger(tt.logLevel, tt.encoding, tt.logDir, tt.encodingLevel)
 		if ce := got.Check(getLoggerLevel(tt.logLevel), "testing"); ce == nil {
 			t.Errorf("unexpected error")
 		}
@@ -91,7 +94,7 @@ func TestGetLogger(t *testing.T) {
 
 func TestGetDefaultLogger(t *testing.T) {
 	t.Run("json encoding", func(t *testing.T) {
-		Init("json", "info")
+		Init("json", "info", "")
 		got := GetDefaultLogger()
 		want := globalLogger
 		if !reflect.DeepEqual(got, want) {
@@ -99,7 +102,7 @@ func TestGetDefaultLogger(t *testing.T) {
 		}
 	})
 	t.Run("console encoding", func(t *testing.T) {
-		Init("console", "info")
+		Init("console", "info", "")
 		got := GetDefaultLogger()
 		want := globalLogger
 		if !reflect.DeepEqual(got, want) {
