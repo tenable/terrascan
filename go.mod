@@ -30,7 +30,7 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
-	github.com/hashicorp/go-getter v1.5.11
+	github.com/hashicorp/go-getter v1.6.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/go-version v1.2.1
@@ -54,7 +54,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.9.1
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d
+	golang.org/x/sys v0.0.0-20220517195934-5e4e11fc645e
 	golang.org/x/tools v0.1.11-0.20220316014157-77aa08bb151a // indirect
 	google.golang.org/api v0.34.0
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
