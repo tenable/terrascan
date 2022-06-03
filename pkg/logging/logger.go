@@ -18,6 +18,7 @@ package logging
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -103,8 +104,11 @@ func GetLogger(logLevel, encoding, logDir string, encodingLevel func(zapcore.Lev
 		}
 		zapConfig.OutputPaths = append(zapConfig.OutputPaths, logDirPath)
 	}
-	// should we panic here?
-	logger, _ := zapConfig.Build()
+
+	logger, err := zapConfig.Build()
+	if err != nil {
+		log.Fatal("failed to initialize logger %w", err)
+	}
 
 	return logger
 }
@@ -114,7 +118,7 @@ func GetDefaultLogger() *zap.SugaredLogger {
 	return globalLogger
 }
 
-// newTerrascanWinFileSink custome sink to open file on windows
+// newTerrascanWinFileSink custom sink to open file on windows
 // https://github.com/uber-go/zap/issues/621#issue-350197709 - referred from this issue comment
 func newTerrascanWinFileSink(u *url.URL) (zap.Sink, error) {
 	// copy pasting this error from default FileSink of zap to keep the standard behaviour across all platforms
