@@ -23,20 +23,20 @@ import (
 // NatGatewayConfig holds config for aws_nat_gateway
 type NatGatewayConfig struct {
 	Config
-	AllocationId     string `json:"allocation_id"`
+	AllocationID     string `json:"allocation_id"`
 	ConnectivityType string `json:"connectivity_type"`
-	SubnetId         string `json:"subnet_id"`
+	SubnetID         string `json:"subnet_id"`
 }
 
-// GetRouteTableAssociationConfig returns config for aws_nat_gateway
+// GetNatGatewayConfig returns config for aws_nat_gateway
 func GetNatGatewayConfig(e *ec2.NatGateway) []AWSResourceConfig {
 	cf := NatGatewayConfig{
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AllocationId:     e.AllocationId,
+		AllocationID:     e.AllocationId,
 		ConnectivityType: e.ConnectivityType,
-		SubnetId:         e.SubnetId,
+		SubnetID:         e.SubnetId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

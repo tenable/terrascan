@@ -23,16 +23,16 @@ import (
 // RouteTableAssociationConfig holds config for aws_route_table_association
 type RouteTableAssociationConfig struct {
 	Config
-	RouteTableId string `json:"route_table_id"`
-	SubnetId     string `json:"subnet_id"`
+	RouteTableID string `json:"route_table_id"`
+	SubnetID     string `json:"subnet_id"`
 }
 
 // GetRouteTableAssociationConfig returns config for aws_route_table_association
 func GetRouteTableAssociationConfig(e *ec2.SubnetRouteTableAssociation) []AWSResourceConfig {
 	cf := RouteTableAssociationConfig{
 		Config:       Config{},
-		RouteTableId: e.RouteTableId,
-		SubnetId:     e.SubnetId,
+		RouteTableID: e.RouteTableId,
+		SubnetID:     e.SubnetId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

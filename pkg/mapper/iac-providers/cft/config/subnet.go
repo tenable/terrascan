@@ -27,9 +27,9 @@ type SubnetConfig struct {
 	AvailabilityZone            string `json:"availability_zone"`
 	CidrBlock                   string `json:"cidr_block"`
 	Ipv6CidrBlock               string `json:"ipv6_cidr_block"`
-	MapPublicIpOnLaunch         bool   `json:"map_public_ip_on_launch"`
+	MapPublicIPOnLaunch         bool   `json:"map_public_ip_on_launch"`
 	OutpostArn                  string `json:"outpost_arn"`
-	VpcId                       string `json:"vpc_id"`
+	VpcID                       string `json:"vpc_id"`
 }
 
 // GetSubnetConfig returns config for aws_subnet
@@ -42,9 +42,9 @@ func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 		AvailabilityZone:            e.AvailabilityZone,
 		CidrBlock:                   e.CidrBlock,
 		Ipv6CidrBlock:               e.Ipv6CidrBlock,
-		MapPublicIpOnLaunch:         e.MapPublicIpOnLaunch,
+		MapPublicIPOnLaunch:         e.MapPublicIpOnLaunch,
 		OutpostArn:                  e.OutpostArn,
-		VpcId:                       e.VpcId,
+		VpcID:                       e.VpcId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

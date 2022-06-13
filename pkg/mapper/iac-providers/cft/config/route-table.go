@@ -23,16 +23,16 @@ import (
 // RouteTableConfig holds config for aws_route_table
 type RouteTableConfig struct {
 	Config
-	VpcId string `json:"vpc_id"`
+	VpcID string `json:"vpc_id"`
 }
 
-// RouteTable returns config for aws_route_table
+// GetRouteTableConfig returns config for aws_route_table
 func GetRouteTableConfig(e *ec2.RouteTable) []AWSResourceConfig {
 	cf := RouteTableConfig{
 		Config: Config{
 			Tags: e.Tags,
 		},
-		VpcId: e.VpcId,
+		VpcID: e.VpcId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

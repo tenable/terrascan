@@ -23,38 +23,38 @@ import (
 // RouteConfig holds config for aws_route
 type RouteConfig struct {
 	Config
-	CarrierGatewayId            string `json:"carrier_gateway_id"`
+	CarrierGatewayID            string `json:"carrier_gateway_id"`
 	DestinationCidrBlock        string `json:"destination_cidr_block"`
 	DestinationIpv6CidrBlock    string `json:"destination_ipv6_cidr_block"`
-	EgressOnlyInternetGatewayId string `json:"egress_only_gateway_id"`
-	GatewayId                   string `json:"gateway_id"`
-	InstanceId                  string `json:"instance_id"`
-	LocalGatewayId              string `json:"local_gateway_id"`
-	NatGatewayId                string `json:"nat_gateway_id"`
-	NetworkInterfaceId          string `json:"network_interface_id"`
-	RouteTableId                string `json:"route_table_id"`
-	TransitGatewayId            string `json:"transit_gateway_id"`
-	VpcEndpointId               string `json:"vpc_endpoint_id"`
-	VpcPeeringConnectionId      string `json:"vpc_peering_connection_id"`
+	EgressOnlyInternetGatewayID string `json:"egress_only_gateway_id"`
+	GatewayID                   string `json:"gateway_id"`
+	InstanceID                  string `json:"instance_id"`
+	LocalGatewayID              string `json:"local_gateway_id"`
+	NatGatewayID                string `json:"nat_gateway_id"`
+	NetworkInterfaceID          string `json:"network_interface_id"`
+	RouteTableID                string `json:"route_table_id"`
+	TransitGatewayID            string `json:"transit_gateway_id"`
+	VpcEndpointID               string `json:"vpc_endpoint_id"`
+	VpcPeeringConnectionID      string `json:"vpc_peering_connection_id"`
 }
 
-// RouteTable returns config for aws_route
+// GetRouteConfig returns config for aws_route
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
 		Config:                      Config{},
-		CarrierGatewayId:            e.CarrierGatewayId,
+		CarrierGatewayID:            e.CarrierGatewayId,
 		DestinationCidrBlock:        e.DestinationCidrBlock,
 		DestinationIpv6CidrBlock:    e.DestinationIpv6CidrBlock,
-		EgressOnlyInternetGatewayId: e.EgressOnlyInternetGatewayId,
-		GatewayId:                   e.GatewayId,
-		InstanceId:                  e.InstanceId,
-		LocalGatewayId:              e.LocalGatewayId,
-		NatGatewayId:                e.NatGatewayId,
-		NetworkInterfaceId:          e.NetworkInterfaceId,
-		RouteTableId:                e.RouteTableId,
-		TransitGatewayId:            e.TransitGatewayId,
-		VpcEndpointId:               e.VpcEndpointId,
-		VpcPeeringConnectionId:      e.VpcPeeringConnectionId,
+		EgressOnlyInternetGatewayID: e.EgressOnlyInternetGatewayId,
+		GatewayID:                   e.GatewayId,
+		InstanceID:                  e.InstanceId,
+		LocalGatewayID:              e.LocalGatewayId,
+		NatGatewayID:                e.NatGatewayId,
+		NetworkInterfaceID:          e.NetworkInterfaceId,
+		RouteTableID:                e.RouteTableId,
+		TransitGatewayID:            e.TransitGatewayId,
+		VpcEndpointID:               e.VpcEndpointId,
+		VpcPeeringConnectionID:      e.VpcPeeringConnectionId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,
