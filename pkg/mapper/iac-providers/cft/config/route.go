@@ -41,7 +41,6 @@ type RouteConfig struct {
 // GetRouteConfig returns config for aws_route
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
-		Config:                      Config{},
 		CarrierGatewayID:            e.CarrierGatewayId,
 		DestinationCidrBlock:        e.DestinationCidrBlock,
 		DestinationIpv6CidrBlock:    e.DestinationIpv6CidrBlock,
