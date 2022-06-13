@@ -105,4 +105,9 @@ const (
 	AwsAppMeshMesh                   = "aws_appmesh_mesh"
 	AwsRAMResourceShare              = "aws_ram_resource_share"
 	AwsAppAutoscalingPolicy          = "aws_appautoscaling_policy"
+	AwsRouteTableAssociation         = "aws_route_table_association"
+	AwsRouteTable                    = "aws_route_table"
+	AwsNatGateway                    = "aws_nat_gateway"
+	AwsSubnet                        = "aws_subnet"
+	AwsRoute                         = "aws_route"
 )

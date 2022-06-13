@@ -191,6 +191,16 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetEbsVolumeConfig(resource)
 	case *ec2.VPC:
 		return config.GetEc2VpcConfig(resource)
+	case *ec2.SubnetRouteTableAssociation:
+		return config.GetRouteTableAssociationConfig(resource)
+	case *ec2.RouteTable:
+		return config.GetRouteTableConfig(resource)
+	case *ec2.NatGateway:
+		return config.GetNatGatewayConfig(resource)
+	case *ec2.Subnet:
+		return config.GetSubnetConfig(resource)
+	case *ec2.Route:
+		return config.GetRouteConfig(resource)
 	case *efs.FileSystem:
 		return config.GetEfsFileSystemConfig(resource)
 	case *elasticache.CacheCluster:
