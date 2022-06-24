@@ -1,0 +1,16 @@
+[
+    {
+        "name": "app-example",
+        "image": "app-example",
+        "networkMode": "awsvpc",
+        "cpu": 10,
+        "memoryReservation": 512,
+        "memory": 512,
+        "essential": true,
+        "portMappings": [
+            {
+                "containerPort": 80
+            }
+        ]
+    }
+]
