@@ -30,7 +30,7 @@ const (
 	currentWorkingPath = "${path.cwd}"
 )
 
-func evaluateTemplatefile(exprValue, modfiledir string) (string, error) {
+func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
 	params := getTemplatefileParams(exprValue)
 	interpretedPath, err := interpretFilesystemInfo(params[0], modfiledir)
 	if err != nil {

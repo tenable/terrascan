@@ -204,7 +204,7 @@ func (c *converter) evaluateExpr(expr hclsyntax.Expression) (interface{}, error)
 	modfiledir := filepath.Dir(c.modfilepath)
 
 	if strings.HasPrefix(exprValue, "templatefile") {
-		return evaluateTemplatefile(exprValue, modfiledir)
+		return evalTemplatefileFunc(exprValue, modfiledir)
 	}
 
 	return c.wrapExpr(expr), nil
