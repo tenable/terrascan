@@ -48,7 +48,6 @@ func TestEvaluateTemplatefile(t *testing.T) {
 		13 - templatefile(wrong_filepath)
 		14 - templatefile(path.root+wrong_filepath)
 		15 - templatefile(path.module+wrong_filepath)
-		16 - templatefile(path.cwd+wrong_filepath)
 	*/
 
 	const templateData = "template_data"
@@ -181,13 +180,6 @@ func TestEvaluateTemplatefile(t *testing.T) {
 			modfiledir: "tim/blin",
 			wantConfig: "",
 			wantErr:    fmt.Errorf("failed to read template file: open tim/blin/foo/bar: no such file or directory"),
-		},
-		{
-			name:       "invalid file path with path.cwd | without variables",
-			exprValue:  `templatefile("${path.cwd}/foo/bar")`,
-			modfiledir: "",
-			wantConfig: "",
-			wantErr:    fmt.Errorf("failed to read template file: open /Users/ggogia/Desktop/cs/terrascan/pkg/iac-providers/terraform/commons/foo/bar: no such file or directory"),
 		},
 	}
 
