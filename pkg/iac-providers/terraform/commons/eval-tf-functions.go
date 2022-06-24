@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -39,13 +40,18 @@ func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
 
 	data, err := ioutil.ReadFile(interpretedPath)
 	if err != nil {
+		fmt.Println(fmt.Errorf("failed to read template file: %w", err))
 		return "", fmt.Errorf("failed to read template file: %w", err)
 	}
 	templateInfo := string(data)
 
-	for i := 1; i < len(params); i++ {
-		key := fmt.Sprintf("${%s}", strings.Split(params[i], "=")[0])
-		value := strings.Split(params[i], "=")[1]
+	for _, param := range params[1:] {
+		if param == "" {
+			continue
+		}
+
+		key := fmt.Sprintf("${%s}", strings.Split(param, "=")[0])
+		value := strings.Split(param, "=")[1]
 
 		templateInfo = strings.ReplaceAll(templateInfo, key, value)
 	}
@@ -62,19 +68,24 @@ func getTemplatefileParams(exprValue string) []string {
 	paramString = strings.ReplaceAll(paramString, " ", "")
 	paramOne := strings.Split(paramString, ",")[0]
 
-	re = regexp.MustCompile(`(,{)(.*)(})`)
-	paramTwo := re.FindString(paramString)
-	paramTwo = strings.TrimLeft(paramTwo, ",{")
-	paramTwo = strings.TrimRight(paramTwo, "}")
-
 	var params []string
 	params = append(params, paramOne)
-	params = append(params, strings.Split(paramTwo, ",")...)
+
+	re = regexp.MustCompile(`(,{)(.*)(})`)
+	paramTwo := re.FindString(paramString)
+	if paramTwo != "" {
+		paramTwo = strings.TrimLeft(paramTwo, ",{")
+		paramTwo = strings.TrimRight(paramTwo, "}")
+		functionParams := strings.Split(paramTwo, ",")
+		params = append(params, functionParams...)
+	}
 
 	return params
 }
 
 func interpretFilesystemInfo(fsinfo, modfiledir string) (string, error) {
+	fsinfo = filepath.Clean(fsinfo)
+
 	if strings.HasPrefix(fsinfo, modulePath) {
 		return strings.Replace(fsinfo, modulePath, modfiledir, 1), nil
 	}
@@ -88,7 +99,7 @@ func interpretFilesystemInfo(fsinfo, modfiledir string) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("failed to get current working dir: %w", err)
 		}
-		return strings.Replace(fsinfo, modulePath, cwd, 1), nil
+		return strings.Replace(fsinfo, currentWorkingPath, cwd, 1), nil
 	}
 
 	return fsinfo, nil
