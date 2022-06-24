@@ -23,6 +23,7 @@ package commons
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	hcl "github.com/hashicorp/hcl/v2"
@@ -36,7 +37,8 @@ type jsonObj map[string]interface{}
 type lineObj map[string]interface{}
 
 type converter struct {
-	bytes []byte
+	bytes       []byte
+	modfilepath string
 }
 
 func (c *converter) rangeSource(r hcl.Range) string {
@@ -192,8 +194,20 @@ func (c *converter) convertExpression(expr hclsyntax.Expression) (ret interface{
 		}
 		return m, l, nil
 	default:
-		return c.wrapExpr(expr), line, nil
+		ret, err := c.evaluateExpr(expr)
+		return ret, line, err
 	}
+}
+
+func (c *converter) evaluateExpr(expr hclsyntax.Expression) (interface{}, error) {
+	exprValue := c.rangeSource(expr.Range())
+	modfiledir := filepath.Dir(c.modfilepath)
+
+	if strings.HasPrefix(exprValue, "templatefile") {
+		return evaluateTemplatefile(exprValue, modfiledir)
+	}
+
+	return c.wrapExpr(expr), nil
 }
 
 func (c *converter) convertTemplate(t *hclsyntax.TemplateExpr) (string, error) {
