@@ -38,7 +38,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	}
 
 	// convert resource config from hcl.Body to map[string]interface{}
-	c := converter{bytes: fileBytes}
+	c := converter{bytes: fileBytes, modfilepath: managedResource.DeclRange.Filename}
 	var hclBody *hclsyntax.Body
 	var ok bool
 	if hclBody, ok = managedResource.Config.(*hclsyntax.Body); !ok {
