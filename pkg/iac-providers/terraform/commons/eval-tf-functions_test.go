@@ -60,7 +60,7 @@ func TestEvaluateTemplatefile(t *testing.T) {
 	withVariablesOut, _ := ioutil.ReadFile(withVariablesOutPath)
 
 	const (
-		requiredVariable = `{ image_version = "1.2.3.4" }`
+		requiredVariable = "{ image_version \t\t = \n\n \"1.2.3.4\" }"
 		extraVariables   = `{ image_version = "1.2.3.4", test = "test" }`
 	)
 
@@ -81,7 +81,7 @@ func TestEvaluateTemplatefile(t *testing.T) {
 		},
 		{
 			name:       "valid file path with path.root | without variables",
-			exprValue:  `templatefile("${path.root}/withoutVariables.json")`,
+			exprValue:  `${templatefile("${path.root}/withoutVariables.json")}`,
 			modfiledir: filepath.Dir(withoutVariablesPath),
 			wantConfig: string(withoutVariablesOut),
 			wantErr:    nil,
@@ -95,7 +95,7 @@ func TestEvaluateTemplatefile(t *testing.T) {
 		},
 		{
 			name:       "valid file path with path.cwd | with variables",
-			exprValue:  `templatefile("${path.cwd}/testdata/template_data/withoutVariables.json")`,
+			exprValue:  `${templatefile("${path.cwd}/testdata/template_data/withoutVariables.json")}`,
 			modfiledir: "",
 			wantConfig: string(withoutVariablesOut),
 			wantErr:    nil,
@@ -111,7 +111,7 @@ func TestEvaluateTemplatefile(t *testing.T) {
 		},
 		{
 			name:       "valid file path | with extra variables",
-			exprValue:  fmt.Sprintf(`templatefile("%s", %s)`, withVariablesPath, extraVariables),
+			exprValue:  fmt.Sprintf(`${templatefile("%s", %s)}`, withVariablesPath, extraVariables),
 			modfiledir: "",
 			wantConfig: string(withVariablesOut),
 			wantErr:    nil,
