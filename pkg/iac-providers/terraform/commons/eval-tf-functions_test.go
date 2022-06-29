@@ -165,21 +165,21 @@ func TestEvaluateTemplatefile(t *testing.T) {
 			exprValue:  `templatefile("/foo/bar")`,
 			modfiledir: "",
 			wantConfig: "",
-			wantErr:    fmt.Errorf("failed to read template file: open /foo/bar: no such file or directory"),
+			wantErr:    fmt.Errorf("%s failed to read template file: open /foo/bar: no such file or directory", templatefileFuncEvalFailure),
 		},
 		{
 			name:       "invalid file path with path.root | without variables",
 			exprValue:  `templatefile("${path.root}/foo/bar")`,
 			modfiledir: "tim/blin",
 			wantConfig: "",
-			wantErr:    fmt.Errorf("failed to read template file: open tim/blin/foo/bar: no such file or directory"),
+			wantErr:    fmt.Errorf("%s failed to read template file: open tim/blin/foo/bar: no such file or directory", templatefileFuncEvalFailure),
 		},
 		{
 			name:       "invalid file path with path.module | without variables",
 			exprValue:  `templatefile("${path.module}/foo/bar")`,
 			modfiledir: "tim/blin",
 			wantConfig: "",
-			wantErr:    fmt.Errorf("failed to read template file: open tim/blin/foo/bar: no such file or directory"),
+			wantErr:    fmt.Errorf("%s failed to read template file: open tim/blin/foo/bar: no such file or directory", templatefileFuncEvalFailure),
 		},
 	}
 
