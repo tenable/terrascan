@@ -23,12 +23,15 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"go.uber.org/zap"
 )
 
 const (
-	modulePath         = "${path.module}"
-	rootModulePath     = "${path.root}"
-	currentWorkingPath = "${path.cwd}"
+	modulePath                  = "${path.module}"
+	rootModulePath              = "${path.root}"
+	currentWorkingPath          = "${path.cwd}"
+	templatefileFuncEvalFailure = "templatefile function evaluation failed:"
 )
 
 func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
@@ -40,7 +43,9 @@ func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
 
 	data, err := ioutil.ReadFile(interpretedPath)
 	if err != nil {
-		return "", fmt.Errorf("failed to read template file: %w", err)
+		errMessage := fmt.Errorf("%s failed to read template file: %w", templatefileFuncEvalFailure, err)
+		zap.S().Debug(errMessage)
+		return "", errMessage
 	}
 	templateInfo := string(data)
 
@@ -99,7 +104,9 @@ func interpretFilesystemInfo(fsinfo, modfiledir string) (string, error) {
 	if strings.HasPrefix(fsinfo, currentWorkingPath) {
 		cwd, err := os.Getwd()
 		if err != nil {
-			return "", fmt.Errorf("failed to get current working dir: %w", err)
+			errMessage := fmt.Errorf("%s failed to get current working dir: %w", templatefileFuncEvalFailure, err)
+			zap.S().Debug(errMessage)
+			return "", errMessage
 		}
 		return strings.Replace(fsinfo, currentWorkingPath, cwd, 1), nil
 	}

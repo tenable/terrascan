@@ -195,21 +195,23 @@ func (c *converter) convertExpression(expr hclsyntax.Expression) (ret interface{
 		}
 		return m, l, nil
 	default:
-		ret, err := c.evaluateExpr(expr)
-		return ret, line, err
+		return c.evaluateExpr(expr), line, err
 	}
 }
 
-func (c *converter) evaluateExpr(expr hclsyntax.Expression) (interface{}, error) {
+func (c *converter) evaluateExpr(expr hclsyntax.Expression) interface{} {
 	exprValue := c.rangeSource(expr.Range())
 	modfiledir := filepath.Dir(c.modfilepath)
 
 	re := regexp.MustCompile(`templatefile\(([\s\S]+)\)`)
 	if re.MatchString(exprValue) {
-		return evalTemplatefileFunc(exprValue, modfiledir)
+		evaluatedExpr, err := evalTemplatefileFunc(exprValue, modfiledir)
+		if err == nil {
+			return evaluatedExpr
+		}
 	}
 
-	return c.wrapExpr(expr), nil
+	return c.wrapExpr(expr)
 }
 
 func (c *converter) convertTemplate(t *hclsyntax.TemplateExpr) (string, error) {
