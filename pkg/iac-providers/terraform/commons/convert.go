@@ -24,6 +24,7 @@ package commons
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	hcl "github.com/hashicorp/hcl/v2"
@@ -203,7 +204,8 @@ func (c *converter) evaluateExpr(expr hclsyntax.Expression) (interface{}, error)
 	exprValue := c.rangeSource(expr.Range())
 	modfiledir := filepath.Dir(c.modfilepath)
 
-	if strings.HasPrefix(exprValue, "templatefile") {
+	re := regexp.MustCompile(`templatefile\(([\s\S]+)\)`)
+	if re.MatchString(exprValue) {
 		return evalTemplatefileFunc(exprValue, modfiledir)
 	}
 

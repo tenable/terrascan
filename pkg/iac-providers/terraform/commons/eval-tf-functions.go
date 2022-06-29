@@ -40,7 +40,6 @@ func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
 
 	data, err := ioutil.ReadFile(interpretedPath)
 	if err != nil {
-		fmt.Println(fmt.Errorf("failed to read template file: %w", err))
 		return "", fmt.Errorf("failed to read template file: %w", err)
 	}
 	templateInfo := string(data)
@@ -60,18 +59,21 @@ func evalTemplatefileFunc(exprValue, modfiledir string) (string, error) {
 }
 
 func getTemplatefileParams(exprValue string) []string {
-	re := regexp.MustCompile(`\((.*)\)`)
-	paramString := re.FindString(exprValue)
+	re := regexp.MustCompile(`\(([\s\S]+)\)`)
+	spacedExprValue := re.FindString(exprValue)
+
+	re = regexp.MustCompile(`\s+`)
+	paramString := re.ReplaceAllString(spacedExprValue, "")
+
 	paramString = strings.TrimLeft(paramString, "(")
 	paramString = strings.TrimRight(paramString, ")")
 	paramString = strings.ReplaceAll(paramString, "\"", "")
-	paramString = strings.ReplaceAll(paramString, " ", "")
 	paramOne := strings.Split(paramString, ",")[0]
 
 	var params []string
 	params = append(params, paramOne)
 
-	re = regexp.MustCompile(`(,{)(.*)(})`)
+	re = regexp.MustCompile(`(,{)(.+)(})`)
 	paramTwo := re.FindString(paramString)
 	if paramTwo != "" {
 		paramTwo = strings.TrimLeft(paramTwo, ",{")
