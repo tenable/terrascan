@@ -83,8 +83,8 @@ func SupportedIacVersions() []string {
 func GetProviderIacVersions(iacType string) []string {
 	var versions []string
 
-	for k := range supportedIacProviders[supportedIacType(iacType)] {
-		versions = append(versions, string(k))
+	for version := range supportedIacProviders[supportedIacType(iacType)] {
+		versions = append(versions, string(version))
 	}
 	sort.Strings(versions)
 	return versions
