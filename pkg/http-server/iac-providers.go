@@ -22,18 +22,18 @@ import (
 	"net/http"
 
 	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
-
 	"go.uber.org/zap"
 )
 
+// IacProvider contains response body for iac providers
 type IacProvider struct {
 	Type           string   `json:"type"`
 	Versions       []string `json:"versions"`
 	DefaultVersion string   `json:"defaultVersion"`
 }
 
+// iacProviders returns list of iac providers
 func (g *APIHandler) iacProviders(w http.ResponseWriter, r *http.Request) {
-
 	var providers = []IacProvider{}
 	for _, provider := range iacProvider.SupportedIacProviders() {
 		providers = append(providers, IacProvider{
