@@ -2,7 +2,7 @@
 ### docker_from
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | json | MEDIUM | Ensure platform flag with FROM command is not used for Docker file | AC_DOCKER_0041 | AC_DOCKER_0041 |
+| Infrastructure Security | json | MEDIUM | Ensure tag with FROM command exists and is not latest | AC_DOCKER_0041 | AC_DOCKER_0041 |
 | Infrastructure Security | json | MEDIUM | Ensure platform flag with FROM command is not used for Docker file | AC_DOCKER_0001 | AC_DOCKER_0001 |
 
 
