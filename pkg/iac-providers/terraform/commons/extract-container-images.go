@@ -100,7 +100,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 			}
 			fileData, err := ioutil.ReadFile(fileLocation)
 			if err != nil {
-				zap.S().Errorf("error fetching containers from aws resource: %v", err)
+				zap.S().Warnf("error fetching containers from aws resource: %v", err)
 				return results
 			}
 			def = string(fileData)
@@ -108,7 +108,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 		containers := []jsonObj{}
 		err := json.Unmarshal([]byte(def), &containers)
 		if err != nil {
-			zap.S().Errorf("error fetching containers from aws resource: %v", err)
+			zap.S().Warnf("error fetching containers from aws resource: %v", err)
 			return results
 		}
 		results = getContainers(containers)
@@ -126,7 +126,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 				for _, arg := range funcExp.Args {
 					re, diags := arg.Value(nil)
 					if diags.HasErrors() {
-						zap.S().Errorf("error fetching containers from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
+						zap.S().Warnf("error fetching containers from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
 						return
 					}
 					if !re.CanIterateElements() {
@@ -137,7 +137,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 						_, val := it.Element()
 						containerTemp, err := convertCtyToGoNative(val)
 						if err != nil {
-							zap.S().Errorf("error fetching containers from aws resource: %v", err)
+							zap.S().Warnf("error fetching containers from aws resource: %v", err)
 							return
 						}
 						var (
