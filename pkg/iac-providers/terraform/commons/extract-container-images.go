@@ -100,7 +100,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 			}
 			fileData, err := ioutil.ReadFile(fileLocation)
 			if err != nil {
-				zap.S().Warnf("error fetching containers from aws resource: %v", err)
+				zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 				return results
 			}
 			def = string(fileData)
@@ -108,7 +108,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 		containers := []jsonObj{}
 		err := json.Unmarshal([]byte(def), &containers)
 		if err != nil {
-			zap.S().Warnf("error fetching containers from aws resource: %v", err)
+			zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 			return results
 		}
 		results = getContainers(containers)
