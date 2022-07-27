@@ -12,6 +12,12 @@ find_files() {
     \) -name '*.go'
 }
 
+
+export GO111MODULE=on
+export PATH=$PATH:$(go env GOPATH)/bin
+go get -d golang.org/x/lint/golint
+go install golang.org/x/lint/golint
+
 bad_files=$(find_files | xargs -I@ bash -c "$GOPATH/bin/golint @")
 if [[ -n "${bad_files}" ]]; then
   echo "${bad_files}"
