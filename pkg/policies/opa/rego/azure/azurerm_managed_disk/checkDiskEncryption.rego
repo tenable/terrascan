@@ -5,7 +5,7 @@ package accurics
     checkEncryption(managed_disk.config)
 }
 
-checkEncrytion(inputConfig) {
+checkEncryption(inputConfig) {
     inputConfig.encryption_settings.enabled != true
 }
 
