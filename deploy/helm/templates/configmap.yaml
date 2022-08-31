@@ -4,5 +4,5 @@ metadata:
   name: {{ .Values.config_name }}
   namespace: {{ .Release.Namespace }}
 data:
-  terrascan-config: |
+  terrascan-config.toml: |
 {{ .Files.Get "data/config.toml" | indent 4 }}

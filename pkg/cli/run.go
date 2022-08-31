@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,21 +19,21 @@ package cli
 import (
 	"errors"
 	"flag"
+	"io"
 	"os"
-	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/downloader"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/writer"
 	"github.com/mattn/go-isatty"
+	"github.com/tenable/terrascan/pkg/downloader"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/writer"
 	"go.uber.org/zap"
 )
 
 const (
-	humanOutputFormat = "human"
-	sarifOutputFormat = "sarif"
+	yamlOutputFormat = "yaml"
+	jsonOutputFormat = "json"
 )
 
 // ScanOptions represents scan command and its optional flags
@@ -66,10 +66,13 @@ type ScanOptions struct {
 	// configOnly will output resource config (should only be used for debugging purposes)
 	configOnly bool
 
+	// configWithError will output resource config and encountered errors
+	configWithError bool
+
 	// config file path
 	configFile string
 
-	// the output format for wring the results
+	// the output format for writing the results
 	outputType string
 
 	// UseColors indicates whether to use color output
@@ -102,6 +105,21 @@ type ScanOptions struct {
 
 	// FindVulnerabilities gives option to scan container images for vulnerabilities
 	findVulnerabilities bool
+
+	// notificationWebhookURL is the URL where terrascan will send the scan report and normalized config json
+	notificationWebhookURL string
+
+	// notificationWebhookToken is the auth token to call the notification webhook URL
+	notificationWebhookToken string
+
+	// repoURL lets us specify URL of the repository being scanned
+	repoURL string
+
+	// repoRef lets us specify the branch of the repository being scanned
+	repoRef string
+
+	// logOutputDir lets us specify the directory to write scan result and log files
+	logOutputDir string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -136,13 +154,12 @@ func (s *ScanOptions) Init() error {
 // validate config only for human readable output
 // rest command options are validated by the executor
 func (s ScanOptions) validate() error {
-	// human readable output doesn't support --config-only flag
-	// if --config-only flag is set, then exit with an error
+	// human readable output doesn't support --config-only and --config-with-error flag
+	// if --config-only/--config-with-error flag is set, then exit with an error
 	// asking the user to use yaml or json output format
-	if s.configOnly && strings.EqualFold(s.outputType, humanOutputFormat) {
-		return errors.New("please use yaml or json output format when using --config-only flag")
+	if (s.configOnly || s.configWithError) && !(strings.EqualFold(s.outputType, yamlOutputFormat) || strings.EqualFold(s.outputType, jsonOutputFormat)) {
+		return errors.New("please use yaml or json output format when using --config-only or --config-with-error flags")
 	}
-
 	return nil
 }
 
@@ -176,7 +193,7 @@ func (s *ScanOptions) initColor() {
 func (s *ScanOptions) Run() error {
 
 	// temp dir to download the remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
@@ -186,14 +203,16 @@ func (s *ScanOptions) Run() error {
 	}
 
 	// create a new runtime executor for processing IaC
-	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType,
-		s.iacFilePath, s.iacDirPath, s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache, s.findVulnerabilities)
+	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType, s.iacFilePath, s.iacDirPath,
+		s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache,
+		s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken, s.repoURL, s.repoRef,
+	)
 	if err != nil {
 		return err
 	}
 
 	// executor output
-	results, err := executor.Execute(s.configOnly)
+	results, err := executor.Execute(s.configOnly, s.configWithError)
 	if err != nil {
 		return err
 	}
@@ -238,10 +257,23 @@ func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 
 func (s ScanOptions) writeResults(results runtime.Output) error {
 
+	var writers []io.Writer
+
 	outputWriter := NewOutputWriter(s.UseColors)
+	writers = append(writers, outputWriter)
+
+	fileWriter, closeFile := NewFileWriter(s.logOutputDir, s.outputType)
+	if fileWriter != nil {
+		writers = append(writers, fileWriter)
+		defer closeFile()
+	}
 
 	if s.configOnly {
-		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+		return writer.Write(s.outputType, results.ResourceConfig, writers)
+	}
+
+	if s.configWithError {
+		return writer.Write(s.outputType, results, writers)
 	}
 
 	// add verbose flag to the scan summary
@@ -251,7 +283,7 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
-	return writer.Write(s.outputType, results.Violations, outputWriter)
+	return writer.Write(s.outputType, results.Violations, writers)
 }
 
 // getExitCode returns appropriate exit code for terrascan based on scan output

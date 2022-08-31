@@ -17,7 +17,7 @@ Running the following command will generate new entries in `CHANGELOG.md` since 
 Before running this command, you'll need to have a GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) set in the `GITHUB_TOKEN` OS environment variable.
 
 ```
-docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator -u accurics -p terrascan -t $GITHUB_TOKEN -b CHANGELOG.md --since-tag v1.4.0 --future-release v1.5.0
+docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator -u tenable -p terrascan -t $GITHUB_TOKEN -b CHANGELOG.md --since-tag v1.4.0 --future-release v1.5.0
 ```
 
 Next, Review `CHANGELOG.md` to ensure there are notes for the new release
@@ -27,20 +27,25 @@ Once complete, commit changes and submit a pull request. This should be the last
 ### Tag the new release with git
 Once the changelog PR has been merged, pull the updated code, tag it with the new version number, and push the tag back to the repo:
 
-(again, subsitute v1.5.0 for the appropriate version being released)
+(again, substitute v1.5.0 for the appropriate version being released)
 ```
 git pull
 git tag v1.5.0
 git push --tags
+git push upstream v1.5.0
 ```
 
 This will kick off the GitHub workflow to run goreleaser to perform the release.
 
 ### Brew PR
 
-Run the commands below to update Brew to the latest Terrascan version.
+Run the commands below to update Brew to the latest Terrascan version. If you are on macOS use `shasum -a 256` instead of `sha256sum` in below command. Release version number in below command for example should be v1.5.0
 
 ```
 $ export TERRASCAN_VERSION=<release_version_number>
-$ brew bump-formula-pr --no-browse --url https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
+$ brew bump-formula-pr --no-browse --url https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
 ```
+
+### Update helm chart and kustomize directory
+
+Manually change the version for the terrascan container image in files `deploy/helm/values.yaml` and `deploy/kustomize/base/deployment.yaml`.

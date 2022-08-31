@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package tfv12
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	commons "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	commons "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	"go.uber.org/zap"
 )
 
@@ -26,6 +26,11 @@ import (
 // all the descendant modules present to create an output list of all the
 // resources present in rootDir and descendant modules
 func (*TfV12) LoadIacDir(absRootDir string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
-	zap.S().Warn("There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/accurics/terrascan/releases/v1.3.0")
+	zap.S().Warn("There may be a few breaking changes while working with terraform v0.12 files. For further information, refer to https://github.com/tenable/terrascan/releases/v1.3.0")
 	return commons.NewTerraformDirectoryLoader(absRootDir, options).LoadIacDir()
+}
+
+// Name returns name of the provider
+func (*TfV12) Name() string {
+	return "terraform"
 }

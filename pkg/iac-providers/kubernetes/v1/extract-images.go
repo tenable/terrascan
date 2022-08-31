@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package k8sv1
 import (
 	"encoding/json"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
 	yamltojson "github.com/ghodss/yaml"
 	"github.com/pkg/errors"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 	k8sappsv1 "k8s.io/api/apps/v1"
 	k8sbatchv1 "k8s.io/api/batch/v1"
@@ -80,8 +80,10 @@ func (k *K8sV1) extractContainerImages(kind string, doc *utils.IacDocument) ([]o
 			zap.S().Errorf(err.Error())
 			return nil, nil, err
 		}
-		containerImages = append(containerImages, readContainers(rc.Spec.Template.Spec.Containers)...)
-		initContainerImages = append(initContainerImages, readContainers(rc.Spec.Template.Spec.InitContainers)...)
+		if rc.Spec.Template != nil {
+			containerImages = append(containerImages, readContainers(rc.Spec.Template.Spec.Containers)...)
+			initContainerImages = append(initContainerImages, readContainers(rc.Spec.Template.Spec.InitContainers)...)
+		}
 
 	case "Job":
 		job := k8sbatchv1.Job{}

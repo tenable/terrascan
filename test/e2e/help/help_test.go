@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ import (
 	"io"
 	"path/filepath"
 
-	helpUtils "github.com/accurics/terrascan/test/e2e/help"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	helpUtils "github.com/tenable/terrascan/test/e2e/help"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var (

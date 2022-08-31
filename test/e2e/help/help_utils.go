@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package help
 import (
 	"path/filepath"
 
-	"github.com/accurics/terrascan/test/helper"
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 // ValidateExitCodeAndOutput validates the exit code and output of the command

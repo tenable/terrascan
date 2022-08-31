@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -156,7 +156,7 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef, callerRef string
 
 	// extract values from attribute expressions as golang interface{}
 	c := converter{bytes: fileBytes}
-	val, err := c.convertExpression(varAttr.Expr)
+	val, _, err := c.convertExpression(varAttr.Expr)
 	if err != nil {
 		zap.S().Errorf("failed to convert expression '%v', ref: '%v'", varAttr.Expr, varRef)
 		return varRef

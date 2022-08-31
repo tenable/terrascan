@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/onsi/ginkgo"
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/utils"
 	"gopkg.in/yaml.v3"
 )
 
@@ -425,4 +425,25 @@ func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, gold
 	fileContents = sarifVersionPattern.ReplaceAllString(fileContents, "")
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
+}
+
+// CheckSummaryForVulnerabilities is a helper function to check vulnerabilies exists
+func CheckSummaryForVulnerabilities(session *gexec.Session, expectedCount int) {
+	var sessionBytes []byte
+
+	sessionBytes = session.Wait().Out.Contents()
+
+	sessionBytes = bytes.TrimSpace(sessionBytes)
+
+	var sessionEngineOutput policy.EngineOutput
+
+	err := json.Unmarshal(sessionBytes, &sessionEngineOutput)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+
+	sessionOutputSummary := sessionEngineOutput.ViolationStore.Summary
+	gomega.Expect(sessionOutputSummary).NotTo(gomega.BeNil())
+	gomega.Expect(sessionOutputSummary.Vulnerabilities).NotTo(gomega.BeNil())
+	gomega.Eventually(func() int {
+		return *sessionOutputSummary.Vulnerabilities
+	}).Should(gomega.BeNumerically(">=", expectedCount))
 }

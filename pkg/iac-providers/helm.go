@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package iacprovider
 import (
 	"reflect"
 
-	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
+	helmv3 "github.com/tenable/terrascan/pkg/iac-providers/helm/v3"
 )
 
 // terraform specific constants

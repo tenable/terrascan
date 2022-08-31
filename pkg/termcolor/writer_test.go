@@ -1,12 +1,13 @@
 package termcolor
 
 import (
+	"io"
 	"regexp"
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/writer"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/writer"
 )
 
 var (
@@ -34,14 +35,14 @@ func buildStore() *results.ViolationStore {
 func init() {
 	res := buildStore()
 
-	w := NewColorizedWriter(&jsonData)
+	w := []io.Writer{NewColorizedWriter(&jsonData)}
 
 	err := writer.Write("json", res, w)
 	if err != nil {
 		panic(err)
 	}
 
-	w = NewColorizedWriter(&yamlData)
+	w = []io.Writer{NewColorizedWriter(&yamlData)}
 
 	err = writer.Write("yaml", res, w)
 	if err != nil {
@@ -77,7 +78,8 @@ func TestYAMLSeverityIsColorized(t *testing.T) {
 
 	res := buildStore()
 	yw := &strings.Builder{}
-	w := NewColorizedWriter(yw)
+
+	w := []io.Writer{NewColorizedWriter(yw)}
 
 	// HIGH, MEDIUM, LOW
 	testSeverity := func(sev string) {
@@ -143,7 +145,7 @@ func TestJSONSeverityIsColorized(t *testing.T) {
 
 	res := buildStore()
 	yw := &strings.Builder{}
-	w := NewColorizedWriter(yw)
+	w := []io.Writer{NewColorizedWriter(yw)}
 
 	// HIGH, MEDIUM, LOW
 	testSeverity := func(sev string) {

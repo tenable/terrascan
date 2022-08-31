@@ -1,0 +1,17 @@
+{
+    "name": "dnfCleanAllMissing",
+    "file": "dnfCleanAllMissing.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "dnfCleanAllMissing"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure Cached package data should be cleaned after installation to reduce image size",
+    "reference_id": "AC_DOCKER_00025",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_00025",
+    "version": 1
+}

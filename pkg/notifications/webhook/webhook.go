@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ package webhook
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
+	httputils "github.com/tenable/terrascan/pkg/utils/http"
 	"go.uber.org/zap"
 )
 
@@ -79,8 +78,8 @@ func (w *Webhook) SendNotification(data interface{}) error {
 	}
 
 	// validate http response
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusAccepted {
-		zap.S().Errorf("failed to webhook notification. Incorrect status code: '%v'", resp.StatusCode)
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		zap.S().Errorf("failed to send webhook notification, status code: '%v'", resp.StatusCode)
 		return fmt.Errorf("webhook notification failed")
 	}
 

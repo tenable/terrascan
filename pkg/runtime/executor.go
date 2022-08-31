@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,18 +18,21 @@ package runtime
 
 import (
 	"sort"
+	"strings"
 
-	"github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/accurics/terrascan/pkg/vulnerability"
+	"github.com/tenable/terrascan/pkg/notifications/webhook"
+	"github.com/tenable/terrascan/pkg/policy/opa"
+	"github.com/tenable/terrascan/pkg/vulnerability"
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/filters"
-	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/notifications"
-	"github.com/accurics/terrascan/pkg/policy"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/filters"
+	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/notifications"
+	"github.com/tenable/terrascan/pkg/policy"
+	res "github.com/tenable/terrascan/pkg/results"
 )
 
 const (
@@ -39,38 +42,46 @@ const (
 
 // Executor object
 type Executor struct {
-	filePath            string
-	dirPath             string
-	policyPath          []string
-	iacType             string
-	iacVersion          string
-	scanRules           []string
-	skipRules           []string
-	iacProviders        []iacProvider.IacProvider
-	policyEngines       []policy.Engine
-	notifiers           []notifications.Notifier
-	categories          []string
-	policyTypes         []string
-	severity            string
-	nonRecursive        bool
-	useTerraformCache   bool
-	findVulnerabilities bool
-	vulnerabilityEngine vulnerability.Engine
+	filePath                 string
+	dirPath                  string
+	policyPath               []string
+	iacType                  string
+	iacVersion               string
+	scanRules                []string
+	skipRules                []string
+	iacProviders             []iacProvider.IacProvider
+	policyEngines            []policy.Engine
+	notifiers                []notifications.Notifier
+	categories               []string
+	policyTypes              []string
+	severity                 string
+	nonRecursive             bool
+	useTerraformCache        bool
+	findVulnerabilities      bool
+	vulnerabilityEngine      vulnerability.Engine
+	notificationWebhookURL   string
+	notificationWebhookToken string
+	repoURL                  string
+	repoRef                  string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef string) (e *Executor, err error) {
 	e = &Executor{
-		filePath:            filePath,
-		dirPath:             dirPath,
-		policyPath:          policyPath,
-		policyTypes:         policyTypes,
-		iacType:             iacType,
-		iacVersion:          iacVersion,
-		iacProviders:        make([]iacProvider.IacProvider, 0),
-		nonRecursive:        nonRecursive,
-		useTerraformCache:   useTerraformCache,
-		findVulnerabilities: findVulnerabilities,
+		filePath:                 filePath,
+		dirPath:                  dirPath,
+		policyPath:               policyPath,
+		policyTypes:              policyTypes,
+		iacType:                  iacType,
+		iacVersion:               iacVersion,
+		iacProviders:             make([]iacProvider.IacProvider, 0),
+		nonRecursive:             nonRecursive,
+		useTerraformCache:        useTerraformCache,
+		findVulnerabilities:      findVulnerabilities,
+		notificationWebhookURL:   notificationWebhookURL,
+		notificationWebhookToken: notificationWebhookToken,
+		repoURL:                  repoURL,
+		repoRef:                  repoRef,
 	}
 
 	// assigning vulnerabilityEngine
@@ -147,13 +158,22 @@ func (e *Executor) Init() error {
 	}
 
 	// create new notifiers
-	e.notifiers, err = notifications.NewNotifiers()
-	if err != nil {
-		zap.S().Debug("failed to create notifier(s).", zap.Error(err))
-		// do not return an error if a key is not present in the config file
-		if err != notifications.ErrNotificationNotPresent {
-			zap.S().Error("failed to create notifier(s).", zap.Error(err))
-			return err
+	if e.notificationWebhookURL != "" {
+		e.notifiers = []notifications.Notifier{
+			&webhook.Webhook{
+				URL:   e.notificationWebhookURL,
+				Token: e.notificationWebhookToken,
+			},
+		}
+	} else {
+		e.notifiers, err = notifications.NewNotifiers()
+		if err != nil {
+			zap.S().Debug("failed to create notifier(s).", zap.Error(err))
+			// do not return an error if a key is not present in the config file
+			if err != notifications.ErrNotificationNotPresent {
+				zap.S().Error("failed to create notifier(s).", zap.Error(err))
+				return err
+			}
 		}
 	}
 
@@ -186,16 +206,17 @@ func (e *Executor) initPolicyEngines() (err error) {
 }
 
 // Execute validates the inputs, processes the IaC, creates json output
-func (e *Executor) Execute(configOnly bool) (results Output, err error) {
+func (e *Executor) Execute(configOnly, configWithError bool) (results Output, err error) {
 
 	var merr *multierror.Error
+	var iacTypes []string
 	var resourceConfig output.AllResourceConfigs
 	options := e.buildOptions()
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
 	if e.dirPath != "" {
 		// get all resource configs in the directory
-		resourceConfig, merr = e.getResourceConfigs()
+		resourceConfig, iacTypes, merr = e.getResourceConfigs()
 	} else {
 		// create results output from Iac provider
 		// iac providers will contain one element
@@ -218,6 +239,18 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 
 	if e.findVulnerabilities {
 		results.ResourceConfig = e.fetchVulnerabilities(&results, options)
+	}
+
+	if configWithError {
+		results.Violations.ViolationStore = res.NewViolationStore()
+		if e.iacType == "all" {
+			results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
+		}
+		if err := merr.ErrorOrNil(); err != nil {
+			sort.Sort(merr)
+			results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
+		}
+		return results, nil
 	}
 
 	if configOnly {
@@ -243,11 +276,6 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 	// add other summary details after policies are evaluated
 	results.Violations.ViolationStore.AddSummary(e.iacType, resourcePath)
 
-	// send notifications, if configured
-	if err = e.SendNotifications(results); err != nil {
-		return results, err
-	}
-
 	// we want to display the dir scan errors with all the iac providers
 	// that support sub folder scanning, which includes 'all' iac scan
 	if err := merr.ErrorOrNil(); err != nil {
@@ -256,13 +284,25 @@ func (e *Executor) Execute(configOnly bool) (results Output, err error) {
 		results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
 	}
 
+	if e.iacType == "all" {
+		results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
+	}
+
+	// send notifications, if configured
+	if e.repoURL != "" {
+		results.Violations.Summary.ResourcePath = e.repoURL
+		results.Violations.Summary.Branch = e.repoRef
+	}
+	e.SendNotifications(results)
+
 	// successful
 	return results, nil
 }
 
 // getResourceConfigs is a helper method to get all resource configs
-func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.Error) {
+func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, []string, *multierror.Error) {
 	var merr *multierror.Error
+	var iacTypes []string
 	resourceConfig := make(output.AllResourceConfigs)
 
 	// channel for directory scan response
@@ -273,13 +313,16 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
 			rc, err := ip.LoadIacDir(e.dirPath, options)
-			scanRespChan <- dirScanResp{err, rc}
+			scanRespChan <- dirScanResp{err, rc, ip.Name()}
 		}(iacP)
 	}
 
 	for i := 0; i < len(e.iacProviders); i++ {
 		sr := <-scanRespChan
 		merr = multierror.Append(merr, sr.err)
+		if len(sr.rc) > 0 {
+			iacTypes = append(iacTypes, sr.iacType)
+		}
 		// deduplication of resources
 		if len(resourceConfig) > 0 {
 			for key, r := range sr.rc {
@@ -292,7 +335,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 		}
 	}
 
-	return resourceConfig, merr
+	return resourceConfig, iacTypes, merr
 }
 
 // findViolations is a helper method to find all violations in the resource config

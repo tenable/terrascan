@@ -2,12 +2,13 @@ package writer
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
 )
 
 // these variables would be used as test input accross the writer package
@@ -183,9 +184,10 @@ func TestYAMLWriter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			YAMLWriter(tt.input, writer)
-			if gotOutput := writer.String(); !strings.EqualFold(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)) {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			YAMLWriter(tt.input, w)
+			if gotOutput := bf.String(); !strings.EqualFold(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)) {
 				t.Errorf("YAMLWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
 			}
 		})

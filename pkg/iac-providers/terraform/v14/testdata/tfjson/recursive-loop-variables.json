@@ -11,7 +11,12 @@
       "config": {
         "container_definitions": "${templatefile(\n    ${path.module}/${var.filename},\n    {\n      foo = \"bar\"\n    }\n  )}"
       },
-      "skip_rules": null
+      "line_config": {
+        "container_definitions": 6
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }

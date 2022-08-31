@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/secretsmanager"
+	"github.com/awslabs/goformation/v5/cloudformation/secretsmanager"
 )
 
 // SecretsManagerSecretPolicyConfig holds config for aws_secretsmanager_secret_policy

@@ -16,6 +16,15 @@
           "region": "${var.region}"
         }
       },
+      "line_config": {
+        "backend": 42,
+        "config": {
+          "bucket": 46,
+          "key": 47,
+          "profile": 44,
+          "region": 45
+        }
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -45,6 +54,17 @@
         "test2": 5,
         "test3": "${1 + 2}"
       },
+      "line_config": {
+        "arr": 5,
+        "hyphen-test": 6,
+        "quoted": 9,
+        "squoted": 10,
+        "temp": 7,
+        "temp2": 8,
+        "test1": 3,
+        "test2": 4,
+        "test3": 2
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -70,6 +90,18 @@
           "thing": "${[for x in local.arr: x * 2]}"
         }
       },
+      "line_config": {
+        "other": {
+          "3": 18,
+          "a.b.c": 22,
+          "a.b.c[\"hi\"][3].*": 20,
+          "local.test1": 19,
+          "local.test3": 17,
+          "loop": 21,
+          "num": 15,
+          "thing": 16
+        }
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": ""
@@ -88,6 +120,12 @@
         "heredoc": "This is a heredoc template.\nIt references local.other.3\n",
         "heredoc2": "\t\tAnother heredoc, that\n\t\tdoesn't remove indentation\n\t\tlocal.other.3\n\t\t%{if true ? false : true}\"gotcha\"\\n%{else}4%{endif}\n",
         "simple": "${4 - 2}"
+      },
+      "line_config": {
+        "cond": 32,
+        "heredoc": 28,
+        "heredoc2": 34,
+        "simple": 31
       },
       "skip_rules": null,
       "max_severity": "",

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 package writer
 
 import (
-	"fmt"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/version"
-	"github.com/go-errors/errors"
-	"github.com/owenrumney/go-sarif/sarif"
-	"go.uber.org/zap"
 	"io"
 	"path/filepath"
 	"strings"
+
+	"github.com/go-errors/errors"
+	"github.com/owenrumney/go-sarif/sarif"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/version"
+	"go.uber.org/zap"
 )
 
 const (
@@ -38,39 +38,39 @@ func init() {
 }
 
 // SarifWriter writes sarif formatted violation results report
-func SarifWriter(data interface{}, writer io.Writer) error {
-	return writeSarif(data, writer, false)
+func SarifWriter(data interface{}, writers []io.Writer) error {
+	return writeSarif(data, writers, false)
 }
 
-func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
+func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 	outputData := data.(policy.EngineOutput)
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
 		return err
 	}
 
-	run := sarif.NewRun("terrascan", "https://github.com/accurics/terrascan")
+	run := sarif.NewRun("terrascan", "https://github.com/tenable/terrascan")
 	run.Tool.Driver.WithVersion(version.GetNumeric())
 	// add a run to the report
 	report.AddRun(run)
 
 	for _, passedRule := range outputData.PassedRules {
-		m := make(map[string]string)
-		m["category"] = passedRule.Category
-		m["severity"] = passedRule.Severity
+		m := sarif.NewPropertyBag()
+		m.Properties["category"] = passedRule.Category
+		m.Properties["severity"] = passedRule.Severity
 
 		run.AddRule(passedRule.RuleID).
-			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m)
+			WithDescription(passedRule.Description).WithName(passedRule.RuleName).WithProperties(m.Properties)
 	}
 
 	// for each result add the rule, location and result to the report
 	for _, violation := range outputData.Violations {
-		m := make(map[string]string)
-		m["category"] = violation.Category
-		m["severity"] = violation.Severity
+		m := sarif.NewPropertyBag()
+		m.Properties["category"] = violation.Category
+		m.Properties["severity"] = violation.Severity
 
 		rule := run.AddRule(violation.RuleID).
-			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m)
+			WithDescription(violation.Description).WithName(violation.RuleName).WithProperties(m.Properties)
 
 		var artifactLocation *sarif.ArtifactLocation
 
@@ -82,7 +82,11 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 			if err != nil {
 				return errors.Errorf("unable to create absolute path, error: %v", err)
 			}
-			artifactLocation = sarif.NewSimpleArtifactLocation(fmt.Sprintf("file://%s", absFilePath))
+			uriFilePath, err := utils.GetFileURI(absFilePath)
+			if err != nil {
+				return errors.Errorf("unable to create uri path, error: %v", err)
+			}
+			artifactLocation = sarif.NewSimpleArtifactLocation(uriFilePath)
 		}
 
 		location := sarif.NewLocation().WithPhysicalLocation(sarif.NewPhysicalLocation().
@@ -99,8 +103,14 @@ func writeSarif(data interface{}, writer io.Writer, forGithub bool) error {
 			WithLocation(location)
 	}
 
-	// print the report to anything that implements `io.Writer`
-	return report.PrettyWrite(writer)
+	for _, writer := range writers {
+		// print the report to anything that implements `io.Writer`
+		err = report.PrettyWrite(writer)
+		if err != nil {
+			zap.S().Warnf("failed to write result, error :%w", err)
+		}
+	}
+	return nil
 }
 
 func getSarifLevel(severity string) string {

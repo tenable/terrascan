@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,8 +17,30 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/elasticloadbalancing"
+	"fmt"
+
+	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancing"
 )
+
+// GetPolicies represents subresource aws_load_balancer_policy for Policies attribute
+const (
+	GetPolicies = "Policies"
+)
+
+// PolicyAttributeBlock holds config for PolicyTypeBlock
+type PolicyAttributeBlock struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// ElasticLoadBalancingLoadBalancerPoliciesConfig holds config for ElasticLoadBalancingLoadBalancerPolicies
+type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
+	Config
+	LoadBalancerName string                 `json:"load_balancer_name"`
+	PolicyName       string                 `json:"policy_name"`
+	PolicyTypeName   string                 `jons:"policy_type_name"`
+	PolicyAttribute  []PolicyAttributeBlock `json:"policy_attribute"`
+}
 
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
@@ -39,10 +61,46 @@ type ELBListenerConfig struct {
 }
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
-func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer) []AWSResourceConfig {
+func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
+	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
+	awsconfig := make([]AWSResourceConfig, len(e.Policies))
+
+	for i := range e.Policies {
+		indexedElbName := fmt.Sprintf("%s%d", elbname, i)
+
+		elbpolicies[i].LoadBalancerName = indexedElbName
+		elbpolicies[i].PolicyName = e.Policies[i].PolicyName
+		elbpolicies[i].PolicyTypeName = e.Policies[i].PolicyType
+
+		elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(e.Policies[i].Attributes))
+		for ai := range e.Policies[i].Attributes {
+			attribVals, ok := e.Policies[i].Attributes[ai].(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			elbpolicies[i].PolicyAttribute[ai].Name, ok = attribVals["Name"].(string)
+			if !ok {
+				continue
+			}
+
+			elbpolicies[i].PolicyAttribute[ai].Value, ok = attribVals["Value"].(string)
+			if !ok {
+				continue
+			}
+
+			// variable "ok" is only used for safe type conversion
+			_ = ok
+		}
+
+		awsconfig[i].Type = GetPolicies
+		awsconfig[i].Name = indexedElbName
+		awsconfig[i].Resource = elbpolicies[i]
+		awsconfig[i].Metadata = e.AWSCloudFormationMetadata
+	}
+
 	cf := ElasticLoadBalancingLoadBalancerConfig{
 		Config: Config{
-			Name: e.LoadBalancerName,
 			Tags: e.Tags,
 		},
 	}
@@ -64,8 +122,10 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		cf.Listeners = lc
 	}
 
-	return []AWSResourceConfig{{
-		Resource: cf,
-		Metadata: e.AWSCloudFormationMetadata,
-	}}
+	var awsconfigElb AWSResourceConfig
+	awsconfigElb.Resource = cf
+	awsconfigElb.Metadata = e.AWSCloudFormationMetadata
+	awsconfig = append(awsconfig, awsconfigElb)
+
+	return awsconfig
 }

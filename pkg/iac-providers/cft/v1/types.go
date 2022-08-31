@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,4 +49,9 @@ const (
 // CFTFileExtensions returns the valid extensions for AWS CFT (json | YAML | txt | template)
 func CFTFileExtensions() []string {
 	return []string{YAMLExtension, YAMLExtension2, JSONExtension, TemplateExtension, TXTExtension}
+}
+
+type cftResource struct {
+	AWSTemplateFormatVersion string                 `json:"AWSTemplateFormatVersion"`
+	Resources                map[string]interface{} `json:"Resources"`
 }

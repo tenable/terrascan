@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/config"
-	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
-	"github.com/accurics/terrascan/pkg/k8s/dblogs"
-	"github.com/accurics/terrascan/pkg/results"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	admissionWebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
+	"github.com/tenable/terrascan/pkg/k8s/dblogs"
+	"github.com/tenable/terrascan/pkg/results"
 	"go.uber.org/zap"
 )
 
@@ -82,7 +82,7 @@ func (g *APIHandler) getLogs(w http.ResponseWriter, r *http.Request) {
 	)
 
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
-	validatingWebhook := admissionWebhook.NewValidatingWebhook([]byte(""))
+	validatingWebhook := admissionWebhook.NewValidatingWebhook([]byte(""), "", "", "", "")
 	if err := validatingWebhook.Authorize(apiKey); err != nil {
 		switch err {
 		case admissionWebhook.ErrAPIKeyMissing:

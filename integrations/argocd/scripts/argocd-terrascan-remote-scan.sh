@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#    Copyright (C) 2021 Accurics, Inc.
+#    Copyright (C) 2022 Tenable, Inc.
 #
 #	Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ IAC_VERSION=${IAC_VERSION:-"v1"}
 CLOUD_PROVIDER=${CLOUD_PROVIDER:-"all"}
 REMOTE_TYPE=${REMOTE_TYPE:-"git"}
 
-if [ -z ${SERVICE_NAME} ]; then 
-    echo "Service Name Not set" 
+if [ -z ${SERVICE_NAME} ]; then
+    echo "Service Name Not set"
     exit 1
 fi
 

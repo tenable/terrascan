@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/k8s/dblogs"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/k8s/dblogs"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 
 	admissionv1 "k8s.io/api/admission/v1"
@@ -42,15 +42,23 @@ import (
 // the kubernetes API server and decides whether the admission request from
 // the kubernetes client should be allowed or not
 type ValidatingWebhook struct {
-	requestBody []byte
-	dblogger    *dblogs.WebhookScanLogger
+	requestBody              []byte
+	dblogger                 *dblogs.WebhookScanLogger
+	notificationWebhookURL   string
+	notificationWebhookToken string
+	repoURL                  string
+	repoRef                  string
 }
 
 // NewValidatingWebhook returns a new, empty ValidatingWebhook struct
-func NewValidatingWebhook(body []byte) AdmissionWebhook {
+func NewValidatingWebhook(body []byte, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef string) AdmissionWebhook {
 	return ValidatingWebhook{
-		dblogger:    dblogs.NewWebhookScanLogger(),
-		requestBody: body,
+		dblogger:                 dblogs.NewWebhookScanLogger(),
+		requestBody:              body,
+		notificationWebhookURL:   notificationWebhookURL,
+		notificationWebhookToken: notificationWebhookToken,
+		repoURL:                  repoURL,
+		repoRef:                  repoRef,
 	}
 }
 
@@ -191,17 +199,17 @@ func (w ValidatingWebhook) scanK8sFile(filePath string) (runtime.Output, error) 
 
 	if flag.Lookup("test.v") != nil {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			filePath, "", []string{testPoliciesPath}, []string{}, []string{}, []string{}, "", false, false, false)
+			filePath, "", []string{testPoliciesPath}, []string{}, []string{}, []string{}, "", false, false, false, w.notificationWebhookURL, w.notificationWebhookToken, w.repoURL, w.repoRef)
 	} else {
 		executor, err = runtime.NewExecutor("k8s", "v1", []string{"k8s"},
-			filePath, "", []string{}, []string{}, []string{}, []string{}, "", false, false, false)
+			filePath, "", []string{}, []string{}, []string{}, []string{}, "", false, false, false, w.notificationWebhookURL, w.notificationWebhookToken, w.repoURL, w.repoRef)
 	}
 	if err != nil {
 		zap.S().Errorf("failed to create runtime executer: '%v'", err)
 		return result, err
 	}
 
-	result, err = executor.Execute(false)
+	result, err = executor.Execute(false, false)
 	if err != nil {
 		zap.S().Error("failed to scan resource object. error: '%v'", err)
 		return result, err

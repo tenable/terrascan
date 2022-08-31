@@ -1,0 +1,23 @@
+Violation Details -
+
+	Description    :	Enable AWS AMI Encryption
+	File           :	main.tf
+	Module Name    :	root
+	Plan Root      :	./
+	Line           :	5
+	Severity       :	MEDIUM
+
+	-----------------------------------------------------------------------
+
+
+Scan Summary -
+
+	File/Folder         :	https://github.com/tenable/terrascan.git
+	Branch              :	main
+	IaC Type            :	terraform
+	Scanned At          :	2021-03-02 15:45:17.636568 +0000 UTC
+	Policies Validated  :	8
+	Violated Policies   :	1
+	Low                 :	0
+	Medium              :	1
+	High                :	0

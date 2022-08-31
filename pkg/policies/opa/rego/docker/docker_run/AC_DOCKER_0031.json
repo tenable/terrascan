@@ -1,0 +1,17 @@
+{
+    "name": "pipInstallKeepingCachedPackages",
+    "file": "pipInstallKeepingCachedPackages.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "pipInstallKeepingCachedPackages"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure when installing packages with pip, the '--no-cache-dir' flag should be set to make Docker images smaller",
+    "reference_id": "AC_DOCKER_0031",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0031",
+    "version": 1
+}

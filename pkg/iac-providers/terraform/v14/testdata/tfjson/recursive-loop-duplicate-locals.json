@@ -1,20 +1,24 @@
 {
-    "aws_iam_user": [
-      {
-        "id": "aws_iam_user.lb",
-        "name": "lb",
-        "module_name": "dummy",
-        "source": "dummy/main.tf",
-        "plan_root": "./",
-        "line": 15,
-        "type": "aws_iam_user",
-        "config": {
-          "name": "joe != \"\" ? \"joe-fred\" : fred",
-          "tags": "${merge(${merge({\n          CreatedBy = \"Terraform\"\n        }, {\"this\":\"that\"})},\n  {\n    Name = joe != \"\" ? \"joe-fred\" : fred\n  })}"
-        },
-        "skip_rules": null,
-        "max_severity": "",
-        "min_severity": ""
-      }
-    ]
-  }
+  "aws_iam_user": [
+    {
+      "id": "aws_iam_user.lb",
+      "name": "lb",
+      "module_name": "dummy",
+      "source": "dummy/main.tf",
+      "plan_root": "./",
+      "line": 15,
+      "type": "aws_iam_user",
+      "config": {
+        "name": "joe != \"\" ? \"joe-fred\" : fred",
+        "tags": "${merge(${merge({\n          CreatedBy = \"Terraform\"\n        }, {\"this\":\"that\"})},\n  {\n    Name = joe != \"\" ? \"joe-fred\" : fred\n  })}"
+      },
+      "line_config": {
+        "name": 16,
+        "tags": 17
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
+    }
+  ]
+}

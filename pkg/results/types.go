@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -62,6 +62,7 @@ type ViolationStore struct {
 // ScanSummary will hold the default scan summary data
 type ScanSummary struct {
 	ResourcePath         string `json:"file/folder" yaml:"file/folder" xml:"file_folder,attr"`
+	Branch               string `json:"branch,omitempty" yaml:"branch,omitempty" xml:"branch,attr,omitempty"`
 	IacType              string `json:"iac_type" yaml:"iac_type" xml:"iac_type,attr"`
 	Timestamp            string `json:"scanned_at" yaml:"scanned_at" xml:"scanned_at,attr"`
 	ShowViolationDetails bool   `json:"-" yaml:"-" xml:"-"`

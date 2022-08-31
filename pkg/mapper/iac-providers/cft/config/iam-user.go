@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v4/cloudformation/iam"
+	"github.com/awslabs/goformation/v5/cloudformation/iam"
 )
 
 const (
@@ -30,26 +30,26 @@ const (
 	IamUserPolicy = "Policy"
 )
 
-// IamUserLoginProfileConfig holds the config for aws_iam_user_login_profile
+// IamUserLoginProfileConfig holds config for aws_iam_user_login_profile
 type IamUserLoginProfileConfig struct {
 	Config
 	PasswordResetRequired bool `json:"password_reset_required"`
 }
 
-// IamUserPolicyConfig holds the config for aws_iam_user_policy
+// IamUserPolicyConfig holds config for aws_iam_user_policy
 type IamUserPolicyConfig struct {
 	Config
 	PolicyName     string `json:"name"`
 	PolicyDocument string `json:"policy"`
 }
 
-// IamUserConfig holds the config for aws_iam_user
+// IamUserConfig holds config for aws_iam_user
 type IamUserConfig struct {
 	Config
 	UserName string `json:"name"`
 }
 
-// GetIamUserConfig returns the config for aws_iam_user, aws_iam_user_policy, aws_iam_user_login_profile
+// GetIamUserConfig returns config for aws_iam_user, aws_iam_user_policy, aws_iam_user_login_profile
 func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 
 	resourceConfigs := make([]AWSResourceConfig, 0)
@@ -66,17 +66,21 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 		},
 	})
 
+	iamLoginProfileConfig := IamUserLoginProfileConfig{
+		Config: Config{
+			Name: i.UserName,
+		},
+	}
+	if i.LoginProfile != nil {
+		iamLoginProfileConfig.PasswordResetRequired = i.LoginProfile.PasswordResetRequired
+	}
+
 	// add aws_iam_user_login_profile
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Type:     IamUserLoginProfile,
 		Name:     i.UserName,
 		Metadata: i.AWSCloudFormationMetadata,
-		Resource: IamUserLoginProfileConfig{
-			Config: Config{
-				Name: i.UserName,
-			},
-			PasswordResetRequired: i.LoginProfile.PasswordResetRequired,
-		},
+		Resource: iamLoginProfileConfig,
 	})
 
 	// add aws_iam_user_policy

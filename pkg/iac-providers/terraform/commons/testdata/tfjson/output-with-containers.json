@@ -25,13 +25,31 @@
           }
         ]
       },
+      "line_config": {
+        "container_definitions": 3,
+        "family": 2,
+        "proxy_configuration": [
+          {
+            "container_name": 7,
+            "properties": {
+              "AppPorts": 9,
+              "EgressIgnoredIPs": 10,
+              "IgnoredUID": 11,
+              "ProxyEgressPort": 12,
+              "ProxyIngressPort": 13
+            },
+            "type": 6
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "jenkins",
-          "image": "jenkins"
+          "image": "jenkins",
+          "vulnerabilities": null
         }
       ]
     },
@@ -54,17 +72,28 @@
           "FARGATE"
         ]
       },
+      "line_config": {
+        "container_definitions": 8,
+        "cpu": 6,
+        "execution_role_arn": 7,
+        "family": 2,
+        "memory": 5,
+        "network_mode": 3,
+        "requires_compatibilities": 4
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "first",
-          "image": "service-first"
+          "image": "service-first",
+          "vulnerabilities": null
         },
         {
           "name": "second",
-          "image": "service-second"
+          "image": "service-second",
+          "vulnerabilities": null
         }
       ]
     },
@@ -87,13 +116,23 @@
           "FARGATE"
         ]
       },
+      "line_config": {
+        "container_definitions": 9,
+        "cpu": 6,
+        "execution_role_arn": 7,
+        "family": 2,
+        "memory": 5,
+        "network_mode": 3,
+        "requires_compatibilities": 4
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "jenkins",
-          "image": "jenkins"
+          "image": "jenkins",
+          "vulnerabilities": null
         }
       ]
     }
@@ -138,17 +177,50 @@
           "environment": "testing"
         }
       },
+      "line_config": {
+        "container": [
+          {
+            "cpu": 12,
+            "image": 11,
+            "memory": 13,
+            "name": 10,
+            "ports": [
+              {
+                "port": 16,
+                "protocol": 17
+              }
+            ]
+          },
+          {
+            "cpu": 24,
+            "image": 23,
+            "memory": 25,
+            "name": 22
+          }
+        ],
+        "dns_name_label": 6,
+        "ip_address_type": 5,
+        "location": 3,
+        "name": 2,
+        "os_type": 7,
+        "resource_group_name": 4,
+        "tags": {
+          "environment": 29
+        }
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "hello-world",
-          "image": "microsoft/aci-helloworld:latest"
+          "image": "microsoft/aci-helloworld:latest",
+          "vulnerabilities": null
         },
         {
           "name": "sidecar",
-          "image": "microsoft/aci-tutorial-sidecar"
+          "image": "microsoft/aci-tutorial-sidecar",
+          "vulnerabilities": null
         }
       ]
     }
@@ -175,7 +247,8 @@
             "job_template": [
               {
                 "metadata": [
-                  {}
+                  {
+                  }
                 ],
                 "spec": [
                   {
@@ -183,7 +256,8 @@
                     "template": [
                       {
                         "metadata": [
-                          {}
+                          {
+                          }
                         ],
                         "spec": [
                           {
@@ -213,13 +287,63 @@
           }
         ]
       },
+      "line_config": {
+        "metadata": [
+          {
+            "name": 3
+          }
+        ],
+        "spec": [
+          {
+            "concurrency_policy": 6,
+            "failed_jobs_history_limit": 7,
+            "job_template": [
+              {
+                "metadata": [
+                  {
+                  }
+                ],
+                "spec": [
+                  {
+                    "backoff_limit": 14,
+                    "template": [
+                      {
+                        "metadata": [
+                          {
+                          }
+                        ],
+                        "spec": [
+                          {
+                            "container": [
+                              {
+                                "command": 22,
+                                "image": 21,
+                                "name": 20
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "ttl_seconds_after_finished": 15
+                  }
+                ]
+              }
+            ],
+            "schedule": 8,
+            "starting_deadline_seconds": 9,
+            "successful_jobs_history_limit": 10
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "hello",
-          "image": "busybox"
+          "image": "busybox",
+          "vulnerabilities": null
         }
       ]
     }
@@ -287,21 +411,78 @@
           }
         ]
       },
+      "line_config": {
+        "metadata": [
+          {
+            "labels": {
+              "test": 42
+            },
+            "name": 39,
+            "namespace": 40
+          }
+        ],
+        "spec": [
+          {
+            "replicas": 47,
+            "selector": [
+              {
+                "match_labels": {
+                  "test": 51
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "test": 58
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "automount_service_account_token": 79,
+                    "container": [
+                      {
+                        "image": 64,
+                        "name": 65
+                      },
+                      {
+                        "image": 69,
+                        "name": 70
+                      },
+                      {
+                        "image": 74,
+                        "name": 75
+                      }
+                    ],
+                    "service_account_name": 78
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "example1",
-          "image": "nginx:1.7.8"
+          "image": "nginx:1.7.8",
+          "vulnerabilities": null
         },
         {
           "name": "example2",
-          "image": "nginx:1.7.8"
+          "image": "nginx:1.7.8",
+          "vulnerabilities": null
         },
         {
           "name": "example3",
-          "image": "nginx:1.7.8"
+          "image": "nginx:1.7.8",
+          "vulnerabilities": null
         }
       ]
     }
@@ -327,7 +508,8 @@
             "template": [
               {
                 "metadata": [
-                  {}
+                  {
+                  }
                 ],
                 "spec": [
                   {
@@ -352,13 +534,47 @@
         ],
         "wait_for_completion": true
       },
+      "line_config": {
+        "metadata": [
+          {
+            "name": 3
+          }
+        ],
+        "spec": [
+          {
+            "backoff_limit": 17,
+            "template": [
+              {
+                "metadata": [
+                  {
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "command": 12,
+                        "image": 11,
+                        "name": 10
+                      }
+                    ],
+                    "restart_policy": 14
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "wait_for_completion": 19
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "pi",
-          "image": "perl"
+          "image": "perl",
+          "vulnerabilities": null
         }
       ]
     }
@@ -376,6 +592,13 @@
         "metadata": [
           {
             "name": "nginx"
+          }
+        ]
+      },
+      "line_config": {
+        "metadata": [
+          {
+            "name": 15
           }
         ]
       },
@@ -424,13 +647,45 @@
           }
         ]
       },
+      "line_config": {
+        "metadata": [
+          {
+            "name": 3
+          }
+        ],
+        "spec": [
+          {
+            "container": [
+              {
+                "image": 8,
+                "name": 9,
+                "resources": [
+                  {
+                    "limits": {
+                      "cpu": 13,
+                      "memory": 14,
+                      "nvidia/gpu": 15
+                    },
+                    "requests": {
+                      "cpu": 19,
+                      "memory": 20,
+                      "nvidia/gpu": 21
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "example",
-          "image": "nginx:1.7.9"
+          "image": "nginx:1.7.9",
+          "vulnerabilities": null
         }
       ]
     }
@@ -515,13 +770,85 @@
           }
         ]
       },
+      "line_config": {
+        "metadata": [
+          {
+            "labels": {
+              "test": 5
+            },
+            "name": 3
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "test": 11
+            },
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "annotations": {
+                      "key1": 19
+                    },
+                    "labels": {
+                      "test": 16
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "image": 25,
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "http_header": [
+                                  {
+                                    "name": 34,
+                                    "value": 35
+                                  }
+                                ],
+                                "path": 30,
+                                "port": 31
+                              }
+                            ],
+                            "initial_delay_seconds": 39,
+                            "period_seconds": 40
+                          }
+                        ],
+                        "name": 26,
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": 45,
+                              "memory": 46
+                            },
+                            "requests": {
+                              "cpu": 49,
+                              "memory": 50
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "example",
-          "image": "nginx:1.7.8"
+          "image": "nginx:1.7.8",
+          "vulnerabilities": null
         }
       ]
     }
@@ -555,6 +882,29 @@
               "app": "${kubernetes_deployment.example.spec.0.template.0.metadata.0.labels.test}"
             },
             "type": "NodePort"
+          }
+        ]
+      },
+      "line_config": {
+        "metadata": [
+          {
+            "name": 21,
+            "namespace": 22
+          }
+        ],
+        "spec": [
+          {
+            "port": [
+              {
+                "node_port": 30,
+                "port": 31,
+                "target_port": 32
+              }
+            ],
+            "selector": {
+              "app": 26
+            },
+            "type": 28
           }
         ]
       },
@@ -604,7 +954,8 @@
               {
                 "metadata": [
                   {
-                    "annotations": {},
+                    "annotations": {
+                    },
                     "labels": {
                       "k8s-app": "prometheus"
                     }
@@ -780,23 +1131,219 @@
           }
         ]
       },
+      "line_config": {
+        "metadata": [
+          {
+            "annotations": {
+              "SomeAnnotation": 4
+            },
+            "labels": {
+              "addonmanager.kubernetes.io/mode": 10,
+              "k8s-app": 8,
+              "kubernetes.io/cluster-service": 9,
+              "version": 11
+            },
+            "name": 14
+          }
+        ],
+        "spec": [
+          {
+            "pod_management_policy": 18,
+            "replicas": 19,
+            "revision_history_limit": 20,
+            "selector": [
+              {
+                "match_labels": {
+                  "k8s-app": 24
+                }
+              }
+            ],
+            "service_name": 28,
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "annotations": {
+                    },
+                    "labels": {
+                      "k8s-app": 33
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "args": 60,
+                        "image": 57,
+                        "image_pull_policy": 58,
+                        "name": 56,
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": 73,
+                              "memory": 74
+                            },
+                            "requests": {
+                              "cpu": 78,
+                              "memory": 79
+                            }
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "mount_path": 67,
+                            "name": 66,
+                            "read_only": 68
+                          }
+                        ]
+                      },
+                      {
+                        "args": 89,
+                        "image": 86,
+                        "image_pull_policy": 87,
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": 136,
+                                "port": 137,
+                                "scheme": 138
+                              }
+                            ],
+                            "initial_delay_seconds": 141,
+                            "timeout_seconds": 142
+                          }
+                        ],
+                        "name": 85,
+                        "port": [
+                          {
+                            "container_port": 98
+                          }
+                        ],
+                        "readiness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": 126,
+                                "port": 127
+                              }
+                            ],
+                            "initial_delay_seconds": 130,
+                            "timeout_seconds": 131
+                          }
+                        ],
+                        "resources": [
+                          {
+                            "limits": {
+                              "cpu": 103,
+                              "memory": 104
+                            },
+                            "requests": {
+                              "cpu": 108,
+                              "memory": 109
+                            }
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "mount_path": 115,
+                            "name": 114
+                          },
+                          {
+                            "mount_path": 120,
+                            "name": 119,
+                            "sub_path": 121
+                          }
+                        ]
+                      }
+                    ],
+                    "init_container": [
+                      {
+                        "command": 46,
+                        "image": 44,
+                        "image_pull_policy": 45,
+                        "name": 43,
+                        "volume_mount": [
+                          {
+                            "mount_path": 50,
+                            "name": 49,
+                            "sub_path": 51
+                          }
+                        ]
+                      }
+                    ],
+                    "service_account_name": 40,
+                    "termination_grace_period_seconds": 146,
+                    "volume": [
+                      {
+                        "config_map": [
+                          {
+                            "name": 152
+                          }
+                        ],
+                        "name": 149
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "update_strategy": [
+              {
+                "rolling_update": [
+                  {
+                    "partition": 162
+                  }
+                ],
+                "type": 159
+              }
+            ],
+            "volume_claim_template": [
+              {
+                "metadata": [
+                  {
+                    "name": 168
+                  }
+                ],
+                "spec": [
+                  {
+                    "access_modes": 172,
+                    "resources": [
+                      {
+                        "requests": {
+                          "storage": 177
+                        }
+                      }
+                    ],
+                    "storage_class_name": 173
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "skip_rules": null,
       "max_severity": "",
       "min_severity": "",
       "container_images": [
         {
           "name": "prometheus-server-configmap-reload",
-          "image": "jimmidyson/configmap-reload:v0.1"
+          "image": "jimmidyson/configmap-reload:v0.1",
+          "vulnerabilities": null
         },
         {
           "name": "prometheus-server",
-          "image": "prom/prometheus:v2.2.1"
+          "image": "prom/prometheus:v2.2.1",
+          "vulnerabilities": null
         }
       ],
       "init_container_images": [
         {
           "name": "init-chown-data",
-          "image": "busybox:latest"
+          "image": "busybox:latest",
+          "vulnerabilities": null
         }
       ]
     }

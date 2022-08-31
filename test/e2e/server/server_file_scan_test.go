@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/policy"
-	serverUtils "github.com/accurics/terrascan/test/e2e/server"
-	"github.com/accurics/terrascan/test/helper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/policy"
+	serverUtils "github.com/tenable/terrascan/test/e2e/server"
+	"github.com/tenable/terrascan/test/helper"
 )
 
 var _ = Describe("Server File Scan", func() {

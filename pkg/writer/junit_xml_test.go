@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ package writer
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"strings"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/version"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/version"
 )
 
 func TestJUnitXMLWriter(t *testing.T) {
@@ -39,7 +40,6 @@ func TestJUnitXMLWriter(t *testing.T) {
     </testcase>
     <testcase classname="modules/m1/main.tf" name="[ERROR] resource: &#34;bucket&#34; at line: 20, violates: RULE - AWS.S3Bucket.DS.High.1043" severity="HIGH" category="S3">
       <skipped message=""></skipped>
-      <failure message="Description: S3 bucket Access is allowed to all AWS Account Users., File: modules/m1/main.tf, Line: 20, Severity: HIGH, Rule Name: s3EnforceUserACL, Rule ID: AWS.S3Bucket.DS.High.1043, Resource Name: bucket, Resource Type: aws_s3_bucket, Category: S3" type=""></failure>
     </testcase>
   </testsuite>
 </testsuites>
@@ -62,6 +62,16 @@ func TestJUnitXMLWriter(t *testing.T) {
       <property name="Terrascan Version" value="%s"></property>
     </properties>
     <testcase classname="s3EnforceUserACL" name="RULE - AWS.S3Bucket.DS.High.1043, CATEGORY - S3, DESCRIPTION - S3 bucket Access is allowed to all AWS Account Users." severity="HIGH" category="S3"></testcase>
+  </testsuite>
+</testsuites>
+	`, version.Get())
+
+	testOutputRepoURLRepoRef := fmt.Sprintf(`
+<testsuites tests="566" name="TERRASCAN_POLICY_SUITES" failures="1" time="0">
+  <testsuite tests="566" failures="1" time="0" name="TERRASCAN_POLICY_SUITE" package="https://github.com/user/repository.git" branch="main">
+    <properties>
+      <property name="Terrascan Version" value="%s"></property>
+    </properties>
   </testsuite>
 </testsuites>
 	`, version.Get())
@@ -108,15 +118,27 @@ func TestJUnitXMLWriter(t *testing.T) {
 			},
 			wantWriter: testOutputPassedRules,
 		},
+		{
+			name: "data with repository url and branch",
+			args: args{
+				policy.EngineOutput{
+					ViolationStore: &results.ViolationStore{
+						Summary: summaryWithRepoURLRepoRef,
+					},
+				},
+			},
+			wantWriter: testOutputRepoURLRepoRef,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			if err := JUnitXMLWriter(tt.args.data, writer); (err != nil) != tt.wantErr {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			if err := JUnitXMLWriter(tt.args.data, w); (err != nil) != tt.wantErr {
 				t.Errorf("JUnitXMLWriter() got error = %v, wantErr = %v", err, tt.wantErr)
 				return
 			}
-			if gotWriter := writer.String(); !strings.EqualFold(strings.TrimSpace(gotWriter), strings.TrimSpace(tt.wantWriter)) {
+			if gotWriter := bf.String(); !strings.EqualFold(strings.TrimSpace(gotWriter), strings.TrimSpace(tt.wantWriter)) {
 				t.Errorf("JUnitXMLWriter() got = %v, want = %v", gotWriter, tt.wantWriter)
 			}
 		})

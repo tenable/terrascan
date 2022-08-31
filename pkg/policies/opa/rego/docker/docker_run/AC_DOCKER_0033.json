@@ -1,0 +1,16 @@
+{
+    "name": "yumInstallWithoutVersion",
+    "file": "yumInstallWithoutVersion.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure package version is specified to avoid failures",
+    "reference_id": "AC_DOCKER_0033",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0033",
+    "version": 1
+}

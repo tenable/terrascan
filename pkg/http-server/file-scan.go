@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -49,6 +49,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		showPassed          = false
 		findVulnerabilities = false
 		categories          = []string{}
+		configWithError     = false
 	)
 
 	// parse multipart form, 10 << 20 specifies maximum upload of 10 MB files
@@ -102,6 +103,8 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// scan and skip rules are comma separated rule id's in the request body
 	scanRulesValue := r.FormValue("scan_rules")
 	skipRulesValue := r.FormValue("skip_rules")
+	notificationWebhookURL := r.FormValue("webhook_url")
+	notificationWebhookToken := r.FormValue("webhook_token")
 
 	// categories is the list categories of violations that the user want to get informed about: low, medium or high
 	categoriesValue := r.FormValue("categories")
@@ -126,6 +129,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 		configOnly, err = strconv.ParseBool(configOnlyValue)
 		if err != nil {
 			errMsg := fmt.Sprintf("error while reading 'config_only' value. error: '%v'", err)
+			zap.S().Error(errMsg)
+			apiErrorResponse(w, errMsg, http.StatusBadRequest)
+			return
+		}
+	}
+	// read config_with_error from the form data
+	configWithErrorValue := r.FormValue("config_with_error")
+	if configWithErrorValue != "" {
+		configWithError, err = strconv.ParseBool(configWithErrorValue)
+		if err != nil {
+			errMsg := fmt.Sprintf("error while reading 'config_with_error' value. error: '%v'", err)
 			zap.S().Error(errMsg)
 			apiErrorResponse(w, errMsg, http.StatusBadRequest)
 			return
@@ -164,17 +178,17 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	var executor *runtime.Executor
 	if g.test {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false)
+			tempFile.Name(), "", []string{"./testdata/testpolicies"}, scanRules, skipRules, categories, severity, false, false, false, notificationWebhookURL, notificationWebhookToken, "", "")
 	} else {
 		executor, err = runtime.NewExecutor(iacType, iacVersion, cloudType,
-			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities)
+			tempFile.Name(), "", getPolicyPathFromConfig(), scanRules, skipRules, categories, severity, false, false, findVulnerabilities, notificationWebhookURL, notificationWebhookToken, "", "")
 	}
 	if err != nil {
 		zap.S().Error(err)
 		apiErrorResponse(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	normalized, err := executor.Execute(configOnly)
+	normalized, err := executor.Execute(configOnly, configWithError)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to scan uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -184,8 +198,10 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	var output interface{}
 
-	// if config only, return resource config else return violations
-	if configOnly {
+	// if config-with-error return config as well as dir errors,for config only, return resource config else return violations
+	if configWithError {
+		output = normalized
+	} else if configOnly {
 		output = normalized.ResourceConfig
 	} else {
 		if !showPassed {

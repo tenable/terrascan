@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,14 +18,16 @@ package config
 
 import (
 	"path/filepath"
+	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
 const (
-	defaultPolicyRepoURL = "https://github.com/accurics/terrascan.git"
-	defaultPolicyBranch  = "master"
+	defaultPolicyRepoURL     = "https://github.com/tenable/terrascan.git"
+	defaultPolicyBranch      = "master"
+	defaultPolicyEnvironment = "https://cloud.tenable.com"
 )
 
 // ConfigEnvvarName env variable
@@ -92,6 +94,12 @@ func LoadGlobalConfig(configFile string) error {
 	if len(configReader.getPolicyConfig().Branch) > 0 {
 		global.Policy.Branch = configReader.getPolicyConfig().Branch
 	}
+	if len(configReader.getPolicyConfig().Environment) > 0 {
+		global.Policy.Environment = configReader.getPolicyConfig().Environment
+	}
+	if len(configReader.getPolicyConfig().AccessToken) > 0 {
+		global.Policy.AccessToken = configReader.getPolicyConfig().AccessToken
+	}
 
 	if len(configReader.getRules().ScanRules) > 0 {
 		global.Rules.ScanRules = configReader.getRules().ScanRules
@@ -150,6 +158,22 @@ func GetPolicyBranch() string {
 		return defaultPolicyBranch
 	}
 	return global.Policy.Branch
+}
+
+// GetPolicyEnvironment returns the configured policy environment url
+func GetPolicyEnvironment() string {
+	if global == nil {
+		return defaultPolicyEnvironment
+	}
+	return strings.TrimRight(global.Policy.Environment, "/")
+}
+
+// GetPolicyAccessToken returns the configured policy access token
+func GetPolicyAccessToken() string {
+	if global == nil {
+		return ""
+	}
+	return global.Policy.AccessToken
 }
 
 // GetScanRules returns the configured scan rules

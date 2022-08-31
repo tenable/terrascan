@@ -1,0 +1,17 @@
+{
+    "name": "updateInstructionsAlone",
+    "file": "updateInstructionsAlone.rego",
+    "policy_type": "docker",
+    "resource_type": "docker_run",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name": "updateInstructionsAlone"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure instruction 'RUN <package-manager> update' should always be followed by '<package-manager> install' in the same RUN statement",
+    "reference_id": "AC_DOCKER_0049",
+    "category": "Infrastructure Security",
+    "id": "AC_DOCKER_0049",
+    "version": 1
+}

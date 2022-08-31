@@ -24,7 +24,17 @@
         },
         "vpc_security_group_ids": "${var.security_group_ids}"
       },
-      "skip_rules": null
+      "line_config": {
+        "ami": 8,
+        "count": 6,
+        "instance_type": 9,
+        "subnet_id": 11,
+        "tags": 14,
+        "vpc_security_group_ids": 12
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": ""
     }
   ]
 }

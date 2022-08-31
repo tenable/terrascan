@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
 )
 
 const (
@@ -27,7 +27,7 @@ const (
 	GatewayMethodSettings = "MethodSettings"
 )
 
-// MethodSettingConfig holds the config for aws_api_gateway_method_settings
+// MethodSettingConfig holds config for aws_api_gateway_method_settings
 type MethodSettingConfig struct {
 	Config
 	MethodSettings []Settings `json:"settings"`

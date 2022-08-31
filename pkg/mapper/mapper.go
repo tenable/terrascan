@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package mapper
 
 import (
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft"
+	"github.com/tenable/terrascan/pkg/mapper/core"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft"
 )
 
 // NewMapper returns a mapper based on IaC provider.

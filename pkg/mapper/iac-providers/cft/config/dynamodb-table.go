@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/dynamodb"
+	"github.com/awslabs/goformation/v5/cloudformation/dynamodb"
 )
 
 // DynamoDBTableConfig holds config for aws_dynamodb_table
 type DynamoDBTableConfig struct {
 	Config
 	ServerSideEncryption []map[string]interface{} `json:"server_side_encryption"`
+	PointInTimeRecovery  []map[string]interface{} `json:"point_in_time_recovery"`
 }
 
 // GetDynamoDBTableConfig returns config for aws_dynamodb_table
@@ -35,10 +36,17 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 		},
 	}
 	sse := make(map[string]interface{})
+	pitr := make(map[string]interface{})
 	if t.SSESpecification != nil {
 		sse["enabled"] = t.SSESpecification.SSEEnabled
 	}
+
+	if t.PointInTimeRecoverySpecification != nil {
+		pitr["enabled"] = t.PointInTimeRecoverySpecification.PointInTimeRecoveryEnabled
+	}
+
 	cf.ServerSideEncryption = []map[string]interface{}{sse}
+	cf.PointInTimeRecovery = []map[string]interface{}{pitr}
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: t.AWSCloudFormationMetadata,

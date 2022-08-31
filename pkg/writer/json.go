@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -30,9 +30,11 @@ func init() {
 }
 
 // JSONWriter prints data in JSON format
-func JSONWriter(data interface{}, writer io.Writer) error {
+func JSONWriter(data interface{}, writers []io.Writer) error {
 	j, _ := json.MarshalIndent(data, "", "  ")
-	writer.Write(j)
-	writer.Write([]byte{'\n'})
+	for _, writer := range writers {
+		writer.Write(j)
+		writer.Write([]byte{'\n'})
+	}
 	return nil
 }

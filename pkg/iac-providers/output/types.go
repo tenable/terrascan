@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ type ResourceConfig struct {
 	Line       int         `json:"line"`
 	Type       string      `json:"type"`
 	Config     interface{} `json:"config"`
+	LineConfig interface{} `json:"line_config,omitempty" yaml:"line_config,omitempty"`
 	// SkipRules will hold the rules to be skipped for the resource.
 	// Each iac provider should append the rules to be skipped for a resource,
 	// while extracting resource from the iac files

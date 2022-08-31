@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,6 +32,12 @@ var (
 
 	// ConfigFile Config file path
 	ConfigFile string
+
+	// CustomTempDir Temporary directory path to download remote repository,module and templates
+	CustomTempDir string
+
+	// LogOutputDir Directory to write scan logs and result files
+	LogOutputDir string
 )
 
 var rootCmd = &cobra.Command{
@@ -40,6 +46,6 @@ var rootCmd = &cobra.Command{
 	Long: `Terrascan
 
 Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.
-For more information, please visit https://docs.accurics.com
+For more information, please visit https://runterrascan.io/
 `,
 }

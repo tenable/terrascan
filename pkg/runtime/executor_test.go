@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,27 +23,27 @@ import (
 	"reflect"
 	"testing"
 
-	tfv15 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v15"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/vulnerability"
 	"github.com/hashicorp/go-multierror"
+	tfv15 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v15"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/vulnerability"
 
-	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	armv1 "github.com/accurics/terrascan/pkg/iac-providers/arm/v1"
-	cftv1 "github.com/accurics/terrascan/pkg/iac-providers/cft/v1"
-	dockerv1 "github.com/accurics/terrascan/pkg/iac-providers/docker/v1"
-	helmv3 "github.com/accurics/terrascan/pkg/iac-providers/helm/v3"
-	k8sv1 "github.com/accurics/terrascan/pkg/iac-providers/kubernetes/v1"
-	kustomizev4 "github.com/accurics/terrascan/pkg/iac-providers/kustomize/v4"
-	tfv12 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v12"
-	tfv14 "github.com/accurics/terrascan/pkg/iac-providers/terraform/v14"
-	"github.com/accurics/terrascan/pkg/notifications/webhook"
+	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
+	armv1 "github.com/tenable/terrascan/pkg/iac-providers/arm/v1"
+	cftv1 "github.com/tenable/terrascan/pkg/iac-providers/cft/v1"
+	dockerv1 "github.com/tenable/terrascan/pkg/iac-providers/docker/v1"
+	helmv3 "github.com/tenable/terrascan/pkg/iac-providers/helm/v3"
+	k8sv1 "github.com/tenable/terrascan/pkg/iac-providers/kubernetes/v1"
+	kustomizev4 "github.com/tenable/terrascan/pkg/iac-providers/kustomize/v4"
+	tfv12 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v12"
+	tfv14 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v14"
+	"github.com/tenable/terrascan/pkg/notifications/webhook"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/notifications"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/notifications"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 var (
@@ -68,6 +68,10 @@ func (m MockIacProvider) LoadIacDir(dir string, options map[string]interface{}) 
 
 func (m MockIacProvider) LoadIacFile(file string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return m.output, m.err
+}
+
+func (m MockIacProvider) Name() string {
+	return "mock-iac"
 }
 
 // mock policy engine
@@ -116,9 +120,11 @@ func TestExecute(t *testing.T) {
 
 	// TODO: add tests to validate output of Execute()
 	table := []struct {
-		name     string
-		executor Executor
-		wantErr  error
+		name            string
+		configOnly      bool
+		configWithError bool
+		executor        Executor
+		wantErr         error
 	}{
 		{
 			name: "test LoadIacDir error",
@@ -165,15 +171,6 @@ func TestExecute(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "test SendNofitications mock error",
-			executor: Executor{
-				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
-				notifiers:     []notifications.Notifier{&MockNotifier{err: errMockNotifier}},
-				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
-			},
-			wantErr: errMockNotifier,
-		},
-		{
 			name: "test policy enginer no error",
 			executor: Executor{
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
@@ -207,11 +204,30 @@ func TestExecute(t *testing.T) {
 			},
 			wantErr: nil,
 		},
+		{
+			name: "has scan errors with all the iac providers",
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "all",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
+		{
+			name:            "test config with error",
+			configWithError: true,
+			executor: Executor{
+				dirPath:      testDir,
+				iacType:      "terraform",
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
+			},
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.executor.Execute(false)
+			_, gotErr := tt.executor.Execute(tt.configOnly, tt.configWithError)
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
@@ -418,6 +434,22 @@ func TestInit(t *testing.T) {
 			wantErr:         config.ErrNotPresent,
 			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
 		},
+		{
+			name: "notification webhook configs passed as CLI args",
+			executor: Executor{
+				filePath:                 filepath.Join(testDataDir, "testfile"),
+				dirPath:                  "",
+				policyTypes:              []string{"aws"},
+				iacType:                  "terraform",
+				iacVersion:               "v12",
+				notificationWebhookURL:   "http://some-host.url",
+				notificationWebhookToken: "token",
+			},
+			configFile:      filepath.Join(testDataDir, "webhook.toml"),
+			wantErr:         nil,
+			wantIacProvider: []iacProvider.IacProvider{&tfv12.TfV12{}},
+			wantNotifiers:   []notifications.Notifier{&webhook.Webhook{}},
+		},
 	}
 
 	for _, tt := range table {
@@ -449,16 +481,20 @@ func TestInit(t *testing.T) {
 }
 
 type flagSet struct {
-	iacType     string
-	iacVersion  string
-	filePath    string
-	dirPath     string
-	policyPath  []string
-	policyTypes []string
-	categories  []string
-	severity    string
-	scanRules   []string
-	skipRules   []string
+	iacType                  string
+	iacVersion               string
+	filePath                 string
+	dirPath                  string
+	policyPath               []string
+	policyTypes              []string
+	categories               []string
+	severity                 string
+	scanRules                []string
+	skipRules                []string
+	notificationWebhookURL   string
+	notificationWebhookToken string
+	repoURL                  string
+	repoRef                  string
 }
 
 func TestNewExecutor(t *testing.T) {
@@ -587,7 +623,7 @@ func TestNewExecutor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			config.LoadGlobalConfig(tt.configfile)
 
-			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false)
+			gotExecutor, gotErr := NewExecutor(tt.flags.iacType, tt.flags.iacVersion, tt.flags.policyTypes, tt.flags.filePath, tt.flags.dirPath, tt.flags.policyPath, tt.flags.scanRules, tt.flags.skipRules, tt.flags.categories, tt.flags.severity, false, false, false, tt.flags.notificationWebhookURL, tt.flags.notificationWebhookToken, tt.flags.repoURL, tt.flags.repoRef)
 
 			if !reflect.DeepEqual(tt.wantErr, gotErr) {
 				t.Errorf("Mismatch in error => got: '%v', want: '%v'", gotErr, tt.wantErr)

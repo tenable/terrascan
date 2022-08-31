@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package cli
 
 import (
-	httpserver "github.com/accurics/terrascan/pkg/http-server"
 	"github.com/spf13/cobra"
+	httpserver "github.com/tenable/terrascan/pkg/http-server"
 )
 
 var (

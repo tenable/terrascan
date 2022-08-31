@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import (
 var (
 	ErrEmptyURLType      = fmt.Errorf("empty remote url and type")
 	ErrEmptyURLDest      = fmt.Errorf("remote url or destination dir path cannot be empty")
-	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or desitnation dir path")
+	ErrEmptyURLTypeDest  = fmt.Errorf("empty remote url or type or destination dir path")
 	ErrInvalidRemoteType = fmt.Errorf("supplied remote type is not supported")
 )
 

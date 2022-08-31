@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 var fileTestDataDir = filepath.Join(testDataDir, "file-test-data")
@@ -97,20 +97,20 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			},
 		},
 		{
-			ID:          "docker_from.3e7f6a412bae2c36b5e8123c0d437288",
+			ID:          "docker_from.aaa14f2bb7549c35cdb047282de7e26b",
 			Name:        "dockerfile-withmultiple-stages",
 			ModuleName:  "",
 			Source:      "dockerfile-withmultiple-stages",
 			PlanRoot:    "",
 			Line:        6,
 			Type:        "docker_from",
-			Config:      "alpine:3.12.0",
+			Config:      "alpine:3.14",
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
 			ContainerImages: []output.ContainerDetails{
 				{
-					Image: "alpine:3.12.0",
+					Image: "alpine:3.14",
 				},
 			},
 		},

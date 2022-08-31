@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
 )
 
@@ -100,7 +100,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 			}
 			fileData, err := ioutil.ReadFile(fileLocation)
 			if err != nil {
-				zap.S().Errorf("error fetching containers from aws resource: %v", err)
+				zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 				return results
 			}
 			def = string(fileData)
@@ -108,7 +108,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 		containers := []jsonObj{}
 		err := json.Unmarshal([]byte(def), &containers)
 		if err != nil {
-			zap.S().Errorf("error fetching containers from aws resource: %v", err)
+			zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 			return results
 		}
 		results = getContainers(containers)
@@ -126,7 +126,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 				for _, arg := range funcExp.Args {
 					re, diags := arg.Value(nil)
 					if diags.HasErrors() {
-						zap.S().Errorf("error fetching containers from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
+						zap.S().Warnf("failed to fetch the container from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
 						return
 					}
 					if !re.CanIterateElements() {
@@ -135,12 +135,19 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 					it := re.ElementIterator()
 					for it.Next() {
 						_, val := it.Element()
-						containerTemp, err := ctyToMap(val)
+						containerTemp, err := convertCtyToGoNative(val)
 						if err != nil {
-							zap.S().Errorf("error fetching containers from aws resource: %v", err)
+							zap.S().Warnf("failed to fetch the container from aws resource: %v", err)
 							return
 						}
-						containerMap := containerTemp.(map[string]interface{})
+						var (
+							containerMap map[string]interface{}
+							isMap        bool
+						)
+
+						if containerMap, isMap = containerTemp.(map[string]interface{}); !isMap {
+							break
+						}
 						tempContainer := output.ContainerDetails{}
 						if image, iok := containerMap[image]; iok {
 							if imageName, ok := image.(string); ok {
@@ -261,7 +268,7 @@ func getValueFromCtyExpr(expr hclsyntax.Expression) (value string) {
 		zap.S().Errorf("error fetching containers from k8s resource: %v", getErrorMessagesFromDiagnostics(diags))
 		return
 	}
-	valInterface, err := ctyToStr(val)
+	valInterface, err := convertCtyToGoNative(val)
 	if err != nil {
 		zap.S().Errorf("error fetching containers from k8s resource: %v", err)
 		return

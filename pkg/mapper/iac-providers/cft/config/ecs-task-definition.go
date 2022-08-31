@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v4/cloudformation/ecs"
+	"github.com/awslabs/goformation/v5/cloudformation/ecs"
 )
 
 // EcsTaskDefinitionConfig holds config for aws_ecs_task_definition
@@ -40,7 +40,7 @@ type EfsVolumeConfig struct {
 	TransitEncryption string `json:"transit_encryption"`
 }
 
-// ContainerDefinitionConfig holds the config for container_definitions
+// ContainerDefinitionConfig holds config for container_definitions
 type ContainerDefinitionConfig struct {
 	Environment []EnvironmentConfig `json:"environment"`
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -113,4 +113,48 @@ func TestFindAllDirectories(t *testing.T) {
 			t.Errorf("got no error; error expected")
 		}
 	})
+}
+
+func TestGetFileURI(t *testing.T) {
+
+	table := []struct {
+		name    string
+		path    string
+		want    string
+		wantWin string
+		wantErr error
+	}{
+		{
+			name:    "test Linux path",
+			path:    "dir1/dir2/file.txt",
+			want:    "file://dir1/dir2/file.txt",
+			wantWin: "file:///dir1/dir2/file.txt",
+			wantErr: nil,
+		},
+		{
+			name:    "test Windows path",
+			path:    "c:\\dir1\\dir2\\file.txt",
+			want:    "file://c:/dir1/dir2/file.txt",
+			wantWin: "file:///c:/dir1/dir2/file.txt",
+			wantErr: nil,
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetFileURI(tt.path)
+			if err != tt.wantErr {
+				t.Errorf("unexpected error; got: '%v', want: '%v'", err, tt.wantErr)
+			}
+			if IsWindowsPlatform() {
+				if got != tt.wantWin {
+					t.Errorf("got: '%v', want: '%v'", got, tt.wantWin)
+				}
+			} else {
+				if got != tt.want {
+					t.Errorf("got: '%v', want: '%v'", got, tt.want)
+				}
+			}
+		})
+	}
 }

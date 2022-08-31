@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/gorilla/mux"
+	admissionWebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
 	"go.uber.org/zap"
 
 	v1 "k8s.io/api/admission/v1"
@@ -34,8 +34,13 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	zap.S().Debug("handle: validating webhook request")
 
 	var (
-		params = mux.Vars(r)
-		apiKey = params["apiKey"]
+		params                   = mux.Vars(r)
+		apiKey                   = params["apiKey"]
+		qP                       = r.URL.Query()
+		notificationWebhookURL   = qP.Get("webhook-url")
+		notificationWebhookToken = qP.Get("webhook-token")
+		repoURL                  = qP.Get("repo-url")
+		repoRef                  = qP.Get("repo-ref")
 	)
 
 	// Read the request into byte array
@@ -47,7 +52,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	}
 	zap.S().Debugf("scanning configuration webhook request: %+v", string(body))
 
-	validatingWebhook := admissionWebhook.NewValidatingWebhook(body)
+	validatingWebhook := admissionWebhook.NewValidatingWebhook(body, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef)
 	// Validate if authorized (API key is specified and matched the server one (saved in an environment variable)
 	if err := validatingWebhook.Authorize(apiKey); err != nil {
 		switch err {

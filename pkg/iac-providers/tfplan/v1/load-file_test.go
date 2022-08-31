@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestLoadIacFile(t *testing.T) {
@@ -59,11 +59,17 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid tfplan json",
 			filePath: filepath.Join("testdata", "invalid-tfplan.json"),
 			tfplan:   TFPlan{},
-			wantErr:  fmt.Errorf("invalid terraform json file; error: 'terraform format version shoule be '0.1''"),
+			wantErr:  fmt.Errorf("invalid terraform json file; error: 'terraform format version shoule be one of '0.1, 0.2''"),
 		},
 		{
 			name:     "valid tfplan json",
 			filePath: filepath.Join("testdata", "valid-tfplan.json"),
+			tfplan:   TFPlan{},
+			wantErr:  nil,
+		},
+		{
+			name:     "valid tfplan v0.2 json",
+			filePath: filepath.Join("testdata", "valid-tfplan-0.2.json"),
 			tfplan:   TFPlan{},
 			wantErr:  nil,
 		},

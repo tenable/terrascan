@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -121,6 +121,11 @@ func ctyToMap(ctyVal cty.Value) (interface{}, error) {
 
 // convertCtyToGoNative converts a cty.Value to its go native type
 func convertCtyToGoNative(ctyVal cty.Value) (interface{}, error) {
+	// no need to convert variable to any type in case value is null
+	// added check here since this function is been called in recursive manner
+	if ctyVal.IsNull() {
+		return nil, nil
+	}
 	if ctyVal.Type().IsPrimitiveType() {
 		return convertPrimitiveType(ctyVal)
 	}

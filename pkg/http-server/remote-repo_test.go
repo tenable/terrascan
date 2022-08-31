@@ -10,12 +10,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/downloader"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/runtime"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/downloader"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/runtime"
 )
 
 var (
@@ -92,18 +92,19 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 	testCloudType := "aws"
 
 	table := []struct {
-		name         string
-		iacType      string
-		iacVersion   string
-		cloudType    string
-		remoteURL    string
-		remoteType   string
-		scanRules    []string
-		skipRules    []string
-		showPassed   bool
-		configOnly   bool
-		nonRecursive bool
-		wantStatus   int
+		name            string
+		iacType         string
+		iacVersion      string
+		cloudType       string
+		remoteURL       string
+		remoteType      string
+		scanRules       []string
+		skipRules       []string
+		showPassed      bool
+		configOnly      bool
+		configWithError bool
+		nonRecursive    bool
+		wantStatus      int
 	}{
 		{
 			name:       "empty url and type",
@@ -174,6 +175,17 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 			configOnly: true,
 			wantStatus: http.StatusOK,
 		},
+		{
+			name:            "test show config with error",
+			iacType:         testIacType,
+			iacVersion:      testIacVersion,
+			cloudType:       testCloudType,
+			remoteURL:       validRepo,
+			remoteType:      "git",
+			showPassed:      false,
+			configWithError: true,
+			wantStatus:      http.StatusOK,
+		},
 	}
 
 	for _, tt := range table {
@@ -186,13 +198,14 @@ func TestScanRemoteRepoHandler(t *testing.T) {
 
 			// request body
 			s := scanRemoteRepoReq{
-				RemoteURL:    tt.remoteURL,
-				RemoteType:   tt.remoteType,
-				ScanRules:    tt.scanRules,
-				SkipRules:    tt.skipRules,
-				ShowPassed:   tt.showPassed,
-				ConfigOnly:   tt.configOnly,
-				NonRecursive: tt.nonRecursive,
+				RemoteURL:       tt.remoteURL,
+				RemoteType:      tt.remoteType,
+				ScanRules:       tt.scanRules,
+				SkipRules:       tt.skipRules,
+				ShowPassed:      tt.showPassed,
+				ConfigOnly:      tt.configOnly,
+				ConfigWithError: tt.configWithError,
+				NonRecursive:    tt.nonRecursive,
 			}
 			reqBody, _ := json.Marshal(s)
 

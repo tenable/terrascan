@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v4/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
 )
 
 // APIGatewayRestAPIConfig holds config for aws_api_gateway_rest_api
@@ -25,6 +25,7 @@ type APIGatewayRestAPIConfig struct {
 	Config
 	EndpointConfiguration  []map[string][]string `json:"endpoint_configuration"`
 	MinimumCompressionSize int                   `json:"minimum_compression_size"`
+	Policy                 interface{}           `json:"policy"`
 }
 
 // GetAPIGatewayRestAPIConfig returns config for aws_api_gateway_rest_api
@@ -35,6 +36,7 @@ func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 			Tags: a.Tags,
 		},
 		MinimumCompressionSize: a.MinimumCompressionSize,
+		Policy:                 a.Policy,
 	}
 	// Endpoint Configuration is a []map[string][]string in terraform for some reason
 	// despite having fixed keys and not more than one possible value
@@ -44,6 +46,7 @@ func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 		ec["vpc_endpoint_ids"] = a.EndpointConfiguration.VpcEndpointIds
 	}
 	cf.EndpointConfiguration = []map[string][]string{ec}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: a.AWSCloudFormationMetadata,
