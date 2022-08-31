@@ -14,19 +14,28 @@
     limitations under the License.
 */
 
-package version
+package config
 
-import "fmt"
+import (
+	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+)
 
-// Terrascan The Terrascan version
-const Terrascan = "1.15.2"
-
-// Get returns the terrascan version
-func Get() string {
-	return fmt.Sprintf("v%s", Terrascan)
+// RouteTableConfig holds config for aws_route_table
+type RouteTableConfig struct {
+	Config
+	VpcID string `json:"vpc_id"`
 }
 
-// GetNumeric returns the numeric terrascan version
-func GetNumeric() string {
-	return Terrascan
+// GetRouteTableConfig returns config for aws_route_table
+func GetRouteTableConfig(e *ec2.RouteTable) []AWSResourceConfig {
+	cf := RouteTableConfig{
+		Config: Config{
+			Tags: e.Tags,
+		},
+		VpcID: e.VpcId,
+	}
+	return []AWSResourceConfig{{
+		Resource: cf,
+		Metadata: e.AWSCloudFormationMetadata,
+	}}
 }

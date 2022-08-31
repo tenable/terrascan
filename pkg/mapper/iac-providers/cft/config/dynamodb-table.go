@@ -24,6 +24,7 @@ import (
 type DynamoDBTableConfig struct {
 	Config
 	ServerSideEncryption []map[string]interface{} `json:"server_side_encryption"`
+	PointInTimeRecovery  []map[string]interface{} `json:"point_in_time_recovery"`
 }
 
 // GetDynamoDBTableConfig returns config for aws_dynamodb_table
@@ -35,10 +36,17 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 		},
 	}
 	sse := make(map[string]interface{})
+	pitr := make(map[string]interface{})
 	if t.SSESpecification != nil {
 		sse["enabled"] = t.SSESpecification.SSEEnabled
 	}
+
+	if t.PointInTimeRecoverySpecification != nil {
+		pitr["enabled"] = t.PointInTimeRecoverySpecification.PointInTimeRecoveryEnabled
+	}
+
 	cf.ServerSideEncryption = []map[string]interface{}{sse}
+	cf.PointInTimeRecovery = []map[string]interface{}{pitr}
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: t.AWSCloudFormationMetadata,
