@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,20 +18,21 @@ package runtime
 
 import (
 	"sort"
+	"strings"
 
-	"github.com/accurics/terrascan/pkg/notifications/webhook"
-	"github.com/accurics/terrascan/pkg/policy/opa"
-	"github.com/accurics/terrascan/pkg/vulnerability"
+	"github.com/tenable/terrascan/pkg/notifications/webhook"
+	"github.com/tenable/terrascan/pkg/policy/opa"
+	"github.com/tenable/terrascan/pkg/vulnerability"
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/filters"
-	iacProvider "github.com/accurics/terrascan/pkg/iac-providers"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/notifications"
-	"github.com/accurics/terrascan/pkg/policy"
-	res "github.com/accurics/terrascan/pkg/results"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/filters"
+	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/notifications"
+	"github.com/tenable/terrascan/pkg/policy"
+	res "github.com/tenable/terrascan/pkg/results"
 )
 
 const (
@@ -208,13 +209,14 @@ func (e *Executor) initPolicyEngines() (err error) {
 func (e *Executor) Execute(configOnly, configWithError bool) (results Output, err error) {
 
 	var merr *multierror.Error
+	var iacTypes []string
 	var resourceConfig output.AllResourceConfigs
 	options := e.buildOptions()
 	// when dir path has value, only then it will 'all iac' scan
 	// when file path has value, we will go with the only iac provider in the list
 	if e.dirPath != "" {
 		// get all resource configs in the directory
-		resourceConfig, merr = e.getResourceConfigs()
+		resourceConfig, iacTypes, merr = e.getResourceConfigs()
 	} else {
 		// create results output from Iac provider
 		// iac providers will contain one element
@@ -241,6 +243,9 @@ func (e *Executor) Execute(configOnly, configWithError bool) (results Output, er
 
 	if configWithError {
 		results.Violations.ViolationStore = res.NewViolationStore()
+		if e.iacType == "all" {
+			results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
+		}
 		if err := merr.ErrorOrNil(); err != nil {
 			sort.Sort(merr)
 			results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
@@ -279,6 +284,10 @@ func (e *Executor) Execute(configOnly, configWithError bool) (results Output, er
 		results.Violations.ViolationStore.AddLoadDirErrors(merr.WrappedErrors())
 	}
 
+	if e.iacType == "all" {
+		results.Violations.ViolationStore.Summary.IacType = strings.Join(iacTypes, ",")
+	}
+
 	// send notifications, if configured
 	if e.repoURL != "" {
 		results.Violations.Summary.ResourcePath = e.repoURL
@@ -291,8 +300,9 @@ func (e *Executor) Execute(configOnly, configWithError bool) (results Output, er
 }
 
 // getResourceConfigs is a helper method to get all resource configs
-func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.Error) {
+func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, []string, *multierror.Error) {
 	var merr *multierror.Error
+	var iacTypes []string
 	resourceConfig := make(output.AllResourceConfigs)
 
 	// channel for directory scan response
@@ -303,13 +313,16 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 	for _, iacP := range e.iacProviders {
 		go func(ip iacProvider.IacProvider) {
 			rc, err := ip.LoadIacDir(e.dirPath, options)
-			scanRespChan <- dirScanResp{err, rc}
+			scanRespChan <- dirScanResp{err, rc, ip.Name()}
 		}(iacP)
 	}
 
 	for i := 0; i < len(e.iacProviders); i++ {
 		sr := <-scanRespChan
 		merr = multierror.Append(merr, sr.err)
+		if len(sr.rc) > 0 {
+			iacTypes = append(iacTypes, sr.iacType)
+		}
 		// deduplication of resources
 		if len(resourceConfig) > 0 {
 			for key, r := range sr.rc {
@@ -322,7 +335,7 @@ func (e *Executor) getResourceConfigs() (output.AllResourceConfigs, *multierror.
 		}
 	}
 
-	return resourceConfig, merr
+	return resourceConfig, iacTypes, merr
 }
 
 // findViolations is a helper method to find all violations in the resource config

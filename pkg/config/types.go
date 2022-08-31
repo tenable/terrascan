@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,6 +49,10 @@ type Policy struct {
 	// policy git url and branch
 	RepoURL string `toml:"repo_url,omitempty" yaml:"repo_url,omitempty"`
 	Branch  string `toml:"branch,omitempty" yaml:"branch,omitempty"`
+
+	// policy environment and access token
+	Environment string `toml:"environment,omitempty" yaml:"environment,omitempty"`
+	AccessToken string `toml:"access_token,omitempty" yaml:"access_token,omitempty"`
 }
 
 // Notifier represent a single notification in the terrascan config file

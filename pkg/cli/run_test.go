@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/policy"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestMain(m *testing.M) {
@@ -141,7 +141,7 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
-			// test for https://github.com/accurics/terrascan/issues/718
+			// test for https://github.com/tenable/terrascan/issues/718
 			// a valid tfplan file is supplied, error is not expected
 			name: "iac type is tfplan and -f option used to specify the tfplan.json",
 			scanOptions: &ScanOptions{
@@ -309,7 +309,7 @@ func TestScanOptionsDownloadRemoteRepository(t *testing.T) {
 			name: "valid input parameters",
 			fields: fields{
 				RemoteType: "git",
-				RemoteURL:  "github.com/accurics/terrascan",
+				RemoteURL:  "github.com/tenable/terrascan",
 			},
 			tempDir: testTempdir,
 			want:    testTempdir,

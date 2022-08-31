@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Checkout Terrascan
       uses: actions/checkout@v2
-      
+
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -28,6 +28,9 @@ jobs:
 
     - name: Install golint
       run: go install golang.org/x/lint/golint
+
+    - name: Build Terrascan docker image
+      run: make docker-build
 
     - name: Go validations
       run: make validate
@@ -37,7 +40,7 @@ jobs:
 
     - name: Run unit tests
       run: make unit-tests
-    
+
     - name: install kind
       run: make install-kind
 
@@ -66,8 +69,12 @@ jobs:
     - name: Build Terrascan docker image
       run: make docker-build
 
-    - name: Login to docker hub
-      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u accurics --password-stdin
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      if: ${{ github.ref == 'refs/heads/master' }}
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push Terrascan latest docker image
       if: ${{ github.ref == 'refs/heads/master' }}

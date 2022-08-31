@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,8 +17,21 @@
 package logging
 
 import (
+	"fmt"
+	"log"
+	"net/url"
+	"os"
+	"path/filepath"
+
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+)
+
+const (
+	logFileName                   = "terrascan.log"
+	terrascanZapSink              = "terrascan-winfile-sink"
+	terrascanZapSinkWithSeparator = terrascanZapSink + ":///"
 )
 
 var globalLogger *zap.SugaredLogger
@@ -44,7 +57,7 @@ func getLoggerLevel(lvl string) zapcore.Level {
 }
 
 // Init initializes global custom zap logger
-func Init(encoding, level string) {
+func Init(encoding, level, logDir string) {
 
 	// select encoding level
 	encodingLevel := zapcore.LowercaseColorLevelEncoder
@@ -53,7 +66,7 @@ func Init(encoding, level string) {
 	}
 
 	// get logger
-	logger := GetLogger(level, encoding, encodingLevel)
+	logger := GetLogger(level, encoding, logDir, encodingLevel)
 
 	// set global Logger as well
 	globalLogger = logger.Sugar()
@@ -63,7 +76,7 @@ func Init(encoding, level string) {
 }
 
 // GetLogger creates a customer zap logger
-func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)) *zap.Logger {
+func GetLogger(logLevel, encoding, logDir string, encodingLevel func(zapcore.Level, zapcore.PrimitiveArrayEncoder)) *zap.Logger {
 
 	// build zap config
 	zapConfig := zap.Config{
@@ -81,8 +94,21 @@ func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapc
 		},
 	}
 
-	// create zap logger
-	logger, _ := zapConfig.Build()
+	if logDir != "" {
+		logDirPath := filepath.Join(logDir, logFileName)
+		// currently zap's default file sink do not support handling of windows files
+		// so if we are on windows os register an sink which will handle the opening of file.
+		if utils.IsWindowsPlatform() {
+			zap.RegisterSink(terrascanZapSink, newTerrascanWinFileSink)
+			logDirPath = terrascanZapSinkWithSeparator + logDirPath
+		}
+		zapConfig.OutputPaths = append(zapConfig.OutputPaths, logDirPath)
+	}
+
+	logger, err := zapConfig.Build()
+	if err != nil {
+		log.Fatal("failed to initialize logger %w", err)
+	}
 
 	return logger
 }
@@ -90,4 +116,30 @@ func GetLogger(logLevel, encoding string, encodingLevel func(zapcore.Level, zapc
 // GetDefaultLogger returns the globalLogger
 func GetDefaultLogger() *zap.SugaredLogger {
 	return globalLogger
+}
+
+// newTerrascanWinFileSink custom sink to open file on windows
+// https://github.com/uber-go/zap/issues/621#issue-350197709 - referred from this issue comment
+func newTerrascanWinFileSink(u *url.URL) (zap.Sink, error) {
+	// copy pasting this error from default FileSink of zap to keep the standard behaviour across all platforms
+	// newFileSink()
+	if u.User != nil {
+		return nil, fmt.Errorf("user and password not allowed with file URLs: got %v", u)
+	}
+	if u.Fragment != "" {
+		return nil, fmt.Errorf("fragments not allowed with file URLs: got %v", u)
+	}
+	if u.RawQuery != "" {
+		return nil, fmt.Errorf("query parameters not allowed with file URLs: got %v", u)
+	}
+	// Error messages are better if we check hostname and port separately.
+	if u.Port() != "" {
+		return nil, fmt.Errorf("ports not allowed with file URLs: got %v", u)
+	}
+	if hn := u.Hostname(); hn != "" && hn != "localhost" {
+		return nil, fmt.Errorf("file URLs must leave host empty or use localhost: got %v", u)
+	}
+	// after url.Parse() u.Path contains and extra leading slash
+	// Remove leading slash left by url.Parse()
+	return os.OpenFile(u.Path[1:], os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 }

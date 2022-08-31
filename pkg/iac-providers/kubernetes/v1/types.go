@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -39,8 +39,9 @@ const (
 	// UnknownExtension unknown
 	UnknownExtension = "unknown"
 
-	kubernetesTypeName = "kubernetes"
-	defaultNamespace   = "default"
+	kubernetesTypeName      = "kubernetes"
+	defaultNamespace        = "default"
+	kubernetesTypeNameShort = "k8s"
 )
 
 // K8sFileExtensions returns the valid extensions for k8s (yaml, yml, json)

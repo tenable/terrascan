@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -29,6 +29,6 @@ func init() {
 }
 
 // GithubSarifWriter writes sarif formatted violation results report that are well suited for github codescanning alerts display
-func GithubSarifWriter(data interface{}, writer io.Writer) error {
-	return writeSarif(data, writer, true)
+func GithubSarifWriter(data interface{}, writers []io.Writer) error {
+	return writeSarif(data, writers, true)
 }

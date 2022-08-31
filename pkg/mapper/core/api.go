@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package core
 
-import "github.com/accurics/terrascan/pkg/iac-providers/output"
+import "github.com/tenable/terrascan/pkg/iac-providers/output"
 
 // Mapper defines the base API that each IaC provider mapper must implement.
 type Mapper interface {

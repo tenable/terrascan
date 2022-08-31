@@ -1,4 +1,4 @@
-#   Copyright (C) 2020 Accurics, Inc.
+#   Copyright (C) 2022 Tenable, Inc.
 #
 #	  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ fi
 
 VERSION=${TERRASCAN_VERSION}
 
-curl -LOs https://github.com/accurics/terrascan/releases/download/v${VERSION}/terrascan_${VERSION}_Linux_x86_64.tar.gz
+curl -LOs https://github.com/tenable/terrascan/releases/download/v${VERSION}/terrascan_${VERSION}_Linux_x86_64.tar.gz
 mkdir /usr/local/bin/terrascan_${VERSION}
 tar -C  /usr/local/bin/terrascan_${VERSION} -xzf terrascan_${VERSION}_Linux_x86_64.tar.gz
 

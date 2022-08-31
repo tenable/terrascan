@@ -1,3 +1,3 @@
 [policy]
-repo_url = "https://github.com/accurics/KaiMonkey.git"
+repo_url = "https://github.com/tenable/KaiMonkey.git"
 branch = "master"

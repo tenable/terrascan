@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package runtime
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/policy"
 )
 
 // Output is the runtime engine output
@@ -35,6 +35,7 @@ type engineEvalResult struct {
 
 // dirScanResp represents a directory scan response
 type dirScanResp struct {
-	err error
-	rc  output.AllResourceConfigs
+	err     error
+	rc      output.AllResourceConfigs
+	iacType string
 }

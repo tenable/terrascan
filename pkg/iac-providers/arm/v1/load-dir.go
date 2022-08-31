@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,13 +26,15 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
-const iacFile = "IAC file"
+const (
+	iacFile = "IAC file"
+)
 
 // LoadIacDir loads all ARM template files in the current directory.
 func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
@@ -45,6 +47,11 @@ func (a *ARMV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: absRootDir, ErrMessage: err.Error()})
+	}
+
+	if len(fileMap) == 0 {
+		errMsg := fmt.Sprintf("ARM files not found in the directory %s", a.absRootDir)
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "arm", Directory: a.absRootDir, ErrMessage: errMsg})
 	}
 
 	for fileDir, files := range fileMap {
@@ -143,4 +150,9 @@ func (a *ARMV1) extractParameterValues(params map[string]interface{}) error {
 		a.templateParameters[key] = value.Value
 	}
 	return nil
+}
+
+// Name returns name of the provider
+func (a *ARMV1) Name() string {
+	return "arm"
 }

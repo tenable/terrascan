@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/results"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/results"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 // LoadIacDir loads all CFT template files in the current directory.
@@ -34,13 +34,18 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 
 	allResourcesConfig := make(map[string][]output.ResourceConfig)
 
-	fileMap, err := utils.FindFilesBySuffix(absRootDir, CFTFileExtensions())
+	cftFileMap, err := utils.FindFilesBySuffix(absRootDir, CFTFileExtensions())
 	if err != nil {
 		zap.S().Debug("error while searching for iac files", zap.String("root dir", absRootDir), zap.Error(err))
 		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: absRootDir, ErrMessage: err.Error()})
 	}
 
-	for fileDir, files := range fileMap {
+	if len(cftFileMap) == 0 {
+		errMsg := fmt.Sprintf("cft files not found in the directory %s", a.absRootDir)
+		return allResourcesConfig, multierror.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: a.absRootDir, ErrMessage: errMsg})
+	}
+
+	for fileDir, files := range cftFileMap {
 		for i := range files {
 			file := filepath.Join(fileDir, *files[i])
 
@@ -59,4 +64,9 @@ func (a *CFTV1) LoadIacDir(absRootDir string, options map[string]interface{}) (o
 	}
 
 	return allResourcesConfig, a.errIacLoadDirs
+}
+
+// Name returns name of the provider
+func (*CFTV1) Name() string {
+	return "cft"
 }

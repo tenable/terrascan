@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"go.uber.org/zap"
 )
 
@@ -100,7 +100,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 			}
 			fileData, err := ioutil.ReadFile(fileLocation)
 			if err != nil {
-				zap.S().Errorf("error fetching containers from aws resource: %v", err)
+				zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 				return results
 			}
 			def = string(fileData)
@@ -108,7 +108,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 		containers := []jsonObj{}
 		err := json.Unmarshal([]byte(def), &containers)
 		if err != nil {
-			zap.S().Errorf("error fetching containers from aws resource: %v", err)
+			zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 			return results
 		}
 		results = getContainers(containers)
@@ -126,7 +126,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 				for _, arg := range funcExp.Args {
 					re, diags := arg.Value(nil)
 					if diags.HasErrors() {
-						zap.S().Errorf("error fetching containers from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
+						zap.S().Warnf("failed to fetch the container from aws resource: %v", getErrorMessagesFromDiagnostics(diags))
 						return
 					}
 					if !re.CanIterateElements() {
@@ -137,7 +137,7 @@ func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.Contain
 						_, val := it.Element()
 						containerTemp, err := convertCtyToGoNative(val)
 						if err != nil {
-							zap.S().Errorf("error fetching containers from aws resource: %v", err)
+							zap.S().Warnf("failed to fetch the container from aws resource: %v", err)
 							return
 						}
 						var (

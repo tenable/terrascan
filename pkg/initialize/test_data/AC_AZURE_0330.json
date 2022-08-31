@@ -1,0 +1,18 @@
+{
+    "name": "ensureMcasInArm_25082021",
+    "file": "ensureProperSettings_25082021.rego",
+    "policy_type": "azure",
+    "resource_type": "azurerm_security_center_setting",
+    "template_args": {
+        "name": "ensureMcasInArm",
+        "prefix": "",
+        "suffix": "_25082021",
+        "value": "MCAS"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure that Microsoft Cloud App Security (MCAS) integration is selected in Azure Security Center Setting",
+    "reference_id": "AC_AZURE_0330",
+    "category": "Compliance Validation",
+    "version": 2,
+    "id": "AC_AZURE_0330"
+}

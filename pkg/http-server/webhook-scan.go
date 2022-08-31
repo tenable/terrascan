@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	admissionWebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
 	"github.com/gorilla/mux"
+	admissionWebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
 	"go.uber.org/zap"
 
 	v1 "k8s.io/api/admission/v1"
