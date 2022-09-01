@@ -3,9 +3,9 @@ package functions
 import (
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
 )
 
 func TestLookUp(t *testing.T) {

@@ -14,6 +14,9 @@ builds:
       - windows
       - darwin
     main: ./cmd/terrascan/main.go
+    ignore:
+      - goos: windows
+        goarch: arm64
 archives:
   - replacements:
       darwin: Darwin
@@ -21,6 +24,10 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
+    # for windows it is good to have zip rather than tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
 checksum:
   name_template: 'checksums.txt'
 snapshot:

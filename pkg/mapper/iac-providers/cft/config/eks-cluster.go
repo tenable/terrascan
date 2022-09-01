@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -47,19 +47,21 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		vpcConfig[0].EndpointPublicAccess = c.ResourcesVpcConfig.EndpointPublicAccess
 	}
 
-	enabledClusterLogTypes := make([]string, len(c.Logging.ClusterLogging.EnabledTypes))
-	for i := range c.Logging.ClusterLogging.EnabledTypes {
-		enabledClusterLogTypes[i] = c.Logging.ClusterLogging.EnabledTypes[i].Type
-	}
-
 	cf := EksClusterConfig{
 		Config: Config{
 			Name: c.Name,
 		},
-		Name:                   c.Name,
-		RoleARN:                c.RoleArn,
-		VPCConfig:              vpcConfig,
-		EnabledClusterLogTypes: enabledClusterLogTypes,
+		Name:      c.Name,
+		RoleARN:   c.RoleArn,
+		VPCConfig: vpcConfig,
+	}
+
+	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(c.Logging.ClusterLogging.EnabledTypes) > 0 {
+		enabledClusterLogTypes := make([]string, len(c.Logging.ClusterLogging.EnabledTypes))
+		for i := range c.Logging.ClusterLogging.EnabledTypes {
+			enabledClusterLogTypes[i] = c.Logging.ClusterLogging.EnabledTypes[i].Type
+		}
+		cf.EnabledClusterLogTypes = enabledClusterLogTypes
 	}
 
 	return []AWSResourceConfig{{

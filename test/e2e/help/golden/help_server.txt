@@ -12,7 +12,9 @@ Flags:
   -p, --port string        server port (default "9010")
 
 Global Flags:
-  -c, --config-path string   config file path
-  -l, --log-level string     log level (debug, info, warn, error, panic, fatal) (default "info")
-  -x, --log-type string      log output type (console, json) (default "console")
-  -o, --output string        output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
+  -c, --config-path string      config file path
+  -l, --log-level string        log level (debug, info, warn, error, panic, fatal) (default "info")
+      --log-output-dir string   directory path to write the log and output files
+  -x, --log-type string         log output type (console, json) (default "console")
+  -o, --output string           output type (human, json, yaml, xml, junit-xml, sarif, github-sarif) (default "human")
+      --temp-dir string         temporary directory path to download remote repository,module and templates

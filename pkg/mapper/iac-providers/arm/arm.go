@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ package arm
 import (
 	"errors"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/config"
-	fn "github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/functions"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/arm/types"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/google/uuid"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/mapper/core"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/config"
+	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 type armMapper struct{}

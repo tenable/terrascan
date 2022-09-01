@@ -1,0 +1,17 @@
+{
+    "name": "awsNoRetentionPolicyCloudwatchLogGroup",
+    "file": "awsNoRetentionPolicyCloudwatchLogGroup.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_cloudwatch_log_group",
+    "template_args": {
+        "name": "awsNoRetentionPolicyCloudwatchLogGroup",
+        "prefix": "",
+        "suffix": ""
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure log retention policy is set for AWS CloudWatch Log Group",
+    "reference_id": "AC_AWS_0452",
+    "category": "Security Best Practices",
+    "version": 2,
+    "id": "AC_AWS_0452"
+}

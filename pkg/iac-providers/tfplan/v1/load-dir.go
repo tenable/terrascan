@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package tfplan
 import (
 	"fmt"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 var (
@@ -30,4 +30,9 @@ var (
 // be a file and not a directory
 func (k *TFPlan) LoadIacDir(absRootDir string, options map[string]interface{}) (output.AllResourceConfigs, error) {
 	return output.AllResourceConfigs{}, errIacDirNotSupport
+}
+
+// Name returns name of the provider
+func (*TFPlan) Name() string {
+	return "tfplan"
 }

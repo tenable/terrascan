@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -61,11 +61,6 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/ecs"
 	"github.com/awslabs/goformation/v5/cloudformation/logs"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	"github.com/accurics/terrascan/pkg/mapper/core"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/config"
-	"github.com/accurics/terrascan/pkg/mapper/iac-providers/cft/store"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/awslabs/goformation/v5/cloudformation"
 	"github.com/awslabs/goformation/v5/cloudformation/amazonmq"
 	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
@@ -82,6 +77,11 @@ import (
 	"github.com/awslabs/goformation/v5/cloudformation/redshift"
 	"github.com/awslabs/goformation/v5/cloudformation/route53"
 	"github.com/awslabs/goformation/v5/cloudformation/s3"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/mapper/core"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/config"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/store"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 const errUnsupportedDoc = "unsupported document type"
@@ -191,6 +191,16 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetEbsVolumeConfig(resource)
 	case *ec2.VPC:
 		return config.GetEc2VpcConfig(resource)
+	case *ec2.SubnetRouteTableAssociation:
+		return config.GetRouteTableAssociationConfig(resource)
+	case *ec2.RouteTable:
+		return config.GetRouteTableConfig(resource)
+	case *ec2.NatGateway:
+		return config.GetNatGatewayConfig(resource)
+	case *ec2.Subnet:
+		return config.GetSubnetConfig(resource)
+	case *ec2.Route:
+		return config.GetRouteConfig(resource)
 	case *efs.FileSystem:
 		return config.GetEfsFileSystemConfig(resource)
 	case *elasticache.CacheCluster:

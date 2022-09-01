@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,15 +21,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/config"
-	"github.com/accurics/terrascan/pkg/downloader"
-	admissionwebhook "github.com/accurics/terrascan/pkg/k8s/admission-webhook"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/config"
+	"github.com/tenable/terrascan/pkg/downloader"
+	admissionwebhook "github.com/tenable/terrascan/pkg/k8s/admission-webhook"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
@@ -120,7 +119,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 	)
 
 	// temp destination directory to download remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository

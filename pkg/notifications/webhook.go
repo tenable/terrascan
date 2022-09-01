@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package notifications
 import (
 	"reflect"
 
-	webhookNotifier "github.com/accurics/terrascan/pkg/notifications/webhook"
+	webhookNotifier "github.com/tenable/terrascan/pkg/notifications/webhook"
 )
 
 // terraform specific constants

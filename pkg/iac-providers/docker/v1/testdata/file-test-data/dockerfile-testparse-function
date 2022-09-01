@@ -1,5 +1,5 @@
 FROM runatlantis/atlantis:v0.16.1
-MAINTAINER accurics
+MAINTAINER tenable
 LABEL key="value"
 WORKDIR test
 ENV DEFAULT_TERRASCAN_VERSION=1.5.1
@@ -17,7 +17,7 @@ VOLUME /temp
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "executable" ]
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
 SHELL [ "cd" ]
-ONBUILD RUN cd 
+ONBUILD RUN cd
 expose 9090
 STOPSIGNAL 1
 CMD ["server"]

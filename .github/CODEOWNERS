@@ -2,12 +2,12 @@
 # This file designates required PR reviewers for this repository
 # https://help.github.com/articles/about-codeowners/
 
-*       @accurics/terrascan-maintainers @bkizer-tenable
+*       @tenable/terrascan-maintainers @bkizer-tenable
 
-*.rego  @accurics/terrascan-policy-maintainers
+*.rego  @tenable/terrascan-policy-maintainers
 
-*.go    @accurics/terrascan-maintainers
+*.go    @tenable/terrascan-maintainers
 
-/pkg/   @accurics/terrascan-maintainers
+/pkg/   @tenable/terrascan-maintainers
 
-/pkg/policies/opa/rego/ @accurics/terrascan-policy-maintainers
+/pkg/policies/opa/rego/ @tenable/terrascan-policy-maintainers

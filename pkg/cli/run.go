@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ package cli
 import (
 	"errors"
 	"flag"
+	"io"
 	"os"
-	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/downloader"
-	"github.com/accurics/terrascan/pkg/runtime"
-	"github.com/accurics/terrascan/pkg/utils"
-	"github.com/accurics/terrascan/pkg/writer"
 	"github.com/mattn/go-isatty"
+	"github.com/tenable/terrascan/pkg/downloader"
+	"github.com/tenable/terrascan/pkg/runtime"
+	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/writer"
 	"go.uber.org/zap"
 )
 
@@ -72,7 +72,7 @@ type ScanOptions struct {
 	// config file path
 	configFile string
 
-	// the output format for wring the results
+	// the output format for writing the results
 	outputType string
 
 	// UseColors indicates whether to use color output
@@ -117,6 +117,9 @@ type ScanOptions struct {
 
 	// repoRef lets us specify the branch of the repository being scanned
 	repoRef string
+
+	// logOutputDir lets us specify the directory to write scan result and log files
+	logOutputDir string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -190,7 +193,7 @@ func (s *ScanOptions) initColor() {
 func (s *ScanOptions) Run() error {
 
 	// temp dir to download the remote repo
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 
 	// download remote repository
@@ -254,14 +257,23 @@ func (s *ScanOptions) downloadRemoteRepository(tempDir string) error {
 
 func (s ScanOptions) writeResults(results runtime.Output) error {
 
+	var writers []io.Writer
+
 	outputWriter := NewOutputWriter(s.UseColors)
+	writers = append(writers, outputWriter)
+
+	fileWriter, closeFile := NewFileWriter(s.logOutputDir, s.outputType)
+	if fileWriter != nil {
+		writers = append(writers, fileWriter)
+		defer closeFile()
+	}
 
 	if s.configOnly {
-		return writer.Write(s.outputType, results.ResourceConfig, outputWriter)
+		return writer.Write(s.outputType, results.ResourceConfig, writers)
 	}
 
 	if s.configWithError {
-		return writer.Write(s.outputType, results, outputWriter)
+		return writer.Write(s.outputType, results, writers)
 	}
 
 	// add verbose flag to the scan summary
@@ -271,7 +283,7 @@ func (s ScanOptions) writeResults(results runtime.Output) error {
 		results.Violations.ViolationStore.PassedRules = nil
 	}
 
-	return writer.Write(s.outputType, results.Violations, outputWriter)
+	return writer.Write(s.outputType, results.Violations, writers)
 }
 
 // getExitCode returns appropriate exit code for terrascan based on scan output

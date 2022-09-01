@@ -17,7 +17,7 @@ Running the following command will generate new entries in `CHANGELOG.md` since 
 Before running this command, you'll need to have a GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) set in the `GITHUB_TOKEN` OS environment variable.
 
 ```
-docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator -u accurics -p terrascan -t $GITHUB_TOKEN -b CHANGELOG.md --since-tag v1.4.0 --future-release v1.5.0
+docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator -u tenable -p terrascan -t $GITHUB_TOKEN -b CHANGELOG.md --since-tag v1.4.0 --future-release v1.5.0
 ```
 
 Next, Review `CHANGELOG.md` to ensure there are notes for the new release
@@ -43,7 +43,7 @@ Run the commands below to update Brew to the latest Terrascan version. If you ar
 
 ```
 $ export TERRASCAN_VERSION=<release_version_number>
-$ brew bump-formula-pr --no-browse --url https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/accurics/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
+$ brew bump-formula-pr --no-browse --url https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
 ```
 
 ### Update helm chart and kustomize directory

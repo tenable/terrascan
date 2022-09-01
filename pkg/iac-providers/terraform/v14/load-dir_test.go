@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,16 +25,16 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
-	commons_test "github.com/accurics/terrascan/pkg/iac-providers/terraform/commons/test"
-	"github.com/accurics/terrascan/pkg/utils"
 	"github.com/hashicorp/go-multierror"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	commons_test "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
+	"github.com/tenable/terrascan/pkg/utils"
 )
 
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 
-	testErrorMessage := fmt.Sprintf(`failed to load terraform config dir '%s'. error from terraform:
+	testErrorMessage := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
 `, testDataDir, emptyTfFilePath, emptyTfFilePath)

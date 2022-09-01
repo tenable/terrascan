@@ -6,7 +6,7 @@ Validating Webhook as well, that'll use the terrascan server as its backend.
 In server mode, terrascan will act both as an API server for
 performing remote scans of IAC, as well as a validating admission
 webhook for a Kubernetes cluster. Further details can be found in
-the [main documentation](https://docs.accurics.com/projects/accurics-terrascan/en/latest/).
+the [main documentation](https://runterrascan.io/).
 
 ## Usage
 ### Set up TLS certificates
@@ -25,7 +25,7 @@ will be named `terrascan` and hosted in `terrascan` namespace. You'll have to ma
 
 ### Terrascan configuration file
 This chart will look for a [terrascan configuration
-file](https://docs.accurics.com/projects/accurics-terrascan/en/latest/usage/#config-file)
+file](https://runterrascan.io/docs/usage/config_options/)
 at `data/config.toml`. If that file exists before running `helm
 install`, it's contents will be loaded into a configMap and provided
 to the terrascan server.

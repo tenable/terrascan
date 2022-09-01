@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package iacprovider
 
 import (
-	"github.com/accurics/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 // IacProvider defines the interface which every IaC provider needs to implement
@@ -25,4 +25,5 @@ import (
 type IacProvider interface {
 	LoadIacFile(string, map[string]interface{}) (output.AllResourceConfigs, error)
 	LoadIacDir(string, map[string]interface{}) (output.AllResourceConfigs, error)
+	Name() string
 }

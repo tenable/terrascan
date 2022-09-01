@@ -2,6 +2,7 @@ package writer
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 )
@@ -40,9 +41,10 @@ func TestXMLWriter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			writer := &bytes.Buffer{}
-			XMLWriter(tt.input, writer)
-			if gotOutput := writer.String(); !strings.EqualFold(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)) {
+			var bf bytes.Buffer
+			w := []io.Writer{&bf}
+			XMLWriter(tt.input, w)
+			if gotOutput := bf.String(); !strings.EqualFold(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)) {
 				t.Errorf("XMLWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
 			}
 		})

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -105,4 +105,9 @@ const (
 	AwsAppMeshMesh                   = "aws_appmesh_mesh"
 	AwsRAMResourceShare              = "aws_ram_resource_share"
 	AwsAppAutoscalingPolicy          = "aws_appautoscaling_policy"
+	AwsRouteTableAssociation         = "aws_route_table_association"
+	AwsRouteTable                    = "aws_route_table"
+	AwsNatGateway                    = "aws_nat_gateway"
+	AwsSubnet                        = "aws_subnet"
+	AwsRoute                         = "aws_route"
 )

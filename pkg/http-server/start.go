@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2020 Accurics, Inc.
+    Copyright (C) 2022 Tenable, Inc.
 
 	Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,16 +18,17 @@ package httpserver
 
 import (
 	"context"
-	httputils "github.com/accurics/terrascan/pkg/utils/http"
-	gorillaHandlers "github.com/gorilla/handlers"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	"github.com/accurics/terrascan/pkg/logging"
+	gorillaHandlers "github.com/gorilla/handlers"
+	httputils "github.com/tenable/terrascan/pkg/utils/http"
+	"go.uber.org/zap"
+
 	"github.com/gorilla/mux"
+	"github.com/tenable/terrascan/pkg/logging"
 )
 
 // Start initializes api routes and starts http server

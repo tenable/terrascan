@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/accurics/terrascan/pkg/utils"
 	getter "github.com/hashicorp/go-getter"
+	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
 )
 
 // ResolveLinkedTemplate downloads temlate for the given uri and returns its path
 func ResolveLinkedTemplate(uri string) ([]byte, error) {
-	tempDir := filepath.Join(os.TempDir(), utils.GenRandomString(6))
+	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
 	path, err := downloadTemplate(uri, tempDir)
 	if err != nil {
