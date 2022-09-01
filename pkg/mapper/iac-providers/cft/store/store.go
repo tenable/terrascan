@@ -106,4 +106,9 @@ var ResourceTypes = map[string]string{
 	"AWS::AppMesh::Mesh":                               AwsAppMeshMesh,
 	"AWS::ApplicationAutoScaling::ScalingPolicy":       AwsAppAutoscalingPolicy,
 	"AWS::RAM::ResourceShare":                          AwsRAMResourceShare,
+	"AWS::EC2::SubnetRouteTableAssociation":            AwsRouteTableAssociation,
+	"AWS::EC2::RouteTable":                             AwsRouteTable,
+	"AWS::EC2::NatGateway":                             AwsNatGateway,
+	"AWS::EC2::Subnet":                                 AwsSubnet,
+	"AWS::EC2::Route":                                  AwsRoute,
 }
