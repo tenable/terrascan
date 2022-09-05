@@ -107,6 +107,7 @@ var _ = Describe("Server", func() {
 				It("server should be accepting requests", func() {
 					// logs are written in StdErr
 					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /health"))
+					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /v1/providers"))
 					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/local/file/scan"))
 					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/remote/dir/scan"))
 					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("http server listening at port 9010"))
@@ -114,12 +115,23 @@ var _ = Describe("Server", func() {
 
 				Context("request with no body on all handlers", func() {
 					healthCheckURL := fmt.Sprintf("%s:%d/health", host, defaultPort)
+					providersURL := fmt.Sprintf("%s:%d/v1/providers", host, defaultPort)
 					terraformV12LocalScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/all/local/file/scan", host, defaultPort)
 					terrformV12RemoteScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/aws/remote/dir/scan", host, defaultPort)
 
 					When("health check request is made", func() {
 						It("should get 200 OK response", func() {
 							r, err := serverUtils.MakeHTTPRequest(http.MethodGet, healthCheckURL)
+							Expect(err).NotTo(HaveOccurred())
+							defer r.Body.Close()
+							Expect(r).NotTo(BeNil())
+							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusOK))
+						})
+					})
+
+					When("GET request on providers is made", func() {
+						It("should get 200 OK response", func() {
+							r, err := serverUtils.MakeHTTPRequest(http.MethodGet, providersURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())
@@ -170,6 +182,16 @@ var _ = Describe("Server", func() {
 					When("POST request on health check", func() {
 						It("should receive method not allowed response", func() {
 							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, healthCheckURL)
+							Expect(err).NotTo(HaveOccurred())
+							defer r.Body.Close()
+							Expect(r).NotTo(BeNil())
+							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusMethodNotAllowed))
+						})
+					})
+
+					When("POST request on providers", func() {
+						It("should receive method not allowed response", func() {
+							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, providersURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())

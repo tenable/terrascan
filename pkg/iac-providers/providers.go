@@ -79,6 +79,17 @@ func SupportedIacVersions() []string {
 	return iacVersions
 }
 
+// GetProviderIacVersions returns list of Iac Provider versions for the given IaC type
+func GetProviderIacVersions(iacType string) []string {
+	var versions []string
+
+	for version := range supportedIacProviders[supportedIacType(iacType)] {
+		versions = append(versions, string(version))
+	}
+	sort.Strings(versions)
+	return versions
+}
+
 // GetDefaultIacVersion returns the default IaC version for the given IaC type
 func GetDefaultIacVersion(iacType string) string {
 	return string(defaultIacVersions[supportedIacType(iacType)])
