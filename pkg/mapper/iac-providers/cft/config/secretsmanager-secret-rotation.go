@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/secretsmanager"
+import "github.com/awslabs/goformation/v6/cloudformation/secretsmanager"
 
 // SecretRotationRulesBlock holds config for SecretRotationRules
 type SecretRotationRulesBlock struct {
@@ -36,12 +36,12 @@ func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) [
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {
 		rotationRules = make([]SecretRotationRulesBlock, 1)
-		rotationRules[0].AutomaticallyAfterDays = r.RotationRules.AutomaticallyAfterDays
+		rotationRules[0].AutomaticallyAfterDays = *r.RotationRules.AutomaticallyAfterDays
 	}
 
 	cf := SecretsManagerSecretRotationConfig{
 		SecretID:          r.SecretId,
-		RotationLambdaARN: r.RotationLambdaARN,
+		RotationLambdaARN: *r.RotationLambdaARN,
 		RotationRules:     rotationRules,
 	}
 

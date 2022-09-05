@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/rds"
+	"github.com/awslabs/goformation/v6/cloudformation/rds"
 )
 
 // RDSClusterConfig holds config for aws_rds_cluster
@@ -31,11 +31,11 @@ type RDSClusterConfig struct {
 func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	cf := RDSClusterConfig{
 		Config: Config{
-			Name: c.DatabaseName,
+			Name: *c.DatabaseName,
 			Tags: c.Tags,
 		},
-		BackupRetentionPeriod: c.BackupRetentionPeriod,
-		StorageEncrypted:      c.StorageEncrypted,
+		BackupRetentionPeriod: *c.BackupRetentionPeriod,
+		StorageEncrypted:      *c.StorageEncrypted,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

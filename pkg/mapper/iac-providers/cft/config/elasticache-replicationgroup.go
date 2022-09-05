@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/elasticache"
+	"github.com/awslabs/goformation/v6/cloudformation/elasticache"
 )
 
 // ElastiCacheReplicationGroupConfig holds config for aws_elasticache_replication_group
@@ -33,8 +33,8 @@ func GetElastiCacheReplicationGroupConfig(r *elasticache.ReplicationGroup) []AWS
 		Config: Config{
 			Tags: r.Tags,
 		},
-		AtRestEncryptionEnabled:  r.AtRestEncryptionEnabled,
-		TransitEncryptionEnabled: r.TransitEncryptionEnabled,
+		AtRestEncryptionEnabled:  *r.AtRestEncryptionEnabled,
+		TransitEncryptionEnabled: *r.TransitEncryptionEnabled,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

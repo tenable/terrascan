@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/kinesisfirehose"
+	"github.com/awslabs/goformation/v6/cloudformation/kinesisfirehose"
 )
 
 // KinesisFirehoseDeliveryStreamConfig holds config for aws_kinesis_firehose_delivery_stream
@@ -37,7 +37,7 @@ type KinesisFirehoseDeliveryStreamSseConfig struct {
 func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) []AWSResourceConfig {
 	cf := KinesisFirehoseDeliveryStreamConfig{
 		Config: Config{
-			Name: k.DeliveryStreamName,
+			Name: *k.DeliveryStreamName,
 			Tags: k.Tags,
 		},
 	}
@@ -45,7 +45,7 @@ func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) [
 	if k.DeliveryStreamEncryptionConfigurationInput != nil {
 		sseConfig.Enabled = true
 		sseConfig.KeyType = k.DeliveryStreamEncryptionConfigurationInput.KeyType
-		sseConfig.KeyARN = k.DeliveryStreamEncryptionConfigurationInput.KeyARN
+		sseConfig.KeyARN = *k.DeliveryStreamEncryptionConfigurationInput.KeyARN
 	}
 	cf.ServerSideEncryption = []KinesisFirehoseDeliveryStreamSseConfig{sseConfig}
 	return []AWSResourceConfig{{

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/cloudformation"
+	"github.com/awslabs/goformation/v6/cloudformation/cloudformation"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -39,7 +39,7 @@ func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 		TemplateData:     []byte{},
 	}
 
-	if len(s.NotificationARNs) > 0 {
+	if len(*s.NotificationARNs) > 0 {
 		cf.NotificationARNs = s.NotificationARNs
 	}
 
@@ -55,7 +55,7 @@ func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 
 	// Add Parameters for propogation to the nested Stack
 	if s.Parameters != nil {
-		cf.Parameters = s.Parameters
+		cf.Parameters = *s.Parameters
 	}
 
 	return []AWSResourceConfig{{

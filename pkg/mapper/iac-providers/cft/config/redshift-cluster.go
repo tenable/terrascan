@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/redshift"
+	"github.com/awslabs/goformation/v6/cloudformation/redshift"
 )
 
 // RedshiftClusterConfig holds config for aws_redshift_cluster
@@ -36,9 +36,9 @@ func GetRedshiftClusterConfig(c *redshift.Cluster) []AWSResourceConfig {
 			Name: c.DBName,
 			Tags: c.Tags,
 		},
-		KmsKeyID:           c.KmsKeyId,
-		Encrypted:          c.Encrypted,
-		PubliclyAccessible: c.PubliclyAccessible,
+		KmsKeyID:           *c.KmsKeyId,
+		Encrypted:          *c.Encrypted,
+		PubliclyAccessible: *c.PubliclyAccessible,
 	}
 	if c.LoggingProperties != nil {
 		// if LoggingProperties are mentioned in cft,

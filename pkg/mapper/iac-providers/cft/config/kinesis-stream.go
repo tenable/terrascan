@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/kinesis"
+	"github.com/awslabs/goformation/v6/cloudformation/kinesis"
 )
 
 // KinesisStreamConfig holds config for aws_kinesis_stream
@@ -32,10 +32,10 @@ type KinesisStreamConfig struct {
 func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 	cf := KinesisStreamConfig{
 		Config: Config{
-			Name: k.Name,
+			Name: *k.Name,
 			Tags: k.Tags,
 		},
-		Name: k.Name,
+		Name: *k.Name,
 	}
 
 	if k.StreamEncryption != nil {

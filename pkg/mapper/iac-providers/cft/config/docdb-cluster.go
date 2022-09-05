@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/docdb"
+	"github.com/awslabs/goformation/v6/cloudformation/docdb"
 )
 
 // DocDBClusterConfig holds config for aws_docdb_cluster
@@ -34,9 +34,9 @@ func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 		Config: Config{
 			Tags: d.Tags,
 		},
-		KmsKeyID:                    d.KmsKeyId,
-		StorageEncrypted:            d.StorageEncrypted,
-		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,
+		KmsKeyID:                    *d.KmsKeyId,
+		StorageEncrypted:            *d.StorageEncrypted,
+		EnableCloudwatchLogsExports: *d.EnableCloudwatchLogsExports,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

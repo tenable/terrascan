@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v6/cloudformation/cloudtrail"
 )
 
 // CloudTrailConfig holds config for aws_cloudtrail
@@ -32,14 +32,14 @@ type CloudTrailConfig struct {
 // GetCloudTrailConfig returns config for aws_cloudtrail
 func GetCloudTrailConfig(t *cloudtrail.Trail) []AWSResourceConfig {
 	cf := CloudTrailConfig{
-		Config:                  Config{Tags: t.Tags, Name: t.TrailName},
+		Config:                  Config{Tags: t.Tags, Name: *t.TrailName},
 		EnableLogFileValidation: t.EnableLogFileValidation,
 		IsMultiRegionTrail:      t.IsMultiRegionTrail,
 	}
-	if len(t.KMSKeyId) > 0 {
+	if len(*t.KMSKeyId) > 0 {
 		cf.KmsKeyID = t.KMSKeyId
 	}
-	if len(t.SnsTopicName) > 0 {
+	if len(*t.SnsTopicName) > 0 {
 		cf.SnsTopicName = t.SnsTopicName
 	}
 

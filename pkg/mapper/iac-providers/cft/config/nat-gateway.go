@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 )
 
 // NatGatewayConfig holds config for aws_nat_gateway
@@ -34,8 +34,8 @@ func GetNatGatewayConfig(e *ec2.NatGateway) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AllocationID:     e.AllocationId,
-		ConnectivityType: e.ConnectivityType,
+		AllocationID:     *e.AllocationId,
+		ConnectivityType: *e.ConnectivityType,
 		SubnetID:         e.SubnetId,
 	}
 	return []AWSResourceConfig{{

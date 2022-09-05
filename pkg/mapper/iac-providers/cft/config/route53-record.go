@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/route53"
+	"github.com/awslabs/goformation/v6/cloudformation/route53"
 )
 
 // Route53RecordConfig holds config for aws_route53_record
@@ -32,7 +32,7 @@ func GetRoute53RecordConfig(r *route53.RecordSet) []AWSResourceConfig {
 		Config: Config{
 			Name: r.Name,
 		},
-		ResourceRecords: r.ResourceRecords,
+		ResourceRecords: *r.ResourceRecords,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

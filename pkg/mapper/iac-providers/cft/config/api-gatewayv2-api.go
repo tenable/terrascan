@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/apigatewayv2"
+import "github.com/awslabs/goformation/v6/cloudformation/apigatewayv2"
 
 // CorsConfigurationBlock holds config for cors_configuration attribute
 type CorsConfigurationBlock struct {
@@ -51,30 +51,30 @@ func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 
 	if a.CorsConfiguration != nil {
 		corsConfigData = make([]CorsConfigurationBlock, 1)
-		corsConfigData[0].AllowCredentials = a.CorsConfiguration.AllowCredentials
-		corsConfigData[0].AllowHeaders = a.CorsConfiguration.AllowHeaders
-		corsConfigData[0].AllowMethods = a.CorsConfiguration.AllowMethods
-		corsConfigData[0].AllowOrigins = a.CorsConfiguration.AllowOrigins
-		corsConfigData[0].ExposeHeaders = a.CorsConfiguration.ExposeHeaders
-		corsConfigData[0].MaxAge = a.CorsConfiguration.MaxAge
+		corsConfigData[0].AllowCredentials = *a.CorsConfiguration.AllowCredentials
+		corsConfigData[0].AllowHeaders = *a.CorsConfiguration.AllowHeaders
+		corsConfigData[0].AllowMethods = *a.CorsConfiguration.AllowMethods
+		corsConfigData[0].AllowOrigins = *a.CorsConfiguration.AllowOrigins
+		corsConfigData[0].ExposeHeaders = *a.CorsConfiguration.ExposeHeaders
+		corsConfigData[0].MaxAge = *a.CorsConfiguration.MaxAge
 	}
 
 	cf := APIGatewayV2ApiConfig{
 		Config: Config{
-			Name: a.Name,
+			Name: *a.Name,
 			Tags: a.Tags,
 		},
-		Name:                      a.Name,
-		ProtocolType:              a.ProtocolType,
-		RouteKey:                  a.RouteKey,
-		Description:               a.Description,
-		CredentialsArn:            a.CredentialsArn,
-		RouteSelectionExpression:  a.RouteSelectionExpression,
-		Target:                    a.Target,
-		Version:                   a.Version,
-		APIKeySelectionExpression: a.ApiKeySelectionExpression,
-		DisableExecuteAPIEndpoint: a.DisableExecuteApiEndpoint,
-		FailOnWarnings:            a.FailOnWarnings,
+		Name:                      *a.Name,
+		ProtocolType:              *a.ProtocolType,
+		RouteKey:                  *a.RouteKey,
+		Description:               *a.Description,
+		CredentialsArn:            *a.CredentialsArn,
+		RouteSelectionExpression:  *a.RouteSelectionExpression,
+		Target:                    *a.Target,
+		Version:                   *a.Version,
+		APIKeySelectionExpression: *a.ApiKeySelectionExpression,
+		DisableExecuteAPIEndpoint: *a.DisableExecuteApiEndpoint,
+		FailOnWarnings:            *a.FailOnWarnings,
 		CorsConfiguration:         corsConfigData,
 	}
 

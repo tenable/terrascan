@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/config"
+	"github.com/awslabs/goformation/v6/cloudformation/config"
 )
 
 // ConfigurationAggregatorConfig holds config for aws_config_configuration_aggregator
@@ -32,14 +32,14 @@ func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) [
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{
 			Tags: c.Tags,
-			Name: c.ConfigurationAggregatorName,
+			Name: *c.ConfigurationAggregatorName,
 		},
 	}
 	if c.AccountAggregationSources != nil {
 		accountAggregationSources := make([]map[string]interface{}, 0)
-		for i := range c.AccountAggregationSources {
+		for _, agsource := range *c.AccountAggregationSources {
 			accountAggregationSource := make(map[string]interface{})
-			accountAggregationSource["all_regions"] = c.AccountAggregationSources[i].AllAwsRegions
+			accountAggregationSource["all_regions"] = *agsource.AllAwsRegions
 			accountAggregationSources = append(accountAggregationSources, accountAggregationSource)
 		}
 		if len(accountAggregationSources) > 0 {

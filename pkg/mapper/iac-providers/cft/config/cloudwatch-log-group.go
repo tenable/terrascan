@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/logs"
+	"github.com/awslabs/goformation/v6/cloudformation/logs"
 )
 
 // LogCloudWatchGroupConfig holds config for aws_cloudwatch_log_group
@@ -32,11 +32,11 @@ type LogCloudWatchGroupConfig struct {
 func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 	cf := LogCloudWatchGroupConfig{
 		Config: Config{
-			Name: r.LogGroupName,
+			Name: *r.LogGroupName,
 		},
-		LogGroupName:    r.LogGroupName,
-		KmsKeyID:        r.KmsKeyId,
-		RetentionInDays: r.RetentionInDays,
+		LogGroupName:    *r.LogGroupName,
+		KmsKeyID:        *r.KmsKeyId,
+		RetentionInDays: *r.RetentionInDays,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

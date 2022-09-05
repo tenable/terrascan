@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/certificatemanager"
+import "github.com/awslabs/goformation/v6/cloudformation/certificatemanager"
 
 // CertificateManagerCertificateConfig holds config for CertificateManagerCertificate
 type CertificateManagerCertificateConfig struct {
@@ -32,7 +32,7 @@ func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) [
 			Tags: c.Tags,
 		},
 		DomainName:       c.DomainName,
-		ValidationMethod: c.ValidationMethod,
+		ValidationMethod: *c.ValidationMethod,
 	}
 
 	return []AWSResourceConfig{{

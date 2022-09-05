@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/backup"
+import "github.com/awslabs/goformation/v6/cloudformation/backup"
 
 // BackupVaultConfig holds config for BackupVault
 type BackupVaultConfig struct {
@@ -33,7 +33,7 @@ func GetBackupVaultConfig(b *backup.BackupVault) []AWSResourceConfig {
 			Tags: b.BackupVaultTags,
 		},
 		Name:      b.BackupVaultName,
-		KMSKeyARN: b.EncryptionKeyArn,
+		KMSKeyARN: *b.EncryptionKeyArn,
 	}
 
 	return []AWSResourceConfig{{

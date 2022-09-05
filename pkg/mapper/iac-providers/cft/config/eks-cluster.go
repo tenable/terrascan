@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/eks"
+import "github.com/awslabs/goformation/v6/cloudformation/eks"
 
 // EKSVPCConfigBlock holds config for EKSVPCConfig
 type EKSVPCConfigBlock struct {
@@ -42,24 +42,24 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		vpcConfig := make([]EKSVPCConfigBlock, 1)
 
 		vpcConfig[0].SubnetIDs = c.ResourcesVpcConfig.SubnetIds
-		vpcConfig[0].SecurityGroupIDs = c.ResourcesVpcConfig.SecurityGroupIds
-		vpcConfig[0].EndpointPrivateAccess = c.ResourcesVpcConfig.EndpointPrivateAccess
-		vpcConfig[0].EndpointPublicAccess = c.ResourcesVpcConfig.EndpointPublicAccess
+		vpcConfig[0].SecurityGroupIDs = *c.ResourcesVpcConfig.SecurityGroupIds
+		vpcConfig[0].EndpointPrivateAccess = *c.ResourcesVpcConfig.EndpointPrivateAccess
+		vpcConfig[0].EndpointPublicAccess = *c.ResourcesVpcConfig.EndpointPublicAccess
 	}
 
 	cf := EksClusterConfig{
 		Config: Config{
-			Name: c.Name,
+			Name: *c.Name,
 		},
-		Name:      c.Name,
+		Name:      *c.Name,
 		RoleARN:   c.RoleArn,
 		VPCConfig: vpcConfig,
 	}
 
-	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(c.Logging.ClusterLogging.EnabledTypes) > 0 {
-		enabledClusterLogTypes := make([]string, len(c.Logging.ClusterLogging.EnabledTypes))
-		for i := range c.Logging.ClusterLogging.EnabledTypes {
-			enabledClusterLogTypes[i] = c.Logging.ClusterLogging.EnabledTypes[i].Type
+	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(*c.Logging.ClusterLogging.EnabledTypes) > 0 {
+		enabledClusterLogTypes := make([]string, len(*c.Logging.ClusterLogging.EnabledTypes))
+		for i, enabledType := range *c.Logging.ClusterLogging.EnabledTypes {
+			enabledClusterLogTypes[i] = *enabledType.Type
 		}
 		cf.EnabledClusterLogTypes = enabledClusterLogTypes
 	}

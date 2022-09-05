@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/secretsmanager"
+	"github.com/awslabs/goformation/v6/cloudformation/secretsmanager"
 )
 
 // SecretsManagerSecretConfig holds config for aws_secretsmanager_secret
@@ -31,9 +31,9 @@ func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
 			Tags: s.Tags,
-			Name: s.Name,
+			Name: *s.Name,
 		},
-		KmsKeyID: s.KmsKeyId,
+		KmsKeyID: *s.KmsKeyId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

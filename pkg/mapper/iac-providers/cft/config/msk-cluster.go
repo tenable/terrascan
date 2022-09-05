@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/msk"
+import "github.com/awslabs/goformation/v6/cloudformation/msk"
 
 // EncryptionInTransitBlock holds config for EncryptionInTransit
 type EncryptionInTransitBlock struct {
@@ -55,9 +55,9 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 		brokerNodeGroupInfo = make([]BrokerNodeGroupInfoBlock, 1)
 
 		brokerNodeGroupInfo[0].InstanceType = c.BrokerNodeGroupInfo.InstanceType
-		brokerNodeGroupInfo[0].EksVolumeSize = c.BrokerNodeGroupInfo.StorageInfo.EBSStorageInfo.VolumeSize
+		brokerNodeGroupInfo[0].EksVolumeSize = *c.BrokerNodeGroupInfo.StorageInfo.EBSStorageInfo.VolumeSize
 		brokerNodeGroupInfo[0].ClientSubnets = c.BrokerNodeGroupInfo.ClientSubnets
-		brokerNodeGroupInfo[0].SecurityGroups = c.BrokerNodeGroupInfo.SecurityGroups
+		brokerNodeGroupInfo[0].SecurityGroups = *c.BrokerNodeGroupInfo.SecurityGroups
 	}
 
 	var encryptionInfo []EncryptionInfoBlock
@@ -71,8 +71,8 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 		if c.EncryptionInfo.EncryptionInTransit != nil {
 			encryptionInfo[0].EncryptionInTransit = make([]EncryptionInTransitBlock, 1)
 
-			encryptionInfo[0].EncryptionInTransit[0].ClientBroker = c.EncryptionInfo.EncryptionInTransit.ClientBroker
-			encryptionInfo[0].EncryptionInTransit[0].InCluster = c.EncryptionInfo.EncryptionInTransit.InCluster
+			encryptionInfo[0].EncryptionInTransit[0].ClientBroker = *c.EncryptionInfo.EncryptionInTransit.ClientBroker
+			encryptionInfo[0].EncryptionInTransit[0].InCluster = *c.EncryptionInfo.EncryptionInTransit.InCluster
 		}
 	}
 

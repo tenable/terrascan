@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/store"
 )
 
@@ -65,24 +65,24 @@ type EC2InstanceConfig struct {
 
 // GetEC2InstanceConfig returns config for EC2Instance
 func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
-	nics := make([]NetworkInterfaceBlock, len(i.NetworkInterfaces))
-	niconfigs := make([]NetworkInterfaceConfig, len(i.NetworkInterfaces))
-	awsconfig := make([]AWSResourceConfig, len(i.NetworkInterfaces))
+	nics := make([]NetworkInterfaceBlock, len(*i.NetworkInterfaces))
+	niconfigs := make([]NetworkInterfaceConfig, len(*i.NetworkInterfaces))
+	awsconfig := make([]AWSResourceConfig, len(*i.NetworkInterfaces))
 
-	for index := range i.NetworkInterfaces {
-		nics[index].NetworkInterfaceID = i.NetworkInterfaces[index].NetworkInterfaceId
-		nics[index].DeleteOnTermination = i.NetworkInterfaces[index].DeleteOnTermination
+	for index, networkInterface := range *i.NetworkInterfaces {
+		nics[index].NetworkInterfaceID = *networkInterface.NetworkInterfaceId
+		nics[index].DeleteOnTermination = *networkInterface.DeleteOnTermination
 		var devindex int
-		devindex, err := strconv.Atoi(i.NetworkInterfaces[index].DeviceIndex)
+		devindex, err := strconv.Atoi(networkInterface.DeviceIndex)
 		if err != nil {
 			devindex = 0
 		}
 		nics[index].DeviceIndex = devindex
 
 		// create aws_network_interface resource on the fly for every network interface used in aws_instance
-		niconfigs[index].SubnetID = i.NetworkInterfaces[index].SubnetId
-		if i.NetworkInterfaces[index].PrivateIpAddress != "" {
-			niconfigs[index].PrivateIPs = []string{i.NetworkInterfaces[index].PrivateIpAddress}
+		niconfigs[index].SubnetID = *networkInterface.SubnetId
+		if *networkInterface.PrivateIpAddress != "" {
+			niconfigs[index].PrivateIPs = []string{*networkInterface.PrivateIpAddress}
 		}
 
 		nicname := fmt.Sprintf("%s%d", instanceName, index)
@@ -102,17 +102,17 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 			Tags: i.Tags,
 			Name: instanceName,
 		},
-		AMI:                 i.ImageId,
-		InstanceType:        i.InstanceType,
-		EBSOptimized:        i.EbsOptimized,
-		Monitoring:          i.Monitoring,
-		IAMInstanceProfile:  i.IamInstanceProfile,
-		VPCSecurityGroupIDs: i.SecurityGroupIds,
+		AMI:                 *i.ImageId,
+		InstanceType:        *i.InstanceType,
+		EBSOptimized:        *i.EbsOptimized,
+		Monitoring:          *i.Monitoring,
+		IAMInstanceProfile:  *i.IamInstanceProfile,
+		VPCSecurityGroupIDs: *i.SecurityGroupIds,
 		NetworkInterface:    nics,
 	}
 
 	if i.HibernationOptions != nil {
-		ec2Config.Hibernation = i.HibernationOptions.Configured
+		ec2Config.Hibernation = *i.HibernationOptions.Configured
 	}
 
 	var awsconfigec2 AWSResourceConfig

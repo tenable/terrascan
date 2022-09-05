@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/ecs"
+import "github.com/awslabs/goformation/v6/cloudformation/ecs"
 
 // ClusterSettingsBlock holds config for settings attribute
 type ClusterSettingsBlock struct {
@@ -66,25 +66,25 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	var clusterSettingsData []ClusterSettingsBlock
 	var capacityProviderStrategyData []CapacityProviderStrategyBlock
 
-	clusterSettingsData = make([]ClusterSettingsBlock, len(e.ClusterSettings))
-	for i := range e.ClusterSettings {
-		clusterSettingsData[i].Name = e.ClusterSettings[i].Name
-		clusterSettingsData[i].Value = e.ClusterSettings[i].Value
+	clusterSettingsData = make([]ClusterSettingsBlock, len(*e.ClusterSettings))
+	for i, clusterSetting := range *e.ClusterSettings {
+		clusterSettingsData[i].Name = *clusterSetting.Name
+		clusterSettingsData[i].Value = *clusterSetting.Value
 	}
 
-	capacityProviderStrategyData = make([]CapacityProviderStrategyBlock, len(e.DefaultCapacityProviderStrategy))
-	for i := range e.DefaultCapacityProviderStrategy {
-		capacityProviderStrategyData[i].Base = e.DefaultCapacityProviderStrategy[i].Base
-		capacityProviderStrategyData[i].CapacityProvider = e.DefaultCapacityProviderStrategy[i].CapacityProvider
-		capacityProviderStrategyData[i].Weight = e.DefaultCapacityProviderStrategy[i].Weight
+	capacityProviderStrategyData = make([]CapacityProviderStrategyBlock, len(*e.DefaultCapacityProviderStrategy))
+	for i, defaultCapacityProviderStrategy := range *e.DefaultCapacityProviderStrategy {
+		capacityProviderStrategyData[i].Base = *defaultCapacityProviderStrategy.Base
+		capacityProviderStrategyData[i].CapacityProvider = *defaultCapacityProviderStrategy.CapacityProvider
+		capacityProviderStrategyData[i].Weight = *defaultCapacityProviderStrategy.Weight
 	}
 
 	cf := EcsClusterConfig{
 		Config: Config{
-			Name: e.ClusterName,
+			Name: *e.ClusterName,
 			Tags: e.Tags,
 		},
-		ClusterName:                     e.ClusterName,
+		ClusterName:                     *e.ClusterName,
 		ClusterSettings:                 clusterSettingsData,
 		DefaultCapacityProviderStrategy: capacityProviderStrategyData,
 	}
@@ -119,8 +119,8 @@ func setExecCommandConfigBlock(e *ecs.Cluster) []ExecuteCommandConfiguration {
 
 	execCommandConfigData = make([]ExecuteCommandConfiguration, 1)
 
-	execCommandConfigData[0].KmsKeyID = e.Configuration.ExecuteCommandConfiguration.KmsKeyId
-	execCommandConfigData[0].Logging = e.Configuration.ExecuteCommandConfiguration.Logging
+	execCommandConfigData[0].KmsKeyID = *e.Configuration.ExecuteCommandConfiguration.KmsKeyId
+	execCommandConfigData[0].Logging = *e.Configuration.ExecuteCommandConfiguration.Logging
 
 	if e.Configuration.ExecuteCommandConfiguration.LogConfiguration == nil {
 		return execCommandConfigData
@@ -134,11 +134,11 @@ func setExecCommandConfigBlock(e *ecs.Cluster) []ExecuteCommandConfiguration {
 func setLogConfigurationBlock(e *ecs.Cluster) []LogConfigurationBlock {
 	logConfigData := make([]LogConfigurationBlock, 1)
 
-	logConfigData[0].S3BucketName = e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3BucketName
-	logConfigData[0].S3KeyPrefix = e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3KeyPrefix
-	logConfigData[0].S3EncryptionEnabled = e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3EncryptionEnabled
-	logConfigData[0].CloudWatchLogGroupName = e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchLogGroupName
-	logConfigData[0].CloudWatchEncryptionEnabled = e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchEncryptionEnabled
+	logConfigData[0].S3BucketName = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3BucketName
+	logConfigData[0].S3KeyPrefix = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3KeyPrefix
+	logConfigData[0].S3EncryptionEnabled = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3EncryptionEnabled
+	logConfigData[0].CloudWatchLogGroupName = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchLogGroupName
+	logConfigData[0].CloudWatchEncryptionEnabled = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchEncryptionEnabled
 
 	return logConfigData
 }

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/dynamodb"
+	"github.com/awslabs/goformation/v6/cloudformation/dynamodb"
 )
 
 // DynamoDBTableConfig holds config for aws_dynamodb_table
@@ -32,7 +32,7 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 	cf := DynamoDBTableConfig{
 		Config: Config{
 			Tags: t.Tags,
-			Name: t.TableName,
+			Name: *t.TableName,
 		},
 	}
 	sse := make(map[string]interface{})

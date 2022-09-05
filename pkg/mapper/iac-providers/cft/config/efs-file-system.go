@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v5/cloudformation/efs"
+	"github.com/awslabs/goformation/v6/cloudformation/efs"
 )
 
 const (
@@ -48,8 +48,8 @@ func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Metadata: f.AWSCloudFormationMetadata,
 		Resource: EfsFileSystemConfig{
-			KmsKeyID:  f.KmsKeyId,
-			Encrypted: f.Encrypted,
+			KmsKeyID:  *f.KmsKeyId,
+			Encrypted: *f.Encrypted,
 		},
 	})
 

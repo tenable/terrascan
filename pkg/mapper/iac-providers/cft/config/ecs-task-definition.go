@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v5/cloudformation/ecs"
+	"github.com/awslabs/goformation/v6/cloudformation/ecs"
 )
 
 // EcsTaskDefinitionConfig holds config for aws_ecs_task_definition
@@ -56,19 +56,19 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 		Config: Config{
 			Tags: t.Tags,
 		},
-		NetworkMode: t.NetworkMode,
+		NetworkMode: *t.NetworkMode,
 	}
 
 	if t.ContainerDefinitions != nil {
 		// add container_definitions as a json string with mapped values
 		cDefs := make([]ContainerDefinitionConfig, 0)
-		for _, cDef := range t.ContainerDefinitions {
+		for _, cDef := range *t.ContainerDefinitions {
 			// add environment kn pairs
 			if cDef.Environment != nil {
 				env := make([]EnvironmentConfig, 0)
-				for _, kvPair := range cDef.Environment {
+				for _, kvPair := range *cDef.Environment {
 					env = append(env, EnvironmentConfig{
-						Name: kvPair.Name,
+						Name: *kvPair.Name,
 					})
 				}
 				cDefs = append(cDefs, ContainerDefinitionConfig{
@@ -84,11 +84,11 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 
 	if t.Volumes != nil {
 		volumes := make([]VolumeConfig, 0)
-		for _, volume := range t.Volumes {
+		for _, volume := range *t.Volumes {
 			if volume.EFSVolumeConfiguration != nil {
 				volumes = append(volumes, VolumeConfig{
 					EfsVolumeConfiguration: EfsVolumeConfig{
-						TransitEncryption: volume.EFSVolumeConfiguration.TransitEncryption,
+						TransitEncryption: *volume.EFSVolumeConfiguration.TransitEncryption,
 					},
 				})
 			}

@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/emr"
+import "github.com/awslabs/goformation/v6/cloudformation/emr"
 
 // KerberosAttributesBlock holds config for KerberosAttributes
 type KerberosAttributesBlock struct {
@@ -49,9 +49,9 @@ func GetEmrClusterConfig(c *emr.Cluster) []AWSResourceConfig {
 			Name: c.Name,
 		},
 		Name:                  c.Name,
-		ReleaseLabel:          c.ReleaseLabel,
+		ReleaseLabel:          *c.ReleaseLabel,
 		ServiceRole:           c.ServiceRole,
-		TerminationProtection: c.Instances.TerminationProtected,
+		TerminationProtection: *c.Instances.TerminationProtected,
 		KerberosAttributes:    kerberosAttributes,
 	}
 

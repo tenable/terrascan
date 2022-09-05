@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancingv2"
+	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancingv2"
 )
 
 // ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener
@@ -47,12 +47,12 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 		// DefaultActions are required
 		cf := ElasticLoadBalancingV2ListenerConfig{
 			Config:   Config{},
-			Protocol: l.Protocol,
+			Protocol: *l.Protocol,
 		}
 		if action.RedirectConfig != nil {
 			defaultAction := DefaultActionConfig{
 				RedirectConfig: RedirectConfig{
-					Protocol: action.RedirectConfig.Protocol,
+					Protocol: *action.RedirectConfig.Protocol,
 				},
 			}
 			cf.DefaultAction = defaultAction

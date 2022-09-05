@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/dms"
+import "github.com/awslabs/goformation/v6/cloudformation/dms"
 
 // DmsReplicationInstanceConfig holds config for DmsReplicationInstance
 type DmsReplicationInstanceConfig struct {
@@ -42,18 +42,18 @@ func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceCo
 			Tags: r.Tags,
 		},
 
-		AlocatedStorage:            r.AllocatedStorage,
-		AutoMinorVersionUpgrade:    r.AutoMinorVersionUpgrade,
-		AvailabilityZone:           r.AvailabilityZone,
-		EngineVersion:              r.EngineVersion,
-		KMSKeyARN:                  r.KmsKeyId,
-		MultiAZ:                    r.MultiAZ,
-		PreferredMaintenanceWindow: r.PreferredMaintenanceWindow,
-		PubliclyAccessible:         r.PubliclyAccessible,
+		AlocatedStorage:            *r.AllocatedStorage,
+		AutoMinorVersionUpgrade:    *r.AutoMinorVersionUpgrade,
+		AvailabilityZone:           *r.AvailabilityZone,
+		EngineVersion:              *r.EngineVersion,
+		KMSKeyARN:                  *r.KmsKeyId,
+		MultiAZ:                    *r.MultiAZ,
+		PreferredMaintenanceWindow: *r.PreferredMaintenanceWindow,
+		PubliclyAccessible:         *r.PubliclyAccessible,
 		ReplicationInstanceClass:   r.ReplicationInstanceClass,
-		ReplicationInstanceID:      r.ReplicationInstanceIdentifier,
-		ReplicationSubnetGroupID:   r.ReplicationSubnetGroupIdentifier,
-		VPCSecurityGroupIDs:        r.VpcSecurityGroupIds,
+		ReplicationInstanceID:      *r.ReplicationInstanceIdentifier,
+		ReplicationSubnetGroupID:   *r.ReplicationSubnetGroupIdentifier,
+		VPCSecurityGroupIDs:        *r.VpcSecurityGroupIds,
 	}
 
 	return []AWSResourceConfig{{

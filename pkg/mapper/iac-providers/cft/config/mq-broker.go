@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/amazonmq"
+	"github.com/awslabs/goformation/v6/cloudformation/amazonmq"
 )
 
 // MqBrokerConfig holds config for aws_mq_broker
@@ -38,12 +38,12 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	}
 	if c.Logs != nil {
 		log := make(map[string]bool)
-		if c.Logs.Audit {
+		if *c.Logs.Audit {
 			log["audit"] = true
 		} else {
 			log["audit"] = false
 		}
-		if c.Logs.General {
+		if *c.Logs.General {
 			log["general"] = true
 		} else {
 			log["general"] = false

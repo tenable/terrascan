@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/ram"
+import "github.com/awslabs/goformation/v6/cloudformation/ram"
 
 // RAMResourceShareConfig holds config for RAMResourceShare
 type RAMResourceShareConfig struct {
@@ -33,7 +33,7 @@ func GetRAMResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
 			Tags: r.Tags,
 		},
 		Name:                    r.Name,
-		AllowExternalPrincipals: r.AllowExternalPrincipals,
+		AllowExternalPrincipals: *r.AllowExternalPrincipals,
 	}
 
 	return []AWSResourceConfig{{

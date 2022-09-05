@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/dax"
+	"github.com/awslabs/goformation/v6/cloudformation/dax"
 )
 
 // DaxClusterConfig holds config for aws_dax_cluster
@@ -31,7 +31,7 @@ func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 	cf := DaxClusterConfig{
 		Config: Config{
 			Tags: t.Tags,
-			Name: t.ClusterName,
+			Name: *t.ClusterName,
 		},
 	}
 	sse := make(map[string]interface{})

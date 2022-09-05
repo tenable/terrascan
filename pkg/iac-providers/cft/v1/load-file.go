@@ -24,8 +24,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/awslabs/goformation/v5"
-	"github.com/awslabs/goformation/v5/cloudformation"
+	"github.com/awslabs/goformation/v6"
+	"github.com/awslabs/goformation/v6/cloudformation"
 	multierr "github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/mapper"

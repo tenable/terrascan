@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/rds"
+	"github.com/awslabs/goformation/v6/cloudformation/rds"
 )
 
 // DBSecurityGroupConfig holds config for aws_db_security_group

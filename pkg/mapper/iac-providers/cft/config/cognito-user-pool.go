@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/cognito"
+import "github.com/awslabs/goformation/v6/cloudformation/cognito"
 
 // PasswordPolicyBlock holds config for PasswordPolicy
 type PasswordPolicyBlock struct {
@@ -41,19 +41,19 @@ func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {
 		passwordPolicy = make([]PasswordPolicyBlock, 1)
 
-		passwordPolicy[0].MinimumLength = u.Policies.PasswordPolicy.MinimumLength
-		passwordPolicy[0].RequireLowercase = u.Policies.PasswordPolicy.RequireLowercase
-		passwordPolicy[0].RequireUppercase = u.Policies.PasswordPolicy.RequireUppercase
-		passwordPolicy[0].RequireNumbers = u.Policies.PasswordPolicy.RequireNumbers
-		passwordPolicy[0].RequireSymbols = u.Policies.PasswordPolicy.RequireSymbols
-		passwordPolicy[0].TemporaryPasswordValidityDays = u.Policies.PasswordPolicy.TemporaryPasswordValidityDays
+		passwordPolicy[0].MinimumLength = *u.Policies.PasswordPolicy.MinimumLength
+		passwordPolicy[0].RequireLowercase = *u.Policies.PasswordPolicy.RequireLowercase
+		passwordPolicy[0].RequireUppercase = *u.Policies.PasswordPolicy.RequireUppercase
+		passwordPolicy[0].RequireNumbers = *u.Policies.PasswordPolicy.RequireNumbers
+		passwordPolicy[0].RequireSymbols = *u.Policies.PasswordPolicy.RequireSymbols
+		passwordPolicy[0].TemporaryPasswordValidityDays = *u.Policies.PasswordPolicy.TemporaryPasswordValidityDays
 	}
 
 	cf := CognitoUserPoolConfig{
 		Config: Config{
-			Name: u.UserPoolName,
+			Name: *u.UserPoolName,
 		},
-		Name:           u.UserPoolName,
+		Name:           *u.UserPoolName,
 		PasswordPolicy: passwordPolicy,
 	}
 

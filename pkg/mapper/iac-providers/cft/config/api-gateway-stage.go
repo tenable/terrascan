@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v5/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v6/cloudformation/apigateway"
 )
 
 const (
@@ -53,7 +53,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 
 	cf := APIGatewayStageConfig{
 		Config: Config{
-			Name: s.StageName,
+			Name: *s.StageName,
 			Tags: s.Tags,
 		},
 	}
@@ -62,8 +62,8 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	} else {
 		cf.AccessLogSettings = struct{}{}
 	}
-	cf.XrayTracingEnabled = s.TracingEnabled
-	if len(s.ClientCertificateId) > 0 {
+	cf.XrayTracingEnabled = *s.TracingEnabled
+	if len(*s.ClientCertificateId) > 0 {
 		cf.ClientCertificateID = s.ClientCertificateId
 	}
 
@@ -76,20 +76,20 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	// add aws_api_gateway_method_settings
 	// multiple MethodSettings can be configured for same resource in cft
 	if s.MethodSettings != nil {
-		for i, settings := range s.MethodSettings {
+		for i, settings := range *s.MethodSettings {
 			msc := MethodSettingConfig{
 				Config: Config{
-					Name: s.StageName,
+					Name: *s.StageName,
 					Tags: s.Tags,
 				},
 				MethodSettings: []Settings{{
-					MetricsEnabled: settings.MetricsEnabled,
+					MetricsEnabled: *settings.MetricsEnabled,
 				}},
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 				Type: GatewayMethodSettings,
 				// Unique name for each method setting used fopr ID
-				Name:     fmt.Sprintf("%s%v", s.StageName, i),
+				Name:     fmt.Sprintf("%s%v", *s.StageName, i),
 				Resource: msc,
 				Metadata: s.AWSCloudFormationMetadata,
 			})

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 )
 
 // SubnetConfig holds config for aws_subnet
@@ -38,12 +38,12 @@ func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AssignIpv6AddressOnCreation: e.AssignIpv6AddressOnCreation,
-		AvailabilityZone:            e.AvailabilityZone,
-		CidrBlock:                   e.CidrBlock,
-		Ipv6CidrBlock:               e.Ipv6CidrBlock,
-		MapPublicIPOnLaunch:         e.MapPublicIpOnLaunch,
-		OutpostArn:                  e.OutpostArn,
+		AssignIpv6AddressOnCreation: *e.AssignIpv6AddressOnCreation,
+		AvailabilityZone:            *e.AvailabilityZone,
+		CidrBlock:                   *e.CidrBlock,
+		Ipv6CidrBlock:               *e.Ipv6CidrBlock,
+		MapPublicIPOnLaunch:         *e.MapPublicIpOnLaunch,
+		OutpostArn:                  *e.OutpostArn,
 		VpcID:                       e.VpcId,
 	}
 	return []AWSResourceConfig{{

@@ -16,13 +16,13 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/eks"
+import "github.com/awslabs/goformation/v6/cloudformation/eks"
 
 // EksNodeGroupScalingConfigBlock holds config for EksNodeGroupScalingConfig
 type EksNodeGroupScalingConfigBlock struct {
-	DesiredSize float64 `json:"desired_size"`
-	MaxSize     float64 `json:"max_size"`
-	MinSize     float64 `json:"min_size"`
+	DesiredSize int `json:"desired_size"`
+	MaxSize     int `json:"max_size"`
+	MinSize     int `json:"min_size"`
 }
 
 // EksNodeGroupConfig holds config for EksNodeGroup
@@ -41,18 +41,18 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock
 	if g.ScalingConfig != nil {
 		scalingConfig = make([]EksNodeGroupScalingConfigBlock, 1)
-		scalingConfig[0].DesiredSize = g.ScalingConfig.DesiredSize
-		scalingConfig[0].MaxSize = g.ScalingConfig.MaxSize
-		scalingConfig[0].MinSize = g.ScalingConfig.MinSize
+		scalingConfig[0].DesiredSize = *g.ScalingConfig.DesiredSize
+		scalingConfig[0].MaxSize = *g.ScalingConfig.MaxSize
+		scalingConfig[0].MinSize = *g.ScalingConfig.MinSize
 	}
 
 	cf := EksNodeGroupConfig{
 		Config: Config{
-			Name: g.NodegroupName,
+			Name: *g.NodegroupName,
 			Tags: g.Tags,
 		},
 		ClusterName:   g.ClusterName,
-		NodeGroupName: g.NodegroupName,
+		NodeGroupName: *g.NodegroupName,
 		NodeRoleARN:   g.NodeRole,
 		SubnetIDs:     g.Subnets,
 		ScalingConfig: scalingConfig,

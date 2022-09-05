@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 )
 
 // IngressEgress holds config for SecurityGroupEgress, SecurityGroupIngress attributes of SecurityGroupConfig
@@ -43,36 +43,36 @@ type SecurityGroupConfig struct {
 func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{
-			Name: s.GroupName,
+			Name: *s.GroupName,
 			Tags: s.Tags,
 		},
-		GroupName:        s.GroupName,
+		GroupName:        *s.GroupName,
 		GroupDescription: s.GroupDescription,
 	}
 
 	ingresses := make([]IngressEgress, 0)
-	for _, i := range s.SecurityGroupIngress {
+	for _, i := range *s.SecurityGroupIngress {
 		ingress := IngressEgress{
 			IPProtocol:  i.IpProtocol,
-			Description: i.Description,
-			CidrIP:      []string{i.CidrIp},
-			CidrIpv6:    []string{i.CidrIpv6},
-			FromPort:    i.FromPort,
-			ToPort:      i.ToPort,
+			Description: *i.Description,
+			CidrIP:      []string{*i.CidrIp},
+			CidrIpv6:    []string{*i.CidrIpv6},
+			FromPort:    *i.FromPort,
+			ToPort:      *i.ToPort,
 		}
 		ingresses = append(ingresses, ingress)
 	}
 	cf.SecurityGroupIngress = ingresses
 
 	egresses := make([]IngressEgress, 0)
-	for _, e := range s.SecurityGroupEgress {
+	for _, e := range *s.SecurityGroupEgress {
 		egress := IngressEgress{
 			IPProtocol:  e.IpProtocol,
-			Description: e.Description,
-			CidrIP:      []string{e.CidrIp},
-			CidrIpv6:    []string{e.CidrIpv6},
-			FromPort:    e.FromPort,
-			ToPort:      e.ToPort,
+			Description: *e.Description,
+			CidrIP:      []string{*e.CidrIp},
+			CidrIpv6:    []string{*e.CidrIpv6},
+			FromPort:    *e.FromPort,
+			ToPort:      *e.ToPort,
 		}
 		egresses = append(egresses, egress)
 	}

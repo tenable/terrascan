@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/cloudfront"
+	"github.com/awslabs/goformation/v6/cloudformation/cloudfront"
 )
 
 // CloudFrontDistributionConfig holds config for aws_cloudfront_distribution
@@ -46,7 +46,7 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 		geoRestrictions := make([]map[string]interface{}, 0)
 		geoRestriction := make(map[string]interface{})
 		geoRestriction["restriction_type"] = d.DistributionConfig.Restrictions.GeoRestriction.RestrictionType
-		if len(d.DistributionConfig.Restrictions.GeoRestriction.Locations) > 0 {
+		if len(*d.DistributionConfig.Restrictions.GeoRestriction.Locations) > 0 {
 			geoRestriction["locations"] = d.DistributionConfig.Restrictions.GeoRestriction.Locations
 		}
 		geoRestrictions = append(geoRestrictions, geoRestriction)
@@ -58,9 +58,9 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 	}
 	if d.DistributionConfig.CacheBehaviors != nil {
 		orderedCacheBehaviors := make([]map[string]interface{}, 0)
-		for i := range d.DistributionConfig.CacheBehaviors {
+		for _, cacheBehaviour := range *d.DistributionConfig.CacheBehaviors {
 			orderedCacheBehavior := make(map[string]interface{})
-			orderedCacheBehavior["viewer_protocol_policy"] = d.DistributionConfig.CacheBehaviors[i].ViewerProtocolPolicy
+			orderedCacheBehavior["viewer_protocol_policy"] = cacheBehaviour.ViewerProtocolPolicy
 			orderedCacheBehaviors = append(orderedCacheBehaviors, orderedCacheBehavior)
 		}
 		if len(orderedCacheBehaviors) > 0 {
@@ -84,7 +84,7 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 			cf.ViewerCertificate = viewerCertificates
 		}
 	}
-	cf.WebACLId = d.DistributionConfig.WebACLId
+	cf.WebACLId = *d.DistributionConfig.WebACLId
 
 	return []AWSResourceConfig{{
 		Resource: cf,

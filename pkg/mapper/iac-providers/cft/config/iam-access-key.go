@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/iam"
+	"github.com/awslabs/goformation/v6/cloudformation/iam"
 )
 
 // IamAccessKeyConfig holds config for aws_iam_access_key
@@ -34,7 +34,7 @@ func GetIamAccessKeyConfig(r *iam.AccessKey) []AWSResourceConfig {
 			Name: r.UserName,
 		},
 		UserName: r.UserName,
-		Status:   r.Status,
+		Status:   *r.Status,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

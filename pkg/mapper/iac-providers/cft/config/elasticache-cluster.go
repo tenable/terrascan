@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/elasticache"
+	"github.com/awslabs/goformation/v6/cloudformation/elasticache"
 )
 
 // ElastiCacheClusterConfig holds config for aws_elasticache_cluster
@@ -33,11 +33,11 @@ func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfi
 	cf := ElastiCacheClusterConfig{
 		Config: Config{
 			Tags: e.Tags,
-			Name: e.ClusterName,
+			Name: *e.ClusterName,
 		},
-		AZMode:        e.AZMode,
+		AZMode:        *e.AZMode,
 		Engine:        e.Engine,
-		EngineVersion: e.EngineVersion,
+		EngineVersion: *e.EngineVersion,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/rds"
+	"github.com/awslabs/goformation/v6/cloudformation/rds"
 )
 
 // DBInstanceConfig holds config for aws_db_instance
@@ -37,15 +37,15 @@ func GetDBInstanceConfig(d *rds.DBInstance) []AWSResourceConfig {
 	cf := DBInstanceConfig{
 		Config: Config{
 			Tags: d.Tags,
-			Name: d.DBName,
+			Name: *d.DBName,
 		},
-		EnabledCloudWatchLogsExports: d.EnableCloudwatchLogsExports,
-		AutoMinorVersionUpgrade:      d.AutoMinorVersionUpgrade,
-		StorageEncrypted:             d.StorageEncrypted,
-		KmsKeyID:                     d.KmsKeyId,
-		CaCertIdentifier:             d.CACertificateIdentifier,
-		IamDBAuthEnabled:             d.EnableIAMDatabaseAuthentication,
-		PubliclyAccessible:           d.PubliclyAccessible,
+		EnabledCloudWatchLogsExports: *d.EnableCloudwatchLogsExports,
+		AutoMinorVersionUpgrade:      *d.AutoMinorVersionUpgrade,
+		StorageEncrypted:             *d.StorageEncrypted,
+		KmsKeyID:                     *d.KmsKeyId,
+		CaCertIdentifier:             *d.CACertificateIdentifier,
+		IamDBAuthEnabled:             *d.EnableIAMDatabaseAuthentication,
+		PubliclyAccessible:           *d.PubliclyAccessible,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/sqs"
+	"github.com/awslabs/goformation/v6/cloudformation/sqs"
 )
 
 // SqsQueueConfig holds config for SqsQueue
@@ -33,12 +33,12 @@ type SqsQueueConfig struct {
 func GetSqsQueueConfig(q *sqs.Queue) []AWSResourceConfig {
 	cf := SqsQueueConfig{
 		Config: Config{
-			Name: q.QueueName,
+			Name: *q.QueueName,
 		},
-		Name:                         q.QueueName,
-		KmsMasterKeyID:               q.KmsMasterKeyId,
-		KmsDataKeyReusePeriodSeconds: q.KmsDataKeyReusePeriodSeconds,
-		MessageRetentionSeconds:      q.MessageRetentionPeriod,
+		Name:                         *q.QueueName,
+		KmsMasterKeyID:               *q.KmsMasterKeyId,
+		KmsDataKeyReusePeriodSeconds: *q.KmsDataKeyReusePeriodSeconds,
+		MessageRetentionSeconds:      *q.MessageRetentionPeriod,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

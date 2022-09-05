@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 )
 
 // RouteConfig holds config for aws_route
@@ -41,19 +41,19 @@ type RouteConfig struct {
 // GetRouteConfig returns config for aws_route
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
-		CarrierGatewayID:            e.CarrierGatewayId,
-		DestinationCidrBlock:        e.DestinationCidrBlock,
-		DestinationIpv6CidrBlock:    e.DestinationIpv6CidrBlock,
-		EgressOnlyInternetGatewayID: e.EgressOnlyInternetGatewayId,
-		GatewayID:                   e.GatewayId,
-		InstanceID:                  e.InstanceId,
-		LocalGatewayID:              e.LocalGatewayId,
-		NatGatewayID:                e.NatGatewayId,
-		NetworkInterfaceID:          e.NetworkInterfaceId,
+		CarrierGatewayID:            *e.CarrierGatewayId,
+		DestinationCidrBlock:        *e.DestinationCidrBlock,
+		DestinationIpv6CidrBlock:    *e.DestinationIpv6CidrBlock,
+		EgressOnlyInternetGatewayID: *e.EgressOnlyInternetGatewayId,
+		GatewayID:                   *e.GatewayId,
+		InstanceID:                  *e.InstanceId,
+		LocalGatewayID:              *e.LocalGatewayId,
+		NatGatewayID:                *e.NatGatewayId,
+		NetworkInterfaceID:          *e.NetworkInterfaceId,
 		RouteTableID:                e.RouteTableId,
-		TransitGatewayID:            e.TransitGatewayId,
-		VpcEndpointID:               e.VpcEndpointId,
-		VpcPeeringConnectionID:      e.VpcPeeringConnectionId,
+		TransitGatewayID:            *e.TransitGatewayId,
+		VpcEndpointID:               *e.VpcEndpointId,
+		VpcPeeringConnectionID:      *e.VpcPeeringConnectionId,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

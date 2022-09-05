@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/qldb"
+import "github.com/awslabs/goformation/v6/cloudformation/qldb"
 
 // QldbLedgerConfig holds config for aws_qldb_ledger resource
 type QldbLedgerConfig struct {
@@ -31,12 +31,12 @@ func GetQldbLedgerConfig(q *qldb.Ledger) []AWSResourceConfig {
 
 	cf := QldbLedgerConfig{
 		Config: Config{
-			Name: q.Name,
+			Name: *q.Name,
 			Tags: q.Tags,
 		},
-		Name:               q.Name,
+		Name:               *q.Name,
 		PermissionsMode:    q.PermissionsMode,
-		DeletionProtection: q.DeletionProtection,
+		DeletionProtection: *q.DeletionProtection,
 	}
 
 	return []AWSResourceConfig{{

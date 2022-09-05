@@ -20,7 +20,7 @@ import (
 	"encoding/base64"
 	"unicode"
 
-	"github.com/awslabs/goformation/v5/cloudformation/autoscaling"
+	"github.com/awslabs/goformation/v6/cloudformation/autoscaling"
 )
 
 // EbsBlockDeviceBlock holds config for EbsBlockDevice
@@ -48,38 +48,38 @@ type AutoScalingLaunchConfigurationConfig struct {
 
 // GetAutoScalingLaunchConfigurationConfig returns config for AutoScalingLaunchConfiguration
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
-	ebsBlockDevice := make([]EbsBlockDeviceBlock, len(l.BlockDeviceMappings))
+	ebsBlockDevice := make([]EbsBlockDeviceBlock, len(*l.BlockDeviceMappings))
 
-	for i := range l.BlockDeviceMappings {
-		if l.BlockDeviceMappings[i].Ebs != nil {
-			ebsBlockDevice[i].Encrypted = l.BlockDeviceMappings[i].Ebs.Encrypted
-			ebsBlockDevice[i].DeleteOnTermination = l.BlockDeviceMappings[i].Ebs.DeleteOnTermination
+	for i, blockDeviceMapping := range *l.BlockDeviceMappings {
+		if blockDeviceMapping.Ebs != nil {
+			ebsBlockDevice[i].Encrypted = *blockDeviceMapping.Ebs.Encrypted
+			ebsBlockDevice[i].DeleteOnTermination = *blockDeviceMapping.Ebs.DeleteOnTermination
 		}
-		ebsBlockDevice[i].DeviceName = l.BlockDeviceMappings[i].DeviceName
+		ebsBlockDevice[i].DeviceName = blockDeviceMapping.DeviceName
 	}
 
 	var metadataOptions MetadataOptionsBlock
 	if l.MetadataOptions != nil {
-		metadataOptions.HTTPEndpoint = l.MetadataOptions.HttpEndpoint
-		metadataOptions.HTTPTokens = l.MetadataOptions.HttpTokens
+		metadataOptions.HTTPEndpoint = *l.MetadataOptions.HttpEndpoint
+		metadataOptions.HTTPTokens = *l.MetadataOptions.HttpTokens
 	}
 
 	cf := AutoScalingLaunchConfigurationConfig{
 		Config: Config{
-			Name: l.LaunchConfigurationName,
+			Name: *l.LaunchConfigurationName,
 		},
-		EnableMonitoring: l.InstanceMonitoring,
+		EnableMonitoring: *l.InstanceMonitoring,
 		MetadataOptions:  metadataOptions,
 		EbsBlockDevice:   ebsBlockDevice,
 	}
 
-	data, err := base64.StdEncoding.Strict().DecodeString(l.UserData)
+	data, err := base64.StdEncoding.Strict().DecodeString(*l.UserData)
 	datastr := string(data)
 
 	if isASCII(datastr) && err == nil {
-		cf.UserDataBase64 = l.UserData
+		cf.UserDataBase64 = *l.UserData
 	} else {
-		cf.UserData = l.UserData
+		cf.UserData = *l.UserData
 	}
 
 	return []AWSResourceConfig{{

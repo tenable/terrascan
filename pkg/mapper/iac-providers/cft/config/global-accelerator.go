@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/globalaccelerator"
+	"github.com/awslabs/goformation/v6/cloudformation/globalaccelerator"
 )
 
 // GlobalAcceleratorConfig holds config for aws_globalaccelerator_accelerator resource
@@ -36,8 +36,8 @@ func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceC
 			Tags: g.Tags,
 		},
 		Name:          g.Name,
-		Enabled:       g.Enabled,
-		IPAddressType: g.IpAddressType,
+		Enabled:       *g.Enabled,
+		IPAddressType: *g.IpAddressType,
 	}
 
 	return []AWSResourceConfig{{

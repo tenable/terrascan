@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/config"
+	"github.com/awslabs/goformation/v6/cloudformation/config"
 )
 
 // AWSConfigConfigRuleConfig holds config for aws_config_config_rule
@@ -30,7 +30,7 @@ type AWSConfigConfigRuleConfig struct {
 func GetConfigConfigRuleConfig(c *config.ConfigRule) []AWSResourceConfig {
 	cf := AWSConfigConfigRuleConfig{
 		Config: Config{
-			Name: c.ConfigRuleName,
+			Name: *c.ConfigRuleName,
 		},
 	}
 	if c.Source != nil {

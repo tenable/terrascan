@@ -16,7 +16,7 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/applicationautoscaling"
+import "github.com/awslabs/goformation/v6/cloudformation/applicationautoscaling"
 
 // AppAutoScalingPolicyConfig holds config for AppAutoScalingPolicy
 type AppAutoScalingPolicyConfig struct {
@@ -36,9 +36,9 @@ func GetAppAutoScalingPolicyConfig(a *applicationautoscaling.ScalingPolicy) []AW
 		},
 		Name:              a.PolicyName,
 		PolicyType:        a.PolicyType,
-		ResourceID:        a.ResourceId,
-		ScalableDimension: a.ScalableDimension,
-		ServiceNamespace:  a.ServiceNamespace,
+		ResourceID:        *a.ResourceId,
+		ScalableDimension: *a.ScalableDimension,
+		ServiceNamespace:  *a.ServiceNamespace,
 	}
 
 	return []AWSResourceConfig{{
