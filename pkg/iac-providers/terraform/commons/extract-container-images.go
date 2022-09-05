@@ -62,17 +62,17 @@ func isKuberneteResource(resource *hclConfigs.Resource) bool {
 	return ok
 }
 
-//isAzureConatinerResource verifies resource is azure type
+// isAzureConatinerResource verifies resource is azure type
 func isAzureConatinerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == azureContainerResource
 }
 
-//isAwsConatinerResource verifies resource is aws type
+// isAwsConatinerResource verifies resource is aws type
 func isAwsConatinerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == awsContainerResources
 }
 
-//fetchConatinersFromAzureResource extracts all the containers from azure resource
+// fetchConatinersFromAzureResource extracts all the containers from azure resource
 func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerDetails {
 	results := []output.ContainerDetails{}
 	if v, ok := resource[container]; ok {
@@ -83,7 +83,7 @@ func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerDetail
 	return results
 }
 
-//fetchConatinersFromAwsResource extracts all the containers from aws ecs resource
+// fetchConatinersFromAwsResource extracts all the containers from aws ecs resource
 func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, resourcePath string) []output.ContainerDetails {
 	results := []output.ContainerDetails{}
 	if v, ok := resource[containerDefinitions]; ok {
@@ -116,7 +116,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 	return results
 }
 
-//getContainersFromhclBody parses the attribute and creates container object
+// getContainersFromhclBody parses the attribute and creates container object
 func getContainersFromhclBody(hclBody *hclsyntax.Body) (results []output.ContainerDetails) {
 	for _, v := range hclBody.Attributes {
 		if v.Name == containerDefinitions {
@@ -194,7 +194,7 @@ func getContainers(containers []jsonObj) (results []output.ContainerDetails) {
 	return
 }
 
-//extractContainerImagesFromk8sResources extracts containers from k8s resource
+// extractContainerImagesFromk8sResources extracts containers from k8s resource
 func extractContainerImagesFromk8sResources(resource *hclConfigs.Resource, body *hclsyntax.Body) (containers, initContainers []output.ContainerDetails) {
 	for _, block := range body.Blocks {
 		if block.Type == spec {
@@ -225,7 +225,7 @@ func getContainerAndInitContainerFromSpecBlocks(specs *hclsyntax.Body) (containe
 	return
 }
 
-//getContainerAndInitContainerFromTemplateBlocks extracts container config from template block of resource
+// getContainerAndInitContainerFromTemplateBlocks extracts container config from template block of resource
 func getContainerAndInitContainerFromTemplateBlocks(templateBlocks []*hclsyntax.Block) (containers, initContainers []*hclsyntax.Block) {
 	for _, templateBlocks := range templateBlocks {
 		if templateBlocks.Type == spec {
@@ -241,7 +241,7 @@ func getContainerAndInitContainerFromTemplateBlocks(templateBlocks []*hclsyntax.
 	return
 }
 
-//getContainerConfigFromContainerBlock creates container config from container block of resource
+// getContainerConfigFromContainerBlock creates container config from container block of resource
 func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (containerImages []output.ContainerDetails) {
 	for _, conatainerBlock := range containerBlocks {
 		containerImage := output.ContainerDetails{}
@@ -261,7 +261,7 @@ func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (c
 	return
 }
 
-//getValueFromCtyExpr get value string from hcl expression
+// getValueFromCtyExpr get value string from hcl expression
 func getValueFromCtyExpr(expr hclsyntax.Expression) (value string) {
 	val, diags := expr.Value(nil)
 	if diags.HasErrors() {
