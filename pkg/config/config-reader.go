@@ -18,7 +18,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -64,7 +63,7 @@ func NewTerrascanConfigReader(fileName string) (*TerrascanConfigReader, error) {
 		return configReader, ErrNotPresent
 	}
 
-	data, err := ioutil.ReadFile(fileName)
+	data, err := os.ReadFile(fileName)
 	if err != nil {
 		zap.S().Error("error loading config file", zap.Error(err))
 		return configReader, ErrTomlLoadConfig

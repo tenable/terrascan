@@ -18,14 +18,14 @@ package rego
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 
 	"github.com/tenable/terrascan/pkg/policy"
 )
 
 // LoadRegoMetadata reads rego meta data file
 func LoadRegoMetadata(file string) (*policy.RegoMetadata, error) {
-	metadata, err := ioutil.ReadFile(file)
+	metadata, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}

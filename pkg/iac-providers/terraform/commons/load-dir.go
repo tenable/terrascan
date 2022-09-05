@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -531,7 +530,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {

@@ -18,7 +18,7 @@ package cftv1
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -56,7 +56,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			a := &CFTV1{}
-			data, err := ioutil.ReadFile(tt.inputFile)
+			data, err := os.ReadFile(tt.inputFile)
 			if err != nil {
 				t.Error(err)
 			}

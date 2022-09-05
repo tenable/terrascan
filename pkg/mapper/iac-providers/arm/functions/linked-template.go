@@ -1,7 +1,6 @@
 package functions
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,7 +18,7 @@ func ResolveLinkedTemplate(uri string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fileData, err := ioutil.ReadFile(path)
+	fileData, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

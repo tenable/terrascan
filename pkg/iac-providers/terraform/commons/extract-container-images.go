@@ -18,7 +18,7 @@ package commons
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -98,7 +98,7 @@ func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, r
 			if !filepath.IsAbs(fileLocation) {
 				fileLocation = filepath.Join(dir, fileLocation)
 			}
-			fileData, err := ioutil.ReadFile(fileLocation)
+			fileData, err := os.ReadFile(fileLocation)
 			if err != nil {
 				zap.S().Warnf("failed to fetch containers from aws resource: %v", err)
 				return results

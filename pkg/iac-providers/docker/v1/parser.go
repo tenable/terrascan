@@ -18,7 +18,7 @@ package dockerv1
 
 import (
 	"bytes"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/moby/buildkit/frontend/dockerfile/instructions"
@@ -50,7 +50,7 @@ func (dc *DockerV1) Parse(filepath string) ([]DockerConfig, string, error) {
 	config := []DockerConfig{}
 	comments := ""
 
-	data, err := ioutil.ReadFile(filepath)
+	data, err := os.ReadFile(filepath)
 	if err != nil {
 		zap.S().Error("error loading docker file", filepath, zap.Error(err))
 		return config, "", err

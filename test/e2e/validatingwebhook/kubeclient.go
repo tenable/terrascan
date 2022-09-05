@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -79,7 +79,7 @@ func (k *KubernetesClient) getK8sClient() (*kubernetes.Clientset, error) {
 // CreateValidatingWebhookConfiguration creates a ValidatingWebhookConfiguration
 func (k *KubernetesClient) CreateValidatingWebhookConfiguration(webhookFile, certFile, apiKey, port string) (*admissionv1.ValidatingWebhookConfiguration, error) {
 	webhooks := admissionv1.ValidatingWebhookConfiguration{}
-	data, err := ioutil.ReadFile(webhookFile)
+	data, err := os.ReadFile(webhookFile)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (k *KubernetesClient) CreateValidatingWebhookConfiguration(webhookFile, cer
 		return nil, err
 	}
 
-	certData, err := ioutil.ReadFile(certFile)
+	certData, err := os.ReadFile(certFile)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (k *KubernetesClient) DeleteValidatingWebhookConfiguration(webhookConfigNam
 // CreatePod will create a pod by parsing a resource file
 func (k *KubernetesClient) CreatePod(resourceFile string) (*v1.Pod, error) {
 	pod := v1.Pod{}
-	data, err := ioutil.ReadFile(resourceFile)
+	data, err := os.ReadFile(resourceFile)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (k *KubernetesClient) DeletePod(podName string) error {
 // CreateService will a service by parsing a resource file
 func (k *KubernetesClient) CreateService(resourceFile string) (*v1.Service, error) {
 	service := v1.Service{}
-	data, err := ioutil.ReadFile(resourceFile)
+	data, err := os.ReadFile(resourceFile)
 	if err != nil {
 		return nil, err
 	}

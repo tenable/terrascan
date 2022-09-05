@@ -18,7 +18,7 @@ package utils
 
 import (
 	"bytes"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -31,7 +31,7 @@ var (
 )
 
 func init() {
-	validJSON, _ = ioutil.ReadFile(validJSONFile)
+	validJSON, _ = os.ReadFile(validJSONFile)
 
 }
 
