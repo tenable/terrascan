@@ -25,7 +25,7 @@ import (
 
 const (
 	// GatewayMethodSettings represents subresource aws_api_gateway_method_settings for MethodSettings attribute
-	GatewayMethodSettings = "MethodSettings"
+	GatewayMethodSetting = "MethodSetting"
 )
 
 // MethodSettingConfig holds config for aws_api_gateway_method_settings
@@ -86,7 +86,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 				}},
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
-				Type: GatewayMethodSettings,
+				Type: GatewayMethodSetting,
 				// Unique name for each method setting used fopr ID
 				Name:     fmt.Sprintf("%s%v", functions.GetVal(s.StageName), i),
 				Resource: msc,
