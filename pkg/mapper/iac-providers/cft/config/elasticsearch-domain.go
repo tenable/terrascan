@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 
 	"github.com/awslabs/goformation/v6/cloudformation/elasticsearch"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -66,7 +67,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	// add domain config
 	esDomainConfig := ElasticsearchDomainConfig{
 		Config: Config{
-			Name: *d.DomainName,
+			Name: functions.GetString(d.DomainName),
 			Tags: d.Tags,
 		},
 	}
@@ -75,7 +76,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 		lpConfig := make([]LogPublishingOptionsConfig, 0)
 		for ltype, options := range *d.LogPublishingOptions {
 			lpConfig = append(lpConfig, LogPublishingOptionsConfig{
-				Enabled: *options.Enabled,
+				Enabled: functions.GetBool(options.Enabled),
 				LogType: ltype,
 			})
 		}
@@ -84,14 +85,14 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 
 	if d.NodeToNodeEncryptionOptions != nil {
 		esDomainConfig.NodeToNodeEncryptionOptions = []NodeToNodeEncryptionOptionsConfig{{
-			Enabled: *d.NodeToNodeEncryptionOptions.Enabled,
+			Enabled: functions.GetBool(d.NodeToNodeEncryptionOptions.Enabled),
 		}}
 	}
 
 	if d.EncryptionAtRestOptions != nil {
 		enc := EncryptionAtRestConfig{
-			KmsKeyID: *d.EncryptionAtRestOptions.KmsKeyId,
-			Enabled:  *d.EncryptionAtRestOptions.Enabled,
+			KmsKeyID: functions.GetString(d.EncryptionAtRestOptions.KmsKeyId),
+			Enabled:  functions.GetBool(d.EncryptionAtRestOptions.Enabled),
 		}
 		esDomainConfig.EncryptionAtRest = []EncryptionAtRestConfig{enc}
 	}
@@ -105,7 +106,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	if d.AccessPolicies != nil {
 		policyConfig := ElasticsearchDomainAccessPolicyConfig{
 			Config: Config{
-				Name: *d.DomainName,
+				Name: functions.GetString(d.DomainName),
 			},
 		}
 		policies, err := json.Marshal(d.AccessPolicies)
@@ -115,7 +116,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 		resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 			Resource: policyConfig,
 			Type:     ElasticsearchDomainAccessPolicy,
-			Name:     *d.DomainName,
+			Name:     functions.GetString(d.DomainName),
 			Metadata: d.AWSCloudFormationMetadata,
 		})
 	}

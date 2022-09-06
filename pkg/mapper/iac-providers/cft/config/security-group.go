@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // IngressEgress holds config for SecurityGroupEgress, SecurityGroupIngress attributes of SecurityGroupConfig
@@ -52,28 +53,14 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 
 	ingresses := make([]IngressEgress, 0)
 	for _, i := range *s.SecurityGroupIngress {
-		ingress := IngressEgress{
-			IPProtocol:  i.IpProtocol,
-			Description: *i.Description,
-			CidrIP:      []string{*i.CidrIp},
-			CidrIpv6:    []string{*i.CidrIpv6},
-			FromPort:    *i.FromPort,
-			ToPort:      *i.ToPort,
-		}
+		ingress := getIngressEgress(i)
 		ingresses = append(ingresses, ingress)
 	}
 	cf.SecurityGroupIngress = ingresses
 
 	egresses := make([]IngressEgress, 0)
 	for _, e := range *s.SecurityGroupEgress {
-		egress := IngressEgress{
-			IPProtocol:  e.IpProtocol,
-			Description: *e.Description,
-			CidrIP:      []string{*e.CidrIp},
-			CidrIpv6:    []string{*e.CidrIpv6},
-			FromPort:    *e.FromPort,
-			ToPort:      *e.ToPort,
-		}
+		egress := getIngressEgress(e)
 		egresses = append(egresses, egress)
 	}
 	cf.SecurityGroupEgress = egresses
@@ -82,4 +69,36 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 		Resource: cf,
 		Metadata: s.AWSCloudFormationMetadata,
 	}}
+}
+
+func getIngressEgress(ie any) IngressEgress {
+	if egress, ok := ie.(*ec2.SecurityGroup_Egress); ok {
+		return getEgress(egress)
+	}
+	if ingress, ok := ie.(*ec2.SecurityGroup_Ingress); ok {
+		return getIngress(ingress)
+	}
+	return IngressEgress{}
+}
+
+func getEgress(egress *ec2.SecurityGroup_Egress) IngressEgress {
+	return IngressEgress{
+		IPProtocol:  egress.IpProtocol,
+		Description: functions.GetString(egress.Description),
+		CidrIP:      []string{functions.GetString(egress.CidrIp)},
+		CidrIpv6:    []string{functions.GetString(egress.CidrIpv6)},
+		FromPort:    functions.GetNum(egress.FromPort),
+		ToPort:      functions.GetNum(egress.ToPort),
+	}
+}
+
+func getIngress(egress *ec2.SecurityGroup_Ingress) IngressEgress {
+	return IngressEgress{
+		IPProtocol:  egress.IpProtocol,
+		Description: functions.GetString(egress.Description),
+		CidrIP:      []string{functions.GetString(egress.CidrIp)},
+		CidrIpv6:    []string{functions.GetString(egress.CidrIpv6)},
+		FromPort:    functions.GetNum(egress.FromPort),
+		ToPort:      functions.GetNum(egress.ToPort),
+	}
 }

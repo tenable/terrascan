@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancingv2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ElasticLoadBalancingV2TargetGroupConfig holds config for aws_lb_target_group
@@ -32,10 +33,10 @@ func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.Target
 	// as only one default action per listener is possible in terraform
 	cf := ElasticLoadBalancingV2TargetGroupConfig{
 		Config: Config{
-			Name: *l.Name,
+			Name: functions.GetString(l.Name),
 			Tags: *l.Tags,
 		},
-		Protocol: *l.Protocol,
+		Protocol: functions.GetString(l.Protocol),
 	}
 
 	return []AWSResourceConfig{{

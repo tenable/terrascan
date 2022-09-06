@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/ec2"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // Ec2VpcConfig holds config for Ec2Vpc
 type Ec2VpcConfig struct {
@@ -33,10 +36,10 @@ func GetEc2VpcConfig(v *ec2.VPC) []AWSResourceConfig {
 		Config: Config{
 			Tags: v.Tags,
 		},
-		CIDRBlock:          *v.CidrBlock,
-		EnableDNSSupport:   *v.EnableDnsSupport,
-		EnableDNSHostnames: *v.EnableDnsHostnames,
-		InstanceTenancy:    *v.InstanceTenancy,
+		CIDRBlock:          functions.GetString(v.CidrBlock),
+		EnableDNSSupport:   functions.GetBool(v.EnableDnsSupport),
+		EnableDNSHostnames: functions.GetBool(v.EnableDnsHostnames),
+		InstanceTenancy:    functions.GetString(v.InstanceTenancy),
 	}
 
 	return []AWSResourceConfig{{

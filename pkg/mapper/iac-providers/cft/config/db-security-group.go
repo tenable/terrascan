@@ -18,12 +18,19 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/rds"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
+
+// DBIngress holds config for ingress block
+type DBIngress struct {
+	CIDR              string `json:"cidr"`
+	SecurityGroupName string `json:"security_group_name"`
+}
 
 // DBSecurityGroupConfig holds config for aws_db_security_group
 type DBSecurityGroupConfig struct {
 	Config
-	Ingress []map[string]interface{} `json:"ingress"`
+	Ingress []DBIngress `json:"ingress"`
 }
 
 // GetDBSecurityGroupConfig returns config for aws_db_security_group
@@ -33,11 +40,15 @@ func GetDBSecurityGroupConfig(dbsg *rds.DBSecurityGroup) []AWSResourceConfig {
 			Tags: dbsg.Tags,
 		},
 	}
-	for _, dbsgi := range dbsg.DBSecurityGroupIngress {
-		i := make(map[string]interface{})
-		i["cidr"] = dbsgi.CIDRIP
-		cf.Ingress = append(cf.Ingress, i)
+
+	if dbsg.DBSecurityGroupIngress != nil {
+		cf.Ingress = make([]DBIngress, len(dbsg.DBSecurityGroupIngress))
+		for i, dbsgi := range dbsg.DBSecurityGroupIngress {
+			cf.Ingress[i].CIDR = functions.GetString(dbsgi.CIDRIP)
+			cf.Ingress[i].SecurityGroupName = functions.GetString(dbsgi.EC2SecurityGroupName)
+		}
 	}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: dbsg.AWSCloudFormationMetadata,

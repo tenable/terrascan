@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/dms"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/dms"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // DmsReplicationInstanceConfig holds config for DmsReplicationInstance
 type DmsReplicationInstanceConfig struct {
@@ -42,17 +45,17 @@ func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceCo
 			Tags: r.Tags,
 		},
 
-		AlocatedStorage:            *r.AllocatedStorage,
-		AutoMinorVersionUpgrade:    *r.AutoMinorVersionUpgrade,
-		AvailabilityZone:           *r.AvailabilityZone,
-		EngineVersion:              *r.EngineVersion,
-		KMSKeyARN:                  *r.KmsKeyId,
-		MultiAZ:                    *r.MultiAZ,
-		PreferredMaintenanceWindow: *r.PreferredMaintenanceWindow,
-		PubliclyAccessible:         *r.PubliclyAccessible,
+		AlocatedStorage:            functions.GetNum(r.AllocatedStorage),
+		AutoMinorVersionUpgrade:    functions.GetBool(r.AutoMinorVersionUpgrade),
+		AvailabilityZone:           functions.GetString(r.AvailabilityZone),
+		EngineVersion:              functions.GetString(r.EngineVersion),
+		KMSKeyARN:                  functions.GetString(r.KmsKeyId),
+		MultiAZ:                    functions.GetBool(r.MultiAZ),
+		PreferredMaintenanceWindow: functions.GetString(r.PreferredMaintenanceWindow),
+		PubliclyAccessible:         functions.GetBool(r.PubliclyAccessible),
 		ReplicationInstanceClass:   r.ReplicationInstanceClass,
-		ReplicationInstanceID:      *r.ReplicationInstanceIdentifier,
-		ReplicationSubnetGroupID:   *r.ReplicationSubnetGroupIdentifier,
+		ReplicationInstanceID:      functions.GetString(r.ReplicationInstanceIdentifier),
+		ReplicationSubnetGroupID:   functions.GetString(r.ReplicationSubnetGroupIdentifier),
 		VPCSecurityGroupIDs:        *r.VpcSecurityGroupIds,
 	}
 

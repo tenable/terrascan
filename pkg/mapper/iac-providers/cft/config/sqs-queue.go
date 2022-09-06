@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/sqs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // SqsQueueConfig holds config for SqsQueue
@@ -33,12 +34,12 @@ type SqsQueueConfig struct {
 func GetSqsQueueConfig(q *sqs.Queue) []AWSResourceConfig {
 	cf := SqsQueueConfig{
 		Config: Config{
-			Name: *q.QueueName,
+			Name: functions.GetString(q.QueueName),
 		},
-		Name:                         *q.QueueName,
-		KmsMasterKeyID:               *q.KmsMasterKeyId,
-		KmsDataKeyReusePeriodSeconds: *q.KmsDataKeyReusePeriodSeconds,
-		MessageRetentionSeconds:      *q.MessageRetentionPeriod,
+		Name:                         functions.GetString(q.QueueName),
+		KmsMasterKeyID:               functions.GetString(q.KmsMasterKeyId),
+		KmsDataKeyReusePeriodSeconds: functions.GetNum(q.KmsDataKeyReusePeriodSeconds),
+		MessageRetentionSeconds:      functions.GetNum(q.MessageRetentionPeriod),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

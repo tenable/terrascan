@@ -21,6 +21,7 @@ import (
 	"strconv"
 
 	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/store"
 )
 
@@ -70,8 +71,8 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 	awsconfig := make([]AWSResourceConfig, len(*i.NetworkInterfaces))
 
 	for index, networkInterface := range *i.NetworkInterfaces {
-		nics[index].NetworkInterfaceID = *networkInterface.NetworkInterfaceId
-		nics[index].DeleteOnTermination = *networkInterface.DeleteOnTermination
+		nics[index].NetworkInterfaceID = functions.GetString(networkInterface.NetworkInterfaceId)
+		nics[index].DeleteOnTermination = functions.GetBool(networkInterface.DeleteOnTermination)
 		var devindex int
 		devindex, err := strconv.Atoi(networkInterface.DeviceIndex)
 		if err != nil {
@@ -82,7 +83,7 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		// create aws_network_interface resource on the fly for every network interface used in aws_instance
 		niconfigs[index].SubnetID = *networkInterface.SubnetId
 		if *networkInterface.PrivateIpAddress != "" {
-			niconfigs[index].PrivateIPs = []string{*networkInterface.PrivateIpAddress}
+			niconfigs[index].PrivateIPs = []string{functions.GetString(networkInterface.PrivateIpAddress)}
 		}
 
 		nicname := fmt.Sprintf("%s%d", instanceName, index)
@@ -102,17 +103,17 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 			Tags: i.Tags,
 			Name: instanceName,
 		},
-		AMI:                 *i.ImageId,
-		InstanceType:        *i.InstanceType,
-		EBSOptimized:        *i.EbsOptimized,
-		Monitoring:          *i.Monitoring,
-		IAMInstanceProfile:  *i.IamInstanceProfile,
+		AMI:                 functions.GetString(i.ImageId),
+		InstanceType:        functions.GetString(i.InstanceType),
+		EBSOptimized:        functions.GetBool(i.EbsOptimized),
+		Monitoring:          functions.GetBool(i.Monitoring),
+		IAMInstanceProfile:  functions.GetString(i.IamInstanceProfile),
 		VPCSecurityGroupIDs: *i.SecurityGroupIds,
 		NetworkInterface:    nics,
 	}
 
 	if i.HibernationOptions != nil {
-		ec2Config.Hibernation = *i.HibernationOptions.Configured
+		ec2Config.Hibernation = functions.GetBool(i.HibernationOptions.Configured)
 	}
 
 	var awsconfigec2 AWSResourceConfig

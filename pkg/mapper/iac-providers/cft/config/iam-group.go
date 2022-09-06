@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -69,9 +70,9 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 
 	groupConfig := IamGroupConfig{
 		Config: Config{
-			Name: *r.GroupName,
+			Name: functions.GetString(r.GroupName),
 		},
-		Name: *r.GroupName,
+		Name: functions.GetString(r.GroupName),
 	}
 
 	var groupPolicyConfig AWSResourceConfig

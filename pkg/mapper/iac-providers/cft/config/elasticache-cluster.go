@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/elasticache"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ElastiCacheClusterConfig holds config for aws_elasticache_cluster
@@ -33,11 +34,11 @@ func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfi
 	cf := ElastiCacheClusterConfig{
 		Config: Config{
 			Tags: e.Tags,
-			Name: *e.ClusterName,
+			Name: functions.GetString(e.ClusterName),
 		},
-		AZMode:        *e.AZMode,
+		AZMode:        functions.GetString(e.AZMode),
 		Engine:        e.Engine,
-		EngineVersion: *e.EngineVersion,
+		EngineVersion: functions.GetString(e.EngineVersion),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

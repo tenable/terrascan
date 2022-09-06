@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // EbsVolumeConfig holds config for aws_ebs_volume
@@ -33,8 +34,8 @@ func GetEbsVolumeConfig(v *ec2.Volume) []AWSResourceConfig {
 		Config: Config{
 			Tags: v.Tags,
 		},
-		Encrypted: *v.Encrypted,
-		KmsKeyID:  *v.KmsKeyId,
+		Encrypted: functions.GetBool(v.Encrypted),
+		KmsKeyID:  functions.GetString(v.KmsKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

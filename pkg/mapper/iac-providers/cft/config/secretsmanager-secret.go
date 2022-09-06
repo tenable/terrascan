@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/secretsmanager"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // SecretsManagerSecretConfig holds config for aws_secretsmanager_secret
@@ -31,9 +32,9 @@ func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
 			Tags: s.Tags,
-			Name: *s.Name,
+			Name: functions.GetString(s.Name),
 		},
-		KmsKeyID: *s.KmsKeyId,
+		KmsKeyID: functions.GetString(s.KmsKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

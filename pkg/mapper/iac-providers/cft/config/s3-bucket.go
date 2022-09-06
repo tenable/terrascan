@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/awslabs/goformation/v6/cloudformation/s3"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -87,16 +88,15 @@ type S3BucketPublicAccessBlockConfig struct {
 
 // GetS3BucketConfig returns config for aws_s3_bucket
 func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
-
 	resourceConfigs := make([]AWSResourceConfig, 0)
 
 	cf := S3BucketConfig{
 		Config: Config{
-			Name: *s.BucketName,
+			Name: functions.GetString(s.BucketName),
 			Tags: s.Tags,
 		},
-		Bucket:        *s.BucketName,
-		AccessControl: strings.ToLower(*s.AccessControl),
+		Bucket:        functions.GetString(s.BucketName),
+		AccessControl: strings.ToLower(functions.GetString(s.AccessControl)),
 	}
 
 	// add sse configurations
@@ -105,7 +105,7 @@ func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 		for _, sseRule := range s.BucketEncryption.ServerSideEncryptionConfiguration {
 			if sseRule.ServerSideEncryptionByDefault != nil {
 				defaultConfig := DefaultSSEConfig{
-					KMSMasterKeyID: *sseRule.ServerSideEncryptionByDefault.KMSMasterKeyID,
+					KMSMasterKeyID: functions.GetString(sseRule.ServerSideEncryptionByDefault.KMSMasterKeyID),
 					SSEAlgorithm:   sseRule.ServerSideEncryptionByDefault.SSEAlgorithm,
 				}
 				sseRules = append(sseRules, ServerSideEncryptionRule{
@@ -121,16 +121,16 @@ func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 	// add logging configurasions
 	if s.LoggingConfiguration != nil {
 		cf.Logging = []LoggingConfig{{
-			DestinationBucketName: *s.LoggingConfiguration.DestinationBucketName,
-			LogFilePrefix:         *s.LoggingConfiguration.LogFilePrefix,
+			DestinationBucketName: functions.GetString(s.LoggingConfiguration.DestinationBucketName),
+			LogFilePrefix:         functions.GetString(s.LoggingConfiguration.LogFilePrefix),
 		}}
 	}
 
 	// add website configurations
 	if s.WebsiteConfiguration != nil {
 		cf.WebsiteConfiguration = []WebsiteConfig{{
-			IndexDocument:         *s.WebsiteConfiguration.IndexDocument,
-			ErrorDocument:         *s.WebsiteConfiguration.ErrorDocument,
+			IndexDocument:         functions.GetString(s.WebsiteConfiguration.IndexDocument),
+			ErrorDocument:         functions.GetString(s.WebsiteConfiguration.ErrorDocument),
 			RedirectAllRequestsTo: s.WebsiteConfiguration.RedirectAllRequestsTo,
 			RoutingRules:          s.WebsiteConfiguration.RoutingRules,
 		}}
@@ -158,17 +158,17 @@ func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 		resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 			Resource: S3BucketPublicAccessBlockConfig{
 				Config: Config{
-					Name: *s.BucketName,
+					Name: functions.GetString(s.BucketName),
 				},
-				Bucket:                fmt.Sprintf("aws_s3_bucket.%s", *s.BucketName),
-				BlockPublicAcls:       *s.PublicAccessBlockConfiguration.BlockPublicAcls,
-				BlockPublicPolicy:     *s.PublicAccessBlockConfiguration.BlockPublicPolicy,
-				IgnorePublicAcls:      *s.PublicAccessBlockConfiguration.IgnorePublicAcls,
-				RestrictPublicBuckets: *s.PublicAccessBlockConfiguration.RestrictPublicBuckets,
+				Bucket:                fmt.Sprintf("aws_s3_bucket.%s", functions.GetString(s.BucketName)),
+				BlockPublicAcls:       functions.GetBool(s.PublicAccessBlockConfiguration.BlockPublicAcls),
+				BlockPublicPolicy:     functions.GetBool(s.PublicAccessBlockConfiguration.BlockPublicPolicy),
+				IgnorePublicAcls:      functions.GetBool(s.PublicAccessBlockConfiguration.IgnorePublicAcls),
+				RestrictPublicBuckets: functions.GetBool(s.PublicAccessBlockConfiguration.RestrictPublicBuckets),
 			},
 			Metadata: s.AWSCloudFormationMetadata,
 			Type:     PublicAccessBlock,
-			Name:     *s.BucketName,
+			Name:     functions.GetString(s.BucketName),
 		})
 	}
 

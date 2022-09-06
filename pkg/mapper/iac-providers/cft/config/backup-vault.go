@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/backup"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/backup"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // BackupVaultConfig holds config for BackupVault
 type BackupVaultConfig struct {
@@ -33,7 +36,7 @@ func GetBackupVaultConfig(b *backup.BackupVault) []AWSResourceConfig {
 			Tags: b.BackupVaultTags,
 		},
 		Name:      b.BackupVaultName,
-		KMSKeyARN: *b.EncryptionKeyArn,
+		KMSKeyARN: functions.GetString(b.EncryptionKeyArn),
 	}
 
 	return []AWSResourceConfig{{

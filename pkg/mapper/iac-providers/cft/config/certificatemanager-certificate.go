@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/certificatemanager"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/certificatemanager"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // CertificateManagerCertificateConfig holds config for CertificateManagerCertificate
 type CertificateManagerCertificateConfig struct {
@@ -32,7 +35,7 @@ func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) [
 			Tags: c.Tags,
 		},
 		DomainName:       c.DomainName,
-		ValidationMethod: *c.ValidationMethod,
+		ValidationMethod: functions.GetString(c.ValidationMethod),
 	}
 
 	return []AWSResourceConfig{{

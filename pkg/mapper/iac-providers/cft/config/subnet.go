@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // SubnetConfig holds config for aws_subnet
@@ -38,12 +39,12 @@ func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AssignIpv6AddressOnCreation: *e.AssignIpv6AddressOnCreation,
-		AvailabilityZone:            *e.AvailabilityZone,
-		CidrBlock:                   *e.CidrBlock,
-		Ipv6CidrBlock:               *e.Ipv6CidrBlock,
-		MapPublicIPOnLaunch:         *e.MapPublicIpOnLaunch,
-		OutpostArn:                  *e.OutpostArn,
+		AssignIpv6AddressOnCreation: functions.GetBool(e.AssignIpv6AddressOnCreation),
+		AvailabilityZone:            functions.GetString(e.AvailabilityZone),
+		CidrBlock:                   functions.GetString(e.CidrBlock),
+		Ipv6CidrBlock:               functions.GetString(e.Ipv6CidrBlock),
+		MapPublicIPOnLaunch:         functions.GetBool(e.MapPublicIpOnLaunch),
+		OutpostArn:                  functions.GetString(e.OutpostArn),
 		VpcID:                       e.VpcId,
 	}
 	return []AWSResourceConfig{{

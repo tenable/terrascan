@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/config"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ConfigurationAggregatorConfig holds config for aws_config_configuration_aggregator
@@ -32,14 +33,14 @@ func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) [
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{
 			Tags: c.Tags,
-			Name: *c.ConfigurationAggregatorName,
+			Name: functions.GetString(c.ConfigurationAggregatorName),
 		},
 	}
 	if c.AccountAggregationSources != nil {
 		accountAggregationSources := make([]map[string]interface{}, 0)
 		for _, agsource := range *c.AccountAggregationSources {
 			accountAggregationSource := make(map[string]interface{})
-			accountAggregationSource["all_regions"] = *agsource.AllAwsRegions
+			accountAggregationSource["all_regions"] = functions.GetBool(agsource.AllAwsRegions)
 			accountAggregationSources = append(accountAggregationSources, accountAggregationSource)
 		}
 		if len(accountAggregationSources) > 0 {

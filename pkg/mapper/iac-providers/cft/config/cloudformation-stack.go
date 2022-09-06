@@ -39,7 +39,7 @@ func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 		TemplateData:     []byte{},
 	}
 
-	if len(*s.NotificationARNs) > 0 {
+	if s.NotificationARNs != nil {
 		cf.NotificationARNs = s.NotificationARNs
 	}
 

@@ -35,10 +35,13 @@ type RedshiftParameterGroupConfig struct {
 
 // GetRedshiftParameterGroupConfig returns config for RedshiftParameterGroup
 func GetRedshiftParameterGroupConfig(p *redshift.ClusterParameterGroup, paramGroupName string) []AWSResourceConfig {
-	parameterBlock := make([]ParameterBlock, len(*p.Parameters))
-	for i, parameter := range *p.Parameters {
-		parameterBlock[i].Name = parameter.ParameterName
-		parameterBlock[i].Value = parameter.ParameterValue
+	var parameterBlock []ParameterBlock
+	if p.Parameters != nil {
+		parameterBlock := make([]ParameterBlock, len(*p.Parameters))
+		for i, parameter := range *p.Parameters {
+			parameterBlock[i].Name = parameter.ParameterName
+			parameterBlock[i].Value = parameter.ParameterValue
+		}
 	}
 
 	cf := RedshiftParameterGroupConfig{

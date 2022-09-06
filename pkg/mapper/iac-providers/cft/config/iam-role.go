@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -49,7 +50,7 @@ func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	// add aws_iam_role
 	roleConfig := IamRoleConfig{
 		Config: Config{
-			Name: *r.RoleName,
+			Name: functions.GetString(r.RoleName),
 			Tags: r.Tags,
 		},
 	}

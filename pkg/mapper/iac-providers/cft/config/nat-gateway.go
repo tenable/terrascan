@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // NatGatewayConfig holds config for aws_nat_gateway
@@ -34,8 +35,8 @@ func GetNatGatewayConfig(e *ec2.NatGateway) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AllocationID:     *e.AllocationId,
-		ConnectivityType: *e.ConnectivityType,
+		AllocationID:     functions.GetString(e.AllocationId),
+		ConnectivityType: functions.GetString(e.ConnectivityType),
 		SubnetID:         e.SubnetId,
 	}
 	return []AWSResourceConfig{{

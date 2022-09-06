@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/dax"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // DaxClusterConfig holds config for aws_dax_cluster
@@ -31,7 +32,7 @@ func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 	cf := DaxClusterConfig{
 		Config: Config{
 			Tags: t.Tags,
-			Name: *t.ClusterName,
+			Name: functions.GetString(t.ClusterName),
 		},
 	}
 	sse := make(map[string]interface{})

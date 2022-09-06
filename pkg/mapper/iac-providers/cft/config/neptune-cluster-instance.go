@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/neptune"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/neptune"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // NeptuneClusterInstanceConfig holds config for aws_neptune_cluster_instance resource
 type NeptuneClusterInstanceConfig struct {
@@ -36,13 +39,13 @@ func GetNeptuneClusterInstanceConfig(n *neptune.DBInstance) []AWSResourceConfig 
 		Config: Config{
 			Tags: n.Tags,
 		},
-		AutoMinorVersionUpgrade:    *n.AutoMinorVersionUpgrade,
-		AvailabilityZone:           *n.AvailabilityZone,
-		DBClusterIdentifier:        *n.DBClusterIdentifier,
+		AutoMinorVersionUpgrade:    functions.GetBool(n.AutoMinorVersionUpgrade),
+		AvailabilityZone:           functions.GetString(n.AvailabilityZone),
+		DBClusterIdentifier:        functions.GetString(n.DBClusterIdentifier),
 		DBInstanceClass:            n.DBInstanceClass,
-		DBParameterGroupName:       *n.DBParameterGroupName,
-		DBSubnetGroupName:          *n.DBSubnetGroupName,
-		PreferredMaintenanceWindow: *n.PreferredMaintenanceWindow,
+		DBParameterGroupName:       functions.GetString(n.DBParameterGroupName),
+		DBSubnetGroupName:          functions.GetString(n.DBSubnetGroupName),
+		PreferredMaintenanceWindow: functions.GetString(n.PreferredMaintenanceWindow),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

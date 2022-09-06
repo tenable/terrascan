@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/rds"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // RDSClusterConfig holds config for aws_rds_cluster
@@ -31,11 +32,11 @@ type RDSClusterConfig struct {
 func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	cf := RDSClusterConfig{
 		Config: Config{
-			Name: *c.DatabaseName,
+			Name: functions.GetString(c.DatabaseName),
 			Tags: c.Tags,
 		},
-		BackupRetentionPeriod: *c.BackupRetentionPeriod,
-		StorageEncrypted:      *c.StorageEncrypted,
+		BackupRetentionPeriod: functions.GetNum(c.BackupRetentionPeriod),
+		StorageEncrypted:      functions.GetBool(c.StorageEncrypted),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

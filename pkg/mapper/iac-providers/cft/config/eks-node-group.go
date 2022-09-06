@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/eks"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/eks"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // EksNodeGroupScalingConfigBlock holds config for EksNodeGroupScalingConfig
 type EksNodeGroupScalingConfigBlock struct {
@@ -41,9 +44,9 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock
 	if g.ScalingConfig != nil {
 		scalingConfig = make([]EksNodeGroupScalingConfigBlock, 1)
-		scalingConfig[0].DesiredSize = *g.ScalingConfig.DesiredSize
-		scalingConfig[0].MaxSize = *g.ScalingConfig.MaxSize
-		scalingConfig[0].MinSize = *g.ScalingConfig.MinSize
+		scalingConfig[0].DesiredSize = functions.GetNum(g.ScalingConfig.DesiredSize)
+		scalingConfig[0].MaxSize = functions.GetNum(g.ScalingConfig.MaxSize)
+		scalingConfig[0].MinSize = functions.GetNum(g.ScalingConfig.MinSize)
 	}
 
 	cf := EksNodeGroupConfig{

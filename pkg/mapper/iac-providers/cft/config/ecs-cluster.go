@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/ecs"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/ecs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // ClusterSettingsBlock holds config for settings attribute
 type ClusterSettingsBlock struct {
@@ -68,23 +71,23 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 
 	clusterSettingsData = make([]ClusterSettingsBlock, len(*e.ClusterSettings))
 	for i, clusterSetting := range *e.ClusterSettings {
-		clusterSettingsData[i].Name = *clusterSetting.Name
-		clusterSettingsData[i].Value = *clusterSetting.Value
+		clusterSettingsData[i].Name = functions.GetString(clusterSetting.Name)
+		clusterSettingsData[i].Value = functions.GetString(clusterSetting.Value)
 	}
 
 	capacityProviderStrategyData = make([]CapacityProviderStrategyBlock, len(*e.DefaultCapacityProviderStrategy))
 	for i, defaultCapacityProviderStrategy := range *e.DefaultCapacityProviderStrategy {
-		capacityProviderStrategyData[i].Base = *defaultCapacityProviderStrategy.Base
-		capacityProviderStrategyData[i].CapacityProvider = *defaultCapacityProviderStrategy.CapacityProvider
-		capacityProviderStrategyData[i].Weight = *defaultCapacityProviderStrategy.Weight
+		capacityProviderStrategyData[i].Base = functions.GetNum(defaultCapacityProviderStrategy.Base)
+		capacityProviderStrategyData[i].CapacityProvider = functions.GetString(defaultCapacityProviderStrategy.CapacityProvider)
+		capacityProviderStrategyData[i].Weight = functions.GetNum(defaultCapacityProviderStrategy.Weight)
 	}
 
 	cf := EcsClusterConfig{
 		Config: Config{
-			Name: *e.ClusterName,
+			Name: functions.GetString(e.ClusterName),
 			Tags: e.Tags,
 		},
-		ClusterName:                     *e.ClusterName,
+		ClusterName:                     functions.GetString(e.ClusterName),
 		ClusterSettings:                 clusterSettingsData,
 		DefaultCapacityProviderStrategy: capacityProviderStrategyData,
 	}
@@ -119,8 +122,8 @@ func setExecCommandConfigBlock(e *ecs.Cluster) []ExecuteCommandConfiguration {
 
 	execCommandConfigData = make([]ExecuteCommandConfiguration, 1)
 
-	execCommandConfigData[0].KmsKeyID = *e.Configuration.ExecuteCommandConfiguration.KmsKeyId
-	execCommandConfigData[0].Logging = *e.Configuration.ExecuteCommandConfiguration.Logging
+	execCommandConfigData[0].KmsKeyID = functions.GetString(e.Configuration.ExecuteCommandConfiguration.KmsKeyId)
+	execCommandConfigData[0].Logging = functions.GetString(e.Configuration.ExecuteCommandConfiguration.Logging)
 
 	if e.Configuration.ExecuteCommandConfiguration.LogConfiguration == nil {
 		return execCommandConfigData
@@ -134,11 +137,11 @@ func setExecCommandConfigBlock(e *ecs.Cluster) []ExecuteCommandConfiguration {
 func setLogConfigurationBlock(e *ecs.Cluster) []LogConfigurationBlock {
 	logConfigData := make([]LogConfigurationBlock, 1)
 
-	logConfigData[0].S3BucketName = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3BucketName
-	logConfigData[0].S3KeyPrefix = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3KeyPrefix
-	logConfigData[0].S3EncryptionEnabled = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3EncryptionEnabled
-	logConfigData[0].CloudWatchLogGroupName = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchLogGroupName
-	logConfigData[0].CloudWatchEncryptionEnabled = *e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchEncryptionEnabled
+	logConfigData[0].S3BucketName = functions.GetString(e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3BucketName)
+	logConfigData[0].S3KeyPrefix = functions.GetString(e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3KeyPrefix)
+	logConfigData[0].S3EncryptionEnabled = functions.GetBool(e.Configuration.ExecuteCommandConfiguration.LogConfiguration.S3EncryptionEnabled)
+	logConfigData[0].CloudWatchLogGroupName = functions.GetString(e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchLogGroupName)
+	logConfigData[0].CloudWatchEncryptionEnabled = functions.GetBool(e.Configuration.ExecuteCommandConfiguration.LogConfiguration.CloudWatchEncryptionEnabled)
 
 	return logConfigData
 }

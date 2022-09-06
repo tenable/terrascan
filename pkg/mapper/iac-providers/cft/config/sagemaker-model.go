@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/sagemaker"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ImageConfigBlock holds config for ImageConfig
@@ -46,9 +47,12 @@ type SagemakerModelConfig struct {
 
 // GetSagemakerModelConfig returns config for SagemakerModel
 func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
-	containerBlock := make([]ContainerBlock, len(*m.Containers))
-	for i, container := range *m.Containers {
-		containerBlock[i] = getContainer(container)
+	var containerBlock []ContainerBlock
+	if m.Containers != nil {
+		containerBlock = make([]ContainerBlock, len(*m.Containers))
+		for i, container := range *m.Containers {
+			containerBlock[i] = getContainer(container)
+		}
 	}
 
 	var primaryContainer []ContainerBlock
@@ -59,10 +63,10 @@ func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 
 	cf := SagemakerModelConfig{
 		Config: Config{
-			Name: *m.ModelName,
+			Name: functions.GetString(m.ModelName),
 			Tags: m.Tags,
 		},
-		Name:             *m.ModelName,
+		Name:             functions.GetString(m.ModelName),
 		ExecutionRoleARN: m.ExecutionRoleArn,
 		Container:        containerBlock,
 		PrimaryContainer: primaryContainer,
@@ -77,10 +81,10 @@ func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 func getContainer(gftContainer sagemaker.Model_ContainerDefinition) ContainerBlock {
 	var container ContainerBlock
 
-	container.Image = *gftContainer.Image
-	container.Mode = *gftContainer.Mode
-	container.ModelDataURL = *gftContainer.ModelDataUrl
-	container.ContainerHostname = *gftContainer.ContainerHostname
+	container.Image = functions.GetString(gftContainer.Image)
+	container.Mode = functions.GetString(gftContainer.Mode)
+	container.ModelDataURL = functions.GetString(gftContainer.ModelDataUrl)
+	container.ContainerHostname = functions.GetString(gftContainer.ContainerHostname)
 	container.Environment = gftContainer.Environment
 
 	if gftContainer.ImageConfig != nil {

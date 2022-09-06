@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -59,16 +60,16 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 		Metadata: i.AWSCloudFormationMetadata,
 		Resource: IamUserConfig{
 			Config: Config{
-				Name: *i.UserName,
+				Name: functions.GetString(i.UserName),
 				Tags: i.Tags,
 			},
-			UserName: *i.UserName,
+			UserName: functions.GetString(i.UserName),
 		},
 	})
 
 	iamLoginProfileConfig := IamUserLoginProfileConfig{
 		Config: Config{
-			Name: *i.UserName,
+			Name: functions.GetString(i.UserName),
 		},
 	}
 	if i.LoginProfile != nil {
@@ -78,7 +79,7 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 	// add aws_iam_user_login_profile
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Type:     IamUserLoginProfile,
-		Name:     *i.UserName,
+		Name:     functions.GetString(i.UserName),
 		Metadata: i.AWSCloudFormationMetadata,
 		Resource: iamLoginProfileConfig,
 	})

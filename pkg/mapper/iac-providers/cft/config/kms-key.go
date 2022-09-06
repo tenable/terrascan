@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 
 	"github.com/awslabs/goformation/v6/cloudformation/kms"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // KmsKeyConfig holds config for aws_kms_key
@@ -38,9 +39,9 @@ func GetKmsKeyConfig(k *kms.Key) []AWSResourceConfig {
 		Config: Config{
 			Tags: k.Tags,
 		},
-		Enabled:             *k.Enabled,
-		EnableKeyRotation:   *k.EnableKeyRotation,
-		PendingWindowInDays: *k.PendingWindowInDays,
+		Enabled:             functions.GetBool(k.Enabled),
+		EnableKeyRotation:   functions.GetBool(k.EnableKeyRotation),
+		PendingWindowInDays: functions.GetNum(k.PendingWindowInDays),
 	}
 
 	keyPolicy, err := json.Marshal(k.KeyPolicy)

@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v6/cloudformation/sns"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/sns"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // SnsTopicConfig holds config for SnsTopic
 type SnsTopicConfig struct {
@@ -29,10 +32,10 @@ type SnsTopicConfig struct {
 func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
 	cf := SnsTopicConfig{
 		Config: Config{
-			Name: *t.TopicName,
+			Name: functions.GetString(t.TopicName),
 		},
-		Name:        *t.TopicName,
-		KmsMasterID: *t.KmsMasterKeyId,
+		Name:        functions.GetString(t.TopicName),
+		KmsMasterID: functions.GetString(t.KmsMasterKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

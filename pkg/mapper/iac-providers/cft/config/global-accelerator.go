@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v6/cloudformation/globalaccelerator"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // GlobalAcceleratorConfig holds config for aws_globalaccelerator_accelerator resource
@@ -36,8 +37,8 @@ func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceC
 			Tags: g.Tags,
 		},
 		Name:          g.Name,
-		Enabled:       *g.Enabled,
-		IPAddressType: *g.IpAddressType,
+		Enabled:       functions.GetBool(g.Enabled),
+		IPAddressType: functions.GetString(g.IpAddressType),
 	}
 
 	return []AWSResourceConfig{{

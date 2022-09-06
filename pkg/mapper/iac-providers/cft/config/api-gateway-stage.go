@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/awslabs/goformation/v6/cloudformation/apigateway"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -41,7 +42,7 @@ type Settings struct {
 // APIGatewayStageConfig holds config for aws_api_gateway_stage
 type APIGatewayStageConfig struct {
 	AccessLogSettings   interface{} `json:"access_log_settings"`
-	ClientCertificateID interface{} `json:"client_certificate_id"`
+	ClientCertificateID string      `json:"client_certificate_id"`
 	Config
 	XrayTracingEnabled bool `json:"xray_tracing_enabled"`
 }
@@ -53,7 +54,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 
 	cf := APIGatewayStageConfig{
 		Config: Config{
-			Name: *s.StageName,
+			Name: functions.GetString(s.StageName),
 			Tags: s.Tags,
 		},
 	}
@@ -62,10 +63,8 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	} else {
 		cf.AccessLogSettings = struct{}{}
 	}
-	cf.XrayTracingEnabled = *s.TracingEnabled
-	if len(*s.ClientCertificateId) > 0 {
-		cf.ClientCertificateID = s.ClientCertificateId
-	}
+	cf.XrayTracingEnabled = functions.GetBool(s.TracingEnabled)
+	cf.ClientCertificateID = functions.GetString(s.ClientCertificateId)
 
 	// add aws_api_gateway_stage
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
@@ -79,17 +78,17 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 		for i, settings := range *s.MethodSettings {
 			msc := MethodSettingConfig{
 				Config: Config{
-					Name: *s.StageName,
+					Name: functions.GetString(s.StageName),
 					Tags: s.Tags,
 				},
 				MethodSettings: []Settings{{
-					MetricsEnabled: *settings.MetricsEnabled,
+					MetricsEnabled: functions.GetBool(settings.MetricsEnabled),
 				}},
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 				Type: GatewayMethodSettings,
 				// Unique name for each method setting used fopr ID
-				Name:     fmt.Sprintf("%s%v", *s.StageName, i),
+				Name:     fmt.Sprintf("%s%v", functions.GetString(s.StageName), i),
 				Resource: msc,
 				Metadata: s.AWSCloudFormationMetadata,
 			})

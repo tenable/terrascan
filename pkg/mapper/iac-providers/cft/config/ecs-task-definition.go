@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 
 	"github.com/awslabs/goformation/v6/cloudformation/ecs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // EcsTaskDefinitionConfig holds config for aws_ecs_task_definition
@@ -56,7 +57,7 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 		Config: Config{
 			Tags: t.Tags,
 		},
-		NetworkMode: *t.NetworkMode,
+		NetworkMode: functions.GetString(t.NetworkMode),
 	}
 
 	if t.ContainerDefinitions != nil {
@@ -68,7 +69,7 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 				env := make([]EnvironmentConfig, 0)
 				for _, kvPair := range *cDef.Environment {
 					env = append(env, EnvironmentConfig{
-						Name: *kvPair.Name,
+						Name: functions.GetString(kvPair.Name),
 					})
 				}
 				cDefs = append(cDefs, ContainerDefinitionConfig{
@@ -88,7 +89,7 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 			if volume.EFSVolumeConfiguration != nil {
 				volumes = append(volumes, VolumeConfig{
 					EfsVolumeConfiguration: EfsVolumeConfig{
-						TransitEncryption: *volume.EFSVolumeConfiguration.TransitEncryption,
+						TransitEncryption: functions.GetString(volume.EFSVolumeConfiguration.TransitEncryption),
 					},
 				})
 			}

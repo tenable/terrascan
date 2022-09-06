@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancing"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // GetPolicies represents subresource aws_load_balancer_policy for Policies attribute
@@ -115,7 +116,7 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		lc := make([]ELBListenerConfig, 0)
 		for _, listener := range e.Listeners {
 			lc = append(lc, ELBListenerConfig{
-				InstanceProtocol: *listener.InstanceProtocol,
+				InstanceProtocol: functions.GetString(listener.InstanceProtocol),
 				LBProtocol:       listener.Protocol,
 			})
 		}

@@ -21,6 +21,7 @@ import (
 	"unicode"
 
 	"github.com/awslabs/goformation/v6/cloudformation/autoscaling"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // EbsBlockDeviceBlock holds config for EbsBlockDevice
@@ -48,38 +49,40 @@ type AutoScalingLaunchConfigurationConfig struct {
 
 // GetAutoScalingLaunchConfigurationConfig returns config for AutoScalingLaunchConfiguration
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
-	ebsBlockDevice := make([]EbsBlockDeviceBlock, len(*l.BlockDeviceMappings))
-
-	for i, blockDeviceMapping := range *l.BlockDeviceMappings {
-		if blockDeviceMapping.Ebs != nil {
-			ebsBlockDevice[i].Encrypted = *blockDeviceMapping.Ebs.Encrypted
-			ebsBlockDevice[i].DeleteOnTermination = *blockDeviceMapping.Ebs.DeleteOnTermination
+	var ebsBlockDevice []EbsBlockDeviceBlock
+	if l.BlockDeviceMappings != nil {
+		ebsBlockDevice = make([]EbsBlockDeviceBlock, len(*l.BlockDeviceMappings))
+		for i, blockDeviceMapping := range *l.BlockDeviceMappings {
+			if blockDeviceMapping.Ebs != nil {
+				ebsBlockDevice[i].Encrypted = functions.GetBool(blockDeviceMapping.Ebs.Encrypted)
+				ebsBlockDevice[i].DeleteOnTermination = functions.GetBool(blockDeviceMapping.Ebs.DeleteOnTermination)
+			}
+			ebsBlockDevice[i].DeviceName = blockDeviceMapping.DeviceName
 		}
-		ebsBlockDevice[i].DeviceName = blockDeviceMapping.DeviceName
 	}
 
 	var metadataOptions MetadataOptionsBlock
 	if l.MetadataOptions != nil {
-		metadataOptions.HTTPEndpoint = *l.MetadataOptions.HttpEndpoint
-		metadataOptions.HTTPTokens = *l.MetadataOptions.HttpTokens
+		metadataOptions.HTTPEndpoint = functions.GetString(l.MetadataOptions.HttpEndpoint)
+		metadataOptions.HTTPTokens = functions.GetString(l.MetadataOptions.HttpTokens)
 	}
 
 	cf := AutoScalingLaunchConfigurationConfig{
 		Config: Config{
-			Name: *l.LaunchConfigurationName,
+			Name: functions.GetString(l.LaunchConfigurationName),
 		},
-		EnableMonitoring: *l.InstanceMonitoring,
+		EnableMonitoring: functions.GetBool(l.InstanceMonitoring),
 		MetadataOptions:  metadataOptions,
 		EbsBlockDevice:   ebsBlockDevice,
 	}
 
-	data, err := base64.StdEncoding.Strict().DecodeString(*l.UserData)
+	data, err := base64.StdEncoding.Strict().DecodeString(functions.GetString(l.UserData))
 	datastr := string(data)
 
 	if isASCII(datastr) && err == nil {
-		cf.UserDataBase64 = *l.UserData
+		cf.UserDataBase64 = datastr
 	} else {
-		cf.UserData = *l.UserData
+		cf.UserData = datastr
 	}
 
 	return []AWSResourceConfig{{
