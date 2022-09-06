@@ -84,7 +84,7 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 
 		// create aws_network_interface resource on the fly for every network interface used in aws_instance
 		niconfigs[index].SubnetID = functions.GetVal(networkInterface.SubnetId)
-		if *networkInterface.PrivateIpAddress != "" {
+		if networkInterface.PrivateIpAddress != nil {
 			niconfigs[index].PrivateIPs = []string{functions.GetVal(networkInterface.PrivateIpAddress)}
 		}
 
