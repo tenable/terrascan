@@ -35,8 +35,8 @@ func GetNatGatewayConfig(e *ec2.NatGateway) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AllocationID:     functions.GetString(e.AllocationId),
-		ConnectivityType: functions.GetString(e.ConnectivityType),
+		AllocationID:     functions.GetVal(e.AllocationId),
+		ConnectivityType: functions.GetVal(e.ConnectivityType),
 		SubnetID:         e.SubnetId,
 	}
 	return []AWSResourceConfig{{

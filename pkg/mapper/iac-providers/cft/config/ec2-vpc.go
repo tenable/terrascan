@@ -36,10 +36,10 @@ func GetEc2VpcConfig(v *ec2.VPC) []AWSResourceConfig {
 		Config: Config{
 			Tags: v.Tags,
 		},
-		CIDRBlock:          functions.GetString(v.CidrBlock),
-		EnableDNSSupport:   functions.GetBool(v.EnableDnsSupport),
-		EnableDNSHostnames: functions.GetBool(v.EnableDnsHostnames),
-		InstanceTenancy:    functions.GetString(v.InstanceTenancy),
+		CIDRBlock:          functions.GetVal(v.CidrBlock),
+		EnableDNSSupport:   functions.GetVal(v.EnableDnsSupport),
+		EnableDNSHostnames: functions.GetVal(v.EnableDnsHostnames),
+		InstanceTenancy:    functions.GetVal(v.InstanceTenancy),
 	}
 
 	return []AWSResourceConfig{{

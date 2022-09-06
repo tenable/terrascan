@@ -32,9 +32,9 @@ func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
 			Tags: s.Tags,
-			Name: functions.GetString(s.Name),
+			Name: functions.GetVal(s.Name),
 		},
-		KmsKeyID: functions.GetString(s.KmsKeyId),
+		KmsKeyID: functions.GetVal(s.KmsKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

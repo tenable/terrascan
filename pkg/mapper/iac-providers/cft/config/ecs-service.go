@@ -31,10 +31,10 @@ type EcsServiceConfig struct {
 func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{
-			Name: functions.GetString(c.ServiceName),
+			Name: functions.GetVal(c.ServiceName),
 			Tags: c.Tags,
 		},
-		IamRole: functions.GetString(c.Role),
+		IamRole: functions.GetVal(c.Role),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

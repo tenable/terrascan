@@ -39,9 +39,9 @@ func GetAppAutoScalingPolicyConfig(a *applicationautoscaling.ScalingPolicy) []AW
 		},
 		Name:              a.PolicyName,
 		PolicyType:        a.PolicyType,
-		ResourceID:        functions.GetString(a.ResourceId),
-		ScalableDimension: functions.GetString(a.ScalableDimension),
-		ServiceNamespace:  functions.GetString(a.ServiceNamespace),
+		ResourceID:        functions.GetVal(a.ResourceId),
+		ScalableDimension: functions.GetVal(a.ScalableDimension),
+		ServiceNamespace:  functions.GetVal(a.ServiceNamespace),
 	}
 
 	return []AWSResourceConfig{{

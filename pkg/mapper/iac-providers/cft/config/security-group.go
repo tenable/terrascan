@@ -44,22 +44,22 @@ type SecurityGroupConfig struct {
 func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{
-			Name: *s.GroupName,
+			Name: functions.GetVal(s.GroupName),
 			Tags: s.Tags,
 		},
-		GroupName:        *s.GroupName,
+		GroupName:        functions.GetVal(s.GroupName),
 		GroupDescription: s.GroupDescription,
 	}
 
 	ingresses := make([]IngressEgress, 0)
-	for _, i := range *s.SecurityGroupIngress {
+	for _, i := range functions.GetVal(s.SecurityGroupIngress) {
 		ingress := getIngressEgress(i)
 		ingresses = append(ingresses, ingress)
 	}
 	cf.SecurityGroupIngress = ingresses
 
 	egresses := make([]IngressEgress, 0)
-	for _, e := range *s.SecurityGroupEgress {
+	for _, e := range functions.GetVal(s.SecurityGroupEgress) {
 		egress := getIngressEgress(e)
 		egresses = append(egresses, egress)
 	}
@@ -84,21 +84,21 @@ func getIngressEgress(ie any) IngressEgress {
 func getEgress(egress *ec2.SecurityGroup_Egress) IngressEgress {
 	return IngressEgress{
 		IPProtocol:  egress.IpProtocol,
-		Description: functions.GetString(egress.Description),
-		CidrIP:      []string{functions.GetString(egress.CidrIp)},
-		CidrIpv6:    []string{functions.GetString(egress.CidrIpv6)},
-		FromPort:    functions.GetNum(egress.FromPort),
-		ToPort:      functions.GetNum(egress.ToPort),
+		Description: functions.GetVal(egress.Description),
+		CidrIP:      []string{functions.GetVal(egress.CidrIp)},
+		CidrIpv6:    []string{functions.GetVal(egress.CidrIpv6)},
+		FromPort:    functions.GetVal(egress.FromPort),
+		ToPort:      functions.GetVal(egress.ToPort),
 	}
 }
 
 func getIngress(egress *ec2.SecurityGroup_Ingress) IngressEgress {
 	return IngressEgress{
 		IPProtocol:  egress.IpProtocol,
-		Description: functions.GetString(egress.Description),
-		CidrIP:      []string{functions.GetString(egress.CidrIp)},
-		CidrIpv6:    []string{functions.GetString(egress.CidrIpv6)},
-		FromPort:    functions.GetNum(egress.FromPort),
-		ToPort:      functions.GetNum(egress.ToPort),
+		Description: functions.GetVal(egress.Description),
+		CidrIP:      []string{functions.GetVal(egress.CidrIp)},
+		CidrIpv6:    []string{functions.GetVal(egress.CidrIpv6)},
+		FromPort:    functions.GetVal(egress.FromPort),
+		ToPort:      functions.GetVal(egress.ToPort),
 	}
 }

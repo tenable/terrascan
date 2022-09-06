@@ -54,7 +54,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 
 	cf := APIGatewayStageConfig{
 		Config: Config{
-			Name: functions.GetString(s.StageName),
+			Name: functions.GetVal(s.StageName),
 			Tags: s.Tags,
 		},
 	}
@@ -63,8 +63,8 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	} else {
 		cf.AccessLogSettings = struct{}{}
 	}
-	cf.XrayTracingEnabled = functions.GetBool(s.TracingEnabled)
-	cf.ClientCertificateID = functions.GetString(s.ClientCertificateId)
+	cf.XrayTracingEnabled = functions.GetVal(s.TracingEnabled)
+	cf.ClientCertificateID = functions.GetVal(s.ClientCertificateId)
 
 	// add aws_api_gateway_stage
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
@@ -75,20 +75,20 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	// add aws_api_gateway_method_settings
 	// multiple MethodSettings can be configured for same resource in cft
 	if s.MethodSettings != nil {
-		for i, settings := range *s.MethodSettings {
+		for i, settings := range functions.GetVal(s.MethodSettings) {
 			msc := MethodSettingConfig{
 				Config: Config{
-					Name: functions.GetString(s.StageName),
+					Name: functions.GetVal(s.StageName),
 					Tags: s.Tags,
 				},
 				MethodSettings: []Settings{{
-					MetricsEnabled: functions.GetBool(settings.MetricsEnabled),
+					MetricsEnabled: functions.GetVal(settings.MetricsEnabled),
 				}},
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 				Type: GatewayMethodSettings,
 				// Unique name for each method setting used fopr ID
-				Name:     fmt.Sprintf("%s%v", functions.GetString(s.StageName), i),
+				Name:     fmt.Sprintf("%s%v", functions.GetVal(s.StageName), i),
 				Resource: msc,
 				Metadata: s.AWSCloudFormationMetadata,
 			})

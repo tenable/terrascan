@@ -77,7 +77,7 @@ func setFieldToMatch(w *waf.SizeConstraintSet, index int) []FieldToMatchBlock {
 	fieldToMatchBlock[0].Type = w.SizeConstraints[index].FieldToMatch.Type
 
 	if w.SizeConstraints[index].FieldToMatch.Data != nil {
-		fieldToMatchBlock[0].Data = functions.GetString(w.SizeConstraints[index].FieldToMatch.Data)
+		fieldToMatchBlock[0].Data = functions.GetVal(w.SizeConstraints[index].FieldToMatch.Data)
 	}
 
 	return fieldToMatchBlock

@@ -34,11 +34,11 @@ func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfi
 	cf := ElastiCacheClusterConfig{
 		Config: Config{
 			Tags: e.Tags,
-			Name: functions.GetString(e.ClusterName),
+			Name: functions.GetVal(e.ClusterName),
 		},
-		AZMode:        functions.GetString(e.AZMode),
+		AZMode:        functions.GetVal(e.AZMode),
 		Engine:        e.Engine,
-		EngineVersion: functions.GetString(e.EngineVersion),
+		EngineVersion: functions.GetVal(e.EngineVersion),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

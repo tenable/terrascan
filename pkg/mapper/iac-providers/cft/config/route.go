@@ -42,19 +42,19 @@ type RouteConfig struct {
 // GetRouteConfig returns config for aws_route
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
-		CarrierGatewayID:            functions.GetString(e.CarrierGatewayId),
-		DestinationCidrBlock:        functions.GetString(e.DestinationCidrBlock),
-		DestinationIpv6CidrBlock:    functions.GetString(e.DestinationIpv6CidrBlock),
-		EgressOnlyInternetGatewayID: functions.GetString(e.EgressOnlyInternetGatewayId),
-		GatewayID:                   functions.GetString(e.GatewayId),
-		InstanceID:                  functions.GetString(e.InstanceId),
-		LocalGatewayID:              functions.GetString(e.LocalGatewayId),
-		NatGatewayID:                functions.GetString(e.NatGatewayId),
-		NetworkInterfaceID:          functions.GetString(e.NetworkInterfaceId),
+		CarrierGatewayID:            functions.GetVal(e.CarrierGatewayId),
+		DestinationCidrBlock:        functions.GetVal(e.DestinationCidrBlock),
+		DestinationIpv6CidrBlock:    functions.GetVal(e.DestinationIpv6CidrBlock),
+		EgressOnlyInternetGatewayID: functions.GetVal(e.EgressOnlyInternetGatewayId),
+		GatewayID:                   functions.GetVal(e.GatewayId),
+		InstanceID:                  functions.GetVal(e.InstanceId),
+		LocalGatewayID:              functions.GetVal(e.LocalGatewayId),
+		NatGatewayID:                functions.GetVal(e.NatGatewayId),
+		NetworkInterfaceID:          functions.GetVal(e.NetworkInterfaceId),
 		RouteTableID:                e.RouteTableId,
-		TransitGatewayID:            functions.GetString(e.TransitGatewayId),
-		VpcEndpointID:               functions.GetString(e.VpcEndpointId),
-		VpcPeeringConnectionID:      functions.GetString(e.VpcPeeringConnectionId),
+		TransitGatewayID:            functions.GetVal(e.TransitGatewayId),
+		VpcEndpointID:               functions.GetVal(e.VpcEndpointId),
+		VpcPeeringConnectionID:      functions.GetVal(e.VpcPeeringConnectionId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

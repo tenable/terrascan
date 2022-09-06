@@ -34,12 +34,12 @@ type SqsQueueConfig struct {
 func GetSqsQueueConfig(q *sqs.Queue) []AWSResourceConfig {
 	cf := SqsQueueConfig{
 		Config: Config{
-			Name: functions.GetString(q.QueueName),
+			Name: functions.GetVal(q.QueueName),
 		},
-		Name:                         functions.GetString(q.QueueName),
-		KmsMasterKeyID:               functions.GetString(q.KmsMasterKeyId),
-		KmsDataKeyReusePeriodSeconds: functions.GetNum(q.KmsDataKeyReusePeriodSeconds),
-		MessageRetentionSeconds:      functions.GetNum(q.MessageRetentionPeriod),
+		Name:                         functions.GetVal(q.QueueName),
+		KmsMasterKeyID:               functions.GetVal(q.KmsMasterKeyId),
+		KmsDataKeyReusePeriodSeconds: functions.GetVal(q.KmsDataKeyReusePeriodSeconds),
+		MessageRetentionSeconds:      functions.GetVal(q.MessageRetentionPeriod),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

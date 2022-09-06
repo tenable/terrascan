@@ -84,7 +84,7 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 			cf.ViewerCertificate = viewerCertificates
 		}
 	}
-	cf.WebACLId = functions.GetString(d.DistributionConfig.WebACLId)
+	cf.WebACLId = functions.GetVal(d.DistributionConfig.WebACLId)
 
 	return []AWSResourceConfig{{
 		Resource: cf,

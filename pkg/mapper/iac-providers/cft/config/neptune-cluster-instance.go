@@ -39,13 +39,13 @@ func GetNeptuneClusterInstanceConfig(n *neptune.DBInstance) []AWSResourceConfig 
 		Config: Config{
 			Tags: n.Tags,
 		},
-		AutoMinorVersionUpgrade:    functions.GetBool(n.AutoMinorVersionUpgrade),
-		AvailabilityZone:           functions.GetString(n.AvailabilityZone),
-		DBClusterIdentifier:        functions.GetString(n.DBClusterIdentifier),
+		AutoMinorVersionUpgrade:    functions.GetVal(n.AutoMinorVersionUpgrade),
+		AvailabilityZone:           functions.GetVal(n.AvailabilityZone),
+		DBClusterIdentifier:        functions.GetVal(n.DBClusterIdentifier),
 		DBInstanceClass:            n.DBInstanceClass,
-		DBParameterGroupName:       functions.GetString(n.DBParameterGroupName),
-		DBSubnetGroupName:          functions.GetString(n.DBSubnetGroupName),
-		PreferredMaintenanceWindow: functions.GetString(n.PreferredMaintenanceWindow),
+		DBParameterGroupName:       functions.GetVal(n.DBParameterGroupName),
+		DBSubnetGroupName:          functions.GetVal(n.DBSubnetGroupName),
+		PreferredMaintenanceWindow: functions.GetVal(n.PreferredMaintenanceWindow),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

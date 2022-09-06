@@ -24,7 +24,7 @@ import (
 // DaxClusterConfig holds config for aws_dax_cluster
 type DaxClusterConfig struct {
 	Config
-	ServerSideEncryption []map[string]interface{} `json:"server_side_encryption"`
+	ServerSideEncryption []SSE `json:"server_side_encryption"`
 }
 
 // GetDaxClusterConfig returns config for aws_dax_cluster
@@ -32,14 +32,16 @@ func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 	cf := DaxClusterConfig{
 		Config: Config{
 			Tags: t.Tags,
-			Name: functions.GetString(t.ClusterName),
+			Name: functions.GetVal(t.ClusterName),
 		},
 	}
-	sse := make(map[string]interface{})
+
 	if t.SSESpecification != nil {
-		sse["enabled"] = t.SSESpecification.SSEEnabled
+		cf.ServerSideEncryption = make([]SSE, 1)
+
+		cf.ServerSideEncryption[0].Enabled = functions.GetVal(t.SSESpecification.SSEEnabled)
 	}
-	cf.ServerSideEncryption = []map[string]interface{}{sse}
+
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: t.AWSCloudFormationMetadata,

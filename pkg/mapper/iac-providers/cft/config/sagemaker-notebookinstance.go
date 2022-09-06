@@ -36,15 +36,15 @@ type SagemakerNotebookInstanceConfig struct {
 func GetSagemakerNotebookInstanceConfig(n *sagemaker.NotebookInstance) []AWSResourceConfig {
 	cf := SagemakerNotebookInstanceConfig{
 		Config: Config{
-			Name: functions.GetString(n.NotebookInstanceName),
+			Name: functions.GetVal(n.NotebookInstanceName),
 			Tags: n.Tags,
 		},
-		Name:                 functions.GetString(n.NotebookInstanceName),
+		Name:                 functions.GetVal(n.NotebookInstanceName),
 		RoleARN:              n.RoleArn,
 		InstanceType:         n.InstanceType,
-		KMSKeyID:             functions.GetString(n.KmsKeyId),
-		DirectInternetAccess: functions.GetString(n.DirectInternetAccess),
-		RootAccess:           functions.GetString(n.RootAccess),
+		KMSKeyID:             functions.GetVal(n.KmsKeyId),
+		DirectInternetAccess: functions.GetVal(n.DirectInternetAccess),
+		RootAccess:           functions.GetVal(n.RootAccess),
 	}
 
 	return []AWSResourceConfig{{

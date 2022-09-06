@@ -32,10 +32,10 @@ type SnsTopicConfig struct {
 func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
 	cf := SnsTopicConfig{
 		Config: Config{
-			Name: functions.GetString(t.TopicName),
+			Name: functions.GetVal(t.TopicName),
 		},
-		Name:        functions.GetString(t.TopicName),
-		KmsMasterID: functions.GetString(t.KmsMasterKeyId),
+		Name:        functions.GetVal(t.TopicName),
+		KmsMasterID: functions.GetVal(t.KmsMasterKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

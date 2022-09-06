@@ -37,8 +37,8 @@ func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceC
 			Tags: g.Tags,
 		},
 		Name:          g.Name,
-		Enabled:       functions.GetBool(g.Enabled),
-		IPAddressType: functions.GetString(g.IpAddressType),
+		Enabled:       functions.GetVal(g.Enabled),
+		IPAddressType: functions.GetVal(g.IpAddressType),
 	}
 
 	return []AWSResourceConfig{{

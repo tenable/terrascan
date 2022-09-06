@@ -57,7 +57,7 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 		Config: Config{
 			Tags: t.Tags,
 		},
-		NetworkMode: functions.GetString(t.NetworkMode),
+		NetworkMode: functions.GetVal(t.NetworkMode),
 	}
 
 	if t.ContainerDefinitions != nil {
@@ -67,9 +67,9 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 			// add environment kn pairs
 			if cDef.Environment != nil {
 				env := make([]EnvironmentConfig, 0)
-				for _, kvPair := range *cDef.Environment {
+				for _, kvPair := range functions.GetVal(cDef.Environment) {
 					env = append(env, EnvironmentConfig{
-						Name: functions.GetString(kvPair.Name),
+						Name: functions.GetVal(kvPair.Name),
 					})
 				}
 				cDefs = append(cDefs, ContainerDefinitionConfig{
@@ -85,11 +85,11 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 
 	if t.Volumes != nil {
 		volumes := make([]VolumeConfig, 0)
-		for _, volume := range *t.Volumes {
+		for _, volume := range functions.GetVal(t.Volumes) {
 			if volume.EFSVolumeConfiguration != nil {
 				volumes = append(volumes, VolumeConfig{
 					EfsVolumeConfiguration: EfsVolumeConfig{
-						TransitEncryption: functions.GetString(volume.EFSVolumeConfiguration.TransitEncryption),
+						TransitEncryption: functions.GetVal(volume.EFSVolumeConfiguration.TransitEncryption),
 					},
 				})
 			}

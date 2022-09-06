@@ -32,11 +32,11 @@ type RDSClusterConfig struct {
 func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	cf := RDSClusterConfig{
 		Config: Config{
-			Name: functions.GetString(c.DatabaseName),
+			Name: functions.GetVal(c.DatabaseName),
 			Tags: c.Tags,
 		},
-		BackupRetentionPeriod: functions.GetNum(c.BackupRetentionPeriod),
-		StorageEncrypted:      functions.GetBool(c.StorageEncrypted),
+		BackupRetentionPeriod: functions.GetVal(c.BackupRetentionPeriod),
+		StorageEncrypted:      functions.GetVal(c.StorageEncrypted),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

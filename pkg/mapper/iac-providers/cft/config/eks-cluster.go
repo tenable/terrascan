@@ -45,24 +45,25 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		vpcConfig := make([]EKSVPCConfigBlock, 1)
 
 		vpcConfig[0].SubnetIDs = c.ResourcesVpcConfig.SubnetIds
-		vpcConfig[0].SecurityGroupIDs = *c.ResourcesVpcConfig.SecurityGroupIds
-		vpcConfig[0].EndpointPrivateAccess = functions.GetBool(c.ResourcesVpcConfig.EndpointPrivateAccess)
-		vpcConfig[0].EndpointPublicAccess = functions.GetBool(c.ResourcesVpcConfig.EndpointPublicAccess)
+		vpcConfig[0].SecurityGroupIDs = functions.GetVal(c.ResourcesVpcConfig.SecurityGroupIds)
+		vpcConfig[0].EndpointPrivateAccess = functions.GetVal(c.ResourcesVpcConfig.EndpointPrivateAccess)
+		vpcConfig[0].EndpointPublicAccess = functions.GetVal(c.ResourcesVpcConfig.EndpointPublicAccess)
 	}
 
 	cf := EksClusterConfig{
 		Config: Config{
-			Name: functions.GetString(c.Name),
+			Name: functions.GetVal(c.Name),
 		},
-		Name:      functions.GetString(c.Name),
+		Name:      functions.GetVal(c.Name),
 		RoleARN:   c.RoleArn,
 		VPCConfig: vpcConfig,
 	}
 
-	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(*c.Logging.ClusterLogging.EnabledTypes) > 0 {
-		enabledClusterLogTypes := make([]string, len(*c.Logging.ClusterLogging.EnabledTypes))
-		for i, enabledType := range *c.Logging.ClusterLogging.EnabledTypes {
-			enabledClusterLogTypes[i] = functions.GetString(enabledType.Type)
+	enabledTypes := functions.GetVal(c.Logging.ClusterLogging.EnabledTypes)
+	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(enabledTypes) > 0 {
+		enabledClusterLogTypes := make([]string, len(enabledTypes))
+		for i, enabledType := range enabledTypes {
+			enabledClusterLogTypes[i] = functions.GetVal(enabledType.Type)
 		}
 		cf.EnabledClusterLogTypes = enabledClusterLogTypes
 	}

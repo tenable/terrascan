@@ -44,18 +44,18 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock
 	if g.ScalingConfig != nil {
 		scalingConfig = make([]EksNodeGroupScalingConfigBlock, 1)
-		scalingConfig[0].DesiredSize = functions.GetNum(g.ScalingConfig.DesiredSize)
-		scalingConfig[0].MaxSize = functions.GetNum(g.ScalingConfig.MaxSize)
-		scalingConfig[0].MinSize = functions.GetNum(g.ScalingConfig.MinSize)
+		scalingConfig[0].DesiredSize = functions.GetVal(g.ScalingConfig.DesiredSize)
+		scalingConfig[0].MaxSize = functions.GetVal(g.ScalingConfig.MaxSize)
+		scalingConfig[0].MinSize = functions.GetVal(g.ScalingConfig.MinSize)
 	}
 
 	cf := EksNodeGroupConfig{
 		Config: Config{
-			Name: *g.NodegroupName,
+			Name: functions.GetVal(g.NodegroupName),
 			Tags: g.Tags,
 		},
 		ClusterName:   g.ClusterName,
-		NodeGroupName: *g.NodegroupName,
+		NodeGroupName: functions.GetVal(g.NodegroupName),
 		NodeRoleARN:   g.NodeRole,
 		SubnetIDs:     g.Subnets,
 		ScalingConfig: scalingConfig,

@@ -63,10 +63,12 @@ type ELBListenerConfig struct {
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
 func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
-	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(*e.Policies))
-	awsconfig := make([]AWSResourceConfig, len(*e.Policies))
+	policies := functions.GetVal(e.Policies)
 
-	for i, policy := range *e.Policies {
+	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(policies))
+	awsconfig := make([]AWSResourceConfig, len(policies))
+
+	for i, policy := range policies {
 		indexedElbName := fmt.Sprintf("%s%d", elbname, i)
 
 		elbpolicies[i].LoadBalancerName = indexedElbName
@@ -116,7 +118,7 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		lc := make([]ELBListenerConfig, 0)
 		for _, listener := range e.Listeners {
 			lc = append(lc, ELBListenerConfig{
-				InstanceProtocol: functions.GetString(listener.InstanceProtocol),
+				InstanceProtocol: functions.GetVal(listener.InstanceProtocol),
 				LBProtocol:       listener.Protocol,
 			})
 		}

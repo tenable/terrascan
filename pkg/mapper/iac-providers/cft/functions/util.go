@@ -16,26 +16,11 @@
 
 package functions
 
-// GetString function validates and returns string from string pointer
-func GetString(sptr *string) string {
-	if sptr == nil {
-		return ""
+// GetAny function pointer of any type, validates and returns value
+func GetVal[T any](ptr *T) T {
+	if ptr == nil {
+		var retval T
+		return retval
 	}
-	return *sptr
-}
-
-// GetBool function validates and returns bool from bool pointer
-func GetBool(bptr *bool) bool {
-	if bptr == nil {
-		return false
-	}
-	return *bptr
-}
-
-// GetNum function validates and returns a number from int | float32 | float64 pointer
-func GetNum[T int | float32 | float64](nptr *T) T {
-	if nptr == nil {
-		return 0
-	}
-	return *nptr
+	return *ptr
 }

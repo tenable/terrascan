@@ -35,7 +35,7 @@ func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) [
 			Tags: c.Tags,
 		},
 		DomainName:       c.DomainName,
-		ValidationMethod: functions.GetString(c.ValidationMethod),
+		ValidationMethod: functions.GetVal(c.ValidationMethod),
 	}
 
 	return []AWSResourceConfig{{

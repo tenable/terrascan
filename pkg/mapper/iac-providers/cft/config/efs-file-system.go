@@ -49,8 +49,8 @@ func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Metadata: f.AWSCloudFormationMetadata,
 		Resource: EfsFileSystemConfig{
-			KmsKeyID:  functions.GetString(f.KmsKeyId),
-			Encrypted: functions.GetBool(f.Encrypted),
+			KmsKeyID:  functions.GetVal(f.KmsKeyId),
+			Encrypted: functions.GetVal(f.Encrypted),
 		},
 	})
 

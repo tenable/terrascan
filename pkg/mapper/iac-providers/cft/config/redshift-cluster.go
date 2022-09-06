@@ -37,9 +37,9 @@ func GetRedshiftClusterConfig(c *redshift.Cluster) []AWSResourceConfig {
 			Name: c.DBName,
 			Tags: c.Tags,
 		},
-		KmsKeyID:           functions.GetString(c.KmsKeyId),
-		Encrypted:          functions.GetBool(c.Encrypted),
-		PubliclyAccessible: functions.GetBool(c.PubliclyAccessible),
+		KmsKeyID:           functions.GetVal(c.KmsKeyId),
+		Encrypted:          functions.GetVal(c.Encrypted),
+		PubliclyAccessible: functions.GetVal(c.PubliclyAccessible),
 	}
 	if c.LoggingProperties != nil {
 		// if LoggingProperties are mentioned in cft,

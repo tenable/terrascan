@@ -38,13 +38,13 @@ func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 	var imageScanningConfiguration []ImageScanningConfigurationBlock
 	if r.ImageScanningConfiguration != nil {
 		imageScanningConfiguration = make([]ImageScanningConfigurationBlock, 1)
-		imageScanningConfiguration[0].ScanOnPush = functions.GetBool(r.ImageScanningConfiguration.ScanOnPush)
+		imageScanningConfiguration[0].ScanOnPush = functions.GetVal(r.ImageScanningConfiguration.ScanOnPush)
 	}
 
 	cf := EcrRepositoryConfig{
 		Config: Config{
 			Tags: r.Tags,
-			Name: functions.GetString(r.RepositoryName),
+			Name: functions.GetVal(r.RepositoryName),
 		},
 		ImageScanningConfiguration: imageScanningConfiguration,
 	}

@@ -43,7 +43,7 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 	cf := DynamoDBTableConfig{
 		Config: Config{
 			Tags: t.Tags,
-			Name: functions.GetString(t.TableName),
+			Name: functions.GetVal(t.TableName),
 		},
 	}
 
@@ -56,7 +56,7 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 	if t.PointInTimeRecoverySpecification != nil {
 		cf.PointInTimeRecovery = make([]PITR, 1)
 
-		cf.PointInTimeRecovery[0].Enabled = functions.GetBool(t.PointInTimeRecoverySpecification.PointInTimeRecoveryEnabled)
+		cf.PointInTimeRecovery[0].Enabled = functions.GetVal(t.PointInTimeRecoverySpecification.PointInTimeRecoveryEnabled)
 	}
 
 	return []AWSResourceConfig{{

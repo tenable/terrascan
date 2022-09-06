@@ -35,8 +35,8 @@ func GetWorkspacesWorkspaceConfig(w *workspaces.Workspace) []AWSResourceConfig {
 			Name: w.UserName,
 			Tags: w.Tags,
 		},
-		UserVolumeEncryptionEnabled: functions.GetBool(w.UserVolumeEncryptionEnabled),
-		RootVolumeEncryptionEnabled: functions.GetBool(w.RootVolumeEncryptionEnabled),
+		UserVolumeEncryptionEnabled: functions.GetVal(w.UserVolumeEncryptionEnabled),
+		RootVolumeEncryptionEnabled: functions.GetVal(w.RootVolumeEncryptionEnabled),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

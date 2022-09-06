@@ -39,9 +39,9 @@ func GetKmsKeyConfig(k *kms.Key) []AWSResourceConfig {
 		Config: Config{
 			Tags: k.Tags,
 		},
-		Enabled:             functions.GetBool(k.Enabled),
-		EnableKeyRotation:   functions.GetBool(k.EnableKeyRotation),
-		PendingWindowInDays: functions.GetNum(k.PendingWindowInDays),
+		Enabled:             functions.GetVal(k.Enabled),
+		EnableKeyRotation:   functions.GetVal(k.EnableKeyRotation),
+		PendingWindowInDays: functions.GetVal(k.PendingWindowInDays),
 	}
 
 	keyPolicy, err := json.Marshal(k.KeyPolicy)

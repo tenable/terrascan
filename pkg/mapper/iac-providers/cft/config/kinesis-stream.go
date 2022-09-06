@@ -33,10 +33,10 @@ type KinesisStreamConfig struct {
 func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 	cf := KinesisStreamConfig{
 		Config: Config{
-			Name: functions.GetString(k.Name),
+			Name: functions.GetVal(k.Name),
 			Tags: k.Tags,
 		},
-		Name: functions.GetString(k.Name),
+		Name: functions.GetVal(k.Name),
 	}
 
 	if k.StreamEncryption != nil {

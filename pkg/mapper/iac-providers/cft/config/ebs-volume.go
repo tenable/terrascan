@@ -34,8 +34,8 @@ func GetEbsVolumeConfig(v *ec2.Volume) []AWSResourceConfig {
 		Config: Config{
 			Tags: v.Tags,
 		},
-		Encrypted: functions.GetBool(v.Encrypted),
-		KmsKeyID:  functions.GetString(v.KmsKeyId),
+		Encrypted: functions.GetVal(v.Encrypted),
+		KmsKeyID:  functions.GetVal(v.KmsKeyId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

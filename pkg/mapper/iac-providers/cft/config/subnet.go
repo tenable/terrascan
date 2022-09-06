@@ -39,12 +39,12 @@ func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 		Config: Config{
 			Tags: e.Tags,
 		},
-		AssignIpv6AddressOnCreation: functions.GetBool(e.AssignIpv6AddressOnCreation),
-		AvailabilityZone:            functions.GetString(e.AvailabilityZone),
-		CidrBlock:                   functions.GetString(e.CidrBlock),
-		Ipv6CidrBlock:               functions.GetString(e.Ipv6CidrBlock),
-		MapPublicIPOnLaunch:         functions.GetBool(e.MapPublicIpOnLaunch),
-		OutpostArn:                  functions.GetString(e.OutpostArn),
+		AssignIpv6AddressOnCreation: functions.GetVal(e.AssignIpv6AddressOnCreation),
+		AvailabilityZone:            functions.GetVal(e.AvailabilityZone),
+		CidrBlock:                   functions.GetVal(e.CidrBlock),
+		Ipv6CidrBlock:               functions.GetVal(e.Ipv6CidrBlock),
+		MapPublicIPOnLaunch:         functions.GetVal(e.MapPublicIpOnLaunch),
+		OutpostArn:                  functions.GetVal(e.OutpostArn),
 		VpcID:                       e.VpcId,
 	}
 	return []AWSResourceConfig{{

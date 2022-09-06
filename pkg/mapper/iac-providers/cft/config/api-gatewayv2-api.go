@@ -54,30 +54,30 @@ func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 
 	if a.CorsConfiguration != nil {
 		corsConfigData = make([]CorsConfigurationBlock, 1)
-		corsConfigData[0].AllowCredentials = functions.GetBool(a.CorsConfiguration.AllowCredentials)
-		corsConfigData[0].AllowHeaders = *a.CorsConfiguration.AllowHeaders
-		corsConfigData[0].AllowMethods = *a.CorsConfiguration.AllowMethods
-		corsConfigData[0].AllowOrigins = *a.CorsConfiguration.AllowOrigins
-		corsConfigData[0].ExposeHeaders = *a.CorsConfiguration.ExposeHeaders
-		corsConfigData[0].MaxAge = functions.GetNum(a.CorsConfiguration.MaxAge)
+		corsConfigData[0].AllowCredentials = functions.GetVal(a.CorsConfiguration.AllowCredentials)
+		corsConfigData[0].AllowHeaders = functions.GetVal(a.CorsConfiguration.AllowHeaders)
+		corsConfigData[0].AllowMethods = functions.GetVal(a.CorsConfiguration.AllowMethods)
+		corsConfigData[0].AllowOrigins = functions.GetVal(a.CorsConfiguration.AllowOrigins)
+		corsConfigData[0].ExposeHeaders = functions.GetVal(a.CorsConfiguration.ExposeHeaders)
+		corsConfigData[0].MaxAge = functions.GetVal(a.CorsConfiguration.MaxAge)
 	}
 
 	cf := APIGatewayV2ApiConfig{
 		Config: Config{
-			Name: functions.GetString(a.Name),
+			Name: functions.GetVal(a.Name),
 			Tags: a.Tags,
 		},
-		Name:                      functions.GetString(a.Name),
-		ProtocolType:              functions.GetString(a.ProtocolType),
-		RouteKey:                  functions.GetString(a.RouteKey),
-		Description:               functions.GetString(a.Description),
-		CredentialsArn:            functions.GetString(a.CredentialsArn),
-		RouteSelectionExpression:  functions.GetString(a.RouteSelectionExpression),
-		Target:                    functions.GetString(a.Target),
-		Version:                   functions.GetString(a.Version),
-		APIKeySelectionExpression: functions.GetString(a.ApiKeySelectionExpression),
-		DisableExecuteAPIEndpoint: functions.GetBool(a.DisableExecuteApiEndpoint),
-		FailOnWarnings:            functions.GetBool(a.FailOnWarnings),
+		Name:                      functions.GetVal(a.Name),
+		ProtocolType:              functions.GetVal(a.ProtocolType),
+		RouteKey:                  functions.GetVal(a.RouteKey),
+		Description:               functions.GetVal(a.Description),
+		CredentialsArn:            functions.GetVal(a.CredentialsArn),
+		RouteSelectionExpression:  functions.GetVal(a.RouteSelectionExpression),
+		Target:                    functions.GetVal(a.Target),
+		Version:                   functions.GetVal(a.Version),
+		APIKeySelectionExpression: functions.GetVal(a.ApiKeySelectionExpression),
+		DisableExecuteAPIEndpoint: functions.GetVal(a.DisableExecuteApiEndpoint),
+		FailOnWarnings:            functions.GetVal(a.FailOnWarnings),
 		CorsConfiguration:         corsConfigData,
 	}
 

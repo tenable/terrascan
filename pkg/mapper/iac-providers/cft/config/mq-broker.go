@@ -39,12 +39,12 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	}
 	if c.Logs != nil {
 		log := make(map[string]bool)
-		if functions.GetBool(c.Logs.Audit) {
+		if functions.GetVal(c.Logs.Audit) {
 			log["audit"] = true
 		} else {
 			log["audit"] = false
 		}
-		if functions.GetBool(c.Logs.General) {
+		if functions.GetVal(c.Logs.General) {
 			log["general"] = true
 		} else {
 			log["general"] = false

@@ -33,10 +33,10 @@ func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.Target
 	// as only one default action per listener is possible in terraform
 	cf := ElasticLoadBalancingV2TargetGroupConfig{
 		Config: Config{
-			Name: functions.GetString(l.Name),
-			Tags: *l.Tags,
+			Name: functions.GetVal(l.Name),
+			Tags: l.Tags,
 		},
-		Protocol: functions.GetString(l.Protocol),
+		Protocol: functions.GetVal(l.Protocol),
 	}
 
 	return []AWSResourceConfig{{

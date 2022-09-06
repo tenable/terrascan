@@ -52,9 +52,9 @@ func GetEmrClusterConfig(c *emr.Cluster) []AWSResourceConfig {
 			Name: c.Name,
 		},
 		Name:                  c.Name,
-		ReleaseLabel:          functions.GetString(c.ReleaseLabel),
+		ReleaseLabel:          functions.GetVal(c.ReleaseLabel),
 		ServiceRole:           c.ServiceRole,
-		TerminationProtection: functions.GetBool(c.Instances.TerminationProtected),
+		TerminationProtection: functions.GetVal(c.Instances.TerminationProtected),
 		KerberosAttributes:    kerberosAttributes,
 	}
 

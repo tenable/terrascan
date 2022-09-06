@@ -34,12 +34,12 @@ func GetQldbLedgerConfig(q *qldb.Ledger) []AWSResourceConfig {
 
 	cf := QldbLedgerConfig{
 		Config: Config{
-			Name: functions.GetString(q.Name),
+			Name: functions.GetVal(q.Name),
 			Tags: q.Tags,
 		},
-		Name:               functions.GetString(q.Name),
+		Name:               functions.GetVal(q.Name),
 		PermissionsMode:    q.PermissionsMode,
-		DeletionProtection: functions.GetBool(q.DeletionProtection),
+		DeletionProtection: functions.GetVal(q.DeletionProtection),
 	}
 
 	return []AWSResourceConfig{{

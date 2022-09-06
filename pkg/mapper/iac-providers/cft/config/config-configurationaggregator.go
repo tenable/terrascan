@@ -33,14 +33,14 @@ func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) [
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{
 			Tags: c.Tags,
-			Name: functions.GetString(c.ConfigurationAggregatorName),
+			Name: functions.GetVal(c.ConfigurationAggregatorName),
 		},
 	}
 	if c.AccountAggregationSources != nil {
 		accountAggregationSources := make([]map[string]interface{}, 0)
-		for _, agsource := range *c.AccountAggregationSources {
+		for _, agsource := range functions.GetVal(c.AccountAggregationSources) {
 			accountAggregationSource := make(map[string]interface{})
-			accountAggregationSource["all_regions"] = functions.GetBool(agsource.AllAwsRegions)
+			accountAggregationSource["all_regions"] = functions.GetVal(agsource.AllAwsRegions)
 			accountAggregationSources = append(accountAggregationSources, accountAggregationSource)
 		}
 		if len(accountAggregationSources) > 0 {
@@ -50,7 +50,7 @@ func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) [
 	if c.OrganizationAggregationSource != nil {
 		organizationAggregationSources := make([]map[string]interface{}, 0)
 		organizationAggregationSource := make(map[string]interface{})
-		organizationAggregationSource["all_regions"] = c.OrganizationAggregationSource.AllAwsRegions
+		organizationAggregationSource["all_regions"] = functions.GetVal(c.OrganizationAggregationSource.AllAwsRegions)
 		organizationAggregationSources = append(organizationAggregationSources, organizationAggregationSource)
 		if len(organizationAggregationSources) > 0 {
 			cf.OrgAggregationSource = organizationAggregationSources

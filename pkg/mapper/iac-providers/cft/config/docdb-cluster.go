@@ -35,9 +35,9 @@ func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 		Config: Config{
 			Tags: d.Tags,
 		},
-		KmsKeyID:                    functions.GetString(d.KmsKeyId),
-		StorageEncrypted:            functions.GetBool(d.StorageEncrypted),
-		EnableCloudwatchLogsExports: *d.EnableCloudwatchLogsExports,
+		KmsKeyID:                    functions.GetVal(d.KmsKeyId),
+		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
+		EnableCloudwatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

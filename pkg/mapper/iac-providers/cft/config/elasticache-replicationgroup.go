@@ -34,8 +34,8 @@ func GetElastiCacheReplicationGroupConfig(r *elasticache.ReplicationGroup) []AWS
 		Config: Config{
 			Tags: r.Tags,
 		},
-		AtRestEncryptionEnabled:  functions.GetBool(r.AtRestEncryptionEnabled),
-		TransitEncryptionEnabled: functions.GetBool(r.TransitEncryptionEnabled),
+		AtRestEncryptionEnabled:  functions.GetVal(r.AtRestEncryptionEnabled),
+		TransitEncryptionEnabled: functions.GetVal(r.TransitEncryptionEnabled),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

@@ -53,10 +53,10 @@ func GetAppMeshMeshConfig(m *appmesh.Mesh) []AWSResourceConfig {
 
 	cf := AppMeshMeshConfig{
 		Config: Config{
-			Name: functions.GetString(m.MeshName),
+			Name: functions.GetVal(m.MeshName),
 			Tags: m.Tags,
 		},
-		Name: functions.GetString(m.MeshName),
+		Name: functions.GetVal(m.MeshName),
 		Spec: spec,
 	}
 

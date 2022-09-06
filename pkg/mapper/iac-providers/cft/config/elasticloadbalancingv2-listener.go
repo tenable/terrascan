@@ -48,14 +48,14 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 		// DefaultActions are required
 		cf := ElasticLoadBalancingV2ListenerConfig{
 			Config:   Config{},
-			Protocol: functions.GetString(l.Protocol),
+			Protocol: functions.GetVal(l.Protocol),
 		}
 		if action.RedirectConfig != nil {
 			defaultAction := []DefaultActionConfig{
 				{
 					RedirectConfig: []RedirectConfig{
 						{
-							Protocol: functions.GetString(action.RedirectConfig.Protocol),
+							Protocol: functions.GetVal(action.RedirectConfig.Protocol),
 						},
 					},
 				},

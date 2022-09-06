@@ -33,11 +33,11 @@ type CloudTrailConfig struct {
 // GetCloudTrailConfig returns config for aws_cloudtrail
 func GetCloudTrailConfig(t *cloudtrail.Trail) []AWSResourceConfig {
 	cf := CloudTrailConfig{
-		Config:                  Config{Tags: t.Tags, Name: functions.GetString(t.TrailName)},
+		Config:                  Config{Tags: t.Tags, Name: functions.GetVal(t.TrailName)},
 		EnableLogFileValidation: t.EnableLogFileValidation,
 		IsMultiRegionTrail:      t.IsMultiRegionTrail,
 	}
-	cf.KmsKeyID = functions.GetString(t.KMSKeyId)
-	cf.SnsTopicName = functions.GetString(t.SnsTopicName)
+	cf.KmsKeyID = functions.GetVal(t.KMSKeyId)
+	cf.SnsTopicName = functions.GetVal(t.SnsTopicName)
 	return []AWSResourceConfig{{Resource: cf, Metadata: t.AWSCloudFormationMetadata}}
 }

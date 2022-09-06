@@ -44,8 +44,8 @@ func GetDBSecurityGroupConfig(dbsg *rds.DBSecurityGroup) []AWSResourceConfig {
 	if dbsg.DBSecurityGroupIngress != nil {
 		cf.Ingress = make([]DBIngress, len(dbsg.DBSecurityGroupIngress))
 		for i, dbsgi := range dbsg.DBSecurityGroupIngress {
-			cf.Ingress[i].CIDR = functions.GetString(dbsgi.CIDRIP)
-			cf.Ingress[i].SecurityGroupName = functions.GetString(dbsgi.EC2SecurityGroupName)
+			cf.Ingress[i].CIDR = functions.GetVal(dbsgi.CIDRIP)
+			cf.Ingress[i].SecurityGroupName = functions.GetVal(dbsgi.EC2SecurityGroupName)
 		}
 	}
 

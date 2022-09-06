@@ -51,11 +51,12 @@ type AutoScalingLaunchConfigurationConfig struct {
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
 	var ebsBlockDevice []EbsBlockDeviceBlock
 	if l.BlockDeviceMappings != nil {
-		ebsBlockDevice = make([]EbsBlockDeviceBlock, len(*l.BlockDeviceMappings))
-		for i, blockDeviceMapping := range *l.BlockDeviceMappings {
+		blockDeviceMappingLen := len(functions.GetVal(l.BlockDeviceMappings))
+		ebsBlockDevice = make([]EbsBlockDeviceBlock, blockDeviceMappingLen)
+		for i, blockDeviceMapping := range functions.GetVal(l.BlockDeviceMappings) {
 			if blockDeviceMapping.Ebs != nil {
-				ebsBlockDevice[i].Encrypted = functions.GetBool(blockDeviceMapping.Ebs.Encrypted)
-				ebsBlockDevice[i].DeleteOnTermination = functions.GetBool(blockDeviceMapping.Ebs.DeleteOnTermination)
+				ebsBlockDevice[i].Encrypted = functions.GetVal(blockDeviceMapping.Ebs.Encrypted)
+				ebsBlockDevice[i].DeleteOnTermination = functions.GetVal(blockDeviceMapping.Ebs.DeleteOnTermination)
 			}
 			ebsBlockDevice[i].DeviceName = blockDeviceMapping.DeviceName
 		}
@@ -63,20 +64,20 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 
 	var metadataOptions MetadataOptionsBlock
 	if l.MetadataOptions != nil {
-		metadataOptions.HTTPEndpoint = functions.GetString(l.MetadataOptions.HttpEndpoint)
-		metadataOptions.HTTPTokens = functions.GetString(l.MetadataOptions.HttpTokens)
+		metadataOptions.HTTPEndpoint = functions.GetVal(l.MetadataOptions.HttpEndpoint)
+		metadataOptions.HTTPTokens = functions.GetVal(l.MetadataOptions.HttpTokens)
 	}
 
 	cf := AutoScalingLaunchConfigurationConfig{
 		Config: Config{
-			Name: functions.GetString(l.LaunchConfigurationName),
+			Name: functions.GetVal(l.LaunchConfigurationName),
 		},
-		EnableMonitoring: functions.GetBool(l.InstanceMonitoring),
+		EnableMonitoring: functions.GetVal(l.InstanceMonitoring),
 		MetadataOptions:  metadataOptions,
 		EbsBlockDevice:   ebsBlockDevice,
 	}
 
-	data, err := base64.StdEncoding.Strict().DecodeString(functions.GetString(l.UserData))
+	data, err := base64.StdEncoding.Strict().DecodeString(functions.GetVal(l.UserData))
 	datastr := string(data)
 
 	if isASCII(datastr) && err == nil {

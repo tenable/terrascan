@@ -47,7 +47,7 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 	// aws_iam_role_policy as a SubResource
 	policyConfigs := make([]AWSResourceConfig, 0)
 	if r.Policies != nil {
-		for i, policy := range *r.Policies {
+		for i, policy := range functions.GetVal(r.Policies) {
 			pc := IamGroupPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,
@@ -70,9 +70,9 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 
 	groupConfig := IamGroupConfig{
 		Config: Config{
-			Name: functions.GetString(r.GroupName),
+			Name: functions.GetVal(r.GroupName),
 		},
-		Name: functions.GetString(r.GroupName),
+		Name: functions.GetVal(r.GroupName),
 	}
 
 	var groupPolicyConfig AWSResourceConfig

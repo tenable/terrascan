@@ -66,13 +66,15 @@ type EC2InstanceConfig struct {
 
 // GetEC2InstanceConfig returns config for EC2Instance
 func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
-	nics := make([]NetworkInterfaceBlock, len(*i.NetworkInterfaces))
-	niconfigs := make([]NetworkInterfaceConfig, len(*i.NetworkInterfaces))
-	awsconfig := make([]AWSResourceConfig, len(*i.NetworkInterfaces))
+	networkInterfaces := functions.GetVal(i.NetworkInterfaces)
 
-	for index, networkInterface := range *i.NetworkInterfaces {
-		nics[index].NetworkInterfaceID = functions.GetString(networkInterface.NetworkInterfaceId)
-		nics[index].DeleteOnTermination = functions.GetBool(networkInterface.DeleteOnTermination)
+	nics := make([]NetworkInterfaceBlock, len(networkInterfaces))
+	niconfigs := make([]NetworkInterfaceConfig, len(networkInterfaces))
+	awsconfig := make([]AWSResourceConfig, len(networkInterfaces))
+
+	for index, networkInterface := range networkInterfaces {
+		nics[index].NetworkInterfaceID = functions.GetVal(networkInterface.NetworkInterfaceId)
+		nics[index].DeleteOnTermination = functions.GetVal(networkInterface.DeleteOnTermination)
 		var devindex int
 		devindex, err := strconv.Atoi(networkInterface.DeviceIndex)
 		if err != nil {
@@ -81,9 +83,9 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		nics[index].DeviceIndex = devindex
 
 		// create aws_network_interface resource on the fly for every network interface used in aws_instance
-		niconfigs[index].SubnetID = *networkInterface.SubnetId
+		niconfigs[index].SubnetID = functions.GetVal(networkInterface.SubnetId)
 		if *networkInterface.PrivateIpAddress != "" {
-			niconfigs[index].PrivateIPs = []string{functions.GetString(networkInterface.PrivateIpAddress)}
+			niconfigs[index].PrivateIPs = []string{functions.GetVal(networkInterface.PrivateIpAddress)}
 		}
 
 		nicname := fmt.Sprintf("%s%d", instanceName, index)
@@ -103,17 +105,17 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 			Tags: i.Tags,
 			Name: instanceName,
 		},
-		AMI:                 functions.GetString(i.ImageId),
-		InstanceType:        functions.GetString(i.InstanceType),
-		EBSOptimized:        functions.GetBool(i.EbsOptimized),
-		Monitoring:          functions.GetBool(i.Monitoring),
-		IAMInstanceProfile:  functions.GetString(i.IamInstanceProfile),
-		VPCSecurityGroupIDs: *i.SecurityGroupIds,
+		AMI:                 functions.GetVal(i.ImageId),
+		InstanceType:        functions.GetVal(i.InstanceType),
+		EBSOptimized:        functions.GetVal(i.EbsOptimized),
+		Monitoring:          functions.GetVal(i.Monitoring),
+		IAMInstanceProfile:  functions.GetVal(i.IamInstanceProfile),
+		VPCSecurityGroupIDs: functions.GetVal(i.SecurityGroupIds),
 		NetworkInterface:    nics,
 	}
 
 	if i.HibernationOptions != nil {
-		ec2Config.Hibernation = functions.GetBool(i.HibernationOptions.Configured)
+		ec2Config.Hibernation = functions.GetVal(i.HibernationOptions.Configured)
 	}
 
 	var awsconfigec2 AWSResourceConfig

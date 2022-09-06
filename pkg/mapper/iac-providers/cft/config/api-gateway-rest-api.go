@@ -33,18 +33,18 @@ type APIGatewayRestAPIConfig struct {
 func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 	cf := APIGatewayRestAPIConfig{
 		Config: Config{
-			Name: functions.GetString(a.Name),
+			Name: functions.GetVal(a.Name),
 			Tags: a.Tags,
 		},
-		MinimumCompressionSize: functions.GetNum(a.MinimumCompressionSize),
+		MinimumCompressionSize: functions.GetVal(a.MinimumCompressionSize),
 		Policy:                 a.Policy,
 	}
 	// Endpoint Configuration is a []map[string][]string in terraform for some reason
 	// despite having fixed keys and not more than one possible value
 	ec := make(map[string][]string)
 	if a.EndpointConfiguration != nil {
-		ec["types"] = *a.EndpointConfiguration.Types
-		ec["vpc_endpoint_ids"] = *a.EndpointConfiguration.VpcEndpointIds
+		ec["types"] = functions.GetVal(a.EndpointConfiguration.Types)
+		ec["vpc_endpoint_ids"] = functions.GetVal(a.EndpointConfiguration.VpcEndpointIds)
 	}
 	cf.EndpointConfiguration = []map[string][]string{ec}
 

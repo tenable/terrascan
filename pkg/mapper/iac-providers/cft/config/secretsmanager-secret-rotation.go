@@ -39,12 +39,12 @@ func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) [
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {
 		rotationRules = make([]SecretRotationRulesBlock, 1)
-		rotationRules[0].AutomaticallyAfterDays = functions.GetNum(r.RotationRules.AutomaticallyAfterDays)
+		rotationRules[0].AutomaticallyAfterDays = functions.GetVal(r.RotationRules.AutomaticallyAfterDays)
 	}
 
 	cf := SecretsManagerSecretRotationConfig{
 		SecretID:          r.SecretId,
-		RotationLambdaARN: functions.GetString(r.RotationLambdaARN),
+		RotationLambdaARN: functions.GetVal(r.RotationLambdaARN),
 		RotationRules:     rotationRules,
 	}
 

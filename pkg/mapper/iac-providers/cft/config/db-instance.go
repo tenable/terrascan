@@ -38,15 +38,15 @@ func GetDBInstanceConfig(d *rds.DBInstance) []AWSResourceConfig {
 	cf := DBInstanceConfig{
 		Config: Config{
 			Tags: d.Tags,
-			Name: functions.GetString(d.DBName),
+			Name: functions.GetVal(d.DBName),
 		},
-		EnabledCloudWatchLogsExports: *d.EnableCloudwatchLogsExports,
-		AutoMinorVersionUpgrade:      functions.GetBool(d.AutoMinorVersionUpgrade),
-		StorageEncrypted:             functions.GetBool(d.StorageEncrypted),
-		KmsKeyID:                     functions.GetString(d.KmsKeyId),
-		CaCertIdentifier:             functions.GetString(d.CACertificateIdentifier),
-		IamDBAuthEnabled:             functions.GetBool(d.EnableIAMDatabaseAuthentication),
-		PubliclyAccessible:           functions.GetBool(d.PubliclyAccessible),
+		EnabledCloudWatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
+		AutoMinorVersionUpgrade:      functions.GetVal(d.AutoMinorVersionUpgrade),
+		StorageEncrypted:             functions.GetVal(d.StorageEncrypted),
+		KmsKeyID:                     functions.GetVal(d.KmsKeyId),
+		CaCertIdentifier:             functions.GetVal(d.CACertificateIdentifier),
+		IamDBAuthEnabled:             functions.GetVal(d.EnableIAMDatabaseAuthentication),
+		PubliclyAccessible:           functions.GetVal(d.PubliclyAccessible),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

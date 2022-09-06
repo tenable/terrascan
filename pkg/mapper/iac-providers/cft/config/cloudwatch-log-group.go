@@ -33,11 +33,11 @@ type LogCloudWatchGroupConfig struct {
 func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 	cf := LogCloudWatchGroupConfig{
 		Config: Config{
-			Name: functions.GetString(r.LogGroupName),
+			Name: functions.GetVal(r.LogGroupName),
 		},
-		LogGroupName:    functions.GetString(r.LogGroupName),
-		KmsKeyID:        functions.GetString(r.KmsKeyId),
-		RetentionInDays: functions.GetNum(r.RetentionInDays),
+		LogGroupName:    functions.GetVal(r.LogGroupName),
+		KmsKeyID:        functions.GetVal(r.KmsKeyId),
+		RetentionInDays: functions.GetVal(r.RetentionInDays),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

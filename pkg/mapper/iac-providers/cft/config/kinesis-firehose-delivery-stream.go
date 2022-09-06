@@ -38,7 +38,7 @@ type KinesisFirehoseDeliveryStreamSseConfig struct {
 func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) []AWSResourceConfig {
 	cf := KinesisFirehoseDeliveryStreamConfig{
 		Config: Config{
-			Name: functions.GetString(k.DeliveryStreamName),
+			Name: functions.GetVal(k.DeliveryStreamName),
 			Tags: k.Tags,
 		},
 	}
@@ -46,7 +46,7 @@ func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) [
 	if k.DeliveryStreamEncryptionConfigurationInput != nil {
 		sseConfig.Enabled = true
 		sseConfig.KeyType = k.DeliveryStreamEncryptionConfigurationInput.KeyType
-		sseConfig.KeyARN = functions.GetString(k.DeliveryStreamEncryptionConfigurationInput.KeyARN)
+		sseConfig.KeyARN = functions.GetVal(k.DeliveryStreamEncryptionConfigurationInput.KeyARN)
 	}
 	cf.ServerSideEncryption = []KinesisFirehoseDeliveryStreamSseConfig{sseConfig}
 	return []AWSResourceConfig{{

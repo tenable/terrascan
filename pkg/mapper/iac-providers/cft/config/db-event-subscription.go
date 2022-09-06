@@ -36,10 +36,10 @@ func GetDBEventSubscriptionConfig(d *rds.EventSubscription) []AWSResourceConfig 
 	cf := DBEventSubscriptionConfig{
 		Config:          Config{},
 		SnsTopicArn:     d.SnsTopicArn,
-		Enabled:         functions.GetBool(d.Enabled),
-		EventCategories: *d.EventCategories,
-		SourceIds:       *d.SourceIds,
-		SourceType:      functions.GetString(d.SourceType),
+		Enabled:         functions.GetVal(d.Enabled),
+		EventCategories: functions.GetVal(d.EventCategories),
+		SourceIds:       functions.GetVal(d.SourceIds),
+		SourceType:      functions.GetVal(d.SourceType),
 	}
 
 	return []AWSResourceConfig{{

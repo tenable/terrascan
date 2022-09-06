@@ -44,19 +44,19 @@ func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {
 		passwordPolicy = make([]PasswordPolicyBlock, 1)
 
-		passwordPolicy[0].MinimumLength = functions.GetNum(u.Policies.PasswordPolicy.MinimumLength)
-		passwordPolicy[0].RequireLowercase = functions.GetBool(u.Policies.PasswordPolicy.RequireLowercase)
-		passwordPolicy[0].RequireUppercase = functions.GetBool(u.Policies.PasswordPolicy.RequireUppercase)
-		passwordPolicy[0].RequireNumbers = functions.GetBool(u.Policies.PasswordPolicy.RequireNumbers)
-		passwordPolicy[0].RequireSymbols = functions.GetBool(u.Policies.PasswordPolicy.RequireSymbols)
-		passwordPolicy[0].TemporaryPasswordValidityDays = functions.GetNum(u.Policies.PasswordPolicy.TemporaryPasswordValidityDays)
+		passwordPolicy[0].MinimumLength = functions.GetVal(u.Policies.PasswordPolicy.MinimumLength)
+		passwordPolicy[0].RequireLowercase = functions.GetVal(u.Policies.PasswordPolicy.RequireLowercase)
+		passwordPolicy[0].RequireUppercase = functions.GetVal(u.Policies.PasswordPolicy.RequireUppercase)
+		passwordPolicy[0].RequireNumbers = functions.GetVal(u.Policies.PasswordPolicy.RequireNumbers)
+		passwordPolicy[0].RequireSymbols = functions.GetVal(u.Policies.PasswordPolicy.RequireSymbols)
+		passwordPolicy[0].TemporaryPasswordValidityDays = functions.GetVal(u.Policies.PasswordPolicy.TemporaryPasswordValidityDays)
 	}
 
 	cf := CognitoUserPoolConfig{
 		Config: Config{
-			Name: functions.GetString(u.UserPoolName),
+			Name: functions.GetVal(u.UserPoolName),
 		},
-		Name:           functions.GetString(u.UserPoolName),
+		Name:           functions.GetVal(u.UserPoolName),
 		PasswordPolicy: passwordPolicy,
 	}
 

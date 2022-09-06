@@ -35,7 +35,7 @@ func GetIamAccessKeyConfig(r *iam.AccessKey) []AWSResourceConfig {
 			Name: r.UserName,
 		},
 		UserName: r.UserName,
-		Status:   functions.GetString(r.Status),
+		Status:   functions.GetVal(r.Status),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

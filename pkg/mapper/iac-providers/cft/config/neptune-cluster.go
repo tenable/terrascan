@@ -34,8 +34,8 @@ func GetNeptuneClusterConfig(d *neptune.DBCluster) []AWSResourceConfig {
 		Config: Config{
 			Tags: d.Tags,
 		},
-		StorageEncrypted:            functions.GetBool(d.StorageEncrypted),
-		EnableCloudwatchLogsExports: *d.EnableCloudwatchLogsExports,
+		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
+		EnableCloudwatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

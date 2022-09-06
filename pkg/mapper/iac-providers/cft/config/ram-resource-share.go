@@ -36,7 +36,7 @@ func GetRAMResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
 			Tags: r.Tags,
 		},
 		Name:                    r.Name,
-		AllowExternalPrincipals: functions.GetBool(r.AllowExternalPrincipals),
+		AllowExternalPrincipals: functions.GetVal(r.AllowExternalPrincipals),
 	}
 
 	return []AWSResourceConfig{{

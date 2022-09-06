@@ -36,7 +36,7 @@ func GetBackupVaultConfig(b *backup.BackupVault) []AWSResourceConfig {
 			Tags: b.BackupVaultTags,
 		},
 		Name:      b.BackupVaultName,
-		KMSKeyARN: functions.GetString(b.EncryptionKeyArn),
+		KMSKeyARN: functions.GetVal(b.EncryptionKeyArn),
 	}
 
 	return []AWSResourceConfig{{
