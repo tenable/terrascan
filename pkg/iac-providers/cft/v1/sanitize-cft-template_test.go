@@ -18,7 +18,6 @@ package cftv1
 
 import (
 	"encoding/json"
-	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -32,11 +31,10 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 		isYAML bool
 	}
 	tests := []struct {
-		name              string
-		inputFile         string
-		args              args
-		expectedParingErr error
-		wantErr           bool
+		name      string
+		inputFile string
+		args      args
+		wantErr   bool
 	}{
 		{
 			name:      "input file with incorrect values in parameters",
@@ -44,8 +42,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 			args: args{
 				isYAML: true,
 			},
-			expectedParingErr: errors.New("json: cannot unmarshal string into Go struct field Template.Resources of type int"),
-			wantErr:           false,
+			wantErr: false,
 		},
 		{
 			name:      "input file with incorrect values in parameters",
@@ -53,8 +50,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 			args: args{
 				isYAML: true,
 			},
-			expectedParingErr: errors.New("json: cannot unmarshal number into Go struct field Template.Resources of type string"),
-			wantErr:           false,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -83,8 +79,8 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 			}
 
 			_, err = goformation.ParseJSON(resData)
-			if err != nil && err.Error() != tt.expectedParingErr.Error() {
-				t.Errorf("CFTV1.sanitizeCftTemplate() got error: %v, expected: %v", err, tt.expectedParingErr)
+			if err == nil {
+				t.Errorf("CFTV1.sanitizeCftTemplate() expected an error")
 			}
 		})
 	}
