@@ -16,7 +16,7 @@
 
 package functions
 
-// GetAny function pointer of any type, validates and returns value
+// GetVal function pointer of any type, validates and returns value
 func GetVal[T any](ptr *T) T {
 	if ptr == nil {
 		var retval T

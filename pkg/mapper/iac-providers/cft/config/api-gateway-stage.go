@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	// GatewayMethodSettings represents subresource aws_api_gateway_method_settings for MethodSettings attribute
+	// GatewayMethodSetting represents subresource aws_api_gateway_method_settings for MethodSettings attribute
 	GatewayMethodSetting = "MethodSetting"
 )
 
