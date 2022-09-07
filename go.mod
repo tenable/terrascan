@@ -17,7 +17,7 @@ require (
 	github.com/BurntSushi/toml v0.4.1 // indirect
 	github.com/GoogleCloudPlatform/docker-credential-gcr v2.0.5+incompatible
 	github.com/VerbalExpressions/GoVerbalExpressions v0.0.0-20200410162751-4d76a1099a6e
-	github.com/aws/aws-sdk-go v1.37.0
+	github.com/aws/aws-sdk-go v1.44.92
 	github.com/aws/aws-sdk-go-v2/config v1.5.0
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.3.2
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
@@ -54,7 +54,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.9.1
 	go.uber.org/zap v1.16.0
-	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d
+	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e
 	golang.org/x/tools v0.1.11-0.20220316014157-77aa08bb151a // indirect
 	google.golang.org/api v0.34.0
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a
@@ -178,10 +178,10 @@ require (
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
-	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
+	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
+	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
