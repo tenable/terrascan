@@ -23,8 +23,8 @@ import (
 
 // apiResponse creates an API response
 func apiResponse(w http.ResponseWriter, msg string, statusCode int) {
-	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
 	fmt.Fprint(w, msg)
 }
 
