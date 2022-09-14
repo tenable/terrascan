@@ -19,7 +19,7 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -44,7 +44,7 @@ func (g *APIHandler) validateK8SWebhook(w http.ResponseWriter, r *http.Request) 
 	)
 
 	// Read the request into byte array
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		msg := fmt.Sprintf("failed to read validating admission webhook request body, error: '%v'", err)
 		apiErrorResponse(w, msg, http.StatusBadRequest)

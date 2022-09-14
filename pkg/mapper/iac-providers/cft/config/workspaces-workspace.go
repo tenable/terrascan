@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/workspaces"
+	"github.com/awslabs/goformation/v6/cloudformation/workspaces"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // WorkspacesWorkspaceConfig holds config for aws_workspaces_workspace
@@ -34,8 +35,8 @@ func GetWorkspacesWorkspaceConfig(w *workspaces.Workspace) []AWSResourceConfig {
 			Name: w.UserName,
 			Tags: w.Tags,
 		},
-		UserVolumeEncryptionEnabled: w.UserVolumeEncryptionEnabled,
-		RootVolumeEncryptionEnabled: w.RootVolumeEncryptionEnabled,
+		UserVolumeEncryptionEnabled: functions.GetVal(w.UserVolumeEncryptionEnabled),
+		RootVolumeEncryptionEnabled: functions.GetVal(w.RootVolumeEncryptionEnabled),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

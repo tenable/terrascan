@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/guardduty"
+	"github.com/awslabs/goformation/v6/cloudformation/guardduty"
 )
 
 // GuardDutyDetectorConfig holds config for aws_guardduty_detector

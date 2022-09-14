@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/apigatewayv2"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/apigatewayv2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // CorsConfigurationBlock holds config for cors_configuration attribute
 type CorsConfigurationBlock struct {
@@ -51,30 +54,30 @@ func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 
 	if a.CorsConfiguration != nil {
 		corsConfigData = make([]CorsConfigurationBlock, 1)
-		corsConfigData[0].AllowCredentials = a.CorsConfiguration.AllowCredentials
-		corsConfigData[0].AllowHeaders = a.CorsConfiguration.AllowHeaders
-		corsConfigData[0].AllowMethods = a.CorsConfiguration.AllowMethods
-		corsConfigData[0].AllowOrigins = a.CorsConfiguration.AllowOrigins
-		corsConfigData[0].ExposeHeaders = a.CorsConfiguration.ExposeHeaders
-		corsConfigData[0].MaxAge = a.CorsConfiguration.MaxAge
+		corsConfigData[0].AllowCredentials = functions.GetVal(a.CorsConfiguration.AllowCredentials)
+		corsConfigData[0].AllowHeaders = functions.GetVal(a.CorsConfiguration.AllowHeaders)
+		corsConfigData[0].AllowMethods = functions.GetVal(a.CorsConfiguration.AllowMethods)
+		corsConfigData[0].AllowOrigins = functions.GetVal(a.CorsConfiguration.AllowOrigins)
+		corsConfigData[0].ExposeHeaders = functions.GetVal(a.CorsConfiguration.ExposeHeaders)
+		corsConfigData[0].MaxAge = functions.GetVal(a.CorsConfiguration.MaxAge)
 	}
 
 	cf := APIGatewayV2ApiConfig{
 		Config: Config{
-			Name: a.Name,
+			Name: functions.GetVal(a.Name),
 			Tags: a.Tags,
 		},
-		Name:                      a.Name,
-		ProtocolType:              a.ProtocolType,
-		RouteKey:                  a.RouteKey,
-		Description:               a.Description,
-		CredentialsArn:            a.CredentialsArn,
-		RouteSelectionExpression:  a.RouteSelectionExpression,
-		Target:                    a.Target,
-		Version:                   a.Version,
-		APIKeySelectionExpression: a.ApiKeySelectionExpression,
-		DisableExecuteAPIEndpoint: a.DisableExecuteApiEndpoint,
-		FailOnWarnings:            a.FailOnWarnings,
+		Name:                      functions.GetVal(a.Name),
+		ProtocolType:              functions.GetVal(a.ProtocolType),
+		RouteKey:                  functions.GetVal(a.RouteKey),
+		Description:               functions.GetVal(a.Description),
+		CredentialsArn:            functions.GetVal(a.CredentialsArn),
+		RouteSelectionExpression:  functions.GetVal(a.RouteSelectionExpression),
+		Target:                    functions.GetVal(a.Target),
+		Version:                   functions.GetVal(a.Version),
+		APIKeySelectionExpression: functions.GetVal(a.ApiKeySelectionExpression),
+		DisableExecuteAPIEndpoint: functions.GetVal(a.DisableExecuteApiEndpoint),
+		FailOnWarnings:            functions.GetVal(a.FailOnWarnings),
 		CorsConfiguration:         corsConfigData,
 	}
 

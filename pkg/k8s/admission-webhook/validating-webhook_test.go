@@ -17,7 +17,6 @@
 package admissionwebhook
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -104,7 +103,7 @@ func TestDecodeAdmissionReviewRequest(t *testing.T) {
 	for _, test := range table {
 
 		// read test request from file
-		requestBody, err := ioutil.ReadFile(test.requestFile)
+		requestBody, err := os.ReadFile(test.requestFile)
 		if err != nil {
 			t.Errorf("failed to read test data, error: '%v'", err)
 		}

@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/rds"
+	"github.com/awslabs/goformation/v6/cloudformation/rds"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // DBInstanceConfig holds config for aws_db_instance
@@ -37,15 +38,15 @@ func GetDBInstanceConfig(d *rds.DBInstance) []AWSResourceConfig {
 	cf := DBInstanceConfig{
 		Config: Config{
 			Tags: d.Tags,
-			Name: d.DBName,
+			Name: functions.GetVal(d.DBName),
 		},
-		EnabledCloudWatchLogsExports: d.EnableCloudwatchLogsExports,
-		AutoMinorVersionUpgrade:      d.AutoMinorVersionUpgrade,
-		StorageEncrypted:             d.StorageEncrypted,
-		KmsKeyID:                     d.KmsKeyId,
-		CaCertIdentifier:             d.CACertificateIdentifier,
-		IamDBAuthEnabled:             d.EnableIAMDatabaseAuthentication,
-		PubliclyAccessible:           d.PubliclyAccessible,
+		EnabledCloudWatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
+		AutoMinorVersionUpgrade:      functions.GetVal(d.AutoMinorVersionUpgrade),
+		StorageEncrypted:             functions.GetVal(d.StorageEncrypted),
+		KmsKeyID:                     functions.GetVal(d.KmsKeyId),
+		CaCertIdentifier:             functions.GetVal(d.CACertificateIdentifier),
+		IamDBAuthEnabled:             functions.GetVal(d.EnableIAMDatabaseAuthentication),
+		PubliclyAccessible:           functions.GetVal(d.PubliclyAccessible),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

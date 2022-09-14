@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -135,7 +134,7 @@ func MakeRemoteScanRequest(URL string, bodyAttributes map[string]interface{}, ex
 // CompareResponseAndGoldenOutput compares the json response and golden json output
 func CompareResponseAndGoldenOutput(goldenFilePath string, responseBytes []byte) {
 	var responseEngineOutput, fileDataEngineOutput policy.EngineOutput
-	fileBytes, err := ioutil.ReadFile(goldenFilePath)
+	fileBytes, err := os.ReadFile(goldenFilePath)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
 	err = json.Unmarshal(responseBytes, &responseEngineOutput)

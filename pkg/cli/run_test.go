@@ -17,7 +17,7 @@
 package cli
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -59,7 +59,7 @@ var runTestDir = filepath.Join(testDataDir, "run-test")
 func TestRun(t *testing.T) {
 	// disable terraform logs when TF_LOG env variable is not set
 	if os.Getenv("TF_LOG") == "" {
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 	}
 
 	kustomizeTestDirPath := filepath.Join(runTestDir, "kustomize-test")

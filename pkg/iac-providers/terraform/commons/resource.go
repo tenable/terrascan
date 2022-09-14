@@ -18,7 +18,7 @@ package commons
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	hclConfigs "github.com/hashicorp/terraform/configs"
@@ -31,7 +31,7 @@ import (
 func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig output.ResourceConfig, err error) {
 
 	// read source file
-	fileBytes, err := ioutil.ReadFile(managedResource.DeclRange.Filename)
+	fileBytes, err := os.ReadFile(managedResource.DeclRange.Filename)
 	if err != nil {
 		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", managedResource.DeclRange.Filename, err)
 		return resourceConfig, fmt.Errorf("failed to read terraform file")
@@ -76,7 +76,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	return resourceConfig, nil
 }
 
-//findContainers finds containers defined in resource
+// findContainers finds containers defined in resource
 func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerDetails, initContainers []output.ContainerDetails) {
 	if isKuberneteResource(managedResource) {
 		containers, initContainers = extractContainerImagesFromk8sResources(managedResource, hclBody)

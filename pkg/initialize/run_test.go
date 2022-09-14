@@ -21,7 +21,6 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,7 +65,7 @@ func TestGetCommercialPolicy(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			policies, err := ioutil.ReadFile(tt.configFile)
+			policies, err := os.ReadFile(tt.configFile)
 			if err != nil {
 				t.Errorf("unable to read test file")
 			}
@@ -166,12 +165,12 @@ func verifyFiles(files []fs.DirEntry, rscdir string) error {
 		testpath := filepath.Join(TESTDIR, file.Name())
 		convpath := filepath.Join(rscdir, file.Name())
 
-		testbytes, err := ioutil.ReadFile(testpath)
+		testbytes, err := os.ReadFile(testpath)
 		if err != nil {
 			return fmt.Errorf("unable to read test file: '%s', err: '%w'", testpath, err)
 		}
 
-		databytes, err := ioutil.ReadFile(convpath)
+		databytes, err := os.ReadFile(convpath)
 		if err != nil {
 			return fmt.Errorf("unable to read converted file: '%s', err: '%w'", convpath, err)
 		}

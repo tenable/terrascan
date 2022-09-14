@@ -13,16 +13,14 @@
 	    See the License for the specific language governing permissions and
 	    limitations under the License.
 */
-package help_test
 
-import (
-	"testing"
+package functions
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-)
-
-func TestHelp(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Help Suite")
+// GetVal function pointer of any type, validates and returns value
+func GetVal[T any](ptr *T) T {
+	if ptr == nil {
+		var retval T
+		return retval
+	}
+	return *ptr
 }

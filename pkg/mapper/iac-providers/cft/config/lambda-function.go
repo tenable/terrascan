@@ -20,8 +20,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/awslabs/goformation/v5/cloudformation/lambda"
-	"github.com/awslabs/goformation/v5/cloudformation/serverless"
+	"github.com/awslabs/goformation/v6/cloudformation/lambda"
+	"github.com/awslabs/goformation/v6/cloudformation/serverless"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // TracingConfigBlock holds config for TracingConfig
@@ -76,7 +77,7 @@ func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
 
 func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 	tracingConfig := make([]TracingConfigBlock, 1)
-	tracingConfig[0].Mode = sf.Tracing
+	tracingConfig[0].Mode = functions.GetVal(sf.Tracing)
 
 	var vpcConfig []VPCConfigBlock
 	if sf.VpcConfig != nil {
@@ -95,19 +96,19 @@ func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 
 	cf := LambdaFunctionConfig{
 		Config: Config{
-			Name: sf.FunctionName,
+			Name: functions.GetVal(sf.FunctionName),
 		},
-		FunctionName:                 sf.FunctionName,
-		Role:                         sf.Role,
-		Handler:                      sf.Handler,
-		MemorySize:                   sf.MemorySize,
-		ReservedConcurrentExecutions: sf.ReservedConcurrentExecutions,
-		Runtime:                      sf.Runtime,
-		Timeout:                      sf.Timeout,
+		FunctionName:                 functions.GetVal(sf.FunctionName),
+		Role:                         functions.GetVal(sf.Role),
+		Handler:                      functions.GetVal(sf.Handler),
+		MemorySize:                   functions.GetVal(sf.MemorySize),
+		ReservedConcurrentExecutions: functions.GetVal(sf.ReservedConcurrentExecutions),
+		Runtime:                      functions.GetVal(sf.Runtime),
+		Timeout:                      functions.GetVal(sf.Timeout),
 		TracingConfig:                tracingConfig,
 		VPCConfig:                    vpcConfig,
 		Environment:                  environment,
-		KMSKeyARN:                    sf.KmsKeyArn,
+		KMSKeyARN:                    functions.GetVal(sf.KmsKeyArn),
 	}
 
 	cf = setServerlessCodePackage(cf, sf)
@@ -123,22 +124,21 @@ func setServerlessCodePackage(cf LambdaFunctionConfig, f *serverless.Function) L
 		return cf
 	}
 
-	if f.ImageUri != "" {
-		cf.ImageURI = f.ImageUri
+	if f.ImageUri != nil {
+		cf.ImageURI = functions.GetVal(f.ImageUri)
 		return cf
 	}
 
 	if f.CodeUri != nil && f.CodeUri.String != nil &&
-		*f.CodeUri.String != "" && !strings.HasPrefix(*f.CodeUri.String, "s3") {
-		cf.FileName = *f.CodeUri.String
+		functions.GetVal(f.CodeUri.String) != "" && !strings.HasPrefix(functions.GetVal(f.CodeUri.String), "s3") {
+		cf.FileName = functions.GetVal(f.CodeUri.String)
 		return cf
 	}
 
 	if f.CodeUri != nil && f.CodeUri.S3Location != nil {
 		cf.S3Bucket = f.CodeUri.S3Location.Bucket
 		cf.S3Key = f.CodeUri.S3Location.Key
-		cf.S3ObjectVersion = strconv.Itoa(f.CodeUri.S3Location.Version)
-
+		cf.S3ObjectVersion = strconv.Itoa(functions.GetVal(f.CodeUri.S3Location.Version))
 	}
 
 	return cf
@@ -149,39 +149,39 @@ func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 	if lf.TracingConfig != nil {
 		tracingConfig = make([]TracingConfigBlock, 1)
 
-		tracingConfig[0].Mode = lf.TracingConfig.Mode
+		tracingConfig[0].Mode = functions.GetVal(lf.TracingConfig.Mode)
 	}
 
 	var vpcConfig []VPCConfigBlock
 	if lf.VpcConfig != nil {
 		vpcConfig = make([]VPCConfigBlock, 1)
 
-		vpcConfig[0].SecurityGroupIDs = lf.VpcConfig.SecurityGroupIds
-		vpcConfig[0].SubnetIDs = lf.VpcConfig.SubnetIds
+		vpcConfig[0].SecurityGroupIDs = *lf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = *lf.VpcConfig.SubnetIds
 	}
 
 	var environment []EnvironmentBlock
 	if lf.Environment != nil {
 		environment = make([]EnvironmentBlock, 1)
 
-		environment[0].Variables = lf.Environment.Variables
+		environment[0].Variables = *lf.Environment.Variables
 	}
 
 	cf := LambdaFunctionConfig{
 		Config: Config{
-			Name: lf.FunctionName,
+			Name: functions.GetVal(lf.FunctionName),
 		},
-		FunctionName:                 lf.FunctionName,
+		FunctionName:                 functions.GetVal(lf.FunctionName),
 		Role:                         lf.Role,
-		Handler:                      lf.Handler,
-		MemorySize:                   lf.MemorySize,
-		ReservedConcurrentExecutions: lf.ReservedConcurrentExecutions,
-		Runtime:                      lf.Runtime,
-		Timeout:                      lf.Timeout,
+		Handler:                      functions.GetVal(lf.Handler),
+		MemorySize:                   functions.GetVal(lf.MemorySize),
+		ReservedConcurrentExecutions: functions.GetVal(lf.ReservedConcurrentExecutions),
+		Runtime:                      functions.GetVal(lf.Runtime),
+		Timeout:                      functions.GetVal(lf.Timeout),
 		TracingConfig:                tracingConfig,
 		VPCConfig:                    vpcConfig,
 		Environment:                  environment,
-		KMSKeyARN:                    lf.KmsKeyArn,
+		KMSKeyARN:                    functions.GetVal(lf.KmsKeyArn),
 	}
 
 	cf = setLambdaCodePackage(cf, lf)
@@ -193,13 +193,12 @@ func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 }
 
 func setLambdaCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
-	if f.Code.ImageUri != "" {
-		cf.ImageURI = f.Code.ImageUri
+	if f.Code != nil {
+		cf.ImageURI = functions.GetVal(f.Code.ImageUri)
 		return cf
 	}
-
-	cf.S3Bucket = f.Code.S3Bucket
-	cf.S3Key = f.Code.S3Key
-	cf.S3ObjectVersion = f.Code.S3ObjectVersion
+	cf.S3Bucket = functions.GetVal(f.Code.S3Bucket)
+	cf.S3Key = functions.GetVal(f.Code.S3Key)
+	cf.S3ObjectVersion = functions.GetVal(f.Code.S3ObjectVersion)
 	return cf
 }
