@@ -11,7 +11,7 @@
     "severity": "LOW",
     "description": "Ensure endpoint slice is not created or updated with loopback addresses as this acts as an attack vector for exploiting CVE-2021-25737 by an authorized user",
     "reference_id": "AC_K8S_0113",
-    "id": "AC_K8S_0113",
+    "id": "AC_K8S_0132",
     "category": "Infrastructure Security",
     "version": 1
 }
