@@ -18,7 +18,7 @@ package cli
 
 import (
 	"flag"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -92,7 +92,7 @@ func Execute() {
 
 	// disable terraform logs when TF_LOG env variable is not set
 	if os.Getenv("TF_LOG") == "" {
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 	}
 
 	if err := rootCmd.Execute(); err != nil {

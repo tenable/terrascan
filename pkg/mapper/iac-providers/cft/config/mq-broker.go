@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/amazonmq"
+	"github.com/awslabs/goformation/v6/cloudformation/amazonmq"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // MqBrokerConfig holds config for aws_mq_broker
@@ -38,12 +39,12 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	}
 	if c.Logs != nil {
 		log := make(map[string]bool)
-		if c.Logs.Audit {
+		if functions.GetVal(c.Logs.Audit) {
 			log["audit"] = true
 		} else {
 			log["audit"] = false
 		}
-		if c.Logs.General {
+		if functions.GetVal(c.Logs.General) {
 			log["general"] = true
 		} else {
 			log["general"] = false

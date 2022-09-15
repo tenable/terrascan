@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v5/cloudformation/iam"
+	"github.com/awslabs/goformation/v6/cloudformation/iam"
 )
 
 // IamPolicyConfig holds config for aws_iam_policy

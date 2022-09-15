@@ -101,7 +101,7 @@ func TestGetSkipRules(t *testing.T) {
 			},
 		},
 		{
-			name: "rule and comment with random space characters",
+			name:  "rule and comment with random space characters",
 			input: "#ts:skip=  AWS.S3Bucket.DS.High.1041  		reason_to skip. the rule\n",
 			expected: []output.SkipRule{
 				{

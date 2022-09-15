@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/athena"
+	"github.com/awslabs/goformation/v6/cloudformation/athena"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // EncryptionConfigurationBlock holds config for encryption_configuration attribute
@@ -61,25 +62,25 @@ func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 	if w.WorkGroupConfiguration != nil {
 		workGroupConfig = make([]WorkgroupConfigurationBlock, 1)
 
-		workGroupConfig[0].BytesScannedCutoffPerQuery = w.WorkGroupConfiguration.BytesScannedCutoffPerQuery
-		workGroupConfig[0].EnforceWorkgroupConfiguration = w.WorkGroupConfiguration.EnforceWorkGroupConfiguration
-		workGroupConfig[0].RequesterPaysEnabled = w.WorkGroupConfiguration.RequesterPaysEnabled
-		workGroupConfig[0].PublishCloudwatchMetricsEnabled = w.WorkGroupConfiguration.PublishCloudWatchMetricsEnabled
+		workGroupConfig[0].BytesScannedCutoffPerQuery = functions.GetVal(w.WorkGroupConfiguration.BytesScannedCutoffPerQuery)
+		workGroupConfig[0].EnforceWorkgroupConfiguration = functions.GetVal(w.WorkGroupConfiguration.EnforceWorkGroupConfiguration)
+		workGroupConfig[0].RequesterPaysEnabled = functions.GetVal(w.WorkGroupConfiguration.RequesterPaysEnabled)
+		workGroupConfig[0].PublishCloudwatchMetricsEnabled = functions.GetVal(w.WorkGroupConfiguration.PublishCloudWatchMetricsEnabled)
 
 		if w.WorkGroupConfiguration.EngineVersion != nil {
 			engineConfig := make([]EnginerVersionBlock, 1)
-			engineConfig[0].SelectedEngineVersion = w.WorkGroupConfiguration.EngineVersion.SelectedEngineVersion
+			engineConfig[0].SelectedEngineVersion = functions.GetVal(w.WorkGroupConfiguration.EngineVersion.SelectedEngineVersion)
 			workGroupConfig[0].EngineVersion = engineConfig
 		}
 
 		if w.WorkGroupConfiguration.ResultConfiguration != nil {
 			resultConfig := make([]ResultConfigurationBlock, 1)
-			resultConfig[0].OutputLocation = w.WorkGroupConfiguration.ResultConfiguration.OutputLocation
+			resultConfig[0].OutputLocation = functions.GetVal(w.WorkGroupConfiguration.ResultConfiguration.OutputLocation)
 
 			if w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration != nil {
 				encryptionCofig := make([]EncryptionConfigurationBlock, 1)
 				encryptionCofig[0].EncryptionOption = w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.EncryptionOption
-				encryptionCofig[0].KmsKeyArn = w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.KmsKey
+				encryptionCofig[0].KmsKeyArn = functions.GetVal(w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.KmsKey)
 
 				resultConfig[0].EncryptionConfiguration = encryptionCofig
 			}

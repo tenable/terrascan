@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,7 +55,7 @@ type TerraformInstalledModuleMetaData struct {
 	Dir        string `json:"Dir"`
 }
 
-//TerraformModuleManifest holds details of all modules downloaded by terraform
+// TerraformModuleManifest holds details of all modules downloaded by terraform
 type TerraformModuleManifest struct {
 	Modules []TerraformInstalledModuleMetaData `json:"Modules"`
 }
@@ -531,7 +530,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {
@@ -557,7 +556,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 	return
 }
 
-//versionSatisfied - check version in terraform init cache satisfies the required version constraints
+// versionSatisfied - check version in terraform init cache satisfies the required version constraints
 func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
 	currentVersion, err := version.NewVersion(foundversion)
 	if err != nil {

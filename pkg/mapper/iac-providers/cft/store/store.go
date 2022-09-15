@@ -22,7 +22,7 @@ var ResourceTypes = map[string]string{
 	"AWS::ApiGatewayV2::Stage":                         AwsAPIGatewayV2Stage,
 	"AWS::ApiGatewayV2::Api":                           AwsAPIGatewayV2Api,
 	"AWS::ApiGateway::Stage":                           AwsAPIGatewayStage,
-	"AWS::ApiGateway::Stage.MethodSettings":            AwsAPIGatewayStageMethodSettings,
+	"AWS::ApiGateway::Stage.MethodSetting":             AwsAPIGatewayStageMethodSettings,
 	"AWS::ApiGateway::RestApi":                         AwsAPIGatewayRestAPI,
 	"AWS::Athena::WorkGroup":                           AwsAthenaWorkGroup,
 	"AWS::QLDB::Ledger":                                AwsQldbLedger,

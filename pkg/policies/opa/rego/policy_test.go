@@ -19,7 +19,6 @@ package rego
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -52,14 +51,12 @@ func TestPolicyValidation(t *testing.T) {
 }
 
 func Validate(dir string, t *testing.T) {
-
-	var fileInfo []os.FileInfo
-	fileInfo, err := ioutil.ReadDir(dir)
+	dirEntries, err := os.ReadDir(dir)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	metadataFiles := utils.FilterFileInfoBySuffix(&fileInfo, []string{".json"})
+	metadataFiles := utils.FilterFileInfoBySuffix(&dirEntries, []string{".json"})
 
 	for j := range metadataFiles {
 		filePath := filepath.Join(dir, *metadataFiles[j])

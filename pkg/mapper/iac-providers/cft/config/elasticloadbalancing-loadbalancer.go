@@ -19,7 +19,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancing"
+	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancing"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // GetPolicies represents subresource aws_load_balancer_policy for Policies attribute
@@ -62,19 +63,21 @@ type ELBListenerConfig struct {
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
 func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
-	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
-	awsconfig := make([]AWSResourceConfig, len(e.Policies))
+	policies := functions.GetVal(e.Policies)
 
-	for i := range e.Policies {
+	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(policies))
+	awsconfig := make([]AWSResourceConfig, len(policies))
+
+	for i, policy := range policies {
 		indexedElbName := fmt.Sprintf("%s%d", elbname, i)
 
 		elbpolicies[i].LoadBalancerName = indexedElbName
-		elbpolicies[i].PolicyName = e.Policies[i].PolicyName
-		elbpolicies[i].PolicyTypeName = e.Policies[i].PolicyType
+		elbpolicies[i].PolicyName = policy.PolicyName
+		elbpolicies[i].PolicyTypeName = policy.PolicyType
 
-		elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(e.Policies[i].Attributes))
-		for ai := range e.Policies[i].Attributes {
-			attribVals, ok := e.Policies[i].Attributes[ai].(map[string]interface{})
+		elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(policy.Attributes))
+		for ai := range policy.Attributes {
+			attribVals, ok := policy.Attributes[ai].(map[string]interface{})
 			if !ok {
 				continue
 			}
@@ -115,7 +118,7 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		lc := make([]ELBListenerConfig, 0)
 		for _, listener := range e.Listeners {
 			lc = append(lc, ELBListenerConfig{
-				InstanceProtocol: listener.InstanceProtocol,
+				InstanceProtocol: functions.GetVal(listener.InstanceProtocol),
 				LBProtocol:       listener.Protocol,
 			})
 		}

@@ -19,7 +19,6 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -60,7 +59,7 @@ func FindAllDirectories(basePath string) ([]string, error) {
 }
 
 // FilterFileInfoBySuffix Given a list of files, returns a subset of files containing a suffix which matches the input filter
-func FilterFileInfoBySuffix(allFileList *[]os.FileInfo, filter []string) []*string {
+func FilterFileInfoBySuffix(allFileList *[]os.DirEntry, filter []string) []*string {
 	fileList := make([]*string, 0)
 
 	for i := range *allFileList {
@@ -93,8 +92,8 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 	sort.Strings(dirList)
 	for i := range dirList {
 		// Find all files in the current dir
-		var fileInfo []os.FileInfo
-		fileInfo, err = ioutil.ReadDir(dirList[i])
+		var dirEntries []os.DirEntry
+		dirEntries, err = os.ReadDir(dirList[i])
 		if err != nil {
 			if !errors.Is(err, os.ErrNotExist) {
 				zap.S().Debug("error while searching for files", zap.String("dir", dirList[i]), zap.Error(err))
@@ -102,7 +101,7 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 			continue
 		}
 
-		fileList := FilterFileInfoBySuffix(&fileInfo, suffixes)
+		fileList := FilterFileInfoBySuffix(&dirEntries, suffixes)
 		if len(fileList) > 0 {
 			retMap[dirList[i]] = fileList
 		}
@@ -115,11 +114,11 @@ func FindFilesBySuffix(basePath string, suffixes []string) (map[string][]*string
 // IT DOES NOT LOOK INTO ANY SUBDIRECTORY. JUST A SINGLE LEVEL FILE SEARCH.
 // Returns an array for string pointers as a list of files
 func FindFilesBySuffixInDir(basePath string, suffixes []string) ([]*string, error) {
-	fileInfos, err := ioutil.ReadDir(basePath)
+	dirEntries, err := os.ReadDir(basePath)
 	if err != nil {
 		return nil, err
 	}
-	return FilterFileInfoBySuffix(&fileInfos, suffixes), nil
+	return FilterFileInfoBySuffix(&dirEntries, suffixes), nil
 }
 
 // AddFileExtension returns full file name string after adding the extension to the filename

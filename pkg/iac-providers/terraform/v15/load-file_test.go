@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -142,7 +142,7 @@ func TestLoadIacFile(t *testing.T) {
 
 			gotBytes, _ := json.MarshalIndent(got, "", "  ")
 			gotBytes = append(gotBytes, []byte{'\n'}...)
-			wantBytes, _ := ioutil.ReadFile(tt.tfJSONFile)
+			wantBytes, _ := os.ReadFile(tt.tfJSONFile)
 
 			if utils.IsWindowsPlatform() {
 				gotBytes = utils.ReplaceCarriageReturnBytes(gotBytes)

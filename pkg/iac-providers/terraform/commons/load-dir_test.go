@@ -19,7 +19,6 @@ package commons
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -378,7 +377,7 @@ func TestTerraformDirectoryLoaderLoadIacDir(t *testing.T) {
 			var want output.AllResourceConfigs
 
 			// Read the expected value and unmarshal into want
-			contents, _ := ioutil.ReadFile(tt.tfJSONFile)
+			contents, _ := os.ReadFile(tt.tfJSONFile)
 			if utils.IsWindowsPlatform() {
 				contents = utils.ReplaceWinNewLineBytes(contents)
 			}

@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/secretsmanager"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/secretsmanager"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // SecretRotationRulesBlock holds config for SecretRotationRules
 type SecretRotationRulesBlock struct {
@@ -36,12 +39,12 @@ func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) [
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {
 		rotationRules = make([]SecretRotationRulesBlock, 1)
-		rotationRules[0].AutomaticallyAfterDays = r.RotationRules.AutomaticallyAfterDays
+		rotationRules[0].AutomaticallyAfterDays = functions.GetVal(r.RotationRules.AutomaticallyAfterDays)
 	}
 
 	cf := SecretsManagerSecretRotationConfig{
 		SecretID:          r.SecretId,
-		RotationLambdaARN: r.RotationLambdaARN,
+		RotationLambdaARN: functions.GetVal(r.RotationLambdaARN),
 		RotationRules:     rotationRules,
 	}
 
