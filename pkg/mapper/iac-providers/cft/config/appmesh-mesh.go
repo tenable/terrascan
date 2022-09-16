@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/appmesh"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/appmesh"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // AppMeshEgressFilterBlock holds config for AppMeshEgressFilter
 type AppMeshEgressFilterBlock struct {
@@ -50,10 +53,10 @@ func GetAppMeshMeshConfig(m *appmesh.Mesh) []AWSResourceConfig {
 
 	cf := AppMeshMeshConfig{
 		Config: Config{
-			Name: m.MeshName,
+			Name: functions.GetVal(m.MeshName),
 			Tags: m.Tags,
 		},
-		Name: m.MeshName,
+		Name: functions.GetVal(m.MeshName),
 		Spec: spec,
 	}
 

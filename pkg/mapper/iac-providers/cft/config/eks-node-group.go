@@ -16,13 +16,16 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/eks"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/eks"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // EksNodeGroupScalingConfigBlock holds config for EksNodeGroupScalingConfig
 type EksNodeGroupScalingConfigBlock struct {
-	DesiredSize float64 `json:"desired_size"`
-	MaxSize     float64 `json:"max_size"`
-	MinSize     float64 `json:"min_size"`
+	DesiredSize int `json:"desired_size"`
+	MaxSize     int `json:"max_size"`
+	MinSize     int `json:"min_size"`
 }
 
 // EksNodeGroupConfig holds config for EksNodeGroup
@@ -41,18 +44,18 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock
 	if g.ScalingConfig != nil {
 		scalingConfig = make([]EksNodeGroupScalingConfigBlock, 1)
-		scalingConfig[0].DesiredSize = g.ScalingConfig.DesiredSize
-		scalingConfig[0].MaxSize = g.ScalingConfig.MaxSize
-		scalingConfig[0].MinSize = g.ScalingConfig.MinSize
+		scalingConfig[0].DesiredSize = functions.GetVal(g.ScalingConfig.DesiredSize)
+		scalingConfig[0].MaxSize = functions.GetVal(g.ScalingConfig.MaxSize)
+		scalingConfig[0].MinSize = functions.GetVal(g.ScalingConfig.MinSize)
 	}
 
 	cf := EksNodeGroupConfig{
 		Config: Config{
-			Name: g.NodegroupName,
+			Name: functions.GetVal(g.NodegroupName),
 			Tags: g.Tags,
 		},
 		ClusterName:   g.ClusterName,
-		NodeGroupName: g.NodegroupName,
+		NodeGroupName: functions.GetVal(g.NodegroupName),
 		NodeRoleARN:   g.NodeRole,
 		SubnetIDs:     g.Subnets,
 		ScalingConfig: scalingConfig,

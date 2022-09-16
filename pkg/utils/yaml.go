@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -35,7 +34,7 @@ func LoadYAML(filePath string) ([]*IacDocument, error) {
 	}
 	defer file.Close()
 
-	fileBytes, err := ioutil.ReadFile(filePath)
+	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return iacDocumentList, err
 	}
@@ -51,7 +50,7 @@ func LoadYAMLString(data, absFilePath string) ([]*IacDocument, error) {
 
 // ReadYamlFile reads a yaml file and load content in a map[string]interface{} type
 func ReadYamlFile(path string) (map[string]interface{}, error) {
-	dat, err := ioutil.ReadFile(path)
+	dat, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

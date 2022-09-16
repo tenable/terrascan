@@ -19,7 +19,6 @@ package cftv1
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -114,7 +113,7 @@ func TestLoadIacDir(t *testing.T) {
 
 func TestCFTMapper(t *testing.T) {
 	root := filepath.Join(basePath, provider)
-	dirList, err := ioutil.ReadDir(root)
+	dirList, err := os.ReadDir(root)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -127,7 +126,7 @@ func TestCFTMapper(t *testing.T) {
 
 			// load expected output.json from test artifacts
 			var testArc output.AllResourceConfigs
-			outputData, err := ioutil.ReadFile(filepath.Join(resourceDir, "output.json"))
+			outputData, err := os.ReadFile(filepath.Join(resourceDir, "output.json"))
 			if err != nil {
 				t.Errorf("error reading output.json ResourceConfig, %T", err)
 			}

@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/waf"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/waf"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // FieldToMatchBlock holds field_to_match attribute
 type FieldToMatchBlock struct {
@@ -73,8 +76,8 @@ func setFieldToMatch(w *waf.SizeConstraintSet, index int) []FieldToMatchBlock {
 	fieldToMatchBlock := make([]FieldToMatchBlock, 1)
 	fieldToMatchBlock[0].Type = w.SizeConstraints[index].FieldToMatch.Type
 
-	if w.SizeConstraints[index].FieldToMatch.Data != "" {
-		fieldToMatchBlock[0].Data = w.SizeConstraints[index].FieldToMatch.Data
+	if w.SizeConstraints[index].FieldToMatch.Data != nil {
+		fieldToMatchBlock[0].Data = functions.GetVal(w.SizeConstraints[index].FieldToMatch.Data)
 	}
 
 	return fieldToMatchBlock

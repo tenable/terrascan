@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -131,7 +131,7 @@ References to other resources during the destroy phase can cause dependency cycl
 
 			gotBytes, _ := json.MarshalIndent(got, "", "  ")
 			gotBytes = append(gotBytes, []byte{'\n'}...)
-			wantBytes, _ := ioutil.ReadFile(tt.tfJSONFile)
+			wantBytes, _ := os.ReadFile(tt.tfJSONFile)
 
 			if utils.IsWindowsPlatform() {
 				gotBytes = utils.ReplaceCarriageReturnBytes(gotBytes)

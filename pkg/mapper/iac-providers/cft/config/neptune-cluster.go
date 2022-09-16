@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/neptune"
+	"github.com/awslabs/goformation/v6/cloudformation/neptune"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // NeptuneClusterConfig holds config for aws_neptune_cluster
@@ -33,8 +34,8 @@ func GetNeptuneClusterConfig(d *neptune.DBCluster) []AWSResourceConfig {
 		Config: Config{
 			Tags: d.Tags,
 		},
-		StorageEncrypted:            d.StorageEncrypted,
-		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,
+		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
+		EnableCloudwatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

@@ -19,7 +19,6 @@ package armv1
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -58,7 +57,7 @@ func TestLoadIacDir(t *testing.T) {
 	}
 
 	var linkedResConf output.ResourceConfig
-	if templateData, err := ioutil.ReadFile(filepath.Join(testDataDir, "linked", "output.json")); err == nil {
+	if templateData, err := os.ReadFile(filepath.Join(testDataDir, "linked", "output.json")); err == nil {
 		err := json.Unmarshal(templateData, &linkedResConf)
 		if err != nil {
 			t.Errorf("output file not found for linked template test, got %T", err)
@@ -134,7 +133,7 @@ func TestARMMapper(t *testing.T) {
 
 	// get output json to verify
 	var testArc output.AllResourceConfigs
-	outputData, err := ioutil.ReadFile(filepath.Join(root, "output.json"))
+	outputData, err := os.ReadFile(filepath.Join(root, "output.json"))
 	if err != nil {
 		t.Errorf("error reading output.json ResourceConfig, %T", err)
 	}

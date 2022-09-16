@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // RouteConfig holds config for aws_route
@@ -41,19 +42,19 @@ type RouteConfig struct {
 // GetRouteConfig returns config for aws_route
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
-		CarrierGatewayID:            e.CarrierGatewayId,
-		DestinationCidrBlock:        e.DestinationCidrBlock,
-		DestinationIpv6CidrBlock:    e.DestinationIpv6CidrBlock,
-		EgressOnlyInternetGatewayID: e.EgressOnlyInternetGatewayId,
-		GatewayID:                   e.GatewayId,
-		InstanceID:                  e.InstanceId,
-		LocalGatewayID:              e.LocalGatewayId,
-		NatGatewayID:                e.NatGatewayId,
-		NetworkInterfaceID:          e.NetworkInterfaceId,
+		CarrierGatewayID:            functions.GetVal(e.CarrierGatewayId),
+		DestinationCidrBlock:        functions.GetVal(e.DestinationCidrBlock),
+		DestinationIpv6CidrBlock:    functions.GetVal(e.DestinationIpv6CidrBlock),
+		EgressOnlyInternetGatewayID: functions.GetVal(e.EgressOnlyInternetGatewayId),
+		GatewayID:                   functions.GetVal(e.GatewayId),
+		InstanceID:                  functions.GetVal(e.InstanceId),
+		LocalGatewayID:              functions.GetVal(e.LocalGatewayId),
+		NatGatewayID:                functions.GetVal(e.NatGatewayId),
+		NetworkInterfaceID:          functions.GetVal(e.NetworkInterfaceId),
 		RouteTableID:                e.RouteTableId,
-		TransitGatewayID:            e.TransitGatewayId,
-		VpcEndpointID:               e.VpcEndpointId,
-		VpcPeeringConnectionID:      e.VpcPeeringConnectionId,
+		TransitGatewayID:            functions.GetVal(e.TransitGatewayId),
+		VpcEndpointID:               functions.GetVal(e.VpcEndpointId),
+		VpcPeeringConnectionID:      functions.GetVal(e.VpcPeeringConnectionId),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

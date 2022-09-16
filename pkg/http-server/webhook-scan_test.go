@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -211,7 +211,7 @@ func TestUWebhooks(t *testing.T) {
 			}
 			defer logger.ClearDbFilePath()
 
-			byteValue, _ := ioutil.ReadAll(jsonFile)
+			byteValue, _ := io.ReadAll(jsonFile)
 
 			var admissionRequest v1.AdmissionReview
 			json.Unmarshal(byteValue, &admissionRequest)

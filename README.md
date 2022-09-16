@@ -9,6 +9,7 @@
 [![codecov](https://codecov.io/gh/tenable/terrascan/branch/master/graph/badge.svg)](https://codecov.io/gh/tenable/terrascan)
 [![Documentation Status](https://readthedocs.com/projects/tenable-terrascan/badge/?version=latest)](https://runterrascan.io/)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+![GitHub all releases](https://img.shields.io/github/downloads/tenable/terrascan/total)
 
 ## Introduction
 
@@ -27,7 +28,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
 
 <p align="center">
-    Join our community
+    Join Tenable community 👇
 <br/>
 <a href="https://discord.gg/ScUPMzyG3n">
     <img src="http://fig.io/icons/discord-logo-square.png" width="80px" height="80px" />
@@ -193,7 +194,7 @@ Terrascan's default output is a list of violations present in the scanned IaC. A
 ![Screenshot 2021-01-19 at 10 52 47 PM](https://user-images.githubusercontent.com/74685902/105115731-32d2ff80-5a7e-11eb-93b0-2f0620eb1295.png)
 
 ## Building Terrascan
-Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan. [gcc](https://gcc.gnu.org/install/) and [Go](https://go.dev/doc/install) 1.17 or above are required.
+Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan. [gcc](https://gcc.gnu.org/install/) and [Go](https://go.dev/doc/install) 1.19 or above are required.
 
 ```sh
 $ git clone git@github.com:tenable/terrascan.git

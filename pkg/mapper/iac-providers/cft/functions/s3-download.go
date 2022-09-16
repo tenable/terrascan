@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -152,7 +151,7 @@ func downloadPublicTemplate(uri string) ([]byte, error) {
 		return nil, err
 	}
 
-	fileData, err := ioutil.ReadFile(path)
+	fileData, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

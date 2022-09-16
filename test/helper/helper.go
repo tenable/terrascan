@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -124,7 +123,7 @@ func CompareActualWithGoldenConfigOnlyRegex(session *gexec.Session, goldenFileAb
 // CompareActualWithGoldenSummaryRegex compares actual string with contents of golden file passed as parameter
 // ignores specified regex patterns from the actual and golden text
 func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPath string, isJunitXML, isStdOut bool) {
-	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
+	fileData, err := os.ReadFile(goldenFileAbsPath)
 	if utils.IsWindowsPlatform() {
 		fileData = utils.ReplaceWinNewLineBytes(fileData)
 	}
@@ -292,7 +291,7 @@ func getSession(cmd *exec.Cmd, outWriter, errWriter io.Writer) *gexec.Session {
 
 // GetByteData is a helper function to get data in byte slice from session and golden file
 func GetByteData(session *gexec.Session, goldenFileAbsPath string, isStdOut bool) ([]byte, []byte) {
-	fileBytes, err := ioutil.ReadFile(goldenFileAbsPath)
+	fileBytes, err := os.ReadFile(goldenFileAbsPath)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	var sessionBytes []byte
 
@@ -403,7 +402,7 @@ func GetAbsoluteFilePathForSarif(resourcePath, filePath string) (string, error) 
 // CompareActualSarifOutputWithGoldenSummaryRegex compares actual string with contents of golden file passed as parameter
 // ignores specified regex patterns from the actual and golden text
 func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPath string) {
-	fileData, err := ioutil.ReadFile(goldenFileAbsPath)
+	fileData, err := os.ReadFile(goldenFileAbsPath)
 	if utils.IsWindowsPlatform() {
 		fileData = utils.ReplaceWinNewLineBytes(fileData)
 	}

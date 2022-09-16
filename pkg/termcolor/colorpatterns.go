@@ -3,7 +3,6 @@ package termcolor
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 
@@ -86,7 +85,7 @@ func GetColorPatterns() map[*regexp.Regexp]FieldStyle {
 
 	if len(patternFile) > 0 {
 		var err error
-		pdata, err = ioutil.ReadFile(patternFile)
+		pdata, err = os.ReadFile(patternFile)
 		if err != nil {
 			zap.S().Warnf("Unable to read color patterns: %v", err)
 			zap.S().Warn("Will proceed with defaults")
