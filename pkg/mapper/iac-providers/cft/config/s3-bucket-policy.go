@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v5/cloudformation/s3"
+	"github.com/awslabs/goformation/v6/cloudformation/s3"
 )
 
 // S3BucketPolicyConfig holds config for aws_s3_bucket_policy

@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/config"
+	"github.com/awslabs/goformation/v6/cloudformation/config"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // AWSConfigConfigRuleConfig holds config for aws_config_config_rule
@@ -30,13 +31,13 @@ type AWSConfigConfigRuleConfig struct {
 func GetConfigConfigRuleConfig(c *config.ConfigRule) []AWSResourceConfig {
 	cf := AWSConfigConfigRuleConfig{
 		Config: Config{
-			Name: c.ConfigRuleName,
+			Name: functions.GetVal(c.ConfigRuleName),
 		},
 	}
 	if c.Source != nil {
 		sources := make([]map[string]interface{}, 0)
 		source := make(map[string]interface{})
-		source["source_identifier"] = c.Source.SourceIdentifier
+		source["source_identifier"] = functions.GetVal(c.Source.SourceIdentifier)
 		sources = append(sources, source)
 		if len(sources) > 0 {
 			cf.Source = sources

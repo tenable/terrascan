@@ -18,7 +18,6 @@ package downloader
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -84,7 +83,7 @@ func newTerraformRegistryClient() terraformRegistryClient {
 // NewAuthenticatedRegistryClient parses the contents of a terraformrc file and builds an authenticated
 // registry client using the credentials found in the rcfile
 func NewAuthenticatedRegistryClient(rcFile string) terraformRegistryClient {
-	b, err := ioutil.ReadFile(rcFile)
+	b, err := os.ReadFile(rcFile)
 	if err != nil {
 		zap.S().Infof("Error reading %s: %s", rcFile, err)
 		return registry.NewClient(nil, nil)

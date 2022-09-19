@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -114,7 +114,7 @@ func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 		return fmt.Errorf("error downloading environment policies, response status code: '%d'", res.StatusCode)
 	}
 
-	policies, err := ioutil.ReadAll(res.Body)
+	policies, err := io.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("error reading api call response for environment policies. error: '%w'", err)
 	}
@@ -183,7 +183,7 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 	metadata := buffer.Bytes()
 	metadata = bytes.TrimRight(metadata, "\n")
 	metaDataPath := filepath.Join(resourceDir, policy.metadataFileName)
-	err = ioutil.WriteFile(metaDataPath, metadata, os.ModePerm)
+	err = os.WriteFile(metaDataPath, metadata, os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("could not write rule metadata file on disk. error: '%w'", err)
 	}
@@ -195,7 +195,7 @@ func saveEnvironmentPolicies(policy environmentPolicy, policyRepoPath string) er
 		return nil
 	}
 
-	err = ioutil.WriteFile(regoPath, []byte(policy.regoTemplate), filePermissionBits)
+	err = os.WriteFile(regoPath, []byte(policy.regoTemplate), filePermissionBits)
 	if err != nil {
 		return fmt.Errorf("could not write rego code file on disk. error: '%w'", err)
 	}

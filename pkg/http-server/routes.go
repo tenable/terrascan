@@ -33,6 +33,7 @@ func (g *APIServer) Routes() []*Route {
 	h := NewAPIHandler()
 	routes := []*Route{
 		{verb: "GET", path: "/health", fn: h.Health},
+		{verb: "GET", path: versionedPath("/providers"), fn: h.iacProviders},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/local/file/scan"), fn: h.scanFile},
 		{verb: "POST", path: versionedPath("/{iac}/{iacVersion}/{cloud}/remote/dir/scan"), fn: h.scanRemoteRepo},
 

@@ -17,19 +17,20 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/elasticloadbalancingv2"
+	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancingv2"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener
 type ElasticLoadBalancingV2ListenerConfig struct {
 	Config
-	Protocol      string              `json:"protocol"`
-	DefaultAction DefaultActionConfig `json:"default_action"`
+	Protocol      string                `json:"protocol"`
+	DefaultAction []DefaultActionConfig `json:"default_action"`
 }
 
 // DefaultActionConfig holds config for default_action attribute of aws_lb_listener
 type DefaultActionConfig struct {
-	RedirectConfig RedirectConfig `json:"redirect"`
+	RedirectConfig []RedirectConfig `json:"redirect"`
 }
 
 // RedirectConfig holds config for redirect attirbute of default_action
@@ -47,12 +48,16 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 		// DefaultActions are required
 		cf := ElasticLoadBalancingV2ListenerConfig{
 			Config:   Config{},
-			Protocol: l.Protocol,
+			Protocol: functions.GetVal(l.Protocol),
 		}
 		if action.RedirectConfig != nil {
-			defaultAction := DefaultActionConfig{
-				RedirectConfig: RedirectConfig{
-					Protocol: action.RedirectConfig.Protocol,
+			defaultAction := []DefaultActionConfig{
+				{
+					RedirectConfig: []RedirectConfig{
+						{
+							Protocol: functions.GetVal(action.RedirectConfig.Protocol),
+						},
+					},
 				},
 			}
 			cf.DefaultAction = defaultAction

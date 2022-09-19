@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/docdb"
+	"github.com/awslabs/goformation/v6/cloudformation/docdb"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // DocDBClusterConfig holds config for aws_docdb_cluster
@@ -34,9 +35,9 @@ func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 		Config: Config{
 			Tags: d.Tags,
 		},
-		KmsKeyID:                    d.KmsKeyId,
-		StorageEncrypted:            d.StorageEncrypted,
-		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,
+		KmsKeyID:                    functions.GetVal(d.KmsKeyId),
+		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
+		EnableCloudwatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

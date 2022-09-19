@@ -19,7 +19,7 @@ package armv1
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -113,7 +113,7 @@ func (a *ARMV1) tryGetParameters(fileName string, fileDir string, files []*strin
 	}
 	defer f.Close()
 
-	data, err := ioutil.ReadAll(f)
+	data, err := io.ReadAll(f)
 	if err != nil {
 		zap.S().Debug(errFileLoad, zap.String(iacFile, file), zap.Error(err))
 		return

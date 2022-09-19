@@ -19,7 +19,6 @@ package helmv3
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -170,7 +169,7 @@ func (h *HelmV3) renderChart(chartPath string, chartMap helmChartData, templateD
 	chartFiles := make([]*chart.File, 0)
 	for _, templateFile := range templateFiles {
 		var fileData []byte
-		fileData, err := ioutil.ReadFile(filepath.Join(templateDir, *templateFile))
+		fileData, err := os.ReadFile(filepath.Join(templateDir, *templateFile))
 		if err != nil {
 			logger.Debug("error while reading template file", zap.String("file", *templateFile), zap.Error(err))
 			return iacDocuments, err
@@ -246,7 +245,7 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 	logger := zap.S().With("chart path", chartPath)
 
 	// load the chart file and values file from the specified chart path
-	chartFileBytes, err := ioutil.ReadFile(chartPath)
+	chartFileBytes, err := os.ReadFile(chartPath)
 	if err != nil {
 		logger.Debug("unable to read", zap.Error(err))
 		return iacDocuments, chartMap, err
@@ -268,7 +267,7 @@ func (h *HelmV3) loadChart(chartPath string) ([]*utils.IacDocument, helmChartDat
 
 	logger.With("file name", fileInfo.Name())
 	var valueFileBytes []byte
-	valueFileBytes, err = ioutil.ReadFile(valuesFile)
+	valueFileBytes, err = os.ReadFile(valuesFile)
 	if err != nil {
 		logger.Debug("unable to read values.yaml", zap.Error(err))
 		return iacDocuments, chartMap, err

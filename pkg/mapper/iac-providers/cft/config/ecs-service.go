@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ecs"
+	"github.com/awslabs/goformation/v6/cloudformation/ecs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // EcsServiceConfig holds config for aws_ecs_service
@@ -30,10 +31,10 @@ type EcsServiceConfig struct {
 func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{
-			Name: c.ServiceName,
+			Name: functions.GetVal(c.ServiceName),
 			Tags: c.Tags,
 		},
-		IamRole: c.Role,
+		IamRole: functions.GetVal(c.Role),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

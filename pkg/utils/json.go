@@ -20,7 +20,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"reflect"
 )
@@ -54,7 +53,7 @@ func LoadJSON(filePath string) ([]*IacDocument, error) {
 	}
 
 	// Second pass extracts raw data
-	fileBytes, err := ioutil.ReadFile(filePath)
+	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return iacDocumentList, err
 	}

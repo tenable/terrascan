@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/rds"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/rds"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // DBEventSubscriptionConfig holds config for aws_db_event_subscription resource
 type DBEventSubscriptionConfig struct {
@@ -30,19 +33,17 @@ type DBEventSubscriptionConfig struct {
 
 // GetDBEventSubscriptionConfig returns config for aws_db_event_subscription resource
 func GetDBEventSubscriptionConfig(d *rds.EventSubscription) []AWSResourceConfig {
-
 	cf := DBEventSubscriptionConfig{
 		Config:          Config{},
 		SnsTopicArn:     d.SnsTopicArn,
-		Enabled:         d.Enabled,
-		EventCategories: d.EventCategories,
-		SourceIds:       d.SourceIds,
-		SourceType:      d.SourceType,
+		Enabled:         functions.GetVal(d.Enabled),
+		EventCategories: functions.GetVal(d.EventCategories),
+		SourceIds:       functions.GetVal(d.SourceIds),
+		SourceType:      functions.GetVal(d.SourceType),
 	}
 
 	return []AWSResourceConfig{{
 		Resource: cf,
 		Metadata: d.AWSCloudFormationMetadata,
 	}}
-
 }
