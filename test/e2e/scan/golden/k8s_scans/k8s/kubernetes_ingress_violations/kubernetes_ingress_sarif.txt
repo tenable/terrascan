@@ -5,9 +5,8 @@
     {
       "tool": {
         "driver": {
-          "name": "terrascan",
-          "version": "1.9.0",
           "informationUri": "https://github.com/tenable/terrascan",
+          "name": "terrascan",
           "rules": [
             {
               "id": "AC_K8S_0001",
@@ -20,12 +19,14 @@
                 "severity": "HIGH"
               }
             }
-          ]
+          ],
+          "version": "1.15.2"
         }
       },
       "results": [
         {
           "ruleId": "AC_K8S_0001",
+          "ruleIndex": 0,
           "level": "error",
           "message": {
             "text": "TLS disabled can affect the confidentiality of the data in transit"
