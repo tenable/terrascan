@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that 'Send email notification for high severity alerts' is set to 'On'",
-    "reference_id": "accurics.azure.MON.353",
+    "reference_id": "tenable.azure.MON.353",
     "category": "Logging and Monitoring",
     "version": 1,
     "id": "AC_AZURE_0386"

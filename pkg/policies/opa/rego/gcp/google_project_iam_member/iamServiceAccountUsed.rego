@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 iamServiceAccountUsed[api.id]
 {

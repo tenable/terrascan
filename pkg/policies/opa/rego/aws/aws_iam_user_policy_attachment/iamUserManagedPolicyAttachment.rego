@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}iamUserManagedPolicyAttachment[iam_user_policy_attachment.id] {
 	iam_user_policy_attachment := input.aws_iam_user_policy_attachment[_]

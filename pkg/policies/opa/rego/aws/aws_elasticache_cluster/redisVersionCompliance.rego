@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}redisVersionCompliance[retVal] {
     elasticache = input.aws_elasticache_cluster[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}checkKeyExpirationIsSet[retVal] {
   vault_key := input.azurerm_key_vault_key[_]

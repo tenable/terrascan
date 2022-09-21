@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}kmsKeyPolicyMissingPrincipal[kms_policy.id] {
     kms_policy = input.aws_kms_key[_]

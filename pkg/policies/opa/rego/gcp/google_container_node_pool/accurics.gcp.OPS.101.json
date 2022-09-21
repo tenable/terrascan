@@ -9,7 +9,7 @@
     },
     "severity": "LOW",
     "description": "Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters.",
-    "reference_id": "accurics.gcp.OPS.101",
+    "reference_id": "tenable.gcp.OPS.101",
     "category": "Security Best Practices",
     "version": 1,
     "id": "AC_GCP_0017"

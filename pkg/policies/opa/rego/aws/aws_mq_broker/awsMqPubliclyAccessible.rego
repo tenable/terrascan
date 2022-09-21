@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 awsMqPubliclyAccessible[api.id] {
     api := input.aws_mq_broker[_]

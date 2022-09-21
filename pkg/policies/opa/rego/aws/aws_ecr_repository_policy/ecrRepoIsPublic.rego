@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 
 {{.prefix}}ecrRepoIsPublic[retVal] {

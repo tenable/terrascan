@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}iamRoleWithFullAdminCntrl[retVal] {
 	iamUserMfa = input.aws_iam_role[_]

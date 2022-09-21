@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 apiGatewayMiconfiguredCors[api.id] {
   api := input.aws_apigatewayv2_api[_]

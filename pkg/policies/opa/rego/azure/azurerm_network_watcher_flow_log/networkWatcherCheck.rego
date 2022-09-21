@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}logRetensionGraterThan90Days[log_object.id] {
   log_object := input.azurerm_network_watcher_flow_log[_]

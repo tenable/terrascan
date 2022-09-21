@@ -1,5 +1,5 @@
 
-package accurics
+package tenable
 
 overlyPermissiveInstance[res.id] {
     res = input.aws_instance[_]

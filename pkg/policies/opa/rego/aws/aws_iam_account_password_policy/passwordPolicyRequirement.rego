@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal] {
     password_policy := input.aws_iam_account_password_policy[_]

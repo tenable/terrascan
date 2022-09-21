@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal]{
     efs_file = input.aws_efs_file_system[_]

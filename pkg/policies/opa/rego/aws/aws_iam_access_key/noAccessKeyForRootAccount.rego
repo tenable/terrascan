@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noAccessKeyForRootAccount[retVal] {
     access := input.aws_iam_access_key[_]

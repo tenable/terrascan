@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rdsIsPublic[retVal] {
     sg = input.aws_db_security_group[_]

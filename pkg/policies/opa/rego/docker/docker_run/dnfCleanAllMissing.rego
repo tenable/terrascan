@@ -1,10 +1,10 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]
 {
     run := input.docker_run[_]
     config := run.config
-    
+
     installCommandExists(config)
     not contains(config, "dnf clean")
     not cleanExistsPostInstall(config)

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}elbAccessLoggingDisabled[elb.id] {
     elb := input.aws_elb[_]

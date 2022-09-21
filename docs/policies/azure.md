@@ -2,129 +2,129 @@
 ### azurerm_storage_container
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | azure | HIGH | Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary. | accurics.azure.IAM.368 | AC_AZURE_0366 |
+| Identity and Access Management | azure | HIGH | Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary. | tenable.azure.IAM.368 | AC_AZURE_0366 |
 
 
 ### azurerm_mysql_server
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server. | accurics.azure.NS.361 | AC_AZURE_0131 |
+| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for MySQL Database Server. | tenable.azure.NS.361 | AC_AZURE_0131 |
 
 
 ### azurerm_sql_firewall_rule
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | MEDIUM | Restrict Azure SQL Server accessibility to a minimal address range | accurics.azure.NS.169 | AC_AZURE_0280 |
-| Infrastructure Security | azure | HIGH | Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server | accurics.azure.NS.5 | AC_AZURE_0381 |
-| Infrastructure Security | azure | MEDIUM | Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP) | accurics.azure.NS.21 | AC_AZURE_0380 |
+| Infrastructure Security | azure | MEDIUM | Restrict Azure SQL Server accessibility to a minimal address range | tenable.azure.NS.169 | AC_AZURE_0280 |
+| Infrastructure Security | azure | HIGH | Ensure entire Azure infrastructure doesn't have access to Azure SQL ServerEnsure entire Azure infrastructure doesn't have access to Azure SQL Server | tenable.azure.NS.5 | AC_AZURE_0381 |
+| Infrastructure Security | azure | MEDIUM | Ensure that no SQL Server allows ingress from 0.0.0.0/0 (ANY IP) | tenable.azure.NS.21 | AC_AZURE_0380 |
 
 
 ### azurerm_key_vault
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | azure | MEDIUM | Ensure the key vault is recoverable - enable "Soft Delete" setting for a Key Vault | accurics.azure.EKM.164 | AC_AZURE_0170 |
-| Logging and Monitoring | azure | HIGH | Ensure that logging for Azure KeyVault is 'Enabled' | accurics.azure.EKM.20 | AC_AZURE_0169 |
+| Data Protection | azure | MEDIUM | Ensure the key vault is recoverable - enable "Soft Delete" setting for a Key Vault | tenable.azure.EKM.164 | AC_AZURE_0170 |
+| Logging and Monitoring | azure | HIGH | Ensure that logging for Azure KeyVault is 'Enabled' | tenable.azure.EKM.20 | AC_AZURE_0169 |
 
 
 ### azurerm_resource_group
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | azure | LOW | Ensure that Azure Resource Group has resource lock enabled | accurics.azure.NS.272 | AC_AZURE_0389 |
+| Identity and Access Management | azure | LOW | Ensure that Azure Resource Group has resource lock enabled | tenable.azure.NS.272 | AC_AZURE_0389 |
 
 
 ### azurerm_storage_account_network_rules
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | MEDIUM | Ensure default network access rule for Storage Accounts is set to deny. | accurics.azure.NS.370 | AC_AZURE_0309 |
+| Infrastructure Security | azure | MEDIUM | Ensure default network access rule for Storage Accounts is set to deny. | tenable.azure.NS.370 | AC_AZURE_0309 |
 
 
 ### azurerm_storage_account
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | HIGH | Ensure 'Trusted Microsoft Services' is enabled for Storage Account access | accurics.azure.NS.2 | AC_AZURE_0371 |
-| Infrastructure Security | azure | HIGH | Ensure default network access rule for Storage Accounts is not open to public | accurics.azure.NS.4 | AC_AZURE_0370 |
-| Data Protection | azure | HIGH | Ensure that 'Secure transfer required' is enabled for Storage Accounts | accurics.azure.EKM.7 | AC_AZURE_0373 |
+| Infrastructure Security | azure | HIGH | Ensure 'Trusted Microsoft Services' is enabled for Storage Account access | tenable.azure.NS.2 | AC_AZURE_0371 |
+| Infrastructure Security | azure | HIGH | Ensure default network access rule for Storage Accounts is not open to public | tenable.azure.NS.4 | AC_AZURE_0370 |
+| Data Protection | azure | HIGH | Ensure that 'Secure transfer required' is enabled for Storage Accounts | tenable.azure.EKM.7 | AC_AZURE_0373 |
 
 
 ### azurerm_sql_server
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for SQL servers | accurics.azure.MON.354 | AC_AZURE_0376 |
-| Identity and Access Management | azure | HIGH | Ensure that Azure Active Directory Admin is configured for SQL Server | accurics.azure.IAM.10 | AC_AZURE_0378 |
-| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server admin account login | accurics.azure.IAM.138 | AC_AZURE_0377 |
-| Compliance Validation | azure | LOW | Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers. | accurics.azure.LOG.356 | AC_AZURE_0375 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for SQL servers | tenable.azure.MON.354 | AC_AZURE_0376 |
+| Identity and Access Management | azure | HIGH | Ensure that Azure Active Directory Admin is configured for SQL Server | tenable.azure.IAM.10 | AC_AZURE_0378 |
+| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server admin account login | tenable.azure.IAM.138 | AC_AZURE_0377 |
+| Compliance Validation | azure | LOW | Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers. | tenable.azure.LOG.356 | AC_AZURE_0375 |
 
 
 ### azurerm_postgresql_configuration
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_duration' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.154 | AC_AZURE_0411 |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server | accurics.azure.LOG.155 | AC_AZURE_0410 |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.152 | AC_AZURE_0413 |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.364 | AC_AZURE_0409 |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.153 | AC_AZURE_0412 |
-| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server | accurics.azure.LOG.151 | AC_AZURE_0414 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_duration' is set to 'ON' for PostgreSQL Database Server | tenable.azure.LOG.154 | AC_AZURE_0411 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_retention_days' is greater than 3 days for PostgreSQL Database Server | tenable.azure.LOG.155 | AC_AZURE_0410 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_connections' is set to 'ON' for PostgreSQL Database Server | tenable.azure.LOG.152 | AC_AZURE_0413 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server | tenable.azure.LOG.364 | AC_AZURE_0409 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'log_disconnections' is set to 'ON' for PostgreSQL Database Server | tenable.azure.LOG.153 | AC_AZURE_0412 |
+| Logging and Monitoring | azure | MEDIUM | Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server | tenable.azure.LOG.151 | AC_AZURE_0414 |
 
 
 ### azurerm_sql_database
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | azure | MEDIUM | Ensure that 'Threat Detection' is enabled for Azure SQL Database | accurics.azure.MON.157 | AC_AZURE_0383 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Threat Detection' is enabled for Azure SQL Database | tenable.azure.MON.157 | AC_AZURE_0383 |
 
 
 ### azurerm_redis_cache
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Security Best Practices | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates.Note this feature is only available to Premium tier Redis Caches. | accurics.azure.NS.13 | AC_AZURE_0393 |
-| Infrastructure Security | azure | MEDIUM | Ensure that the Redis Cache accepts only SSL connections | accurics.azure.EKM.23 | AC_AZURE_0394 |
-| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources | accurics.azure.NS.31 | AC_AZURE_0391 |
-| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet | accurics.azure.NS.30 | AC_AZURE_0392 |
-| Infrastructure Security | azure | MEDIUM | Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs | accurics.azure.NS.166 | AC_AZURE_0390 |
+| Security Best Practices | azure | HIGH | Ensure that Redis is updated regularly with security and operational updates.Note this feature is only available to Premium tier Redis Caches. | tenable.azure.NS.13 | AC_AZURE_0393 |
+| Infrastructure Security | azure | MEDIUM | Ensure that the Redis Cache accepts only SSL connections | tenable.azure.EKM.23 | AC_AZURE_0394 |
+| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from other Azure sources | tenable.azure.NS.31 | AC_AZURE_0391 |
+| Infrastructure Security | azure | HIGH | Ensure there are no firewall rules allowing unrestricted access to Redis from the Internet | tenable.azure.NS.30 | AC_AZURE_0392 |
+| Infrastructure Security | azure | MEDIUM | Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs | tenable.azure.NS.166 | AC_AZURE_0390 |
 
 
 ### azurerm_mssql_server
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for MSSQL servers | accurics.azure.MON.355 | AC_AZURE_0137 |
-| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers. | accurics.azure.LOG.357 | AC_AZURE_0136 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' is set to 'On' for MSSQL servers | tenable.azure.MON.355 | AC_AZURE_0137 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Auditing' Retention is 'greater than 90 days' for MSSQL servers. | tenable.azure.LOG.357 | AC_AZURE_0136 |
 
 
 ### azurerm_kubernetes_cluster
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | MEDIUM | Ensure Kube Dashboard is disabled | accurics.azure.NS.383 | AC_AZURE_0161 |
-| Infrastructure Security | azure | MEDIUM | Ensure AKS cluster has Network Policy configured. | accurics.azure.NS.382 | AC_AZURE_0158 |
+| Infrastructure Security | azure | MEDIUM | Ensure Kube Dashboard is disabled | tenable.azure.NS.383 | AC_AZURE_0161 |
+| Infrastructure Security | azure | MEDIUM | Ensure AKS cluster has Network Policy configured. | tenable.azure.NS.382 | AC_AZURE_0158 |
 
 
 ### azurerm_managed_disk
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | azure | MEDIUM | Ensure that 'Unattached disks' are encrypted in Azure Managed Disk | accurics.azure.EKM.156 | AC_AZURE_0143 |
+| Data Protection | azure | MEDIUM | Ensure that 'Unattached disks' are encrypted in Azure Managed Disk | tenable.azure.EKM.156 | AC_AZURE_0143 |
 
 
 ### azurerm_network_watcher_flow_log
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Resilience | azure | MEDIUM | Ensure that Network Security Group Flow Log retention period is 'greater than 90 days' for Azure Network Watcher Flow Log | accurics.azure.NS.342 | AC_AZURE_0419 |
-| Logging and Monitoring | azure | HIGH | Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure. | accurics.azure.NS.11 | AC_AZURE_0418 |
+| Resilience | azure | MEDIUM | Ensure that Network Security Group Flow Log retention period is 'greater than 90 days' for Azure Network Watcher Flow Log | tenable.azure.NS.342 | AC_AZURE_0419 |
+| Logging and Monitoring | azure | HIGH | Enable Network Watcher for Azure subscriptions. Network diagnostic and visualization tools available with Network Watcher help users understand, diagnose, and gain insights to the network in Azure. | tenable.azure.NS.11 | AC_AZURE_0418 |
 
 
 ### azurerm_key_vault_secret
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | azure | HIGH | Ensure that all secrets have an expiration date set which must expire within 2 years | accurics.azure.EKM.26 | AC_AZURE_0163 |
+| Data Protection | azure | HIGH | Ensure that all secrets have an expiration date set which must expire within 2 years | tenable.azure.EKM.26 | AC_AZURE_0163 |
 
 
 ### azurerm_key_vault_key
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | azure | HIGH | Ensure that the expiration date is set on all keys | accurics.azure.EKM.25 | AC_AZURE_0164 |
+| Data Protection | azure | HIGH | Ensure that the expiration date is set on all keys | tenable.azure.EKM.25 | AC_AZURE_0164 |
 
 
 ### azurerm_security_center_contact
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | azure | MEDIUM | Ensure that 'Send email notification for high severity alerts' is set to 'On' | accurics.azure.MON.353 | AC_AZURE_0386 |
+| Logging and Monitoring | azure | MEDIUM | Ensure that 'Send email notification for high severity alerts' is set to 'On' | tenable.azure.MON.353 | AC_AZURE_0386 |
 
 
 ### azurerm_network_security_rule
@@ -264,51 +264,49 @@
 ### azurerm_cosmosdb_account
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | HIGH | Ensure to filter source Ips for Cosmos DB Account | accurics.azure.NS.32 | AC_AZURE_0184 |
-| Compliance Validation | azure | MEDIUM | Ensure that Cosmos DB Account has an associated tag | accurics.azure.CAM.162 | AC_AZURE_0277 |
+| Infrastructure Security | azure | HIGH | Ensure to filter source Ips for Cosmos DB Account | tenable.azure.NS.32 | AC_AZURE_0184 |
+| Compliance Validation | azure | MEDIUM | Ensure that Cosmos DB Account has an associated tag | tenable.azure.CAM.162 | AC_AZURE_0277 |
 
 
 ### azurerm_security_center_subscription_pricing
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Security Best Practices | azure | MEDIUM | Ensure that standard pricing tiers are selected | accurics.azure.OPS.349 | AC_AZURE_0385 |
+| Security Best Practices | azure | MEDIUM | Ensure that standard pricing tiers are selected | tenable.azure.OPS.349 | AC_AZURE_0385 |
 
 
 ### azurerm_sql_active_directory_administrator
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account | accurics.azure.IAM.137 | AC_AZURE_0384 |
+| Compliance Validation | azure | MEDIUM | Avoid using names like 'Admin' for an Azure SQL Server Active Directory Administrator account | tenable.azure.IAM.137 | AC_AZURE_0384 |
 
 
 ### azurerm_container_registry
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | azure | MEDIUM | Ensure that admin user is disabled for Container Registry | accurics.azure.EKM.164 | AC_AZURE_0186 |
-| Resilience | azure | HIGH | Ensure Container Registry has locks | accurics.azure.AKS.3 | AC_AZURE_0185 |
+| Identity and Access Management | azure | MEDIUM | Ensure that admin user is disabled for Container Registry | tenable.azure.EKM.164 | AC_AZURE_0186 |
+| Resilience | azure | HIGH | Ensure Container Registry has locks | tenable.azure.AKS.3 | AC_AZURE_0185 |
 
 
 ### azurerm_virtual_network
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | MEDIUM | Ensure that Azure Virtual Network subnet is configured with a Network Security Group | accurics.azure.NS.161 | AC_AZURE_0356 |
+| Infrastructure Security | azure | MEDIUM | Ensure that Azure Virtual Network subnet is configured with a Network Security Group | tenable.azure.NS.161 | AC_AZURE_0356 |
 
 
 ### azurerm_role_assignment
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | azure | HIGH | Ensure that there are no guest users | accurics.azure.IAM.388 | AC_AZURE_0388 |
+| Identity and Access Management | azure | HIGH | Ensure that there are no guest users | tenable.azure.IAM.388 | AC_AZURE_0388 |
 
 
 ### azurerm_application_gateway
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | MEDIUM | Ensure Azure Application Gateway Web application firewall (WAF) is enabled | accurics.azure.NS.147 | AC_AZURE_0189 |
+| Infrastructure Security | azure | MEDIUM | Ensure Azure Application Gateway Web application firewall (WAF) is enabled | tenable.azure.NS.147 | AC_AZURE_0189 |
 
 
 ### azurerm_postgresql_server
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server | accurics.azure.EKM.1 | AC_AZURE_0408 |
-| Resilience | azure | MEDIUM | Ensure that Geo Redundant Backups is enabled on PostgreSQL | accurics.azure.BDR.163 | AC_AZURE_0407 |
-
-
+| Infrastructure Security | azure | HIGH | Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server | tenable.azure.EKM.1 | AC_AZURE_0408 |
+| Resilience | azure | MEDIUM | Ensure that Geo Redundant Backups is enabled on PostgreSQL | tenable.azure.BDR.163 | AC_AZURE_0407 |

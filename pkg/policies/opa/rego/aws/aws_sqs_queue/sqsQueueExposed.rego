@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sqsQueueExposed[retVal] {
 	sqs := input.aws_sqs_queue[_]

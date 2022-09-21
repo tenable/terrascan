@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}storageAccountEnableHttps[retVal] {
   enablehttp := input.azurerm_storage_account[_]

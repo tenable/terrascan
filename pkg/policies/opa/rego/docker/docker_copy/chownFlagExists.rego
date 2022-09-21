@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[cmd.id]{
 	cmd := input.docker_copy[_]

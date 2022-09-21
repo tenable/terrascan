@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[service.id] {
     service := input.{{.resource_type}}[_]

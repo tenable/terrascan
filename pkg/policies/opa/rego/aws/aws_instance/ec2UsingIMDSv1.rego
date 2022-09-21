@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 ec2UsingIMDSv1[api.id] {
   api := input.aws_instance[_]

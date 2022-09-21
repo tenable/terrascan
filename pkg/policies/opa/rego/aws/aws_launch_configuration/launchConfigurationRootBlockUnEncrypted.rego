@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}launchConfigurationRootBlockUnEncrypted[result.retVal] {
     block := input.aws_launch_configuration[_]

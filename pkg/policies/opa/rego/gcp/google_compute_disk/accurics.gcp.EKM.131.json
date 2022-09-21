@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) .",
-    "reference_id": "accurics.gcp.EKM.131",
+    "reference_id": "tenable.gcp.EKM.131",
     "category": "Data Protection",
     "version": 1,
     "id": "AC_GCP_0229"

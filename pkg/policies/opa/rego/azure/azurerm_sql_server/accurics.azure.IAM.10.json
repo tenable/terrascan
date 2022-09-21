@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Ensure that Azure Active Directory Admin is configured for SQL Server",
-    "reference_id": "accurics.azure.IAM.10",
+    "reference_id": "tenable.azure.IAM.10",
     "category": "Identity and Access Management",
     "version": 2,
     "id": "AC_AZURE_0378"

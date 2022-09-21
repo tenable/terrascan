@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}kinesisNotEncryptedWithKms[stream.id] {
     stream = input.aws_kinesis_stream[_]

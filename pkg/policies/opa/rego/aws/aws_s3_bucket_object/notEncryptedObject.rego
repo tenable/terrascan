@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}notEncryptedObject[s3Object.id] {
     s3Object = input.aws_s3_bucket_object[_]

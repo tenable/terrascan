@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[block.id] {
     block := input.aws_ebs_volume[_]

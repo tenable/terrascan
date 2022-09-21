@@ -1,13 +1,13 @@
 [rules]
     scan-rules = [
         "AWS.S3Bucket.DS.High.1043",
-        "accurics.kubernetes.IAM.107"
+        "tenable.kubernetes.IAM.107"
     ]
     skip-rules = [
         "AWS.S3Bucket.IAM.High.0370",
-        "accurics.kubernetes.IAM.5",
-        "accurics.kubernetes.OPS.461",
-        "accurics.kubernetes.IAM.109"
+        "tenable.kubernetes.IAM.5",
+        "tenable.kubernetes.OPS.461",
+        "tenable.kubernetes.IAM.109"
     ]
 
 [severity]

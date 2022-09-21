@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}cloudfrontNoLogging[retVal]{
     cloudfront = input.aws_cloudfront_distribution[_]

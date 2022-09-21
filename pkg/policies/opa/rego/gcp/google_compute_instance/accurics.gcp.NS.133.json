@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure Compute instances are launched with Shielded VM enabled.",
-    "reference_id": "accurics.gcp.NS.133",
+    "reference_id": "tenable.gcp.NS.133",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_GCP_0035"

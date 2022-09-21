@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Repository is Not Private or Internal.",
-    "reference_id": "accurics.github.IAM.1",
+    "reference_id": "tenable.github.IAM.1",
     "id": "AC_GITHUB_0002",
     "category": "Identity and Access Management",
     "version": 1

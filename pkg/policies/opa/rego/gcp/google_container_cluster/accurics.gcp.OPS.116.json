@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure PodSecurityPolicy controller is enabled on the Kubernetes Engine Clusters.",
-    "reference_id": "accurics.gcp.OPS.116",
+    "reference_id": "tenable.gcp.OPS.116",
     "category": "Compliance Validation",
     "version": 1,
     "id": "AC_GCP_0022"

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[retVal] {
     rule := input.google_compute_firewall[_]

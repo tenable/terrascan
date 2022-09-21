@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}defaultVpcExist[vpc.id] {
     vpc = input.aws_vpc[_]

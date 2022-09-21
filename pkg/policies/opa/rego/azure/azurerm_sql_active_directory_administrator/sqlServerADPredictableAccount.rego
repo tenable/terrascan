@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sqlServerADPredictableAccount[retVal] {
   known_user = { "azure_superuser", "azure_pg_admin", "admin", "administrator", "root", "guest", "public" }

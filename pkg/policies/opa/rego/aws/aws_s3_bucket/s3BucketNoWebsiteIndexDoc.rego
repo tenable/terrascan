@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}s3BucketNoWebsiteIndexDoc[retVal] {
 	bucket := input.aws_s3_bucket[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 cloudWatchMonitoringLaunchConfig[res.id] {
     res = input.aws_launch_configuration[_]

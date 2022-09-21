@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sslEnforceDisabled[retVal] {
   psql_server := input.azurerm_postgresql_server[_]

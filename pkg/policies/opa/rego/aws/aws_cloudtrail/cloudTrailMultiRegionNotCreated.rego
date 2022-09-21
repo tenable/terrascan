@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}cloudTrailMultiRegionNotCreated[retVal]{
     cloud_trail = input.aws_cloudtrail[_]

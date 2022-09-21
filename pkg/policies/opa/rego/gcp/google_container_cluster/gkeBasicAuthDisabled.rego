@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 gkeBasicAuthDisabled[api.id] {
     api := input.google_container_cluster[_]

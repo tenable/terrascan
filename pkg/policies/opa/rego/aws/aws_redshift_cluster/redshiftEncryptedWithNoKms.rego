@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal]{
      redshift_cluster = input.aws_redshift_cluster[_]

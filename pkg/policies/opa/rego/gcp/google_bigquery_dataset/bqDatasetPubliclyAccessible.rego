@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 bqDatasetPubliclyAccessible[api.id]{
     api := input.google_bigquery_dataset[_]

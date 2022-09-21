@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[retval] {
     security_center_settings := input.azurerm_security_center_setting[_]

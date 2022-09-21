@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Ensure that there are no guest users",
-    "reference_id": "accurics.azure.IAM.388",
+    "reference_id": "tenable.azure.IAM.388",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_AZURE_0388"

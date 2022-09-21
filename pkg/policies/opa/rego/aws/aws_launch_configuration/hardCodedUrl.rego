@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}hardCodedUrl[res.id]{
     res = input.aws_instance[_]

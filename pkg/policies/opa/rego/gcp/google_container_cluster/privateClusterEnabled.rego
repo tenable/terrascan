@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 privateClusterEnabled[api.id] {
     api := input.google_container_cluster[_]

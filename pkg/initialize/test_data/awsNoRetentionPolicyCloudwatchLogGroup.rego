@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[retVal] {
     cw_log_group := input.aws_cloudwatch_log_group[_]

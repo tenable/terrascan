@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noSecurityGroupAssociated[retVal] {
 	vn := input.azurerm_virtual_network[_]

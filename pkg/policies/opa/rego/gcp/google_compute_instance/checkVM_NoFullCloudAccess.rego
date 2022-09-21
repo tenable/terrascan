@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkVM_NoFullCloudAccess[log_object.id] {
   log_object := input.google_compute_instance[_]

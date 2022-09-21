@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal] {
 	s3bucket = input.aws_s3_bucket_policy[_]

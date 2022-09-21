@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}configEnabledForAllRegions[con.id]{
     con = input.aws_config_configuration_aggregator[_]

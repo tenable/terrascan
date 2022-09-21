@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 elastiCacheMultiAZ[api.id] {
     api := input.aws_elasticache_cluster[_]

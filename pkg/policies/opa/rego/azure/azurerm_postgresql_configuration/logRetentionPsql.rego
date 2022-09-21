@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}logRetention[retVal] {
   psql_config := input.azurerm_postgresql_configuration[_]

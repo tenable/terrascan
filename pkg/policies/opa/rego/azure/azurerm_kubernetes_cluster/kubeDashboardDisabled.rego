@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 kubeDashboardDisabled[api.id] {
     api := input.azurerm_kubernetes_cluster[_]

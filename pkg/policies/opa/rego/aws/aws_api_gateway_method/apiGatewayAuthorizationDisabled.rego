@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}apiGatewayAuthorizationDisabled[api_gw.id] {
     api_gw := input.aws_api_gateway_method[_]

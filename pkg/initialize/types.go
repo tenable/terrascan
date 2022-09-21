@@ -35,7 +35,7 @@ func newPolicy(ruleMetadata environmentPolicyMetadata) (environmentPolicy, error
 	var policy environmentPolicy
 	var templateArgs map[string]interface{}
 
-	policy.regoTemplate = "package accurics\n\n" + ruleMetadata.RuleTemplate
+	policy.regoTemplate = "package tenable\n\n" + ruleMetadata.RuleTemplate
 	policy.metadataFileName = ruleMetadata.RuleReferenceID + ".json"
 	policy.resourceType = ruleMetadata.ResourceType
 

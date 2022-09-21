@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}dbInstanceLoggingDisabled[db_instance.id] {
     db_instance := input.aws_db_instance[_]

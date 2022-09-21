@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[role.id] {
     role := input.kubernetes_cluster_role[_]

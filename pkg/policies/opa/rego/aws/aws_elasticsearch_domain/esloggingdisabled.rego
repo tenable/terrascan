@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}esloggingdisabled[retVal] {
   esin := input.aws_elasticsearch_domain[_]

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network.",
-    "reference_id": "accurics.gcp.LOG.118",
+    "reference_id": "tenable.gcp.LOG.118",
     "category": "Logging and Monitoring",
     "version": 1,
     "id": "AC_GCP_0033"

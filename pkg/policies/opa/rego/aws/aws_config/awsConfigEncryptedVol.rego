@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 awsConfigEncryptedVol[api.id] {
     api := input.aws_config_config_rule[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkNoPublicAccess[bucket_iam.id] {
   bucket_iam := input.google_storage_bucket_iam_member[_]

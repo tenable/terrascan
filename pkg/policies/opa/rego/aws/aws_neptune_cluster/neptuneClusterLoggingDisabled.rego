@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}neptuneClusterLoggingDisabled[neptune_cluster.id] {
     neptune_cluster := input.aws_neptune_cluster[_]

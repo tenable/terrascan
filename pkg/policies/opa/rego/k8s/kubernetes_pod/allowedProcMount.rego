@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #rule for pod_security_policy
 {{.prefix}}{{.name}}{{.suffix}}[psp.id] {

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}detailedMonitoringEnabledInstance[instance.id] {
     instance := input.aws_instance[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}checkStorageContainerAccess[storage_container.id] {
   storage_container := input.azurerm_storage_container[_]

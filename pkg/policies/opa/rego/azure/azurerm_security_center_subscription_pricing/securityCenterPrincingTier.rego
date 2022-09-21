@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}securityCenterPrincingTier[subscription.id] {
   subscription := input.azurerm_security_center_subscription_pricing[_]

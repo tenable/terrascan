@@ -36,7 +36,7 @@ func TestGetSkipRules(t *testing.T) {
 	testRuleK8S1 := "AC_K8S_1111"
 	testRuleGITHUB1 := "AC_GITHUB_1111"
 	testRuleAWSwithHyphen := "AC-AWS-NS-IN-M-1172"
-	testRuleAzure := "accurics.azure.NS.147"
+	testRuleAzure := "tenable.azure.NS.147"
 	testRuleKubernetesWithHyphen := "AC-K8-DS-PO-M-0143"
 
 	table := []struct {
@@ -66,7 +66,7 @@ func TestGetSkipRules(t *testing.T) {
 		{
 			// gcp, kubernetes, github rules are of same format
 			name:  "rule id with no comment, azure",
-			input: "#ts:skip=accurics.azure.NS.147\n",
+			input: "#ts:skip=tenable.azure.NS.147\n",
 			expected: []output.SkipRule{
 				{Rule: testRuleAzure},
 			},
@@ -303,7 +303,7 @@ func TestGetSkipRules(t *testing.T) {
 
 func TestReadSkipRulesFromMap(t *testing.T) {
 	testRuleAWS1 := "AWS.CloudFormation.Medium.0603"
-	testRuleK8s := "accurics.kubernetes.IAM.109"
+	testRuleK8s := "tenable.kubernetes.IAM.109"
 
 	table := []struct {
 		name     string
@@ -324,14 +324,14 @@ func TestReadSkipRulesFromMap(t *testing.T) {
 		},
 		{
 			name:  "with valid k8s rule",
-			input: map[string]interface{}{TerrascanSkip: "[{\"rule\":\"accurics.kubernetes.IAM.109\"}]"},
+			input: map[string]interface{}{TerrascanSkip: "[{\"rule\":\"tenable.kubernetes.IAM.109\"}]"},
 			expected: []output.SkipRule{
 				{Rule: testRuleK8s},
 			},
 		},
 		{
 			name:  "with invalid rule format",
-			input: map[string]interface{}{TerrascanSkip: "[{\"rule\"\"accurics.kubernetes.IAM.109\"}]"},
+			input: map[string]interface{}{TerrascanSkip: "[{\"rule\"\"tenable.kubernetes.IAM.109\"}]"},
 			// expected would be empty
 		},
 	}

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 logGroupNotEncryptedWithKms[log_group.id] {
   log_group := input.aws_cloudwatch_log_group[_]

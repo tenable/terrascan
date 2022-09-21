@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access",
-    "reference_id": "accurics.azure.NS.2",
+    "reference_id": "tenable.azure.NS.2",
     "category": "Infrastructure Security",
     "version": 2,
     "id": "AC_AZURE_0371"

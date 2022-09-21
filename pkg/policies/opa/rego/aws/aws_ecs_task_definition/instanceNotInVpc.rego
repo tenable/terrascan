@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}instanceNotInVpc[retVal] {
     instance := input.aws_ecs_task_definition[_]

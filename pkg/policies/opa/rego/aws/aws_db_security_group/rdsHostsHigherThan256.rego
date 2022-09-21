@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rdsHostsHigherThan256[retVal] {
     sg = input.aws_db_security_group[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[cmdInst[_]]{
 	command := input.docker_cmd

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}docDbEncrypted[doc_cluster.id] {
     doc_cluster := input.aws_docdb_cluster[_]

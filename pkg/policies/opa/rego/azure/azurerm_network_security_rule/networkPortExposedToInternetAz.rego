@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[retval] {
     sg := input.azurerm_network_security_rule[_]

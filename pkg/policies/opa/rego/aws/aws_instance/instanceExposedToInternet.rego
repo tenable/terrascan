@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 instanceExposedToInternet[ins.id] {
     ins = input.aws_instance[_]

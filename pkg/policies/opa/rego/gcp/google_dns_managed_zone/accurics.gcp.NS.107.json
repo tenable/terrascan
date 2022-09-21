@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "LOW",
     "description": "Ensure that DNSSEC is enabled for Cloud DNS.",
-    "reference_id": "accurics.gcp.NS.107",
+    "reference_id": "tenable.gcp.NS.107",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_GCP_0014"

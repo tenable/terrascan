@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure default network access rule for Storage Accounts is set to deny.",
-    "reference_id": "accurics.azure.NS.370",
+    "reference_id": "tenable.azure.NS.370",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_AZURE_0309"

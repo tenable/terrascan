@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 insecureSslUsed[api.id] {
     api := input.github_repository_webhook[_]

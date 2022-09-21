@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}dynamoDbEncrypted[dydb_cluster.id] {
     dydb_cluster := input.aws_dynamodb_table[_]

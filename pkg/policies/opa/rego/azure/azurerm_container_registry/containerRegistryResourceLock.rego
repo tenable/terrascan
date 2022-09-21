@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}containerRegistryResourceLock[retVal] {
     registry := input.azurerm_container_registry[_]

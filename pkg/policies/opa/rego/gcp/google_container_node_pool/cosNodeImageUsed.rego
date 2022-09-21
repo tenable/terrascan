@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 cosNodeImageUsed[api.id]{
     api := input.google_container_node_pool[_]

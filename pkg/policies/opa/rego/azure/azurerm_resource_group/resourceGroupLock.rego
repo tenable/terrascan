@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}resourceGroupLock[retVal] {
     resource_group := input.azurerm_resource_group[_]

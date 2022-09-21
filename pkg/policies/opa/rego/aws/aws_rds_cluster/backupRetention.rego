@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}backupRetentionRDS[rds.id]{
     rds = input.aws_rds_cluster[_]

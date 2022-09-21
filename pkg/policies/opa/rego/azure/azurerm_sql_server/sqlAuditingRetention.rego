@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 sqlAuditingRetention[api.id]{
     api := input.azurerm_sql_server[_]

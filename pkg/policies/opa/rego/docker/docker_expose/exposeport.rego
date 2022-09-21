@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[expose.id]{
 	expose := input.docker_expose[_]
@@ -20,4 +20,4 @@ checkPort(config) {
 
 checkPortList(config) {
     contains(config[_], "22")
-}  
+}

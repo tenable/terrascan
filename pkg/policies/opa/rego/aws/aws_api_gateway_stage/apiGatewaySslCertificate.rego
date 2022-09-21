@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 apiGatewaySslCertificate[api.id] {
 	api := input.aws_api_gateway_stage[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noNodeToNodeEncryptionDomain[domain.id] {
     domain := input.aws_elasticsearch_domain[_]

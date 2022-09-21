@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}storageAccountCheckNetworkDefaultRule[retVal] {
   storage_account := input.azurerm_storage_account[_]

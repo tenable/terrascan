@@ -1,5 +1,5 @@
 
-package accurics
+package tenable
 
 {{.prefix}}s3BucketAccessLoggingDisabled[retVal] {
     cloudTrail := input.aws_cloudtrail[_]

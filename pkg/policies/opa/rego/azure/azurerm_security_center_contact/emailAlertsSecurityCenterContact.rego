@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 emailAlertsEnabled[api.id]{
     api := input.azurerm_security_center_contact[_]

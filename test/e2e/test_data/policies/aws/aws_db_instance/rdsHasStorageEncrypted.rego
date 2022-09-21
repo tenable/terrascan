@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 rdsHasStorageEncrypted[rds.id] {
     rds := input.aws_db_instance[_]

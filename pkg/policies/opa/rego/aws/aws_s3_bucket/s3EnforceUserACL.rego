@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}s3EnforceUserACL[bucket.id] {
     bucket := input.aws_s3_bucket[_]

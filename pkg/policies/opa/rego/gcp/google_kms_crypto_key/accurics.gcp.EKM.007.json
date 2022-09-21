@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Encryption keys are rotated within a period of 365 days.",
-    "reference_id": "accurics.gcp.EKM.007",
+    "reference_id": "tenable.gcp.EKM.007",
     "category": "Security Best Practices",
     "version": 1,
     "id": "AC_GCP_0012"

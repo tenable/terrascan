@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 rsaSha1NotUsedDNSSEC[api.id] {
     api := input.google_dns_managed_zone[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}targetGroupUsingHttp[tg_group.id] {
     tg_group = input.aws_lb_target_group[_]

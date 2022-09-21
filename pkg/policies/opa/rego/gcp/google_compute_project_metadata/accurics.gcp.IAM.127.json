@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure oslogin is enabled for a Project",
-    "reference_id": "accurics.gcp.IAM.127",
+    "reference_id": "tenable.gcp.IAM.127",
     "id": "AC_GCP_0291",
     "category": "Identity and Access Management",
     "version": 1

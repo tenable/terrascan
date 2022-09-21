@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}notEncryptedSecrets[secrets_mgm.id] {
 	secrets_mgm := input.aws_secretsmanager_secret[_]

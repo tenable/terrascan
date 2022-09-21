@@ -8,7 +8,7 @@ metadata:
     test2: someupdate3
   annotations:
     terrascanSkip:
-      - rule: accurics.kubernetes.IAM.109
+      - rule: tenable.kubernetes.IAM.109
         comment: reason to skip the rule
 spec:
   containers:
@@ -28,9 +28,9 @@ metadata:
     test2: someupdate3
   annotations:
     terrascanSkip:
-      - rule: accurics.kubernetes.IAM.3
+      - rule: tenable.kubernetes.IAM.3
         comment: reason to skip the rule
-      - rule: accurics.kubernetes.OPS.461
+      - rule: tenable.kubernetes.OPS.461
         comment: reason to skip the rule
 spec:
   template:

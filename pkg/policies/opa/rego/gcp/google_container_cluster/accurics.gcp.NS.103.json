@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Network policy is enabled on Kubernetes Engine Clusters.",
-    "reference_id": "accurics.gcp.NS.103",
+    "reference_id": "tenable.gcp.NS.103",
     "id": "AC_GCP_0293",
     "category": "Infrastructure Security",
     "version": 1

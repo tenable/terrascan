@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}globalAccFlowLogsDisabled[global_acc.id] {
     global_acc := input.aws_globalaccelerator_accelerator[_]

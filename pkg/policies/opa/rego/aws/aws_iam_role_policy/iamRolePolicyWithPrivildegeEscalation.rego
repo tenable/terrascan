@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}iamRolePolicyWithPrivildegeEscalation[iamUser.id] {
     iamUser = input.aws_iam_role_policy[_]
@@ -19,5 +19,5 @@ json_unmarshal(s) = result {
 
 policyCheck(statement) = true {
     disallowed_actions := ["iam:passrole", "lambda:createfunction", "lambda:invokefunc*"]
-    statement.Action[_] == disallowed_actions[_]   
+    statement.Action[_] == disallowed_actions[_]
 }

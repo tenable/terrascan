@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerRun.id] {
     dockerRun := input.docker_run[_]

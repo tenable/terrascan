@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rootUserNotContainMfaTypeVirtual[iamUserMfa_id] {
 	iamUserMfa = input.aws_iam_user_policy[_]

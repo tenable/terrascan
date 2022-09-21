@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 ec2ebsnotoptimized[con.id] {
 	con = input.aws_instance[_]

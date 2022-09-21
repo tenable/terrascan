@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure the key vault is recoverable - enable \"Soft Delete\" setting for a Key Vault",
-    "reference_id": "accurics.azure.EKM.164",
+    "reference_id": "tenable.azure.EKM.164",
     "category": "Data Protection",
     "version": 2,
     "id": "AC_AZURE_0170"

@@ -8,7 +8,7 @@
     },
     "severity": "LOW",
     "description": "Ensure that Azure Resource Group has resource lock enabled",
-    "reference_id": "accurics.azure.NS.272",
+    "reference_id": "tenable.azure.NS.272",
     "category": "Identity and Access Management",
     "version": 2,
     "id": "AC_AZURE_0389"

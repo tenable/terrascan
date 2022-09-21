@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal] {
     redis := input.azurerm_redis_firewall_rule[_]

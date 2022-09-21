@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}launchConfigurationEBSBlockUnEncrypted[result.retVal] {
     block := input.aws_launch_configuration[_]

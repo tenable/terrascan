@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}apiGatewayRestApiPolicyNotSecure[rest_api.id] {
     rest_api := input.aws_api_gateway_rest_api_policy[_]

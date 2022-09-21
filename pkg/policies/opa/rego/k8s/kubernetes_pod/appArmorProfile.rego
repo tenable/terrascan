@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #rule for pod security policy, will be valid for terraform pod_security_policy
 {{.prefix}}{{.name}}{{.suffix}}[psp.id] {

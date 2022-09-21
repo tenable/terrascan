@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}redshiftAuditLogs[redshift.id] {
     redshift := input.aws_redshift_cluster[_]

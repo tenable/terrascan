@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 apiGatewayEndpointConfig[api.id]{
       api := input.aws_api_gateway_rest_api[_]

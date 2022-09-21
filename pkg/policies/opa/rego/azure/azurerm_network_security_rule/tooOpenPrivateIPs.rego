@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[nsg.id] {
 	nsg := input.azurerm_network_security_group[_]

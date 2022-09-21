@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerRun.name] {
     dockerRun := input.docker_run[_]
@@ -6,7 +6,7 @@ package accurics
     config := dockerRun.config
     configArray := split(config, "&&")
     command := configArray[_]
-    
+
     startswith(command, ["sudo apt-get", "apt-get"][_])
     contains(command, "install")
 

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[deployment.id] {
     deployment := input.kubernetes_deployment[_]

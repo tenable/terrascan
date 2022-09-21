@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}neptuneClusterNotEncrypted[np.id] {
     np = input.aws_neptune_cluster[_]

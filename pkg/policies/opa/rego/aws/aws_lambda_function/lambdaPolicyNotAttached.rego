@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}lambdaPolicyNotAttached[lambda_function.id] {
     lambda_function :=  input.aws_lambda_function[_]

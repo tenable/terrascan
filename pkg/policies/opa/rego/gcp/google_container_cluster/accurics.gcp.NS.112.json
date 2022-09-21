@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters.",
-    "reference_id": "accurics.gcp.NS.112",
+    "reference_id": "tenable.gcp.NS.112",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_GCP_0027"

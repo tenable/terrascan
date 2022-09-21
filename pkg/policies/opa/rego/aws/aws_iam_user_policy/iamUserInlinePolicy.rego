@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}iamUserInlinePolicy[iam_user_policy.id] {
 	iam_user_policy := input.aws_iam_user_policy[_]

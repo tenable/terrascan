@@ -97,7 +97,7 @@ func getSkipRuleObject(s string) *output.SkipRule {
 //
 //	annotations:
 //	  runterrascan.io/skip: |
-//	    [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+//	    [{"rule": "tenable.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 //
 // cft:
 // Resource:

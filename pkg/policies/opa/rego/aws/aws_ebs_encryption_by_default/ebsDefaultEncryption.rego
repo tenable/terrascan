@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}ebsDefaultEncryption[retVal] {
   ebsEncrypt := input.aws_ebs_encryption_by_default[_]

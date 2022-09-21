@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {
     pod := input.kubernetes_pod_security_policy[_]

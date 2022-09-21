@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerRun.id] {
     dockerRun := input.docker_run[_]
@@ -23,4 +23,4 @@ checkyumUpdateArray(config) {
     some i
     checkyumList := arrayList[i]
     contains(config[_], checkyumList)
-} 
+}

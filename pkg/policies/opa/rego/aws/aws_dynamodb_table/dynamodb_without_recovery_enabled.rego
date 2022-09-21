@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}dynamoderecovery_enabled[policy.id] {
     policy := input.aws_dynamodb_table[_]
