@@ -24,6 +24,7 @@ Terrascan is a static code analyzer for Infrastructure as Code. Terrascan allows
 
 
 ### Resources
+* To try Terrascan in your browser, see the Terrascan Sandbox https://www.tenable.com/terrascan
 
 * To learn more about Terrascan's features and capabilities, see the documentation portal: https://runterrascan.io
 
