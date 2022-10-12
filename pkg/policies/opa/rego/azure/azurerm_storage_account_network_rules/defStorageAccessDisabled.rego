@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 defStorageAccessDisabled[san_rules.id] {
 	san_rules := input.azurerm_storage_account_network_rules[_]

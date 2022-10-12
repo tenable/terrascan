@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 awsMqLoggingEnabled[api.id] {
     api := input.aws_mq_broker[_]

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites.",
-    "reference_id": "accurics.gcp.EKM.134",
+    "reference_id": "tenable.gcp.EKM.134",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_GCP_0034"

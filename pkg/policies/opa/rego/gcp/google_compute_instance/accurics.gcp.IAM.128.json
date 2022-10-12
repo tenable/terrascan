@@ -9,7 +9,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that no instance in the project overrides the project setting for enabling OSLogin",
-    "reference_id": "accurics.gcp.IAM.128",
+    "reference_id": "tenable.gcp.IAM.128",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0038"

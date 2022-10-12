@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rdsCAExpired[retVal] {
     rds = input.aws_db_instance[_]

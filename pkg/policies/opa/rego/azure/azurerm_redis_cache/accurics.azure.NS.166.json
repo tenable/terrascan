@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure there are no firewall rules allowing Redis Cache access for a large number of source IPs",
-    "reference_id": "accurics.azure.NS.166",
+    "reference_id": "tenable.azure.NS.166",
     "category": "Infrastructure Security",
     "version": 2,
     "id": "AC_AZURE_0390"

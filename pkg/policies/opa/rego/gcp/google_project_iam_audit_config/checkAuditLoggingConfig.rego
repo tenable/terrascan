@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkAuditLoggingConfig[iam_audit.id] {
   iam_audit := input.google_project_iam_audit_config[_]

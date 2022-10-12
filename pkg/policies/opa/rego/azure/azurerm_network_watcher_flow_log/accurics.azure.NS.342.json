@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that Network Security Group Flow Log retention period is 'greater than 90 days' for Azure Network Watcher Flow Log",
-    "reference_id": "accurics.azure.NS.342",
+    "reference_id": "tenable.azure.NS.342",
     "category": "Resilience",
     "version": 1,
     "id": "AC_AZURE_0419"

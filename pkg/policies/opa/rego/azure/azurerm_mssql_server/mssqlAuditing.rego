@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.name}}[api.id]{
     api := input.azurerm_mssql_server[_]

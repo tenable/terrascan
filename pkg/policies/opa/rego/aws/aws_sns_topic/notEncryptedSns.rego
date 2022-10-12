@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}notEncryptedSns[sns_topic.id] {
     sns_topic := input.aws_sns_topic[_]

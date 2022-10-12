@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}efsPolicyNotSecure[efs_policy.id] {
 	efs_policy := input.aws_efs_file_system_policy[_]

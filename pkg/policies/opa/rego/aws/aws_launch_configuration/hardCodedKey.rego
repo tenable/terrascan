@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}hardCodedKey[res.id] {
     res = input.aws_launch_configuration[_]

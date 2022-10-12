@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}route53LoggingDisabled[route.id] {
   route := input.aws_route53_zone[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}instanceWithNoVpc[retVal] {
     instance := input.aws_instance[_]

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "LOW",
     "description": "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers.",
-    "reference_id": "accurics.azure.LOG.356",
+    "reference_id": "tenable.azure.LOG.356",
     "category": "Compliance Validation",
     "version": 1,
     "id": "AC_AZURE_0375"

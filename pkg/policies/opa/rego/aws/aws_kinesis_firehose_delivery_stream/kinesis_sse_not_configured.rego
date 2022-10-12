@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}kinesisSseNotConfigured[retVal] {
     stream := input.aws_kinesis_firehose_delivery_stream[_]

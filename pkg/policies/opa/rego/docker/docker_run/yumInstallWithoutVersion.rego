@@ -1,10 +1,10 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]{
     run := input.docker_run[_]
     config := run.config
-    
-    
+
+
     commands := split(config, "&&")
     command := commands[_]
     contains(command, "yum install")

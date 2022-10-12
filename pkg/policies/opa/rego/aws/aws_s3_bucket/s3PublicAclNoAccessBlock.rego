@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}s3PublicAclNoAccessBlock[s3_bucket.id] {
     s3_bucket := input.aws_s3_bucket[_]

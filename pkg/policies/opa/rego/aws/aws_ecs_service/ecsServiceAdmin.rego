@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 ecsServiceAdmin[ecs.id] {
     ecs := input.aws_ecs_service[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}kmsKeyExposedPolicy[retVal] {
 	kms = input.aws_kms_key[_]

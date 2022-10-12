@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerFrom.id]{
 	dockerFrom := input.docker_from[_]

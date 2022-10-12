@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}scanOnPushDisabled[retVal] {
   imageScan := input.aws_ecr_repository[_]

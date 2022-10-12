@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {
     pod := input.kubernetes_cron_job[_]

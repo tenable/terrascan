@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}lambdaXRayTracingDisabled[retVal] {
     lambda = input.aws_lambda_function[_]

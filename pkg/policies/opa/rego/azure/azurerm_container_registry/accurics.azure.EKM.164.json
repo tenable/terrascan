@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that admin user is disabled for Container Registry",
-    "reference_id": "accurics.azure.EKM.164",
+    "reference_id": "tenable.azure.EKM.164",
     "category": "Identity and Access Management",
     "version": 2,
     "id": "AC_AZURE_0186"

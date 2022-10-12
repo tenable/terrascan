@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters.",
-    "reference_id": "accurics.gcp.IAM.142",
+    "reference_id": "tenable.gcp.IAM.142",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0028"

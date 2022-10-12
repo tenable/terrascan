@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #rule for pod, same will satisfy terraform pod, covers containers, initContainers, and terraform init_containers
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {

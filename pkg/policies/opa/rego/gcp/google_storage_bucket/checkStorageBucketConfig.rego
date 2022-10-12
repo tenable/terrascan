@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkVersioningEnabled[log_object.id] {
   log_object := input.google_storage_bucket[_]

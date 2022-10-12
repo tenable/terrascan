@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}appGatewayWAFEnabled[retVal] {
 	ag := input.azurerm_application_gateway[_]

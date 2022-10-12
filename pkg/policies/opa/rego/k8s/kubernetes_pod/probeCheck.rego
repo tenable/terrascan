@@ -1,5 +1,5 @@
 #liveenessprobe and readinessprobe are not applicable for init containers.
-package accurics
+package tenable
 
 #rule for pod
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {

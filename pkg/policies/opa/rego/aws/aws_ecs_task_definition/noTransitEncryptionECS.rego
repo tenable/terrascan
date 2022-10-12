@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noTransitEncryptionECS[ecs.id]{
 	ecs := input.aws_ecs_task_definition[_]

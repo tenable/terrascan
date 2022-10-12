@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 serviceAttachmentAcceptAutomatic[saconf.id] {
   saconf := input.google_compute_service_attachment[_]

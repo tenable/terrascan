@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.name}}[api.id] {
     api := input.google_container_node_pool[_]

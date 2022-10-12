@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rdsIamAuthEnabled[retVal] {
   rds := input.aws_db_instance[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 vpcFlowLogEnabled[api.id]{
     api := input.google_compute_subnetwork[_]

@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that 'Threat Detection' is enabled for Azure SQL Database",
-    "reference_id": "accurics.azure.MON.157",
+    "reference_id": "tenable.azure.MON.157",
     "category": "Logging and Monitoring",
     "version": 2,
     "id": "AC_AZURE_0383"

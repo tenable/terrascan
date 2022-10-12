@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 noWafEnabled[retVal] {
     cloudfront := input.aws_cloudfront_distribution[_]

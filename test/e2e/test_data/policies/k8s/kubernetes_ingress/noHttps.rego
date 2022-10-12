@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[ingress.id] {
     ingress = input.kubernetes_ingress[_]

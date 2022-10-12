@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 backupConfigEnabled[api.id] {
     api := input.google_sql_database_instance[_]

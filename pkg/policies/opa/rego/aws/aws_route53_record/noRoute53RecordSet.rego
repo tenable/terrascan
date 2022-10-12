@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noRoute53RecordSet[retVal] {
     route := input.aws_route53_record[_]

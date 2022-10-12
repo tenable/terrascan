@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkRequireSSLEnabled[db_instance.id] {
   db_instance := input.google_sql_database_instance[_]
@@ -6,12 +6,12 @@ checkRequireSSLEnabled[db_instance.id] {
   not setting.ip_configuration
 } {
   db_instance := input.google_sql_database_instance[_]
-  setting := db_instance.config.settings[_]  
+  setting := db_instance.config.settings[_]
   ip_configuration = setting.ip_configuration[_]
   not ip_configuration.require_ssl
 } {
   db_instance := input.google_sql_database_instance[_]
-  setting := db_instance.config.settings[_]  
+  setting := db_instance.config.settings[_]
   ip_configuration = setting.ip_configuration[_]
   ip_configuration.require_ssl == false
 }

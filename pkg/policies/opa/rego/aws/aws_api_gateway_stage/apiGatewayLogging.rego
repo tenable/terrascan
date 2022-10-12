@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}apiGatewayLogging[retVal] {
 	api := input.aws_api_gateway_stage[_]

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that Cloud Storage buckets have uniform bucket-level access enabled.",
-    "reference_id": "accurics.gcp.IAM.122",
+    "reference_id": "tenable.gcp.IAM.122",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0234"

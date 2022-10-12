@@ -2,94 +2,94 @@
 ### google_container_node_pool
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Security Best Practices | gcp | LOW | Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters. | accurics.gcp.OPS.101 | AC_GCP_0017 |
-| Compliance Validation | gcp | HIGH | Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image. | accurics.gcp.OPS.114 | AC_GCP_0016 |
-| Security Best Practices | gcp | LOW | Ensure 'Automatic node repair' is enabled for Kubernetes Clusters. | accurics.gcp.OPS.144 | AC_GCP_0015 |
+| Security Best Practices | gcp | LOW | Ensure 'Automatic node upgrade' is enabled for Kubernetes Clusters. | tenable.gcp.OPS.101 | AC_GCP_0017 |
+| Compliance Validation | gcp | HIGH | Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image. | tenable.gcp.OPS.114 | AC_GCP_0016 |
+| Security Best Practices | gcp | LOW | Ensure 'Automatic node repair' is enabled for Kubernetes Clusters. | tenable.gcp.OPS.144 | AC_GCP_0015 |
 
 
 ### github_repository
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | MEDIUM | Repository is Not Private. | accurics.gcp.IAM.145 | AC_GCP_0231 |
+| Identity and Access Management | gcp | MEDIUM | Repository is Not Private. | tenable.gcp.IAM.145 | AC_GCP_0231 |
 
 
 ### google_bigquery_dataset
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | HIGH | BigQuery datasets may be anonymously or publicly accessible. | accurics.gcp.IAM.106 | AC_GCP_0230 |
+| Identity and Access Management | gcp | HIGH | BigQuery datasets may be anonymously or publicly accessible. | tenable.gcp.IAM.106 | AC_GCP_0230 |
 
 
 ### google_compute_project_metadata
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | HIGH | Ensure oslogin is enabled for a Project | accurics.gcp.IAM.127 | AC_GCP_0291 |
+| Identity and Access Management | gcp | HIGH | Ensure oslogin is enabled for a Project | tenable.gcp.IAM.127 | AC_GCP_0291 |
 
 ### google_compute_service_attachment
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | gcp | MEDIUM | Service Attachment with connection_preference ACCEPT_AUTOMATIC allow any project to connect. | accurics.gcp.NS.134 | AC_GCP_0296 |
+| Infrastructure Security | gcp | MEDIUM | Service Attachment with connection_preference ACCEPT_AUTOMATIC allow any project to connect. | tenable.gcp.NS.134 | AC_GCP_0296 |
 
 ### google_compute_subnetwork
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | gcp | MEDIUM | Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network. | accurics.gcp.LOG.118 | AC_GCP_0033 |
+| Logging and Monitoring | gcp | MEDIUM | Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network. | tenable.gcp.LOG.118 | AC_GCP_0033 |
 
 
 ### google_project_iam_audit_config
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | gcp | LOW | Ensure that Cloud Audit Logging is configured properly across all services and all users from a project. | accurics.gcp.LOG.010 | AC_GCP_0009 |
+| Logging and Monitoring | gcp | LOW | Ensure that Cloud Audit Logging is configured properly across all services and all users from a project. | tenable.gcp.LOG.010 | AC_GCP_0009 |
 
 
 ### google_sql_database_instance
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Resilience | gcp | HIGH | Ensure all Cloud SQL database instance have backup configuration enabled. | accurics.gcp.BDR.105 | AC_GCP_0001 |
-| Infrastructure Security | gcp | HIGH | Ensure that Cloud SQL database Instances are not open to the world. | accurics.gcp.NS.102 | AC_GCP_0295 |
-| Infrastructure Security | gcp | HIGH | Ensure that Cloud SQL database instance requires all incoming connections to use SSL | accurics.gcp.EKM.141 | AC_GCP_0003 |
+| Resilience | gcp | HIGH | Ensure all Cloud SQL database instance have backup configuration enabled. | tenable.gcp.BDR.105 | AC_GCP_0001 |
+| Infrastructure Security | gcp | HIGH | Ensure that Cloud SQL database Instances are not open to the world. | tenable.gcp.NS.102 | AC_GCP_0295 |
+| Infrastructure Security | gcp | HIGH | Ensure that Cloud SQL database instance requires all incoming connections to use SSL | tenable.gcp.EKM.141 | AC_GCP_0003 |
 
 
 ### google_compute_instance
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | gcp | MEDIUM | Ensure IP forwarding is not enabled on Instances. | accurics.gcp.NS.130 | AC_GCP_0232 |
-| Infrastructure Security | gcp | HIGH | Ensure 'Block Project-wide SSH keys' is enabled for VM instances. | accurics.gcp.NS.126 | AC_GCP_0039 |
-| Data Protection | gcp | MEDIUM | VM disks attached to a compute instance should be encrypted with Customer Supplied Encryption Keys (CSEK) . | accurics.gcp.EKM.132 | AC_GCP_0036 |
-| Identity and Access Management | gcp | HIGH | Instances may have been configured to use the default service account with full access to all Cloud APIs | accurics.gcp.IAM.124 | AC_GCP_0040 |
-| Infrastructure Security | gcp | MEDIUM | Ensure 'Enable connecting to serial ports' is not enabled for VM instances. | accurics.gcp.NS.129 | AC_GCP_0037 |
-| Infrastructure Security | gcp | MEDIUM | Ensure Compute instances are launched with Shielded VM enabled. | accurics.gcp.NS.133 | AC_GCP_0035 |
-| Identity and Access Management | gcp | MEDIUM | Ensure that no instance in the project overrides the project setting for enabling OSLogin | accurics.gcp.IAM.128 | AC_GCP_0038 |
-| Infrastructure Security | gcp | HIGH | Instances may have been configured to use the default service account with full access to all Cloud APIs | accurics.gcp.NS.125 | AC_GCP_0041 |
+| Infrastructure Security | gcp | MEDIUM | Ensure IP forwarding is not enabled on Instances. | tenable.gcp.NS.130 | AC_GCP_0232 |
+| Infrastructure Security | gcp | HIGH | Ensure 'Block Project-wide SSH keys' is enabled for VM instances. | tenable.gcp.NS.126 | AC_GCP_0039 |
+| Data Protection | gcp | MEDIUM | VM disks attached to a compute instance should be encrypted with Customer Supplied Encryption Keys (CSEK) . | tenable.gcp.EKM.132 | AC_GCP_0036 |
+| Identity and Access Management | gcp | HIGH | Instances may have been configured to use the default service account with full access to all Cloud APIs | tenable.gcp.IAM.124 | AC_GCP_0040 |
+| Infrastructure Security | gcp | MEDIUM | Ensure 'Enable connecting to serial ports' is not enabled for VM instances. | tenable.gcp.NS.129 | AC_GCP_0037 |
+| Infrastructure Security | gcp | MEDIUM | Ensure Compute instances are launched with Shielded VM enabled. | tenable.gcp.NS.133 | AC_GCP_0035 |
+| Identity and Access Management | gcp | MEDIUM | Ensure that no instance in the project overrides the project setting for enabling OSLogin | tenable.gcp.IAM.128 | AC_GCP_0038 |
+| Infrastructure Security | gcp | HIGH | Instances may have been configured to use the default service account with full access to all Cloud APIs | tenable.gcp.NS.125 | AC_GCP_0041 |
 
 
 ### google_storage_bucket_iam_binding
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | MEDIUM | Ensure that Cloud Storage bucket is not anonymously or publicly accessible. | accurics.gcp.IAM.121 | AC_GCP_0237 |
+| Identity and Access Management | gcp | MEDIUM | Ensure that Cloud Storage bucket is not anonymously or publicly accessible. | tenable.gcp.IAM.121 | AC_GCP_0237 |
 
 
 ### google_container_cluster
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Infrastructure Security | json | Medium | GKE Control Plane is exposed to few public IP addresses using master-authorized-network-config | AC-GC-IS-CC-M-0367 | AC_GCP_0292 |
-| Logging and Monitoring | gcp | HIGH | Ensure Stackdriver Monitoring is enabled on Kubernetes Engine Clusters. | accurics.gcp.MON.143 | AC_GCP_0029 |
-| Infrastructure Security | gcp | HIGH | Ensure Kubernetes Cluster is created with Private cluster enabled. | accurics.gcp.NS.117 | AC_GCP_0294 |
-| Compliance Validation | gcp | HIGH | Ensure PodSecurityPolicy controller is enabled on the Kubernetes Engine Clusters. | accurics.gcp.OPS.116 | AC_GCP_0022 |
-| Identity and Access Management | gcp | HIGH | Ensure GKE basic auth is disabled. | accurics.gcp.IAM.110 | AC_GCP_0021 |
-| Infrastructure Security | gcp | HIGH | Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters. | accurics.gcp.NS.112 | AC_GCP_0027 |
-| Compliance Validation | gcp | HIGH | Ensure Kubernetes Cluster is created with Alias IP ranges enabled | accurics.gcp.OPS.115 | AC_GCP_0025 |
-| Infrastructure Security | gcp | HIGH | Ensure GKE Control Plane is not public. | accurics.gcp.NS.109 | AC_GCP_0023 |
-| Identity and Access Management | gcp | MEDIUM | Ensure Kubernetes Cluster is created with Client Certificate disabled. | accurics.gcp.IAM.104 | AC_GCP_0024 |
-| Compliance Validation | gcp | HIGH | Ensure Kubernetes Clusters are configured with Labels. | accurics.gcp.OPS.113 | AC_GCP_0019 |
-| Identity and Access Management | gcp | HIGH | Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters. | accurics.gcp.IAM.142 | AC_GCP_0028 |
-| Logging and Monitoring | gcp | HIGH | Ensure Stackdriver Logging is enabled on Kubernetes Engine Clusters. | accurics.gcp.LOG.100 | AC_GCP_0030 |
-| Infrastructure Security | gcp | HIGH | Ensure Network policy is enabled on Kubernetes Engine Clusters. | accurics.gcp.NS.103 | AC_GCP_0293 |
+| Logging and Monitoring | gcp | HIGH | Ensure Stackdriver Monitoring is enabled on Kubernetes Engine Clusters. | tenable.gcp.MON.143 | AC_GCP_0029 |
+| Infrastructure Security | gcp | HIGH | Ensure Kubernetes Cluster is created with Private cluster enabled. | tenable.gcp.NS.117 | AC_GCP_0294 |
+| Compliance Validation | gcp | HIGH | Ensure PodSecurityPolicy controller is enabled on the Kubernetes Engine Clusters. | tenable.gcp.OPS.116 | AC_GCP_0022 |
+| Identity and Access Management | gcp | HIGH | Ensure GKE basic auth is disabled. | tenable.gcp.IAM.110 | AC_GCP_0021 |
+| Infrastructure Security | gcp | HIGH | Ensure Master Authentication is set to enabled on Kubernetes Engine Clusters. | tenable.gcp.NS.112 | AC_GCP_0027 |
+| Compliance Validation | gcp | HIGH | Ensure Kubernetes Cluster is created with Alias IP ranges enabled | tenable.gcp.OPS.115 | AC_GCP_0025 |
+| Infrastructure Security | gcp | HIGH | Ensure GKE Control Plane is not public. | tenable.gcp.NS.109 | AC_GCP_0023 |
+| Identity and Access Management | gcp | MEDIUM | Ensure Kubernetes Cluster is created with Client Certificate disabled. | tenable.gcp.IAM.104 | AC_GCP_0024 |
+| Compliance Validation | gcp | HIGH | Ensure Kubernetes Clusters are configured with Labels. | tenable.gcp.OPS.113 | AC_GCP_0019 |
+| Identity and Access Management | gcp | HIGH | Ensure Legacy Authorization is set to disabled on Kubernetes Engine Clusters. | tenable.gcp.IAM.142 | AC_GCP_0028 |
+| Logging and Monitoring | gcp | HIGH | Ensure Stackdriver Logging is enabled on Kubernetes Engine Clusters. | tenable.gcp.LOG.100 | AC_GCP_0030 |
+| Infrastructure Security | gcp | HIGH | Ensure Network policy is enabled on Kubernetes Engine Clusters. | tenable.gcp.NS.103 | AC_GCP_0293 |
 
 
 ### google_project
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | gcp | MEDIUM | Ensure that the default network does not exist in a project. | accurics.gcp.NS.119 | AC_GCP_0010 |
+| Infrastructure Security | gcp | MEDIUM | Ensure that the default network does not exist in a project. | tenable.gcp.NS.119 | AC_GCP_0010 |
 
 
 ### google_compute_firewall
@@ -286,54 +286,52 @@
 ### google_dns_managed_zone
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | gcp | HIGH | Ensure that RSASHA1 is not used for the zone-signing and key-signing keys in Cloud DNS DNSSEC. | accurics.gcp.EKM.108 | AC_GCP_0013 |
-| Infrastructure Security | gcp | LOW | Ensure that DNSSEC is enabled for Cloud DNS. | accurics.gcp.NS.107 | AC_GCP_0014 |
+| Infrastructure Security | gcp | HIGH | Ensure that RSASHA1 is not used for the zone-signing and key-signing keys in Cloud DNS DNSSEC. | tenable.gcp.EKM.108 | AC_GCP_0013 |
+| Infrastructure Security | gcp | LOW | Ensure that DNSSEC is enabled for Cloud DNS. | tenable.gcp.NS.107 | AC_GCP_0014 |
 
 
 ### google_compute_disk
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Data Protection | gcp | MEDIUM | Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) . | accurics.gcp.EKM.131 | AC_GCP_0229 |
+| Data Protection | gcp | MEDIUM | Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK) . | tenable.gcp.EKM.131 | AC_GCP_0229 |
 
 
 ### google_project_iam_member
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | HIGH | Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level. | accurics.gcp.IAM.137 | AC_GCP_0006 |
-| Identity and Access Management | gcp | HIGH | Ensure that Service Account has no Admin privileges. | accurics.gcp.IAM.138 | AC_GCP_0005 |
+| Identity and Access Management | gcp | HIGH | Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level. | tenable.gcp.IAM.137 | AC_GCP_0006 |
+| Identity and Access Management | gcp | HIGH | Ensure that Service Account has no Admin privileges. | tenable.gcp.IAM.138 | AC_GCP_0005 |
 
 
 ### google_storage_bucket_iam_member
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | HIGH | Ensure that Cloud Storage bucket is not anonymously or publicly Accessible. | accurics.gcp.IAM.120 | AC_GCP_0238 |
+| Identity and Access Management | gcp | HIGH | Ensure that Cloud Storage bucket is not anonymously or publicly Accessible. | tenable.gcp.IAM.120 | AC_GCP_0238 |
 
 
 ### google_compute_ssl_policy
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Infrastructure Security | gcp | MEDIUM | Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites. | accurics.gcp.EKM.134 | AC_GCP_0034 |
+| Infrastructure Security | gcp | MEDIUM | Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites. | tenable.gcp.EKM.134 | AC_GCP_0034 |
 
 
 ### google_storage_bucket
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | gcp | HIGH | Ensure that logging is enabled for Cloud storage buckets. | accurics.gcp.LOG.147 | AC_GCP_0233 |
-| Logging and Monitoring | gcp | HIGH | Ensure that object versioning is enabled on log-buckets. | accurics.gcp.LOG.146 | AC_GCP_0241 |
-| Identity and Access Management | gcp | MEDIUM | Ensure that Cloud Storage buckets have uniform bucket-level access enabled. | accurics.gcp.IAM.122 | AC_GCP_0234 |
+| Logging and Monitoring | gcp | HIGH | Ensure that logging is enabled for Cloud storage buckets. | tenable.gcp.LOG.147 | AC_GCP_0233 |
+| Logging and Monitoring | gcp | HIGH | Ensure that object versioning is enabled on log-buckets. | tenable.gcp.LOG.146 | AC_GCP_0241 |
+| Identity and Access Management | gcp | MEDIUM | Ensure that Cloud Storage buckets have uniform bucket-level access enabled. | tenable.gcp.IAM.122 | AC_GCP_0234 |
 
 
 ### google_kms_crypto_key
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Security Best Practices | gcp | MEDIUM | Ensure Encryption keys are rotated within a period of 90 days. | accurics.gcp.EKM.139 | AC_GCP_0011 |
-| Security Best Practices | gcp | HIGH | Ensure Encryption keys are rotated within a period of 365 days. | accurics.gcp.EKM.007 | AC_GCP_0012 |
+| Security Best Practices | gcp | MEDIUM | Ensure Encryption keys are rotated within a period of 90 days. | tenable.gcp.EKM.139 | AC_GCP_0011 |
+| Security Best Practices | gcp | HIGH | Ensure Encryption keys are rotated within a period of 365 days. | tenable.gcp.EKM.007 | AC_GCP_0012 |
 
 
 ### google_project_iam_binding
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | HIGH | Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level. | accurics.gcp.IAM.136 | AC_GCP_0007 |
-| Identity and Access Management | gcp | MEDIUM | Ensure that corporate login credentials are used instead of Gmail accounts. | accurics.gcp.IAM.150 | AC_GCP_0008 |
-
-
+| Identity and Access Management | gcp | HIGH | Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level. | tenable.gcp.IAM.136 | AC_GCP_0007 |
+| Identity and Access Management | gcp | MEDIUM | Ensure that corporate login credentials are used instead of Gmail accounts. | tenable.gcp.IAM.150 | AC_GCP_0008 |

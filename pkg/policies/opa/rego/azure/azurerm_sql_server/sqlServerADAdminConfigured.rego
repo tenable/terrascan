@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sqlServerADAdminConfigured[retVal] {
   sql_server := input.azurerm_sql_server[_]

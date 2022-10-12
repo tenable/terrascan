@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}s3BucketSseRulesWithKmsNull[retVal] {
     bucket := input.aws_s3_bucket[_]

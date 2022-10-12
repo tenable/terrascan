@@ -10,7 +10,7 @@
     "remediation": "Ensure MCAS setting is enabled in Azure Security Center Setting.",
     "engineType": "terraform",
     "provider": "azure",
-    "managedBy": "Accurics Inc",
+    "managedBy": "tenable Inc",
     "ruleDisplayName": "Ensure that Microsoft Cloud App Security (MCAS) integration is selected in Azure Security Center Setting",
     "category": "Compliance Validation",
     "poli": "CIS-1.3:2.10"

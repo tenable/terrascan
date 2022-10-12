@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 apiGatewayNoAccessLogs[stage.id] {
   stage := input.aws_apigatewayv2_stage[_]

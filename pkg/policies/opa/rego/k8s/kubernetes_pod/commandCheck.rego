@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[pod_kubeapi.id] {
     pod_kubeapi := input.kubernetes_pod[_]

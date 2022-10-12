@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 elastiSearchEncryptAtRest[api.id] {
     api := input.aws_elasticsearch_domain[_]
@@ -10,4 +10,3 @@ elastiSearchEncryptAtRest[api.id] {
     encrypt := api.config.encrypt_at_rest[_]
     encrypt.enabled == false
 }
-

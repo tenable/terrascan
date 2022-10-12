@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that the Redis Cache accepts only SSL connections",
-    "reference_id": "accurics.azure.EKM.23",
+    "reference_id": "tenable.azure.EKM.23",
     "category": "Infrastructure Security",
     "version": 2,
     "id": "AC_AZURE_0394"

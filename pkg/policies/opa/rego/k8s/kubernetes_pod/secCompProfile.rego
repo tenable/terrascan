@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #rule for pod, pod_security_policy covers containers
 {{.prefix}}{{.name}}{{.suffix}}[kind.id] {

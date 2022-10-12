@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[endpoint_slice.id] {
    endpoint_slice = input.kubernetes_endpoint_slice[_]

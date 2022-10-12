@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}secretManagerPolicyNotSecret[secret_policy.id] {
     secret_policy := input.aws_secretsmanager_secret_policy[_]
@@ -34,5 +34,5 @@ policyPrincipalCheck(statement) = true {
 
 policyActionCheck(statement) = true {
     disallowed_actions := ["secretsmanager:*"]
-    statement.Action == disallowed_actions[_]   
+    statement.Action == disallowed_actions[_]
 }

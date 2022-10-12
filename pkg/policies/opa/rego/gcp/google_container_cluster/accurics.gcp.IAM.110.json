@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure GKE basic auth is disabled.",
-    "reference_id": "accurics.gcp.IAM.110",
+    "reference_id": "tenable.gcp.IAM.110",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0021"

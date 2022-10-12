@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure AKS cluster has Network Policy configured.",
-    "reference_id": "accurics.azure.NS.382",
+    "reference_id": "tenable.azure.NS.382",
     "category": "Infrastructure Security",
     "version": 1,
     "id": "AC_AZURE_0158"

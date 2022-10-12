@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}listenerNotHttps[listener.id] {
     listener = input.aws_lb_listener[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 privateRepoEnabled[api.id] {
     api := input.github_repository[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sqlServerPredictableAccount[retVal] {
   known_user = { "azure_superuser", "azure_pg_admin", "admin", "administrator", "root", "guest", "public" }
@@ -44,4 +44,3 @@ package accurics
   traverse := "administrator_login"
   retVal := { "Id": sql_server.id, "ReplaceType": "edit", "CodeType": "attribute", "Traverse": traverse, "Attribute": traverse, "AttributeDataType": "string", "Expected": uuid_user, "Actual": sql_server.config.administrator_login }
 }
-

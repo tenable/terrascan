@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 networkPolicyEnabled[api.id] {
 	api := input.azurerm_kubernetes_cluster[_]

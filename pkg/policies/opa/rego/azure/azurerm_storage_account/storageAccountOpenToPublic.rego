@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}storageAccountOpenToPublic[retVal] {
   storage_account := input.azurerm_storage_account[_]

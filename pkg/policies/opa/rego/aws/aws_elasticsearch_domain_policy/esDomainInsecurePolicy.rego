@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}esDomainInsecurePolicy[es_domain.id] {
     es_domain := input.aws_elasticsearch_domain_policy[_]

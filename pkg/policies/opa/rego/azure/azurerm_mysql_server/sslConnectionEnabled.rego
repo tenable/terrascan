@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 sslConnectionEnabled[api.id]{
     api := input.azurerm_mysql_server[_]

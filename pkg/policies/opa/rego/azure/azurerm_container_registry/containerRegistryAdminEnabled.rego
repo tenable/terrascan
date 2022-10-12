@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}containerRegistryAdminEnabled[retVal] {
 	acr := input.azurerm_container_registry[_]

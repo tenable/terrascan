@@ -57,7 +57,7 @@ metadata:
   name: myapp-pod
   annotations:
     runterrascan.io/skip: |
-      [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+      [{"rule": "tenable.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
     - name: myapp-container
@@ -69,7 +69,7 @@ metadata:
   generateName: myapp-pod-prefix-
   annotations:
     runterrascan.io/skip: |
-      [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+      [{"rule": "tenable.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
 spec:
   containers:
     - name: myapp-container
@@ -124,7 +124,7 @@ func TestK8sV1ExtractResource(t *testing.T) {
 				Metadata: k8sMetadata{
 					Name: "myapp-pod",
 					Annotations: map[string]interface{}{
-						utils.TerrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
+						utils.TerrascanSkip: "[{\"rule\": \"tenable.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 					},
 				},
 			},
@@ -181,7 +181,7 @@ func TestK8sV1GetNormalizedName(t *testing.T) {
 }
 
 func TestK8sV1Normalize(t *testing.T) {
-	testRule := "accurics.kubernetes.IAM.109"
+	testRule := "tenable.kubernetes.IAM.109"
 	testComment := "reason to skip the rule"
 
 	testSkipRule := output.SkipRule{
@@ -224,7 +224,7 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "Pod",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							utils.TerrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
+							utils.TerrascanSkip: "[{\"rule\": \"tenable.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 						},
 						"name": "myapp-pod",
 					},
@@ -260,7 +260,7 @@ func TestK8sV1Normalize(t *testing.T) {
 					"kind":       "CRD",
 					"metadata": map[string]interface{}{
 						"annotations": map[string]interface{}{
-							utils.TerrascanSkip: "[{\"rule\": \"accurics.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
+							utils.TerrascanSkip: "[{\"rule\": \"tenable.kubernetes.IAM.109\", \"comment\": \"reason to skip the rule\"}]\n",
 						},
 						"generateName": "myapp-pod-prefix-",
 					},

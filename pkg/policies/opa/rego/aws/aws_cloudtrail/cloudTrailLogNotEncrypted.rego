@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}cloudTrailLogNotEncrypted[cloud_trail.id]{
     cloud_trail = input.aws_cloudtrail[_]

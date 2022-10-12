@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[cmd.id]{
     cmd := input.docker_user[count(input.docker_user) - 1]

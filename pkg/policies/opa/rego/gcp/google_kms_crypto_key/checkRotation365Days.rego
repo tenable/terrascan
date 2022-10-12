@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkRotation365Days[crypto_key.id]{
     crypto_key := input.google_kms_crypto_key[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}sqsSseDisabled[sqs.id] {
   sqs := input.aws_sqs_queue[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 amiNotEncrypted[api.id] {
     api := input.aws_ami[_]

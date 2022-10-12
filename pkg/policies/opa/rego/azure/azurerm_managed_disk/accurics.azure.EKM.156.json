@@ -10,7 +10,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that 'Unattached disks' are encrypted in Azure Managed Disk",
-    "reference_id": "accurics.azure.EKM.156",
+    "reference_id": "tenable.azure.EKM.156",
     "category": "Data Protection",
     "version": 2,
     "id": "AC_AZURE_0143"

@@ -8,7 +8,7 @@
     },
     "severity": "HIGH",
     "description": "Ensure that 'Secure transfer required' is enabled for Storage Accounts",
-    "reference_id": "accurics.azure.EKM.7",
+    "reference_id": "tenable.azure.EKM.7",
     "category": "Data Protection",
     "version": 2,
     "id": "AC_AZURE_0373"

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure Kubernetes Cluster is created with Private cluster enabled.",
-    "reference_id": "accurics.gcp.NS.117",
+    "reference_id": "tenable.gcp.NS.117",
     "id": "AC_GCP_0294",
     "category": "Infrastructure Security",
     "version": 1

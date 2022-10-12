@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[instance.id]{
 	instance := input.aws_ecs_task_definition[_]

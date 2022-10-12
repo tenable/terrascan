@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}enableSNSTopic[sns.id] {
     sns := input.aws_cloudtrail[_]

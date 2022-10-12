@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #this will satisfy version 4 provider and previous providers
 {{.prefix}}noS3BucketSseRules[retVal] {

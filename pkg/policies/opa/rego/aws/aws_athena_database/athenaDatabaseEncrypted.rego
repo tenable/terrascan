@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}athenaDatabaseEncrypted[athena.id]{
     athena = input.aws_athena_database[_]

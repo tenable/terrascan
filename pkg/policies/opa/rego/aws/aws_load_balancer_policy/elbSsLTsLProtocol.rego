@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}elbSsLTsLProtocol[retVal] {
     lb = input.aws_load_balancer_policy[_]

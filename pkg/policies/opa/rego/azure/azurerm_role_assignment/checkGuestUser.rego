@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}checkGuestUser[role_assignment.id] {
   role_assignment := input.azurerm_role_assignment[_]

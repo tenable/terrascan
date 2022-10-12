@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure server parameter 'connection_throttling' is set to 'ON' for PostgreSQL Database Server",
-    "reference_id": "accurics.azure.LOG.151",
+    "reference_id": "tenable.azure.LOG.151",
     "category": "Logging and Monitoring",
     "version": 2,
     "id": "AC_AZURE_0414"

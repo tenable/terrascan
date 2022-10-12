@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}snsPublicAccess[retVal] {
 	sns := input.aws_sns_topic[_]

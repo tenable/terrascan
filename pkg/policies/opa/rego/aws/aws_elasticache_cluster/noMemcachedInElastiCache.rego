@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noMemcachedInElastiCache[retVal] {
     elasticache = input.aws_elasticache_cluster[_]

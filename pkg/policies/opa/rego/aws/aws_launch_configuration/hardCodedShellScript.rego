@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}hardCodedShellScript[res.id]{
     res = input.aws_instance[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 ####fixed the minimum set of allowed volumes, this may change as per the user####
 

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level.",
-    "reference_id": "accurics.gcp.IAM.136",
+    "reference_id": "tenable.gcp.IAM.136",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0007"

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[workspace.id] {
     workspace := input.aws_workspaces_workspace[_]

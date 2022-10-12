@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.name}}[api.id] {
     api := input.aws_cloudformation_stack[_]

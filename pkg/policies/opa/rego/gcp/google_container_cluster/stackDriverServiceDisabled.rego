@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.name}}[container_cluster.id] {
   container_cluster := input.google_container_cluster[_]

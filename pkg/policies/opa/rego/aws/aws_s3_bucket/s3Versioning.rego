@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 #when resource is not declared, this is for every s3 bucket
 {{.prefix}}s3Versioning[retVal] {

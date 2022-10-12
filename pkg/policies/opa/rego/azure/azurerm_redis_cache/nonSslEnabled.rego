@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}nonSslEnabled[retVal] {
     redis := input.azurerm_redis_cache[_]

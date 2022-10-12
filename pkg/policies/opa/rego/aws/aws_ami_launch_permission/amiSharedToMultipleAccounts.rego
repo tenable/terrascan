@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}amiSharedToMultipleAccounts[retVal] {
 	all_permissions := input.aws_ami_launch_permission

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal] {
     sql_rule := input.azurerm_sql_firewall_rule[_]

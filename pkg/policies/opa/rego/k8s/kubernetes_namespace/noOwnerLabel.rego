@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[namespace.id] {
     namespace := input.kubernetes_namespace[_]

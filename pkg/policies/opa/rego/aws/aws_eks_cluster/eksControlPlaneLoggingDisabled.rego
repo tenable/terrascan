@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}eksControlPlaneLoggingDisabled[eks_cluster.id] {
     eks_cluster := input.aws_eks_cluster[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[dax_cluster.id]{
     dax_cluster := input.aws_dax_cluster[_]

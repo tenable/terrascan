@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}kmsKeySecurePolicyNotUsed[kms_policy.id] {
     kms_policy = input.aws_kms_key[_]

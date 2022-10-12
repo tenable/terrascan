@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 elastiSearchNoKms[api.id] {
     api := input.aws_elasticsearch_domain[_]

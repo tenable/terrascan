@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 lambdaNotInVpc[lambda.id] {
   lambda := input.aws_lambda_function[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 checkOSLoginEnabled[metadata.id] {
   metadata := input.google_compute_project_metadata[_]

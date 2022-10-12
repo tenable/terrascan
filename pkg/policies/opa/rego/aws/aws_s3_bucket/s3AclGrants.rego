@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}[retVal] {
     bucket := input.aws_s3_bucket[_]

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure all Cloud SQL database instance have backup configuration enabled.",
-    "reference_id": "accurics.gcp.BDR.105",
+    "reference_id": "tenable.gcp.BDR.105",
     "category": "Resilience",
     "version": 1,
     "id": "AC_GCP_0001"

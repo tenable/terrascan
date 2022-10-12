@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}vpcFlowLogsNotEnabled[retVal] {
   vpc := input.aws_vpc[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}iamPolicyWithFullAdminControl[retVal] {
 	iamUserMfa = input.aws_iam_policy[_]

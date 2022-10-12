@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}redshiftPublicAccess[retVal]{
     redshift = input.aws_redshift_cluster[_]

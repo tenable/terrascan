@@ -1,5 +1,5 @@
 
-package accurics
+package tenable
 
 overlyPermissiveLaunchConfig[res.id] {
     res = input.aws_launch_configuration[_]

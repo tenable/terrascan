@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "HIGH",
     "description": "Ensure that Service Account has no Admin privileges.",
-    "reference_id": "accurics.gcp.IAM.138",
+    "reference_id": "tenable.gcp.IAM.138",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0005"

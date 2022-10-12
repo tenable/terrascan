@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 defaultServiceAccountUsed[api.id] {
      api := input.google_compute_instance[_]

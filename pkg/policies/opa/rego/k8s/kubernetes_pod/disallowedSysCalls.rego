@@ -1,5 +1,5 @@
 ### this pollicy depends on the parameters specified by the user/client. Here we are considering that no kernel level syscalls are allowed###
-package accurics
+package tenable
 
 #rule for pod
 {{.prefix}}{{.name}}{{.suffix}}[pod.id] {

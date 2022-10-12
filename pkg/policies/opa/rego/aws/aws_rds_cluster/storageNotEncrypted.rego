@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}storageNotEncrypted[rds.id]{
     rds = input.aws_rds_cluster[_]

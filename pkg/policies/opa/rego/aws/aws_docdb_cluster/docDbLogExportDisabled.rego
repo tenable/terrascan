@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}docDbLogExportDisabled[docdb.id] {
     docdb := input.aws_docdb_cluster[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}keyVaultSoftDeleteEnabled[retVal] {
   kv := input.azurerm_key_vault[_]

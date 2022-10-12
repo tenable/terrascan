@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 lambdaNotEncryptedWithKms[lambda.id] {
 	lambda := input.aws_lambda_function[_]

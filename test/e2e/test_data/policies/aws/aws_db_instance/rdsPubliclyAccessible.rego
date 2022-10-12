@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}rdsPubliclyAccessible[retVal] {
   db := input.aws_db_instance[_]
@@ -6,4 +6,3 @@ package accurics
   traverse = "publicly_accessible"
   retVal := { "Id": db.id, "ReplaceType": "edit", "CodeType": "attribute", "Traverse": traverse, "Attribute": "publicly_accessible", "AttributeDataType": "bool", "Expected": false, "Actual": db.config.publicly_accessible }
 }
-

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}gaurdDutyDisabled[retVal] {
   duty := input.aws_guardduty_detector[_]

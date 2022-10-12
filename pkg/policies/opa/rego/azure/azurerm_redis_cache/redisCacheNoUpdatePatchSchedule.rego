@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}redisCacheNoUpdatePatchSchedule[retVal] {
     redis := input.azurerm_redis_cache[_]

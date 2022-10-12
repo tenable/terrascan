@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}elbInstanceProtocolNotSecured[retVal] {
     elb = input.aws_elb[_]

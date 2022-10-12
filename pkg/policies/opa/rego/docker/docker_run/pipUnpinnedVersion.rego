@@ -1,22 +1,22 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]
 {
     run := input.docker_run[_]
     config := run.config
-    
+
     contains(config, ["pip install", "pip3 install"][_])
     contains(config, "--upgrade")
     cleanString := trim_space(split(config, "--upgrade")[1])
     packages := split(cleanString, " ")
     pack := packages[_]
-    not withVersion(pack)  
+    not withVersion(pack)
 }
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]
 {
     run := input.docker_run[_]
-    config := run.config  
+    config := run.config
     contains(config, ["pip install", "pip3 install"][_])
     not contains(config, "--")
     cleanString := trim_space(split(config, "install")[1])
@@ -35,4 +35,3 @@ withVersion(pack) {
 withVersion(pack) {
 	re_match("[A-Za-z0-9_-]+=(.+)", pack)
 }
-

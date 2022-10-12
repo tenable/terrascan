@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}cloudTrailLogValidationDisabled[cloudtrail.id] {
     cloudtrail := input.aws_cloudtrail[_]

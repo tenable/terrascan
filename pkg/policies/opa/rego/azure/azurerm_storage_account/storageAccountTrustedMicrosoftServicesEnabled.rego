@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}storageAccountTrustedMicrosoftServicesEnabled[retVal] {
   storage_account := input.azurerm_storage_account[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 dnsStateIsNotOn[dnsconfig.id] {
   dnsconfig := input.google_dns_managed_zone[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}atRestNotEncryptedElasticCache[replication_grp.id] {
     replication_grp := input.aws_elasticache_replication_group[_]

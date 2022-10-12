@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}noPasswordPolicyEnabled[result.retVal] {
     policy := input.aws_iam_user_login_profile[_]

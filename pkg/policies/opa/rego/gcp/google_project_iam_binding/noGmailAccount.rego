@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 noGmailAccount[member.id] {
   member := input.google_project_iam_binding[_]

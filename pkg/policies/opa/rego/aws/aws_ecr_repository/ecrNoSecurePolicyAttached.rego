@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}ecrNoSecurePolicyAttached[ecr_repo.id] {
 	ecr_repo := input.aws_ecr_repository[_]

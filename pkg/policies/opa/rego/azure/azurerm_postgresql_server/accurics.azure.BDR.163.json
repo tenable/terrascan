@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure that Geo Redundant Backups is enabled on PostgreSQL",
-    "reference_id": "accurics.azure.BDR.163",
+    "reference_id": "tenable.azure.BDR.163",
     "category": "Resilience",
     "version": 2,
     "id": "AC_AZURE_0407"

@@ -6,7 +6,7 @@
     "template_args": null,
     "severity": "MEDIUM",
     "description": "Ensure that corporate login credentials are used instead of Gmail accounts.",
-    "reference_id": "accurics.gcp.IAM.150",
+    "reference_id": "tenable.gcp.IAM.150",
     "category": "Identity and Access Management",
     "version": 1,
     "id": "AC_GCP_0008"

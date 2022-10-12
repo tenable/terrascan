@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}{{.name}}{{.suffix}}[managed_disk.id] {
     managed_disk := input.azurerm_managed_disk[_]

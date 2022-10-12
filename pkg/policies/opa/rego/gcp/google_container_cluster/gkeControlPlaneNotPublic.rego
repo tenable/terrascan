@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 gkeControlPlaneNotPublic[api.id] {
     api := input.google_container_cluster[_]

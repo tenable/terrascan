@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.name}}[api.id] {
     api := array.concat(input.google_compute_instance, input.google_compute_project_metadata)[_]

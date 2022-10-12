@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 postgreSqlLogsEnabled[api.id] {
     api := input.azurerm_postgresql_configuration[_]

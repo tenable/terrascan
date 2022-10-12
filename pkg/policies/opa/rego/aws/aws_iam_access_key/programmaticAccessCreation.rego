@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}programmaticAccessCreation[retVal] {
     access := input.aws_iam_access_key[_]

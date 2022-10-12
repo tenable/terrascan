@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}keyVaultAuditLoggingEnabled[retVal] {
   kv := input.azurerm_key_vault[_]

@@ -1,4 +1,4 @@
-package accurics
+package tenable
 
 {{.prefix}}ecrmaketagsimmutable[con.id]{
     con = input.aws_ecr_repository[_]
