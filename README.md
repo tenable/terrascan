@@ -82,6 +82,14 @@ yay -S terrascan
 $ brew install terrascan
 ```
 
+#### Install on Windows via Chocolatey
+
+[Chocolatey](https://community.chocolatey.org) users can install by:
+
+```powershell
+choco install terrascan
+```
+
 #### Docker image
 
 Terrascan is also available as a Docker image and can be used as follows
