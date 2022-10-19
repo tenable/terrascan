@@ -1,13 +1,15 @@
 {
-    "name": "dbInstanceLoggingDisabled",
-    "file": "dbInstanceLoggingDisabled.rego",
+    "name": "rdsLogExportDisabled",
+    "file": "rdsLogExportDisabled.rego",
     "policy_type": "aws",
     "resource_type": "aws_db_instance",
     "template_args": {
-        "prefix": ""
+        "prefix": "",
+        "name": "rdsLogExportDisabled",
+        "suffix": ""
     },
     "severity": "MEDIUM",
-    "description": "Ensure AWS RDS instances have logging enabled.",
+    "description": "Ensure CloudWatch logging is enabled for AWS DB instances",
     "reference_id": "AWS.ADI.LM.MEDIUM.0076",
     "category": "Logging and Monitoring",
     "id": "AC_AWS_0454",
