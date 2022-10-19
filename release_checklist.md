@@ -9,7 +9,7 @@ make cicd
 ```
 
 ### Bump version in source code
-Once tests look clean, edit `pkg/version/version.go` and update the version number around line 20.
+Once tests look clean, edit `pkg/version/version.go` and update the version number around line 22.
 
 ### Update Changelog
 Running the following command will generate new entries in `CHANGELOG.md` since _since-tag_. They will be placed in the changelog file under a heading related to _future-release_. In the example below, changelogs will be generated for any changes since the `v1.4.0` tag, and placed under a section titled *v1.5.0*.
