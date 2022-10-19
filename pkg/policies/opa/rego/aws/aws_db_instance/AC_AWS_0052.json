@@ -1,0 +1,17 @@
+{
+    "name": "rdsBackupDisabled",
+    "file": "rdsBackupDisabled.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_db_instance",
+    "template_args": {
+        "prefix": "",
+        "name": "rdsBackupDisabled",
+        "suffix": ""
+    },
+    "severity": "HIGH",
+    "description": "Ensure automated backups are enabled for AWS RDS instances",
+    "reference_id": "AC_AWS_0052",
+    "category": "Data Protection",
+    "id": "AC_AWS_0052",
+    "version": 2
+}
