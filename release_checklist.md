@@ -43,7 +43,7 @@ Run the commands below to update Brew to the latest Terrascan version. If you ar
 
 ```
 $ export TERRASCAN_VERSION=<release_version_number>
-$ brew bump-formula-pr --no-browse --url https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}')
+$ brew bump-formula-pr --no-browse --url https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz --sha256 $(curl -sL https://github.com/tenable/terrascan/archive/${TERRASCAN_VERSION}.tar.gz | sha256sum | awk '{print $1}') terrascan
 ```
 
 ### Update helm chart and kustomize directory
