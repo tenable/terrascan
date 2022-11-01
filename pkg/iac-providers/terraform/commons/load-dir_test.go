@@ -257,7 +257,7 @@ func TestGetConfigSource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := GetConfigSource(tt.args.remoteURLMapping, tt.args.resourceConfig, tt.args.absRootDir)
+			got, _, err := GetConfigSource(tt.args.remoteURLMapping, tt.args.resourceConfig, tt.args.absRootDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetConfigSource() error = %v, wantErr %v", err, tt.wantErr)
 				return
