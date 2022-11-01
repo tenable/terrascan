@@ -41,6 +41,7 @@ type ResourceConfig struct {
 	MinSeverity         string             `json:"min_severity"`
 	ContainerImages     []ContainerDetails `json:"container_images,omitempty"`
 	InitContainerImages []ContainerDetails `json:"init_container_images,omitempty"`
+	IsRemoteModule      *bool              `json:"is_remote_module,omitempty"`
 }
 
 // ContainerDetails holds information about container name, image and vulberabilities
