@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/sagemaker"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/sagemaker"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // SagemakerNotebookInstanceConfig holds config for SagemakerNotebookInstance
 type SagemakerNotebookInstanceConfig struct {
@@ -33,15 +36,15 @@ type SagemakerNotebookInstanceConfig struct {
 func GetSagemakerNotebookInstanceConfig(n *sagemaker.NotebookInstance) []AWSResourceConfig {
 	cf := SagemakerNotebookInstanceConfig{
 		Config: Config{
-			Name: n.NotebookInstanceName,
+			Name: functions.GetVal(n.NotebookInstanceName),
 			Tags: n.Tags,
 		},
-		Name:                 n.NotebookInstanceName,
+		Name:                 functions.GetVal(n.NotebookInstanceName),
 		RoleARN:              n.RoleArn,
 		InstanceType:         n.InstanceType,
-		KMSKeyID:             n.KmsKeyId,
-		DirectInternetAccess: n.DirectInternetAccess,
-		RootAccess:           n.RootAccess,
+		KMSKeyID:             functions.GetVal(n.KmsKeyId),
+		DirectInternetAccess: functions.GetVal(n.DirectInternetAccess),
+		RootAccess:           functions.GetVal(n.RootAccess),
 	}
 
 	return []AWSResourceConfig{{

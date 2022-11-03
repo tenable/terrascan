@@ -20,7 +20,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v5/cloudformation/iam"
+	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -59,33 +60,33 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 		Metadata: i.AWSCloudFormationMetadata,
 		Resource: IamUserConfig{
 			Config: Config{
-				Name: i.UserName,
+				Name: functions.GetVal(i.UserName),
 				Tags: i.Tags,
 			},
-			UserName: i.UserName,
+			UserName: functions.GetVal(i.UserName),
 		},
 	})
 
 	iamLoginProfileConfig := IamUserLoginProfileConfig{
 		Config: Config{
-			Name: i.UserName,
+			Name: functions.GetVal(i.UserName),
 		},
 	}
 	if i.LoginProfile != nil {
-		iamLoginProfileConfig.PasswordResetRequired = i.LoginProfile.PasswordResetRequired
+		iamLoginProfileConfig.PasswordResetRequired = functions.GetVal(i.LoginProfile.PasswordResetRequired)
 	}
 
 	// add aws_iam_user_login_profile
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Type:     IamUserLoginProfile,
-		Name:     i.UserName,
+		Name:     functions.GetVal(i.UserName),
 		Metadata: i.AWSCloudFormationMetadata,
 		Resource: iamLoginProfileConfig,
 	})
 
 	// add aws_iam_user_policy
 	if i.Policies != nil {
-		for j, policy := range i.Policies {
+		for j, policy := range functions.GetVal(i.Policies) {
 			pc := IamUserPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,

@@ -20,12 +20,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/awslabs/goformation/v5"
-	"github.com/awslabs/goformation/v5/cloudformation"
+	"github.com/awslabs/goformation/v6"
+	"github.com/awslabs/goformation/v6/cloudformation"
 	multierr "github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/mapper"
@@ -38,7 +38,7 @@ import (
 // LoadIacFile loads the specified CFT template file.
 // Note that a single CFT template json file may contain multiple resource definitions.
 func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
-	fileData, err := ioutil.ReadFile(absFilePath)
+	fileData, err := os.ReadFile(absFilePath)
 	if err != nil {
 		zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", absFilePath))
 		return allResourcesConfig, fmt.Errorf("unable to read file %s", absFilePath)
@@ -135,14 +135,14 @@ func (a *CFTV1) cleanTemplate(templateMap map[string]interface{}, absFilePath st
 		resourceData, err := json.Marshal(resourceInfo)
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
+			a.errIacLoadDirs = multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
+			a.errIacLoadDirs = multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 

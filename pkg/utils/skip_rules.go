@@ -94,23 +94,29 @@ func getSkipRuleObject(s string) *output.SkipRule {
 // can be set in annotations for kubernetes manifests and Resource Metadata in AWS cft:
 // k8s:
 // metadata:
-//   annotations:
-//     runterrascan.io/skip: |
-//       [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+//
+//	annotations:
+//	  runterrascan.io/skip: |
+//	    [{"rule": "accurics.kubernetes.IAM.109", "comment": "reason to skip the rule"}]
+//
 // cft:
 // Resource:
-//   myResource:
-//     Metadata:
-//       runterrascan.io/skip: |
-//         [{"rule": "AC_AWS_047", "comment": "reason to skip the rule"}]
+//
+//	myResource:
+//	  Metadata:
+//	    runterrascan.io/skip: |
+//	      [{"rule": "AC_AWS_047", "comment": "reason to skip the rule"}]
+//
 // cft json:
-// "Resource":{
-//   "myResource":{
-//     "Metadata":{
-//        "runterrascan.io/skip": "[{\"rule\":\"AWS.CloudFormation.Medium.0603\"}]"
-//     }
-//   }
-// }
+//
+//	"Resource":{
+//	  "myResource":{
+//	    "Metadata":{
+//	       "runterrascan.io/skip": "[{\"rule\":\"AWS.CloudFormation.Medium.0603\"}]"
+//	    }
+//	  }
+//	}
+//
 // each rule and its optional comment must be a string containing an json array like
 // [{rule: ruleID, comment: reason for skipping}]
 func ReadSkipRulesFromMap(skipRulesMap map[string]interface{}, resourceID string) []output.SkipRule {

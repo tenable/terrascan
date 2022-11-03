@@ -19,7 +19,7 @@ package armv1
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -40,7 +40,7 @@ func (a *ARMV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 		return allResourcesConfig, fmt.Errorf("unsupported file %s", absFilePath)
 	}
 
-	fileData, err := ioutil.ReadFile(absFilePath)
+	fileData, err := os.ReadFile(absFilePath)
 	if err != nil {
 		zap.S().Debug("unable to read file", zap.Error(err), zap.String("file", absFilePath))
 		return allResourcesConfig, fmt.Errorf("unable to read file %s", absFilePath)
@@ -185,7 +185,7 @@ func (a *ARMV1) getLinkedTemplate(config output.ResourceConfig, path string, map
 			// if linked template is relative path
 			if relativePath := convert.ToString(resourceConfig, types.LinkedTemplateRelativePath); relativePath != "" {
 				templatePath := filepath.Join(filepath.Dir(path), relativePath)
-				data, err := ioutil.ReadFile(templatePath)
+				data, err := os.ReadFile(templatePath)
 				if err != nil {
 					zap.S().Debug("error loading linked template", zap.String("path", relativePath), zap.Error(err))
 				}

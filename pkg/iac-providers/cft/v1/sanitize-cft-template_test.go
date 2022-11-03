@@ -18,12 +18,12 @@ package cftv1
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
 
-	"github.com/awslabs/goformation/v5"
+	"github.com/awslabs/goformation/v6"
 )
 
 func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
@@ -56,7 +56,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			a := &CFTV1{}
-			data, err := ioutil.ReadFile(tt.inputFile)
+			data, err := os.ReadFile(tt.inputFile)
 			if err != nil {
 				t.Error(err)
 			}
@@ -79,8 +79,8 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 			}
 
 			_, err = goformation.ParseJSON(resData)
-			if err != nil {
-				t.Error("CFTV1.sanitizeCftTemplate() got error, expected no error")
+			if err == nil {
+				t.Errorf("CFTV1.sanitizeCftTemplate() expected an error")
 			}
 		})
 	}

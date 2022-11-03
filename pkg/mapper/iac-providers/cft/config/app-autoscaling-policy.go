@@ -16,7 +16,10 @@
 
 package config
 
-import "github.com/awslabs/goformation/v5/cloudformation/applicationautoscaling"
+import (
+	"github.com/awslabs/goformation/v6/cloudformation/applicationautoscaling"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
+)
 
 // AppAutoScalingPolicyConfig holds config for AppAutoScalingPolicy
 type AppAutoScalingPolicyConfig struct {
@@ -36,9 +39,9 @@ func GetAppAutoScalingPolicyConfig(a *applicationautoscaling.ScalingPolicy) []AW
 		},
 		Name:              a.PolicyName,
 		PolicyType:        a.PolicyType,
-		ResourceID:        a.ResourceId,
-		ScalableDimension: a.ScalableDimension,
-		ServiceNamespace:  a.ServiceNamespace,
+		ResourceID:        functions.GetVal(a.ResourceId),
+		ScalableDimension: functions.GetVal(a.ScalableDimension),
+		ServiceNamespace:  functions.GetVal(a.ServiceNamespace),
 	}
 
 	return []AWSResourceConfig{{

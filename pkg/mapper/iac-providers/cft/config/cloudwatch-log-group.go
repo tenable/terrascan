@@ -17,7 +17,8 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/logs"
+	"github.com/awslabs/goformation/v6/cloudformation/logs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // LogCloudWatchGroupConfig holds config for aws_cloudwatch_log_group
@@ -32,11 +33,11 @@ type LogCloudWatchGroupConfig struct {
 func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 	cf := LogCloudWatchGroupConfig{
 		Config: Config{
-			Name: r.LogGroupName,
+			Name: functions.GetVal(r.LogGroupName),
 		},
-		LogGroupName:    r.LogGroupName,
-		KmsKeyID:        r.KmsKeyId,
-		RetentionInDays: r.RetentionInDays,
+		LogGroupName:    functions.GetVal(r.LogGroupName),
+		KmsKeyID:        functions.GetVal(r.KmsKeyId),
+		RetentionInDays: functions.GetVal(r.RetentionInDays),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

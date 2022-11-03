@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,7 +56,7 @@ type TerraformInstalledModuleMetaData struct {
 	Dir        string `json:"Dir"`
 }
 
-//TerraformModuleManifest holds details of all modules downloaded by terraform
+// TerraformModuleManifest holds details of all modules downloaded by terraform
 type TerraformModuleManifest struct {
 	Modules []TerraformInstalledModuleMetaData `json:"Modules"`
 }
@@ -210,11 +210,15 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				// resolve references
 				resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
 
+				var isRemoteModule bool
 				// source file path
-				resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
+				resourceConfig.Source, isRemoteModule, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
 				if err != nil {
 					t.addError(err.Error(), dir)
 					continue
+				}
+				if isRemoteModule {
+					resourceConfig.IsRemoteModule = &isRemoteModule
 				}
 
 				// tf plan directory relative path
@@ -333,12 +337,16 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 
 			// resolve references
 			resourceConfig.Config = r.ResolveRefs(resourceConfig.Config.(jsonObj))
-
+			var isRemoteModule bool
 			// source file path
-			resourceConfig.Source, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
+			resourceConfig.Source, isRemoteModule, err = GetConfigSource(remoteURLMapping, resourceConfig, t.absRootDir)
 			if err != nil {
 				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
+			}
+
+			if isRemoteModule {
+				resourceConfig.IsRemoteModule = &isRemoteModule
 			}
 
 			// add tf plan directory relative path
@@ -490,29 +498,38 @@ func GetRemoteLocation(cache map[string]string, resourcePath string) (remoteURL,
 }
 
 // GetConfigSource - get the source path for the resource
-func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.ResourceConfig, absRootDir string) (string, error) {
+func GetConfigSource(remoteURLMapping map[string]string, resourceConfig output.ResourceConfig, absRootDir string) (string, bool, error) {
 	var (
-		source string
-		err    error
-		rel    string
+		source   string
+		err      error
+		rel      string
+		isRemote bool
 	)
+
 	// Get source path if remote module used
 	remoteURL, tempDir := GetRemoteLocation(remoteURLMapping, resourceConfig.Source)
 	if remoteURL != "" {
 		rel, err = filepath.Rel(tempDir, resourceConfig.Source)
 		if err != nil {
 			errMessage := fmt.Sprintf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
-			return source, errors.New(errMessage)
+			return source, false, errors.New(errMessage)
 		}
-		source = filepath.Join(filepath.Clean(remoteURL), rel)
+		isRemote = true
+
+		source = filepath.Join(url.PathEscape(remoteURL), rel)
+		source, err = url.PathUnescape(source)
+		if err != nil {
+			errMessage := fmt.Sprintf("failed to get remote resource's %s filepath: %v", resourceConfig.Name, err)
+			return source, false, errors.New(errMessage)
+		}
 	} else {
 		// source file path
 		source, err = filepath.Rel(absRootDir, resourceConfig.Source)
 		if err != nil {
-			return source, err
+			return source, false, err
 		}
 	}
-	return source, nil
+	return source, isRemote, nil
 }
 
 // GetRemoteModuleIfPresentInTerraformSrc - Gets the remote module if present in terraform init cache
@@ -531,7 +548,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := ioutil.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {
@@ -557,7 +574,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 	return
 }
 
-//versionSatisfied - check version in terraform init cache satisfies the required version constraints
+// versionSatisfied - check version in terraform init cache satisfies the required version constraints
 func versionSatisfied(foundversion string, requiredVersion hclConfigs.VersionConstraint) bool {
 	currentVersion, err := version.NewVersion(foundversion)
 	if err != nil {

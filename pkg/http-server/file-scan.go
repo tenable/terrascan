@@ -19,7 +19,7 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"path"
@@ -77,7 +77,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 
 	// Create a temporary file within temp directory
 	tempFileTemplate := fmt.Sprintf("terrascan-*%s", fileExtension)
-	tempFile, err := ioutil.TempFile("", tempFileTemplate)
+	tempFile, err := os.CreateTemp("", tempFileTemplate)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to create temp file. error: '%v'", err)
 		zap.S().Error(errMsg)
@@ -88,7 +88,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	zap.S().Debugf("create temp config file at '%s'", tempFile.Name())
 
 	// read all of the contents of uploaded file
-	fileBytes, err := ioutil.ReadAll(file)
+	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to read uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)

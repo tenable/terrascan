@@ -19,7 +19,8 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v5/cloudformation/efs"
+	"github.com/awslabs/goformation/v6/cloudformation/efs"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -48,8 +49,8 @@ func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 	resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 		Metadata: f.AWSCloudFormationMetadata,
 		Resource: EfsFileSystemConfig{
-			KmsKeyID:  f.KmsKeyId,
-			Encrypted: f.Encrypted,
+			KmsKeyID:  functions.GetVal(f.KmsKeyId),
+			Encrypted: functions.GetVal(f.Encrypted),
 		},
 	})
 

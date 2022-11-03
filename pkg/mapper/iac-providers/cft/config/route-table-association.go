@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v5/cloudformation/ec2"
+	"github.com/awslabs/goformation/v6/cloudformation/ec2"
 )
 
 // RouteTableAssociationConfig holds config for aws_route_table_association

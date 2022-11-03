@@ -19,7 +19,7 @@ package tfplan
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
@@ -44,7 +44,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	zap.S().Debug("processing tfplan file")
 
 	// read tfplan json file
-	tfjson, err := ioutil.ReadFile(absFilePath)
+	tfjson, err := os.ReadFile(absFilePath)
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to read tfplan JSON file. error: '%v'", err)
 		zap.S().Debug(errMsg)
