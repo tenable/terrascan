@@ -24,9 +24,8 @@ const violationTemplate = `{
             {
               "tool": {
                 "driver": {
-                  "name": "terrascan",
-                  "version": "%s",
                   "informationUri": "https://github.com/tenable/terrascan",
+                  "name": "terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
@@ -39,12 +38,14 @@ const violationTemplate = `{
                         "severity": "HIGH"
                       }
                     }
-                  ]
+                  ],
+                  "version": "%s"
                 }
               },
               "results": [
                 {
                   "ruleId": "AWS.S3Bucket.DS.High.1043",
+                  "ruleIndex": 0,
                   "level": "error",
                   "message": {
                     "text": "S3 bucket Access is allowed to all AWS Account Users."
@@ -82,9 +83,10 @@ var expectedSarifOutput2 = fmt.Sprintf(`{
             {
               "tool": {
                 "driver": {
+                  "informationUri": "https://github.com/tenable/terrascan",
                   "name": "terrascan",
-                  "version": "%s",
-                  "informationUri": "https://github.com/tenable/terrascan"
+                  "rules": [],
+                  "version": "%s"
                 }
               },
               "results": []
@@ -99,9 +101,8 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
             {
               "tool": {
                 "driver": {
-                  "name": "terrascan",
-                  "version": "%s",
                   "informationUri": "https://github.com/tenable/terrascan",
+                  "name": "terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
@@ -114,9 +115,59 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
                         "severity": "HIGH"
                       }
                     }
-                  ]
+                  ],
+                  "version": "%s"
                 }
               },
+              "results": []
+            }
+          ]
+        }`, version.GetNumeric())
+
+var expectedSarifOutput4 = fmt.Sprintf(`{
+          "version": "2.1.0",
+          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "runs": [
+            {
+              "tool": {
+                "driver": {
+                  "informationUri": "https://github.com/tenable/terrascan",
+                  "name": "terrascan",
+                  "rules": [
+                    {
+                      "id": "AWS.S3Bucket.DS.High.1043",
+                      "name": "s3EnforceUserACL",
+                      "shortDescription": {
+                        "text": "S3 bucket Access is allowed to all AWS Account Users."
+                      },
+                      "properties": {
+                        "category": "S3",
+                        "severity": "HIGH"
+                      }
+                    }
+                  ],
+                  "version": "%s"
+                }
+              },
+              "invocations": [
+                {
+                  "executionSuccessful": true,
+                  "toolExecutionNotifications": [
+                    {
+                      "level": "warning",
+                      "message": {
+                        "text": "kustomization.y(a)ml file not found in the directory test/e2e/test_data/iac/aws/aws_db_instance_violation"
+                      }
+                    },
+                    {
+                      "level": "warning",
+                      "message": {
+                        "text": "no helm charts found in directory test/e2e/test_data/iac/aws/aws_db_instance_violation"
+                      }
+                    }
+                  ]
+                }
+              ],
               "results": []
             }
           ]
@@ -149,6 +200,11 @@ func TestSarifWriter(t *testing.T) {
 			name:           "Human Readable Writer: With PassedRules",
 			input:          outputWithPassedRules,
 			expectedOutput: expectedSarifOutput3,
+		},
+		{
+			name:           "Human Readable Writer: with directory scan error",
+			input:          outputWithDirScanErrors,
+			expectedOutput: expectedSarifOutput4,
 		},
 	}
 
