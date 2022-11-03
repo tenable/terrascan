@@ -79,8 +79,8 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 			}
 
 			_, err = goformation.ParseJSON(resData)
-			if err == nil {
-				t.Errorf("CFTV1.sanitizeCftTemplate() expected an error")
+			if err != nil {
+				t.Errorf("CFTV1.sanitizeCftTemplate() parsing error error = %v, wantError: %v", err, nil)
 			}
 		})
 	}
