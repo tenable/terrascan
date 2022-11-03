@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/apigatewayv2"
+	"github.com/awslabs/goformation/v7/cloudformation/apigatewayv2"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -55,10 +55,10 @@ func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 	if a.CorsConfiguration != nil {
 		corsConfigData = make([]CorsConfigurationBlock, 1)
 		corsConfigData[0].AllowCredentials = functions.GetVal(a.CorsConfiguration.AllowCredentials)
-		corsConfigData[0].AllowHeaders = functions.GetVal(a.CorsConfiguration.AllowHeaders)
-		corsConfigData[0].AllowMethods = functions.GetVal(a.CorsConfiguration.AllowMethods)
-		corsConfigData[0].AllowOrigins = functions.GetVal(a.CorsConfiguration.AllowOrigins)
-		corsConfigData[0].ExposeHeaders = functions.GetVal(a.CorsConfiguration.ExposeHeaders)
+		corsConfigData[0].AllowHeaders = a.CorsConfiguration.AllowHeaders
+		corsConfigData[0].AllowMethods = a.CorsConfiguration.AllowMethods
+		corsConfigData[0].AllowOrigins = a.CorsConfiguration.AllowOrigins
+		corsConfigData[0].ExposeHeaders = a.CorsConfiguration.ExposeHeaders
 		corsConfigData[0].MaxAge = functions.GetVal(a.CorsConfiguration.MaxAge)
 	}
 

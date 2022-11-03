@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v6/cloudformation/ecs"
+	"github.com/awslabs/goformation/v7/cloudformation/ecs"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -63,11 +63,11 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 	if t.ContainerDefinitions != nil {
 		// add container_definitions as a json string with mapped values
 		cDefs := make([]ContainerDefinitionConfig, 0)
-		for _, cDef := range *t.ContainerDefinitions {
+		for _, cDef := range t.ContainerDefinitions {
 			// add environment kn pairs
 			if cDef.Environment != nil {
 				env := make([]EnvironmentConfig, 0)
-				for _, kvPair := range functions.GetVal(cDef.Environment) {
+				for _, kvPair := range cDef.Environment {
 					env = append(env, EnvironmentConfig{
 						Name: functions.GetVal(kvPair.Name),
 					})
@@ -85,7 +85,7 @@ func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 
 	if t.Volumes != nil {
 		volumes := make([]VolumeConfig, 0)
-		for _, volume := range functions.GetVal(t.Volumes) {
+		for _, volume := range t.Volumes {
 			if volume.EFSVolumeConfiguration != nil {
 				volumes = append(volumes, VolumeConfig{
 					EfsVolumeConfiguration: EfsVolumeConfig{

@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v6/cloudformation/secretsmanager"
+	"github.com/awslabs/goformation/v7/cloudformation/secretsmanager"
 )
 
 // SecretsManagerSecretPolicyConfig holds config for aws_secretsmanager_secret_policy

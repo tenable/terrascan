@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/backup"
+	"github.com/awslabs/goformation/v7/cloudformation/backup"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

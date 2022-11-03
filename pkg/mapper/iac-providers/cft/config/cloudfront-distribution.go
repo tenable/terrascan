@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/cloudfront"
+	"github.com/awslabs/goformation/v7/cloudformation/cloudfront"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -58,7 +58,7 @@ func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceCo
 	}
 	if d.DistributionConfig.CacheBehaviors != nil {
 		orderedCacheBehaviors := make([]map[string]interface{}, 0)
-		for _, cacheBehaviour := range *d.DistributionConfig.CacheBehaviors {
+		for _, cacheBehaviour := range d.DistributionConfig.CacheBehaviors {
 			orderedCacheBehavior := make(map[string]interface{})
 			orderedCacheBehavior["viewer_protocol_policy"] = cacheBehaviour.ViewerProtocolPolicy
 			orderedCacheBehaviors = append(orderedCacheBehaviors, orderedCacheBehavior)

@@ -43,7 +43,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moby/buildkit v0.8.3
 	github.com/onsi/ginkgo v1.16.4
-	github.com/onsi/gomega v1.20.2
+	github.com/onsi/gomega v1.22.1
 	github.com/open-policy-agent/opa v0.22.0
 	github.com/owenrumney/go-sarif/v2 v2.1.2
 	github.com/pelletier/go-toml v1.9.3
@@ -69,7 +69,7 @@ require (
 	sigs.k8s.io/kustomize/kyaml v0.11.0
 )
 
-require github.com/awslabs/goformation/v6 v6.10.0
+require github.com/awslabs/goformation/v7 v7.0.5
 
 require (
 	cloud.google.com/go/storage v1.10.0 // indirect

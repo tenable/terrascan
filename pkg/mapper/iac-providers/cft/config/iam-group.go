@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/awslabs/goformation/v7/cloudformation/iam"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -47,7 +47,7 @@ func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 	// aws_iam_role_policy as a SubResource
 	policyConfigs := make([]AWSResourceConfig, 0)
 	if r.Policies != nil {
-		for i, policy := range functions.GetVal(r.Policies) {
+		for i, policy := range r.Policies {
 			pc := IamGroupPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,

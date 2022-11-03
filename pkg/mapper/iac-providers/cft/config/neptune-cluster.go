@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/neptune"
+	"github.com/awslabs/goformation/v7/cloudformation/neptune"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -35,7 +35,7 @@ func GetNeptuneClusterConfig(d *neptune.DBCluster) []AWSResourceConfig {
 			Tags: d.Tags,
 		},
 		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
-		EnableCloudwatchLogsExports: functions.GetVal(d.EnableCloudwatchLogsExports),
+		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,

@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/awslabs/goformation/v6/cloudformation/lambda"
-	"github.com/awslabs/goformation/v6/cloudformation/serverless"
+	"github.com/awslabs/goformation/v7/cloudformation/lambda"
+	"github.com/awslabs/goformation/v7/cloudformation/serverless"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -156,15 +156,15 @@ func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 	if lf.VpcConfig != nil {
 		vpcConfig = make([]VPCConfigBlock, 1)
 
-		vpcConfig[0].SecurityGroupIDs = *lf.VpcConfig.SecurityGroupIds
-		vpcConfig[0].SubnetIDs = *lf.VpcConfig.SubnetIds
+		vpcConfig[0].SecurityGroupIDs = lf.VpcConfig.SecurityGroupIds
+		vpcConfig[0].SubnetIDs = lf.VpcConfig.SubnetIds
 	}
 
 	var environment []EnvironmentBlock
 	if lf.Environment != nil {
 		environment = make([]EnvironmentBlock, 1)
 
-		environment[0].Variables = *lf.Environment.Variables
+		environment[0].Variables = lf.Environment.Variables
 	}
 
 	cf := LambdaFunctionConfig{

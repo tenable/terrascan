@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v7/cloudformation/apigateway"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -43,8 +43,8 @@ func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 	// despite having fixed keys and not more than one possible value
 	ec := make(map[string][]string)
 	if a.EndpointConfiguration != nil {
-		ec["types"] = functions.GetVal(a.EndpointConfiguration.Types)
-		ec["vpc_endpoint_ids"] = functions.GetVal(a.EndpointConfiguration.VpcEndpointIds)
+		ec["types"] = a.EndpointConfiguration.Types
+		ec["vpc_endpoint_ids"] = a.EndpointConfiguration.VpcEndpointIds
 	}
 	cf.EndpointConfiguration = []map[string][]string{ec}
 

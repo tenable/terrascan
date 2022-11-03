@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/elasticache"
+	"github.com/awslabs/goformation/v7/cloudformation/elasticache"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

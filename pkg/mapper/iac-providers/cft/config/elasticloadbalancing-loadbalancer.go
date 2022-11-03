@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancing"
+	"github.com/awslabs/goformation/v7/cloudformation/elasticloadbalancing"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -63,12 +63,10 @@ type ELBListenerConfig struct {
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
 func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
-	policies := functions.GetVal(e.Policies)
+	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
+	awsconfig := make([]AWSResourceConfig, len(e.Policies))
 
-	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(policies))
-	awsconfig := make([]AWSResourceConfig, len(policies))
-
-	for i, policy := range policies {
+	for i, policy := range e.Policies {
 		indexedElbName := fmt.Sprintf("%s%d", elbname, i)
 
 		elbpolicies[i].LoadBalancerName = indexedElbName
