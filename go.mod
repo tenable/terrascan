@@ -43,7 +43,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moby/buildkit v0.8.3
 	github.com/onsi/ginkgo v1.16.4
-	github.com/onsi/gomega v1.20.2
+	github.com/onsi/gomega v1.22.1
 	github.com/open-policy-agent/opa v0.22.0
 	github.com/owenrumney/go-sarif v1.0.12
 	github.com/pelletier/go-toml v1.9.3
@@ -69,7 +69,7 @@ require (
 	sigs.k8s.io/kustomize/kyaml v0.11.0
 )
 
-require github.com/awslabs/goformation/v6 v6.10.0
+require github.com/awslabs/goformation/v7 v7.0.5
 
 require (
 	cloud.google.com/go/storage v1.10.0 // indirect
@@ -177,7 +177,6 @@ require (
 	go.uber.org/atomic v1.6.0 // indirect
 	go.uber.org/multierr v1.5.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20220218215828-6cf2b201936e // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect

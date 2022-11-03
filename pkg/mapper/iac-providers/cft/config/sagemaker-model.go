@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/sagemaker"
+	"github.com/awslabs/goformation/v7/cloudformation/sagemaker"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -49,8 +49,8 @@ type SagemakerModelConfig struct {
 func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	var containerBlock []ContainerBlock
 	if m.Containers != nil {
-		containerBlock = make([]ContainerBlock, len(*m.Containers))
-		for i, container := range *m.Containers {
+		containerBlock = make([]ContainerBlock, len(m.Containers))
+		for i, container := range m.Containers {
 			containerBlock[i] = getContainer(container)
 		}
 	}

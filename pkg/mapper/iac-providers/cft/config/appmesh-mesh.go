@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/appmesh"
+	"github.com/awslabs/goformation/v7/cloudformation/appmesh"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

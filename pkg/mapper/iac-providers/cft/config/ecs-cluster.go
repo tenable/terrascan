@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/ecs"
+	"github.com/awslabs/goformation/v7/cloudformation/ecs"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -69,14 +69,14 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	var clusterSettingsData []ClusterSettingsBlock
 	var capacityProviderStrategyData []CapacityProviderStrategyBlock
 
-	clusterSettings := functions.GetVal(e.ClusterSettings)
+	clusterSettings := e.ClusterSettings
 	clusterSettingsData = make([]ClusterSettingsBlock, len(clusterSettings))
 	for i, clusterSetting := range clusterSettings {
 		clusterSettingsData[i].Name = functions.GetVal(clusterSetting.Name)
 		clusterSettingsData[i].Value = functions.GetVal(clusterSetting.Value)
 	}
 
-	defaultCapacityProviderStrategy := functions.GetVal(e.DefaultCapacityProviderStrategy)
+	defaultCapacityProviderStrategy := e.DefaultCapacityProviderStrategy
 	capacityProviderStrategyData = make([]CapacityProviderStrategyBlock, len(defaultCapacityProviderStrategy))
 	for i, defaultCapacityProviderStrategy := range defaultCapacityProviderStrategy {
 		capacityProviderStrategyData[i].Base = functions.GetVal(defaultCapacityProviderStrategy.Base)

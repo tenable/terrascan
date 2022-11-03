@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v6/cloudformation/efs"
+	"github.com/awslabs/goformation/v7/cloudformation/efs"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

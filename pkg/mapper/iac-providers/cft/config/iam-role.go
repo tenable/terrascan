@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/awslabs/goformation/v7/cloudformation/iam"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -66,7 +66,7 @@ func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	// aws_iam_role_policy as a SubResource
 	// multiple Policies can be defined for a resource in cft
 	if r.Policies != nil {
-		for i, policy := range functions.GetVal(r.Policies) {
+		for i, policy := range r.Policies {
 			pc := IamRolePolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,

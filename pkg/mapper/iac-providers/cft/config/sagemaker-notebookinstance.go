@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/sagemaker"
+	"github.com/awslabs/goformation/v7/cloudformation/sagemaker"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

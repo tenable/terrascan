@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/eks"
+	"github.com/awslabs/goformation/v7/cloudformation/eks"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -45,7 +45,7 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		vpcConfig := make([]EKSVPCConfigBlock, 1)
 
 		vpcConfig[0].SubnetIDs = c.ResourcesVpcConfig.SubnetIds
-		vpcConfig[0].SecurityGroupIDs = functions.GetVal(c.ResourcesVpcConfig.SecurityGroupIds)
+		vpcConfig[0].SecurityGroupIDs = c.ResourcesVpcConfig.SecurityGroupIds
 		vpcConfig[0].EndpointPrivateAccess = functions.GetVal(c.ResourcesVpcConfig.EndpointPrivateAccess)
 		vpcConfig[0].EndpointPublicAccess = functions.GetVal(c.ResourcesVpcConfig.EndpointPublicAccess)
 	}
@@ -59,7 +59,7 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		VPCConfig: vpcConfig,
 	}
 
-	enabledTypes := functions.GetVal(c.Logging.ClusterLogging.EnabledTypes)
+	enabledTypes := c.Logging.ClusterLogging.EnabledTypes
 	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(enabledTypes) > 0 {
 		enabledClusterLogTypes := make([]string, len(enabledTypes))
 		for i, enabledType := range enabledTypes {

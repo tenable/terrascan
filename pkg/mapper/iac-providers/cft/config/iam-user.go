@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/awslabs/goformation/v6/cloudformation/iam"
+	"github.com/awslabs/goformation/v7/cloudformation/iam"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -86,7 +86,7 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 
 	// add aws_iam_user_policy
 	if i.Policies != nil {
-		for j, policy := range functions.GetVal(i.Policies) {
+		for j, policy := range i.Policies {
 			pc := IamUserPolicyConfig{
 				Config: Config{
 					Name: policy.PolicyName,

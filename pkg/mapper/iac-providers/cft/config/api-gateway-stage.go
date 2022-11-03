@@ -19,7 +19,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/awslabs/goformation/v6/cloudformation/apigateway"
+	"github.com/awslabs/goformation/v7/cloudformation/apigateway"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -75,7 +75,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	// add aws_api_gateway_method_settings
 	// multiple MethodSettings can be configured for same resource in cft
 	if s.MethodSettings != nil {
-		for i, settings := range functions.GetVal(s.MethodSettings) {
+		for i, settings := range s.MethodSettings {
 			msc := MethodSettingConfig{
 				Config: Config{
 					Name: functions.GetVal(s.StageName),

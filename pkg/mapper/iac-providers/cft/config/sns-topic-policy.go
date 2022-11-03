@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v6/cloudformation/sns"
+	"github.com/awslabs/goformation/v7/cloudformation/sns"
 )
 
 // SnsTopicPolicyConfig holds config for SnsTopicPolicy

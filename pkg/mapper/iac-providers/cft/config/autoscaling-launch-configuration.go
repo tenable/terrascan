@@ -20,7 +20,7 @@ import (
 	"encoding/base64"
 	"unicode"
 
-	"github.com/awslabs/goformation/v6/cloudformation/autoscaling"
+	"github.com/awslabs/goformation/v7/cloudformation/autoscaling"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -51,9 +51,9 @@ type AutoScalingLaunchConfigurationConfig struct {
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
 	var ebsBlockDevice []EbsBlockDeviceBlock
 	if l.BlockDeviceMappings != nil {
-		blockDeviceMappingLen := len(functions.GetVal(l.BlockDeviceMappings))
+		blockDeviceMappingLen := len(l.BlockDeviceMappings)
 		ebsBlockDevice = make([]EbsBlockDeviceBlock, blockDeviceMappingLen)
-		for i, blockDeviceMapping := range functions.GetVal(l.BlockDeviceMappings) {
+		for i, blockDeviceMapping := range l.BlockDeviceMappings {
 			if blockDeviceMapping.Ebs != nil {
 				ebsBlockDevice[i].Encrypted = functions.GetVal(blockDeviceMapping.Ebs.Encrypted)
 				ebsBlockDevice[i].DeleteOnTermination = functions.GetVal(blockDeviceMapping.Ebs.DeleteOnTermination)

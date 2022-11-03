@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/awslabs/goformation/v7/cloudformation/ec2"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/store"
 )
@@ -66,7 +66,7 @@ type EC2InstanceConfig struct {
 
 // GetEC2InstanceConfig returns config for EC2Instance
 func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
-	networkInterfaces := functions.GetVal(i.NetworkInterfaces)
+	networkInterfaces := i.NetworkInterfaces
 
 	nics := make([]NetworkInterfaceBlock, len(networkInterfaces))
 	niconfigs := make([]NetworkInterfaceConfig, len(networkInterfaces))
@@ -110,7 +110,7 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		EBSOptimized:        functions.GetVal(i.EbsOptimized),
 		Monitoring:          functions.GetVal(i.Monitoring),
 		IAMInstanceProfile:  functions.GetVal(i.IamInstanceProfile),
-		VPCSecurityGroupIDs: functions.GetVal(i.SecurityGroupIds),
+		VPCSecurityGroupIDs: i.SecurityGroupIds,
 		NetworkInterface:    nics,
 	}
 
