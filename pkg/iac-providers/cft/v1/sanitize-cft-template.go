@@ -30,11 +30,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Constant names for CFT values
-const (
-	PARAMETERS = "Parameters"
-	RESOURCES  = "Resources"
-)
+// PARAMETERS is a constant to fetch Parameters from CFT
+const PARAMETERS = "Parameters"
+
+// RESOURCES is a constant to fetch Resources from CFT
+const RESOURCES = "Resources"
 
 func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
 	var (
@@ -109,8 +109,8 @@ func removeRefAnchors(data []byte) ([]byte, error) {
 		return nil, fmt.Errorf("error while unmarshalling yaml, error %w", err)
 	}
 
-	cfnJsonMap := anyMapToStringMap(cfnmap)
-	paramsMap, paramsOk := cfnJsonMap[PARAMETERS].(map[string]any)
+	cfnJSONMap := anyMapToStringMap(cfnmap)
+	paramsMap, paramsOk := cfnJSONMap[PARAMETERS].(map[string]any)
 
 	for i := range words {
 		current := strings.ToLower(words[i])
