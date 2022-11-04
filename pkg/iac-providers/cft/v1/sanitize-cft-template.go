@@ -30,8 +30,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Constant names for CFT values
 const (
 	PARAMETERS = "Parameters"
+	RESOURCES  = "Resources"
 )
 
 func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
@@ -79,7 +81,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	// sanitize resources
-	r, ok := templateFileMap["Resources"]
+	r, ok := templateFileMap[RESOURCES]
 	if ok {
 		rMap, ok := r.(map[string]interface{})
 		if ok {
