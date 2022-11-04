@@ -27,6 +27,11 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/policies"
 	"github.com/awslabs/goformation/v7/intrinsics"
 	"go.uber.org/zap"
+	"gopkg.in/yaml.v3"
+)
+
+const (
+	PARAMETERS = "Parameters"
 )
 
 func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
@@ -36,7 +41,10 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	)
 
 	if isYAML {
-		data = removeRefAnchors(data)
+		data, err = removeRefAnchors(data)
+		if err != nil {
+			return nil, err
+		}
 
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
 		intrinsified, err = intrinsics.ProcessYAML(data, nil)
@@ -59,7 +67,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	// sanitize Parameters
-	params, ok := templateFileMap["Parameters"]
+	params, ok := templateFileMap[PARAMETERS]
 	if ok {
 		pMap, ok := params.(map[string]interface{})
 		if ok {
@@ -88,17 +96,38 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	return templateFileMap, nil
 }
 
-func removeRefAnchors(data []byte) []byte {
+func removeRefAnchors(data []byte) ([]byte, error) {
 	const REF = "!ref"
 	strdata := string(data)
 	words := strings.Split(strdata, " ")
 
+	var cfnmap map[any]any
+	err := yaml.Unmarshal(data, &cfnmap)
+	if err != nil {
+		return nil, fmt.Errorf("error while unmarshalling yaml, error %w", err)
+	}
+
+	cfnJsonMap := anyMapToStringMap(cfnmap)
+	paramsMap, paramsOk := cfnJsonMap[PARAMETERS].(map[string]any)
+
 	for i := range words {
 		current := strings.ToLower(words[i])
-		if len(words) != i+1 {
-			next := strings.ToLower(words[i+1])
-			if strings.Contains(current, REF) && strings.Contains(next, "aws::") {
+		if len(words) == i+1 {
+			break
+		}
+
+		if strings.Contains(current, REF) {
+			next := strings.TrimSpace(words[i+1])
+			nextLower := strings.ToLower(words[i+1])
+
+			if strings.Contains(nextLower, "aws::") {
 				continue
+			}
+
+			if paramsOk {
+				if _, ok := paramsMap[next]; ok {
+					continue
+				}
 			}
 		}
 
@@ -108,7 +137,20 @@ func removeRefAnchors(data []byte) []byte {
 	}
 
 	strdata = strings.Join(words, " ")
-	return []byte(strdata)
+	return []byte(strdata), nil
+}
+
+func anyMapToStringMap(cfnmap map[any]any) map[string]any {
+	res := map[string]any{}
+	for k, v := range cfnmap {
+		switch v2 := v.(type) {
+		case map[any]any:
+			res[fmt.Sprint(k)] = anyMapToStringMap(v2)
+		default:
+			res[fmt.Sprint(k)] = v
+		}
+	}
+	return res
 }
 
 func inspectAndSanitizeParameters(p interface{}) {
