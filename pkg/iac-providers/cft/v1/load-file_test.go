@@ -36,7 +36,7 @@ func TestLoadIacFile(t *testing.T) {
 
 	testErrString1 := fmt.Sprintf("unsupported extension for file %s", testFile)
 	testErrString2 := "unable to read file nonexistent.txt"
-	testErrString3 := "invalid YAML template: yaml: line 27: did not find expected alphabetic or numeric character"
+	testErrString3 := "yaml: line 28: did not find expected alphabetic or numeric character"
 
 	validFileConfig := make(map[string][]output.ResourceConfig, 2)
 	validFileConfig["aws_s3_bucket_policy"] = []output.ResourceConfig{{
@@ -88,7 +88,7 @@ func TestLoadIacFile(t *testing.T) {
 			filePath: "nonexistent.txt",
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("error while resolving intrinsic functions, error %w", fmt.Errorf(testErrString3)),
+			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf(testErrString3)),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid file",
