@@ -36,6 +36,8 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	)
 
 	if isYAML {
+		data = removeRefAnchors(data)
+
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
 		intrinsified, err = intrinsics.ProcessYAML(data, nil)
 		if err != nil {
@@ -84,6 +86,29 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	return templateFileMap, nil
+}
+
+func removeRefAnchors(data []byte) []byte {
+	const REF = "!ref"
+	strdata := string(data)
+	words := strings.Split(strdata, " ")
+
+	for i := range words {
+		current := strings.ToLower(words[i])
+		if len(words) != i+1 {
+			next := strings.ToLower(words[i+1])
+			if strings.Contains(current, REF) && strings.Contains(next, "aws::") {
+				continue
+			}
+		}
+
+		if strings.Contains(current, REF) {
+			words[i] = strings.Replace(current, REF, "", 1)
+		}
+	}
+
+	strdata = strings.Join(words, " ")
+	return []byte(strdata)
 }
 
 func inspectAndSanitizeParameters(p interface{}) {
