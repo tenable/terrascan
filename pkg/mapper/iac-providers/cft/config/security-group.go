@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/ec2"
+	"github.com/awslabs/goformation/v7/cloudformation/ec2"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -52,14 +52,14 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	}
 
 	ingresses := make([]IngressEgress, 0)
-	for _, i := range functions.GetVal(s.SecurityGroupIngress) {
+	for _, i := range s.SecurityGroupIngress {
 		ingress := getIngressEgress(i)
 		ingresses = append(ingresses, ingress)
 	}
 	cf.SecurityGroupIngress = ingresses
 
 	egresses := make([]IngressEgress, 0)
-	for _, e := range functions.GetVal(s.SecurityGroupEgress) {
+	for _, e := range s.SecurityGroupEgress {
 		egress := getIngressEgress(e)
 		egresses = append(egresses, egress)
 	}

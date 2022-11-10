@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/rds"
+	"github.com/awslabs/goformation/v7/cloudformation/rds"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -37,8 +37,8 @@ func GetDBEventSubscriptionConfig(d *rds.EventSubscription) []AWSResourceConfig 
 		Config:          Config{},
 		SnsTopicArn:     d.SnsTopicArn,
 		Enabled:         functions.GetVal(d.Enabled),
-		EventCategories: functions.GetVal(d.EventCategories),
-		SourceIds:       functions.GetVal(d.SourceIds),
+		EventCategories: d.EventCategories,
+		SourceIds:       d.SourceIds,
 		SourceType:      functions.GetVal(d.SourceType),
 	}
 

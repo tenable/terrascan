@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/elasticloadbalancingv2"
+	"github.com/awslabs/goformation/v7/cloudformation/elasticloadbalancingv2"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -25,6 +25,7 @@ import (
 type ElasticLoadBalancingV2ListenerConfig struct {
 	Config
 	Protocol      string                `json:"protocol"`
+	Port          int                   `json:"port"`
 	DefaultAction []DefaultActionConfig `json:"default_action"`
 }
 
@@ -36,6 +37,7 @@ type DefaultActionConfig struct {
 // RedirectConfig holds config for redirect attirbute of default_action
 type RedirectConfig struct {
 	Protocol string `json:"protocol"`
+	Port     string `json:"port"`
 }
 
 // GetElasticLoadBalancingV2ListenerConfig returns config for aws_lb_listener
@@ -49,6 +51,7 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 		cf := ElasticLoadBalancingV2ListenerConfig{
 			Config:   Config{},
 			Protocol: functions.GetVal(l.Protocol),
+			Port:     functions.GetVal(l.Port),
 		}
 		if action.RedirectConfig != nil {
 			defaultAction := []DefaultActionConfig{
@@ -56,6 +59,7 @@ func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener)
 					RedirectConfig: []RedirectConfig{
 						{
 							Protocol: functions.GetVal(action.RedirectConfig.Protocol),
+							Port:     functions.GetVal(action.RedirectConfig.Port),
 						},
 					},
 				},

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/cloudtrail"
+	"github.com/awslabs/goformation/v7/cloudformation/cloudtrail"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

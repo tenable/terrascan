@@ -18,9 +18,8 @@ const violationTemplateForGH = `{
             {
               "tool": {
                 "driver": {
-                  "name": "terrascan",
-                  "version": "%s",
                   "informationUri": "https://github.com/tenable/terrascan",
+                  "name": "terrascan",
                   "rules": [
                     {
                       "id": "AWS.S3Bucket.DS.High.1043",
@@ -33,12 +32,14 @@ const violationTemplateForGH = `{
                         "severity": "HIGH"
                       }
                     }
-                  ]
+                  ],
+                  "version": "%s"
                 }
               },
               "results": [
                 {
                   "ruleId": "AWS.S3Bucket.DS.High.1043",
+                  "ruleIndex": 0,
                   "level": "error",
                   "message": {
                     "text": "S3 bucket Access is allowed to all AWS Account Users."
@@ -48,7 +49,7 @@ const violationTemplateForGH = `{
                       "physicalLocation": {
                         "artifactLocation": {
                           "uri": "%s",
-						  "uriBaseId": "test"
+                          "uriBaseId": "test"
                         },
                         "region": {
                           "startLine": 20

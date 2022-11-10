@@ -23,11 +23,18 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/awslabs/goformation/v6/cloudformation"
-	"github.com/awslabs/goformation/v6/cloudformation/policies"
-	"github.com/awslabs/goformation/v6/intrinsics"
+	"github.com/awslabs/goformation/v7/cloudformation"
+	"github.com/awslabs/goformation/v7/cloudformation/policies"
+	"github.com/awslabs/goformation/v7/intrinsics"
 	"go.uber.org/zap"
+	"gopkg.in/yaml.v3"
 )
+
+// PARAMETERS is a constant to fetch Parameters from CFT
+const PARAMETERS = "Parameters"
+
+// RESOURCES is a constant to fetch Resources from CFT
+const RESOURCES = "Resources"
 
 func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
 	var (
@@ -36,6 +43,11 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	)
 
 	if isYAML {
+		data, err = removeRefAnchors(data)
+		if err != nil {
+			return nil, err
+		}
+
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
 		intrinsified, err = intrinsics.ProcessYAML(data, nil)
 		if err != nil {
@@ -57,7 +69,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	// sanitize Parameters
-	params, ok := templateFileMap["Parameters"]
+	params, ok := templateFileMap[PARAMETERS]
 	if ok {
 		pMap, ok := params.(map[string]interface{})
 		if ok {
@@ -69,7 +81,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	// sanitize resources
-	r, ok := templateFileMap["Resources"]
+	r, ok := templateFileMap[RESOURCES]
 	if ok {
 		rMap, ok := r.(map[string]interface{})
 		if ok {
@@ -84,6 +96,63 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 	}
 
 	return templateFileMap, nil
+}
+
+func removeRefAnchors(data []byte) ([]byte, error) {
+	const REF = "!ref"
+	strdata := string(data)
+	words := strings.Split(strdata, " ")
+
+	var cfnmap map[any]any
+	err := yaml.Unmarshal(data, &cfnmap)
+	if err != nil {
+		return nil, fmt.Errorf("error while unmarshalling yaml, error %w", err)
+	}
+
+	cfnJSONMap := anyMapToStringMap(cfnmap)
+	paramsMap, paramsOk := cfnJSONMap[PARAMETERS].(map[string]any)
+
+	for i := range words {
+		current := strings.ToLower(words[i])
+		if len(words) == i+1 {
+			break
+		}
+
+		if strings.Contains(current, REF) {
+			next := strings.TrimSpace(words[i+1])
+			nextLower := strings.ToLower(words[i+1])
+
+			if strings.Contains(nextLower, "aws::") {
+				continue
+			}
+
+			if paramsOk {
+				if _, ok := paramsMap[next]; ok {
+					continue
+				}
+			}
+		}
+
+		if strings.Contains(current, REF) {
+			words[i] = strings.Replace(current, REF, "", 1)
+		}
+	}
+
+	strdata = strings.Join(words, " ")
+	return []byte(strdata), nil
+}
+
+func anyMapToStringMap(cfnmap map[any]any) map[string]any {
+	res := map[string]any{}
+	for k, v := range cfnmap {
+		switch v2 := v.(type) {
+		case map[any]any:
+			res[fmt.Sprint(k)] = anyMapToStringMap(v2)
+		default:
+			res[fmt.Sprint(k)] = v
+		}
+	}
+	return res
 }
 
 func inspectAndSanitizeParameters(p interface{}) {

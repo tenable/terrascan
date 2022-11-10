@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/dms"
+	"github.com/awslabs/goformation/v7/cloudformation/dms"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -56,7 +56,7 @@ func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceCo
 		ReplicationInstanceClass:   r.ReplicationInstanceClass,
 		ReplicationInstanceID:      functions.GetVal(r.ReplicationInstanceIdentifier),
 		ReplicationSubnetGroupID:   functions.GetVal(r.ReplicationSubnetGroupIdentifier),
-		VPCSecurityGroupIDs:        functions.GetVal(r.VpcSecurityGroupIds),
+		VPCSecurityGroupIDs:        r.VpcSecurityGroupIds,
 	}
 
 	return []AWSResourceConfig{{

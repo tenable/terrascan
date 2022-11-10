@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/codebuild"
+	"github.com/awslabs/goformation/v7/cloudformation/codebuild"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -77,7 +77,7 @@ func GetCodebuildProjectConfig(p *codebuild.Project) []AWSResourceConfig {
 		cacheBlock = make([]CacheBlock, 1)
 
 		cacheBlock[0].Type = p.Cache.Type
-		cacheBlock[0].Modes = *p.Cache.Modes
+		cacheBlock[0].Modes = p.Cache.Modes
 	}
 
 	var environmentBlock []CodebuildEnvironmentBlock

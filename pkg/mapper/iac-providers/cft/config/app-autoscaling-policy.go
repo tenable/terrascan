@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/applicationautoscaling"
+	"github.com/awslabs/goformation/v7/cloudformation/applicationautoscaling"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 

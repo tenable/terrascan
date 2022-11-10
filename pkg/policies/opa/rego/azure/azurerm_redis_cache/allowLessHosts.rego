@@ -13,5 +13,5 @@ calculateHosts(val) = ans {
   ipVals := split(val, ".")
   # 2^24 = 16777216, 2^16 = 65536, 2^8 = 256
   # no of hosts in IP p.q.r.s = (p * 2^24) + (q * 2^16) + (r * 2^8) + s
-  ans = (to_number(ipVals[0]) * 16777216) + (to_number(ipVals[1]) * 65536) + (to_number(ipVals[2]) * 256) + to_number(ipVals[3])
+  ans := (to_number(ipVals[0]) * 16777216) + (to_number(ipVals[1]) * 65536) + (to_number(ipVals[2]) * 256) + to_number(ipVals[3])
 }

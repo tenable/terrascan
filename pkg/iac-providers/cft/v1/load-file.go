@@ -24,8 +24,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/awslabs/goformation/v6"
-	"github.com/awslabs/goformation/v6/cloudformation"
+	"github.com/awslabs/goformation/v7"
+	"github.com/awslabs/goformation/v7/cloudformation"
 	multierr "github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/mapper"
@@ -135,14 +135,14 @@ func (a *CFTV1) cleanTemplate(templateMap map[string]interface{}, absFilePath st
 		resourceData, err := json.Marshal(resourceInfo)
 		if err != nil {
 			zap.S().Debug("failed to marshal json for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
+			a.errIacLoadDirs = multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 
 		template, err := goformation.ParseJSON(resourceData)
 		if err != nil {
 			zap.S().Debug("failed to generate template for resource", zap.String("resource", resourceName), zap.Error(err))
-			multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
+			a.errIacLoadDirs = multierr.Append(a.errIacLoadDirs, results.DirScanErr{IacType: "cft", Directory: filepath.Dir(absFilePath), ErrMessage: err.Error()})
 			continue
 		}
 

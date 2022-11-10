@@ -102,7 +102,8 @@ const (
       maxseverity: ""
       minseverity: ""
       containerimages: []
-      initcontainerimages: []`
+      initcontainerimages: []
+      isremotemodule: null`
 
 	scanTestOutputYAML = `results:
     violations:

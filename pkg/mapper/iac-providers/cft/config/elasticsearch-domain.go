@@ -19,7 +19,7 @@ package config
 import (
 	"encoding/json"
 
-	"github.com/awslabs/goformation/v6/cloudformation/elasticsearch"
+	"github.com/awslabs/goformation/v7/cloudformation/elasticsearch"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -74,7 +74,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 
 	if d.LogPublishingOptions != nil {
 		lpConfig := make([]LogPublishingOptionsConfig, 0)
-		for ltype, options := range *d.LogPublishingOptions {
+		for ltype, options := range d.LogPublishingOptions {
 			lpConfig = append(lpConfig, LogPublishingOptionsConfig{
 				Enabled: functions.GetVal(options.Enabled),
 				LogType: ltype,

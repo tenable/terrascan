@@ -5,14 +5,10 @@ package accurics
     checkEncryption(managed_disk.config)
 }
 
-checkEncrytion(inputConfig) {
-    inputConfig.encryption_settings.enabled != true
+checkEncryption(inputConfig) {
+    inputConfig.encryption_settings[_].enabled != true
 }
 
-checkEncryption(inputConfig) {
-    count(inputConfig.encryption_settings) == 0
-}
-
-checkEncryption(inputConfig) {
-    not inputConfig.encryption_settings
+checkEncryption(inputConfig) {    
+    object.get(inputConfig, "encryption_settings", "undefined") == [null, false, "undefined", [], {}][_]
 }

@@ -17,7 +17,7 @@
 package config
 
 import (
-	"github.com/awslabs/goformation/v6/cloudformation/msk"
+	"github.com/awslabs/goformation/v7/cloudformation/msk"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -60,7 +60,7 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 		brokerNodeGroupInfo[0].InstanceType = c.BrokerNodeGroupInfo.InstanceType
 		brokerNodeGroupInfo[0].EksVolumeSize = functions.GetVal(c.BrokerNodeGroupInfo.StorageInfo.EBSStorageInfo.VolumeSize)
 		brokerNodeGroupInfo[0].ClientSubnets = c.BrokerNodeGroupInfo.ClientSubnets
-		brokerNodeGroupInfo[0].SecurityGroups = functions.GetVal(c.BrokerNodeGroupInfo.SecurityGroups)
+		brokerNodeGroupInfo[0].SecurityGroups = c.BrokerNodeGroupInfo.SecurityGroups
 	}
 
 	var encryptionInfo []EncryptionInfoBlock
