@@ -80,15 +80,17 @@ type TerraformDirectoryLoader struct {
 	parser                   *hclConfigs.Parser
 	errIacLoadDirs           *multierror.Error
 	terraformInitModuleCache map[string]TerraformModuleManifest
+	terraformVersion         string
 }
 
 // NewTerraformDirectoryLoader creates a new terraformDirectoryLoader
-func NewTerraformDirectoryLoader(rootDirectory string, options map[string]interface{}) TerraformDirectoryLoader {
+func NewTerraformDirectoryLoader(rootDirectory, terraformVersion string, options map[string]interface{}) TerraformDirectoryLoader {
 	terraformDirectoryLoader := TerraformDirectoryLoader{
 		absRootDir:               rootDirectory,
 		remoteDownloader:         downloader.NewRemoteDownloader(),
 		parser:                   hclConfigs.NewParser(afero.NewOsFs()),
 		terraformInitModuleCache: make(map[string]TerraformModuleManifest),
+		terraformVersion:         terraformVersion,
 	}
 	for key, val := range options {
 		// keeping switch case in case more flags are added
@@ -156,6 +158,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			t.addError(errMessage, dir)
 		}
 
+		// getting provider version for the root module
+		providerVersion := GetModuleProviderVersion(rootMod)
+
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 		// Get the downloader chache
@@ -204,6 +209,13 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 					continue
 				}
 
+				resourceConfig.TerraformVersion = t.terraformVersion
+				resourceConfig.ProviderVersion = providerVersion
+
+				// if root module do not have provider contraints fetch the latest compatible version
+				if resourceConfig.ProviderVersion == "" {
+					resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
+				}
 				// set module name
 				resourceConfig.ModuleName = current.Name
 
