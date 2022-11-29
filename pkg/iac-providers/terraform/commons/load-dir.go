@@ -296,6 +296,9 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		t.addError(errMessage, t.absRootDir)
 	}
 
+	// getting provider version for the root module
+	providerVersion := GetModuleProviderVersion(rootMod)
+
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
@@ -355,6 +358,14 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			if err != nil {
 				errMessage := fmt.Sprintf("failed to get resource's filepath: %v", err)
 				return allResourcesConfig, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: errMessage})
+			}
+
+			resourceConfig.TerraformVersion = t.terraformVersion
+			resourceConfig.ProviderVersion = providerVersion
+
+			// if root module do not have provider contraints fetch the latest compatible version
+			if resourceConfig.ProviderVersion == "" {
+				resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
 			}
 
 			if isRemoteModule {

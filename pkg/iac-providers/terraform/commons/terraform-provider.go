@@ -130,7 +130,9 @@ func GetModuleProviderVersion(m *configs.Module) string {
 		return version
 	}
 	for _, requiredProvider := range m.ProviderRequirements.RequiredProviders {
-		version = requiredProvider.Requirement.Required[0].String()
+		if requiredProvider != nil && len(requiredProvider.Requirement.Required) > 0 {
+			version = requiredProvider.Requirement.Required[0].String()
+		}
 	}
 
 	// trim version string
@@ -146,11 +148,13 @@ func GetModuleProviderVersion(m *configs.Module) string {
 // if the 'required_providers' is not defined, it returns empty string
 func GetFileProviderVersion(f *configs.File) string {
 	version := ""
-	if f == nil || f.RequiredProviders == nil {
+	if f == nil || f.RequiredProviders == nil || len(f.RequiredProviders) == 0 {
 		return version
 	}
 	for _, requiredProvider := range f.RequiredProviders[0].RequiredProviders {
-		version = requiredProvider.Requirement.Required[0].String()
+		if requiredProvider != nil && len(requiredProvider.Requirement.Required) > 0 {
+			version = requiredProvider.Requirement.Required[0].String()
+		}
 	}
 
 	// trim version string

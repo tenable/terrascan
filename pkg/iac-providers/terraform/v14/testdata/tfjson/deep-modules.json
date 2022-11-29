@@ -18,7 +18,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     },
     {
       "id": "aws_s3_bucket.bucket",
@@ -38,7 +40,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     },
     {
       "id": "aws_s3_bucket.bucket4a",
@@ -58,7 +62,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     }
   ]
 }

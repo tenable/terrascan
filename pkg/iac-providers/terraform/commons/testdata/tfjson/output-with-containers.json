@@ -1,6 +1,52 @@
 {
   "aws_ecs_task_definition": [
     {
+      "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
+      "name": "demo-ecs-jsoncode-task-definition",
+      "module_name": "root",
+      "source": "terraform-aws-provider/jsoncode_in_task_definition.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
+        "cpu": "512",
+        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+        "family": "ecs-task-definition-demo",
+        "memory": "1024",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE"
+        ]
+      },
+      "line_config": {
+        "container_definitions": 8,
+        "cpu": 6,
+        "execution_role_arn": 7,
+        "family": 2,
+        "memory": 5,
+        "network_mode": 3,
+        "requires_compatibilities": 4
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "first",
+          "image": "service-first",
+          "vulnerabilities": null
+        },
+        {
+          "name": "second",
+          "image": "service-second",
+          "vulnerabilities": null
+        }
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
+    },
+    {
       "id": "aws_ecs_task_definition.demo-ecs-task-definition",
       "name": "demo-ecs-task-definition",
       "module_name": "root",
@@ -39,7 +85,7 @@
         }
       ],
       "terraform_version": "0.15.0",
-      "provider_version": "4.41.0"
+      "provider_version": "4.42.0"
     },
     {
       "id": "aws_ecs_task_definition.service",
@@ -94,53 +140,7 @@
         }
       ],
       "terraform_version": "0.15.0",
-      "provider_version": "4.41.0"
-    },
-    {
-      "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
-      "name": "demo-ecs-jsoncode-task-definition",
-      "module_name": "root",
-      "source": "terraform-aws-provider/jsoncode_in_task_definition.tf",
-      "plan_root": "terraform-aws-provider",
-      "line": 1,
-      "type": "aws_ecs_task_definition",
-      "config": {
-        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
-        "cpu": "512",
-        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
-        "family": "ecs-task-definition-demo",
-        "memory": "1024",
-        "network_mode": "awsvpc",
-        "requires_compatibilities": [
-          "FARGATE"
-        ]
-      },
-      "line_config": {
-        "container_definitions": 8,
-        "cpu": 6,
-        "execution_role_arn": 7,
-        "family": 2,
-        "memory": 5,
-        "network_mode": 3,
-        "requires_compatibilities": 4
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": "",
-      "container_images": [
-        {
-          "name": "first",
-          "image": "service-first",
-          "vulnerabilities": null
-        },
-        {
-          "name": "second",
-          "image": "service-second",
-          "vulnerabilities": null
-        }
-      ],
-      "terraform_version": "0.15.0",
-      "provider_version": "4.41.0"
+      "provider_version": "4.42.0"
     }
   ],
   "azurerm_container_group": [
