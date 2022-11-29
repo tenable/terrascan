@@ -3,26 +3,6 @@
     {
       "id": "aws_s3_bucket.bucket",
       "name": "bucket",
-      "module_name": "m4",
-      "source": "modules/m4/main.tf",
-      "plan_root": "./",
-      "line": 11,
-      "type": "aws_s3_bucket",
-      "config": {
-        "bucket": "tf-test-project-2",
-        "policy": "${module.m4a.fullbucketpolicy}"
-      },
-      "line_config": {
-        "bucket": 12,
-        "policy": 13
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": ""
-    },
-    {
-      "id": "aws_s3_bucket.bucket",
-      "name": "bucket",
       "module_name": "m1",
       "source": "modules/m1/main.tf",
       "plan_root": "./",
@@ -38,7 +18,31 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
+    },
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "module_name": "m4",
+      "source": "modules/m4/main.tf",
+      "plan_root": "./",
+      "line": 11,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "tf-test-project-2",
+        "policy": "${module.m4a.fullbucketpolicy}"
+      },
+      "line_config": {
+        "bucket": 12,
+        "policy": 13
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     },
     {
       "id": "aws_s3_bucket.bucket4a",
@@ -58,7 +62,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     },
     {
       "id": "aws_s3_bucket.bucket",
@@ -78,7 +84,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.14.0",
+      "provider_version": "4.42.0"
     }
   ]
 }

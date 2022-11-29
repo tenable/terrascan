@@ -215,7 +215,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_cloudtrail": [
@@ -241,7 +243,8 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_ecs_task_definition": [
@@ -265,7 +268,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_efs_file_system": [
@@ -291,7 +296,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_elasticache_cluster": [
@@ -321,7 +328,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_guardduty_detector": [
@@ -341,7 +350,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_iam_access_key": [
@@ -365,7 +376,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_kinesis_stream": [
@@ -404,7 +417,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_kms_key": [
@@ -434,7 +449,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_load_balancer_policy": [
@@ -470,7 +487,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_s3_bucket": [
@@ -500,7 +519,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_security_group": [
@@ -568,7 +589,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "aws_sqs_queue": [
@@ -605,7 +628,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ]
 }

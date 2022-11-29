@@ -27,7 +27,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "0.0.0"
     }
   ],
   "type1": [
@@ -67,7 +69,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "0.0.0"
     }
   ],
   "type2": [
@@ -104,7 +108,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "0.0.0"
     }
   ],
   "type3": [
@@ -129,7 +135,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "0.0.0"
     }
   ]
 }
