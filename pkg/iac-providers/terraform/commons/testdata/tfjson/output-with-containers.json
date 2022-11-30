@@ -1,6 +1,93 @@
 {
   "aws_ecs_task_definition": [
     {
+      "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
+      "name": "demo-ecs-jsoncode-task-definition",
+      "module_name": "root",
+      "source": "terraform-aws-provider/jsoncode_in_task_definition.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
+        "cpu": "512",
+        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+        "family": "ecs-task-definition-demo",
+        "memory": "1024",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE"
+        ]
+      },
+      "line_config": {
+        "container_definitions": 8,
+        "cpu": 6,
+        "execution_role_arn": 7,
+        "family": 2,
+        "memory": 5,
+        "network_mode": 3,
+        "requires_compatibilities": 4
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "first",
+          "image": "service-first",
+          "vulnerabilities": null
+        },
+        {
+          "name": "second",
+          "image": "service-second",
+          "vulnerabilities": null
+        }
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
+    },
+    {
+      "id": "aws_ecs_task_definition.demo-ecs-task-definition",
+      "name": "demo-ecs-task-definition",
+      "module_name": "root",
+      "source": "terraform-aws-provider/main.tf",
+      "plan_root": "terraform-aws-provider",
+      "line": 1,
+      "type": "aws_ecs_task_definition",
+      "config": {
+        "container_definitions": "[\n    {\n        \"cpu\": 10,\n        \"command\": [\"sleep\", \"10\"],\n        \"entryPoint\": [\"/\"],\n        \"environment\": [\n            {\"name\": \"VARNAME\", \"value\": \"VARVAL\"}\n        ],\n        \"essential\": true,\n        \"image\": \"jenkins\",\n        \"memory\": 128,\n        \"name\": \"jenkins\",\n        \"portMappings\": [\n            {\n                \"containerPort\": 80,\n                \"hostPort\": 8080\n            }\n        ],\n        \"resourceRequirements\":[\n            {\n                \"type\":\"InferenceAccelerator\",\n                \"value\":\"device_1\"\n            }\n        ]\n    }\n]\n",
+        "cpu": "512",
+        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+        "family": "ecs-task-definition-demo",
+        "memory": "1024",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE"
+        ]
+      },
+      "line_config": {
+        "container_definitions": 9,
+        "cpu": 6,
+        "execution_role_arn": 7,
+        "family": 2,
+        "memory": 5,
+        "network_mode": 3,
+        "requires_compatibilities": 4
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "container_images": [
+        {
+          "name": "jenkins",
+          "image": "jenkins",
+          "vulnerabilities": null
+        }
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
+    },
+    {
       "id": "aws_ecs_task_definition.service",
       "name": "service",
       "module_name": "root",
@@ -51,90 +138,9 @@
           "image": "jenkins",
           "vulnerabilities": null
         }
-      ]
-    },
-    {
-      "id": "aws_ecs_task_definition.demo-ecs-jsoncode-task-definition",
-      "name": "demo-ecs-jsoncode-task-definition",
-      "module_name": "root",
-      "source": "terraform-aws-provider/jsoncode_in_task_definition.tf",
-      "plan_root": "terraform-aws-provider",
-      "line": 1,
-      "type": "aws_ecs_task_definition",
-      "config": {
-        "container_definitions": "${jsonencode([\n    {\n      name      = \"first\"\n      image     = \"service-first\"\n      cpu       = 10\n      memory    = 512\n      essential = true\n      portMappings = [\n        {\n          containerPort = 80\n          hostPort      = 80\n        }\n      ]\n    },\n    {\n      name      = \"second\"\n      image     = \"service-second\"\n      cpu       = 10\n      memory    = 256\n      essential = true\n      portMappings = [\n        {\n          containerPort = 443\n          hostPort      = 443\n        }\n      ]\n    }\n  ])}",
-        "cpu": "512",
-        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
-        "family": "ecs-task-definition-demo",
-        "memory": "1024",
-        "network_mode": "awsvpc",
-        "requires_compatibilities": [
-          "FARGATE"
-        ]
-      },
-      "line_config": {
-        "container_definitions": 8,
-        "cpu": 6,
-        "execution_role_arn": 7,
-        "family": 2,
-        "memory": 5,
-        "network_mode": 3,
-        "requires_compatibilities": 4
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": "",
-      "container_images": [
-        {
-          "name": "first",
-          "image": "service-first",
-          "vulnerabilities": null
-        },
-        {
-          "name": "second",
-          "image": "service-second",
-          "vulnerabilities": null
-        }
-      ]
-    },
-    {
-      "id": "aws_ecs_task_definition.demo-ecs-task-definition",
-      "name": "demo-ecs-task-definition",
-      "module_name": "root",
-      "source": "terraform-aws-provider/main.tf",
-      "plan_root": "terraform-aws-provider",
-      "line": 1,
-      "type": "aws_ecs_task_definition",
-      "config": {
-        "container_definitions": "[\n    {\n        \"cpu\": 10,\n        \"command\": [\"sleep\", \"10\"],\n        \"entryPoint\": [\"/\"],\n        \"environment\": [\n            {\"name\": \"VARNAME\", \"value\": \"VARVAL\"}\n        ],\n        \"essential\": true,\n        \"image\": \"jenkins\",\n        \"memory\": 128,\n        \"name\": \"jenkins\",\n        \"portMappings\": [\n            {\n                \"containerPort\": 80,\n                \"hostPort\": 8080\n            }\n        ],\n        \"resourceRequirements\":[\n            {\n                \"type\":\"InferenceAccelerator\",\n                \"value\":\"device_1\"\n            }\n        ]\n    }\n]\n",
-        "cpu": "512",
-        "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
-        "family": "ecs-task-definition-demo",
-        "memory": "1024",
-        "network_mode": "awsvpc",
-        "requires_compatibilities": [
-          "FARGATE"
-        ]
-      },
-      "line_config": {
-        "container_definitions": 9,
-        "cpu": 6,
-        "execution_role_arn": 7,
-        "family": 2,
-        "memory": 5,
-        "network_mode": 3,
-        "requires_compatibilities": 4
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": "",
-      "container_images": [
-        {
-          "name": "jenkins",
-          "image": "jenkins",
-          "vulnerabilities": null
-        }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "4.42.0"
     }
   ],
   "azurerm_container_group": [
@@ -222,7 +228,9 @@
           "image": "microsoft/aci-tutorial-sidecar",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "3.33.0"
     }
   ],
   "kubernetes_cron_job": [
@@ -247,8 +255,7 @@
             "job_template": [
               {
                 "metadata": [
-                  {
-                  }
+                  {}
                 ],
                 "spec": [
                   {
@@ -256,8 +263,7 @@
                     "template": [
                       {
                         "metadata": [
-                          {
-                          }
+                          {}
                         ],
                         "spec": [
                           {
@@ -300,8 +306,7 @@
             "job_template": [
               {
                 "metadata": [
-                  {
-                  }
+                  {}
                 ],
                 "spec": [
                   {
@@ -309,8 +314,7 @@
                     "template": [
                       {
                         "metadata": [
-                          {
-                          }
+                          {}
                         ],
                         "spec": [
                           {
@@ -345,7 +349,9 @@
           "image": "busybox",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_deployment": [
@@ -484,7 +490,9 @@
           "image": "nginx:1.7.8",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_job": [
@@ -508,8 +516,7 @@
             "template": [
               {
                 "metadata": [
-                  {
-                  }
+                  {}
                 ],
                 "spec": [
                   {
@@ -546,8 +553,7 @@
             "template": [
               {
                 "metadata": [
-                  {
-                  }
+                  {}
                 ],
                 "spec": [
                   {
@@ -576,7 +582,9 @@
           "image": "perl",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_namespace": [
@@ -604,7 +612,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_pod": [
@@ -687,7 +697,9 @@
           "image": "nginx:1.7.9",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_replication_controller": [
@@ -850,7 +862,9 @@
           "image": "nginx:1.7.8",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_service": [
@@ -910,7 +924,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ],
   "kubernetes_stateful_set": [
@@ -954,8 +970,7 @@
               {
                 "metadata": [
                   {
-                    "annotations": {
-                    },
+                    "annotations": {},
                     "labels": {
                       "k8s-app": "prometheus"
                     }
@@ -1163,8 +1178,7 @@
               {
                 "metadata": [
                   {
-                    "annotations": {
-                    },
+                    "annotations": {},
                     "labels": {
                       "k8s-app": 33
                     }
@@ -1345,7 +1359,9 @@
           "image": "busybox:latest",
           "vulnerabilities": null
         }
-      ]
+      ],
+      "terraform_version": "0.15.0",
+      "provider_version": "2.3.2"
     }
   ]
 }

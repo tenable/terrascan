@@ -19,6 +19,7 @@ package webhook
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	httputils "github.com/tenable/terrascan/pkg/utils/http"
 	"go.uber.org/zap"
@@ -71,7 +72,7 @@ func (w *Webhook) SendNotification(data interface{}) error {
 	dataBytes, _ := json.Marshal(data)
 
 	// make http POST request
-	resp, err := httputils.SendPOSTRequest(w.URL, w.Token, dataBytes)
+	resp, err := httputils.SendPOSTRequest(w.URL, w.Token, dataBytes, http.Header{})
 	if err != nil {
 		zap.S().Errorf("failed to send webhook notification. error: '%v'", err)
 		return err

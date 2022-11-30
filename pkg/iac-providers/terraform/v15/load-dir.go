@@ -27,7 +27,7 @@ import (
 // resources present in rootDir and descendant modules
 func (*TfV15) LoadIacDir(absRootDir string, options map[string]interface{}) (allResourcesConfig output.AllResourceConfigs, err error) {
 
-	return commons.NewTerraformDirectoryLoader(absRootDir, options).LoadIacDir()
+	return commons.NewTerraformDirectoryLoader(absRootDir, "0.15.0", options).LoadIacDir()
 }
 
 // Name returns name of the provider
