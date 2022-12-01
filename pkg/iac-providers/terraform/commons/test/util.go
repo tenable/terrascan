@@ -27,6 +27,8 @@ func prepareAllResourceConfigs(v output.AllResourceConfigs, modifySourceVal bool
 			if modifySourceVal {
 				item.Source = filepath.Join(strings.Split(item.Source, "/")...)
 			}
+			// we pull latest version available for provider version hence is subject to change
+			item.ProviderVersion = ""
 
 			newkey := item.Source + "##" + item.ID
 			newval[key][newkey] = item
