@@ -49,7 +49,7 @@ require (
 	github.com/pelletier/go-toml v1.9.3
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.7.0
 	github.com/zclconf/go-cty v1.10.0
 	go.uber.org/zap v1.16.0
@@ -69,7 +69,10 @@ require (
 	sigs.k8s.io/kustomize/kyaml v0.11.0
 )
 
-require github.com/awslabs/goformation/v7 v7.0.5
+require (
+	github.com/apparentlymart/go-versions v1.0.1
+	github.com/awslabs/goformation/v7 v7.0.5
+)
 
 require (
 	cloud.google.com/go/storage v1.10.0 // indirect
@@ -88,7 +91,6 @@ require (
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/apparentlymart/go-versions v1.0.1 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.7.1 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.3.1 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.3.0 // indirect
@@ -133,7 +135,7 @@ require (
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/itchyny/astgen-go v0.0.0-20210113000433-0da0671862a3 // indirect
 	github.com/itchyny/timefmt-go v0.1.1 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
