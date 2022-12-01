@@ -29,7 +29,7 @@ import (
 )
 
 // LoadIacFile parses the given terraform file from the given file path
-func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfigs, err error) {
+func LoadIacFile(absFilePath, terraformVersion string) (allResourcesConfig output.AllResourceConfigs, err error) {
 
 	// new terraform config parser
 	parser := hclConfigs.NewParser(afero.NewOsFs())
@@ -47,6 +47,8 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
+	// getting provider version for the file
+	providerVersion := GetFileProviderVersion(hclFile)
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
@@ -66,6 +68,14 @@ func LoadIacFile(absFilePath string) (allResourcesConfig output.AllResourceConfi
 
 		// extract file name from path
 		resourceConfig.Source = getFileName(resourceConfig.Source)
+
+		resourceConfig.TerraformVersion = terraformVersion
+		resourceConfig.ProviderVersion = providerVersion
+
+		// if root module do not have provider contraints fetch the latest compatible version
+		if resourceConfig.ProviderVersion == "" {
+			resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, terraformVersion)
+		}
 
 		// append to normalized output
 		if _, present := allResourcesConfig[resourceConfig.Type]; !present {

@@ -103,7 +103,9 @@ const (
       minseverity: ""
       containerimages: []
       initcontainerimages: []
-      isremotemodule: null`
+      isremotemodule: null
+      terraformversion: ""
+      providerversion: ""`
 
 	scanTestOutputYAML = `results:
     violations:

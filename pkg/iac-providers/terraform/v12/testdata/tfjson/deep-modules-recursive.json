@@ -3,26 +3,6 @@
     {
       "id": "aws_s3_bucket.bucket",
       "name": "bucket",
-      "module_name": "m1",
-      "source": "modules/m1/main.tf",
-      "plan_root": "./",
-      "line": 20,
-      "type": "aws_s3_bucket",
-      "config": {
-        "bucket": "${module.m3.fullbucketname}",
-        "policy": "${module.m2.fullbucketpolicy}"
-      },
-      "line_config": {
-        "bucket": 21,
-        "policy": 22
-      },
-      "skip_rules": null,
-      "max_severity": "",
-      "min_severity": ""
-    },
-    {
-      "id": "aws_s3_bucket.bucket",
-      "name": "bucket",
       "module_name": "m4",
       "source": "modules/m4/main.tf",
       "plan_root": "./",
@@ -38,7 +18,31 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.12.0",
+      "provider_version": "3.37.0"
+    },
+    {
+      "id": "aws_s3_bucket.bucket",
+      "name": "bucket",
+      "module_name": "m1",
+      "source": "modules/m1/main.tf",
+      "plan_root": "./",
+      "line": 20,
+      "type": "aws_s3_bucket",
+      "config": {
+        "bucket": "${module.m3.fullbucketname}",
+        "policy": "${module.m2.fullbucketpolicy}"
+      },
+      "line_config": {
+        "bucket": 21,
+        "policy": 22
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.12.0",
+      "provider_version": "3.37.0"
     },
     {
       "id": "aws_s3_bucket.bucket4a",
@@ -58,7 +62,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.12.0",
+      "provider_version": "3.37.0"
     },
     {
       "id": "aws_s3_bucket.bucket",
@@ -78,7 +84,9 @@
       },
       "skip_rules": null,
       "max_severity": "",
-      "min_severity": ""
+      "min_severity": "",
+      "terraform_version": "0.12.0",
+      "provider_version": "3.37.0"
     }
   ]
 }

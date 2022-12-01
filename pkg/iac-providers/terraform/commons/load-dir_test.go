@@ -57,22 +57,24 @@ func TestProcessLocalSource(t *testing.T) {
 		req *hclConfigs.ModuleRequest
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    string
-		options map[string]interface{}
+		name             string
+		args             args
+		want             string
+		options          map[string]interface{}
+		terraformVersion string
 	}{
 		{
 			name: "no remote module",
 			args: args{
 				req: testModuleReqA,
 			},
-			want: filepath.Join(testDirPath, "someModule"),
+			terraformVersion: "0.15.0",
+			want:             filepath.Join(testDirPath, "someModule"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := NewTerraformDirectoryLoader("", tt.options)
+			dl := NewTerraformDirectoryLoader("", tt.terraformVersion, tt.options)
 			if got := dl.processLocalSource(tt.args.req); got != tt.want {
 				t.Errorf("processLocalSource() got = %v, want = %v", got, tt.want)
 			}
@@ -90,11 +92,12 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 		m              downloader.ModuleDownloader
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    string
-		wantErr bool
-		options map[string]interface{}
+		name             string
+		args             args
+		want             string
+		wantErr          bool
+		options          map[string]interface{}
+		terraformVersion string
 	}{
 		{
 			name: "invalid registry host",
@@ -106,7 +109,8 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 				tempDir:        utils.GenerateTempDir(),
 				m:              downloader.NewRemoteDownloader(),
 			},
-			wantErr: true,
+			wantErr:          true,
+			terraformVersion: "0.15.0",
 		},
 		{
 			name: "valid registry source",
@@ -124,7 +128,7 @@ func TestProcessTerraformRegistrySource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer os.RemoveAll(tt.args.tempDir)
-			dl := NewTerraformDirectoryLoader("", tt.options)
+			dl := NewTerraformDirectoryLoader("", tt.terraformVersion, tt.options)
 			got, err := dl.processTerraformRegistrySource(tt.args.req, tt.args.tempDir)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("processTerraformRegistrySource() got error = %v, wantErr = %v", err, tt.wantErr)
@@ -337,11 +341,12 @@ func TestGetRemoteModuleIfPresentInTerraformSrc(t *testing.T) {
 func TestTerraformDirectoryLoaderLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 	tests := []struct {
-		name        string
-		tfConfigDir string
-		tfJSONFile  string
-		options     map[string]interface{}
-		wantErr     error
+		name             string
+		tfConfigDir      string
+		tfJSONFile       string
+		options          map[string]interface{}
+		wantErr          error
+		terraformVersion string
 	}{
 		{
 			name:        "directory with resources having container defined",
@@ -351,6 +356,7 @@ func TestTerraformDirectoryLoaderLoadIacDir(t *testing.T) {
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-container-extraction/terraform-aws-provider/task-definitions")),
 			),
+			terraformVersion: "0.15.0",
 		},
 	}
 	for _, tt := range tests {
@@ -360,6 +366,7 @@ func TestTerraformDirectoryLoaderLoadIacDir(t *testing.T) {
 				remoteDownloader:         downloader.NewRemoteDownloader(),
 				parser:                   hclConfigs.NewParser(afero.NewOsFs()),
 				terraformInitModuleCache: make(map[string]TerraformModuleManifest),
+				terraformVersion:         tt.terraformVersion,
 			}
 			got, gotErr := tr.LoadIacDir()
 			me, ok := gotErr.(*multierror.Error)

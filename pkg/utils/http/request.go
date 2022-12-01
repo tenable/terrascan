@@ -26,7 +26,9 @@ func init() {
 }
 
 // SendRequest sends a http request on the given url
-func SendRequest(method, url, token string, data []byte) (*http.Response, error) {
+// Sets application/json as default Content-Type
+func SendRequest(method, url, token string, data []byte, customHeaders http.Header) (*http.Response, error) {
+	zap.S().Debugf("sending http request, %s : %s", method, url)
 
 	var resp *http.Response
 
@@ -36,7 +38,14 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 		zap.S().Errorf("failed to create http request; method: '%v', url: '%v'")
 		return resp, errNewRequest
 	}
-	req.Header.Set("Content-Type", "application/json")
+	// initialize to custom headers
+	req.Header = customHeaders
+
+	// set application/json as default Content-Type
+	if req.Header.Get("Content-Type") == "" {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
 	if token != "" {
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
@@ -52,6 +61,6 @@ func SendRequest(method, url, token string, data []byte) (*http.Response, error)
 }
 
 // SendPOSTRequest sends a http POST request
-func SendPOSTRequest(url, token string, data []byte) (*http.Response, error) {
-	return SendRequest("POST", url, token, data)
+func SendPOSTRequest(url, token string, data []byte, customHeaders http.Header) (*http.Response, error) {
+	return SendRequest("POST", url, token, data, customHeaders)
 }

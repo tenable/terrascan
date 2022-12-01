@@ -42,6 +42,8 @@ type ResourceConfig struct {
 	ContainerImages     []ContainerDetails `json:"container_images,omitempty"`
 	InitContainerImages []ContainerDetails `json:"init_container_images,omitempty"`
 	IsRemoteModule      *bool              `json:"is_remote_module,omitempty"`
+	TerraformVersion    string             `json:"terraform_version,omitempty"`
+	ProviderVersion     string             `json:"provider_version,omitempty"`
 }
 
 // ContainerDetails holds information about container name, image and vulberabilities
