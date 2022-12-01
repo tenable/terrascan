@@ -69,7 +69,10 @@ require (
 	sigs.k8s.io/kustomize/kyaml v0.11.0
 )
 
-require github.com/awslabs/goformation/v7 v7.0.5
+require (
+	github.com/apparentlymart/go-versions v1.0.1
+	github.com/awslabs/goformation/v7 v7.0.5
+)
 
 require (
 	cloud.google.com/go/storage v1.10.0 // indirect
@@ -89,7 +92,6 @@ require (
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/apparentlymart/go-versions v1.0.1 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.7.1 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.3.1 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.3.0 // indirect
