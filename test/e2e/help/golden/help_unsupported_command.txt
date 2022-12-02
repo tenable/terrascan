@@ -3,6 +3,7 @@ Usage:
   terrascan [command]
 
 Available Commands:
+  completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   init        Initializes Terrascan and clones policies from the Terrascan GitHub repository.
   scan        Detect compliance and security violations across Infrastructure as Code.
