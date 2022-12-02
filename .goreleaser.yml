@@ -24,7 +24,12 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
-    # for windows it is good to have zip rather than tar.gz
+  # for windows it is good to have zip along with tar.gz
+  - id: win_zip
+    replacements:
+      windows: Windows
+      386: i386
+      amd64: x86_64
     format_overrides:
       - goos: windows
         format: zip
