@@ -133,10 +133,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 	for _, dir := range dirList {
 		// check if the directory has any tf config files (.tf or .tf.json)
 		if !t.parser.IsConfigDir(dir) {
-			// log a debug message and continue with other directories
+			// log a debug message and continue with other directories (do not fail)
 			errMessage := fmt.Sprintf("directory '%s' has no terraform config files", dir)
 			zap.S().Debug(errMessage)
-			t.addError(errMessage, dir)
 			continue
 		}
 
