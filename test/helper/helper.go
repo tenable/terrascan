@@ -89,6 +89,9 @@ var (
 
 	// sourceRegexPattern is regex for 'file/folder' attribute in violations output
 	sourceRegexPattern = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)[\\\/](.+)["]*`)
+
+	// version is regex for 'version' attribute in violations output
+	versionRegexPattern = regexp.MustCompile(`["version":]*"[0-9][\.]([0-9])+[\.]([0-9])"`)
 )
 
 // ValidateExitCode validates the exit code of a gexec.Session
@@ -422,6 +425,9 @@ func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, gold
 
 	sessionOutput = sarifVersionPattern.ReplaceAllString(sessionOutput, "")
 	fileContents = sarifVersionPattern.ReplaceAllString(fileContents, "")
+
+	sessionOutput = versionRegexPattern.ReplaceAllString(sessionOutput, "")
+	fileContents = versionRegexPattern.ReplaceAllString(fileContents, "")
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
 }
