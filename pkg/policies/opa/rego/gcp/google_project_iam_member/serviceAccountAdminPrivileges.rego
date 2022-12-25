@@ -1,6 +1,6 @@
 package accurics
 
-serviceAccountAdminPriviledges[api.id]
+serviceAccountAdminPrivileges[api.id]
 {
     api := input.google_project_iam_member[_]
     api.config.role == "roles/editor"
