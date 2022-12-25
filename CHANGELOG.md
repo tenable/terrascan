@@ -610,7 +610,7 @@
 - Adding Aws new policies cloudTrail [\#810](https://github.com/accurics/terrascan/pull/810) ([Avanti19](https://github.com/Avanti19))
 - Feature/az id field [\#808](https://github.com/accurics/terrascan/pull/808) ([gaurav-gogia](https://github.com/gaurav-gogia))
 - added support for sarif formatted violation reports [\#806](https://github.com/accurics/terrascan/pull/806) ([dev-gaur](https://github.com/dev-gaur))
-- Adds support to scan config resources with applicable policies & Refactors filteration [\#803](https://github.com/accurics/terrascan/pull/803) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds support to scan config resources with applicable policies & Refactors filtration [\#803](https://github.com/accurics/terrascan/pull/803) ([patilpankaj212](https://github.com/patilpankaj212))
 - Adds: in-file instrumentation for resource prioritizing [\#802](https://github.com/accurics/terrascan/pull/802) ([Rchanger](https://github.com/Rchanger))
 - shifted opa engine warning message to debug log level [\#800](https://github.com/accurics/terrascan/pull/800) ([dev-gaur](https://github.com/dev-gaur))
 - fix: added validation for module local source dir [\#793](https://github.com/accurics/terrascan/pull/793) ([Rchanger](https://github.com/Rchanger))
