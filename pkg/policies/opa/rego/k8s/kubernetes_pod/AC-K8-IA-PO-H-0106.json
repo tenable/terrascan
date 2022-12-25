@@ -1,10 +1,10 @@
 {
-    "name": "priviledgedContainersEnabled",
-    "file": "priviledgedContainersEnabled.rego",
+    "name": "privilegedContainersEnabled",
+    "file": "privilegedContainersEnabled.rego",
     "policy_type": "k8s",
     "resource_type": "kubernetes_pod",
     "template_args": {
-        "name": "priviledgedContainersEnabled",
+        "name": "privilegedContainersEnabled",
         "prefix": "",
         "suffix": ""
     },
