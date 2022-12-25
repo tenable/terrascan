@@ -285,7 +285,7 @@ var _ = Describe("Server File Scan", func() {
 				When("multiple categories are sent but some of them are invalid", func() {
 					It("should receive a 400 bad request", func() {
 						bodyAttrs := make(map[string]string)
-						bodyAttrs["categories"] = " dATa pROtECtION, IDENTITY is Acess Management "
+						bodyAttrs["categories"] = " dATa pROtECtION, IDENTITY is Access Management "
 
 						serverUtils.MakeFileScanRequest(awsAmiIacFilePath, requestURL, bodyAttrs, http.StatusBadRequest)
 						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("category not supported"))
