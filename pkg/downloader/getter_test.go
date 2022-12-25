@@ -173,7 +173,7 @@ func TestDownload(t *testing.T) {
 			wantErr:  fmt.Errorf("GitHub URLs should be github.com/username/repo"),
 		},
 		{
-			name:          "valid url, non existing repo",
+			name:          "valid url, nonexistent repo",
 			URL:           "https://:@github.com/testuser/testrepo",
 			dest:          someDest,
 			wantDest:      "",
@@ -274,7 +274,7 @@ func TestDownloadWithType(t *testing.T) {
 			wantErr:  fmt.Errorf("%s, is not a valid terraform registry", testInvalidRegistrySource),
 		},
 		{
-			name:          "terraform-registry remote type with valid non-existent source addr",
+			name:          "terraform-registry remote type with valid nonexistent source addr",
 			Type:          remoteTypeTerraformRegistry,
 			URL:           testValidNonExistentRegistrySource,
 			dest:          someDest,
