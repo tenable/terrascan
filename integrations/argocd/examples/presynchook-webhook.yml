@@ -14,7 +14,7 @@ spec:
          type: RuntimeDefault
      containers:
      - name: terrascan-argocd
-       image: <CUSTOME PRESYNC HOOK IMAGE>
+       image: <CUSTOM PRESYNC HOOK IMAGE>
        resources:
          requests:
            cpu: "1"
