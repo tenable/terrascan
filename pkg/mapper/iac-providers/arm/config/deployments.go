@@ -52,7 +52,7 @@ func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) ma
 		tfTags:     r.Tags,
 	}
 
-	// if template is defiened directly
+	// if template is defined directly
 	if template := convert.ToMap(r.Properties, armTemplate); template != nil {
 		templateContent, err := json.Marshal(template)
 		if err != nil {
