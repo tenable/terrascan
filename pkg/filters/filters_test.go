@@ -112,7 +112,7 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "only scan rules specified, regometadata referecen id doesn't match",
+			name: "only scan rules specified, regometadata reference id doesn't match",
 			fields: fields{
 				scanRules: []string{testRuleID},
 			},
@@ -124,7 +124,7 @@ func TestRegoMetadataPreLoadFilterIsAllowed(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "only scan rules specified, regometadata referecen id matches one of the scan rule id",
+			name: "only scan rules specified, regometadata reference id matches one of the scan rule id",
 			fields: fields{
 				scanRules: []string{testRuleID},
 			},

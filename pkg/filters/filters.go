@@ -41,7 +41,7 @@ func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories, policyTypes 
 		severity:    severity,
 		// add applicable filter specs to the list
 		filterSpecs: []policy.FilterSpecification{
-			RerefenceIDsFilterSpecification{scanRules},
+			ReferenceIDsFilterSpecification{scanRules},
 			CategoryFilterSpecification{categories: categories},
 			SeverityFilterSpecification{severity: severity},
 			PolicyTypesFilterSpecification{policyTypes: policyTypes},
@@ -55,7 +55,7 @@ func (r *RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata
 	if len(r.skipRules) < 1 {
 		return false
 	}
-	refIDsSpec := RerefenceIDsFilterSpecification{r.skipRules}
+	refIDsSpec := ReferenceIDsFilterSpecification{r.skipRules}
 	return refIDsSpec.IsSatisfied(regoMetadata)
 }
 
