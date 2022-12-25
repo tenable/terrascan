@@ -761,7 +761,7 @@ var jsonTree = (function() {
          * Returns the source json-string (pretty-printed)
          *
          * @param {boolean} isPrettyPrinted - 'true' for pretty-printed string
-         * @returns {string} - for exemple, '{"a":2,"b":3}'
+         * @returns {string} - for example, '{"a":2,"b":3}'
          */
         toSourceJSON : function(isPrettyPrinted) {
             if (!isPrettyPrinted) {
