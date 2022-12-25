@@ -18,7 +18,7 @@ package dockerv1
 
 import "github.com/hashicorp/go-multierror"
 
-// DockerV1 truct implements the IacProvider interface
+// DockerV1 struct implements the IacProvider interface
 type DockerV1 struct {
 	errIacLoadDirs *multierror.Error
 	// absRootDir is the root directory being scanned.
