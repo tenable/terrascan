@@ -162,7 +162,7 @@ func TestExecute(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "test SendNofitications no error",
+			name: "test SendNotifications no error",
 			executor: Executor{
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
