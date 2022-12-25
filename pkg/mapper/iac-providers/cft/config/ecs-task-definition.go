@@ -31,12 +31,12 @@ type EcsTaskDefinitionConfig struct {
 	Volumes              []VolumeConfig `json:"volume"`
 }
 
-// VolumeConfig holds config for volume attirbute of aws_ecs_task_definition
+// VolumeConfig holds config for volume attribute of aws_ecs_task_definition
 type VolumeConfig struct {
 	EfsVolumeConfiguration EfsVolumeConfig `json:"efs_volume_configuration"`
 }
 
-// EfsVolumeConfig holds config for efs_volume_configuration atrtribute of volume
+// EfsVolumeConfig holds config for efs_volume_configuration attribute of volume
 type EfsVolumeConfig struct {
 	TransitEncryption string `json:"transit_encryption"`
 }
@@ -46,7 +46,7 @@ type ContainerDefinitionConfig struct {
 	Environment []EnvironmentConfig `json:"environment"`
 }
 
-// EnvironmentConfig holds config for environment atrtribute for container_definitions
+// EnvironmentConfig holds config for environment attribute for container_definitions
 type EnvironmentConfig struct {
 	Name string `json:"name"`
 }
