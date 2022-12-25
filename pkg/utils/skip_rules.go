@@ -31,7 +31,7 @@ const (
 	TerrascanSkip = "runterrascan.io/skip"
 	// TerrascanSkipRule key used to detect the rule to be skipped
 	TerrascanSkipRule = "rule"
-	// TerrascanSkipComment key used to detect comment skiupping a give rule
+	// TerrascanSkipComment key used to detect comment skipping a give rule
 	TerrascanSkipComment = "comment"
 	// SkipRulesPrefix used to identify and trim the skipping rule patterns
 	SkipRulesPrefix = "#ts:skip="
