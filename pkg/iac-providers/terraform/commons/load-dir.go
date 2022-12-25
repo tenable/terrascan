@@ -64,7 +64,7 @@ type TerraformModuleManifest struct {
 // ModuleConfig contains the *hclConfigs.Config for every module in the
 // unified config tree along with *hclConfig.ModuleCall made by the parent
 // module. The ParentModuleCall helps in resolving references for variables
-// initilaized in the parent ModuleCall
+// initialized in the parent ModuleCall
 type ModuleConfig struct {
 	Config           *hclConfigs.Config
 	ParentModuleCall *hclConfigs.ModuleCall
