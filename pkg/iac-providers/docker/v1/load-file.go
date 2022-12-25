@@ -85,7 +85,7 @@ func (dc *DockerV1) LoadIacFile(absFilePath string, options map[string]interface
 	}
 
 	// Creates config for entire dockerfile which has array of instructions against the Config field.
-	// Created to use against policies which checks for availablility of command/instruction in dockerfile
+	// Created to use against policies which checks for availability of command/instruction in dockerfile
 	// if command is not present line no also doesnot have any importance thats why set to 1.
 	config := output.ResourceConfig{
 		Name:        filepath.Base(absFilePath),
