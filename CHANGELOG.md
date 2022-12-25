@@ -547,7 +547,7 @@
 
 **Fixed bugs:**
 
-- Azure AKS failling to check the network policy status. [\#789](https://github.com/accurics/terrascan/issues/789)
+- Azure AKS failing to check the network policy status. [\#789](https://github.com/accurics/terrascan/issues/789)
 - Scan for terraform doesn't error out if a module definition refers to a directory with no tf files [\#782](https://github.com/accurics/terrascan/issues/782)
 - Wrong detection of MemoryRequestsCheck,CpuRequestsCheck,noReadinessProbe and nolivenessProbe policy in k8s Job spec  [\#767](https://github.com/accurics/terrascan/issues/767)
 - Update Docker build for terrascan to use numeric UID [\#766](https://github.com/accurics/terrascan/issues/766)
