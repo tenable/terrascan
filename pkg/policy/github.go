@@ -18,11 +18,11 @@ package policy
 
 const (
 	github                  supportedCloudType  = "github"
-	defaultGithubIacType    supportedIacType    = "terraform"
-	defaultGithubIacVersion supportedIacVersion = version12
+	defaultGitHubIacType    supportedIacType    = "terraform"
+	defaultGitHubIacVersion supportedIacVersion = version12
 )
 
 func init() {
 	// Register github as a cloud provider with terrascan
-	RegisterCloudProvider(github, defaultGithubIacType, defaultGithubIacVersion)
+	RegisterCloudProvider(github, defaultGitHubIacType, defaultGitHubIacVersion)
 }

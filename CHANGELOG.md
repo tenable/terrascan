@@ -777,7 +777,7 @@
 - Adds support for junit xml output [\#527](https://github.com/accurics/terrascan/pull/527)
 - Adds e2e test scenarios for help and scan command [\#564](https://github.com/accurics/terrascan/pull/564)
 - Adds e2e tests for api server [\#585](https://github.com/accurics/terrascan/pull/585)
-- Please checkout our new [Github Action!](https://github.com/marketplace/actions/terrascan-iac-scanner)
+- Please checkout our new [GitHub Action!](https://github.com/marketplace/actions/terrascan-iac-scanner)
 
 **Fixed bugs:**
 
@@ -1013,8 +1013,8 @@
 
 **Merged pull requests:**
 
-- Bring Go to 1.15 in Github Actions [\#384](https://github.com/accurics/terrascan/pull/384) ([gliptak](https://github.com/gliptak))
-- Bring Go to 1.15 in Github Actions [\#383](https://github.com/accurics/terrascan/pull/383) ([gliptak](https://github.com/gliptak))
+- Bring Go to 1.15 in GitHub Actions [\#384](https://github.com/accurics/terrascan/pull/384) ([gliptak](https://github.com/gliptak))
+- Bring Go to 1.15 in GitHub Actions [\#383](https://github.com/accurics/terrascan/pull/383) ([gliptak](https://github.com/gliptak))
 - fix a bug when rendering subcharts [\#381](https://github.com/accurics/terrascan/pull/381) ([williepaul](https://github.com/williepaul))
 - Added kustomize support [\#378](https://github.com/accurics/terrascan/pull/378) ([dev-gaur](https://github.com/dev-gaur))
 - Adds support for Helm v3 [\#377](https://github.com/accurics/terrascan/pull/377) ([williepaul](https://github.com/williepaul))

@@ -71,7 +71,7 @@ const violationTemplateForGH = `{
 
 var expectedSarifViolationOutputGH = fmt.Sprintf(violationTemplateForGH, version.GetNumeric(), testpathForGH)
 
-func TestGithubSarifWriter(t *testing.T) {
+func TestGitHubSarifWriter(t *testing.T) {
 
 	type funcInput interface{}
 	tests := []struct {
@@ -81,7 +81,7 @@ func TestGithubSarifWriter(t *testing.T) {
 		expectedOutput string
 	}{
 		{
-			name:           "Sarif Writer for Github: Violations",
+			name:           "Sarif Writer for GitHub: Violations",
 			input:          violationsInput,
 			expectedOutput: expectedSarifViolationOutputGH,
 		},
@@ -91,7 +91,7 @@ func TestGithubSarifWriter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var bf bytes.Buffer
 			w := []io.Writer{&bf}
-			if err := GithubSarifWriter(tt.input, w); (err != nil) != tt.expectedError {
+			if err := GitHubSarifWriter(tt.input, w); (err != nil) != tt.expectedError {
 				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
 			outputBytes := bf.Bytes()
