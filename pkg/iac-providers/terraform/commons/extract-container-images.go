@@ -45,7 +45,7 @@ const (
 	containerDefinitions   = "container_definitions"
 )
 
-// all the type of resources which has container definitaions
+// all the type of resources which has container definitions
 var k8sResources = map[string]struct{}{
 	"kubernetes_deployment":             {},
 	"kubernetes_pod":                    {},
