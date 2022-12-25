@@ -336,8 +336,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 1. sort actual and golden violations and remove "file" attribute
 	sort.Sort(actualViolations)
 	sort.Sort(expectedViolations)
-	removeFileAndRoothFromViolations(actualViolations)
-	removeFileAndRoothFromViolations(expectedViolations)
+	removeFileAndRootFromViolations(actualViolations)
+	removeFileAndRootFromViolations(expectedViolations)
 
 	actualSkippedViolations = sessionEngineOutput.ViolationStore.SkippedViolations
 	expectedSkippedViolations = fileDataEngineOutput.ViolationStore.SkippedViolations
@@ -345,8 +345,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 2. sort actual and golden skipped violations and remove "file" attribute
 	sort.Sort(actualSkippedViolations)
 	sort.Sort(expectedSkippedViolations)
-	removeFileAndRoothFromViolations(actualSkippedViolations)
-	removeFileAndRoothFromViolations(expectedSkippedViolations)
+	removeFileAndRootFromViolations(actualSkippedViolations)
+	removeFileAndRootFromViolations(expectedSkippedViolations)
 
 	actualPassedRules = sessionEngineOutput.ViolationStore.PassedRules
 	expectedPassedRules = fileDataEngineOutput.ViolationStore.PassedRules
@@ -376,8 +376,8 @@ func removeTimestampAndResourcePath(summary *results.ScanSummary) {
 	summary.ResourcePath = ""
 }
 
-// removeFileAndRoothFromViolations is helper func to make file in violations blank
-func removeFileAndRoothFromViolations(v violations) {
+// removeFileAndRootFromViolations is helper func to make file in violations blank
+func removeFileAndRootFromViolations(v violations) {
 	vs := []*results.Violation(v)
 
 	for _, violation := range vs {
