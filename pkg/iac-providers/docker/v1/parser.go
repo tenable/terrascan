@@ -71,7 +71,7 @@ func (dc *DockerV1) Parse(filepath string) ([]DockerConfig, string, error) {
 
 		// loop over all the comments before the instruction is found to create one single string of comments
 		// appending # prefix and new line since it is removed by the parser while creating the AST
-		// Purpose of adding them back is to use the comman function to find skiprules and min max severity.
+		// Purpose of adding them back is to use the command function to find skiprules and min max severity.
 		for _, comment := range child.PrevComment {
 			comments = comments + commentPrefix + comment + newLine
 		}
