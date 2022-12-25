@@ -21,11 +21,11 @@ policyCheckAction(statement) = true {
 }
 
 policyCheckPrincipal(statement) = true {
-    statement.Pricipal == "*"
+    statement.Principal == "*"
 }
 
 policyCheckPrincipal(statement) = true {
-    statement.Pricipal.AWS == "*"
+    statement.Principal.AWS == "*"
 }
 
 json_unmarshal(s) = result {
