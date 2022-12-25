@@ -114,7 +114,7 @@ func MakeRemoteScanRequest(URL string, bodyAttributes map[string]interface{}, ex
 
 	req.Header.Set("Content-Type", "application/json")
 
-	// make http rquest
+	// make http request
 	resp, err := http.DefaultClient.Do(req)
 	gomega.Expect(err).NotTo(gomega.HaveOccurred())
 	gomega.Expect(resp).NotTo(gomega.BeNil())
