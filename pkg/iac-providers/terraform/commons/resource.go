@@ -80,9 +80,9 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerDetails, initContainers []output.ContainerDetails) {
 	if isKuberneteResource(managedResource) {
 		containers, initContainers = extractContainerImagesFromk8sResources(managedResource, hclBody)
-	} else if isAzureConatinerResource(managedResource) {
+	} else if isAzureContainerResource(managedResource) {
 		containers = fetchContainersFromAzureResource(jsonBody)
-	} else if isAwsConatinerResource(managedResource) {
+	} else if isAwsContainerResource(managedResource) {
 		containers = fetchContainersFromAwsResource(jsonBody, hclBody, managedResource.DeclRange.Filename)
 	}
 	return
