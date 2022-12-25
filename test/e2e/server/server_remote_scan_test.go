@@ -36,7 +36,7 @@ import (
 )
 
 var _ = Describe("Server Remote Scan", func() {
-	// In case of adding new test case first push the test data and golden data files and then write test cases around thata
+	// In case of adding new test case first push the test data and golden data files and then write test cases around that
 	var session *gexec.Session
 	var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
 	port := "9011"
