@@ -154,7 +154,7 @@ The `--find-vuln` flag can be used when scanning IaC files as follows:
 $ terrascan scan -i <IaC provider> --find-vuln
 ```
 
-For more information and explanation of how to setup your environment to authenticate with the registrie's APIs see the [usage](https://runterrascan.io/docs/usage/command_line_mode/) documentation.
+For more information and explanation of how to setup your environment to authenticate with the registry's APIs see the [usage](https://runterrascan.io/docs/usage/command_line_mode/) documentation.
 
 ## Customizing scans
 
