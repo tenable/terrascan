@@ -67,7 +67,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	// decode processed out into output.ResourceConfig
 	var resourceConfigs []output.ResourceConfig
 	if err := json.Unmarshal(processed, &resourceConfigs); err != nil {
-		errMsg := fmt.Sprintf("failed to decode proceesed jq output. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to decode processed jq output. error: '%v'", err)
 		zap.S().Debug(errMsg)
 		return allResourcesConfig, fmt.Errorf(errMsg)
 	}

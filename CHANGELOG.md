@@ -1002,7 +1002,7 @@
 
 **Closed issues:**
 
-- Deep modules location mis-proccessed.  [\#365](https://github.com/accurics/terrascan/issues/365)
+- Deep modules location mis-processed.  [\#365](https://github.com/accurics/terrascan/issues/365)
 - 20MB binary file included in repo now [\#364](https://github.com/accurics/terrascan/issues/364)
 - Private GitHub repositories are not recognized with version 3.0.0+ of GitHub provider [\#326](https://github.com/accurics/terrascan/issues/326)
 - Terrascan -var-file=../another dir [\#144](https://github.com/accurics/terrascan/issues/144)
