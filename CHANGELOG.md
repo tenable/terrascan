@@ -870,7 +870,7 @@
 
 **Closed issues:**
 
-- Custom Variable Validation no longer experiemental in 0.13 [\#500](https://github.com/accurics/terrascan/issues/500)
+- Custom Variable Validation no longer experimental in 0.13 [\#500](https://github.com/accurics/terrascan/issues/500)
 
 **Merged pull requests:**
 
