@@ -49,9 +49,9 @@ func NewRegoMetadataPreLoadFilter(scanRules, skipRules, categories, policyTypes 
 	}
 }
 
-// IsFiltered checks whether a RegoMetada should be filtered or not
+// IsFiltered checks whether a RegoMetadata should be filtered or not
 func (r *RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata) bool {
-	// if skip rules are specified, RegoMetada is not filtered
+	// if skip rules are specified, RegoMetadata is not filtered
 	if len(r.skipRules) < 1 {
 		return false
 	}
@@ -59,7 +59,7 @@ func (r *RegoMetadataPreLoadFilter) IsFiltered(regoMetadata *policy.RegoMetadata
 	return refIDsSpec.IsSatisfied(regoMetadata)
 }
 
-// IsAllowed checks whether a RegoMetada should be allowed or not
+// IsAllowed checks whether a RegoMetadata should be allowed or not
 func (r *RegoMetadataPreLoadFilter) IsAllowed(regoMetadata *policy.RegoMetadata) bool {
 	andSpec := AndFilterSpecification{r.filterSpecs}
 	return andSpec.IsSatisfied(regoMetadata)
