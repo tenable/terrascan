@@ -56,8 +56,8 @@ var k8sResources = map[string]struct{}{
 	"kubernetes_replication_controller": {},
 }
 
-// isKuberneteResource - verifies resource is k8s type
-func isKuberneteResource(resource *hclConfigs.Resource) bool {
+// isKubernetesResource - verifies resource is k8s type
+func isKubernetesResource(resource *hclConfigs.Resource) bool {
 	_, ok := k8sResources[resource.Type]
 	return ok
 }
