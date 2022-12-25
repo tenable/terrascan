@@ -24,7 +24,7 @@ import (
 // DmsReplicationInstanceConfig holds config for DmsReplicationInstance
 type DmsReplicationInstanceConfig struct {
 	Config
-	AlocatedStorage            int      `json:"allocated_storage"`
+	AllocatedStorage           int      `json:"allocated_storage"`
 	AutoMinorVersionUpgrade    bool     `jons:"auto_minor_version_upgrade"`
 	AvailabilityZone           string   `json:"availability_zone"`
 	EngineVersion              string   `json:"engine_version"`
@@ -45,7 +45,7 @@ func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceCo
 			Tags: r.Tags,
 		},
 
-		AlocatedStorage:            functions.GetVal(r.AllocatedStorage),
+		AllocatedStorage:           functions.GetVal(r.AllocatedStorage),
 		AutoMinorVersionUpgrade:    functions.GetVal(r.AutoMinorVersionUpgrade),
 		AvailabilityZone:           functions.GetVal(r.AvailabilityZone),
 		EngineVersion:              functions.GetVal(r.EngineVersion),
