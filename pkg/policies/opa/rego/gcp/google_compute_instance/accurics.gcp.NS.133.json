@@ -1,6 +1,6 @@
 {
-    "name": "shieldedVmEenabled",
-    "file": "shieldedVmEenabled.rego",
+    "name": "shieldedVmEnabled",
+    "file": "shieldedVmEnabled.rego",
     "policy_type": "gcp",
     "resource_type": "google_compute_instance",
     "template_args": null,
