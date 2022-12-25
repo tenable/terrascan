@@ -263,7 +263,7 @@ var _ = Describe("Scan", func() {
 
 		Context("multiple policy paths can be supplied", func() {
 			When("one of the supplied policy path is invalid", func() {
-				It("should error out and exit with staus code 1", func() {
+				It("should error out and exit with status code 1", func() {
 					validPolicyPath, err := filepath.Abs(filepath.Join("..", "test_data"))
 					Expect(err).NotTo(HaveOccurred())
 					scanArgs := []string{scanUtils.ScanCommand, "-p", validPolicyPath, "-p", invalidPolicyPath}
