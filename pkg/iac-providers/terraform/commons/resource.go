@@ -33,7 +33,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	// read source file
 	fileBytes, err := os.ReadFile(managedResource.DeclRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", managedResource.DeclRange.Filename, err)
+		zap.S().Errorf("failed to read terraform IaC file '%s'. error: '%v'", managedResource.DeclRange.Filename, err)
 		return resourceConfig, fmt.Errorf("failed to read terraform file")
 	}
 
