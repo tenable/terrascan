@@ -1,6 +1,6 @@
 package accurics
 
-awsCloudWatchRetentionPreiod[retVal] {
+awsCloudWatchRetentionPeriod[retVal] {
     api := input.aws_cloudwatch_log_group[_]
     api.config.retention_in_days == 0
     
