@@ -198,7 +198,7 @@
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Infrastructure Security | EcsCluster | HIGH | Like any other EC2 instance it is recommended to place ECS instance within a VPC. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations | AWS.EcsCluster.NetworkSecurity.High.0104 | AC_AWS_0088 |
-| Infrastructure Security | AETD | MEDIUM | Ensure EFS volume used for ECS task defination has in transit encryption enabled | AWS.AETD.IS.MEDIUM.0043 | AC_AWS_0463 |
+| Infrastructure Security | AETD | MEDIUM | Ensure EFS volume used for ECS task definition has in transit encryption enabled | AWS.AETD.IS.MEDIUM.0043 | AC_AWS_0463 |
 | Data Protection | LaunchConfiguration | HIGH | Sensitive Information Disclosure | AWS.LaunchConfiguration.DataSecurity.High.0101 | AC_AWS_0095 |
 
 
