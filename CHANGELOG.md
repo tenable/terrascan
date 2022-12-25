@@ -1058,7 +1058,7 @@
 
 **Fixed bugs:**
 
-- Oudated Docker image [\#294](https://github.com/accurics/terrascan/issues/294)
+- Outdated Docker image [\#294](https://github.com/accurics/terrascan/issues/294)
 - Error with XML output [\#290](https://github.com/accurics/terrascan/issues/290)
 - Fixed checkIpForward rule \(gcp\) [\#323](https://github.com/accurics/terrascan/pull/323) ([williepaul](https://github.com/williepaul))
 
