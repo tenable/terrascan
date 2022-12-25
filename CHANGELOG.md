@@ -1007,7 +1007,7 @@
 - Private GitHub repositories are not recognized with version 3.0.0+ of GitHub provider [\#326](https://github.com/accurics/terrascan/issues/326)
 - Terrascan -var-file=../another dir [\#144](https://github.com/accurics/terrascan/issues/144)
 - Error in test\_aws\_security\_group\_inline\_rule\_open and test\_aws\_security\_group\_rule\_open [\#138](https://github.com/accurics/terrascan/issues/138)
-- Intial setup after installation [\#136](https://github.com/accurics/terrascan/issues/136)
+- Initial setup after installation [\#136](https://github.com/accurics/terrascan/issues/136)
 - Add support for data sources [\#3](https://github.com/accurics/terrascan/issues/3)
 - Support from modules [\#2](https://github.com/accurics/terrascan/issues/2)
 
