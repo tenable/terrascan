@@ -74,13 +74,13 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 
 			resData, err := json.Marshal(templateMap)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("resourseMap marshalling error error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("resourseMap marshalling error; error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			_, err = goformation.ParseJSON(resData)
 			if err != nil {
-				t.Errorf("CFTV1.sanitizeCftTemplate() parsing error error = %v, wantError: %v", err, nil)
+				t.Errorf("CFTV1.sanitizeCftTemplate() parsing error; error = %v, wantError: %v", err, nil)
 			}
 		})
 	}

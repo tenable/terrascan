@@ -276,7 +276,7 @@ func TestUpload(t *testing.T) {
 			notificationWebhookToken: "token",
 		},
 		{
-			name:                   "test for config with erorr invalid",
+			name:                   "test for config with error invalid",
 			path:                   testFilePath,
 			param:                  testParamName,
 			iacType:                testIacType,
@@ -285,7 +285,7 @@ func TestUpload(t *testing.T) {
 			invalidConfigWithError: true,
 		},
 		{
-			name:                   "test for config with eror",
+			name:                   "test for config with error",
 			path:                   testFilePath,
 			param:                  testParamName,
 			iacType:                testIacType,
