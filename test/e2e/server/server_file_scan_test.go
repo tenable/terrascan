@@ -148,7 +148,7 @@ var _ = Describe("Server File Scan", func() {
 
 				Context("unknown body attributes are present", func() {
 					Context("api server ignores unknown attributes", func() {
-						It("should receive violations and 200 OK resopnse", func() {
+						It("should receive violations and 200 OK response", func() {
 							bodyAttrs := make(map[string]string)
 							bodyAttrs["unknown_attribute"] = "someValue"
 
@@ -200,7 +200,7 @@ var _ = Describe("Server File Scan", func() {
 			iacFilePath, _ := filepath.Abs(filepath.Join(awsDbInsViolationRelPath, "main.tf"))
 
 			When("scan_rules is used", func() {
-				It("should receive violations and 200 OK resopnse", func() {
+				It("should receive violations and 200 OK response", func() {
 
 					bodyAttrs := make(map[string]string)
 					bodyAttrs["scan_rules"] = "AWS.RDS.DS.High.1041"

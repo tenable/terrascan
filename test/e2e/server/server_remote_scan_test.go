@@ -387,7 +387,7 @@ var _ = Describe("Server Remote Scan", func() {
 			remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/resource_skipping/terraform"
 
 			When("scan_rules is used", func() {
-				It("should receive violations and 200 OK resopnse", func() {
+				It("should receive violations and 200 OK response", func() {
 
 					bodyAttrs := make(map[string]interface{})
 					bodyAttrs["remote_type"] = "git"
