@@ -1131,7 +1131,7 @@ Resources:
               return urls
 
           @helper.delete
-          def delete_hanlder(event, _):
+          def delete_handler(event, _):
               urls = get_config_details(event)
               create_kubeconfig()
               for u in urls:
