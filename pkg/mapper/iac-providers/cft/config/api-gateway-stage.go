@@ -87,7 +87,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 			}
 			resourceConfigs = append(resourceConfigs, AWSResourceConfig{
 				Type: GatewayMethodSetting,
-				// Unique name for each method setting used fopr ID
+				// Unique name for each method setting used for ID
 				Name:     fmt.Sprintf("%s%v", functions.GetVal(s.StageName), i),
 				Resource: msc,
 				Metadata: s.AWSCloudFormationMetadata,
