@@ -422,7 +422,7 @@
 
 - Link to docks in README  [\#944](https://github.com/accurics/terrascan/issues/944)
 - Ensure remote modules are downloaded only once [\#936](https://github.com/accurics/terrascan/issues/936)
-- Rule supression for specific resources [\#868](https://github.com/accurics/terrascan/issues/868)
+- Rule suppression for specific resources [\#868](https://github.com/accurics/terrascan/issues/868)
 
 **Merged pull requests:**
 
@@ -877,7 +877,7 @@
 - release v1.3.1 [\#508](https://github.com/accurics/terrascan/pull/508) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
 - fix dependencies that were breaking the darwin/arm64 build [\#507](https://github.com/accurics/terrascan/pull/507) ([williepaul](https://github.com/williepaul))
 - support for terraform registry remote modules [\#505](https://github.com/accurics/terrascan/pull/505) ([patilpankaj212](https://github.com/patilpankaj212))
-- Readme rule supression [\#503](https://github.com/accurics/terrascan/pull/503) ([amirbenv](https://github.com/amirbenv))
+- Readme rule suppression [\#503](https://github.com/accurics/terrascan/pull/503) ([amirbenv](https://github.com/amirbenv))
 - Bump github.com/hashicorp/go-retryablehttp from 0.6.6 to 0.6.8 [\#496](https://github.com/accurics/terrascan/pull/496) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/hashicorp/go-getter from 1.5.1 to 1.5.2 [\#495](https://github.com/accurics/terrascan/pull/495) ([dependabot[bot]](https://github.com/apps/dependabot))
 
