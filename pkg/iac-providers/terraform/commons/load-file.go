@@ -72,7 +72,7 @@ func LoadIacFile(absFilePath, terraformVersion string) (allResourcesConfig outpu
 		resourceConfig.TerraformVersion = terraformVersion
 		resourceConfig.ProviderVersion = providerVersion
 
-		// if root module do not have provider contraints fetch the latest compatible version
+		// if root module do not have provider constraints fetch the latest compatible version
 		if resourceConfig.ProviderVersion == "" {
 			resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, terraformVersion)
 		}
