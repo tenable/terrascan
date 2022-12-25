@@ -72,7 +72,7 @@
 | Data Protection | RDS | MEDIUM | Ensure that your RDS database has IAM Authentication enabled. | AWS.RDS.DataSecurity.High.0577 | AC_AWS_0053 |
 | Infrastructure Security | RDS | HIGH | RDS Instance publicly_accessible flag is true | AWS.RDS.NS.High.0101 | AC_AWS_0054 |
 | Data Protection | RDS | HIGH | RDS Instance Auto Minor Version Upgrade flag disabled | AWS.RDS.DS.High.1041 | AC_AWS_0056 |
-| Data Protection | RDS | HIGH | Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance. | AWS.RDS.DataSecurity.High.0414 | AC_AWS_0058 |
+| Data Protection | RDS | HIGH | Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and description of data transparently with minimal impact on performance. | AWS.RDS.DataSecurity.High.0414 | AC_AWS_0058 |
 
 
 ### aws_secretsmanager_secret_policy

@@ -5,7 +5,7 @@
     "resource_type": "aws_db_instance",
     "template_args": null,
     "severity": "HIGH",
-    "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+    "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and description of data transparently with minimal impact on performance.",
     "reference_id": "AWS.RDS.DataSecurity.High.0414",
     "category": "Data Protection",
     "version": 1,
