@@ -768,11 +768,11 @@ var jsonTree = (function() {
                 return JSON.stringify(this.sourceJSONObj);
             }
 
-            var DELIMETER = "[%^$#$%^%]",
-                jsonStr = JSON.stringify(this.sourceJSONObj, null, DELIMETER);
+            var DELIMITER = "[%^$#$%^%]",
+                jsonStr = JSON.stringify(this.sourceJSONObj, null, DELIMITER);
 
             jsonStr = jsonStr.split("\n").join("<br />");
-            jsonStr = jsonStr.split(DELIMETER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
+            jsonStr = jsonStr.split(DELIMITER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
 
             return jsonStr;
         },
