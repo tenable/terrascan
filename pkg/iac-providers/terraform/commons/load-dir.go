@@ -163,7 +163,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
-		// Get the downloader chache
+		// Get the downloader cache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 		if diags.HasErrors() {
@@ -302,7 +302,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
-	// Get the downloader chache
+	// Get the downloader cache
 	remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 	if diags.HasErrors() {
