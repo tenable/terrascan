@@ -9,7 +9,7 @@
 - \[fix\] Resolve Vulnerable packages [\#1486](https://github.com/tenable/terrascan/pull/1486) ([rahulchheda](https://github.com/rahulchheda))
 - added tar.gz archive for windows [\#1474](https://github.com/tenable/terrascan/pull/1474) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Update opa and cobra version [\#1472](https://github.com/tenable/terrascan/pull/1472) ([nasir-rabbani](https://github.com/nasir-rabbani))
-- ignored matching provider verson in tests [\#1470](https://github.com/tenable/terrascan/pull/1470) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- ignored matching provider version in tests [\#1470](https://github.com/tenable/terrascan/pull/1470) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - added terraform and provider version in resource config [\#1469](https://github.com/tenable/terrascan/pull/1469) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Bump github.com/hashicorp/go-getter from 1.5.11 to 1.6.2 [\#1298](https://github.com/tenable/terrascan/pull/1298) ([dependabot[bot]](https://github.com/apps/dependabot))
 
