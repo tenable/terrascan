@@ -176,12 +176,12 @@ func readMinMaxSeverityFromAnnotations(annotations map[string]interface{}, resou
 	if minSeverityAnnotation, ok = annotations[terrascanMinSeverity]; !ok {
 		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMinSeverity, resourceID)
 	} else if minSeverity, ok = minSeverityAnnotation.(string); !ok {
-		zap.S().Debugf("%s must be a string cantaining value as (High | Low| Medium)", terrascanMinSeverity)
+		zap.S().Debugf("%s must be a string containing value as (High | Low| Medium)", terrascanMinSeverity)
 	}
 	if maxSeverityAnnotation, ok = annotations[terrascanMaxSeverity]; !ok {
 		zap.S().Debugf(infileInstructionNotPresentLog, terrascanMaxSeverity, resourceID)
 	} else if maxSeverity, ok = maxSeverityAnnotation.(string); !ok {
-		zap.S().Debugf("%s must be a string cantaining value as (High | Low| Medium)", terrascanMaxSeverity)
+		zap.S().Debugf("%s must be a string containing value as (High | Low| Medium)", terrascanMaxSeverity)
 	}
 	return
 }
