@@ -60,7 +60,7 @@ func (g *APIHandler) scanFile(w http.ResponseWriter, r *http.Request) {
 	// the Header and the size of the file
 	file, handler, err := r.FormFile("file")
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to retreive uploaded file. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to retrieve uploaded file. error: '%v'", err)
 		zap.S().Error(errMsg)
 		apiErrorResponse(w, errMsg, http.StatusInternalServerError)
 		return
