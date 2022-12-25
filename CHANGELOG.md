@@ -556,7 +556,7 @@
 - tfplan should use resource address for id field [\#702](https://github.com/accurics/terrascan/issues/702)
 - Rule IDs with spaces cannot be skipped [\#610](https://github.com/accurics/terrascan/issues/610)
 - AWS.CloudFront.Network Security.Low.0568 Doesn't allow skipping due to space in filename [\#549](https://github.com/accurics/terrascan/issues/549)
-- Error parsing syntax if using complex query for dynamic ip\_restriction in azurerm\_function\_app or azurerm\_app\_service ressource [\#433](https://github.com/accurics/terrascan/issues/433)
+- Error parsing syntax if using complex query for dynamic ip\_restriction in azurerm\_function\_app or azurerm\_app\_service resource [\#433](https://github.com/accurics/terrascan/issues/433)
 
 **Closed issues:**
 

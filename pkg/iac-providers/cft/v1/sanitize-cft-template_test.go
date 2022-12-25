@@ -74,7 +74,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 
 			resData, err := json.Marshal(templateMap)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("resourseMap marshalling error; error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("resourceMap marshalling error; error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
