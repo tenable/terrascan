@@ -44,8 +44,8 @@ var (
 )
 
 const (
-	terraformModuleInstallDir             = ".terraform/modules"
-	terraformInstalledModulelMetaFileName = "modules.json"
+	terraformModuleInstallDir            = ".terraform/modules"
+	terraformInstalledModuleMetaFileName = "modules.json"
 )
 
 // TerraformInstalledModuleMetaData metadata about the module downloaded and present in terraform cache.
@@ -562,7 +562,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 	var ok bool
 	if modules, ok = t.terraformInitModuleCache[terraformInitRegs]; !ok {
 		if utils.IsDirExists(terraformInitRegs) {
-			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModuleMetaFileName))
 			if err != nil {
 				if os.IsNotExist(err) {
 					zap.S().Debug("found no terraform module metadata file in dir %s", terraformInitRegs)
@@ -571,7 +571,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
+			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModuleMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {
