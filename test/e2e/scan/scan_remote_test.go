@@ -236,12 +236,12 @@ var _ = Describe("Scan Command using remote types", func() {
 			tmpDir, err := filepath.Abs(filepath.Join(iacRootRelPath, "temp_dir"))
 			Expect(err).NotTo(HaveOccurred())
 			JustBeforeEach(func() {
-				err = os.Setenv("TERRRASCAN_CUSTOM_TEMP_DIR", tmpDir)
+				err = os.Setenv("TERRASCAN_CUSTOM_TEMP_DIR", tmpDir)
 				Expect(err).NotTo(HaveOccurred())
 			})
 
 			JustAfterEach(func() {
-				err := os.Unsetenv("TERRRASCAN_CUSTOM_TEMP_DIR")
+				err := os.Unsetenv("TERRASCAN_CUSTOM_TEMP_DIR")
 				Expect(err).NotTo(HaveOccurred())
 			})
 			It("should download the resource in provided custom temp dir and generate scan results", func() {

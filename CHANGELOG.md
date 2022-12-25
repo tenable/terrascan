@@ -667,7 +667,7 @@
 - fix failing test [\#740](https://github.com/accurics/terrascan/pull/740) ([patilpankaj212](https://github.com/patilpankaj212))
 - AWS policy pack update [\#737](https://github.com/accurics/terrascan/pull/737) ([harkirat22](https://github.com/harkirat22))
 - Adding release checklist [\#734](https://github.com/accurics/terrascan/pull/734) ([jlk](https://github.com/jlk))
-- Gh action terrscan\_atlantis release [\#733](https://github.com/accurics/terrascan/pull/733) ([dev-gaur](https://github.com/dev-gaur))
+- Gh action terrascan\_atlantis release [\#733](https://github.com/accurics/terrascan/pull/733) ([dev-gaur](https://github.com/dev-gaur))
 - adds argocd integration dockerfile, scripts, doc  and examples [\#732](https://github.com/accurics/terrascan/pull/732) ([Rchanger](https://github.com/Rchanger))
 - Fix NSG associations [\#727](https://github.com/accurics/terrascan/pull/727) ([xortim](https://github.com/xortim))
 - changes for argocd integration [\#724](https://github.com/accurics/terrascan/pull/724) ([patilpankaj212](https://github.com/patilpankaj212))
