@@ -33,8 +33,8 @@ type ResultConfigurationBlock struct {
 	OutputLocation          string                         `json:"output_location"`
 }
 
-// EnginerVersionBlock holds config for engine_version attribute
-type EnginerVersionBlock struct {
+// EngineerVersionBlock holds config for engine_version attribute
+type EngineerVersionBlock struct {
 	SelectedEngineVersion string `json:"selected_version"`
 }
 
@@ -44,7 +44,7 @@ type WorkgroupConfigurationBlock struct {
 	EnforceWorkgroupConfiguration   bool                       `json:"enforce_workgroup_configuration"`
 	RequesterPaysEnabled            bool                       `json:"requester_pays_enabled"`
 	PublishCloudwatchMetricsEnabled bool                       `json:"publish_cloudwatch_metrics_enabled"`
-	EngineVersion                   []EnginerVersionBlock      `json:"engine_version"`
+	EngineVersion                   []EngineerVersionBlock     `json:"engine_version"`
 	ResultConfiguration             []ResultConfigurationBlock `json:"result_configuration"`
 }
 
@@ -68,7 +68,7 @@ func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 		workGroupConfig[0].PublishCloudwatchMetricsEnabled = functions.GetVal(w.WorkGroupConfiguration.PublishCloudWatchMetricsEnabled)
 
 		if w.WorkGroupConfiguration.EngineVersion != nil {
-			engineConfig := make([]EnginerVersionBlock, 1)
+			engineConfig := make([]EngineerVersionBlock, 1)
 			engineConfig[0].SelectedEngineVersion = functions.GetVal(w.WorkGroupConfiguration.EngineVersion.SelectedEngineVersion)
 			workGroupConfig[0].EngineVersion = engineConfig
 		}

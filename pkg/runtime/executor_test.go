@@ -171,7 +171,7 @@ func TestExecute(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "test policy enginer no error",
+			name: "test policy engineer no error",
 			executor: Executor{
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
