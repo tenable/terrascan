@@ -8,7 +8,7 @@ resource "complex_var_resource" "complex" {
   tupleVar = var.tuple_var
   listTuple = var.list_of_tuple
   tupleVarComplex = var.tuple_var_complex
-  objecVar = var.object_var
+  objectVar = var.object_var
   mapVar = var.map_var
   mapVarComplex = var.map_var_complex
   objectList = var.object_list

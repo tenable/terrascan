@@ -57,7 +57,7 @@
             "name": "Antman"
           }
         },
-        "objecVar": {
+        "objectVar": {
           "address": "pune",
           "name": "pankaj"
         },
@@ -122,7 +122,7 @@
         "list_no_type": 6,
         "mapVar": 12,
         "mapVarComplex": 13,
-        "objecVar": 11,
+        "objectVar": 11,
         "objectList": 14,
         "objectListComplex": 15,
         "setVar": 7,

@@ -144,7 +144,7 @@ var jsonTree = (function() {
     /**
      * The factory for creating nodes of defined type.
      *
-     * ~~~ Node ~~~ is a structure element of an onject or an array
+     * ~~~ Node ~~~ is a structure element of an object or an array
      * with own label (a key of an object or an index of an array)
      * and value of any json data type. The root object or array
      * is a node without label.
