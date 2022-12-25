@@ -11,7 +11,7 @@ import (
 	"github.com/tenable/terrascan/pkg/results"
 )
 
-// these variables would be used as test input accross the writer package
+// these variables would be used as test input across the writer package
 var (
 	resourceConfigInput = output.AllResourceConfigs{
 		"aws_s3_bucket": []output.ResourceConfig{
