@@ -1,6 +1,6 @@
 {
-    "name": "iamRolePolicyWithPrivildegeEscalation",
-    "file": "iamRolePolicyWithPrivildegeEscalation.rego",
+    "name": "iamRolePolicyWithPrivilegeEscalation",
+    "file": "iamRolePolicyWithPrivilegeEscalation.rego",
     "policy_type": "aws",
     "resource_type": "aws_iam_role_policy",
     "template_args": {
