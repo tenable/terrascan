@@ -86,9 +86,9 @@ func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) ma
 			)
 		}
 		cf[tfParametersContent] = parametersContent
-	} else if paramtersLink := convert.ToMap(r.Properties, armParametersLink); paramtersLink != nil {
-		if parametersURI := convert.ToString(paramtersLink, armURI); parametersURI != "" {
-			// if paramtersLink has a uri
+	} else if parametersLink := convert.ToMap(r.Properties, armParametersLink); parametersLink != nil {
+		if parametersURI := convert.ToString(parametersLink, armURI); parametersURI != "" {
+			// if parametersLink has a uri
 			parametersURI = fn.LookUpString(vars, params, parametersURI)
 			parametersContent, err := fn.ResolveLinkedTemplate(parametersURI)
 			if err != nil {

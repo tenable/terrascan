@@ -36,26 +36,26 @@ const (
 	RemoteScanTimeout int = 30
 )
 
-// RunScanAndAssertGoldenOutputRegex runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertGoldenOutputRegex runs the scan command with supplied parameters and compares actual and golden output
 // it replaces variable parts in output with regex eg: timestamp, file path
 func RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGoldenSummaryRegex(session, goldenFileAbsPath, isJunitXML, isStdOut)
 }
 
-// RunScanAndAssertGoldenOutput runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertGoldenOutput runs the scan command with supplied parameters and compares actual and golden output
 func RunScanAndAssertGoldenOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGolden(session, goldenFileAbsPath, isStdOut)
 }
 
-// RunScanAndAssertJSONOutput runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertJSONOutput runs the scan command with supplied parameters and compares actual and golden output
 func RunScanAndAssertJSONOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGoldenJSON(session, goldenFileAbsPath, isStdOut)
 }
 
-// RunScanAndAssertJSONOutputString runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertJSONOutputString runs the scan command with supplied parameters and compares actual and golden output
 func RunScanAndAssertJSONOutputString(terrascanBinaryPath, goldenString string, exitCode int, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	argList := []string{ScanCommand}
 	argList = append(argList, args...)
@@ -64,19 +64,19 @@ func RunScanAndAssertJSONOutputString(terrascanBinaryPath, goldenString string, 
 	helper.CompareActualWithGoldenJSONString(session, goldenString, isStdOut)
 }
 
-// RunScanAndAssertYAMLOutput runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertYAMLOutput runs the scan command with supplied parameters and compares actual and golden output
 func RunScanAndAssertYAMLOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGoldenYAML(session, goldenFileAbsPath, isStdOut)
 }
 
-// RunScanAndAssertXMLOutput runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertXMLOutput runs the scan command with supplied parameters and compares actual and golden output
 func RunScanAndAssertXMLOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGoldenXML(session, goldenFileAbsPath, isStdOut)
 }
 
-// RunScanAndAssertErrorMessage runs the scan command with supplied paramters and checks of error string is present
+// RunScanAndAssertErrorMessage runs the scan command with supplied parameters and checks of error string is present
 func RunScanAndAssertErrorMessage(terrascanBinaryPath string, exitCode, timeOut int, errString string, outWriter, errWriter io.Writer, args ...string) {
 	session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, args...)
 	gomega.Eventually(session, timeOut).Should(gexec.Exit(exitCode))
@@ -94,7 +94,7 @@ func RunScanCommand(terrascanBinaryPath, relGoldenFilePath string, exitCode int,
 	return session, goldenFileAbsPath
 }
 
-// RunScanAndAssertGoldenSarifOutputRegex runs the scan command with supplied paramters and compares actual and golden output
+// RunScanAndAssertGoldenSarifOutputRegex runs the scan command with supplied parameters and compares actual and golden output
 // it replaces variable parts in output with regex eg: uri, version path
 func RunScanAndAssertGoldenSarifOutputRegex(terrascanBinaryPath, relGoldenFilePath string, exitCode int, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
