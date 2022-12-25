@@ -46,7 +46,7 @@ type ResourceConfig struct {
 	ProviderVersion     string             `json:"provider_version,omitempty"`
 }
 
-// ContainerDetails holds information about container name, image and vulberabilities
+// ContainerDetails holds information about container name, image and vulnerabilities
 type ContainerDetails struct {
 	Name            string          `json:"name"`
 	Image           string          `json:"image"`
