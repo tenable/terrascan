@@ -8,7 +8,7 @@
     },
     "severity": "MEDIUM",
     "description": "Ensure AWS Lambda function has policy attached.",
-    "reference_id": "AWS.LambdaFunction.LM.MEIDUM.0063",
+    "reference_id": "AWS.LambdaFunction.LM.MEDIUM.0063",
     "category": "Logging and Monitoring",
     "id": "AC_AWS_0484",
     "version": 2

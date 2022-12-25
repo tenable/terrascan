@@ -480,7 +480,7 @@
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEIDUM.0063 | AC_AWS_0484 |
+| Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEDIUM.0063 | AC_AWS_0484 |
 | Infrastructure Security | LambdaFunction | Low | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 | AC_AWS_0486 |
 | Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 | AC_AWS_0485 |
 | Data Protection | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 | AC_AWS_0483 |
