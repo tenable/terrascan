@@ -131,7 +131,7 @@ var _ = Describe("Scan", func() {
 				})
 
 				When("tf file present in the dir has no violations", func() {
-					Context("when there are no violations, but has dir scan erros, terrascan exits with status code 4", func() {
+					Context("when there are no violations, but has dir scan errors, terrascan exits with status code 4", func() {
 						It("should scan the directory and exit with status code 0", func() {
 							workDir, err := filepath.Abs(filepath.Join(awsIacRelPath, "aws_db_instance_violation"))
 							Expect(err).NotTo(HaveOccurred())
