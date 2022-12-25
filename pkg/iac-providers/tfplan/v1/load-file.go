@@ -30,7 +30,7 @@ import (
 const jqQuery = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
 
 var (
-	errIncorrectFormatVersion = fmt.Errorf("terraform format version shoule be one of '%s'", strings.Join(getTfPlanFormatVersions(), ", "))
+	errIncorrectFormatVersion = fmt.Errorf("terraform format version should be one of '%s'", strings.Join(getTfPlanFormatVersions(), ", "))
 	errEmptyTerraformVersion  = fmt.Errorf("terraform version cannot be empty in tfplan json")
 )
 
