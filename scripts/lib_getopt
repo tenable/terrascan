@@ -360,7 +360,7 @@ getopt() {
   }
 
   _getopt_resolve_abbrev() {
-    # Resolves an abbrevation from a list of possibilities.
+    # Resolves an abbreviation from a list of possibilities.
     # If the abbreviation is unambiguous, echoes the expansion on stdout
     # and returns 0.  If the abbreviation is ambiguous, prints a message on
     # stderr and returns 1. (For first parse this should convert to exit
