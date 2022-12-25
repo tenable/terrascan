@@ -832,7 +832,7 @@
 **Closed issues:**
 
 - How to get rid of "Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary." [\#405](https://github.com/accurics/terrascan/issues/405)
-- False Positive for accurics.azure.NS.161 when Security Groups Association and Subnets are defined indepently from VNet [\#391](https://github.com/accurics/terrascan/issues/391)
+- False Positive for accurics.azure.NS.161 when Security Groups Association and Subnets are defined independently from VNet [\#391](https://github.com/accurics/terrascan/issues/391)
 - Calico is not supported as a valid Network Security for azurerm\_kubernetes\_cluster [\#376](https://github.com/accurics/terrascan/issues/376)
 
 **Merged pull requests:**
