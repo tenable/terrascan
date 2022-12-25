@@ -324,7 +324,7 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 		-eg: file/folder, scannedAt, file
 		-These attributes needs to be removed from the actual and golden output before comparing
 		-Also, the violations are not in order, they need to be sorted from both actual and golden output,
-		 before the comparision is made. Below are the steps:
+		 before the comparison is made. Below are the steps:
 
 		1. sort actual and golden violations and remove "file" attribute
 		2. sort actual and golden skipped violations and remove "file" attribute
