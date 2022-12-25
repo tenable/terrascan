@@ -221,7 +221,7 @@
 
 - skip terrascan init for --config-with-error flag [\#1160](https://github.com/accurics/terrascan/pull/1160) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Bugfix/s3 user policy [\#1157](https://github.com/accurics/terrascan/pull/1157) ([gaurav-gogia](https://github.com/gaurav-gogia))
-- fix rds encryptionc check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fix rds encryption check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
 - Update mkdocs-material to 8.2.1 [\#1155](https://github.com/accurics/terrascan/pull/1155) ([pyup-bot](https://github.com/pyup-bot))
 - Adds: missing release tag push step [\#1151](https://github.com/accurics/terrascan/pull/1151) ([Rchanger](https://github.com/Rchanger))
 - Adding CFT scanning support for the resources: [\#1149](https://github.com/accurics/terrascan/pull/1149) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
