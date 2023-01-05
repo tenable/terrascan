@@ -38,6 +38,7 @@ import (
 const (
 	useTerraformCache = "useTerraformCache"
 	nonRecursive      = "nonRecursive"
+	valuesFiles       = "valuesFiles"
 )
 
 // Executor object
@@ -63,10 +64,11 @@ type Executor struct {
 	notificationWebhookToken string
 	repoURL                  string
 	repoRef                  string
+	valuesFiles              []string
 }
 
 // NewExecutor creates a runtime object
-func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef string) (e *Executor, err error) {
+func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dirPath string, policyPath, scanRules, skipRules, categories []string, severity string, nonRecursive, useTerraformCache, findVulnerabilities bool, notificationWebhookURL, notificationWebhookToken, repoURL, repoRef string, valuesFiles []string) (e *Executor, err error) {
 	e = &Executor{
 		filePath:                 filePath,
 		dirPath:                  dirPath,
@@ -82,6 +84,7 @@ func NewExecutor(iacType, iacVersion string, policyTypes []string, filePath, dir
 		notificationWebhookToken: notificationWebhookToken,
 		repoURL:                  repoURL,
 		repoRef:                  repoRef,
+		valuesFiles:              valuesFiles,
 	}
 
 	// assigning vulnerabilityEngine
@@ -408,5 +411,6 @@ func (e *Executor) buildOptions() map[string]interface{} {
 	options := make(map[string]interface{})
 	options[useTerraformCache] = e.useTerraformCache
 	options[nonRecursive] = e.nonRecursive
+	options[valuesFiles] = e.valuesFiles
 	return options
 }
