@@ -263,9 +263,11 @@ func (h *HelmV3) loadChart(chartPath string, options map[string]interface{}) ([]
 	// check if custom values files are given as options
 	if valuesFiles, ok := options[valuesFiles]; ok {
 		valuesFilePaths = valuesFiles.([]string)
+		logger.Debug("found user defined values.yaml files list", zap.Any("values", valuesFilePaths))
 	}
 	if len(valuesFilePaths) == 0 { // if no values-files list provided then use default values.yaml file
 		valuesFilePaths = []string{helmValuesFilename}
+		logger.Debug("defaulting to values.yaml file present in the current directory", zap.Any("values", valuesFilePaths))
 	}
 
 	allValuesFiles := make([]map[interface{}]interface{}, 0)
@@ -282,7 +284,7 @@ func (h *HelmV3) loadChart(chartPath string, options map[string]interface{}) ([]
 	if len(allValuesFiles) > 0 {
 		resultValueMap := allValuesFiles[0]
 		for i := 1; i < len(valuesFilePaths); i++ {
-			resultValueMap = h.mergeMaps(resultValueMap, allValuesFiles[i])
+			resultValueMap = utils.MergeMaps(resultValueMap, allValuesFiles[i])
 		}
 
 		outValuesBytes, err := yaml.Marshal(resultValueMap)
@@ -343,26 +345,6 @@ func (h *HelmV3) getHelmChartFilenames() []string {
 // Name returns name of the provider
 func (h *HelmV3) Name() string {
 	return "helm"
-}
-
-// mergeMaps merges two maps the second map values overriding first map
-func (h *HelmV3) mergeMaps(a, b map[interface{}]interface{}) map[interface{}]interface{} {
-	out := make(map[interface{}]interface{}, len(a))
-	for k, v := range a {
-		out[k] = v
-	}
-	for k, v := range b {
-		if v, ok := v.(map[interface{}]interface{}); ok {
-			if bv, ok := out[k]; ok {
-				if bv, ok := bv.(map[interface{}]interface{}); ok {
-					out[k] = h.mergeMaps(bv, v)
-					continue
-				}
-			}
-		}
-		out[k] = v
-	}
-	return out
 }
 
 // readFileIntoInterface reads and converts file into interface
