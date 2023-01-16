@@ -15,7 +15,7 @@
         "suffix": "",
         "value": "false"
     },
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "CPU Request Not Set in config file.",
     "reference_id": "AC-K8-OE-PK-M-0155",
     "category": "Security Best Practices",

@@ -6,7 +6,7 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "It is important to enable cloudWatch monitoring incase monitoring the activity",
     "reference_id": "AC-AW-LM-LC-M-0440",
     "category": "Logging and Monitoring",

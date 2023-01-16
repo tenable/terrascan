@@ -4,7 +4,7 @@
     "policy_type": "gcp",
     "resource_type": "google_container_cluster",
     "template_args": null,
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "GKE Control Plane is exposed to few public IP addresses using master-authorized-network-config",
     "reference_id": "AC-GC-IS-CC-M-0367",
     "id": "AC_GCP_0292",

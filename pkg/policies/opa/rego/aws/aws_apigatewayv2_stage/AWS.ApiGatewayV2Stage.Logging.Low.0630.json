@@ -4,7 +4,7 @@
     "policy_type": "aws",
     "resource_type": "aws_apigatewayv2_stage",
     "template_args": null,
-    "severity": "Low",
+    "severity": "LOW",
     "description": "AWS API Gateway V2 Stage is missing access logs",
     "reference_id": "AWS.ApiGatewayV2Stage.Logging.0630",
     "category": "Logging and Monitoring",

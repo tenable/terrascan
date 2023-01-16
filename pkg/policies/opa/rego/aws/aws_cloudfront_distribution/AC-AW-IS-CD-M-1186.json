@@ -4,7 +4,7 @@
     "policy_type": "aws",
     "resource_type": "aws_cloudfront_distribution",
     "template_args": null,
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "Ensure that cloud-front has web application firewall enabled",
     "reference_id": "AC-AW-IS-CD-M-1186",
     "category": "Infrastructure Security",

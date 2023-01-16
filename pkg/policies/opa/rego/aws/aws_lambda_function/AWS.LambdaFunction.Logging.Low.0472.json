@@ -6,7 +6,7 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "Low",
+    "severity": "LOW",
     "description": "Lambda function does not include a VPC configuration.",
     "reference_id": "AWS.LambdaFunction.Logging.0472",
     "category": "Infrastructure Security",
