@@ -31,6 +31,7 @@ import (
 )
 
 var testInvalidAttribdir = "terraform-with-attrib-errors/module/firewall-test"
+var unsupportedArgument = `Unsupported argument; An argument named "replace_triggered_by" is not expected here`
 
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
@@ -55,14 +56,14 @@ func TestLoadIacDir(t *testing.T) {
 `, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
 
 	errStringUnifiedInvalidattrib := fmt.Sprintf(`failed to build unified config. errors:
-%s/firewall-module.tf:7,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
-%s/firewall-module.tf:25,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
-`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir))
+%s/firewall-module.tf:7,5-25: %s.
+%s/firewall-module.tf:25,5-25: %s.
+`, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
 
 	errDiagnostincMessageAttrib := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s/firewall-module.tf:7,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
-%s/firewall-module.tf:25,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
-`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir))
+%s/firewall-module.tf:7,5-25: %s.
+%s/firewall-module.tf:25,5-25: %s.
+`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
 
 	testDirPath1 := "not-there"
 	testDirPath2 := filepath.Join(testDataDir, "testfile")
@@ -288,7 +289,6 @@ func TestLoadIacDir(t *testing.T) {
 			},
 			wantErr: nilMultiErr,
 		},
-
 		{
 			name:        "Invalid attribute error should be ignored and should return resources",
 			tfConfigDir: filepath.Join(testDataDir, "terraform-with-attrib-errors/firewall"),
