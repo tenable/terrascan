@@ -1,0 +1,185 @@
+{
+  "aws_route53_resolver_firewall_config": [
+    {
+      "id": "aws_route53_resolver_firewall_config.firewall",
+      "name": "firewall",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 42,
+      "type": "aws_route53_resolver_firewall_config",
+      "config": {
+        "firewall_fail_open": "ENABLED",
+        "resource_id": "${aws_vpc.example.id}"
+      },
+      "line_config": {
+        "firewall_fail_open": 43,
+        "resource_id": 44
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.50.0"
+    }
+  ],
+  "aws_route53_resolver_firewall_domain_list": [
+    {
+      "id": "aws_route53_resolver_firewall_domain_list.dlist",
+      "name": "dlist",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 1,
+      "type": "aws_route53_resolver_firewall_domain_list",
+      "config": {
+        "lifecycle": [
+          {
+            "ignore_changes": [
+              "${domains}"
+            ],
+            "replace_triggered_by": [
+              "${null_resource.someteam}"
+            ]
+          }
+        ],
+        "name": "some name"
+      },
+      "line_config": {
+        "lifecycle": [
+          {
+            "ignore_changes": 6,
+            "replace_triggered_by": 7
+          }
+        ],
+        "name": 2
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.50.0"
+    },
+    {
+      "id": "aws_route53_resolver_firewall_domain_list.team_allow",
+      "name": "team_allow",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 17,
+      "type": "aws_route53_resolver_firewall_domain_list",
+      "config": {
+        "domains": [
+          "example.com"
+        ],
+        "lifecycle": [
+          {
+            "ignore_changes": [
+              "${domains}"
+            ],
+            "replace_triggered_by": [
+              "${null_resource.team_allow}"
+            ]
+          }
+        ],
+        "name": "domain list"
+      },
+      "line_config": {
+        "domains": 19,
+        "lifecycle": [
+          {
+            "ignore_changes": 24,
+            "replace_triggered_by": 25
+          }
+        ],
+        "name": 18
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.50.0"
+    }
+  ],
+  "aws_vpc": [
+    {
+      "id": "aws_vpc.example",
+      "name": "example",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 35,
+      "type": "aws_vpc",
+      "config": {
+        "cidr_block": "10.0.0.0/16",
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true
+      },
+      "line_config": {
+        "cidr_block": 36,
+        "enable_dns_hostnames": 38,
+        "enable_dns_support": 37
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "4.50.0"
+    }
+  ],
+  "null_resource": [
+    {
+      "id": "null_resource.team_allow",
+      "name": "team_allow",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 29,
+      "type": "null_resource",
+      "config": {
+        "triggers": {
+          "domains": [
+            "example.com"
+          ]
+        }
+      },
+      "line_config": {
+        "triggers": {
+          "domains": 31
+        }
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "3.2.1"
+    },
+    {
+      "id": "null_resource.someteam",
+      "name": "someteam",
+      "module_name": "test-firewall",
+      "source": "../module/firewall-test/firewall-module.tf",
+      "plan_root": "./",
+      "line": 11,
+      "type": "null_resource",
+      "config": {
+        "triggers": {
+          "domains": [
+            "example.com"
+          ]
+        }
+      },
+      "line_config": {
+        "triggers": {
+          "domains": 13
+        }
+      },
+      "skip_rules": null,
+      "max_severity": "",
+      "min_severity": "",
+      "terraform_version": "0.15.0",
+      "provider_version": "3.2.1"
+    }
+  ]
+}
+

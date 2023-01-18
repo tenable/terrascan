@@ -272,6 +272,17 @@ func TestLoadIacDir(t *testing.T) {
 			},
 			wantErr: nilMultiErr,
 		},
+
+		{
+			name:        "Invalid attribute error should be ignored and should return resources",
+			tfConfigDir: filepath.Join(testDataDir, "terraform-with-attrib-errors/firewall"),
+			tfJSONFile:  filepath.Join(tfJSONDir, "firewall-with-attrib-error.json"),
+			tfv15:       TfV15{},
+			options: map[string]interface{}{
+				"nonRecursive": true,
+			},
+			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
+		},
 	}
 
 	for _, tt := range table2 {
