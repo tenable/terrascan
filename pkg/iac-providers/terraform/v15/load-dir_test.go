@@ -30,6 +30,8 @@ import (
 	"github.com/tenable/terrascan/pkg/utils"
 )
 
+var testInvalidAttribdir = "terraform-with-attrib-errors/module/firewall-test"
+
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 
@@ -51,6 +53,16 @@ func TestLoadIacDir(t *testing.T) {
 <nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
 <nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
 `, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
+
+	errStringUnifiedInvalidattrib := fmt.Sprintf(`failed to build unified config. errors:
+%s/firewall-module.tf:7,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
+%s/firewall-module.tf:25,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
+`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir))
+
+	errDiagnostincMessageAttrib := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
+%s/firewall-module.tf:7,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
+%s/firewall-module.tf:25,5-25: Unsupported argument; An argument named "replace_triggered_by" is not expected here.
+`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir))
 
 	testDirPath1 := "not-there"
 	testDirPath2 := filepath.Join(testDataDir, "testfile")
@@ -137,7 +149,11 @@ func TestLoadIacDir(t *testing.T) {
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(errStringInvalidModuleConfigs),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
+				fmt.Errorf(errStringUnifiedInvalidattrib),                                                                     // 10 good
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
+				fmt.Errorf(errDiagnostincMessageAttrib),                                                                       // 12
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                 // 13 good
 			),
 		},
 		{
