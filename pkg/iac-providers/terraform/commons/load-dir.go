@@ -172,7 +172,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", getErrorMessagesFromDiagnostics(diags))
 			zap.S().Warnf(errMessage)
 			t.addError(errMessage, dir)
-			continue
 		}
 
 		/*
@@ -310,7 +309,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		// loading the config dir, and continue with other directories
 		errMessage := fmt.Sprintf("failed to build unified config. errors:\n%+v\n", getErrorMessagesFromDiagnostics(diags))
 		zap.S().Warnf(errMessage)
-		return nil, multierror.Append(t.errIacLoadDirs, results.DirScanErr{IacType: "terraform", Directory: t.absRootDir, ErrMessage: ErrBuildTFConfigDir.Error()})
+		t.addError(ErrBuildTFConfigDir.Error(), t.absRootDir)
 	}
 
 	/*
