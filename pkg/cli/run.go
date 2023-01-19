@@ -120,6 +120,9 @@ type ScanOptions struct {
 
 	// logOutputDir lets us specify the directory to write scan result and log files
 	logOutputDir string
+
+	// valuesFiles is the array of helm values file
+	valuesFiles []string
 }
 
 // NewScanOptions returns a new pointer to ScanOptions
@@ -205,7 +208,7 @@ func (s *ScanOptions) Run() error {
 	// create a new runtime executor for processing IaC
 	executor, err := runtime.NewExecutor(s.iacType, s.iacVersion, s.policyType, s.iacFilePath, s.iacDirPath,
 		s.policyPath, s.scanRules, s.skipRules, s.categories, s.severity, s.nonRecursive, s.useTerraformCache,
-		s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken, s.repoURL, s.repoRef,
+		s.findVulnerabilities, s.notificationWebhookURL, s.notificationWebhookToken, s.repoURL, s.repoRef, s.valuesFiles,
 	)
 	if err != nil {
 		return err
