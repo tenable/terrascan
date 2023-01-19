@@ -28,6 +28,7 @@ Flags:
       --skip-rules strings        one or more rules to skip while scanning (example: --skip-rules="ruleID1,ruleID2")
       --use-colors string         color output (auto, t, f) (default "auto")
       --use-terraform-cache       use terraform init cache for remote modules (when used directory scan will be non recursive, flag applicable only with terraform IaC provider)
+      --values-files strings      one or more values files to scan(applicable for iactype=helm) (example: --values-files="file1-values.yaml,file2-values.yaml")
   -v, --verbose                   will show violations with details (applicable for default output)
       --webhook-token string      optional token used when sending authenticated requests to the notification webhook
       --webhook-url string        webhook URL where Terrascan will send JSON scan report and normalized IaC JSON
