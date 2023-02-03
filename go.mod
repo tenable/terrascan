@@ -58,8 +58,8 @@ require (
 	go.uber.org/zap v1.17.0
 	golang.org/x/sys v0.3.0
 	golang.org/x/tools v0.1.12 // indirect
-	google.golang.org/api v0.103.0
-	google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37
+	google.golang.org/api v0.109.0
+	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.1
 	helm.sh/helm/v3 v3.6.1
@@ -78,8 +78,8 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute v1.13.0 // indirect
-	cloud.google.com/go/compute/metadata v0.2.1 // indirect
+	cloud.google.com/go/compute v1.14.0 // indirect
+	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/grafeas v0.2.0 // indirect
 	cloud.google.com/go/iam v0.8.0 // indirect
 	cloud.google.com/go/storage v1.27.0 // indirect
@@ -140,7 +140,7 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.2.0 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.2.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
