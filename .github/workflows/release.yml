@@ -13,7 +13,7 @@ jobs:
       GO_VERSION: 1.19
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up Go
@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout Terrascan
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build Terrascan docker image
         run: make docker-build
