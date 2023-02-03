@@ -52,7 +52,7 @@ jobs:
         run: make e2e-vulnerability-tests
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
 
   # push image to Docker Hub
   push:
