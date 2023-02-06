@@ -81,5 +81,6 @@ func init() {
 	scanCmd.Flags().StringVarP(&scanOptions.notificationWebhookToken, "webhook-token", "", "", "optional token used when sending authenticated requests to the notification webhook")
 	scanCmd.Flags().StringVarP(&scanOptions.repoURL, "repo-url", "", "", "URL of the repo being scanned, will be reflected in scan summary")
 	scanCmd.Flags().StringVarP(&scanOptions.repoRef, "repo-ref", "", "", "branch of the repo being scanned")
+	scanCmd.Flags().StringSliceVarP(&scanOptions.valuesFiles, "values-files", "", []string{}, "one or more values files to scan(applicable for iactype=helm) (example: --values-files=\"file1-values.yaml,file2-values.yaml\")")
 	RegisterCommand(rootCmd, scanCmd)
 }
