@@ -123,7 +123,7 @@
 ### aws_apigatewayv2_api
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Security Best Practices | ApiGatewayV2Api | Medium | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.0630 | AC_AWS_0441 |
+| Security Best Practices | ApiGatewayV2Api | MEDIUM | Insecure Cross-Origin Resource Sharing Configuration allowing all domains | AWS.ApiGatewayV2Api.AccessControl.0630 | AC_AWS_0441 |
 
 
 ### aws_efs_file_system
@@ -224,7 +224,7 @@
 ### aws_apigatewayv2_stage
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | ApiGatewayV2Stage | Low | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.0630 | AC_AWS_0442 |
+| Logging and Monitoring | ApiGatewayV2Stage | LOW | AWS API Gateway V2 Stage is missing access logs | AWS.ApiGatewayV2Stage.Logging.0630 | AC_AWS_0442 |
 
 
 ### aws_ecr_repository
@@ -240,7 +240,7 @@
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Data Protection | CloudFront | HIGH | Secure ciphers are not used in CloudFront distribution | AWS.CloudFront.EncryptionandKeyManagement.High.0408 | AC_AWS_0023 |
 | Infrastructure Security | json | LOW | Ensure that geo restriction is enabled for your Amazon CloudFront CDN distribution to whitelist or blacklist a country in order to allow or restrict users in specific locations from accessing web application content. | AC-AW-IS-CD-M-0026 | AC_AWS_0026 |
-| Infrastructure Security | json | Medium | Ensure that cloud-front has web application firewall enabled | AC-AW-IS-CD-M-1186 | AC_AWS_0032 |
+| Infrastructure Security | json | MEDIUM | Ensure that cloud-front has web application firewall enabled | AC-AW-IS-CD-M-1186 | AC_AWS_0032 |
 | Data Protection | CloudFront | HIGH | Use encrypted connection between CloudFront and origin server | AWS.CloudFront.EncryptionandKeyManagement.High.0407 | AC_AWS_0024 |
 | Logging and Monitoring | CloudFront | MEDIUM | Ensure that your AWS Cloudfront distributions have the Logging feature enabled in order to track all viewer requests for the content delivered through the Content Delivery Network (CDN). | AWS.CloudFront.Logging.Medium.0567 | AC_AWS_0025 |
 
@@ -265,7 +265,7 @@
 | Identity and Access Management | json | HIGH | Ensure that launch configuration launched follows the least privilege principle | AC-AW-IA-LC-H-0441 | AC_AWS_0488 |
 | Data Protection | LaunchConfiguration | HIGH | Avoid using base64 encoded private keys as part of config | AWS.LaunchConfiguration.DataSecurity.High.0102 | AC_AWS_0168 |
 | Data Protection | LaunchConfiguration | HIGH | Avoid using base64 encoded shell script as part of config | AWS.LaunchConfiguration.DataSecurity.High.0101 | AC_AWS_0170 |
-| Logging and Monitoring | json | Medium | It is important to enable cloudWatch monitoring incase monitoring the activity | AC-AW-LM-LC-M-0440 | AC_AWS_0490 |
+| Logging and Monitoring | json | MEDIUM | It is important to enable cloudWatch monitoring incase monitoring the activity | AC-AW-LM-LC-M-0440 | AC_AWS_0490 |
 | Configuration and Vulnerability Analysis | json | HIGH | Launch configuration uses IMDSv1 which vulnerable to SSRF | AC-AW-CA-LC-H-0439 | AC_AWS_0487 |
 | Infrastructure Security | json | HIGH | Security group attached to launch configuration is wide open to internet  | AC-AW-IS-LC-H-0438 | AC_AWS_0489 |
 
@@ -468,7 +468,7 @@
 | Logging and Monitoring | CloudTrail | MEDIUM | Cloud Trail Multi Region not enabled | AWS.CloudTrail.Logging.Medium.0460 | AC_AWS_0034 |
 | Logging and Monitoring | CloudTrail | MEDIUM | Ensure CloudTrail has log file validation enabled. | AWS.CloudTrail.LM.MEDIUM.0087 | AC_AWS_0446 |
 | Logging and Monitoring | CloudTrail | MEDIUM | Ensure appropriate subscribers to each SNS topic | AWS.CloudTrail.Logging.Low.0559 | AC_AWS_0035 |
-| Logging and Monitoring | Config | Medium | Ensure AWS Config is enabled in all regions | AWS.Config.Logging.Medium.0590 | AC_AWS_0450 |
+| Logging and Monitoring | Config | MEDIUM | Ensure AWS Config is enabled in all regions | AWS.Config.Logging.Medium.0590 | AC_AWS_0450 |
 
 
 ### aws_sagemaker_notebook_instance
@@ -481,9 +481,9 @@
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEIDUM.0063 | AC_AWS_0484 |
-| Infrastructure Security | LambdaFunction | Low | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 | AC_AWS_0486 |
+| Infrastructure Security | LambdaFunction | LOW | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 | AC_AWS_0486 |
 | Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 | AC_AWS_0485 |
-| Data Protection | LambdaFunction | High | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 | AC_AWS_0483 |
+| Data Protection | LambdaFunction | HIGH | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 | AC_AWS_0483 |
 | Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 | AC_AWS_0163 |
 
 
