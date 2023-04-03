@@ -6,7 +6,7 @@
     "template_args": {
         "prefix": ""
     },
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "Ensure AWS Config is enabled in all regions",
     "reference_id": "AWS.Config.Logging.Medium.0590",
     "category": "Logging and Monitoring",

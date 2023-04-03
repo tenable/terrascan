@@ -15,7 +15,7 @@
         "suffix": "",
         "value": "false"
     },
-    "severity": "Medium",
+    "severity": "MEDIUM",
     "description": "Memory Request Not Set in config file.",
     "reference_id": "AC-K8-OE-PK-M-0157",
     "category": "Security Best Practices",

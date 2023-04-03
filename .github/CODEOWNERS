@@ -11,3 +11,4 @@
 /pkg/   @tenable/terrascan-maintainers
 
 /pkg/policies/opa/rego/ @tenable/terrascan-policy-maintainers
+/sonar-project.properties @tenable/infosec

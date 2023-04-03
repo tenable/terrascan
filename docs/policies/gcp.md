@@ -6,13 +6,6 @@
 | Compliance Validation | gcp | HIGH | Ensure Container-Optimized OS (cos) is used for Kubernetes Engine Clusters Node image. | accurics.gcp.OPS.114 | AC_GCP_0016 |
 | Security Best Practices | gcp | LOW | Ensure 'Automatic node repair' is enabled for Kubernetes Clusters. | accurics.gcp.OPS.144 | AC_GCP_0015 |
 
-
-### github_repository
-| Category | Resource | Severity | Description | Reference ID | ID |
-| -------- | -------- | -------- | ----------- | ------------ | -- |
-| Identity and Access Management | gcp | MEDIUM | Repository is Not Private. | accurics.gcp.IAM.145 | AC_GCP_0231 |
-
-
 ### google_bigquery_dataset
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
