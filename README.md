@@ -233,4 +233,3 @@ Terrascan is licensed under the [Apache 2.0 License](LICENSE).
 
 [![Forkers @tenable/terrascan](https://reporoster.com/forks/tenable/terrascan)](https://github.com/tenable/terrascan/network/members)
 
-
