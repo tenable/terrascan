@@ -1,0 +1,44 @@
+{
+    "aws_ecs_task_definition": [
+        {
+            "id": "aws_ecs_task_definition.demo-ecs-task-definition",
+            "name": "demo-ecs-task-definition",
+            "module_name": "root",
+            "source": "with_provider_config.tf",
+            "line": 6,
+            "type": "aws_ecs_task_definition",
+            "config": {
+                "container_definitions": "[\n    {\n        \"cpu\": 10,\n        \"command\": [\"sleep\", \"10\"],\n        \"entryPoint\": [\"/\"],\n        \"environment\": [\n            {\"name\": \"VARNAME\", \"value\": \"VARVAL\"}\n        ],\n        \"essential\": true,\n        \"image\": \"jenkins\",\n        \"memory\": 128,\n        \"name\": \"jenkins\",\n        \"portMappings\": [\n            {\n                \"containerPort\": 80,\n                \"hostPort\": 8080\n            }\n        ],\n        \"resourceRequirements\":[\n            {\n                \"type\":\"InferenceAccelerator\",\n                \"value\":\"device_1\"\n            }\n        ]\n    }\n]\n",
+                "cpu": "512",
+                "execution_role_arn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+                "family": "ecs-task-definition-demo",
+                "memory": "1024",
+                "network_mode": "awsvpc",
+                "requires_compatibilities": [
+                    "FARGATE"
+                ]
+            },
+            "line_config": {
+                "container_definitions": 14,
+                "cpu": 11,
+                "execution_role_arn": 12,
+                "family": 7,
+                "memory": 10,
+                "network_mode": 8,
+                "requires_compatibilities": 9
+            },
+            "skip_rules": null,
+            "max_severity": "",
+            "min_severity": "",
+            "container_images": [
+                {
+                    "name": "jenkins",
+                    "image": "jenkins",
+                    "vulnerabilities": null
+                }
+            ],
+            "terraform_version": "0.15.0",
+            "provider_version": "3.0.5"
+        }
+    ]
+}
