@@ -31,3 +31,21 @@ ul {
   color: #43e268;
   font-weight: bold;
 }
+
+div.message {
+  position: relative;
+  padding: 10px;
+  padding-left: 35px;
+  margin: 30px 10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.3);
+  background: #BBB;
+  color: #FFF;
+  
+  -webkit-transition: all .5s ease;
+     -moz-transition: all .5s ease;
+      -ms-transition: all .5s ease;
+       -o-transition: all .5s ease;
+          transition: all .5s ease;
+}
+
+div.message.warning{background: #E74;}
