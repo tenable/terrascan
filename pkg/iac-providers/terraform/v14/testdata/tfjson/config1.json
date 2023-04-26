@@ -69,7 +69,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_internet_gateway": [
@@ -96,7 +96,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_key_pair": [
@@ -119,7 +119,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_route_table": [
@@ -158,7 +158,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_route_table_association": [
@@ -181,7 +181,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_security_group": [
@@ -260,7 +260,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_subnet": [
@@ -291,7 +291,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ],
   "aws_vpc": [
@@ -322,7 +322,7 @@
       "max_severity": "",
       "min_severity": "",
       "terraform_version": "0.14.0",
-      "provider_version": "0.0.0"
+      "provider_version": "4.62.0"
     }
   ]
 }

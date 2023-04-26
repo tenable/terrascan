@@ -10,9 +10,8 @@ import (
 	"strings"
 
 	"github.com/apparentlymart/go-versions/versions"
-	"github.com/apparentlymart/go-versions/versions/constraints"
 	"github.com/hashicorp/terraform/addrs"
-	"github.com/hashicorp/terraform/configs"
+	hclConfigs "github.com/hashicorp/terraform/configs"
 	httputils "github.com/tenable/terrascan/pkg/utils/http"
 	"go.uber.org/zap"
 )
@@ -22,11 +21,7 @@ const (
 	terraformVersionHeader = "X-Terraform-Version"
 )
 
-// VersionConstraints ...
-type VersionConstraints = constraints.IntersectionSpec
-
-// Requirements ...
-type Requirements map[addrs.Provider]VersionConstraints
+var versionCache = make(map[string]string)
 
 // ProviderVersions ...
 type ProviderVersions struct {
@@ -37,13 +32,9 @@ type ProviderVersions struct {
 	Warnings []string `json:"warnings"`
 }
 
-// ProviderVersionList fetches all the versions of terraform providers
-func ProviderVersionList(ctx context.Context, addr addrs.Provider, terraformVersion string) (versions.List, []string, error) {
+// providerVersionList fetches all the versions of terraform providers
+func providerVersionList(ctx context.Context, addr addrs.Provider, terraformVersion string) (versions.List, []string, error) {
 	zap.S().Debugf("fetching list of providers metadata, hostname: %q, type: %q, namespace: %q, ", addr.Hostname.String(), addr.Namespace, addr.Type)
-
-	if addr.Hostname.String() == "" {
-		return nil, nil, fmt.Errorf("error preparing the providers list endpoint, error: hostname can't be empty")
-	}
 
 	endpointURL, err := url.Parse(path.Join(apiVersion, "providers", addr.Namespace, addr.Type, "versions"))
 	if err != nil {
@@ -92,76 +83,108 @@ func ProviderVersionList(ctx context.Context, addr addrs.Provider, terraformVers
 		}
 		versionList = append(versionList, ver)
 	}
-	// versionList.Newest()
-
 	return versionList, body.Warnings, nil
 }
 
-var versionCache = make(map[string]string)
-
-// LatestProviderVersion returns the latest published version for the asked provider.
+// latestProviderVersion returns the latest published version for the asked provider.
 // It returns "0.0.0" in case its not available
-func LatestProviderVersion(addr addrs.Provider, terraformVersion string) string {
+func latestProviderVersion(addr addrs.Provider, terraformVersion string) string {
 
 	// check if the cache has the version info
 	if v, found := versionCache[fmt.Sprintf("%s-%s", addr.Type, terraformVersion)]; found {
 		return v
 	}
-	versionList, _, err := ProviderVersionList(context.TODO(), addr, terraformVersion)
+	versionList, _, err := providerVersionList(context.TODO(), addr, terraformVersion)
 	if err != nil {
-		zap.S().Errorf("failed to fetch latest version for terraform provider, error: %s", err.Error())
+		zap.S().Warnf("failed to fetch latest version for terraform provider, error: %s", err.Error())
+		return versionList.Newest().String()
 	}
 	// update cache
 	versionCache[fmt.Sprintf("%s-%s", addr.Type, terraformVersion)] = versionList.Newest().String()
 	return versionList.Newest().String()
 }
 
-// ParseVersionConstraints parses a "Ruby-like" version constraint string
-// into a VersionConstraints value.
-func ParseVersionConstraints(str string) (VersionConstraints, error) {
-	return constraints.ParseRubyStyleMulti(str)
-}
-
-// GetModuleProviderVersion gets the provider version form the 'required_providers' block for module.
-// if the 'required_providers' is not defined, it returns empty string
-func GetModuleProviderVersion(m *configs.Module) string {
+// GetProviderVersion identifies the version constraints for file resources.
+func GetProviderVersion(f *hclConfigs.File, addr addrs.Provider, terraformVersion string) string {
 	version := ""
-	if m == nil || m.ProviderRequirements == nil {
-		return version
-	}
-	for _, requiredProvider := range m.ProviderRequirements.RequiredProviders {
-		if requiredProvider != nil && len(requiredProvider.Requirement.Required) > 0 {
-			version = requiredProvider.Requirement.Required[0].String()
+
+	for _, rps := range f.RequiredProviders {
+		if rp, exist := rps.RequiredProviders[addr.Type]; exist {
+			version = trimVersionConstraints(rp.Requirement.Required.String())
+			break
 		}
 	}
 
-	// trim version string
-	s := strings.Split(version, " ")
-	if len(s) > 1 {
-		version = s[1]
-	}
-
-	return version
-}
-
-// GetFileProviderVersion gets the provider version form the 'required_providers' block for the file.
-// if the 'required_providers' is not defined, it returns empty string
-func GetFileProviderVersion(f *configs.File) string {
-	version := ""
-	if f == nil || f.RequiredProviders == nil || len(f.RequiredProviders) == 0 {
-		return version
-	}
-	for _, requiredProvider := range f.RequiredProviders[0].RequiredProviders {
-		if requiredProvider != nil && len(requiredProvider.Requirement.Required) > 0 {
-			version = requiredProvider.Requirement.Required[0].String()
+	// older version of terraform (terraform version < 1.x) may have version in provider block
+	if len(version) == 0 {
+		for _, pc := range f.ProviderConfigs {
+			if pc.Name == addr.Type {
+				version = trimVersionConstraints(pc.Version.Required.String())
+				break
+			}
 		}
 	}
 
-	// trim version string
-	s := strings.Split(version, " ")
-	if len(s) > 1 {
-		version = s[1]
+	// fetch latest version
+	if len(version) == 0 {
+		version = latestProviderVersion(addr, terraformVersion)
+	}
+	v, err := versions.ParseVersion(version)
+	if err != nil {
+		zap.S().Warnf("failed to parse provider version: %s", err.Error())
+		return ""
+	}
+	return v.String()
+}
+
+// GetModuleProviderVersion identifies the version constraints for module resources.
+func GetModuleProviderVersion(module *hclConfigs.Module, addr addrs.Provider, terraformVersion string) string {
+	version := ""
+
+	if rp, exist := module.ProviderRequirements.RequiredProviders[addr.Type]; exist {
+		version = trimVersionConstraints(rp.Requirement.Required.String())
 	}
 
-	return version
+	// older version of terraform (terraform version < 1.x) may have version in provider block
+	if len(version) == 0 {
+		if pc, exist := module.ProviderConfigs[addr.Type]; exist {
+			version = trimVersionConstraints(pc.Version.Required.String())
+		}
+	}
+
+	// fetch latest version
+	if len(version) == 0 {
+		version = latestProviderVersion(addr, terraformVersion)
+	}
+	v, err := versions.ParseVersion(version)
+	if err != nil {
+		zap.S().Warnf("failed to parse provider version: %s", err.Error())
+		return ""
+	}
+	return v.String()
+}
+
+// ResolveProvider resolves provider addr
+func ResolveProvider(resource *hclConfigs.Resource, requiredProviders []*hclConfigs.RequiredProviders) addrs.Provider {
+	implied, err := addrs.ParseProviderPart(resource.Addr().ImpliedProvider())
+	if err != nil {
+		zap.S().Warnf("failed to parse provider namespace or type: %s", err.Error())
+		return addrs.NewDefaultProvider("aws")
+	}
+	for _, rp := range requiredProviders {
+		if provider, exists := rp.RequiredProviders[implied]; exists {
+			return provider.Type
+		}
+	}
+	return addrs.ImpliedProviderForUnqualifiedType(implied)
+}
+
+// trimVersionConstraints trim version constraints from string.
+// e.g. "~> 3.0.2" will become "3.0.2"
+func trimVersionConstraints(v string) string {
+	s := strings.Split(v, " ")
+	if len(s) > 1 {
+		v = s[1]
+	}
+	return v
 }

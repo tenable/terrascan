@@ -44,8 +44,8 @@ var (
 )
 
 const (
-	terraformModuleInstallDir            = ".terraform/modules"
-	terraformInstalledModuleMetaFileName = "modules.json"
+	terraformModuleInstallDir             = ".terraform/modules"
+	terraformInstalledModulelMetaFileName = "modules.json"
 )
 
 // TerraformInstalledModuleMetaData metadata about the module downloaded and present in terraform cache.
@@ -64,7 +64,7 @@ type TerraformModuleManifest struct {
 // ModuleConfig contains the *hclConfigs.Config for every module in the
 // unified config tree along with *hclConfig.ModuleCall made by the parent
 // module. The ParentModuleCall helps in resolving references for variables
-// initialized in the parent ModuleCall
+// initilaized in the parent ModuleCall
 type ModuleConfig struct {
 	Config           *hclConfigs.Config
 	ParentModuleCall *hclConfigs.ModuleCall
@@ -158,12 +158,9 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			t.addError(errMessage, dir)
 		}
 
-		// getting provider version for the root module
-		providerVersion := GetModuleProviderVersion(rootMod)
-
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
-		// Get the downloader cache
+		// Get the downloader chache
 		remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 		if diags.HasErrors() {
@@ -209,12 +206,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				}
 
 				resourceConfig.TerraformVersion = t.terraformVersion
-				resourceConfig.ProviderVersion = providerVersion
-
-				// if root module do not have provider constraints fetch the latest compatible version
-				if resourceConfig.ProviderVersion == "" {
-					resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
-				}
+				resourceConfig.ProviderVersion = GetModuleProviderVersion(current.Config.Module, managedResource.Provider, t.terraformVersion)
 				// set module name
 				resourceConfig.ModuleName = current.Name
 
@@ -295,13 +287,10 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		t.addError(errMessage, t.absRootDir)
 	}
 
-	// getting provider version for the root module
-	providerVersion := GetModuleProviderVersion(rootMod)
-
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
-	// Get the downloader cache
+	// Get the downloader chache
 	remoteURLMapping := t.remoteDownloader.GetDownloaderCache()
 
 	if diags.HasErrors() {
@@ -360,12 +349,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			}
 
 			resourceConfig.TerraformVersion = t.terraformVersion
-			resourceConfig.ProviderVersion = providerVersion
-
-			// if root module do not have provider constraints fetch the latest compatible version
-			if resourceConfig.ProviderVersion == "" {
-				resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
-			}
+			resourceConfig.ProviderVersion = GetModuleProviderVersion(current.Config.Module, managedResource.Provider, t.terraformVersion)
 
 			if isRemoteModule {
 				resourceConfig.IsRemoteModule = &isRemoteModule
@@ -561,7 +545,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 	var ok bool
 	if modules, ok = t.terraformInitModuleCache[terraformInitRegs]; !ok {
 		if utils.IsDirExists(terraformInitRegs) {
-			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModuleMetaFileName))
+			_, err := os.Stat(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err != nil {
 				if os.IsNotExist(err) {
 					zap.S().Debug("found no terraform module metadata file in dir %s", terraformInitRegs)
@@ -570,7 +554,7 @@ func (t *TerraformDirectoryLoader) GetRemoteModuleIfPresentInTerraformSrc(req *h
 				zap.S().Error("error reading terraform module metadata file", err)
 				return
 			}
-			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModuleMetaFileName))
+			data, err := os.ReadFile(filepath.Join(terraformInitRegs, terraformInstalledModulelMetaFileName))
 			if err == nil {
 				err := json.Unmarshal(data, &modules)
 				if err != nil {
