@@ -1,4 +1,4 @@
-### this pollicy depends on the parameters specified by the user/client. Here we are considering that no kernel level syscalls are allowed###
+### this policy depends on the parameters specified by the user/client. Here we are considering that no kernel level syscalls are allowed###
 package accurics
 
 #rule for pod

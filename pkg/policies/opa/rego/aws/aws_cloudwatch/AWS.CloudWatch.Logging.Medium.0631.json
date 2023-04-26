@@ -1,6 +1,6 @@
 {
-    "name": "awsCloudWatchRetentionPreiod",
-    "file": "awsCloudWatchRetentionPreiod.rego",
+    "name": "awsCloudWatchRetentionPeriod",
+    "file": "awsCloudWatchRetentionPeriod.rego",
     "policy_type": "aws",
     "resource_type": "aws_cloudwatch",
     "template_args": null,

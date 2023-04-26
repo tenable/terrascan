@@ -53,7 +53,7 @@ func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 		}
 	}
 
-	// Add Parameters for propogation to the nested Stack
+	// Add Parameters for propagation to the nested Stack
 	if s.Parameters != nil {
 		cf.Parameters = s.Parameters
 	}

@@ -182,8 +182,8 @@ var _ = Describe("ValidatingWebhook", func() {
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("pod creation addmission requested is sent to server", func() {
-						It("server should get the addmission request to review", func() {
+					When("pod creation admission requested is sent to server", func() {
+						It("server should get the admission request to review", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
@@ -231,8 +231,8 @@ var _ = Describe("ValidatingWebhook", func() {
 					Expect(err).NotTo(HaveOccurred())
 				})
 
-				When("pod creation addmission requested is sent to server", func() {
-					It("server should get the addmission request to review", func() {
+				When("pod creation admission requested is sent to server", func() {
+					It("server should get the admission request to review", func() {
 						// remove the config file
 						defer os.Remove(configFileName)
 
@@ -280,8 +280,8 @@ var _ = Describe("ValidatingWebhook", func() {
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("service creation addmission requested is sent to server", func() {
-						It("server should get the addmission request to review and reject the request", func() {
+					When("service creation admission requested is sent to server", func() {
+						It("server should get the admission request to review and reject the request", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
@@ -327,8 +327,8 @@ var _ = Describe("ValidatingWebhook", func() {
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("service creation addmission requested is sent to server", func() {
-						It("server should get the addmission request to review and reject the request", func() {
+					When("service creation admission requested is sent to server", func() {
+						It("server should get the admission request to review and reject the request", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
@@ -376,8 +376,8 @@ var _ = Describe("ValidatingWebhook", func() {
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("service creation addmission requested is sent to server", func() {
-						It("server should get the addmission request to review and reject the request", func() {
+					When("service creation admission requested is sent to server", func() {
+						It("server should get the admission request to review and reject the request", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 
@@ -423,8 +423,8 @@ var _ = Describe("ValidatingWebhook", func() {
 						Expect(err).NotTo(HaveOccurred())
 					})
 
-					When("service creation addmission requested is sent to server", func() {
-						It("server should get the addmission request to review and reject the request", func() {
+					When("service creation admission requested is sent to server", func() {
+						It("server should get the admission request to review and reject the request", func() {
 							// remove the config file
 							defer os.Remove(configFileName)
 

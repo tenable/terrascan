@@ -17,7 +17,7 @@
 package commons
 
 /*
-	Following code has been borrowed and modifed from:
+	Following code has been borrowed and modified from:
 	https://github.com/tmccombs/hcl2json/blob/5c1402dc2b410e362afee45a3cf15dcb08bc1f2c/convert.go
 */
 

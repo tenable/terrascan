@@ -560,7 +560,7 @@ func TestAuthenticatedRegistryClient(t *testing.T) {
 		},
 		{
 			name:     "invalid terraformrc file",
-			filename: "nonexistantfile",
+			filename: "nonexistentfile",
 		},
 	}
 	for _, tt := range tests {

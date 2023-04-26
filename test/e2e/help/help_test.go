@@ -65,7 +65,7 @@ var _ = Describe("Help", func() {
 		})
 	})
 
-	Describe("terrascan is run with an unkonwn command", func() {
+	Describe("terrascan is run with an unknown command", func() {
 		It("should exit with status code 1 and display a error message", func() {
 			session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, "test")
 			helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeOne, filepath.Join("golden", "incorrect_command.txt"), false)
@@ -108,7 +108,7 @@ var _ = Describe("Help", func() {
 			})
 		})
 
-		Context("for an unkonwn command", func() {
+		Context("for an unknown command", func() {
 			It("should display that help topic is not available for entered command and exit with status code 0", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, helpCommand, "test")
 				helpUtils.ValidateExitCodeAndOutput(session, helper.ExitCodeZero, filepath.Join("golden", "help_unsupported_command.txt"), false)

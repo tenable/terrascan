@@ -1,6 +1,6 @@
 {
-    "name": "apiGatewayMiconfiguredCors",
-    "file": "apiGatewayMiconfiguredCors.rego",
+    "name": "apiGatewayMisconfiguredCors",
+    "file": "apiGatewayMisconfiguredCors.rego",
     "policy_type": "aws",
     "resource_type": "aws_apigatewayv2_api",
     "template_args": null,

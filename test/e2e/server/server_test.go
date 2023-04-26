@@ -117,7 +117,7 @@ var _ = Describe("Server", func() {
 					healthCheckURL := fmt.Sprintf("%s:%d/health", host, defaultPort)
 					providersURL := fmt.Sprintf("%s:%d/v1/providers", host, defaultPort)
 					terraformV12LocalScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/all/local/file/scan", host, defaultPort)
-					terrformV12RemoteScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/aws/remote/dir/scan", host, defaultPort)
+					terraformV12RemoteScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/aws/remote/dir/scan", host, defaultPort)
 
 					When("health check request is made", func() {
 						It("should get 200 OK response", func() {
@@ -151,7 +151,7 @@ var _ = Describe("Server", func() {
 
 					When("GET request on remote scan handler is made", func() {
 						It("should receive method not allowed response", func() {
-							r, err := serverUtils.MakeHTTPRequest(http.MethodGet, terrformV12RemoteScanURL)
+							r, err := serverUtils.MakeHTTPRequest(http.MethodGet, terraformV12RemoteScanURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())
@@ -171,7 +171,7 @@ var _ = Describe("Server", func() {
 
 					When("POST request on remote scan handler is made without body", func() {
 						It("should receive bad request response", func() {
-							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, terrformV12RemoteScanURL)
+							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, terraformV12RemoteScanURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())

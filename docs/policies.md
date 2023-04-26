@@ -63,7 +63,7 @@ $ terrascan scan -i terraform --config-only -o json
 ```
 
 
-You can use this `.json` output as the input in the [rego playgound](https://play.openpolicyagent.org/). The following policy can be used on the above Terraform to flag if the GitHub repository has been created with `private = false`.
+You can use this `.json` output as the input in the [rego playground](https://play.openpolicyagent.org/). The following policy can be used on the above Terraform to flag if the GitHub repository has been created with `private = false`.
 
 ```
 package accurics

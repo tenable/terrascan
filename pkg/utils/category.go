@@ -31,7 +31,7 @@ func ValidateCategoryInput(categories []string) (bool, []string) {
 	return true, invalidInputs
 }
 
-// CheckCategory validates if the category of policy rule is present in the list of specificed categories
+// CheckCategory validates if the category of policy rule is present in the list of specified categories
 func CheckCategory(ruleCategory string, desiredCategories []string) bool {
 	ruleCategory = EnsureUpperCaseTrimmed(ruleCategory)
 	for i, category := range desiredCategories {

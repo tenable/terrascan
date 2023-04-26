@@ -1,6 +1,6 @@
 {
-    "name": "serviceAccountAdminPriviledges",
-    "file": "serviceAccountAdminPriviledges.rego",
+    "name": "serviceAccountAdminPrivileges",
+    "file": "serviceAccountAdminPrivileges.rego",
     "policy_type": "gcp",
     "resource_type": "google_project_iam_member",
     "template_args": null,

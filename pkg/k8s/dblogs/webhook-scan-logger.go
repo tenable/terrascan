@@ -124,7 +124,7 @@ func (g *WebhookScanLogger) FetchLogs() ([]WebhookScanLog, error) {
 	return result, nil
 }
 
-// FetchLogByID retreives a single record based on request ID from the database
+// FetchLogByID retrieves a single record based on request ID from the database
 func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error) {
 	// Fetch a specific log by its request UID
 

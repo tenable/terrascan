@@ -1,6 +1,6 @@
 package accurics
 
-{{.prefix}}gaurdDutyDisabled[retVal] {
+{{.prefix}}guardDutyDisabled[retVal] {
   duty := input.aws_guardduty_detector[_]
   duty.config.enable == false
   traverse = "enable"

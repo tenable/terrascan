@@ -30,7 +30,7 @@ spec:
            name: known-hosts-config
      containers:
      - name: terrascan-argocd
-       image: <terrscan-image>
+       image: <terrascan-image>
        resources:
          requests:
            cpu: "1"

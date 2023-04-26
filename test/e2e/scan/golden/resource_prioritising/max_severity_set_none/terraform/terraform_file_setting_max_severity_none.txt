@@ -4,7 +4,7 @@
     "skipped_violations": [
       {
         "rule_name": "rdsHasStorageEncrypted",
-        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance.",
+        "description": "Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and description of data transparently with minimal impact on performance.",
         "rule_id": "AC_AWS_0003",
         "severity": "HIGH",
         "category": "Data Security",

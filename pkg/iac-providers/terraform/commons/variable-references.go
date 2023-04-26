@@ -150,7 +150,7 @@ func (r *RefResolver) ResolveVarRefFromParentModuleCall(varRef, callerRef string
 	// read source file
 	fileBytes, err := os.ReadFile(r.ParentModuleCall.SourceAddrRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", r.ParentModuleCall.SourceAddr, err)
+		zap.S().Errorf("failed to read terraform IaC file '%s'. error: '%v'", r.ParentModuleCall.SourceAddr, err)
 		return varRef
 	}
 

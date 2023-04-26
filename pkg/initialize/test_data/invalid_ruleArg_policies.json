@@ -30,7 +30,7 @@
         "ruleArgument": "{\"name\":\"awsNoRetentionPolicyCloudwatchLogGroup\",\"prefix\":\"\",\"suffix\":\"\"}",
         "severity": "MEDIUM",
         "vulnerability": "AWS CloudWatch Log Group does not have a retention policy set in order to establish how long log events are kept in AWS CloudWatch Logs.",
-        "remediation": "AWS CloudWatch Log Group can be set with a log retention policy using AWS Console.\n In AWS Console - \n 1. Sign in to AWS Console and go to the CloudWatch console.\n 2. Select Log Groups in the navigation pane.\n 3. Select the log group to update.\n 4. Select 'Edit retention' and change the log retention value to 120 days.",
+        "remediation": "AWS CloudWatch Log Group can be set with a log retention policy using AWS Console.\n In AWS Console - \n 1. Sign into AWS Console and go to the CloudWatch console.\n 2. Select Log Groups in the navigation pane.\n 3. Select the log group to update.\n 4. Select 'Edit retention' and change the log retention value to 120 days.",
         "engineType": "terraform",
         "provider": "aws",
         "managedBy": "Accurics Inc",

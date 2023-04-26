@@ -57,7 +57,7 @@ func TestCtyToFloat(t *testing.T) {
 			want: testFlVal,
 		},
 		{
-			name: "input is not flosat type",
+			name: "input is not float type",
 			args: args{
 				ctyVal: testStringCtyVal,
 			},

@@ -144,7 +144,7 @@ var jsonTree = (function() {
     /**
      * The factory for creating nodes of defined type.
      *
-     * ~~~ Node ~~~ is a structure element of an onject or an array
+     * ~~~ Node ~~~ is a structure element of an object or an array
      * with own label (a key of an object or an index of an array)
      * and value of any json data type. The root object or array
      * is a node without label.
@@ -761,18 +761,18 @@ var jsonTree = (function() {
          * Returns the source json-string (pretty-printed)
          *
          * @param {boolean} isPrettyPrinted - 'true' for pretty-printed string
-         * @returns {string} - for exemple, '{"a":2,"b":3}'
+         * @returns {string} - for example, '{"a":2,"b":3}'
          */
         toSourceJSON : function(isPrettyPrinted) {
             if (!isPrettyPrinted) {
                 return JSON.stringify(this.sourceJSONObj);
             }
 
-            var DELIMETER = "[%^$#$%^%]",
-                jsonStr = JSON.stringify(this.sourceJSONObj, null, DELIMETER);
+            var DELIMITER = "[%^$#$%^%]",
+                jsonStr = JSON.stringify(this.sourceJSONObj, null, DELIMITER);
 
             jsonStr = jsonStr.split("\n").join("<br />");
-            jsonStr = jsonStr.split(DELIMETER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
+            jsonStr = jsonStr.split(DELIMITER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
 
             return jsonStr;
         },

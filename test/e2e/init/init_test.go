@@ -242,7 +242,7 @@ var _ = Describe("Init", func() {
 				initUtil.ValidateGitRepo(repo, terrascanGitURL)
 			})
 
-			It("should log a warning stating no base path speicified", func() {
+			It("should log a warning stating no base path specified", func() {
 				helper.ContainsErrorSubString(session, warnNoBasePath)
 			})
 		})

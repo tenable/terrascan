@@ -72,7 +72,7 @@
 | Data Protection | RDS | MEDIUM | Ensure that your RDS database has IAM Authentication enabled. | AWS.RDS.DataSecurity.High.0577 | AC_AWS_0053 |
 | Infrastructure Security | RDS | HIGH | RDS Instance publicly_accessible flag is true | AWS.RDS.NS.High.0101 | AC_AWS_0054 |
 | Data Protection | RDS | HIGH | RDS Instance Auto Minor Version Upgrade flag disabled | AWS.RDS.DS.High.1041 | AC_AWS_0056 |
-| Data Protection | RDS | HIGH | Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and descryption of data transparently with minimal impact on performance. | AWS.RDS.DataSecurity.High.0414 | AC_AWS_0058 |
+| Data Protection | RDS | HIGH | Ensure that your RDS database instances encrypt the underlying storage. Encrypted RDS instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts RDS DB instances. After data is encrypted, RDS handles authentication of access and description of data transparently with minimal impact on performance. | AWS.RDS.DataSecurity.High.0414 | AC_AWS_0058 |
 
 
 ### aws_secretsmanager_secret_policy
@@ -198,7 +198,7 @@
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
 | Infrastructure Security | EcsCluster | HIGH | Like any other EC2 instance it is recommended to place ECS instance within a VPC. AWS VPCs provides the controls to facilitate a formal process for approving and testing all network connections and changes to the firewall and router configurations | AWS.EcsCluster.NetworkSecurity.High.0104 | AC_AWS_0088 |
-| Infrastructure Security | AETD | MEDIUM | Ensure EFS volume used for ECS task defination has in transit encryption enabled | AWS.AETD.IS.MEDIUM.0043 | AC_AWS_0463 |
+| Infrastructure Security | AETD | MEDIUM | Ensure EFS volume used for ECS task definition has in transit encryption enabled | AWS.AETD.IS.MEDIUM.0043 | AC_AWS_0463 |
 | Data Protection | LaunchConfiguration | HIGH | Sensitive Information Disclosure | AWS.LaunchConfiguration.DataSecurity.High.0101 | AC_AWS_0095 |
 
 
@@ -480,8 +480,8 @@
 ### aws_lambda_function
 | Category | Resource | Severity | Description | Reference ID | ID |
 | -------- | -------- | -------- | ----------- | ------------ | -- |
-| Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEIDUM.0063 | AC_AWS_0484 |
-| Infrastructure Security | LambdaFunction | LOW | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 | AC_AWS_0486 |
+| Logging and Monitoring | LambdaFunction | MEDIUM | Ensure AWS Lambda function has policy attached. | AWS.LambdaFunction.LM.MEDIUM.0063 | AC_AWS_0484 |
+| Infrastructure Security | LambdaFunction | Low | Lambda function does not include a VPC configuration. | AWS.LambdaFunction.Logging.0472 | AC_AWS_0486 |
 | Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 | AC_AWS_0485 |
 | Data Protection | LambdaFunction | HIGH | Lambda does not use KMS CMK key to protect environment variables. | AWS.LambdaFunction.EncryptionandKeyManagement.0471 | AC_AWS_0483 |
 | Logging and Monitoring | LambdaFunction | LOW | Lambda tracing is not enabled. | AWS.LambdaFunction.Logging.0470 | AC_AWS_0163 |

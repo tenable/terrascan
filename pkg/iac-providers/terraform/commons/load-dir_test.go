@@ -197,7 +197,7 @@ func TestGetRemoteLocation(t *testing.T) {
 			wantTmpDir:    "/var/folders/y5/y1qlrpl90rs_3n06z_qgjwv00000gn/T/791rns/",
 		},
 		{
-			name: "source path is local and lenght of path is greater than tempDirs",
+			name: "source path is local and length of path is greater than tempDirs",
 			args: args{
 				cache:        map[string]string{"git::https:/github.com/terraform-aws-modules/terraform-aws-rds?ref=v2.20.0": "/var/folders/y5/y1qlrpl90rs_3n06z_qgjwv00000gn/T/791rns/", "git::https:/github.com/terraform-aws-modules/terraform-aws-rds?ref=v2.10.0": "/var/folders/y5/y1qlrpl90rs_3n06z_qgjwv00000gn/T/791fcs/"},
 				resourcePath: "/user/folders/y5/y1qlrpl90rs_3n06z_qgjwv00000gn/T/791rns/modules/db_parameter_group/main.tf",

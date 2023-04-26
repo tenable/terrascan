@@ -26,7 +26,7 @@ import (
 
 // customTempDir env variable if set all the repository/module/template
 // download will happen in the provided directory
-const customTempDir = "TERRRASCAN_CUSTOM_TEMP_DIR"
+const customTempDir = "TERRASCAN_CUSTOM_TEMP_DIR"
 
 // CustomTempDir store the global flag --temp-dir value which will be used to download repository,module and template.
 var CustomTempDir string

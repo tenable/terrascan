@@ -213,13 +213,13 @@ func TestSarifWriter(t *testing.T) {
 			var bf bytes.Buffer
 			w := []io.Writer{&bf}
 			if err := SarifWriter(tt.input, w); (err != nil) != tt.expectedError {
-				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
+				t.Errorf("HumanReadableWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
 			outputBytes := bf.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 
 			if equal, _ := utils.AreEqualJSON(strings.TrimSpace(gotOutput), strings.TrimSpace(tt.expectedOutput)); !equal {
-				t.Errorf("HumanReadbleWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
+				t.Errorf("HumanReadableWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
 			}
 		})
 	}

@@ -31,7 +31,7 @@ const (
 )
 
 const (
-	humanReadbleFormat supportedFormat = "human"
+	humanReadableFormat supportedFormat = "human"
 
 	defaultTemplate string = `
 {{if (gt (len .ViolationStore.DirScanErrors) 0)}}
@@ -84,11 +84,11 @@ Scan Summary -
 )
 
 func init() {
-	RegisterWriter(humanReadbleFormat, HumanReadbleWriter)
+	RegisterWriter(humanReadableFormat, HumanReadableWriter)
 }
 
-// HumanReadbleWriter display scan summary in human readable format
-func HumanReadbleWriter(data interface{}, writers []io.Writer) error {
+// HumanReadableWriter display scan summary in human readable format
+func HumanReadableWriter(data interface{}, writers []io.Writer) error {
 	tmpl, err := template.New("Report").Funcs(template.FuncMap{
 		"defaultViolations":      defaultViolations,
 		"detailedViolations":     detailedViolations,

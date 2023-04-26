@@ -74,7 +74,7 @@ func (r *RefResolver) ResolveLocalRef(localRef, callerRef string) interface{} {
 	// read source file
 	fileBytes, err := os.ReadFile(localAttr.DeclRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", localAttr.DeclRange.Filename, err)
+		zap.S().Errorf("failed to read terraform IaC file '%s'. error: '%v'", localAttr.DeclRange.Filename, err)
 		return localRef
 	}
 

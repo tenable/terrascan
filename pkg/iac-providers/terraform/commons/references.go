@@ -165,7 +165,7 @@ func (r *RefResolver) ResolveStrRef(ref, callerRef string) interface{} {
 			valStr := val.(string)
 			/*
 			 Now, if the output of ResolveVarRefFromParentModuleCall is a string
-			 then there are following possibilties, output can be a:
+			 then there are following possibilities, output can be a:
 			 - variable reference (resolve the variable reference)
 			 - cross module variable reference in parent module call
 			 	(resolve module reference)

@@ -45,7 +45,7 @@ const (
 	containerDefinitions   = "container_definitions"
 )
 
-// all the type of resources which has container definitaions
+// all the type of resources which has container definitions
 var k8sResources = map[string]struct{}{
 	"kubernetes_deployment":             {},
 	"kubernetes_pod":                    {},
@@ -56,23 +56,23 @@ var k8sResources = map[string]struct{}{
 	"kubernetes_replication_controller": {},
 }
 
-// isKuberneteResource - verifies resource is k8s type
-func isKuberneteResource(resource *hclConfigs.Resource) bool {
+// isKubernetesResource - verifies resource is k8s type
+func isKubernetesResource(resource *hclConfigs.Resource) bool {
 	_, ok := k8sResources[resource.Type]
 	return ok
 }
 
-// isAzureConatinerResource verifies resource is azure type
-func isAzureConatinerResource(resource *hclConfigs.Resource) bool {
+// isAzureContainerResource verifies resource is azure type
+func isAzureContainerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == azureContainerResource
 }
 
-// isAwsConatinerResource verifies resource is aws type
-func isAwsConatinerResource(resource *hclConfigs.Resource) bool {
+// isAwsContainerResource verifies resource is aws type
+func isAwsContainerResource(resource *hclConfigs.Resource) bool {
 	return resource.Type == awsContainerResources
 }
 
-// fetchConatinersFromAzureResource extracts all the containers from azure resource
+// fetchContainersFromAzureResource extracts all the containers from azure resource
 func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerDetails {
 	results := []output.ContainerDetails{}
 	if v, ok := resource[container]; ok {
@@ -83,7 +83,7 @@ func fetchContainersFromAzureResource(resource jsonObj) []output.ContainerDetail
 	return results
 }
 
-// fetchConatinersFromAwsResource extracts all the containers from aws ecs resource
+// fetchContainersFromAwsResource extracts all the containers from aws ecs resource
 func fetchContainersFromAwsResource(resource jsonObj, hclBody *hclsyntax.Body, resourcePath string) []output.ContainerDetails {
 	results := []output.ContainerDetails{}
 	if v, ok := resource[containerDefinitions]; ok {
@@ -243,9 +243,9 @@ func getContainerAndInitContainerFromTemplateBlocks(templateBlocks []*hclsyntax.
 
 // getContainerConfigFromContainerBlock creates container config from container block of resource
 func getContainerConfigFromContainerBlock(containerBlocks []*hclsyntax.Block) (containerImages []output.ContainerDetails) {
-	for _, conatainerBlock := range containerBlocks {
+	for _, containerBlock := range containerBlocks {
 		containerImage := output.ContainerDetails{}
-		for _, attr := range conatainerBlock.Body.Attributes {
+		for _, attr := range containerBlock.Body.Attributes {
 			if attr.Name == image {
 				containerImage.Image = getValueFromCtyExpr(attr.Expr)
 			}

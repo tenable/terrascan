@@ -61,13 +61,13 @@ func (rs ResourceTypeFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bo
 	return rs.resourceType == r.ResourceType
 }
 
-// RerefenceIDFilterSpecification is reference ID based Filter Spec
-type RerefenceIDFilterSpecification struct {
+// ReferenceIDFilterSpecification is reference ID based Filter Spec
+type ReferenceIDFilterSpecification struct {
 	ReferenceID string
 }
 
 // IsSatisfied implementation for reference ID based Filter spec
-func (rs RerefenceIDFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
+func (rs ReferenceIDFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
 	if rs.ReferenceID == r.ID {
 		return true
 	}
@@ -78,13 +78,13 @@ func (rs RerefenceIDFilterSpecification) IsSatisfied(r *policy.RegoMetadata) boo
 	return false
 }
 
-// RerefenceIDsFilterSpecification is reference IDs based Filter Spec
-type RerefenceIDsFilterSpecification struct {
+// ReferenceIDsFilterSpecification is reference IDs based Filter Spec
+type ReferenceIDsFilterSpecification struct {
 	ReferenceIDs []string
 }
 
 // IsSatisfied implementation for reference IDs based Filter spec
-func (rs RerefenceIDsFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
+func (rs ReferenceIDsFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bool {
 	// when reference ID's are not specified (could be skip or scan rules),
 	// return true
 	if len(rs.ReferenceIDs) < 1 {
@@ -92,7 +92,7 @@ func (rs RerefenceIDsFilterSpecification) IsSatisfied(r *policy.RegoMetadata) bo
 	}
 	isSatisfied := false
 	for _, refID := range rs.ReferenceIDs {
-		rfIDSpec := RerefenceIDFilterSpecification{refID}
+		rfIDSpec := ReferenceIDFilterSpecification{refID}
 		if rfIDSpec.IsSatisfied(r) {
 			isSatisfied = true
 			break

@@ -28,7 +28,7 @@ const (
 	ElasticsearchDomainAccessPolicy = "Policy"
 )
 
-// ElasticsearchDomainConfig holds config for aws_elastisearch_domain
+// ElasticsearchDomainConfig holds config for aws_elasticsearch_domain
 type ElasticsearchDomainConfig struct {
 	EncryptionAtRest            interface{} `json:"encrypt_at_rest,omitempty"`
 	LogPublishingOptions        interface{} `json:"log_publishing_options,omitempty"`
@@ -43,24 +43,24 @@ type ElasticsearchDomainAccessPolicyConfig struct {
 	AccessPolicies string `json:"access_policies"`
 }
 
-// EncryptionAtRestConfig holds config for encrypt_at_rest attribute of aws_elastisearch_domain
+// EncryptionAtRestConfig holds config for encrypt_at_rest attribute of aws_elasticsearch_domain
 type EncryptionAtRestConfig struct {
 	KmsKeyID string `json:"kms_key_id,omitempty"`
 	Enabled  bool   `json:"enabled"`
 }
 
-// LogPublishingOptionsConfig holds config for log_publishing_options attribute of aws_elastisearch_domain
+// LogPublishingOptionsConfig holds config for log_publishing_options attribute of aws_elasticsearch_domain
 type LogPublishingOptionsConfig struct {
 	LogType string `json:"log_type,omitempty"`
 	Enabled bool   `json:"enabled,omitempty"`
 }
 
-// NodeToNodeEncryptionOptionsConfig holds config for node_to_node_encryption attribute of aws_elastisearch_domain
+// NodeToNodeEncryptionOptionsConfig holds config for node_to_node_encryption attribute of aws_elasticsearch_domain
 type NodeToNodeEncryptionOptionsConfig struct {
 	Enabled bool `json:"enabled,omitempty"`
 }
 
-// GetElasticsearchDomainConfig returns config for aws_elastisearch_domain and aws_elasticsearch_domain_policy
+// GetElasticsearchDomainConfig returns config for aws_elasticsearch_domain and aws_elasticsearch_domain_policy
 func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 

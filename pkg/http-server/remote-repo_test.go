@@ -242,10 +242,10 @@ func TestHasK8sAdmissionDeniedViolations(t *testing.T) {
 		o runtime.Output
 	}
 	tests := []struct {
-		name      string
-		args      args
-		want      bool
-		conigFile string
+		name       string
+		args       args
+		want       bool
+		configFile string
 	}{
 		{
 			name: "result with no violations",
@@ -273,14 +273,14 @@ func TestHasK8sAdmissionDeniedViolations(t *testing.T) {
 					},
 				},
 			},
-			want:      true,
-			conigFile: configFileWithCategoryDenied,
+			want:       true,
+			configFile: configFileWithCategoryDenied,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := config.LoadGlobalConfig(tt.conigFile); err != nil {
-				t.Errorf("error while loading the config file '%s'", tt.conigFile)
+			if err := config.LoadGlobalConfig(tt.configFile); err != nil {
+				t.Errorf("error while loading the config file '%s'", tt.configFile)
 			}
 			if got := hasK8sAdmissionDeniedViolations(tt.args.o); got != tt.want {
 				t.Errorf("hasK8sAdmissionDeniedViolations() = %v, want %v", got, tt.want)

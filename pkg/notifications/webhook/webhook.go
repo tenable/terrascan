@@ -31,7 +31,7 @@ var (
 	ErrNilConfigData = fmt.Errorf("config data is nil")
 )
 
-// Init initalizes the webhook notifier, reads config file and configures the
+// Init initializes the webhook notifier, reads config file and configures the
 // necessary parameters for webhook notifications to work
 func (w *Webhook) Init(config interface{}) error {
 	// return error if config data is not present
@@ -46,7 +46,7 @@ func (w *Webhook) Init(config interface{}) error {
 		return errInitFailed
 	}
 
-	// initalize Webhook struct with url and token
+	// initialize Webhook struct with url and token
 
 	jsonData, err := json.Marshal(webhookConfig)
 	if err != nil {

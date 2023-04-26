@@ -24,7 +24,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetAbsPolicyConfigPaths tranforms the provided policy base path and repo path into absolute paths
+// GetAbsPolicyConfigPaths transforms the provided policy base path and repo path into absolute paths
 func GetAbsPolicyConfigPaths(policyBasePath, policyRepoPath string) (string, string, error) {
 	absolutePolicyBasePath, err := GetAbsPath(policyBasePath)
 	if err != nil {

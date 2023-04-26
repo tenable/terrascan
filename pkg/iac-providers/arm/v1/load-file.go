@@ -220,7 +220,7 @@ func (a *ARMV1) getLinkedTemplate(config output.ResourceConfig, path string, map
 				return nil, path
 			}
 
-			// propogate parameters
+			// propagate parameters
 			for key, param := range linkedTemplate.Parameters {
 				if _, ok := a.templateParameters[key]; !ok {
 					a.templateParameters[key] = param.DefaultValue

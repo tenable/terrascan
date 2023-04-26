@@ -45,7 +45,7 @@
 - \[fix\] Resolve Vulnerable packages [\#1486](https://github.com/tenable/terrascan/pull/1486) ([rahulchheda](https://github.com/rahulchheda))
 - added tar.gz archive for windows [\#1474](https://github.com/tenable/terrascan/pull/1474) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Update opa and cobra version [\#1472](https://github.com/tenable/terrascan/pull/1472) ([nasir-rabbani](https://github.com/nasir-rabbani))
-- ignored matching provider verson in tests [\#1470](https://github.com/tenable/terrascan/pull/1470) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- ignored matching provider version in tests [\#1470](https://github.com/tenable/terrascan/pull/1470) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - added terraform and provider version in resource config [\#1469](https://github.com/tenable/terrascan/pull/1469) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Bump github.com/hashicorp/go-getter from 1.5.11 to 1.6.2 [\#1298](https://github.com/tenable/terrascan/pull/1298) ([dependabot[bot]](https://github.com/apps/dependabot))
 
@@ -257,7 +257,7 @@
 
 - skip terrascan init for --config-with-error flag [\#1160](https://github.com/accurics/terrascan/pull/1160) ([nasir-rabbani](https://github.com/nasir-rabbani))
 - Bugfix/s3 user policy [\#1157](https://github.com/accurics/terrascan/pull/1157) ([gaurav-gogia](https://github.com/gaurav-gogia))
-- fix rds encryptionc check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
+- fix rds encryption check policy [\#1156](https://github.com/accurics/terrascan/pull/1156) ([gaurav-gogia](https://github.com/gaurav-gogia))
 - Update mkdocs-material to 8.2.1 [\#1155](https://github.com/accurics/terrascan/pull/1155) ([pyup-bot](https://github.com/pyup-bot))
 - Adds: missing release tag push step [\#1151](https://github.com/accurics/terrascan/pull/1151) ([Rchanger](https://github.com/Rchanger))
 - Adding CFT scanning support for the resources: [\#1149](https://github.com/accurics/terrascan/pull/1149) ([shreyas-phansalkar-189](https://github.com/shreyas-phansalkar-189))
@@ -458,7 +458,7 @@
 
 - Link to docks in README  [\#944](https://github.com/accurics/terrascan/issues/944)
 - Ensure remote modules are downloaded only once [\#936](https://github.com/accurics/terrascan/issues/936)
-- Rule supression for specific resources [\#868](https://github.com/accurics/terrascan/issues/868)
+- Rule suppression for specific resources [\#868](https://github.com/accurics/terrascan/issues/868)
 
 **Merged pull requests:**
 
@@ -583,7 +583,7 @@
 
 **Fixed bugs:**
 
-- Azure AKS failling to check the network policy status. [\#789](https://github.com/accurics/terrascan/issues/789)
+- Azure AKS failing to check the network policy status. [\#789](https://github.com/accurics/terrascan/issues/789)
 - Scan for terraform doesn't error out if a module definition refers to a directory with no tf files [\#782](https://github.com/accurics/terrascan/issues/782)
 - Wrong detection of MemoryRequestsCheck,CpuRequestsCheck,noReadinessProbe and nolivenessProbe policy in k8s Job spec  [\#767](https://github.com/accurics/terrascan/issues/767)
 - Update Docker build for terrascan to use numeric UID [\#766](https://github.com/accurics/terrascan/issues/766)
@@ -592,7 +592,7 @@
 - tfplan should use resource address for id field [\#702](https://github.com/accurics/terrascan/issues/702)
 - Rule IDs with spaces cannot be skipped [\#610](https://github.com/accurics/terrascan/issues/610)
 - AWS.CloudFront.Network Security.Low.0568 Doesn't allow skipping due to space in filename [\#549](https://github.com/accurics/terrascan/issues/549)
-- Error parsing syntax if using complex query for dynamic ip\_restriction in azurerm\_function\_app or azurerm\_app\_service ressource [\#433](https://github.com/accurics/terrascan/issues/433)
+- Error parsing syntax if using complex query for dynamic ip\_restriction in azurerm\_function\_app or azurerm\_app\_service resource [\#433](https://github.com/accurics/terrascan/issues/433)
 
 **Closed issues:**
 
@@ -646,7 +646,7 @@
 - Adding Aws new policies cloudTrail [\#810](https://github.com/accurics/terrascan/pull/810) ([Avanti19](https://github.com/Avanti19))
 - Feature/az id field [\#808](https://github.com/accurics/terrascan/pull/808) ([gaurav-gogia](https://github.com/gaurav-gogia))
 - added support for sarif formatted violation reports [\#806](https://github.com/accurics/terrascan/pull/806) ([dev-gaur](https://github.com/dev-gaur))
-- Adds support to scan config resources with applicable policies & Refactors filteration [\#803](https://github.com/accurics/terrascan/pull/803) ([patilpankaj212](https://github.com/patilpankaj212))
+- Adds support to scan config resources with applicable policies & Refactors filtration [\#803](https://github.com/accurics/terrascan/pull/803) ([patilpankaj212](https://github.com/patilpankaj212))
 - Adds: in-file instrumentation for resource prioritizing [\#802](https://github.com/accurics/terrascan/pull/802) ([Rchanger](https://github.com/Rchanger))
 - shifted opa engine warning message to debug log level [\#800](https://github.com/accurics/terrascan/pull/800) ([dev-gaur](https://github.com/dev-gaur))
 - fix: added validation for module local source dir [\#793](https://github.com/accurics/terrascan/pull/793) ([Rchanger](https://github.com/Rchanger))
@@ -703,8 +703,8 @@
 - fix failing test [\#740](https://github.com/accurics/terrascan/pull/740) ([patilpankaj212](https://github.com/patilpankaj212))
 - AWS policy pack update [\#737](https://github.com/accurics/terrascan/pull/737) ([harkirat22](https://github.com/harkirat22))
 - Adding release checklist [\#734](https://github.com/accurics/terrascan/pull/734) ([jlk](https://github.com/jlk))
-- Gh action terrscan\_atlantis release [\#733](https://github.com/accurics/terrascan/pull/733) ([dev-gaur](https://github.com/dev-gaur))
-- adds agrocd integration dockerfile, scripts, doc  and examples [\#732](https://github.com/accurics/terrascan/pull/732) ([Rchanger](https://github.com/Rchanger))
+- Gh action terrascan\_atlantis release [\#733](https://github.com/accurics/terrascan/pull/733) ([dev-gaur](https://github.com/dev-gaur))
+- adds argocd integration dockerfile, scripts, doc  and examples [\#732](https://github.com/accurics/terrascan/pull/732) ([Rchanger](https://github.com/Rchanger))
 - Fix NSG associations [\#727](https://github.com/accurics/terrascan/pull/727) ([xortim](https://github.com/xortim))
 - changes for argocd integration [\#724](https://github.com/accurics/terrascan/pull/724) ([patilpankaj212](https://github.com/patilpankaj212))
 - Update admission-controller-webhooks-usage.md [\#722](https://github.com/accurics/terrascan/pull/722) ([amirbenv](https://github.com/amirbenv))
@@ -712,7 +712,7 @@
 - doc: add homebrew badge [\#714](https://github.com/accurics/terrascan/pull/714) ([chenrui333](https://github.com/chenrui333))
 - update version [\#713](https://github.com/accurics/terrascan/pull/713) ([chenrui333](https://github.com/chenrui333))
 - adds skipped tests for server file scan when file is k8s yaml [\#706](https://github.com/accurics/terrascan/pull/706) ([Rchanger](https://github.com/Rchanger))
-- fixes infinte loop while local variable resolution [\#700](https://github.com/accurics/terrascan/pull/700) ([patilpankaj212](https://github.com/patilpankaj212))
+- fixes infinite loop while local variable resolution [\#700](https://github.com/accurics/terrascan/pull/700) ([patilpankaj212](https://github.com/patilpankaj212))
 - add terrascan atlantis container files, scripts and doc. [\#684](https://github.com/accurics/terrascan/pull/684) ([dev-gaur](https://github.com/dev-gaur))
 - adds support to scan directory with all iac providers in cli mode [\#674](https://github.com/accurics/terrascan/pull/674) ([patilpankaj212](https://github.com/patilpankaj212))
 - adds support to scan sub folders for terraform iac provider [\#640](https://github.com/accurics/terrascan/pull/640) ([patilpankaj212](https://github.com/patilpankaj212))
@@ -813,7 +813,7 @@
 - Adds support for junit xml output [\#527](https://github.com/accurics/terrascan/pull/527)
 - Adds e2e test scenarios for help and scan command [\#564](https://github.com/accurics/terrascan/pull/564)
 - Adds e2e tests for api server [\#585](https://github.com/accurics/terrascan/pull/585)
-- Please checkout our new [Github Action!](https://github.com/marketplace/actions/terrascan-iac-scanner)
+- Please checkout our new [GitHub Action!](https://github.com/marketplace/actions/terrascan-iac-scanner)
 
 **Fixed bugs:**
 
@@ -868,7 +868,7 @@
 **Closed issues:**
 
 - How to get rid of "Anonymous, public read access to a container and its blobs can be enabled in Azure Blob storage. This is only recommended if absolutely necessary." [\#405](https://github.com/accurics/terrascan/issues/405)
-- False Positive for accurics.azure.NS.161 when Security Groups Association and Subnets are defined indepently from VNet [\#391](https://github.com/accurics/terrascan/issues/391)
+- False Positive for accurics.azure.NS.161 when Security Groups Association and Subnets are defined independently from VNet [\#391](https://github.com/accurics/terrascan/issues/391)
 - Calico is not supported as a valid Network Security for azurerm\_kubernetes\_cluster [\#376](https://github.com/accurics/terrascan/issues/376)
 
 **Merged pull requests:**
@@ -906,14 +906,14 @@
 
 **Closed issues:**
 
-- Custom Variable Validation no longer experiemental in 0.13 [\#500](https://github.com/accurics/terrascan/issues/500)
+- Custom Variable Validation no longer experimental in 0.13 [\#500](https://github.com/accurics/terrascan/issues/500)
 
 **Merged pull requests:**
 
 - release v1.3.1 [\#508](https://github.com/accurics/terrascan/pull/508) ([kanchwala-yusuf](https://github.com/kanchwala-yusuf))
 - fix dependencies that were breaking the darwin/arm64 build [\#507](https://github.com/accurics/terrascan/pull/507) ([williepaul](https://github.com/williepaul))
 - support for terraform registry remote modules [\#505](https://github.com/accurics/terrascan/pull/505) ([patilpankaj212](https://github.com/patilpankaj212))
-- Readme rule supression [\#503](https://github.com/accurics/terrascan/pull/503) ([amirbenv](https://github.com/amirbenv))
+- Readme rule suppression [\#503](https://github.com/accurics/terrascan/pull/503) ([amirbenv](https://github.com/amirbenv))
 - Bump github.com/hashicorp/go-retryablehttp from 0.6.6 to 0.6.8 [\#496](https://github.com/accurics/terrascan/pull/496) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/hashicorp/go-getter from 1.5.1 to 1.5.2 [\#495](https://github.com/accurics/terrascan/pull/495) ([dependabot[bot]](https://github.com/apps/dependabot))
 
@@ -1038,19 +1038,19 @@
 
 **Closed issues:**
 
-- Deep modules location mis-proccessed.  [\#365](https://github.com/accurics/terrascan/issues/365)
+- Deep modules location mis-processed.  [\#365](https://github.com/accurics/terrascan/issues/365)
 - 20MB binary file included in repo now [\#364](https://github.com/accurics/terrascan/issues/364)
 - Private GitHub repositories are not recognized with version 3.0.0+ of GitHub provider [\#326](https://github.com/accurics/terrascan/issues/326)
 - Terrascan -var-file=../another dir [\#144](https://github.com/accurics/terrascan/issues/144)
 - Error in test\_aws\_security\_group\_inline\_rule\_open and test\_aws\_security\_group\_rule\_open [\#138](https://github.com/accurics/terrascan/issues/138)
-- Intial setup after installation [\#136](https://github.com/accurics/terrascan/issues/136)
+- Initial setup after installation [\#136](https://github.com/accurics/terrascan/issues/136)
 - Add support for data sources [\#3](https://github.com/accurics/terrascan/issues/3)
 - Support from modules [\#2](https://github.com/accurics/terrascan/issues/2)
 
 **Merged pull requests:**
 
-- Bring Go to 1.15 in Github Actions [\#384](https://github.com/accurics/terrascan/pull/384) ([gliptak](https://github.com/gliptak))
-- Bring Go to 1.15 in Github Actions [\#383](https://github.com/accurics/terrascan/pull/383) ([gliptak](https://github.com/gliptak))
+- Bring Go to 1.15 in GitHub Actions [\#384](https://github.com/accurics/terrascan/pull/384) ([gliptak](https://github.com/gliptak))
+- Bring Go to 1.15 in GitHub Actions [\#383](https://github.com/accurics/terrascan/pull/383) ([gliptak](https://github.com/gliptak))
 - fix a bug when rendering subcharts [\#381](https://github.com/accurics/terrascan/pull/381) ([williepaul](https://github.com/williepaul))
 - Added kustomize support [\#378](https://github.com/accurics/terrascan/pull/378) ([dev-gaur](https://github.com/dev-gaur))
 - Adds support for Helm v3 [\#377](https://github.com/accurics/terrascan/pull/377) ([williepaul](https://github.com/williepaul))
@@ -1094,7 +1094,7 @@
 
 **Fixed bugs:**
 
-- Oudated Docker image [\#294](https://github.com/accurics/terrascan/issues/294)
+- Outdated Docker image [\#294](https://github.com/accurics/terrascan/issues/294)
 - Error with XML output [\#290](https://github.com/accurics/terrascan/issues/290)
 - Fixed checkIpForward rule \(gcp\) [\#323](https://github.com/accurics/terrascan/pull/323) ([williepaul](https://github.com/williepaul))
 
