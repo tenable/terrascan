@@ -33,11 +33,10 @@ func TestLoadIacFile(t *testing.T) {
 		terraformVersion string
 	}
 	tests := []struct {
-		name                   string
-		args                   args
-		outputJSON             string
-		wantAllResourcesConfig output.AllResourceConfigs
-		wantErr                bool
+		name       string
+		args       args
+		outputJSON string
+		wantErr    bool
 	}{
 		{
 			name: "file with no provider defined",
@@ -71,9 +70,6 @@ func TestLoadIacFile(t *testing.T) {
 				t.Errorf("LoadIacFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			// if !reflect.DeepEqual(gotAllResourcesConfig, tt.wantAllResourcesConfig) {
-			// 	t.Errorf("LoadIacFile() = %v, want %v", gotAllResourcesConfig, tt.wantAllResourcesConfig)
-			// }
 
 			var want output.AllResourceConfigs
 

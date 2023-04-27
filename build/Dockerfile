@@ -40,10 +40,6 @@ ENV PATH /go/bin:$PATH
 # copy terrascan binary from build
 COPY --from=builder /go/bin/terrascan /go/bin/terrascan
 
-# Copy webhooks UI templates & assets
-COPY ./pkg/http-server/templates /go/terrascan
-COPY ./pkg/http-server/assets /go/terrascan/assets
-
 EXPOSE 9010
 
 ENTRYPOINT ["/go/bin/terrascan"]
