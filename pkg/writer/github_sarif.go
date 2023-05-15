@@ -25,10 +25,10 @@ const (
 )
 
 func init() {
-	RegisterWriter(githubSarifFormat, GithubSarifWriter)
+	RegisterWriter(githubSarifFormat, GitHubSarifWriter)
 }
 
-// GithubSarifWriter writes sarif formatted violation results report that are well suited for github codescanning alerts display
-func GithubSarifWriter(data interface{}, writers []io.Writer) error {
+// GitHubSarifWriter writes sarif formatted violation results report that are well suited for github codescanning alerts display
+func GitHubSarifWriter(data interface{}, writers []io.Writer) error {
 	return writeSarif(data, writers, true)
 }

@@ -78,7 +78,7 @@ func (m MockIacProvider) Name() string {
 type MockPolicyEngine struct {
 	err error
 }
-type MockVulnerabiltyEngine struct {
+type MockVulnerabilityEngine struct {
 	out vulnerability.EngineOutput
 }
 
@@ -100,11 +100,11 @@ func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreSc
 	return out, m.err
 }
 
-func (m MockVulnerabiltyEngine) ReportVulnerability(input vulnerability.EngineInput, options map[string]interface{}) (out vulnerability.EngineOutput) {
+func (m MockVulnerabilityEngine) ReportVulnerability(input vulnerability.EngineInput, options map[string]interface{}) (out vulnerability.EngineOutput) {
 	return m.out
 }
 
-func (m MockVulnerabiltyEngine) FetchVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
+func (m MockVulnerabilityEngine) FetchVulnerabilities(input output.AllResourceConfigs, options map[string]interface{}) (out output.AllResourceConfigs) {
 	return out
 }
 
@@ -162,7 +162,7 @@ func TestExecute(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "test SendNofitications no error",
+			name: "test SendNotifications no error",
 			executor: Executor{
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
@@ -171,7 +171,7 @@ func TestExecute(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "test policy enginer no error",
+			name: "test policy engineer no error",
 			executor: Executor{
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
@@ -194,7 +194,7 @@ func TestExecute(t *testing.T) {
 				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
 				notifiers:     []notifications.Notifier{&MockNotifier{err: nil}},
 				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
-				vulnerabilityEngine: MockVulnerabiltyEngine{
+				vulnerabilityEngine: MockVulnerabilityEngine{
 					out: vulnerability.EngineOutput{
 						XMLName:        xml.Name{},
 						ViolationStore: results.NewViolationStore(),

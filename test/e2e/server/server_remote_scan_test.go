@@ -36,7 +36,7 @@ import (
 )
 
 var _ = Describe("Server Remote Scan", func() {
-	// In case of adding new test case first push the test data and golden data files and then write test cases around thata
+	// In case of adding new test case first push the test data and golden data files and then write test cases around that
 	var session *gexec.Session
 	var outWriter, errWriter io.Writer = gbytes.NewBuffer(), gbytes.NewBuffer()
 	port := "9011"
@@ -387,7 +387,7 @@ var _ = Describe("Server Remote Scan", func() {
 			remoteRepoURL := "https://github.com/tenable/terrascan//test/e2e/test_data/iac/resource_skipping/terraform"
 
 			When("scan_rules is used", func() {
-				It("should receive violations and 200 OK resopnse", func() {
+				It("should receive violations and 200 OK response", func() {
 
 					bodyAttrs := make(map[string]interface{})
 					bodyAttrs["remote_type"] = "git"

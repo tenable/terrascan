@@ -1,5 +1,5 @@
 {
-    "name": "logRetensionGraterThan90Days",
+    "name": "logRetentionGreaterThan90Days",
     "file": "networkWatcherCheck.rego",
     "policy_type": "azure",
     "resource_type": "azurerm_network_watcher_flow_log",

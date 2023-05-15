@@ -335,8 +335,8 @@
   ],
   "aws_guardduty_detector": [
     {
-      "id": "aws_guardduty_detector.gaurdDutyDisabled",
-      "name": "gaurdDutyDisabled",
+      "id": "aws_guardduty_detector.guardDutyDisabled",
+      "name": "guardDutyDisabled",
       "module_name": "guardduty",
       "source": "guardduty/main.tf",
       "plan_root": "./",

@@ -33,8 +33,8 @@ type ResultConfigurationBlock struct {
 	OutputLocation          string                         `json:"output_location"`
 }
 
-// EnginerVersionBlock holds config for engine_version attribute
-type EnginerVersionBlock struct {
+// EngineerVersionBlock holds config for engine_version attribute
+type EngineerVersionBlock struct {
 	SelectedEngineVersion string `json:"selected_version"`
 }
 
@@ -44,7 +44,7 @@ type WorkgroupConfigurationBlock struct {
 	EnforceWorkgroupConfiguration   bool                       `json:"enforce_workgroup_configuration"`
 	RequesterPaysEnabled            bool                       `json:"requester_pays_enabled"`
 	PublishCloudwatchMetricsEnabled bool                       `json:"publish_cloudwatch_metrics_enabled"`
-	EngineVersion                   []EnginerVersionBlock      `json:"engine_version"`
+	EngineVersion                   []EngineerVersionBlock     `json:"engine_version"`
 	ResultConfiguration             []ResultConfigurationBlock `json:"result_configuration"`
 }
 
@@ -68,7 +68,7 @@ func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 		workGroupConfig[0].PublishCloudwatchMetricsEnabled = functions.GetVal(w.WorkGroupConfiguration.PublishCloudWatchMetricsEnabled)
 
 		if w.WorkGroupConfiguration.EngineVersion != nil {
-			engineConfig := make([]EnginerVersionBlock, 1)
+			engineConfig := make([]EngineerVersionBlock, 1)
 			engineConfig[0].SelectedEngineVersion = functions.GetVal(w.WorkGroupConfiguration.EngineVersion.SelectedEngineVersion)
 			workGroupConfig[0].EngineVersion = engineConfig
 		}
@@ -78,11 +78,11 @@ func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 			resultConfig[0].OutputLocation = functions.GetVal(w.WorkGroupConfiguration.ResultConfiguration.OutputLocation)
 
 			if w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration != nil {
-				encryptionCofig := make([]EncryptionConfigurationBlock, 1)
-				encryptionCofig[0].EncryptionOption = w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.EncryptionOption
-				encryptionCofig[0].KmsKeyArn = functions.GetVal(w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.KmsKey)
+				encryptionConfig := make([]EncryptionConfigurationBlock, 1)
+				encryptionConfig[0].EncryptionOption = w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.EncryptionOption
+				encryptionConfig[0].KmsKeyArn = functions.GetVal(w.WorkGroupConfiguration.ResultConfiguration.EncryptionConfiguration.KmsKey)
 
-				resultConfig[0].EncryptionConfiguration = encryptionCofig
+				resultConfig[0].EncryptionConfiguration = encryptionConfig
 			}
 
 			workGroupConfig[0].ResultConfiguration = resultConfig

@@ -118,7 +118,7 @@ func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 		}}
 	}
 
-	// add logging configurasions
+	// add logging configurations
 	if s.LoggingConfiguration != nil {
 		cf.Logging = []LoggingConfig{{
 			DestinationBucketName: functions.GetVal(s.LoggingConfiguration.DestinationBucketName),

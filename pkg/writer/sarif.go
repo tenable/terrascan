@@ -42,7 +42,7 @@ func SarifWriter(data interface{}, writers []io.Writer) error {
 	return writeSarif(data, writers, false)
 }
 
-func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
+func writeSarif(data interface{}, writers []io.Writer, forGitHub bool) error {
 	outputData := data.(policy.EngineOutput)
 	report, err := sarif.New(sarif.Version210)
 	if err != nil {
@@ -74,7 +74,7 @@ func writeSarif(data interface{}, writers []io.Writer, forGithub bool) error {
 
 		var artifactLocation *sarif.ArtifactLocation
 
-		if forGithub {
+		if forGitHub {
 			artifactLocation = sarif.NewSimpleArtifactLocation(violation.File).
 				WithUriBaseId(outputData.Summary.ResourcePath)
 		} else {

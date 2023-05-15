@@ -255,7 +255,7 @@ Scan Summary -
 	High                :	1`
 )
 
-func TestHumanReadbleWriter(t *testing.T) {
+func TestHumanReadableWriter(t *testing.T) {
 
 	type funcInput interface{}
 	tests := []struct {
@@ -308,13 +308,13 @@ func TestHumanReadbleWriter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var bf bytes.Buffer
 			w := []io.Writer{&bf}
-			if err := HumanReadbleWriter(tt.input, w); (err != nil) != tt.expectedError {
-				t.Errorf("HumanReadbleWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
+			if err := HumanReadableWriter(tt.input, w); (err != nil) != tt.expectedError {
+				t.Errorf("HumanReadableWriter() error = gotErr: %v, wantErr: %v", err, tt.expectedError)
 			}
 			outputBytes := bf.Bytes()
 			gotOutput := string(bytes.TrimSpace(outputBytes))
 			if !strings.EqualFold(gotOutput, strings.TrimSpace(tt.expectedOutput)) {
-				t.Errorf("HumanReadbleWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
+				t.Errorf("HumanReadableWriter() = got: %v, want: %v", gotOutput, tt.expectedOutput)
 			}
 		})
 	}

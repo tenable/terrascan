@@ -17,7 +17,6 @@
 package tfv14
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -26,6 +25,7 @@ import (
 	"testing"
 
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/tenable/terrascan/pkg/utils"
 )
 
@@ -34,7 +34,7 @@ var emptyTfFilePath = filepath.Join(testDataDir, "empty.tf")
 
 func TestLoadIacFile(t *testing.T) {
 
-	testErrorString1 := `error occured while loading config file 'not-there'. error:
+	testErrorString1 := `error occurred while loading config file 'not-there'. error:
 <nil>: Failed to read file; The file "not-there" could not be read.
 `
 
@@ -130,17 +130,26 @@ func TestLoadIacFile(t *testing.T) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
-			gotBytes, _ := json.MarshalIndent(got, "", "  ")
-			gotBytes = append(gotBytes, []byte{'\n'}...)
-			wantBytes, _ := os.ReadFile(tt.tfJSONFile)
+			var want output.AllResourceConfigs
 
+			wantBytes, _ := os.ReadFile(tt.tfJSONFile)
 			if utils.IsWindowsPlatform() {
-				gotBytes = utils.ReplaceCarriageReturnBytes(gotBytes)
 				wantBytes = utils.ReplaceWinNewLineBytes(wantBytes)
 			}
 
-			if !reflect.DeepEqual(bytes.TrimSpace(gotBytes), bytes.TrimSpace(wantBytes)) {
-				t.Errorf("unexpected error; got '%v', want: '%v'", string(gotBytes), string(wantBytes))
+			err := json.Unmarshal(wantBytes, &want)
+			if err != nil {
+				t.Errorf("unexpected error unmarshalling want: %v", err)
+			}
+
+			match, err := test.IdenticalAllResourceConfigs(got, want)
+			if err != nil {
+				t.Errorf("unexpected error checking result: %v", err)
+			}
+			if !match {
+				g, _ := json.MarshalIndent(got, "", "  ")
+				w, _ := json.MarshalIndent(want, "", "  ")
+				t.Errorf("got '%v', want: '%v'", string(g), string(w))
 			}
 		})
 	}

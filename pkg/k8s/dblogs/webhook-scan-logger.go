@@ -124,46 +124,6 @@ func (g *WebhookScanLogger) FetchLogs() ([]WebhookScanLog, error) {
 	return result, nil
 }
 
-// FetchLogByID retreives a single record based on request ID from the database
-func (g *WebhookScanLogger) FetchLogByID(logUID string) (*WebhookScanLog, error) {
-	// Fetch a specific log by its request UID
-
-	db, err := g.getDbHandler()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	row, err := db.Query("SELECT * FROM logs WHERE uid=?", logUID)
-	if err != nil {
-		zap.S().Errorf("failed query logs table. error: '%v'", err)
-		return nil, err
-	}
-	defer row.Close()
-
-	for row.Next() {
-		var id int
-		var uid string
-		var request string
-		var allowed bool
-		var violationsSummary string
-		var deniableViolations string
-		var createdAt time.Time
-		row.Scan(&id, &uid, &request, &allowed, &violationsSummary, &deniableViolations, &createdAt)
-
-		return &WebhookScanLog{
-			UID:                uid,
-			Request:            request,
-			Allowed:            allowed,
-			ViolationsSummary:  violationsSummary,
-			DeniableViolations: deniableViolations,
-			CreatedAt:          createdAt,
-		}, nil
-	}
-
-	return &WebhookScanLog{}, nil
-}
-
 // GetLogURL returns a url to the UI page for reviewing the validating admission request log
 func (g *WebhookScanLogger) GetLogURL(host, logUID string) string {
 	// Use this as the link to show the a specific log

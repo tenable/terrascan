@@ -1,6 +1,6 @@
 package accurics
 
-{{.prefix}}iamRolePolicyWithPrivildegeEscalation[iamUser.id] {
+{{.prefix}}iamRolePolicyWithPrivilegeEscalation[iamUser.id] {
     iamUser = input.aws_iam_role_policy[_]
     policy := json_unmarshal(iamUser.config.policy)
     statement = policy.Statement[_]

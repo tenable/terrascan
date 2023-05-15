@@ -35,7 +35,7 @@ var (
 // NewNotifier returns a new notifier
 func NewNotifier(notifierType string) (notifier Notifier, err error) {
 
-	// get notifier from supportedNotifierss
+	// get notifier from supportedNotifiers
 	notifierObject, supported := supportedNotifiers[supportedNotifierType(notifierType)]
 	if !supported {
 		zap.S().Errorf("notifier type '%s' not supported", notifierType)

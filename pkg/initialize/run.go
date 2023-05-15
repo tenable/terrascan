@@ -77,10 +77,10 @@ func DownloadPolicies() error {
 		return downloadDefaultPolicies(policyBasePath)
 	}
 
-	return dowloadEnvironmentPolicies(policyBasePath, accessToken)
+	return downloadEnvironmentPolicies(policyBasePath, accessToken)
 }
 
-func dowloadEnvironmentPolicies(policyBasePath, accessToken string) error {
+func downloadEnvironmentPolicies(policyBasePath, accessToken string) error {
 	err := ensureDir(policyBasePath)
 	if err != nil {
 		return err

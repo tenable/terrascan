@@ -80,7 +80,7 @@ func TestNewTerrascanConfigReader(t *testing.T) {
 			want: &TerrascanConfigReader{},
 		},
 		{
-			name: "non existent config file",
+			name: "nonexistent config file",
 			args: args{
 				fileName: "test",
 			},

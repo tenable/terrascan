@@ -37,18 +37,16 @@ func LoadIacFile(absFilePath, terraformVersion string) (allResourcesConfig outpu
 	// load current iac file
 	hclFile, diags := parser.LoadConfigFile(absFilePath)
 	if hclFile == nil {
-		errMessage := fmt.Sprintf("error occured while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
+		errMessage := fmt.Sprintf("error occurred while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
 
-	if diags != nil {
+	if diags.HasErrors() {
 		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
 		return allResourcesConfig, fmt.Errorf(errMessage)
 	}
-	// getting provider version for the file
-	providerVersion := GetFileProviderVersion(hclFile)
 
 	// initialize normalized output
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
@@ -62,20 +60,15 @@ func LoadIacFile(absFilePath, terraformVersion string) (allResourcesConfig outpu
 			return allResourcesConfig, fmt.Errorf("failed to create ResourceConfig")
 		}
 
+		resourceConfig.TerraformVersion = terraformVersion
+		managedResource.Provider = ResolveProvider(managedResource, hclFile.RequiredProviders)
+		resourceConfig.ProviderVersion = GetProviderVersion(hclFile, managedResource.Provider, terraformVersion)
 		// set module name
 		// module name for the file scan will always be root
 		resourceConfig.ModuleName = "root"
 
 		// extract file name from path
 		resourceConfig.Source = getFileName(resourceConfig.Source)
-
-		resourceConfig.TerraformVersion = terraformVersion
-		resourceConfig.ProviderVersion = providerVersion
-
-		// if root module do not have provider contraints fetch the latest compatible version
-		if resourceConfig.ProviderVersion == "" {
-			resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, terraformVersion)
-		}
 
 		// append to normalized output
 		if _, present := allResourcesConfig[resourceConfig.Type]; !present {

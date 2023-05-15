@@ -33,7 +33,7 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 	// read source file
 	fileBytes, err := os.ReadFile(managedResource.DeclRange.Filename)
 	if err != nil {
-		zap.S().Errorf("failed to read terrafrom IaC file '%s'. error: '%v'", managedResource.DeclRange.Filename, err)
+		zap.S().Errorf("failed to read terraform IaC file '%s'. error: '%v'", managedResource.DeclRange.Filename, err)
 		return resourceConfig, fmt.Errorf("failed to read terraform file")
 	}
 
@@ -78,11 +78,11 @@ func CreateResourceConfig(managedResource *hclConfigs.Resource) (resourceConfig 
 
 // findContainers finds containers defined in resource
 func findContainers(managedResource *hclConfigs.Resource, jsonBody jsonObj, hclBody *hclsyntax.Body) (containers []output.ContainerDetails, initContainers []output.ContainerDetails) {
-	if isKuberneteResource(managedResource) {
+	if isKubernetesResource(managedResource) {
 		containers, initContainers = extractContainerImagesFromk8sResources(managedResource, hclBody)
-	} else if isAzureConatinerResource(managedResource) {
+	} else if isAzureContainerResource(managedResource) {
 		containers = fetchContainersFromAzureResource(jsonBody)
-	} else if isAwsConatinerResource(managedResource) {
+	} else if isAwsContainerResource(managedResource) {
 		containers = fetchContainersFromAwsResource(jsonBody, hclBody, managedResource.DeclRange.Filename)
 	}
 	return

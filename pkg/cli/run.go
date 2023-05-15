@@ -144,7 +144,7 @@ func (s *ScanOptions) Scan() error {
 	return nil
 }
 
-// Init initalises and validates ScanOptions
+// Init initialises and validates ScanOptions
 func (s *ScanOptions) Init() error {
 	s.initColor()
 	if err := s.validate(); err != nil {

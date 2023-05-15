@@ -30,7 +30,7 @@ import (
 const jqQuery = `[.planned_values.root_module | .. | select(.type? != null and .address? != null and .mode? == "managed") | {id: .address?, type: .type?, name: .name?, config: .values?, source: ""}]`
 
 var (
-	errIncorrectFormatVersion = fmt.Errorf("terraform format version shoule be one of '%s'", strings.Join(getTfPlanFormatVersions(), ", "))
+	errIncorrectFormatVersion = fmt.Errorf("terraform format version should be one of '%s'", strings.Join(getTfPlanFormatVersions(), ", "))
 	errEmptyTerraformVersion  = fmt.Errorf("terraform version cannot be empty in tfplan json")
 )
 
@@ -67,7 +67,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	// decode processed out into output.ResourceConfig
 	var resourceConfigs []output.ResourceConfig
 	if err := json.Unmarshal(processed, &resourceConfigs); err != nil {
-		errMsg := fmt.Sprintf("failed to decode proceesed jq output. error: '%v'", err)
+		errMsg := fmt.Sprintf("failed to decode processed jq output. error: '%v'", err)
 		zap.S().Debug(errMsg)
 		return allResourcesConfig, fmt.Errorf(errMsg)
 	}

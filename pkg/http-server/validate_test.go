@@ -53,7 +53,7 @@ func TestValidateFiles(t *testing.T) {
 			name:           "cert filename absent",
 			privateKeyFile: "keyfile",
 			certFile:       "",
-			wantErr:        fmt.Errorf("private key file provided but certficate file missing"),
+			wantErr:        fmt.Errorf("private key file provided but certificate file missing"),
 		},
 	}
 

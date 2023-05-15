@@ -56,12 +56,6 @@ func TestLogs(t *testing.T) {
 		}
 	})
 
-	// test case 3: fetch db record by log ID
-	myFetchLog, err := logger.FetchLogByID(log.UID)
-	if err != nil {
-		t.Errorf("unexpected error: '%v'", err)
-	}
-
 	t.Run("one db record", func(t *testing.T) {
 		fetchedLogs, err := logger.FetchLogs()
 		if err != nil {
@@ -69,48 +63,6 @@ func TestLogs(t *testing.T) {
 		}
 		if len(fetchedLogs) != 1 {
 			t.Errorf("db has one log, got: '%v' logs", len(fetchedLogs))
-		}
-	})
-
-	t.Run("fetch record by id", func(t *testing.T) {
-
-		if len(myFetchLog.UID) < 1 {
-			t.Errorf("Log with ID: '%v' is not returned by fetchLogByID", log.UID)
-		}
-
-		if myFetchLog.UID != log.UID {
-			t.Errorf("Wrong UID. Expected '%v', Got: '%v'", log.UID, myFetchLog.UID)
-
-		}
-	})
-
-	t.Run("verify allowed", func(t *testing.T) {
-		if myFetchLog.Allowed != log.Allowed {
-			t.Errorf("Wrong Allowed. Expected '%v', Got: '%v'", log.Allowed, myFetchLog.Allowed)
-		}
-	})
-
-	t.Run("verify violations summary", func(t *testing.T) {
-		if myFetchLog.ViolationsSummary != log.ViolationsSummary {
-			t.Errorf("Wrong ViolationsSummary. Expected '%v', Got: '%v'", log.ViolationsSummary, myFetchLog.ViolationsSummary)
-		}
-	})
-
-	t.Run("verify request", func(t *testing.T) {
-		if myFetchLog.Request != log.Request {
-			t.Errorf("Wrong Request. Expected '%v', Got: '%v'", log.Request, myFetchLog.Request)
-		}
-	})
-
-	t.Run("verify deniable violations", func(t *testing.T) {
-		if myFetchLog.DeniableViolations != log.DeniableViolations {
-			t.Errorf("Wrong DeniableViolations. Expected '%v', Got: '%v'", log.DeniableViolations, myFetchLog.DeniableViolations)
-		}
-	})
-
-	t.Run("verify timestamp", func(t *testing.T) {
-		if myFetchLog.CreatedAt.Unix() != log.CreatedAt.Unix() {
-			t.Errorf("Wrong CreatedAt. Expected '%v', Got: '%v'", log.CreatedAt, myFetchLog.CreatedAt)
 		}
 	})
 }

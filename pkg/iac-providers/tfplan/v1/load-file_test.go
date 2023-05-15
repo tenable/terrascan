@@ -58,7 +58,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid tfplan json",
 			filePath: filepath.Join("testdata", "invalid-tfplan.json"),
 			tfplan:   TFPlan{},
-			wantErr:  fmt.Errorf("invalid terraform json file; error: 'terraform format version shoule be one of '0.1, 0.2''"),
+			wantErr:  fmt.Errorf("invalid terraform json file; error: 'terraform format version should be one of '0.1, 0.2''"),
 		},
 		{
 			name:     "valid tfplan json",

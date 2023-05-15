@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// ResolveLinkedTemplate downloads temlate for the given uri and returns its path
+// ResolveLinkedTemplate downloads template for the given uri and returns its path
 func ResolveLinkedTemplate(uri string) ([]byte, error) {
 	tempDir := utils.GenerateTempDir()
 	defer os.RemoveAll(tempDir)
@@ -36,7 +36,7 @@ func downloadTemplate(uri string, dst string) (string, error) {
 	}
 	err := client.Get()
 	if err != nil {
-		zap.S().Debug("unable to parse linked termplate", zap.Error(err), zap.String("file", path))
+		zap.S().Debug("unable to parse linked template", zap.Error(err), zap.String("file", path))
 		return "", err
 	}
 	return path, nil

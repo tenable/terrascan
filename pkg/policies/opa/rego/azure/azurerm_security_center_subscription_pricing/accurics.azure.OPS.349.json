@@ -1,6 +1,6 @@
 {
-    "name": "reme_securityCenterPrincingTier",
-    "file": "securityCenterPrincingTier.rego",
+    "name": "reme_securityCenterPricingTier",
+    "file": "securityCenterPricingTier.rego",
     "policy_type": "azure",
     "resource_type": "azurerm_security_center_subscription_pricing",
     "template_args": {

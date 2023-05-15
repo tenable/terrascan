@@ -36,7 +36,7 @@ var tfJSONDir = filepath.Join(testDataDir, "tfjson")
 
 func TestLoadIacFile(t *testing.T) {
 
-	testErrorString1 := `error occured while loading config file 'not-there'. error:
+	testErrorString1 := `error occurred while loading config file 'not-there'. error:
 <nil>: Failed to read file; The file "not-there" could not be read.
 `
 	testErrorString2 := fmt.Sprintf(`failed to load iac file '%s'. error:

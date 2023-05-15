@@ -158,9 +158,6 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 			t.addError(errMessage, dir)
 		}
 
-		// getting provider version for the root module
-		providerVersion := GetModuleProviderVersion(rootMod)
-
 		// get unified config for the current directory
 		unified, diags := t.buildUnifiedConfig(rootMod, dir)
 		// Get the downloader chache
@@ -209,12 +206,7 @@ func (t TerraformDirectoryLoader) loadDirRecursive(dirList []string) (output.All
 				}
 
 				resourceConfig.TerraformVersion = t.terraformVersion
-				resourceConfig.ProviderVersion = providerVersion
-
-				// if root module do not have provider contraints fetch the latest compatible version
-				if resourceConfig.ProviderVersion == "" {
-					resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
-				}
+				resourceConfig.ProviderVersion = GetModuleProviderVersion(current.Config.Module, managedResource.Provider, t.terraformVersion)
 				// set module name
 				resourceConfig.ModuleName = current.Name
 
@@ -295,9 +287,6 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 		t.addError(errMessage, t.absRootDir)
 	}
 
-	// getting provider version for the root module
-	providerVersion := GetModuleProviderVersion(rootMod)
-
 	// get unified config for the current directory
 	unified, diags := t.buildUnifiedConfig(rootMod, t.absRootDir)
 
@@ -360,12 +349,7 @@ func (t TerraformDirectoryLoader) loadDirNonRecursive() (output.AllResourceConfi
 			}
 
 			resourceConfig.TerraformVersion = t.terraformVersion
-			resourceConfig.ProviderVersion = providerVersion
-
-			// if root module do not have provider contraints fetch the latest compatible version
-			if resourceConfig.ProviderVersion == "" {
-				resourceConfig.ProviderVersion = LatestProviderVersion(managedResource.Provider, t.terraformVersion)
-			}
+			resourceConfig.ProviderVersion = GetModuleProviderVersion(current.Config.Module, managedResource.Provider, t.terraformVersion)
 
 			if isRemoteModule {
 				resourceConfig.IsRemoteModule = &isRemoteModule

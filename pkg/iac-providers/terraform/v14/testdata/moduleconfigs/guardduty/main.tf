@@ -1,3 +1,3 @@
-resource "aws_guardduty_detector" "gaurdDutyDisabled" {
+resource "aws_guardduty_detector" "guardDutyDisabled" {
   enable = false
 }
