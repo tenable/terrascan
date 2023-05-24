@@ -60,22 +60,17 @@ jobs:
     needs: validate
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout Terrascan
         uses: actions/checkout@v2
 
-      - name: Build Terrascan docker image
-        run: make docker-build
-
       - name: Login to Docker Hub
         uses: docker/login-action@v2
-        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Terrascan latest docker image
-        if: ${{ github.ref == 'refs/heads/master' }}
-        run: make docker-push-latest
+      - name: Build and push Terrascan latest docker image
+        run: make docker-build-latest

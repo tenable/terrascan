@@ -116,11 +116,11 @@ docker-push:
 
 # push latest terrascan docker image
 docker-push-latest:
-	./scripts/docker-push-latest.sh
+	./scripts/docker-build.sh latest
 
 # push release tag terrascan docker image
 docker-push-latest-tag:
-	./scripts/docker-push-latest-tag.sh
+	./scripts/docker-build.sh tag
 
 # build terrascan_atlantis docker image
 atlantis-docker-build:
