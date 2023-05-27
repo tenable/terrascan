@@ -31,6 +31,9 @@ jobs:
   # push image to Docker Hub
   push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout Terrascan
@@ -45,7 +48,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Terrascan latest tag docker image
-        run: make docker-build-latest-tag
+        run: make docker-push-latest-tag
         env:
           MULTIPLATFORM: true
 

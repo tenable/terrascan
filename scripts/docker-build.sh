@@ -40,6 +40,6 @@ fi
 
 docker buildx create "${PLATFORM[@]}" --name terrascan-builder --use
 
-docker buildx build "${PLATFORM[@]}" -t ${DOCKER_REPO}:${LABEL} -f ${DOCKERFILE} . "${OUTPUT_TYPE}"
+docker buildx build --provenance=false "${OUTPUT_TYPE}" "${PLATFORM[@]}" -t "${DOCKER_REPO}:${LABEL}" -f "${DOCKERFILE}" .
 
 docker buildx rm terrascan-builder
