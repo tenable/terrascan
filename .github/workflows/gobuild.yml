@@ -76,3 +76,5 @@ jobs:
 
       - name: Build and push Terrascan latest docker image
         run: make docker-build-latest
+        env:
+          MULTIPLATFORM: true

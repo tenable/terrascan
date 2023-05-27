@@ -31,7 +31,7 @@ if [ "${LABEL-false}" = "false" ]; then
 fi
 
 declare -a PLATFORM
-if [ "${CI-false}" = "true" ]; then
+if [ "${MULTIPLATFORM-false}" = "true" ]; then
   OUTPUT_TYPE="--push"
   PLATFORM=("--platform" "linux/amd64,linux/arm64")
 else

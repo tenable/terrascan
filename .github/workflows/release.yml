@@ -46,6 +46,8 @@ jobs:
 
       - name: Build and Push Terrascan latest tag docker image
         run: make docker-build-latest-tag
+        env:
+          MULTIPLATFORM: true
 
       - name: Build terrascan_atlantis docker image
         run: make atlantis-docker-build
