@@ -108,19 +108,26 @@ install-kind:
 docker-build:
 	./scripts/docker-build.sh
 
+# build and push latest terrascan docker image
+docker-build-push-latest:
+	./scripts/docker-build.sh latest
+
+# build and push release tag terrascan docker image
+docker-build-push-latest-tag:
+	./scripts/docker-build.sh tag
+
 
 # push terrascan docker image
 docker-push:
 	./scripts/docker-push.sh
 
-
 # push latest terrascan docker image
 docker-push-latest:
-	./scripts/docker-build.sh latest
+	./scripts/docker-push-latest.sh
 
 # push release tag terrascan docker image
 docker-push-latest-tag:
-	./scripts/docker-build.sh tag
+	./scripts/docker-push-latest-tag.sh
 
 # build terrascan_atlantis docker image
 atlantis-docker-build:

@@ -78,6 +78,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Terrascan latest docker image
-        run: make docker-push-latest
+        run: make docker-build-push-latest
         env:
           MULTIPLATFORM: true
