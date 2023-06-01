@@ -21,7 +21,7 @@ RUN apk update && apk add git && \
 
 
 # -------- prod stage -------- #
-FROM alpine:3.16
+FROM alpine:3
 
 # create non root user
 RUN addgroup --gid 101 terrascan && \
