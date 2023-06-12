@@ -44,7 +44,7 @@ func JQFilterWithQuery(jqQuery string, jsonInput []byte) ([]byte, error) {
 	}
 
 	// run jq query on input
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Millisecond)
 	defer cancel()
 	iter := query.RunWithContext(ctx, input)
 	for {
