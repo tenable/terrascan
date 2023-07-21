@@ -2,6 +2,7 @@ module github.com/tenable/terrascan
 
 go 1.19
 
+
 replace (
 	github.com/hashicorp/go-getter => github.com/hashicorp/go-getter v1.7.0
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.82+incompatible => github.com/tencentcloud/tencentcloud-sdk-go v1.0.191
