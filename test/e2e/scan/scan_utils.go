@@ -33,7 +33,7 @@ const (
 	ScanTimeout int = 3
 
 	// WebhookScanTimeout is default scan command webhook execution timeout
-	WebhookScanTimeout int = 10
+	WebhookScanTimeout int = 30
 
 	// RemoteScanTimeout is default scan command remote execution timeout
 	RemoteScanTimeout int = 30
