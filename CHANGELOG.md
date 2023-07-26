@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.18.2](https://github.com/tenable/terrascan/tree/v1.18.2) (2023-07-26)
+
+[Full Changelog](https://github.com/tenable/terrascan/compare/v1.18.1...v1.18.2)
+
+**Merged pull requests:**
+
+- fix openssl-libcrypto1.1@1.1.1u-r1 library vulnerability [\#1592](https://github.com/tenable/terrascan/pull/1592) ([nitumore](https://github.com/nitumore))
+- Increased timeout for webhook test [\#1591](https://github.com/tenable/terrascan/pull/1591) ([nitumore](https://github.com/nitumore))
+- only high vulns detected by docker scan fixed [\#1588](https://github.com/tenable/terrascan/pull/1588) ([nitumore](https://github.com/nitumore))
+- remove k8s admission log UI [\#1556](https://github.com/tenable/terrascan/pull/1556) ([nasir-rabbani](https://github.com/nasir-rabbani))
+- Spelling [\#1496](https://github.com/tenable/terrascan/pull/1496) ([jsoref](https://github.com/jsoref))
+
+# Changelog
+
 ## [v1.18.1](https://github.com/tenable/terrascan/tree/v1.18.1) (2023-04-13)
 
 [Full Changelog](https://github.com/tenable/terrascan/compare/v1.18.0...v1.18.1)
