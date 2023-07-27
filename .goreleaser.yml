@@ -18,21 +18,16 @@ builds:
       - goos: windows
         goarch: arm64
 archives:
-  - id: darwin
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+  - id: format_all_build_names
+    name_template: >-
+      {{ .Binary }}_
+      {{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }} 
   # for windows it is good to have zip along with tar.gz    
   - id: win_zip
-    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
-    replacements:
-      windows: Windows
-      386: i386
-      amd64: x86_64
     format_overrides:
       - goos: windows
         format: zip
