@@ -21,7 +21,7 @@ archives:
   - id: format_all_build_names
     name_template: >-
       {{ .Binary }}_
-      {{ .Version }}_
+      {{- trimprefix .Version  "." }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
@@ -30,7 +30,7 @@ archives:
   - id: win_zip
     name_template: >-
       {{ .Binary }}_
-      {{ .Version }}_
+      {{- trimprefix .Version  "." }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
