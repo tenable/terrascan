@@ -18,18 +18,23 @@ builds:
       - goos: windows
         goarch: arm64
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-  # for windows it is good to have zip along with tar.gz
+  - id: format_all_build_names
+    name_template: >-
+      {{ .Binary }}_
+      {{- trimprefix .Version  "." }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }} 
+  # for windows it is good to have zip along with tar.gz    
   - id: win_zip
-    replacements:
-      windows: Windows
-      386: i386
-      amd64: x86_64
+    name_template: >-
+      {{ .Binary }}_
+      {{- trimprefix .Version  "." }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
       - goos: windows
         format: zip
