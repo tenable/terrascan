@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.18.3](https://github.com/tenable/terrascan/tree/v1.18.3) (2023-08-03)
+
+[Full Changelog](https://github.com/tenable/terrascan/compare/v1.18.2...v1.18.3)
+
+**Merged pull requests:**
+
+- update net deps to fix vuln [\#1597](https://github.com/tenable/terrascan/pull/1597) ([Rchanger](https://github.com/Rchanger))
+
+# Changelog
+
 ## [v1.18.2](https://github.com/tenable/terrascan/tree/v1.18.2) (2023-07-26)
 
 [Full Changelog](https://github.com/tenable/terrascan/compare/v1.18.1...v1.18.2)
