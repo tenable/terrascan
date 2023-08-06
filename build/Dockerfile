@@ -23,7 +23,7 @@ FROM alpine:3.16
 # create non root user
 RUN addgroup --gid 101 terrascan && \
     adduser -S --uid 101 --ingroup terrascan terrascan && \
-    apk add --no-cache git openssh
+    apk add --no-cache git openssh openssl>=1.1.1u-r2
 
 # create ~/.ssh & ~/bin folder and change owner to terrascan
 RUN mkdir -p /home/terrascan/.ssh /home/terrascan/bin /data && \
