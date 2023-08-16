@@ -31,9 +31,6 @@ jobs:
   # push image to Docker Hub
   push:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout Terrascan
