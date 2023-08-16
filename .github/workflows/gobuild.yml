@@ -58,9 +58,6 @@ jobs:
   push:
     # Ensure "validate" job passes before pushing image.
     needs: validate
-    permissions:
-      contents: read
-      packages: write
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
