@@ -32,9 +32,20 @@ const (
 	// ScanTimeout is default scan command execution timeout
 	ScanTimeout int = 3
 
+	// WebhookScanTimeout is default scan command webhook execution timeout
+	WebhookScanTimeout int = 30
+
 	// RemoteScanTimeout is default scan command remote execution timeout
 	RemoteScanTimeout int = 30
 )
+
+// RunScanAndAssertGoldenOutputRegexWithTimeout runs the scan command with supplied paramters and compares actual and golden output
+// it replaces variable parts in output with regex eg: timestamp, file path
+// added to provide extra option for specifying timeout.
+func RunScanAndAssertGoldenOutputRegexWithTimeout(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isJunitXML, isStdOut bool, outWriter, errWriter io.Writer, scanTimeout int, args ...string) {
+	session, goldenFileAbsPath := RunScanCommandWithTimeOut(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, scanTimeout, args...)
+	helper.CompareActualWithGoldenSummaryRegex(session, goldenFileAbsPath, isJunitXML, isStdOut)
+}
 
 // RunScanAndAssertGoldenOutputRegex runs the scan command with supplied parameters and compares actual and golden output
 // it replaces variable parts in output with regex eg: timestamp, file path
@@ -47,6 +58,18 @@ func RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, relGoldenFilePath st
 func RunScanAndAssertGoldenOutput(terrascanBinaryPath, relGoldenFilePath string, exitCode int, isStdOut bool, outWriter, errWriter io.Writer, args ...string) {
 	session, goldenFileAbsPath := RunScanCommand(terrascanBinaryPath, relGoldenFilePath, exitCode, outWriter, errWriter, args...)
 	helper.CompareActualWithGolden(session, goldenFileAbsPath, isStdOut)
+}
+
+// RunScanCommandWithTimeOut executes the scan command, validates exit code
+// added to provide extra option for specifying timeout.
+func RunScanCommandWithTimeOut(terrascanBinaryPath, relGoldenFilePath string, exitCode int, outWriter, errWriter io.Writer, scanTimeout int, args ...string) (*gexec.Session, string) {
+	argList := []string{ScanCommand}
+	argList = append(argList, args...)
+	session := helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, argList...)
+	gomega.Eventually(session, scanTimeout).Should(gexec.Exit(exitCode))
+	goldenFileAbsPath, err := filepath.Abs(relGoldenFilePath)
+	gomega.Expect(err).NotTo(gomega.HaveOccurred())
+	return session, goldenFileAbsPath
 }
 
 // RunScanAndAssertJSONOutput runs the scan command with supplied parameters and compares actual and golden output

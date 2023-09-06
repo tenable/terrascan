@@ -328,7 +328,7 @@ var _ = Describe("Scan", func() {
 		Context("valid --webhook-url and --webhook-token flag is supplied", func() {
 			It("should scan and display violations in human output format and exit with status code 3", func() {
 				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL, "--webhook-token", notificationToken}
-				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				scanUtils.RunScanAndAssertGoldenOutputRegexWithTimeout(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanUtils.WebhookScanTimeout, scanArgs...)
 
 			})
 		})
@@ -336,7 +336,7 @@ var _ = Describe("Scan", func() {
 		Context("only --webhook-url flag is supplied", func() {
 			It("should scan and display violations in human output format and exit with status code 3", func() {
 				scanArgs := []string{"-p", policyDir, "-i", "terraform", "-d", iacDir, "--webhook-url", notificationURL}
-				scanUtils.RunScanAndAssertGoldenOutputRegex(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanArgs...)
+				scanUtils.RunScanAndAssertGoldenOutputRegexWithTimeout(terrascanBinaryPath, filepath.Join(tfAwsAmiGoldenRelPath, "aws_ami_violation_human.txt"), helper.ExitCodeThree, false, true, outWriter, errWriter, scanUtils.WebhookScanTimeout, scanArgs...)
 
 			})
 		})
