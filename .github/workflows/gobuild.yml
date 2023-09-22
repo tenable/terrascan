@@ -19,10 +19,10 @@ jobs:
       GOOGLE_APPLICATION_CREDENTIALS_TEST_SECRET: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_TEST_KEY }}
     steps:
       - name: Checkout Terrascan
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ env.GO_VERSION }}
 
@@ -60,22 +60,21 @@ jobs:
     needs: validate
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout Terrascan
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Build Terrascan docker image
-        run: make docker-build
+      - uses: docker/setup-qemu-action@v2
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
-        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Terrascan latest docker image
-        if: ${{ github.ref == 'refs/heads/master' }}
-        run: make docker-push-latest
+      - name: Build and push Terrascan latest docker image
+        run: make docker-build-push-latest
+        env:
+          MULTIPLATFORM: true
