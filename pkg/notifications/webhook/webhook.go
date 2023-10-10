@@ -59,7 +59,7 @@ func (w *Webhook) Init(config interface{}) error {
 		return errInitFailed
 	}
 
-	// succesful
+	// successful 
 	zap.S().Debug("initialized webhook notifier")
 	return nil
 }
