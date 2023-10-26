@@ -60,7 +60,7 @@ jobs:
     needs: validate
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' #&& github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout Terrascan
