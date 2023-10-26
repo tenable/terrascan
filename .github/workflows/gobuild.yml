@@ -77,9 +77,9 @@ jobs:
           MULTIPLATFORM: true
 
       - name: Pull Image
-        run:  docker pull docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:1.0.10.DEV231011191849-J-EPRT-TENB-CB-TENB-CB-CICD-5797-10
+        run:  docker pull docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest
 
       - name: Run scan
         run: |
           image_tag=$(<dockerhub-image-label.txt)
-          docker run -e JKN_USERNAME=${{ secrets.JKN_USERNAME }} -e JKN_PASSWORD=${{ secrets.JKN_PASSWORD }} -t docker-terrascan-local.artifactory.eng.tenable.com/latest jobs execute-job  --credential-mode env -n teams-deleng-terraform -p deleng-terraform/dockerhub-publish -d "{\"APPID\":\"test\", \"IMAGE\":\"docker-terrascan-local.artifactory.eng.tenable.com/terrascan:${image_tag}\", \"TARGETS\": \"tenable/terrascan:${image_tag},tenable/was-scanner:latest\", \"MULTIARCH\":\"true\"}" --cloudflare-access-secret ${{ secrets.CF_ACCESS_TOKEN }}:${{ secrets.CF_SECRET }}
+          docker run -e JKN_USERNAME=${{ secrets.JKN_USERNAME }} -e JKN_PASSWORD=${{ secrets.JKN_PASSWORD }} -t docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest jobs execute-job  --credential-mode env -n teams-deleng-terraform -p deleng-terraform/dockerhub-publish -d "{\"APPID\":\"test\", \"IMAGE\":\"docker-terrascan-local.artifactory.eng.tenable.com/terrascan:${image_tag}\", \"TARGETS\": \"tenable/terrascan:${image_tag},"tenable/terrascan:latest\", \"MULTIARCH\":\"true\"}" --cloudflare-access-secret ${{ secrets.CF_ACCESS_TOKEN }}:${{ secrets.CF_SECRET }}
