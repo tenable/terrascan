@@ -68,13 +68,18 @@ jobs:
 
       - uses: docker/setup-qemu-action@v2
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Artifactory
+        run: docker login --username svc_terrascan --password ${{ secrets.ARTIFACTORY_API_TOKEN }}  https://docker-terrascan-local.artifactory.eng.tenable.com
 
-      - name: Build and push Terrascan latest docker image
+      - name: Build latest docker image
         run: make docker-build-push-latest
         env:
           MULTIPLATFORM: true
+
+      - name: Pull Image
+        run:  docker pull docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest
+
+      - name: Run scan
+        run: |
+          image_tag=$(<dockerhub-image-label.txt)
+          docker run -e JKN_USERNAME=${{ secrets.JKN_USERNAME }} -e JKN_PASSWORD=${{ secrets.JKN_PASSWORD }} -t docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest jobs execute-job  --credential-mode env -n teams-deleng-terraform -p deleng-terraform/dockerhub-publish -d "{\"APPID\":\"test\", \"IMAGE\":\"docker-terrascan-local.artifactory.eng.tenable.com/terrascan:${image_tag}\", \"TARGETS\": \"tenable/terrascan:${image_tag},"tenable/terrascan:latest\", \"MULTIARCH\":\"true\"}" --cloudflare-access-secret ${{ secrets.CF_ACCESS_TOKEN }}:${{ secrets.CF_SECRET }}
