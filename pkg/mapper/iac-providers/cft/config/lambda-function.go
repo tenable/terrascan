@@ -195,10 +195,10 @@ func getLambdaConfig(lf *lambda.Function) []AWSResourceConfig {
 func setLambdaCodePackage(cf LambdaFunctionConfig, f *lambda.Function) LambdaFunctionConfig {
 	if f.Code != nil {
 		cf.ImageURI = functions.GetVal(f.Code.ImageUri)
+		cf.S3Bucket = functions.GetVal(f.Code.S3Bucket)
+		cf.S3Key = functions.GetVal(f.Code.S3Key)
+		cf.S3ObjectVersion = functions.GetVal(f.Code.S3ObjectVersion)
 		return cf
 	}
-	cf.S3Bucket = functions.GetVal(f.Code.S3Bucket)
-	cf.S3Key = functions.GetVal(f.Code.S3Key)
-	cf.S3ObjectVersion = functions.GetVal(f.Code.S3ObjectVersion)
 	return cf
 }
