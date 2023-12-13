@@ -111,4 +111,5 @@ var ResourceTypes = map[string]string{
 	"AWS::EC2::NatGateway":                             AwsNatGateway,
 	"AWS::EC2::Subnet":                                 AwsSubnet,
 	"AWS::EC2::Route":                                  AwsRoute,
+	"AWS::SSM::Parameter":                              AwsSSMParameter,
 }
