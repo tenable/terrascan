@@ -110,4 +110,5 @@ const (
 	AwsNatGateway                    = "aws_nat_gateway"
 	AwsSubnet                        = "aws_subnet"
 	AwsRoute                         = "aws_route"
+	AwsSSMParameter                  = "aws_ssm_parameter"
 )

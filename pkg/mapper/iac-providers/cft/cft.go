@@ -77,6 +77,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/redshift"
 	"github.com/awslabs/goformation/v7/cloudformation/route53"
 	"github.com/awslabs/goformation/v7/cloudformation/s3"
+	"github.com/awslabs/goformation/v7/cloudformation/ssm"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/mapper/core"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/config"
@@ -311,6 +312,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetAppAutoScalingPolicyConfig(resource)
 	case *secretsmanager.RotationSchedule:
 		return config.GetSecretsManagerSecretRotationConfig(resource)
+	case *ssm.Parameter:
+		return config.GetSSMParameterConfig(resource)
 	default:
 	}
 	return []config.AWSResourceConfig{}
