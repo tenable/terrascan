@@ -100,6 +100,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 
 func removeRefAnchors(data []byte) ([]byte, error) {
 	const REF = "!ref"
+	const DoubleColon = "::"
 	strdata := string(data)
 	words := strings.Split(strdata, " ")
 
@@ -123,7 +124,10 @@ func removeRefAnchors(data []byte) ([]byte, error) {
 			nextLower := strings.ToLower(words[i+1])
 
 			if strings.Contains(nextLower, "aws::") {
-				continue
+				if i+1 < len(words) { // check edge case
+					words[i+1] = strings.ReplaceAll(nextLower, DoubleColon, "-")
+					continue
+				}
 			}
 
 			if paramsOk {
