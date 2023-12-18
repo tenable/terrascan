@@ -126,8 +126,8 @@ func removeRefAnchors(data []byte) ([]byte, error) {
 			if strings.Contains(nextLower, "aws::") {
 				if i+1 < len(words) { // check edge case
 					words[i+1] = strings.ReplaceAll(nextLower, DoubleColon, "-")
-					continue
 				}
+				continue
 			}
 
 			if paramsOk {
