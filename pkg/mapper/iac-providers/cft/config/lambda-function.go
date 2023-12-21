@@ -60,6 +60,7 @@ type LambdaFunctionConfig struct {
 	VPCConfig                    []VPCConfigBlock     `json:"vpc_config"`
 	Environment                  []EnvironmentBlock   `json:"environment"`
 	KMSKeyARN                    string               `json:"kms_key_arn"`
+	Tags                         map[string]string    `json:"tags"`
 }
 
 // GetLambdaFunctionConfig returns config for LambdaFunction
@@ -110,7 +111,9 @@ func getServerlessConfig(sf *serverless.Function) []AWSResourceConfig {
 		Environment:                  environment,
 		KMSKeyARN:                    functions.GetVal(sf.KmsKeyArn),
 	}
-
+	if sf.Tags != nil {
+		cf.Tags = sf.Tags
+	}
 	cf = setServerlessCodePackage(cf, sf)
 
 	return []AWSResourceConfig{{
