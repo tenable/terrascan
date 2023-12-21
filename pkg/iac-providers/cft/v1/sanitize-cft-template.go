@@ -444,7 +444,6 @@ func examineStruct(t reflect.Type) map[string]reflect.StructField {
 	return m
 }
 
-// //no-lint
 func convertFloat64ToString(paramMap interface{}) (map[string]interface{}, bool) {
 	valMapNew := make(map[string]interface{})
 	foundfloat := false
