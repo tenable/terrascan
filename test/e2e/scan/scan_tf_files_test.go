@@ -221,7 +221,7 @@ var _ = Describe("Scan is run for terraform files", func() {
 				})
 			})
 		})
-		Context("when --use-terraform-cache flag is used, all remote modules are refered from terraform cache", func() {
+		Context("when --use-terraform-cache flag is used, all remote modules are referred from terraform cache", func() {
 			When("when --use-terraform-cache is set with output format json", func() {
 				It("should not display any violations", func() {
 					iacDir := filepath.Join(iacRootRelPath, "terraform_cache_use_in_scan")
