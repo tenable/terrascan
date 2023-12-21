@@ -91,7 +91,7 @@ var (
 	sourceRegexPattern = regexp.MustCompile(`["]*source["]*[ \t]*[:][ \t]*["]*(.+)[\\\/](.+)["]*`)
 
 	// version is regex for 'version' attribute in violations output
-	versionRegexPattern = regexp.MustCompile(`["version":]*"[0-9][\.]([0-9])+[\.]([0-9])"`)
+	versionRegexPattern = regexp.MustCompile(`["version":]*"[0-9][\.]([0-9])+[\.]([0-9])+"`)
 )
 
 // ValidateExitCode validates the exit code of a gexec.Session
