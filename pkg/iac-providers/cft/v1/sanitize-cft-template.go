@@ -70,12 +70,18 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 
 	// sanitize Parameters
 	params, ok := templateFileMap[PARAMETERS]
+	var pMap map[string]interface{}
+	pMapconverted := make(map[string]interface{})
 	if ok {
-		pMap, ok := params.(map[string]interface{})
+		pMap, ok = params.(map[string]interface{})
 		if ok {
 			for pName := range pMap {
 				zap.S().Debug(fmt.Sprintf("inspecting parameter '%s'", pName))
 				inspectAndSanitizeParameters(pMap[pName])
+				resultMap, found := convertFloat64ToString(pMap[pName])
+				if found {
+					pMapconverted[pName] = resultMap
+				}
 			}
 		}
 	}
@@ -87,7 +93,7 @@ func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interf
 		if ok {
 			for rName := range rMap {
 				zap.S().Debug("inspecting resource", zap.String("Resource Name", rName))
-				if shouldRemoveResource := inspectAndSanitizeResource(rMap[rName]); shouldRemoveResource {
+				if shouldRemoveResource := inspectAndSanitizeResource(rMap[rName], pMapconverted); shouldRemoveResource {
 					// we would remove any resource from the map for which goformation doesn't have a type defined
 					delete(rMap, rName)
 				}
@@ -181,7 +187,7 @@ func inspectAndSanitizeParameters(p interface{}) {
 	}
 }
 
-func inspectAndSanitizeResource(r interface{}) (shouldRemoveResource bool) {
+func inspectAndSanitizeResource(r interface{}, pMap map[string]interface{}) (shouldRemoveResource bool) {
 	resMap, ok := r.(map[string]interface{})
 	if !ok {
 		zap.S().Debug("invalid data for 'Resource', should be of type map[string]interface{}")
@@ -238,8 +244,8 @@ func inspectAndSanitizeResource(r interface{}) (shouldRemoveResource bool) {
 			if val != nil {
 				propMap[propName] = val
 			}
+			findKeyAndReplace(propMap[propName], pMap)
 		}
-
 		inspectAndSanitizeResourceAttributes(resMap)
 	}
 	return
@@ -436,4 +442,71 @@ func examineStruct(t reflect.Type) map[string]reflect.StructField {
 		m[key] = f
 	}
 	return m
+}
+
+func convertFloat64ToString(paramMap interface{}) (map[string]interface{}, bool) {
+	valMapNew := make(map[string]interface{})
+	foundfloat := false
+	if valMap, ok := paramMap.(map[string]interface{}); ok {
+		for paramName := range valMap {
+			var newBound []string
+			valToCheck := valMap[paramName]
+			switch val := valToCheck.(type) {
+			case int, float64, int32, float32, int8, int16, int64:
+				valToCheck = fmt.Sprintf("%v", val)
+				foundfloat = true
+				valMapNew[paramName] = valToCheck
+			}
+			if arrayValue, ok := valToCheck.([]interface{}); ok {
+				newBound = make([]string, len(arrayValue))
+				for i := range arrayValue {
+					switch val := arrayValue[i].(type) {
+					case int, float64, int32, float32, int8, int16, int64:
+						newBound[i] = fmt.Sprintf("%v", val)
+						foundfloat = true
+					}
+				}
+				if foundfloat {
+					valMapNew[paramName] = newBound
+				}
+			}
+		}
+		return valMapNew, foundfloat
+	}
+	return valMapNew, foundfloat
+}
+
+// findKeyAndReplace key in interface (recursively) and return value as interface
+func findKeyAndReplace(obj interface{}, propValues map[string]interface{}) (interface{}, bool) {
+	// if the argument is not a map, ignore it
+	mobj, ok := obj.(map[string]interface{})
+	if !ok {
+		return nil, false
+	}
+	for k, v := range mobj {
+		// key match, return value
+		if val, ok := propValues[k]; ok {
+			if valMap, ok := val.(map[string]interface{}); ok {
+				if val2, ok := valMap["Default"]; ok {
+					mobj[k] = val2
+				}
+				return v, true
+			}
+		}
+		// if the value is a map, search recursively
+		if m, ok := v.(map[string]interface{}); ok {
+			if res, ok := findKeyAndReplace(m, propValues); ok {
+				return res, true
+			}
+		}
+		// if the value is an array, search recursively
+		if va, ok := v.([]interface{}); ok {
+			for _, a := range va {
+				if res, ok := findKeyAndReplace(a, propValues); ok {
+					return res, true
+				}
+			}
+		}
+	}
+	return nil, false
 }
