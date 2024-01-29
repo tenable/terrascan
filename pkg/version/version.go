@@ -19,7 +19,7 @@ package version
 import "fmt"
 
 // Terrascan The Terrascan version
-const Terrascan = "1.18.11"
+const Terrascan = "1.19.0"
 
 // Get returns the terrascan version
 func Get() string {

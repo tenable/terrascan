@@ -36,22 +36,32 @@ const PARAMETERS = "Parameters"
 // RESOURCES is a constant to fetch Resources from CFT
 const RESOURCES = "Resources"
 
-func (a *CFTV1) sanitizeCftTemplate(data []byte, isYAML bool) (map[string]interface{}, error) {
+func (a *CFTV1) sanitizeCftTemplate(fileName string, data []byte, isYAML bool) (map[string]interface{}, error) {
 	var (
 		intrinsified []byte
 		err          error
 	)
 
 	if isYAML {
-		data, err = removeRefAnchors(data)
-		if err != nil {
-			return nil, err
-		}
 
-		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
-		intrinsified, err = intrinsics.ProcessYAML(data, nil)
-		if err != nil {
-			return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+		// convert the yaml into json
+		jsonData, err := a.ReadYAMLFileIntoJSON(fileName)
+		if err == nil {
+			// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
+			intrinsified, err = intrinsics.ProcessJSON(jsonData, nil)
+			if err != nil {
+				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			}
+		} else { // fallback to default behaviour of yaml processing
+			data, err = removeRefAnchors(data)
+			if err != nil {
+				return nil, err
+			}
+			// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
+			intrinsified, err = intrinsics.ProcessYAML(data, nil)
+			if err != nil {
+				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			}
 		}
 	} else {
 		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
@@ -509,4 +519,23 @@ func findKeyAndReplace(obj interface{}, propValues map[string]interface{}) (inte
 		}
 	}
 	return nil, false
+}
+
+// ReadYAMLFileIntoJSON converts the given file into JSON string
+func (a *CFTV1) ReadYAMLFileIntoJSON(fileName string) ([]byte, error) {
+	templateSample, err := a.File(fileName)
+	if err != nil {
+		return nil, err
+	}
+	gostruct, err := templateSample.Map()
+	if err != nil {
+		zap.S().Errorf("failed to map yaml to json. error : %s in file %s", err.Error(), fileName)
+		return nil, err
+	}
+	jsonData, err := json.Marshal(gostruct)
+	if err != nil {
+		zap.S().Errorf("failed to convert yaml to json. error : %s", err.Error())
+		return nil, err
+	}
+	return jsonData, nil
 }

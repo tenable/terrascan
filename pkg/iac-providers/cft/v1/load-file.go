@@ -106,7 +106,7 @@ func (a *CFTV1) extractTemplate(file string, data *[]byte) (*cloudformation.Temp
 	}
 
 	zap.S().Debug("sanitizing cft template file", zap.String("file", file))
-	sanitized, err := a.sanitizeCftTemplate(*data, isYaml)
+	sanitized, err := a.sanitizeCftTemplate(file, *data, isYaml)
 	if err != nil {
 		zap.S().Debug("failed to sanitize cft template file", zap.String("file", file), zap.Error(err))
 		return nil, err
@@ -193,7 +193,7 @@ func (*CFTV1) getFileType(file string, data *[]byte) string {
 		if isJSON(string(*data)) {
 			return JSONExtension
 		}
-		return YAMLExtension
+		return TXTExtension
 	}
 	return UnknownExtension
 }

@@ -66,7 +66,7 @@ func TestCFTV1_sanitizeCftTemplate(t *testing.T) {
 				t.Error("CFTV1.sanitizeCftTemplate() got no error, expected parsing error")
 			}
 
-			templateMap, err := a.sanitizeCftTemplate(data, tt.args.isYAML)
+			templateMap, err := a.sanitizeCftTemplate(tt.inputFile, data, tt.args.isYAML)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CFTV1.sanitizeCftTemplate() error = %v, wantErr %v", err, tt.wantErr)
 				return
