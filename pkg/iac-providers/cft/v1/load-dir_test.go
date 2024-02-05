@@ -25,10 +25,10 @@ import (
 	"syscall"
 	"testing"
 
+	"github.com/go-git/go-git/v5"
+	gitConfig "github.com/go-git/go-git/v5/config"
+	"github.com/go-git/go-git/v5/plumbing"
 	"go.uber.org/zap"
-	"gopkg.in/src-d/go-git.v4"
-	gitConfig "gopkg.in/src-d/go-git.v4/config"
-	"gopkg.in/src-d/go-git.v4/plumbing"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"

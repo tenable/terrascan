@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/go-git/go-git/v5"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
@@ -30,7 +31,6 @@ import (
 	"github.com/tenable/terrascan/pkg/utils"
 	initUtil "github.com/tenable/terrascan/test/e2e/init"
 	"github.com/tenable/terrascan/test/helper"
-	"gopkg.in/src-d/go-git.v4"
 )
 
 var (
