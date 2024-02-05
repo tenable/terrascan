@@ -24,10 +24,11 @@ import (
 	"syscall"
 	"testing"
 
+	"github.com/go-git/go-git/v5"
+	gitConfig "github.com/go-git/go-git/v5/config"
 	"go.uber.org/zap"
-	"gopkg.in/src-d/go-git.v4"
-	gitConfig "gopkg.in/src-d/go-git.v4/config"
-	"gopkg.in/src-d/go-git.v4/plumbing"
+
+	"github.com/go-git/go-git/v5/plumbing"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/stretchr/testify/assert"
