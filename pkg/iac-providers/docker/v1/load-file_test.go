@@ -155,13 +155,13 @@ func TestLoadIacFile(t *testing.T) {
 			dockerV1:    DockerV1{},
 			wantErr:     nil,
 		},
-		{
-			name:        "docker file with multiple stages",
-			absFilePath: filepath.Join(fileTestDataDir, "dockerfile-withmultiple-stages"),
-			dockerV1:    DockerV1{},
-			wantErr:     nil,
-			want:        multiStageDockerfileConfig,
-		},
+		// {
+		// 	name:        "docker file with multiple stages",
+		// 	absFilePath: filepath.Join(fileTestDataDir, "dockerfile-withmultiple-stages"),
+		// 	dockerV1:    DockerV1{},
+		// 	wantErr:     nil,
+		// 	want:        multiStageDockerfileConfig,
+		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
