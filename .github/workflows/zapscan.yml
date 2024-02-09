@@ -12,13 +12,25 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        
+      - name: Run a one-line script
+        run: echo No error. Do the necessary build steps here.
 
-      - name: Install ZAP Proxy
-        run: |
-          sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl start nginx
+scans:
+  runs-on: ubuntu-latest
+  name: ZAP API Scan
+   
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Log current directory
+      run: echo ${pwd}
+    - name: Pull ZAP OWASP Image
+      run: docker pull owasp/zap2docker-weekly
+    - name: Run ZAP API Scan
+      run: |
+        sudo docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t openapi.json -f openapi -c api-scan.conf
+  
 
-      - name: Run ZAP Spider
-        run: zap-cli --quick-url http://localhost.com --spider -r -m 5
-
-      - name: Run ZAP Active Scan
-        run: zap-cli --quick-url http://localhost.com -r -m 5 -s active-scan
+        
+      
