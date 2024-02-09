@@ -1,0 +1,25 @@
+name: OWASP ZAP Scan
+
+on:
+  push:
+    branches:
+      - zapscan
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install ZAP Proxy
+        run: |
+          sudo apt update
+          sudo apt install -y zaproxy
+
+      - name: Run ZAP Spider
+        run: zap-cli --quick-url http://localhost.com --spider -r -m 5
+
+      - name: Run ZAP Active Scan
+        run: zap-cli --quick-url http://localhost.com -r -m 5 -s active-scan
