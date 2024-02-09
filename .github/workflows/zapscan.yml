@@ -17,7 +17,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install snapd
-          sudo apt install  zaproxy
+          snap install zaproxy
 
       - name: Run ZAP Spider
         run: zap-cli --quick-url http://localhost.com --spider -r -m 5
