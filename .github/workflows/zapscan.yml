@@ -15,9 +15,7 @@ jobs:
 
       - name: Install ZAP Proxy
         run: |
-          sudo apt update
-          sudo apt install snapd
-          sudo snap install zaproxy
+          sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl start nginx
 
       - name: Run ZAP Spider
         run: zap-cli --quick-url http://localhost.com --spider -r -m 5
