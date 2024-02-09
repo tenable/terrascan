@@ -6,7 +6,7 @@ on:
       - zapscan
 
 jobs:
-  zap_scan:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,20 +16,20 @@ jobs:
       - name: Run a one-line script
         run: echo No error. Do the necessary build steps here.
 
-scans:
-  runs-on: ubuntu-latest
-  name: ZAP API Scan
+  scans:
+    runs-on: ubuntu-latest
+    name: ZAP API Scan
    
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Log current directory
-      run: echo ${pwd}
-    - name: Pull ZAP OWASP Image
-      run: docker pull owasp/zap2docker-weekly
-    - name: Run ZAP API Scan
-      run: |
-        sudo docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t openapi.json -f openapi -c api-scan.conf
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Log current directory
+        run: echo ${pwd}
+      - name: Pull ZAP OWASP Image
+        run: docker pull owasp/zap2docker-weekly
+      - name: Run ZAP API Scan
+        run: |
+          sudo docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t openapi.json -f openapi -c api-scan.conf
   
 
         
