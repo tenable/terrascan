@@ -1,36 +1,29 @@
-name: OWASP ZAP Scan
+name: Gitleaks Scan
 
 on:
   push:
     branches:
-      - zapscan
+      - main
 
 jobs:
-  build:
+  gitleaks-scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Run a one-line script
-        run: echo No error. Do the necessary build steps here.
 
-  scans:
-    runs-on: ubuntu-latest
-    name: ZAP API Scan
-   
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Log current directory
-        run: echo ${pwd}
-      - name: Pull ZAP OWASP Image
-        run: docker pull owasp/zap2docker-weekly
-      - name: Run ZAP API Scan
+      - name: Install gitleaks
         run: |
-          sudo docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t openapi.json -f openapi -c api-scan.conf
-  
-
-        
-      
+          wget https://github.com/zricethezav/gitleaks/releases/download/v7.4.1/gitleaks-linux-amd64 -O gitleaks
+          chmod +x gitleaks
+          sudo mv gitleaks /usr/local/bin/
+      - name: Run gitleaks scan
+        run: |
+          gitleaks --verbose
+      - name: Upload gitleaks report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.txt
