@@ -75,8 +75,16 @@ func getIngressEgress(ie any) IngressEgress {
 	if egress, ok := ie.(*ec2.SecurityGroup_Egress); ok {
 		return getEgress(egress)
 	}
+	if egress, ok := ie.(ec2.SecurityGroup_Egress); ok {
+		return getEgress(&egress)
+	}
+
 	if ingress, ok := ie.(*ec2.SecurityGroup_Ingress); ok {
 		return getIngress(ingress)
+	}
+
+	if ingress, ok := ie.(ec2.SecurityGroup_Ingress); ok {
+		return getIngress(&ingress)
 	}
 	return IngressEgress{}
 }

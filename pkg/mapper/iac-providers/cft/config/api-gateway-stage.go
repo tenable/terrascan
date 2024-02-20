@@ -43,6 +43,7 @@ type Settings struct {
 type APIGatewayStageConfig struct {
 	AccessLogSettings   interface{} `json:"access_log_settings"`
 	ClientCertificateID string      `json:"client_certificate_id"`
+	RestAPIID           string      `json:"rest_api_id"`
 	Config
 	XrayTracingEnabled bool `json:"xray_tracing_enabled"`
 }
@@ -58,6 +59,8 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 			Tags: s.Tags,
 		},
 	}
+	cf.RestAPIID = s.RestApiId
+
 	if s.AccessLogSetting != nil {
 		cf.AccessLogSettings = s.AccessLogSetting
 	} else {

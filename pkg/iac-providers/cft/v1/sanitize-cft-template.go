@@ -47,7 +47,10 @@ func (a *CFTV1) sanitizeCftTemplate(fileName string, data []byte, isYAML bool) (
 		// convert the yaml into json
 		jsonData, err := a.ReadYAMLFileIntoJSON(fileName)
 		if err == nil {
-			// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
+			jsonData, err = a.resolveResourceIDs(jsonData)
+			if err != nil {
+				return nil, fmt.Errorf("error while resolving Resource IDs, error %w", err)
+			}
 			intrinsified, err = intrinsics.ProcessJSON(jsonData, nil)
 			if err != nil {
 				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
@@ -538,4 +541,99 @@ func (a *CFTV1) ReadYAMLFileIntoJSON(fileName string) ([]byte, error) {
 		return nil, err
 	}
 	return jsonData, nil
+}
+func (a *CFTV1) getMapOfResourceIds(allData interface{}) map[string]string {
+	mapOfresourceIds := make(map[string]string)
+	mapOfParameters := make(map[string]interface{})
+	if templateFileMap, ok := allData.(map[string]interface{}); ok {
+		r, ok := templateFileMap[PARAMETERS]
+		if ok {
+			rMap, ok := r.(map[string]interface{})
+			if ok {
+				for rName, val := range rMap {
+					zap.S().Debug("inspecting resource", zap.String("Parameters Name", rName))
+					if val1, ok := val.(map[string]interface{}); ok {
+						mapOfParameters[rName] = val1["Default"]
+					}
+				}
+			}
+		}
+	}
+
+	if templateFileMap, ok := allData.(map[string]interface{}); ok {
+		r, ok := templateFileMap[RESOURCES]
+		if ok {
+			rMap, ok := r.(map[string]interface{})
+			if ok {
+				for rName := range rMap {
+					zap.S().Debug("inspecting resource", zap.String("Resource Name", rName))
+					if _, ok := mapOfParameters[rName]; !ok {
+						mapOfresourceIds[rName] = rName
+					}
+				}
+			}
+		}
+	}
+	return mapOfresourceIds
+}
+
+// resolveResourceIDs resolves the indirect resource to resource references
+func (a *CFTV1) resolveResourceIDs(jsonData []byte) ([]byte, error) {
+	var unmarshalled interface{}
+	if err := json.Unmarshal(jsonData, &unmarshalled); err != nil {
+		return nil, fmt.Errorf("invalid JSON: %s", err)
+	}
+	mapOfparentReferences := a.getMapOfResourceIds(unmarshalled)
+	unmarshalledResult := a.resolveIndirectReferences(nil, unmarshalled, "", mapOfparentReferences)
+	resultBytes, err := json.Marshal(unmarshalledResult)
+	if err != nil {
+		return nil, fmt.Errorf("invalid JSON: %s", err)
+	}
+	jsonData = resultBytes
+	return jsonData, nil
+}
+
+// resolveIndirectReferences finds if the references are of the Name of the resource and replace it with actual Name
+func (a *CFTV1) resolveIndirectReferences(parent interface{}, input interface{}, parentKey string, mapOfReferences map[string]string) interface{} {
+
+	switch value := input.(type) {
+
+	case map[string]interface{}:
+		processed := map[string]interface{}{}
+		for key, val := range value {
+			if key == "Ref" && parentKey != "" {
+				valuStr := fmt.Sprintf("%v", val)
+				if _, ok := mapOfReferences[valuStr]; ok {
+					if parentVal, ok := parent.(map[string]interface{}); ok {
+						parentVal[parentKey] = valuStr
+						val = valuStr
+						return val
+					}
+				}
+			}
+			processed[key] = a.resolveIndirectReferences(value, val, key, mapOfReferences)
+		}
+		return processed
+
+	case []interface{}:
+
+		// We found an array in the JSON - recurse through it's elements looking for intrinsic functions
+		processed := []interface{}{}
+		for _, val := range value {
+			processed = append(processed, a.resolveIndirectReferences(value, val, "", mapOfReferences))
+		}
+		return processed
+
+	case nil:
+		return value
+	case bool:
+		return value
+	case float64:
+		return value
+	case string:
+		return value
+	default:
+		return nil
+
+	}
 }
