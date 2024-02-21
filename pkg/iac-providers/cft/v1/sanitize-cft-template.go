@@ -41,21 +41,28 @@ func (a *CFTV1) sanitizeCftTemplate(fileName string, data []byte, isYAML bool) (
 		intrinsified []byte
 		err          error
 	)
-
 	if isYAML {
+		fallbackToDefaultProcessing := false
 
-		// convert the yaml into json
-		jsonData, err := a.ReadYAMLFileIntoJSON(fileName)
-		if err == nil {
-			jsonData, err = a.resolveResourceIDs(jsonData)
-			if err != nil {
-				return nil, fmt.Errorf("error while resolving Resource IDs, error %w", err)
+		for i := 0; i < 1; i++ {
+			// convert the yaml into json
+			jsonData, err := a.ReadYAMLFileIntoJSON(fileName)
+			if err == nil {
+				jsonData, err := a.resolveResourceIDs(jsonData)
+				if err != nil {
+					zap.S().Debug(fmt.Sprintf("error while resolving Resource IDs, error %s", err.Error()))
+					fallbackToDefaultProcessing = true
+					break
+				}
+				intrinsified, err = intrinsics.ProcessJSON(jsonData, nil)
+				if err != nil {
+					zap.S().Debug(fmt.Sprintf("error while resolving Resource IDs, error %s", err.Error()))
+					fallbackToDefaultProcessing = true
+					break
+				}
 			}
-			intrinsified, err = intrinsics.ProcessJSON(jsonData, nil)
-			if err != nil {
-				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
-			}
-		} else { // fallback to default behaviour of yaml processing
+		}
+		if fallbackToDefaultProcessing || len(intrinsified) == 0 { // fallback to default behaviour of yaml processing
 			data, err = removeRefAnchors(data)
 			if err != nil {
 				return nil, err
@@ -67,13 +74,20 @@ func (a *CFTV1) sanitizeCftTemplate(fileName string, data []byte, isYAML bool) (
 			}
 		}
 	} else {
-		// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
-		intrinsified, err = intrinsics.ProcessJSON(data, nil)
-		if err != nil {
-			return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+		jsonData, err := a.resolveResourceIDs(data)
+		if err == nil {
+			intrinsified, err = intrinsics.ProcessJSON(jsonData, nil)
+			if err != nil {
+				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			}
+		} else {
+			// Process all AWS CloudFormation intrinsic functions (e.g. Fn::Join)
+			intrinsified, err = intrinsics.ProcessJSON(data, nil)
+			if err != nil {
+				return nil, fmt.Errorf("error while resolving intrinsic functions, error %w", err)
+			}
 		}
 	}
-
 	templateFileMap := make(map[string]interface{})
 
 	err = json.Unmarshal(intrinsified, &templateFileMap)
