@@ -27,7 +27,6 @@ type DBIngress struct {
 	SecurityGroupName string `json:"security_group_name"`
 }
 
-// aws_db_security_group
 // DBSecurityGroupConfig holds config for aws_db_security_group
 type DBSecurityGroupConfig struct {
 	Config
@@ -35,6 +34,7 @@ type DBSecurityGroupConfig struct {
 }
 
 // GetDBSecurityGroupConfig returns config for aws_db_security_group
+// aws_db_security_group
 func GetDBSecurityGroupConfig(dbsg *rds.DBSecurityGroup) []AWSResourceConfig {
 	cf := DBSecurityGroupConfig{
 		Config: Config{

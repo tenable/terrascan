@@ -23,7 +23,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_elasticsearch_domain and aws_elasticsearch_domain_policy
 const (
 	// ElasticsearchDomainAccessPolicy represents subresource aws_elasticsearch_domain_policy for Policy attribute
 	ElasticsearchDomainAccessPolicy = "Policy"
@@ -62,6 +61,7 @@ type NodeToNodeEncryptionOptionsConfig struct {
 }
 
 // GetElasticsearchDomainConfig returns config for aws_elasticsearch_domain and aws_elasticsearch_domain_policy
+// aws_elasticsearch_domain and aws_elasticsearch_domain_policy
 func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 

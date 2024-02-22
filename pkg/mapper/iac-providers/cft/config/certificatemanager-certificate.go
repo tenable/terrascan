@@ -28,8 +28,8 @@ type CertificateManagerCertificateConfig struct {
 	ValidationMethod string `json:"validation_method"`
 }
 
-// aws_acm_certificate
 // GetCertificateManagerCertificateConfig returns config for CertificateManagerCertificate
+// aws_acm_certificate
 func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) []AWSResourceConfig {
 	cf := CertificateManagerCertificateConfig{
 		Config: Config{

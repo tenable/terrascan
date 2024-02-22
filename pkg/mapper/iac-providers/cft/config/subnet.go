@@ -33,8 +33,8 @@ type SubnetConfig struct {
 	VpcID                       string `json:"vpc_id"`
 }
 
-// aws_subnet
 // GetSubnetConfig returns config for aws_subnet
+// aws_subnet
 func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 	cf := SubnetConfig{
 		Config: Config{

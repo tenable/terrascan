@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_lb_target_group
 // ElasticLoadBalancingV2TargetGroupConfig holds config for aws_lb_target_group
 type ElasticLoadBalancingV2TargetGroupConfig struct {
 	Config
@@ -29,6 +28,7 @@ type ElasticLoadBalancingV2TargetGroupConfig struct {
 }
 
 // GetElasticLoadBalancingV2TargetGroupConfig returns config for aws_lb_target_group
+// aws_lb_target_group
 func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.TargetGroup) []AWSResourceConfig {
 	// create a listener subresource per DefaultAction defined in cft
 	// as only one default action per listener is possible in terraform

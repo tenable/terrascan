@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_sns_topic
 // SnsTopicConfig holds config for SnsTopic
 type SnsTopicConfig struct {
 	Config
@@ -30,6 +29,7 @@ type SnsTopicConfig struct {
 }
 
 // GetSnsTopicConfig returns config for SnsTopic
+// aws_sns_topic
 func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
 	cf := SnsTopicConfig{
 		Config: Config{

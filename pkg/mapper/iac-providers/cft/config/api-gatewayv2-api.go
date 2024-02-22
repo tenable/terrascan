@@ -49,6 +49,7 @@ type APIGatewayV2ApiConfig struct {
 }
 
 // GetAPIGatewayV2ApiConfig returns config for aws_apigatewayv2_api resource
+// aws_apigatewayv2_api
 func GetAPIGatewayV2ApiConfig(a *apigatewayv2.Api) []AWSResourceConfig {
 	var corsConfigData []CorsConfigurationBlock
 

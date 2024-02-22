@@ -24,7 +24,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_s3_bucket_public_access_block
 const (
 	// PublicAccessBlock represents subresource aws_s3_bucket_public_access_block for attribute PublicAccessBlockConfiguration
 	PublicAccessBlock = "PublicAccessBlock"
@@ -88,6 +87,7 @@ type S3BucketPublicAccessBlockConfig struct {
 }
 
 // GetS3BucketConfig returns config for aws_s3_bucket
+// aws_s3_bucket_public_access_block
 func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 

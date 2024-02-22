@@ -30,8 +30,8 @@ type SqsQueueConfig struct {
 	MessageRetentionSeconds      int    `json:"message_retention_seconds"`
 }
 
-// aws_sqs_queue
 // GetSqsQueueConfig returns config for SqsQueue
+// aws_sqs_queue
 func GetSqsQueueConfig(q *sqs.Queue) []AWSResourceConfig {
 	cf := SqsQueueConfig{
 		Config: Config{

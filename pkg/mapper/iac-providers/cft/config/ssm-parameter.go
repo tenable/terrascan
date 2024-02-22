@@ -20,7 +20,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/ssm"
 )
 
-// aws_ssm_parameter no policy
 // SSMParameterConfig holds config for SSMParameter
 type SSMParameterConfig struct {
 	Config
@@ -34,6 +33,7 @@ type SSMParameterConfig struct {
 }
 
 // GetSSMParameterConfig returns config for SSM Parameter
+// aws_ssm_parameter no policy
 func GetSSMParameterConfig(b *ssm.Parameter) []AWSResourceConfig {
 	if b == nil {
 		cf := SSMParameterConfig{Config: Config{}}

@@ -43,7 +43,6 @@ type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
 	PolicyAttribute  []PolicyAttributeBlock `json:"policy_attribute"`
 }
 
-// aws_lb
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
 	Listeners           interface{} `json:"listener"`
@@ -63,6 +62,7 @@ type ELBListenerConfig struct {
 }
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
+// aws_lb
 func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
 	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
 	awsconfig := make([]AWSResourceConfig, len(e.Policies))

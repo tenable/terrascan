@@ -51,8 +51,8 @@ type MskClusterConfig struct {
 	EncryptionInfo      []EncryptionInfoBlock      `json:"encryption_info"`
 }
 
-// aws_msk_cluster
 // GetMskClusterConfig returns config for MskCluster
+// aws_msk_cluster
 func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	var brokerNodeGroupInfo []BrokerNodeGroupInfoBlock
 	if c.BrokerNodeGroupInfo != nil {

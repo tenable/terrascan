@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_workspaces_workspace
 // WorkspacesWorkspaceConfig holds config for aws_workspaces_workspace
 type WorkspacesWorkspaceConfig struct {
 	Config
@@ -30,6 +29,7 @@ type WorkspacesWorkspaceConfig struct {
 }
 
 // GetWorkspacesWorkspaceConfig returns config for aws_workspaces_workspace
+// aws_workspaces_workspace
 func GetWorkspacesWorkspaceConfig(w *workspaces.Workspace) []AWSResourceConfig {
 	cf := WorkspacesWorkspaceConfig{
 		Config: Config{

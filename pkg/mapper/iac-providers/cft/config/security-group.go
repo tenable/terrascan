@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_security_group
 // IngressEgress holds config for SecurityGroupEgress, SecurityGroupIngress attributes of SecurityGroupConfig
 type IngressEgress struct {
 	IPProtocol  string   `json:"protocol"`
@@ -42,6 +41,7 @@ type SecurityGroupConfig struct {
 }
 
 // GetSecurityGroupConfig returns config for aws_security_group
+// aws_security_group
 func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{

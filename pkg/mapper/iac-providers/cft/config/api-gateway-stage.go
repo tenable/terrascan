@@ -49,6 +49,7 @@ type APIGatewayStageConfig struct {
 }
 
 // GetAPIGatewayStageConfig returns config for aws_api_gateway_stage and aws_api_gateway_method_settings
+// aws_api_gateway_method_settings
 func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 
 	resourceConfigs := make([]AWSResourceConfig, 0)

@@ -64,8 +64,8 @@ type EC2InstanceConfig struct {
 	NetworkInterface    []NetworkInterfaceBlock `json:"network_interface"`
 }
 
-// aws_instance
 // GetEC2InstanceConfig returns config for EC2Instance
+// aws_instance
 func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
 	networkInterfaces := i.NetworkInterfaces
 

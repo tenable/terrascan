@@ -48,7 +48,6 @@ type WorkgroupConfigurationBlock struct {
 	ResultConfiguration             []ResultConfigurationBlock `json:"result_configuration"`
 }
 
-// aws_athena_workgroup
 // AthenaWorkGroupConfig holds config for aws_athena_workgroup resource
 type AthenaWorkGroupConfig struct {
 	Config
@@ -57,6 +56,7 @@ type AthenaWorkGroupConfig struct {
 }
 
 // GetAthenaWorkGroupConfig returns config for aws_athena_workgroup resource
+// aws_athena_workgroup
 func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 	var workGroupConfig []WorkgroupConfigurationBlock
 

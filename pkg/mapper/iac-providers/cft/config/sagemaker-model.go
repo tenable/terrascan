@@ -26,7 +26,6 @@ type ImageConfigBlock struct {
 	RepositoryAccessMode string `json:"repository_access_mode"`
 }
 
-// aws_sagemaker_model
 // ContainerBlock holds config for Container
 type ContainerBlock struct {
 	Image             string             `json:"image"`
@@ -47,6 +46,7 @@ type SagemakerModelConfig struct {
 }
 
 // GetSagemakerModelConfig returns config for SagemakerModel
+// aws_sagemaker_model
 func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	var containerBlock []ContainerBlock
 	if m.Containers != nil {

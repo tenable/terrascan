@@ -31,7 +31,6 @@ type PasswordPolicyBlock struct {
 	TemporaryPasswordValidityDays int  `json:"temporary_password_validity_days"`
 }
 
-// aws_cognito_user_pool no policy
 // CognitoUserPoolConfig holds config for CognitoUserPool
 type CognitoUserPoolConfig struct {
 	Config
@@ -40,6 +39,7 @@ type CognitoUserPoolConfig struct {
 }
 
 // GetCognitoUserPoolConfig returns config for CognitoUserPool
+// aws_cognito_user_pool no policy
 func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
 	var passwordPolicy []PasswordPolicyBlock
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {

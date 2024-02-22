@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_cloudwatch_log_group
 // LogCloudWatchGroupConfig holds config for aws_cloudwatch_log_group
 type LogCloudWatchGroupConfig struct {
 	Config
@@ -31,6 +30,7 @@ type LogCloudWatchGroupConfig struct {
 }
 
 // GetLogCloudWatchGroupConfig returns config for aws_cloudwatch_log_group
+// aws_cloudwatch_log_group
 func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 	cf := LogCloudWatchGroupConfig{
 		Config: Config{

@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_cloudtrail
 // CloudTrailConfig holds config for aws_cloudtrail
 type CloudTrailConfig struct {
 	Config
@@ -32,6 +31,7 @@ type CloudTrailConfig struct {
 }
 
 // GetCloudTrailConfig returns config for aws_cloudtrail
+// aws_cloudtrail
 func GetCloudTrailConfig(t *cloudtrail.Trail) []AWSResourceConfig {
 	cf := CloudTrailConfig{
 		Config:                  Config{Tags: t.Tags, Name: functions.GetVal(t.TrailName)},

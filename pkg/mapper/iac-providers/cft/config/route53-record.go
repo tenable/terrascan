@@ -20,7 +20,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/route53"
 )
 
-// aws_route53_record
 // Route53RecordConfig holds config for aws_route53_record
 type Route53RecordConfig struct {
 	Config
@@ -28,6 +27,7 @@ type Route53RecordConfig struct {
 }
 
 // GetRoute53RecordConfig returns config for aws_route53_record
+// aws_route53_record
 func GetRoute53RecordConfig(r *route53.RecordSet) []AWSResourceConfig {
 	cf := Route53RecordConfig{
 		Config: Config{

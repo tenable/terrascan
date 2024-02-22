@@ -21,9 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_rds_cluster
-// RDSClusterConfig holds config for aws_rds_cluster
-
+// ScalingConfig holds Scalingconfig for aws_rds_cluster
 type ScalingConfig struct {
 	AutoPause             bool   `json:"auto_pause"`
 	MaxCapacity           int    `json:"max_capacity"`
@@ -32,6 +30,7 @@ type ScalingConfig struct {
 	TimeOutAction         string `json:"timeout_Action"`
 }
 
+// RDSClusterConfig holds config for aws_rds_cluster
 type RDSClusterConfig struct {
 	Config
 	BackupRetentionPeriod int           `json:"backup_retention_period,omitempty"`
@@ -40,6 +39,7 @@ type RDSClusterConfig struct {
 }
 
 // GetRDSClusterConfig returns config for aws_rds_cluster
+// aws_rds_cluster
 func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	var scalingConfigData ScalingConfig
 

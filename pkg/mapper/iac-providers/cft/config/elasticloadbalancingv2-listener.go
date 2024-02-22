@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_lb_listener
 // ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener
 type ElasticLoadBalancingV2ListenerConfig struct {
 	Config
@@ -42,6 +41,7 @@ type RedirectConfig struct {
 }
 
 // GetElasticLoadBalancingV2ListenerConfig returns config for aws_lb_listener
+// aws_lb_listener
 func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener) []AWSResourceConfig {
 	// create a listener subresource per DefaultAction defined in cft
 	// as only one default action per listener is possible in terraform

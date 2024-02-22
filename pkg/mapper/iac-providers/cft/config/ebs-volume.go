@@ -29,6 +29,7 @@ type EbsVolumeConfig struct {
 }
 
 // GetEbsVolumeConfig returns config for aws_ebs_volume
+// aws_ebs_volume
 func GetEbsVolumeConfig(v *ec2.Volume) []AWSResourceConfig {
 	cf := EbsVolumeConfig{
 		Config: Config{

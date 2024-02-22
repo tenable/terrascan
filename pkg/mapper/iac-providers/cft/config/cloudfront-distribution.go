@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_cloudfront_distribution
 // CloudFrontDistributionConfig holds config for aws_cloudfront_distribution
 type CloudFrontDistributionConfig struct {
 	Config
@@ -33,6 +32,7 @@ type CloudFrontDistributionConfig struct {
 }
 
 // GetCloudFrontDistributionConfig returns config for aws_cloudfront_distribution
+// aws_cloudfront_distribution
 func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceConfig {
 	cf := CloudFrontDistributionConfig{
 		Config: Config{

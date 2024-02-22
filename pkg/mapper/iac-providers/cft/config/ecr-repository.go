@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_ecr_repository
 // EcrRepositoryConfig holds config for aws_ecr_repository
 type EcrRepositoryConfig struct {
 	Config
@@ -35,6 +34,7 @@ type ImageScanningConfigurationBlock struct {
 }
 
 // GetEcrRepositoryConfig returns config for aws_ecr_repository
+// aws_ecr_repository
 func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 	var imageScanningConfiguration []ImageScanningConfigurationBlock
 	if r.ImageScanningConfiguration != nil {

@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_config_configuration_aggregator
 // ConfigurationAggregatorConfig holds config for aws_config_configuration_aggregator
 type ConfigurationAggregatorConfig struct {
 	Config
@@ -30,6 +29,7 @@ type ConfigurationAggregatorConfig struct {
 }
 
 // GetConfigConfigurationAggregatorConfig returns config for aws_config_configuration_aggregator
+// aws_config_configuration_aggregator
 func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) []AWSResourceConfig {
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{

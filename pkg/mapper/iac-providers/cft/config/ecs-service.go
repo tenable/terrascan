@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_ecs_service
 // EcsServiceConfig holds config for aws_ecs_service
 type EcsServiceConfig struct {
 	Config
@@ -29,6 +28,7 @@ type EcsServiceConfig struct {
 }
 
 // GetEcsServiceConfig returns config for aws_ecs_service
+// aws_ecs_service
 func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{

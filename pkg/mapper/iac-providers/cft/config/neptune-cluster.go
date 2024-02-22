@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_neptune_cluster
 // NeptuneClusterConfig holds config for aws_neptune_cluster
 type NeptuneClusterConfig struct {
 	Config
@@ -30,6 +29,7 @@ type NeptuneClusterConfig struct {
 }
 
 // GetNeptuneClusterConfig returns config for aws_neptune_cluster
+// aws_neptune_cluster
 func GetNeptuneClusterConfig(d *neptune.DBCluster) []AWSResourceConfig {
 	cf := NeptuneClusterConfig{
 		Config: Config{

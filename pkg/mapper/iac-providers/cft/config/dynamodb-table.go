@@ -38,8 +38,8 @@ type DynamoDBTableConfig struct {
 	PointInTimeRecovery  []PITR `json:"point_in_time_recovery"`
 }
 
-// aws_dynamodb_table
 // GetDynamoDBTableConfig returns config for aws_dynamodb_table
+// aws_dynamodb_table
 func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 	cf := DynamoDBTableConfig{
 		Config: Config{

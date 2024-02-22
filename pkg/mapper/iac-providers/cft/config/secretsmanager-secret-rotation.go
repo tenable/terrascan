@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_secretsmanager_secret_rotation no policy
 // SecretRotationRulesBlock holds config for SecretRotationRules
 type SecretRotationRulesBlock struct {
 	AutomaticallyAfterDays int `json:"automatically_after_days"`
@@ -36,6 +35,7 @@ type SecretsManagerSecretRotationConfig struct {
 }
 
 // GetSecretsManagerSecretRotationConfig returns config for SecretsManagerSecretRotation
+// aws_secretsmanager_secret_rotation no policy
 func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) []AWSResourceConfig {
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {

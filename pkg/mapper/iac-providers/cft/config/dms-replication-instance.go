@@ -38,8 +38,8 @@ type DmsReplicationInstanceConfig struct {
 	VPCSecurityGroupIDs        []string `json:"vpc_security_group_ids"`
 }
 
-// aws_dms_replication_instance
 // GetDmsReplicationInstanceConfig returns config for DmsReplicationInstance
+// aws_dms_replication_instance
 func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceConfig {
 	cf := DmsReplicationInstanceConfig{
 		Config: Config{

@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_dax_cluster
 // DaxClusterConfig holds config for aws_dax_cluster
 type DaxClusterConfig struct {
 	Config
@@ -29,6 +28,7 @@ type DaxClusterConfig struct {
 }
 
 // GetDaxClusterConfig returns config for aws_dax_cluster
+// aws_dax_cluster
 func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 	cf := DaxClusterConfig{
 		Config: Config{

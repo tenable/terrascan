@@ -29,7 +29,6 @@ const (
 	IamGroupPolicy = "Policy"
 )
 
-// aws_iam_group, aws_iam_group_policy
 // IamGroupPolicyConfig holds config for aws_iam_group_policy
 type IamGroupPolicyConfig struct {
 	Config
@@ -44,6 +43,7 @@ type IamGroupConfig struct {
 }
 
 // GetIamGroupConfig returns config for aws_iam_group_policy
+// aws_iam_group, aws_iam_group_policy
 func GetIamGroupConfig(r *iam.Group) []AWSResourceConfig {
 	// aws_iam_role_policy as a SubResource
 	policyConfigs := make([]AWSResourceConfig, 0)

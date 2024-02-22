@@ -22,7 +22,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/secretsmanager"
 )
 
-// aws_secretsmanager_secret_policy
 // SecretsManagerSecretPolicyConfig holds config for aws_secretsmanager_secret_policy
 type SecretsManagerSecretPolicyConfig struct {
 	Config
@@ -30,6 +29,7 @@ type SecretsManagerSecretPolicyConfig struct {
 }
 
 // GetSecretsManagerSecretPolicyConfig returns config for aws_secretsmanager_secret_policy
+// aws_secretsmanager_secret_policy
 func GetSecretsManagerSecretPolicyConfig(s *secretsmanager.ResourcePolicy) []AWSResourceConfig {
 	cf := SecretsManagerSecretPolicyConfig{}
 	policy, err := json.Marshal(s.ResourcePolicy)

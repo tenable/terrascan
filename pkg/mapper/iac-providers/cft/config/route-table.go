@@ -20,7 +20,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/ec2"
 )
 
-// aws_route_table
 // RouteTableConfig holds config for aws_route_table
 type RouteTableConfig struct {
 	Config
@@ -28,6 +27,7 @@ type RouteTableConfig struct {
 }
 
 // GetRouteTableConfig returns config for aws_route_table
+// aws_route_table
 func GetRouteTableConfig(e *ec2.RouteTable) []AWSResourceConfig {
 	cf := RouteTableConfig{
 		Config: Config{

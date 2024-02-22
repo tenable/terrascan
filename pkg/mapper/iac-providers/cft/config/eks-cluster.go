@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_eks_cluster
 // EKSVPCConfigBlock holds config for EKSVPCConfig
 type EKSVPCConfigBlock struct {
 	SubnetIDs             []string `json:"subnet_ids"`
@@ -40,6 +39,7 @@ type EksClusterConfig struct {
 }
 
 // GetEksClusterConfig returns config for EksCluster
+// aws_eks_cluster
 func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 	var vpcConfig []EKSVPCConfigBlock
 	if c.ResourcesVpcConfig != nil {

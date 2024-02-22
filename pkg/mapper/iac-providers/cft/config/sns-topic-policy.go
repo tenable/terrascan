@@ -22,7 +22,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/sns"
 )
 
-// aws_sns_topic_policy
 // SnsTopicPolicyConfig holds config for SnsTopicPolicy
 type SnsTopicPolicyConfig struct {
 	Config
@@ -31,6 +30,7 @@ type SnsTopicPolicyConfig struct {
 }
 
 // GetSnsTopicPolicyConfig returns config for SnsTopicPolicy
+// aws_sns_topic_policy
 func GetSnsTopicPolicyConfig(p *sns.TopicPolicy) []AWSResourceConfig {
 	policyDoc, _ := json.Marshal(p.PolicyDocument)
 

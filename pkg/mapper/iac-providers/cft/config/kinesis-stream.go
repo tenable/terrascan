@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_kinesis_stream
 // KinesisStreamConfig holds config for aws_kinesis_stream
 type KinesisStreamConfig struct {
 	Config
@@ -31,6 +30,7 @@ type KinesisStreamConfig struct {
 }
 
 // GetKinesisStreamConfig returns config for aws_kinesis_stream
+// aws_kinesis_stream
 func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 	cf := KinesisStreamConfig{
 		Config: Config{

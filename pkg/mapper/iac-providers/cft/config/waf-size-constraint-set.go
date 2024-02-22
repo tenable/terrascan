@@ -27,7 +27,6 @@ type FieldToMatchBlock struct {
 	Type string `json:"type"`
 }
 
-// aws_waf_size_constraint_set
 // SizeConstraintSetBlock holds size_constraints attribute
 type SizeConstraintSetBlock struct {
 	ComparisonOperator string              `json:"comparison_operator"`
@@ -44,6 +43,7 @@ type WafSizeConstraintSetConfig struct {
 }
 
 // GetWafSizeConstraintSetConfig returns config for aws_waf_size_constraint_set
+// aws_waf_size_constraint_set
 func GetWafSizeConstraintSetConfig(w *waf.SizeConstraintSet) []AWSResourceConfig {
 	sizeConstraintSet := setSizeConstraintSet(w)
 

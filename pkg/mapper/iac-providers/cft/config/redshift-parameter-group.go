@@ -26,7 +26,6 @@ type ParameterBlock struct {
 	Value string `json:"value"`
 }
 
-// aws_redshift_parameter_group
 // RedshiftParameterGroupConfig holds config for RedshiftParameterGroup
 type RedshiftParameterGroupConfig struct {
 	Config
@@ -37,6 +36,7 @@ type RedshiftParameterGroupConfig struct {
 }
 
 // GetRedshiftParameterGroupConfig returns config for RedshiftParameterGroup
+// aws_redshift_parameter_group
 func GetRedshiftParameterGroupConfig(p *redshift.ClusterParameterGroup, paramGroupName string) []AWSResourceConfig {
 	var parameterBlock []ParameterBlock
 	if p.Parameters != nil {

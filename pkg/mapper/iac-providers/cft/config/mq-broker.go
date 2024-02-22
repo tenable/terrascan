@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_mq_broker
 // MqBrokerConfig holds config for aws_mq_broker
 type MqBrokerConfig struct {
 	Logs interface{} `json:"logs,omitempty"`
@@ -30,6 +29,7 @@ type MqBrokerConfig struct {
 }
 
 // GetMqBorkerConfig returns config for aws_mq_broker
+// aws_mq_broker
 func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	cf := MqBrokerConfig{
 		Config: Config{

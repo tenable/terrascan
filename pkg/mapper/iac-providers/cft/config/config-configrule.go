@@ -27,8 +27,8 @@ type AWSConfigConfigRuleConfig struct {
 	Source interface{} `json:"source"`
 }
 
-// aws_config_config_rule
 // GetConfigConfigRuleConfig returns config for aws_config_config_rule
+// aws_config_config_rule
 func GetConfigConfigRuleConfig(c *config.ConfigRule) []AWSResourceConfig {
 	cf := AWSConfigConfigRuleConfig{
 		Config: Config{

@@ -20,7 +20,6 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/guardduty"
 )
 
-// aws_guardduty_detector no policy
 // GuardDutyDetectorConfig holds config for aws_guardduty_detector
 type GuardDutyDetectorConfig struct {
 	Config
@@ -28,6 +27,7 @@ type GuardDutyDetectorConfig struct {
 }
 
 // GetGuardDutyDetectorConfig returns config for aws_guardduty_detector
+// aws_guardduty_detector no policy
 func GetGuardDutyDetectorConfig(d *guardduty.Detector) []AWSResourceConfig {
 	cf := GuardDutyDetectorConfig{
 		Config: Config{},

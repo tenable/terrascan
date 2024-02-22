@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_docdb_cluster no such resource in policy
 // DocDBClusterConfig holds config for aws_docdb_cluster
 type DocDBClusterConfig struct {
 	Config
@@ -31,6 +30,7 @@ type DocDBClusterConfig struct {
 }
 
 // GetDocDBConfig returns config for aws_docdb_cluster
+// aws_docdb_cluster no such resource in policy
 func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 	cf := DocDBClusterConfig{
 		Config: Config{

@@ -28,7 +28,6 @@ const (
 	EfsFileSystemPolicy = "FileSystemPolicy"
 )
 
-// aws_efs_file_system and aws_efs_file_system_policy
 // EfsFileSystemConfig holds config for aws_efs_file_system
 type EfsFileSystemConfig struct {
 	Config
@@ -43,6 +42,7 @@ type EfsFileSystemPolicyConfig struct {
 }
 
 // GetEfsFileSystemConfig returns config for aws_efs_file_system and aws_efs_file_system_policy
+// aws_efs_file_system and aws_efs_file_system_policy
 func GetEfsFileSystemConfig(f *efs.FileSystem) []AWSResourceConfig {
 
 	resourceConfigs := make([]AWSResourceConfig, 0)

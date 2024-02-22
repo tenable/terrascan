@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_appautoscaling_policy
 // AppAutoScalingPolicyConfig holds config for AppAutoScalingPolicy
 type AppAutoScalingPolicyConfig struct {
 	Config
@@ -33,6 +32,7 @@ type AppAutoScalingPolicyConfig struct {
 }
 
 // GetAppAutoScalingPolicyConfig returns config for AppAutoScalingPolicy
+// aws_appautoscaling_policy
 func GetAppAutoScalingPolicyConfig(a *applicationautoscaling.ScalingPolicy) []AWSResourceConfig {
 	cf := AppAutoScalingPolicyConfig{
 		Config: Config{

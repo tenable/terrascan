@@ -30,6 +30,7 @@ type APIGatewayRestAPIConfig struct {
 }
 
 // GetAPIGatewayRestAPIConfig returns config for aws_api_gateway_rest_api
+// aws_api_gateway_rest_api
 func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 	cf := APIGatewayRestAPIConfig{
 		Config: Config{

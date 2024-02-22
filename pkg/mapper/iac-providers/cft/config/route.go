@@ -39,8 +39,8 @@ type RouteConfig struct {
 	VpcPeeringConnectionID      string `json:"vpc_peering_connection_id"`
 }
 
-// aws_route no pilicy
 // GetRouteConfig returns config for aws_route
+// aws_route no pilicy
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
 		CarrierGatewayID:            functions.GetVal(e.CarrierGatewayId),

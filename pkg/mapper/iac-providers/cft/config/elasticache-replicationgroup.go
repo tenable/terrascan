@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_elasticache_replication_group
 // ElastiCacheReplicationGroupConfig holds config for aws_elasticache_replication_group
 type ElastiCacheReplicationGroupConfig struct {
 	Config
@@ -30,6 +29,7 @@ type ElastiCacheReplicationGroupConfig struct {
 }
 
 // GetElastiCacheReplicationGroupConfig returns config for aws_elasticache_replication_group
+// aws_elasticache_replication_group
 func GetElastiCacheReplicationGroupConfig(r *elasticache.ReplicationGroup) []AWSResourceConfig {
 	cf := ElastiCacheReplicationGroupConfig{
 		Config: Config{

@@ -21,7 +21,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_kinesis_firehose_delivery_stream
 // KinesisFirehoseDeliveryStreamConfig holds config for aws_kinesis_firehose_delivery_stream
 type KinesisFirehoseDeliveryStreamConfig struct {
 	ServerSideEncryption interface{} `json:"server_side_encryption"`
@@ -36,6 +35,7 @@ type KinesisFirehoseDeliveryStreamSseConfig struct {
 }
 
 // GetKinesisFirehoseDeliveryStreamConfig returns aws_kinesis_firehose_delivery_stream
+// aws_kinesis_firehose_delivery_stream
 func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) []AWSResourceConfig {
 	cf := KinesisFirehoseDeliveryStreamConfig{
 		Config: Config{

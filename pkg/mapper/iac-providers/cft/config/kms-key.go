@@ -23,7 +23,6 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
-// aws_kms_key
 // KmsKeyConfig holds config for aws_kms_key
 type KmsKeyConfig struct {
 	Config
@@ -35,6 +34,7 @@ type KmsKeyConfig struct {
 }
 
 // GetKmsKeyConfig returns config for aws_kms_key
+// aws_kms_key
 func GetKmsKeyConfig(k *kms.Key) []AWSResourceConfig {
 	cf := KmsKeyConfig{
 		Config: Config{
