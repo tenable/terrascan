@@ -43,7 +43,7 @@ type IamRolePolicyConfig struct {
 	PolicyDocument string `json:"policy"`
 }
 
-// aws_iam_role aws_iam_role_policy
+// aws_iam_role, aws_iam_role_policy
 // GetIamRoleConfig returns config for aws_iam_role and aws_iam_role_policy
 func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
