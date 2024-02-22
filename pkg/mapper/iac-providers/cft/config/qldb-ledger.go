@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_qldb_ledger
 // QldbLedgerConfig holds config for aws_qldb_ledger resource
 type QldbLedgerConfig struct {
 	Config

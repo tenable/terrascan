@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_ecr_repository
 // EcrRepositoryConfig holds config for aws_ecr_repository
 type EcrRepositoryConfig struct {
 	Config

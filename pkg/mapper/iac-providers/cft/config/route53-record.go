@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/route53"
 )
 
+// aws_route53_record
 // Route53RecordConfig holds config for aws_route53_record
 type Route53RecordConfig struct {
 	Config

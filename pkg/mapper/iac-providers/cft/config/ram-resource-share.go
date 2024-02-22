@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_ram_resource_share
 // RAMResourceShareConfig holds config for RAMResourceShare
 type RAMResourceShareConfig struct {
 	Config

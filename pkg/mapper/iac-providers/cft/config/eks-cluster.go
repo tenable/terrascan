@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_eks_cluster
 // EKSVPCConfigBlock holds config for EKSVPCConfig
 type EKSVPCConfigBlock struct {
 	SubnetIDs             []string `json:"subnet_ids"`

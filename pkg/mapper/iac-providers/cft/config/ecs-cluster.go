@@ -27,6 +27,7 @@ type ClusterSettingsBlock struct {
 	Value string `json:"value"`
 }
 
+// aws_ecs_cluster
 // CapacityProviderStrategyBlock holds config for default_capacity_provider_strategy attribute
 type CapacityProviderStrategyBlock struct {
 	Base             int    `json:"base"`
@@ -64,6 +65,7 @@ type EcsClusterConfig struct {
 	Configuration                   []ConfigurationBlock            `json:"configuration"`
 }
 
+// aws_ecs_cluster
 // GetEcsClusterConfig returns config for aws_ecs_cluster resource
 func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	var clusterSettingsData []ClusterSettingsBlock

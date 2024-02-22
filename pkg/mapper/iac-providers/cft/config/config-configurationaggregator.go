@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_config_configuration_aggregator
 // ConfigurationAggregatorConfig holds config for aws_config_configuration_aggregator
 type ConfigurationAggregatorConfig struct {
 	Config

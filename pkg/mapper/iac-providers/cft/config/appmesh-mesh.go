@@ -38,6 +38,7 @@ type AppMeshMeshConfig struct {
 	Spec []AppMeshSpecBlock `json:"spec"`
 }
 
+// aws_appmesh_mesh
 // GetAppMeshMeshConfig returns config for AppMeshMesh
 func GetAppMeshMeshConfig(m *appmesh.Mesh) []AWSResourceConfig {
 	var spec []AppMeshSpecBlock

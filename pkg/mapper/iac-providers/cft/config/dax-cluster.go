@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_dax_cluster
 // DaxClusterConfig holds config for aws_dax_cluster
 type DaxClusterConfig struct {
 	Config

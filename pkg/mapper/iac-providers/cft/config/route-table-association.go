@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/ec2"
 )
 
+// aws_route_table_association
 // RouteTableAssociationConfig holds config for aws_route_table_association
 type RouteTableAssociationConfig struct {
 	Config

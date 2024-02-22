@@ -22,6 +22,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/secretsmanager"
 )
 
+// aws_secretsmanager_secret_policy
 // SecretsManagerSecretPolicyConfig holds config for aws_secretsmanager_secret_policy
 type SecretsManagerSecretPolicyConfig struct {
 	Config

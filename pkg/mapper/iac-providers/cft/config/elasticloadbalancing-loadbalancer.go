@@ -43,6 +43,7 @@ type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
 	PolicyAttribute  []PolicyAttributeBlock `json:"policy_attribute"`
 }
 
+// aws_lb
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
 	Listeners           interface{} `json:"listener"`

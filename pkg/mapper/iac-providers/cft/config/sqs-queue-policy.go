@@ -29,6 +29,7 @@ type SqsQueuePolicyConfig struct {
 	Policy   string `json:"policy"`
 }
 
+// aws_sqs_queue_policy no policy
 // GetSqsQueuePolicyConfig returns config for SqsQueuePolicy
 func GetSqsQueuePolicyConfig(p *sqs.QueuePolicy) []AWSResourceConfig {
 	policyDoc, _ := json.Marshal(p.PolicyDocument)

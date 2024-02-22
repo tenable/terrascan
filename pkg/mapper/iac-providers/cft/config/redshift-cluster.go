@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_redshift_cluster
 // RedshiftClusterConfig holds config for aws_redshift_cluster
 type RedshiftClusterConfig struct {
 	Config

@@ -31,6 +31,7 @@ type PasswordPolicyBlock struct {
 	TemporaryPasswordValidityDays int  `json:"temporary_password_validity_days"`
 }
 
+// aws_cognito_user_pool no policy
 // CognitoUserPoolConfig holds config for CognitoUserPool
 type CognitoUserPoolConfig struct {
 	Config

@@ -47,6 +47,7 @@ type SourceBlock struct {
 	GitCloneDepth int    `json:"git_clone_depth"`
 }
 
+// aws_codebuild_project
 // CodebuildProjectConfig holds config for CodebuildProject
 type CodebuildProjectConfig struct {
 	Config

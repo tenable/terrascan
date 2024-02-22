@@ -47,6 +47,7 @@ type AutoScalingLaunchConfigurationConfig struct {
 	EbsBlockDevice   []EbsBlockDeviceBlock `json:"ebs_block_device"`
 }
 
+// aws_launch_configuration
 // GetAutoScalingLaunchConfigurationConfig returns config for AutoScalingLaunchConfiguration
 func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration) []AWSResourceConfig {
 	var ebsBlockDevice []EbsBlockDeviceBlock

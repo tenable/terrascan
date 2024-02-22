@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_cloudfront_distribution
 // CloudFrontDistributionConfig holds config for aws_cloudfront_distribution
 type CloudFrontDistributionConfig struct {
 	Config

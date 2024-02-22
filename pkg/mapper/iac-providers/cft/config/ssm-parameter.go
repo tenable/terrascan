@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/ssm"
 )
 
+// aws_ssm_parameter no policy
 // SSMParameterConfig holds config for SSMParameter
 type SSMParameterConfig struct {
 	Config

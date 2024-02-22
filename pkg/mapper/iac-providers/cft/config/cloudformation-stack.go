@@ -30,6 +30,7 @@ type CloudFormationStackConfig struct {
 	TemplateData     []byte            `json:"-"`
 }
 
+// aws_cloudformation_stack
 // GetCloudFormationStackConfig returns config for aws_cloudformation_stack
 func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 	cf := CloudFormationStackConfig{

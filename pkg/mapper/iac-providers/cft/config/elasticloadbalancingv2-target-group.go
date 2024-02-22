@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_lb_target_group
 // ElasticLoadBalancingV2TargetGroupConfig holds config for aws_lb_target_group
 type ElasticLoadBalancingV2TargetGroupConfig struct {
 	Config

@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/apigatewayv2"
 )
 
+// aws_api_gatewayv2_stage no policy
 // APIGatewayV2StageConfig holds config for aws_api_gatewayv2_stage
 type APIGatewayV2StageConfig struct {
 	Config

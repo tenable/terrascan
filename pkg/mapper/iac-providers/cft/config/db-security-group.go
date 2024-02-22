@@ -27,6 +27,7 @@ type DBIngress struct {
 	SecurityGroupName string `json:"security_group_name"`
 }
 
+// aws_db_security_group
 // DBSecurityGroupConfig holds config for aws_db_security_group
 type DBSecurityGroupConfig struct {
 	Config

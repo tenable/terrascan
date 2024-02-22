@@ -63,6 +63,7 @@ type LambdaFunctionConfig struct {
 	Tags                         map[string]string    `json:"tags"`
 }
 
+// aws_lambda_function
 // GetLambdaFunctionConfig returns config for LambdaFunction
 func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
 	if l, ok := sf.(*lambda.Function); ok {

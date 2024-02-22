@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_elasticache_cluster
 // ElastiCacheClusterConfig holds config for aws_elasticache_cluster
 type ElastiCacheClusterConfig struct {
 	Config

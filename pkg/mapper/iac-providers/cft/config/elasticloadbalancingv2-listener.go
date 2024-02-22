@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_lb_listener
 // ElasticLoadBalancingV2ListenerConfig holds config for aws_lb_listener
 type ElasticLoadBalancingV2ListenerConfig struct {
 	Config

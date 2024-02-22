@@ -32,6 +32,7 @@ type SagemakerNotebookInstanceConfig struct {
 	RootAccess           string `json:"root_access"`
 }
 
+// aws_sagemaker_notebook_instance
 // GetSagemakerNotebookInstanceConfig returns config for SagemakerNotebookInstance
 func GetSagemakerNotebookInstanceConfig(n *sagemaker.NotebookInstance) []AWSResourceConfig {
 	cf := SagemakerNotebookInstanceConfig{

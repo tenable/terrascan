@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_cloudtrail
 // CloudTrailConfig holds config for aws_cloudtrail
 type CloudTrailConfig struct {
 	Config

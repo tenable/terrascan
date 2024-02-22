@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_docdb_cluster no such resource in policy
 // DocDBClusterConfig holds config for aws_docdb_cluster
 type DocDBClusterConfig struct {
 	Config

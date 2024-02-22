@@ -22,6 +22,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/s3"
 )
 
+// aws_s3_bucket_policy
 // S3BucketPolicyConfig holds config for aws_s3_bucket_policy
 type S3BucketPolicyConfig struct {
 	Config

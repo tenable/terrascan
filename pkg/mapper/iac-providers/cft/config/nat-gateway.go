@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_nat_gateway
 // NatGatewayConfig holds config for aws_nat_gateway
 type NatGatewayConfig struct {
 	Config

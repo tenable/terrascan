@@ -26,6 +26,7 @@ type ImageConfigBlock struct {
 	RepositoryAccessMode string `json:"repository_access_mode"`
 }
 
+// aws_sagemaker_model
 // ContainerBlock holds config for Container
 type ContainerBlock struct {
 	Image             string             `json:"image"`

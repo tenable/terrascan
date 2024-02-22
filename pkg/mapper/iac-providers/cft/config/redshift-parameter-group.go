@@ -26,6 +26,7 @@ type ParameterBlock struct {
 	Value string `json:"value"`
 }
 
+// aws_redshift_parameter_group
 // RedshiftParameterGroupConfig holds config for RedshiftParameterGroup
 type RedshiftParameterGroupConfig struct {
 	Config

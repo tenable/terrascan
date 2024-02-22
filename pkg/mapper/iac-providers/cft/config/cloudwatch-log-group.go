@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_cloudwatch_log_group
 // LogCloudWatchGroupConfig holds config for aws_cloudwatch_log_group
 type LogCloudWatchGroupConfig struct {
 	Config

@@ -23,6 +23,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_ecs_task_definition
 // EcsTaskDefinitionConfig holds config for aws_ecs_task_definition
 type EcsTaskDefinitionConfig struct {
 	Config

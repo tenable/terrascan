@@ -20,6 +20,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/guardduty"
 )
 
+// aws_guardduty_detector no policy
 // GuardDutyDetectorConfig holds config for aws_guardduty_detector
 type GuardDutyDetectorConfig struct {
 	Config

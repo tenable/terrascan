@@ -24,6 +24,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_s3_bucket_public_access_block
 const (
 	// PublicAccessBlock represents subresource aws_s3_bucket_public_access_block for attribute PublicAccessBlockConfiguration
 	PublicAccessBlock = "PublicAccessBlock"

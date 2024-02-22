@@ -39,6 +39,7 @@ type EksNodeGroupConfig struct {
 	Labels        interface{}                      `json:"labels"`
 }
 
+// aws_eks_node_group
 // GetEksNodeGroupConfig returns config for EksNodeGroup
 func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock

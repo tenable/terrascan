@@ -29,6 +29,7 @@ const (
 	IamGroupPolicy = "Policy"
 )
 
+// aws_iam_group, aws_iam_group_policy
 // IamGroupPolicyConfig holds config for aws_iam_group_policy
 type IamGroupPolicyConfig struct {
 	Config

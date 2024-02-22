@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_rds_cluster
 // RDSClusterConfig holds config for aws_rds_cluster
 
 type ScalingConfig struct {

@@ -22,6 +22,7 @@ import (
 	"github.com/awslabs/goformation/v7/cloudformation/sns"
 )
 
+// aws_sns_topic_policy
 // SnsTopicPolicyConfig holds config for SnsTopicPolicy
 type SnsTopicPolicyConfig struct {
 	Config

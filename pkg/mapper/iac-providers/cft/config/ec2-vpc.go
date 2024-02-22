@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_vpc
 // Ec2VpcConfig holds config for Ec2Vpc
 type Ec2VpcConfig struct {
 	Config

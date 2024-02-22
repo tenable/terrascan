@@ -24,6 +24,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_iam_user_policy, aws_iam_user_login_profile
 const (
 	// IamUserLoginProfile represents the subresource aws_iam_user_login_profile for attribute LoginProfile
 	IamUserLoginProfile = "LoginProfile"

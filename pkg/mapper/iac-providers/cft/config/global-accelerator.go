@@ -21,6 +21,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
+// aws_globalaccelerator_accelerator
 // GlobalAcceleratorConfig holds config for aws_globalaccelerator_accelerator resource
 type GlobalAcceleratorConfig struct {
 	Config

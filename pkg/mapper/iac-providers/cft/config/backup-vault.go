@@ -28,6 +28,7 @@ type BackupVaultConfig struct {
 	KMSKeyARN string `json:"kms_key_arn"`
 }
 
+// aws_backup_vault
 // GetBackupVaultConfig returns config for BackupVault
 func GetBackupVaultConfig(b *backup.BackupVault) []AWSResourceConfig {
 	cf := BackupVaultConfig{

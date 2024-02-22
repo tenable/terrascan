@@ -27,6 +27,7 @@ type SecretsManagerSecretConfig struct {
 	KmsKeyID string `json:"kms_key_id,omitempty"`
 }
 
+// aws_secretsmanager_secret
 // GetSecretsManagerSecretConfig returns config for aws_secretsmanager_secret
 func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig {
 	cf := SecretsManagerSecretConfig{
