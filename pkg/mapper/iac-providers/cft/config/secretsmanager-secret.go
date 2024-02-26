@@ -32,7 +32,7 @@ type SecretsManagerSecretConfig struct {
 func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig {
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 			Name: functions.GetVal(s.Name),
 		},
 		KmsKeyID: functions.GetVal(s.KmsKeyId),

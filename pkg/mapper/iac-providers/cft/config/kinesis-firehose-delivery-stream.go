@@ -40,7 +40,7 @@ func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) [
 	cf := KinesisFirehoseDeliveryStreamConfig{
 		Config: Config{
 			Name: functions.GetVal(k.DeliveryStreamName),
-			Tags: k.Tags,
+			Tags: functions.PatchAWSTags(k.Tags),
 		},
 	}
 	sseConfig := KinesisFirehoseDeliveryStreamSseConfig{}

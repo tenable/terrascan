@@ -62,7 +62,7 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 		Resource: IamUserConfig{
 			Config: Config{
 				Name: functions.GetVal(i.UserName),
-				Tags: i.Tags,
+				Tags: functions.PatchAWSTags(i.Tags),
 			},
 			UserName: functions.GetVal(i.UserName),
 		},

@@ -22,6 +22,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 	"go.uber.org/zap"
 )
 
@@ -49,7 +50,7 @@ func DeploymentsConfig(r types.Resource, vars, params map[string]interface{}) ma
 	cf := map[string]interface{}{
 		tfLocation: fn.LookUpString(vars, params, r.Location),
 		tfName:     fn.LookUpString(vars, params, r.Name),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 	}
 
 	// if template is defined directly

@@ -20,6 +20,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const armWafConfiguration = "webApplicationFirewallConfiguration"
@@ -34,7 +35,7 @@ func ApplicationGatewayConfig(r types.Resource, params map[string]interface{}) m
 	cf := map[string]interface{}{
 		tfName:     fn.LookUpString(nil, params, r.Name),
 		tfLocation: fn.LookUpString(nil, params, tfLocation),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 	}
 
 	w := convert.ToMap(r.Properties, armWafConfiguration)

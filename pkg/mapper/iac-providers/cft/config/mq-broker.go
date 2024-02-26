@@ -34,7 +34,7 @@ func GetMqBorkerConfig(c *amazonmq.Broker) []AWSResourceConfig {
 	cf := MqBrokerConfig{
 		Config: Config{
 			Name: c.BrokerName,
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		PubliclyAccessible: c.PubliclyAccessible,
 	}

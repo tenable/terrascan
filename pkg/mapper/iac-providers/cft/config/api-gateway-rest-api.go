@@ -35,7 +35,7 @@ func GetAPIGatewayRestAPIConfig(a *apigateway.RestApi) []AWSResourceConfig {
 	cf := APIGatewayRestAPIConfig{
 		Config: Config{
 			Name: functions.GetVal(a.Name),
-			Tags: a.Tags,
+			Tags: functions.PatchAWSTags(a.Tags),
 		},
 		MinimumCompressionSize: functions.GetVal(a.MinimumCompressionSize),
 		Policy:                 a.Policy,

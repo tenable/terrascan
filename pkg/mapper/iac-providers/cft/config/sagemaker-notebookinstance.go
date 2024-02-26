@@ -38,7 +38,7 @@ func GetSagemakerNotebookInstanceConfig(n *sagemaker.NotebookInstance) []AWSReso
 	cf := SagemakerNotebookInstanceConfig{
 		Config: Config{
 			Name: functions.GetVal(n.NotebookInstanceName),
-			Tags: n.Tags,
+			Tags: functions.PatchAWSTags(n.Tags),
 		},
 		Name:                 functions.GetVal(n.NotebookInstanceName),
 		RoleARN:              n.RoleArn,

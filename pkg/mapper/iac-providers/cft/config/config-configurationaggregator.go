@@ -33,7 +33,7 @@ type ConfigurationAggregatorConfig struct {
 func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) []AWSResourceConfig {
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 			Name: functions.GetVal(c.ConfigurationAggregatorName),
 		},
 	}

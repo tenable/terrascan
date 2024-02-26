@@ -22,6 +22,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -44,7 +45,7 @@ func SecurityCenterContactConfig(r types.Resource, params map[string]interface{}
 	cf := map[string]interface{}{
 		tfLocation: fn.LookUpString(nil, params, r.Location),
 		tfName:     fn.LookUpString(nil, params, r.Name),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 		tfPhone:    fn.LookUpString(nil, params, convert.ToString(r.Properties, armPhone)),
 		tfEmail:    fn.LookUpString(nil, params, convert.ToString(r.Properties, armEmails)),
 	}

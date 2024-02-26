@@ -44,7 +44,7 @@ func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 
 	cf := EcrRepositoryConfig{
 		Config: Config{
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 			Name: functions.GetVal(r.RepositoryName),
 		},
 		ImageScanningConfiguration: imageScanningConfiguration,

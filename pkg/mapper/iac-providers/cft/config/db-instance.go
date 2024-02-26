@@ -48,7 +48,7 @@ type DBInstanceConfig struct {
 func GetDBInstanceConfig(d *rds.DBInstance) []AWSResourceConfig {
 	cf := DBInstanceConfig{
 		Config: Config{
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 			Name: functions.GetVal(d.DBName),
 		},
 		EnabledCloudWatchLogsExports: d.EnableCloudwatchLogsExports,

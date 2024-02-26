@@ -57,7 +57,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	cf := APIGatewayStageConfig{
 		Config: Config{
 			Name: functions.GetVal(s.StageName),
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 		},
 	}
 	cf.RestAPIID = s.RestApiId
@@ -83,7 +83,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 			msc := MethodSettingConfig{
 				Config: Config{
 					Name: functions.GetVal(s.StageName),
-					Tags: s.Tags,
+					Tags: functions.PatchAWSTags(s.Tags),
 				},
 				MethodSettings: []Settings{{
 					MetricsEnabled: functions.GetVal(settings.MetricsEnabled),

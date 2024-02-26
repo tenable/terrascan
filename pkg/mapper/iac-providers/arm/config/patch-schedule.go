@@ -20,6 +20,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -39,6 +40,6 @@ func PatchScheduleConfig(r types.Resource, params map[string]interface{}) map[st
 	return map[string]interface{}{
 		tfDayOfWeek:    fn.LookUpString(nil, params, convert.ToString(sch, armDayOfWeek)),
 		tfStartHourUTC: fn.LookUpFloat64(nil, params, convert.ToString(sch, armStartHourUtc)),
-		tfTags:         r.Tags,
+		tfTags:         functions.PatchAWSTags(r.Tags),
 	}
 }

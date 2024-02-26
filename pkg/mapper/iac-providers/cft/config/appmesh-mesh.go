@@ -55,7 +55,7 @@ func GetAppMeshMeshConfig(m *appmesh.Mesh) []AWSResourceConfig {
 	cf := AppMeshMeshConfig{
 		Config: Config{
 			Name: functions.GetVal(m.MeshName),
-			Tags: m.Tags,
+			Tags: functions.PatchAWSTags(m.Tags),
 		},
 		Name: functions.GetVal(m.MeshName),
 		Spec: spec,

@@ -35,7 +35,7 @@ func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.Target
 	cf := ElasticLoadBalancingV2TargetGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(l.Name),
-			Tags: l.Tags,
+			Tags: functions.PatchAWSTags(l.Tags),
 		},
 		Protocol: functions.GetVal(l.Protocol),
 	}

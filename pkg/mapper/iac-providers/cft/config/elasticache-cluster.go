@@ -34,7 +34,7 @@ type ElastiCacheClusterConfig struct {
 func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfig {
 	cf := ElastiCacheClusterConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 			Name: functions.GetVal(e.ClusterName),
 		},
 		AZMode:        functions.GetVal(e.AZMode),

@@ -53,7 +53,7 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	cf := EksNodeGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(g.NodegroupName),
-			Tags: g.Tags,
+			Tags: functions.PatchAWSTags(g.Tags),
 		},
 		ClusterName:   g.ClusterName,
 		NodeGroupName: functions.GetVal(g.NodegroupName),

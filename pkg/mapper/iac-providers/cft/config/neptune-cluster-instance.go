@@ -38,7 +38,7 @@ type NeptuneClusterInstanceConfig struct {
 func GetNeptuneClusterInstanceConfig(n *neptune.DBInstance) []AWSResourceConfig {
 	cf := NeptuneClusterInstanceConfig{
 		Config: Config{
-			Tags: n.Tags,
+			Tags: functions.PatchAWSTags(n.Tags),
 		},
 		AutoMinorVersionUpgrade:    functions.GetVal(n.AutoMinorVersionUpgrade),
 		AvailabilityZone:           functions.GetVal(n.AvailabilityZone),

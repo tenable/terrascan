@@ -46,7 +46,7 @@ func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(s.GroupName),
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 		},
 		GroupName:        functions.GetVal(s.GroupName),
 		GroupDescription: s.GroupDescription,

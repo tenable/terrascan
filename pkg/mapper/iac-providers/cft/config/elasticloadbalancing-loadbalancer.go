@@ -103,7 +103,7 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 
 	cf := ElasticLoadBalancingLoadBalancerConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 	}
 

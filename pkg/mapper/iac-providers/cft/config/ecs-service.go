@@ -33,7 +33,7 @@ func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{
 			Name: functions.GetVal(c.ServiceName),
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		IamRole: functions.GetVal(c.Role),
 	}

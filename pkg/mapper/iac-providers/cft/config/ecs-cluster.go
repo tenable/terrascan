@@ -88,7 +88,7 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	cf := EcsClusterConfig{
 		Config: Config{
 			Name: functions.GetVal(e.ClusterName),
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 		ClusterName:                     functions.GetVal(e.ClusterName),
 		ClusterSettings:                 clusterSettingsData,

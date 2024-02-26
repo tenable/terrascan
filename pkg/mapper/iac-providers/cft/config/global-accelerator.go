@@ -35,7 +35,7 @@ func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceC
 	cf := GlobalAcceleratorConfig{
 		Config: Config{
 			Name: g.Name,
-			Tags: g.Tags,
+			Tags: functions.PatchAWSTags(g.Tags),
 		},
 		Name:          g.Name,
 		Enabled:       functions.GetVal(g.Enabled),

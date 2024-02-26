@@ -33,7 +33,7 @@ type ElastiCacheReplicationGroupConfig struct {
 func GetElastiCacheReplicationGroupConfig(r *elasticache.ReplicationGroup) []AWSResourceConfig {
 	cf := ElastiCacheReplicationGroupConfig{
 		Config: Config{
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 		},
 		AtRestEncryptionEnabled:  functions.GetVal(r.AtRestEncryptionEnabled),
 		TransitEncryptionEnabled: functions.GetVal(r.TransitEncryptionEnabled),

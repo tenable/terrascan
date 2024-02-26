@@ -38,7 +38,7 @@ type SubnetConfig struct {
 func GetSubnetConfig(e *ec2.Subnet) []AWSResourceConfig {
 	cf := SubnetConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 		AssignIpv6AddressOnCreation: functions.GetVal(e.AssignIpv6AddressOnCreation),
 		AvailabilityZone:            functions.GetVal(e.AvailabilityZone),

@@ -36,7 +36,7 @@ func GetQldbLedgerConfig(q *qldb.Ledger) []AWSResourceConfig {
 	cf := QldbLedgerConfig{
 		Config: Config{
 			Name: functions.GetVal(q.Name),
-			Tags: q.Tags,
+			Tags: functions.PatchAWSTags(q.Tags),
 		},
 		Name:               functions.GetVal(q.Name),
 		PermissionsMode:    q.PermissionsMode,

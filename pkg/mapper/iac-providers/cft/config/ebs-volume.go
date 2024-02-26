@@ -33,7 +33,7 @@ type EbsVolumeConfig struct {
 func GetEbsVolumeConfig(v *ec2.Volume) []AWSResourceConfig {
 	cf := EbsVolumeConfig{
 		Config: Config{
-			Tags: v.Tags,
+			Tags: functions.PatchAWSTags(v.Tags),
 		},
 		Encrypted: functions.GetVal(v.Encrypted),
 		KmsKeyID:  functions.GetVal(v.KmsKeyId),

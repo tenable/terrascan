@@ -634,7 +634,7 @@ func (a *CFTV1) resolveIndirectReferences(parent interface{}, input interface{},
 		// We found an array in the JSON - recurse through it's elements looking for intrinsic functions
 		processed := []interface{}{}
 		for _, val := range value {
-			processed = append(processed, a.resolveIndirectReferences(value, val, "", mapOfReferences))
+			processed = append(processed, a.resolveIndirectReferences(parent, val, parentKey, mapOfReferences))
 		}
 		return processed
 

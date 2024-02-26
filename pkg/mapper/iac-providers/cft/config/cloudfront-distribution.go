@@ -36,7 +36,7 @@ type CloudFrontDistributionConfig struct {
 func GetCloudFrontDistributionConfig(d *cloudfront.Distribution) []AWSResourceConfig {
 	cf := CloudFrontDistributionConfig{
 		Config: Config{
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 	}
 	if checkDistributionConfig(d.DistributionConfig) {

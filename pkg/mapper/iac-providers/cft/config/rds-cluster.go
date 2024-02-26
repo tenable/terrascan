@@ -62,7 +62,7 @@ func GetRDSClusterConfig(c *rds.DBCluster) []AWSResourceConfig {
 	cf := RDSClusterConfig{
 		Config: Config{
 			Name: functions.GetVal(c.DatabaseName),
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		BackupRetentionPeriod: functions.GetVal(c.BackupRetentionPeriod),
 		StorageEncrypted:      functions.GetVal(c.StorageEncrypted),

@@ -33,7 +33,7 @@ type CertificateManagerCertificateConfig struct {
 func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) []AWSResourceConfig {
 	cf := CertificateManagerCertificateConfig{
 		Config: Config{
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		DomainName:       c.DomainName,
 		ValidationMethod: functions.GetVal(c.ValidationMethod),

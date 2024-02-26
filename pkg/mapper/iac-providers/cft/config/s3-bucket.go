@@ -94,7 +94,7 @@ func GetS3BucketConfig(s *s3.Bucket) []AWSResourceConfig {
 	cf := S3BucketConfig{
 		Config: Config{
 			Name: functions.GetVal(s.BucketName),
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 		},
 		Bucket:        functions.GetVal(s.BucketName),
 		AccessControl: strings.ToLower(functions.GetVal(s.AccessControl)),

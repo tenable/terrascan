@@ -35,7 +35,7 @@ type Ec2VpcConfig struct {
 func GetEc2VpcConfig(v *ec2.VPC) []AWSResourceConfig {
 	cf := Ec2VpcConfig{
 		Config: Config{
-			Tags: v.Tags,
+			Tags: functions.PatchAWSTags(v.Tags),
 		},
 		CIDRBlock:          functions.GetVal(v.CidrBlock),
 		EnableDNSSupport:   functions.GetVal(v.EnableDnsSupport),

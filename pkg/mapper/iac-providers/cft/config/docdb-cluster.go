@@ -34,7 +34,7 @@ type DocDBClusterConfig struct {
 func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 	cf := DocDBClusterConfig{
 		Config: Config{
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 		KmsKeyID:                    functions.GetVal(d.KmsKeyId),
 		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),

@@ -17,9 +17,6 @@
 package config
 
 import (
-	"encoding/base64"
-	"unicode"
-
 	"github.com/awslabs/goformation/v7/cloudformation/autoscaling"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
@@ -78,13 +75,8 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 		EbsBlockDevice:   ebsBlockDevice,
 	}
 
-	data, err := base64.StdEncoding.Strict().DecodeString(functions.GetVal(l.UserData))
-	datastr := string(data)
-
-	if isASCII(datastr) && err == nil {
-		cf.UserDataBase64 = datastr
-	} else {
-		cf.UserData = datastr
+	if l.UserData != nil {
+		cf.UserDataBase64 = *l.UserData
 	}
 
 	return []AWSResourceConfig{{
@@ -93,11 +85,12 @@ func GetAutoScalingLaunchConfigurationConfig(l *autoscaling.LaunchConfiguration)
 	}}
 }
 
-func isASCII(s string) bool {
-	for i := 0; i < len(s); i++ {
-		if s[i] > unicode.MaxASCII {
-			return false
-		}
-	}
-	return true
-}
+// isASCII  not in use as we dont need to convert base64 data to string for iac scanning
+// func isASCII(s string) bool {
+// 	for i := 0; i < len(s); i++ {
+// 		if s[i] > unicode.MaxASCII {
+// 			return false
+// 		}
+// 	}
+// 	return true
+// }

@@ -35,7 +35,7 @@ func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 	cf := KinesisStreamConfig{
 		Config: Config{
 			Name: functions.GetVal(k.Name),
-			Tags: k.Tags,
+			Tags: functions.PatchAWSTags(k.Tags),
 		},
 		Name: functions.GetVal(k.Name),
 	}

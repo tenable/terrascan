@@ -36,7 +36,7 @@ func GetRedshiftClusterConfig(c *redshift.Cluster) []AWSResourceConfig {
 	cf := RedshiftClusterConfig{
 		Config: Config{
 			Name: c.DBName,
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		KmsKeyID:           functions.GetVal(c.KmsKeyId),
 		Encrypted:          functions.GetVal(c.Encrypted),

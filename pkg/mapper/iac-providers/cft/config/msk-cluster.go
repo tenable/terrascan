@@ -83,7 +83,7 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	cf := MskClusterConfig{
 		Config: Config{
 			Name: c.ClusterName,
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		ClusterName:         c.ClusterName,
 		KafkaVersion:        c.KafkaVersion,

@@ -69,7 +69,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	esDomainConfig := ElasticsearchDomainConfig{
 		Config: Config{
 			Name: functions.GetVal(d.DomainName),
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 	}
 

@@ -34,7 +34,7 @@ func GetRAMResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
 	cf := RAMResourceShareConfig{
 		Config: Config{
 			Name: r.Name,
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 		},
 		Name:                    r.Name,
 		AllowExternalPrincipals: functions.GetVal(r.AllowExternalPrincipals),
