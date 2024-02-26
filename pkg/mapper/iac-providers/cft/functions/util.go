@@ -57,10 +57,8 @@ func PatchAWSTags(sourceData interface{}) interface{} {
 	if err != nil {
 		if valueRawMap, ok := sourceData.(map[string]interface{}); ok {
 			return valueRawMap
-		} else {
-			return sourceData
 		}
-
+		return sourceData
 	}
 
 	// build the tags map to mimic terraform's aws tag format

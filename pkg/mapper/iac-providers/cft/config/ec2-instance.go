@@ -63,8 +63,8 @@ type EC2InstanceConfig struct {
 	VPCSecurityGroupIDs      []string                `json:"vpc_security_group_ids"`
 	NetworkInterface         []NetworkInterfaceBlock `json:"network_interface"`
 	UserData                 string                  `json:"user_data_base64"`
-	AssociatePublicIpAddress bool                    `json:"associate_public_ip_address"`
-	SubnetId                 string                  `json:"subnet_id"`
+	AssociatePublicIPAddress bool                    `json:"associate_public_ip_address"`
+	SubnetID                 string                  `json:"subnet_id"`
 }
 
 // GetEC2InstanceConfig returns config for EC2Instance
@@ -76,7 +76,7 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 	niconfigs := make([]NetworkInterfaceConfig, len(networkInterfaces))
 	awsconfig := make([]AWSResourceConfig, len(networkInterfaces))
 	associatePublicAddress := false
-	var vpcSecurityId []string
+	var vpcSecurityID []string
 	for index, networkInterface := range networkInterfaces {
 		nics[index].NetworkInterfaceID = functions.GetVal(networkInterface.NetworkInterfaceId)
 		nics[index].DeleteOnTermination = functions.GetVal(networkInterface.DeleteOnTermination)
@@ -109,19 +109,19 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		if networkInterface.GroupSet != nil {
 			for _, groupName := range networkInterface.GroupSet {
 				if groupName != "" {
-					vpcSecurityId = append(vpcSecurityId, groupName)
+					vpcSecurityID = append(vpcSecurityID, groupName)
 				}
 			}
 
 		}
 	}
-	subnetId := ""
+	subnetID := ""
 	if i.SubnetId != nil {
-		subnetId = *i.SubnetId
+		subnetID = *i.SubnetId
 	}
 
 	if i.SecurityGroupIds != nil {
-		vpcSecurityId = append(vpcSecurityId, i.SecurityGroupIds...)
+		vpcSecurityID = append(vpcSecurityID, i.SecurityGroupIds...)
 	}
 
 	ec2Config := EC2InstanceConfig{
@@ -134,10 +134,10 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		EBSOptimized:             functions.GetVal(i.EbsOptimized),
 		Monitoring:               functions.GetVal(i.Monitoring),
 		IAMInstanceProfile:       functions.GetVal(i.IamInstanceProfile),
-		VPCSecurityGroupIDs:      vpcSecurityId,
+		VPCSecurityGroupIDs:      vpcSecurityID,
 		NetworkInterface:         nics,
-		AssociatePublicIpAddress: associatePublicAddress,
-		SubnetId:                 subnetId,
+		AssociatePublicIPAddress: associatePublicAddress,
+		SubnetID:                 subnetID,
 	}
 
 	if i.UserData != nil {
