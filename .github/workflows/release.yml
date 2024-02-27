@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
-      GO_VERSION: 1.19
+      GO_VERSION: 1.21
     steps:
       - name: Checkout
         uses: actions/checkout@v3
