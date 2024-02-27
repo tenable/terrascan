@@ -76,7 +76,7 @@ func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 			// resNode.Line points to first line within the resource
 			extension := filepath.Ext(absFilePath)
 			if extension == ".yaml" || extension == ".yml" {
-				config.Line -= 1
+				config.Line--
 			}
 		} else {
 			// default

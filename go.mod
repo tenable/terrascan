@@ -1,6 +1,6 @@
 module github.com/tenable/terrascan
 
-go 1.19
+go 1.21
 
 replace (
 	github.com/hashicorp/go-getter => github.com/hashicorp/go-getter v1.7.0
