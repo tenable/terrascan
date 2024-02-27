@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/aws-cloudformation/rain/cft/parse"
 	"github.com/awslabs/goformation/v7"
 	"github.com/awslabs/goformation/v7/cloudformation"
 	multierr "github.com/hashicorp/go-multierror"
@@ -51,12 +52,37 @@ func (a *CFTV1) LoadIacFile(absFilePath string, options map[string]interface{}) 
 		return allResourcesConfig, err
 	}
 
+	template, err := parse.File(absFilePath)
+	if err != nil {
+		zap.S().Debug("unable to parse template for getting line numbers of resources", zap.Error(err), zap.String("file", absFilePath))
+	}
+
 	// fill AllResourceConfigs
 	allResourcesConfig = make(map[string][]output.ResourceConfig)
 	var config *output.ResourceConfig
 	for _, resource := range configs {
 		config = &resource
-		config.Line = 1
+
+		// Fetch line number
+		resNode, err := template.GetResource(resource.Name)
+		if err != nil {
+			zap.S().Debug("unable to get line number of resource", zap.Error(err), zap.String("file", absFilePath),
+				zap.String("resource", resource.Name))
+		}
+		if resNode != nil && resNode.Line > 1 {
+			config.Line = resNode.Line
+
+			// If yaml, adjust line number
+			// resNode.Line points to first line within the resource
+			extension := filepath.Ext(absFilePath)
+			if extension == ".yaml" || extension == ".yml" {
+				config.Line -= 1
+			}
+		} else {
+			// default
+			config.Line = 1
+		}
+
 		if config.Source == "" {
 			config.Source = a.getSourceRelativePath(absFilePath)
 		}
