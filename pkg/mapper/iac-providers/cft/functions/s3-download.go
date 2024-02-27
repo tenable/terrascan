@@ -28,6 +28,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/smithy-go/ptr"
 	getter "github.com/hashicorp/go-getter"
 	"github.com/tenable/terrascan/pkg/utils"
 	"go.uber.org/zap"
@@ -112,7 +113,7 @@ func downloadPrivateTemplate(url *url.URL, s3c *S3Client) ([]byte, error) {
 		zap.S().Debug("error in HEAD operation for bucket object", err)
 		return nil, err
 	}
-	buf := make([]byte, int(headObject.ContentLength))
+	buf := make([]byte, ptr.ToInt64(headObject.ContentLength))
 	w := manager.NewWriteAtBuffer(buf)
 
 	// get the object
