@@ -45,8 +45,10 @@ type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
 
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
-	Listeners           interface{} `json:"listener"`
-	AccessLoggingPolicy interface{} `json:"access_logs,omitempty"`
+	Listeners              interface{} `json:"listener"`
+	AccessLoggingPolicy    interface{} `json:"access_logs,omitempty"`
+	CrossZoneLoadBalancing bool        `json:"cross_zone_load_balancing,omitempty"`
+
 	Config
 }
 
@@ -107,6 +109,11 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		},
 	}
 
+	if e.CrossZone != nil {
+		cf.CrossZoneLoadBalancing = *e.CrossZone
+	} else {
+		cf.CrossZoneLoadBalancing = false
+	}
 	if e.AccessLoggingPolicy != nil {
 		cf.AccessLoggingPolicy = ELBAccessLoggingPolicyConfig{
 			Enabled: e.AccessLoggingPolicy.Enabled,
