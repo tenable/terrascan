@@ -18,7 +18,6 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v7/cloudformation/cloudformation"
-	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
@@ -35,7 +34,7 @@ type CloudFormationStackConfig struct {
 // aws_cloudformation_stack
 func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 	cf := CloudFormationStackConfig{
-		Config:           Config{Tags: functions.PatchAWSTags(s.Tags)},
+		Config:           Config{Tags: fn.PatchAWSTags(s.Tags)},
 		TemplateURL:      "",
 		NotificationARNs: nil,
 		TemplateData:     []byte{},
