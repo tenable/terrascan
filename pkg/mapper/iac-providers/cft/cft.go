@@ -314,6 +314,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetSecretsManagerSecretRotationConfig(resource)
 	case *ssm.Parameter:
 		return config.GetSSMParameterConfig(resource)
+	case *elasticloadbalancingv2.LoadBalancer:
+		return config.GetElasticLoadBalancingV2LoadBalancerConfig(resource, resourceName)
 	default:
 	}
 	return []config.AWSResourceConfig{}

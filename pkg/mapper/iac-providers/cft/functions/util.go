@@ -71,3 +71,14 @@ func PatchAWSTags(sourceData interface{}) interface{} {
 
 	return tfTagsMap
 }
+
+// GetBoolValueFromString returns boolean value from string
+func GetBoolValueFromString(inputStr string) bool {
+	if inputStr == "true" {
+		return true
+	} else if inputStr == "false" {
+		return false
+	}
+	return false
+
+}

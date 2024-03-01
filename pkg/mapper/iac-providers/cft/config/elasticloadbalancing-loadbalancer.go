@@ -113,6 +113,7 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 		cf.CrossZoneLoadBalancing = *e.CrossZone
 	} else {
 		cf.CrossZoneLoadBalancing = false
+
 	}
 	if e.AccessLoggingPolicy != nil {
 		cf.AccessLoggingPolicy = ELBAccessLoggingPolicyConfig{
