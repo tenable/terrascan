@@ -27,6 +27,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
+	"github.com/aws/smithy-go/ptr"
 )
 
 func TestDownloadBucketObj(t *testing.T) {
@@ -87,7 +88,7 @@ func TestDownloadPrivateBucketObj(t *testing.T) {
 			client: func(t *testing.T) HeadBucketAPIClient {
 				return mockHeadObjectAPI(func(ctx context.Context, params *s3.HeadObjectInput, optFns ...func(*s3.Options)) (*s3.HeadObjectOutput, error) {
 					t.Helper()
-					return &s3.HeadObjectOutput{ContentLength: 64}, nil
+					return &s3.HeadObjectOutput{ContentLength: ptr.Int64(64)}, nil
 				})
 			},
 			manager: func(t *testing.T) S3DownloadManager {
