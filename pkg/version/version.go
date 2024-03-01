@@ -19,7 +19,6 @@ package version
 import "fmt"
 
 // Terrascan The Terrascan version
-
 const Terrascan = "1.19.1"
 
 // Get returns the terrascan version

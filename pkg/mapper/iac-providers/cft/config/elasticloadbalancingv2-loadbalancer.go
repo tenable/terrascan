@@ -28,14 +28,15 @@ type AccessLogs struct {
 	Enabled bool
 }
 
+// SubnetMapping is internal struct as per terrform schema
 type SubnetMapping struct {
-	AllocationId       string `json:"allocation_id"`
+	AllocationID       string `json:"allocation_id"`
 	IPv6Address        string `json:"ipv6_address"`
 	PrivateIPv4Address string `json:"private_ipv4_Address"`
-	SubnetId           string `json:"subnet_id"`
+	SubnetID           string `json:"subnet_id"`
 }
 
-// ElasticLoadBalancingV2LoadBalancerConfig holds config for aws_lb
+// ElasticLoadBalancingV2LoadBalancerConfig holds config for aws_lb as per terraform schema
 type ElasticLoadBalancingV2LoadBalancerConfig struct {
 	SecurityGroups           []string        `json:"security_groups"`
 	Subnets                  []string        `json:"subnets"`
@@ -52,43 +53,7 @@ type ElasticLoadBalancingV2LoadBalancerConfig struct {
 // GetElasticLoadBalancingV2LoadBalancerConfig returns config for aws_lb
 // aws_lb
 func GetElasticLoadBalancingV2LoadBalancerConfig(e *elasticloadbalancingv2.LoadBalancer, elbname string) []AWSResourceConfig {
-	// elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
 	awsconfig := make([]AWSResourceConfig, 0)
-
-	// for i, policy := range e.Policies {
-	// 	indexedElbName := fmt.Sprintf("%s%d", elbname, i)
-
-	// 	elbpolicies[i].LoadBalancerName = indexedElbName
-	// 	elbpolicies[i].PolicyName = policy.PolicyName
-	// 	elbpolicies[i].PolicyTypeName = policy.PolicyType
-
-	// 	elbpolicies[i].PolicyAttribute = make([]PolicyAttributeBlock, len(policy.Attributes))
-	// 	for ai := range policy.Attributes {
-	// 		attribVals, ok := policy.Attributes[ai].(map[string]interface{})
-	// 		if !ok {
-	// 			continue
-	// 		}
-
-	// 		elbpolicies[i].PolicyAttribute[ai].Name, ok = attribVals["Name"].(string)
-	// 		if !ok {
-	// 			continue
-	// 		}
-
-	// 		elbpolicies[i].PolicyAttribute[ai].Value, ok = attribVals["Value"].(string)
-	// 		if !ok {
-	// 			continue
-	// 		}
-
-	// 		// variable "ok" is only used for safe type conversion
-	// 		_ = ok
-	// 	}
-
-	// 	awsconfig[i].Type = GetPolicies
-	// 	awsconfig[i].Name = indexedElbName
-	// 	awsconfig[i].Resource = elbpolicies[i]
-	// 	awsconfig[i].Metadata = e.AWSCloudFormationMetadata
-	// }
-
 	cf := ElasticLoadBalancingV2LoadBalancerConfig{
 		Config: Config{
 			Tags: functions.PatchAWSTags(e.Tags),
@@ -98,7 +63,6 @@ func GetElasticLoadBalancingV2LoadBalancerConfig(e *elasticloadbalancingv2.LoadB
 	}
 
 	cf.LoadBalancerType = "application"
-
 	if len(e.SecurityGroups) != 0 {
 		cf.SecurityGroups = e.SecurityGroups
 	}
@@ -117,36 +81,15 @@ func GetElasticLoadBalancingV2LoadBalancerConfig(e *elasticloadbalancingv2.LoadB
 			}
 
 			if mapping.AllocationId != nil {
-				subnetMapping.AllocationId = *mapping.AllocationId
+				subnetMapping.AllocationID = *mapping.AllocationId
 			}
-			subnetMapping.SubnetId = mapping.SubnetId
+			subnetMapping.SubnetID = mapping.SubnetId
 			cf.SubnetMappings = append(cf.SubnetMappings, subnetMapping)
 		}
-	} else {
-
 	}
 
 	if len(e.LoadBalancerAttributes) != 0 {
 		for _, attrib := range e.LoadBalancerAttributes {
-
-			/*
-						- Key: load_balancing.cross_zone.enabled
-				          Value: true
-				        - Key: deletion_protection.enabled
-				          Value: false
-
-				        - Key: ipv6.deny_all_igw_traffic
-				          Value: false
-				        - Key: routing.http2.enabled
-				          Value: true
-
-				        - Key: access_logs.s3.bucket
-				          Value: bucketVal
-				        - Key: access_logs.s3.prefix
-				          Value: somePrefix
-						- Key: access_logs.s3.enabled
-				          Value: true
-			*/
 			if attrib.Key != nil && attrib.Value != nil {
 				switch *attrib.Key {
 				case "load_balancing.cross_zone.enabled":
@@ -164,35 +107,11 @@ func GetElasticLoadBalancingV2LoadBalancerConfig(e *elasticloadbalancingv2.LoadB
 				default:
 				}
 			}
-
 		}
 	}
-	// if e.CrossZone != nil {
-	// 	cf.CrossZoneLoadBalancing = *e.CrossZone
-	// } else {
-	// 	cf.CrossZoneLoadBalancing = false
-	// }
-	// if e.AccessLoggingPolicy != nil {
-	// 	cf.AccessLoggingPolicy = ELBAccessLoggingPolicyConfig{
-	// 		Enabled: e.AccessLoggingPolicy.Enabled,
-	// 	}
-	// }
-
-	// if e.Listeners != nil {
-	// 	lc := make([]ELBListenerConfig, 0)
-	// 	for _, listener := range e.Listeners {
-	// 		lc = append(lc, ELBListenerConfig{
-	// 			InstanceProtocol: functions.GetVal(listener.InstanceProtocol),
-	// 			LBProtocol:       listener.Protocol,
-	// 		})
-	// 	}
-	// 	cf.Listeners = lc
-	// }
-
 	var awsconfigElb AWSResourceConfig
 	awsconfigElb.Resource = cf
 	awsconfigElb.Metadata = e.AWSCloudFormationMetadata
 	awsconfig = append(awsconfig, awsconfigElb)
-
 	return awsconfig
 }
