@@ -112,4 +112,5 @@ const (
 	AwsSubnet                        = "aws_subnet"
 	AwsRoute                         = "aws_route"
 	AwsSSMParameter                  = "aws_ssm_parameter"
+	AwsLb                            = "aws_lb"
 )

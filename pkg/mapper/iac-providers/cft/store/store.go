@@ -113,4 +113,5 @@ var ResourceTypes = map[string]string{
 	"AWS::EC2::Subnet":                                 AwsSubnet,
 	"AWS::EC2::Route":                                  AwsRoute,
 	"AWS::SSM::Parameter":                              AwsSSMParameter,
+	"AWS::ElasticLoadBalancingV2::LoadBalancer":        AwsLb,
 }
