@@ -26,11 +26,14 @@ import (
 
 const (
 	// PublicAccessBlock represents subresource aws_s3_bucket_public_access_block for attribute PublicAccessBlockConfiguration
-	PublicAccessBlock    = "PublicAccessBlock"
+	PublicAccessBlock = "PublicAccessBlock"
+	// ServerSideEncription represents subresource aws_s3_bucket for attribute aws_s3_bucket_server_side_encryption_configuration
 	ServerSideEncription = "ServerSideEncription"
-	Versioning           = "Versioning"
+	// Versioning represents subresource aws_s3_bucket for attribute aws_s3_bucket_versioning
+	Versioning = "Versioning"
 )
 
+// BucketConfig holds common config for aws_s3_bucket
 type BucketConfig struct {
 	Config
 	ProviderVersion string `json:"provider_version"`
