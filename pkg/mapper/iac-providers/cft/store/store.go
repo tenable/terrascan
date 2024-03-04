@@ -81,6 +81,7 @@ var ResourceTypes = map[string]string{
 	"AWS::ECS::TaskDefinition":                         AwsEcsTaskDefinition,
 	"AWS::S3::Bucket":                                  AwsS3Bucket,
 	"AWS::S3::Bucket.PublicAccessBlock":                AwsS3BucketPublicAccessBlock,
+	"AWS::S3::Bucket.ServerSideEncription":             AwsS3BucketServersideEncription,
 	"AWS::S3::BucketPolicy":                            AwsS3BucketPolicy,
 	"AWS::SQS::Queue":                                  AwsSqsQueue,
 	"AWS::SQS::QueuePolicy":                            AwsSqsQueuePolicy,
