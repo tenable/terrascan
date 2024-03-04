@@ -28,6 +28,7 @@ type EcsServiceConfig struct {
 }
 
 // GetEcsServiceConfig returns config for aws_ecs_service
+// aws_ecs_service
 func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{
