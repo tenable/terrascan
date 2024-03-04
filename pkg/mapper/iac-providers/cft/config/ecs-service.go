@@ -24,7 +24,7 @@ import (
 // EcsServiceConfig holds config for aws_ecs_service
 type EcsServiceConfig struct {
 	Config
-	IamRole              string                            `json:"iam_role"`
+	IamRole string `json:"iam_role"`
 }
 
 // GetEcsServiceConfig returns config for aws_ecs_service
@@ -32,9 +32,9 @@ func GetEcsServiceConfig(c *ecs.Service) []AWSResourceConfig {
 	cf := EcsServiceConfig{
 		Config: Config{
 			Name: functions.GetVal(c.ServiceName),
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
-		IamRole:              functions.GetVal(c.Role),
+		IamRole: functions.GetVal(c.Role),
 	}
 	return []AWSResourceConfig{{
 		Resource: cf,
