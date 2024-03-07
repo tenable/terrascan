@@ -60,10 +60,10 @@ See Terrascan's [releases](https://github.com/tenable/terrascan/releases) page f
 #### Install as a native executable
 
 ```sh
-$ curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
-$ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
-$ install terrascan /usr/local/bin && rm terrascan
-$ terrascan
+curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz
+tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
+install terrascan /usr/local/bin && rm terrascan
+terrascan
 ```
 
 #### Install on ArchLinux / Manjaro via `AUR`
@@ -79,7 +79,7 @@ yay -S terrascan
 [Homebrew](https://brew.sh/) users can install by:
 
 ```sh
-$ brew install terrascan
+brew install terrascan
 ```
 
 #### Docker image
@@ -87,7 +87,7 @@ $ brew install terrascan
 Terrascan is also available as a Docker image and can be used as follows
 
 ```sh
-$ docker run tenable/terrascan
+docker run tenable/terrascan
 ```
 Refer to [documentation](https://runterrascan.io/docs/getting-started/) for information.
 
@@ -95,7 +95,7 @@ Refer to [documentation](https://runterrascan.io/docs/getting-started/) for info
 To scan your code for security issues you can run the following (defaults to scanning Terraform).
 
 ```sh
-$ terrascan scan
+terrascan scan
 ```
 **Note**: Terrascan will exit with an error code if any errors or violations are found during a scan.
 
@@ -151,7 +151,7 @@ You can use the `--find-vuln` flag to collect vulnerabilities as reported in its
 The `--find-vuln` flag can be used when scanning IaC files as follows:
 
 ```
-$ terrascan scan -i <IaC provider> --find-vuln
+terrascan scan -i <IaC provider> --find-vuln
 ```
 
 For more information and explanation of how to setup your environment to authenticate with the registry's APIs see the [usage](https://runterrascan.io/docs/usage/command_line_mode/) documentation.
@@ -198,10 +198,10 @@ Terrascan's default output is a list of violations present in the scanned IaC. A
 Terrascan can be built locally. This is helpful if you want to be on the latest version or when developing Terrascan. [gcc](https://gcc.gnu.org/install/) and [Go](https://go.dev/doc/install) 1.19 or above are required.
 
 ```sh
-$ git clone git@github.com:tenable/terrascan.git
-$ cd terrascan
-$ make build
-$ ./bin/terrascan
+git clone git@github.com:tenable/terrascan.git
+cd terrascan
+make build
+./bin/terrascan
 ```
 
 ### To build your own docker, refer to this example (Alpine Linux):
