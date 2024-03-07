@@ -25,7 +25,7 @@ Resources:
         Statement:
           - Sid: PublicReadForGetBucketObjects
             Effect: Allow
-            Principal: '*'
+            Principal: 'star'
             Action: 's3:GetObject'
             Resource: !Join 
               - ''
