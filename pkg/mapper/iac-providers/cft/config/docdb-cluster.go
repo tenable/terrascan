@@ -30,10 +30,11 @@ type DocDBClusterConfig struct {
 }
 
 // GetDocDBConfig returns config for aws_docdb_cluster
+// aws_docdb_cluster no such resource in policy
 func GetDocDBConfig(d *docdb.DBCluster) []AWSResourceConfig {
 	cf := DocDBClusterConfig{
 		Config: Config{
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 		KmsKeyID:                    functions.GetVal(d.KmsKeyId),
 		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),

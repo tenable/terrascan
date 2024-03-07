@@ -29,11 +29,12 @@ type RAMResourceShareConfig struct {
 }
 
 // GetRAMResourceShareConfig returns config for RAMResourceShare
+// aws_ram_resource_share
 func GetRAMResourceShareConfig(r *ram.ResourceShare) []AWSResourceConfig {
 	cf := RAMResourceShareConfig{
 		Config: Config{
 			Name: r.Name,
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 		},
 		Name:                    r.Name,
 		AllowExternalPrincipals: functions.GetVal(r.AllowExternalPrincipals),

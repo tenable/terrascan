@@ -20,6 +20,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -37,7 +38,7 @@ func SQLActiveDirectoryAdministratorConfig(r types.Resource, vars, params map[st
 	return map[string]interface{}{
 		tfLocation: fn.LookUpString(nil, params, r.Location),
 		tfName:     fn.LookUpString(nil, params, r.Name),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 		tfLogin:    fn.LookUpString(vars, params, convert.ToString(r.Properties, armLogin)),
 		tfObjectID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armSid)),
 		tfTenantID: fn.LookUpString(vars, params, convert.ToString(r.Properties, armTenantID)),

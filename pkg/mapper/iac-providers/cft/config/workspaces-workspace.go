@@ -29,6 +29,7 @@ type WorkspacesWorkspaceConfig struct {
 }
 
 // GetWorkspacesWorkspaceConfig returns config for aws_workspaces_workspace
+// aws_workspaces_workspace
 func GetWorkspacesWorkspaceConfig(w *workspaces.Workspace) []AWSResourceConfig {
 	cf := WorkspacesWorkspaceConfig{
 		Config: Config{

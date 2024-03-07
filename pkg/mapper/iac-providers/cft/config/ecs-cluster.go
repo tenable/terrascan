@@ -65,6 +65,7 @@ type EcsClusterConfig struct {
 }
 
 // GetEcsClusterConfig returns config for aws_ecs_cluster resource
+// aws_ecs_cluster
 func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	var clusterSettingsData []ClusterSettingsBlock
 	var capacityProviderStrategyData []CapacityProviderStrategyBlock
@@ -87,7 +88,7 @@ func GetEcsClusterConfig(e *ecs.Cluster) []AWSResourceConfig {
 	cf := EcsClusterConfig{
 		Config: Config{
 			Name: functions.GetVal(e.ClusterName),
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 		ClusterName:                     functions.GetVal(e.ClusterName),
 		ClusterSettings:                 clusterSettingsData,

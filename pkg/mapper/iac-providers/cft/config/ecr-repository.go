@@ -34,6 +34,7 @@ type ImageScanningConfigurationBlock struct {
 }
 
 // GetEcrRepositoryConfig returns config for aws_ecr_repository
+// aws_ecr_repository
 func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 	var imageScanningConfiguration []ImageScanningConfigurationBlock
 	if r.ImageScanningConfiguration != nil {
@@ -43,7 +44,7 @@ func GetEcrRepositoryConfig(r *ecr.Repository) []AWSResourceConfig {
 
 	cf := EcrRepositoryConfig{
 		Config: Config{
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 			Name: functions.GetVal(r.RepositoryName),
 		},
 		ImageScanningConfiguration: imageScanningConfiguration,

@@ -81,6 +81,7 @@ const (
 	AwsEcsTaskDefinition             = "aws_ecs_task_definition"
 	AwsS3Bucket                      = "aws_s3_bucket"
 	AwsS3BucketPublicAccessBlock     = "aws_s3_bucket_public_access_block"
+	AwsS3BucketServersideEncription  = "aws_s3_bucket_server_side_encryption_configuration"
 	AwsS3BucketPolicy                = "aws_s3_bucket_policy"
 	AwsSqsQueue                      = "aws_sqs_queue"
 	AwsSqsQueuePolicy                = "aws_sqs_queue_policy"
@@ -111,4 +112,5 @@ const (
 	AwsSubnet                        = "aws_subnet"
 	AwsRoute                         = "aws_route"
 	AwsSSMParameter                  = "aws_ssm_parameter"
+	AwsLb                            = "aws_lb"
 )

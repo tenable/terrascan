@@ -30,6 +30,7 @@ type SnsTopicPolicyConfig struct {
 }
 
 // GetSnsTopicPolicyConfig returns config for SnsTopicPolicy
+// aws_sns_topic_policy
 func GetSnsTopicPolicyConfig(p *sns.TopicPolicy) []AWSResourceConfig {
 	policyDoc, _ := json.Marshal(p.PolicyDocument)
 

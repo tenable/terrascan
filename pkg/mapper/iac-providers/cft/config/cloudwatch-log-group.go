@@ -30,6 +30,7 @@ type LogCloudWatchGroupConfig struct {
 }
 
 // GetLogCloudWatchGroupConfig returns config for aws_cloudwatch_log_group
+// aws_cloudwatch_log_group
 func GetLogCloudWatchGroupConfig(r *logs.LogGroup) []AWSResourceConfig {
 	cf := LogCloudWatchGroupConfig{
 		Config: Config{

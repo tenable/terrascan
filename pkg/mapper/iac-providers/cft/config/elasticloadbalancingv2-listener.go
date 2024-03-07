@@ -41,6 +41,7 @@ type RedirectConfig struct {
 }
 
 // GetElasticLoadBalancingV2ListenerConfig returns config for aws_lb_listener
+// aws_lb_listener
 func GetElasticLoadBalancingV2ListenerConfig(l *elasticloadbalancingv2.Listener) []AWSResourceConfig {
 	// create a listener subresource per DefaultAction defined in cft
 	// as only one default action per listener is possible in terraform

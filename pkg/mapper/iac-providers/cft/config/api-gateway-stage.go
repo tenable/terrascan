@@ -43,11 +43,13 @@ type Settings struct {
 type APIGatewayStageConfig struct {
 	AccessLogSettings   interface{} `json:"access_log_settings"`
 	ClientCertificateID string      `json:"client_certificate_id"`
+	RestAPIID           string      `json:"rest_api_id"`
 	Config
 	XrayTracingEnabled bool `json:"xray_tracing_enabled"`
 }
 
 // GetAPIGatewayStageConfig returns config for aws_api_gateway_stage and aws_api_gateway_method_settings
+// aws_api_gateway_method_settings
 func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 
 	resourceConfigs := make([]AWSResourceConfig, 0)
@@ -55,9 +57,11 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 	cf := APIGatewayStageConfig{
 		Config: Config{
 			Name: functions.GetVal(s.StageName),
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 		},
 	}
+	cf.RestAPIID = s.RestApiId
+
 	if s.AccessLogSetting != nil {
 		cf.AccessLogSettings = s.AccessLogSetting
 	} else {
@@ -79,7 +83,7 @@ func GetAPIGatewayStageConfig(s *apigateway.Stage) []AWSResourceConfig {
 			msc := MethodSettingConfig{
 				Config: Config{
 					Name: functions.GetVal(s.StageName),
-					Tags: s.Tags,
+					Tags: functions.PatchAWSTags(s.Tags),
 				},
 				MethodSettings: []Settings{{
 					MetricsEnabled: functions.GetVal(settings.MetricsEnabled),

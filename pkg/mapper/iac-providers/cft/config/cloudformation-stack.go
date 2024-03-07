@@ -31,9 +31,10 @@ type CloudFormationStackConfig struct {
 }
 
 // GetCloudFormationStackConfig returns config for aws_cloudformation_stack
+// aws_cloudformation_stack
 func GetCloudFormationStackConfig(s *cloudformation.Stack) []AWSResourceConfig {
 	cf := CloudFormationStackConfig{
-		Config:           Config{Tags: s.Tags},
+		Config:           Config{Tags: fn.PatchAWSTags(s.Tags)},
 		TemplateURL:      "",
 		NotificationARNs: nil,
 		TemplateData:     []byte{},

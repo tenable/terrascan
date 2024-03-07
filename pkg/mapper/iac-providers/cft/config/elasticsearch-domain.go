@@ -61,6 +61,7 @@ type NodeToNodeEncryptionOptionsConfig struct {
 }
 
 // GetElasticsearchDomainConfig returns config for aws_elasticsearch_domain and aws_elasticsearch_domain_policy
+// aws_elasticsearch_domain and aws_elasticsearch_domain_policy
 func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 
@@ -68,7 +69,7 @@ func GetElasticsearchDomainConfig(d *elasticsearch.Domain) []AWSResourceConfig {
 	esDomainConfig := ElasticsearchDomainConfig{
 		Config: Config{
 			Name: functions.GetVal(d.DomainName),
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 	}
 

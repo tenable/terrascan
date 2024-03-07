@@ -32,6 +32,7 @@ type AppAutoScalingPolicyConfig struct {
 }
 
 // GetAppAutoScalingPolicyConfig returns config for AppAutoScalingPolicy
+// aws_appautoscaling_policy
 func GetAppAutoScalingPolicyConfig(a *applicationautoscaling.ScalingPolicy) []AWSResourceConfig {
 	cf := AppAutoScalingPolicyConfig{
 		Config: Config{

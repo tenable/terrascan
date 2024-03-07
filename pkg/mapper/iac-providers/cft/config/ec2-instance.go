@@ -54,24 +54,29 @@ type NetworkInterfaceBlock struct {
 // EC2InstanceConfig holds config for EC2Instance
 type EC2InstanceConfig struct {
 	Config
-	AMI                 string                  `json:"ami"`
-	InstanceType        string                  `json:"instance_type"`
-	EBSOptimized        bool                    `json:"ebs_optimized"`
-	Hibernation         bool                    `json:"hibernation"`
-	Monitoring          bool                    `json:"monitoring"`
-	IAMInstanceProfile  string                  `json:"iam_instance_profile"`
-	VPCSecurityGroupIDs []string                `json:"vpc_security_group_ids"`
-	NetworkInterface    []NetworkInterfaceBlock `json:"network_interface"`
+	AMI                      string                  `json:"ami"`
+	InstanceType             string                  `json:"instance_type"`
+	EBSOptimized             bool                    `json:"ebs_optimized"`
+	Hibernation              bool                    `json:"hibernation"`
+	Monitoring               bool                    `json:"monitoring"`
+	IAMInstanceProfile       string                  `json:"iam_instance_profile"`
+	VPCSecurityGroupIDs      []string                `json:"vpc_security_group_ids"`
+	NetworkInterface         []NetworkInterfaceBlock `json:"network_interface"`
+	UserData                 string                  `json:"user_data_base64"`
+	AssociatePublicIPAddress bool                    `json:"associate_public_ip_address"`
+	SubnetID                 string                  `json:"subnet_id"`
 }
 
 // GetEC2InstanceConfig returns config for EC2Instance
+// aws_instance
 func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceConfig {
 	networkInterfaces := i.NetworkInterfaces
 
 	nics := make([]NetworkInterfaceBlock, len(networkInterfaces))
 	niconfigs := make([]NetworkInterfaceConfig, len(networkInterfaces))
 	awsconfig := make([]AWSResourceConfig, len(networkInterfaces))
-
+	associatePublicAddress := false
+	var vpcSecurityID []string
 	for index, networkInterface := range networkInterfaces {
 		nics[index].NetworkInterfaceID = functions.GetVal(networkInterface.NetworkInterfaceId)
 		nics[index].DeleteOnTermination = functions.GetVal(networkInterface.DeleteOnTermination)
@@ -98,20 +103,45 @@ func GetEC2InstanceConfig(i *ec2.Instance, instanceName string) []AWSResourceCon
 		awsconfig[index].Name = nicname
 		awsconfig[index].Resource = niconfigs[index]
 		awsconfig[index].Metadata = i.AWSCloudFormationMetadata
+		if networkInterface.AssociatePublicIpAddress != nil {
+			associatePublicAddress = associatePublicAddress || *networkInterface.AssociatePublicIpAddress
+		}
+		if networkInterface.GroupSet != nil {
+			for _, groupName := range networkInterface.GroupSet {
+				if groupName != "" {
+					vpcSecurityID = append(vpcSecurityID, groupName)
+				}
+			}
+
+		}
+	}
+	subnetID := ""
+	if i.SubnetId != nil {
+		subnetID = *i.SubnetId
+	}
+
+	if i.SecurityGroupIds != nil {
+		vpcSecurityID = append(vpcSecurityID, i.SecurityGroupIds...)
 	}
 
 	ec2Config := EC2InstanceConfig{
 		Config: Config{
-			Tags: i.Tags,
+			Tags: functions.PatchAWSTags(i.Tags),
 			Name: instanceName,
 		},
-		AMI:                 functions.GetVal(i.ImageId),
-		InstanceType:        functions.GetVal(i.InstanceType),
-		EBSOptimized:        functions.GetVal(i.EbsOptimized),
-		Monitoring:          functions.GetVal(i.Monitoring),
-		IAMInstanceProfile:  functions.GetVal(i.IamInstanceProfile),
-		VPCSecurityGroupIDs: i.SecurityGroupIds,
-		NetworkInterface:    nics,
+		AMI:                      functions.GetVal(i.ImageId),
+		InstanceType:             functions.GetVal(i.InstanceType),
+		EBSOptimized:             functions.GetVal(i.EbsOptimized),
+		Monitoring:               functions.GetVal(i.Monitoring),
+		IAMInstanceProfile:       functions.GetVal(i.IamInstanceProfile),
+		VPCSecurityGroupIDs:      vpcSecurityID,
+		NetworkInterface:         nics,
+		AssociatePublicIPAddress: associatePublicAddress,
+		SubnetID:                 subnetID,
+	}
+
+	if i.UserData != nil {
+		ec2Config.UserData = *i.UserData
 	}
 
 	if i.HibernationOptions != nil {

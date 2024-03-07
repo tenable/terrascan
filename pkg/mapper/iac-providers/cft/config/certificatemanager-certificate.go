@@ -29,10 +29,11 @@ type CertificateManagerCertificateConfig struct {
 }
 
 // GetCertificateManagerCertificateConfig returns config for CertificateManagerCertificate
+// aws_acm_certificate
 func GetCertificateManagerCertificateConfig(c *certificatemanager.Certificate) []AWSResourceConfig {
 	cf := CertificateManagerCertificateConfig{
 		Config: Config{
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		DomainName:       c.DomainName,
 		ValidationMethod: functions.GetVal(c.ValidationMethod),

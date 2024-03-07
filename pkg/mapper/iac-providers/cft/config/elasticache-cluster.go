@@ -30,10 +30,11 @@ type ElastiCacheClusterConfig struct {
 }
 
 // GetElastiCacheClusterConfig returns config for aws_elasticache_cluster
+// aws_elasticache_cluster
 func GetElastiCacheClusterConfig(e *elasticache.CacheCluster) []AWSResourceConfig {
 	cf := ElastiCacheClusterConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 			Name: functions.GetVal(e.ClusterName),
 		},
 		AZMode:        functions.GetVal(e.AZMode),

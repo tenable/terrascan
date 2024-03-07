@@ -41,11 +41,12 @@ type SecurityGroupConfig struct {
 }
 
 // GetSecurityGroupConfig returns config for aws_security_group
+// aws_security_group
 func GetSecurityGroupConfig(s *ec2.SecurityGroup) []AWSResourceConfig {
 	cf := SecurityGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(s.GroupName),
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 		},
 		GroupName:        functions.GetVal(s.GroupName),
 		GroupDescription: s.GroupDescription,
@@ -75,8 +76,16 @@ func getIngressEgress(ie any) IngressEgress {
 	if egress, ok := ie.(*ec2.SecurityGroup_Egress); ok {
 		return getEgress(egress)
 	}
+	if egress, ok := ie.(ec2.SecurityGroup_Egress); ok {
+		return getEgress(&egress)
+	}
+
 	if ingress, ok := ie.(*ec2.SecurityGroup_Ingress); ok {
 		return getIngress(ingress)
+	}
+
+	if ingress, ok := ie.(ec2.SecurityGroup_Ingress); ok {
+		return getIngress(&ingress)
 	}
 	return IngressEgress{}
 }

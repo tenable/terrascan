@@ -30,6 +30,7 @@ type S3BucketPolicyConfig struct {
 }
 
 // GetS3BucketPolicyConfig returns config for aws_s3_bucket_policy
+// aws_s3_bucket_policy
 func GetS3BucketPolicyConfig(p *s3.BucketPolicy) []AWSResourceConfig {
 	cf := S3BucketPolicyConfig{
 		Config: Config{

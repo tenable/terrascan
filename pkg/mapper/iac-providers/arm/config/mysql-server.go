@@ -22,6 +22,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -49,7 +50,7 @@ func MySQLServerConfig(r types.Resource, vars, params map[string]interface{}) ma
 		tfLocation:                   fn.LookUpString(nil, params, r.Location),
 		tfName:                       fn.LookUpString(nil, params, r.Name),
 		tfSkuName:                    fn.LookUpString(vars, params, r.SKU.Name),
-		tfTags:                       r.Tags,
+		tfTags:                       functions.PatchAWSTags(r.Tags),
 		tfVersion:                    fn.LookUpString(vars, params, convert.ToString(r.Properties, armVersion)),
 		tfAdministratorLogin:         fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLogin)),
 		tfAdministratorLoginPassword: fn.LookUpString(vars, params, convert.ToString(r.Properties, armAdministratorLoginPassword)),

@@ -31,6 +31,7 @@ type CloudTrailConfig struct {
 }
 
 // GetCloudTrailConfig returns config for aws_cloudtrail
+// aws_cloudtrail
 func GetCloudTrailConfig(t *cloudtrail.Trail) []AWSResourceConfig {
 	cf := CloudTrailConfig{
 		Config:                  Config{Tags: t.Tags, Name: functions.GetVal(t.TrailName)},

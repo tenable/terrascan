@@ -22,6 +22,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // KeyVaultSecretConfig returns config for azurerm_key_vault_secret
@@ -29,7 +30,7 @@ func KeyVaultSecretConfig(r types.Resource, params map[string]interface{}) map[s
 	cf := map[string]interface{}{
 		tfLocation: fn.LookUpString(nil, params, r.Location),
 		tfName:     fn.LookUpString(nil, params, r.Name),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 	}
 
 	a := convert.ToMap(r.Properties, armAttributes)

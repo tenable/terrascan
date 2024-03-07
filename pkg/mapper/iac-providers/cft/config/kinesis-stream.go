@@ -30,11 +30,12 @@ type KinesisStreamConfig struct {
 }
 
 // GetKinesisStreamConfig returns config for aws_kinesis_stream
+// aws_kinesis_stream
 func GetKinesisStreamConfig(k *kinesis.Stream) []AWSResourceConfig {
 	cf := KinesisStreamConfig{
 		Config: Config{
 			Name: functions.GetVal(k.Name),
-			Tags: k.Tags,
+			Tags: functions.PatchAWSTags(k.Tags),
 		},
 		Name: functions.GetVal(k.Name),
 	}

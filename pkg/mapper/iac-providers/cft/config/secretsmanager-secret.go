@@ -28,10 +28,11 @@ type SecretsManagerSecretConfig struct {
 }
 
 // GetSecretsManagerSecretConfig returns config for aws_secretsmanager_secret
+// aws_secretsmanager_secret
 func GetSecretsManagerSecretConfig(s *secretsmanager.Secret) []AWSResourceConfig {
 	cf := SecretsManagerSecretConfig{
 		Config: Config{
-			Tags: s.Tags,
+			Tags: functions.PatchAWSTags(s.Tags),
 			Name: functions.GetVal(s.Name),
 		},
 		KmsKeyID: functions.GetVal(s.KmsKeyId),

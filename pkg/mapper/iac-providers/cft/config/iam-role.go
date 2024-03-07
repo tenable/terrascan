@@ -43,7 +43,7 @@ type IamRolePolicyConfig struct {
 	PolicyDocument string `json:"policy"`
 }
 
-// GetIamRoleConfig returns config for aws_iam_role and aws_iam_role_policy
+// GetIamRoleConfig returns config for aws_iam_role and aws_iam_role_policy // aws_iam_role, aws_iam_role_policy
 func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	resourceConfigs := make([]AWSResourceConfig, 0)
 
@@ -51,7 +51,7 @@ func GetIamRoleConfig(r *iam.Role) []AWSResourceConfig {
 	roleConfig := IamRoleConfig{
 		Config: Config{
 			Name: functions.GetVal(r.RoleName),
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 		},
 	}
 	policyDocument, err := json.Marshal(r.AssumeRolePolicyDocument)

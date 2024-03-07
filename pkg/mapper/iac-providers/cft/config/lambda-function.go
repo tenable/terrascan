@@ -64,6 +64,7 @@ type LambdaFunctionConfig struct {
 }
 
 // GetLambdaFunctionConfig returns config for LambdaFunction
+// aws_lambda_function
 func GetLambdaFunctionConfig(sf interface{}) []AWSResourceConfig {
 	if l, ok := sf.(*lambda.Function); ok {
 		return getLambdaConfig(l)

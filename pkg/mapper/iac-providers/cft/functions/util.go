@@ -16,6 +16,10 @@
 
 package functions
 
+import (
+	"encoding/json"
+)
+
 // GetVal function pointer of any type, validates and returns value
 func GetVal[T any](ptr *T) T {
 	if ptr == nil {
@@ -23,4 +27,58 @@ func GetVal[T any](ptr *T) T {
 		return retval
 	}
 	return *ptr
+}
+
+// interfaceToStruct takes the input data and populates the input struct.
+func interfaceToStruct(sourceData, structPtr interface{}) error {
+	byteData, err := json.Marshal(sourceData)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(byteData, structPtr)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// PatchAWSTags returns tags in map[string]string format instead key="" and value= ""
+func PatchAWSTags(sourceData interface{}) interface{} {
+
+	type awsTags struct {
+		Key   string `json:"key"`
+		Value string `json:"value"`
+	}
+
+	var tagsList []awsTags
+	err := interfaceToStruct(sourceData, &tagsList)
+	if err != nil {
+		if valueRawMap, ok := sourceData.(map[string]interface{}); ok {
+			return valueRawMap
+		}
+		return sourceData
+	}
+
+	// build the tags map to mimic terraform's aws tag format
+	tfTagsMap := make(map[string]string)
+	for i := range tagsList {
+		if len(tagsList[i].Key) != 0 {
+			tfTagsMap[tagsList[i].Key] = tagsList[i].Value
+		}
+	}
+
+	return tfTagsMap
+}
+
+// GetBoolValueFromString returns boolean value from string
+func GetBoolValueFromString(inputStr string) bool {
+	if inputStr == "true" {
+		return true
+	} else if inputStr == "false" {
+		return false
+	}
+	return false
+
 }

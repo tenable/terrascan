@@ -43,6 +43,7 @@ type WafSizeConstraintSetConfig struct {
 }
 
 // GetWafSizeConstraintSetConfig returns config for aws_waf_size_constraint_set
+// aws_waf_size_constraint_set
 func GetWafSizeConstraintSetConfig(w *waf.SizeConstraintSet) []AWSResourceConfig {
 	sizeConstraintSet := setSizeConstraintSet(w)
 

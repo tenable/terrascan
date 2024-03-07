@@ -33,16 +33,24 @@ type SSMParameterConfig struct {
 }
 
 // GetSSMParameterConfig returns config for SSM Parameter
+// aws_ssm_parameter no policy
 func GetSSMParameterConfig(b *ssm.Parameter) []AWSResourceConfig {
-	cf := SSMParameterConfig{
-		Config: Config{
-			Name: *b.Name,
-			Tags: b.Tags,
-		},
-		Name:  *b.Name,
-		Type:  b.Type,
-		Value: b.Value,
+	if b == nil {
+		cf := SSMParameterConfig{Config: Config{}}
+		return []AWSResourceConfig{{
+			Resource: cf,
+		}}
 	}
+	cf := SSMParameterConfig{
+		Config: Config{},
+		Type:   b.Type,
+		Value:  b.Value,
+	}
+	if b.Name != nil {
+		cf.Name = *b.Name
+		cf.Config.Name = *b.Name
+	}
+
 	if b.Description != nil {
 		cf.Description = *b.Description
 	}
@@ -54,6 +62,10 @@ func GetSSMParameterConfig(b *ssm.Parameter) []AWSResourceConfig {
 	}
 	if b.AllowedPattern != nil {
 		cf.AllowedPattern = *b.AllowedPattern
+	}
+
+	if b.Tags != nil {
+		cf.Tags = b.Tags
 	}
 
 	return []AWSResourceConfig{{

@@ -28,6 +28,7 @@ type DaxClusterConfig struct {
 }
 
 // GetDaxClusterConfig returns config for aws_dax_cluster
+// aws_dax_cluster
 func GetDaxClusterConfig(t *dax.Cluster) []AWSResourceConfig {
 	cf := DaxClusterConfig{
 		Config: Config{

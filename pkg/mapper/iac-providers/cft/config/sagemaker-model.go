@@ -46,6 +46,7 @@ type SagemakerModelConfig struct {
 }
 
 // GetSagemakerModelConfig returns config for SagemakerModel
+// aws_sagemaker_model
 func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	var containerBlock []ContainerBlock
 	if m.Containers != nil {
@@ -64,7 +65,7 @@ func GetSagemakerModelConfig(m *sagemaker.Model) []AWSResourceConfig {
 	cf := SagemakerModelConfig{
 		Config: Config{
 			Name: functions.GetVal(m.ModelName),
-			Tags: m.Tags,
+			Tags: functions.PatchAWSTags(m.Tags),
 		},
 		Name:             functions.GetVal(m.ModelName),
 		ExecutionRoleARN: m.ExecutionRoleArn,

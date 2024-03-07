@@ -52,6 +52,7 @@ type MskClusterConfig struct {
 }
 
 // GetMskClusterConfig returns config for MskCluster
+// aws_msk_cluster
 func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	var brokerNodeGroupInfo []BrokerNodeGroupInfoBlock
 	if c.BrokerNodeGroupInfo != nil {
@@ -82,7 +83,7 @@ func GetMskClusterConfig(c *msk.Cluster) []AWSResourceConfig {
 	cf := MskClusterConfig{
 		Config: Config{
 			Name: c.ClusterName,
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 		},
 		ClusterName:         c.ClusterName,
 		KafkaVersion:        c.KafkaVersion,

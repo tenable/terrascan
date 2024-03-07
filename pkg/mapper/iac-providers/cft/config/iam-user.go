@@ -51,6 +51,7 @@ type IamUserConfig struct {
 }
 
 // GetIamUserConfig returns config for aws_iam_user, aws_iam_user_policy, aws_iam_user_login_profile
+// aws_iam_user_policy, aws_iam_user_login_profile
 func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 
 	resourceConfigs := make([]AWSResourceConfig, 0)
@@ -61,7 +62,7 @@ func GetIamUserConfig(i *iam.User) []AWSResourceConfig {
 		Resource: IamUserConfig{
 			Config: Config{
 				Name: functions.GetVal(i.UserName),
-				Tags: i.Tags,
+				Tags: functions.PatchAWSTags(i.Tags),
 			},
 			UserName: functions.GetVal(i.UserName),
 		},

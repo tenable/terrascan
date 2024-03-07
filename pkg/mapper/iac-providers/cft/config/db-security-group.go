@@ -34,6 +34,7 @@ type DBSecurityGroupConfig struct {
 }
 
 // GetDBSecurityGroupConfig returns config for aws_db_security_group
+// aws_db_security_group
 func GetDBSecurityGroupConfig(dbsg *rds.DBSecurityGroup) []AWSResourceConfig {
 	cf := DBSecurityGroupConfig{
 		Config: Config{

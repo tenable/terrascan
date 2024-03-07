@@ -27,6 +27,7 @@ type GuardDutyDetectorConfig struct {
 }
 
 // GetGuardDutyDetectorConfig returns config for aws_guardduty_detector
+// aws_guardduty_detector no policy
 func GetGuardDutyDetectorConfig(d *guardduty.Detector) []AWSResourceConfig {
 	cf := GuardDutyDetectorConfig{
 		Config: Config{},
