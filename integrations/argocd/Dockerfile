@@ -1,6 +1,6 @@
 # Dockerfile with a script to use terrascan's validating webhook
 # configured in the kubernetes cluster, to scan a repo for violations
-FROM alpine:3.14.6
+FROM alpine:3.19
 
 #curl to send request to terrascan validating webhook
 RUN apk add --no-cache curl
