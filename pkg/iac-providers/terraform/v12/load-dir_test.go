@@ -125,14 +125,14 @@ References to other resources during the destroy phase can cause dependency cycl
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
+			wantErr: multierror.Append(fmt.Errorf("%s", "failed to build terraform allResourcesConfig")),
 		},
 		{
 			name:    "incorrect module structure recursive",
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv12:   TfV12{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)),
+			wantErr: multierror.Append(fmt.Errorf("%s", errStringInvalidModuleConfigs), fmt.Errorf("%s", errStringInvalidModuleConfigs)),
 		},
 		{
 			name:    "load invalid config dir",
@@ -141,23 +141,23 @@ References to other resources during the destroy phase can cause dependency cycl
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString1)),
+			wantErr: multierror.Append(fmt.Errorf("%s", testErrorString1)),
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString1),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf(errStringDestroyProvisioners),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid),
-				fmt.Errorf(errStringInvalidModuleConfigs),
-				fmt.Errorf(errStringInvalidModuleConfigs),
-				fmt.Errorf(testErrorString2),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
+			wantErr: multierror.Append(fmt.Errorf("%s", testErrorString1),
+				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
+				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
+				fmt.Errorf("%s", errStringDestroyProvisioners),
+				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
+				fmt.Errorf("%s", errStringModuleSourceInvalid),
+				fmt.Errorf("%s", errStringInvalidModuleConfigs),
+				fmt.Errorf("%s", errStringInvalidModuleConfigs),
+				fmt.Errorf("%s", testErrorString2),
+				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
+				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
 		},
 		{
@@ -167,19 +167,19 @@ References to other resources during the destroy phase can cause dependency cycl
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString2)),
+			wantErr: multierror.Append(fmt.Errorf("%s", testErrorString2)),
 		},
 		{
 			name:    "load multiple provider config dir recursive",
 			dirPath: multipleProvidersDir,
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString2)),
+			wantErr: multierror.Append(fmt.Errorf("%s", testErrorString2)),
 		},
 		{
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)),
+			wantErr: multierror.Append(fmt.Errorf("%s", errStringModuleSourceInvalid)),
 		},
 	}
 

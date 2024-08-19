@@ -68,7 +68,7 @@ References to other resources during the destroy phase can cause dependency cycl
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString1),
+			wantErr:  fmt.Errorf("%s", testErrorString1),
 		},
 		{
 			name:     "empty config",
@@ -79,13 +79,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			name:     "invalid config",
 			filePath: emptyTfFilePath,
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString2),
+			wantErr:  fmt.Errorf("%s", testErrorString2),
 		},
 		{
 			name:     "destroy-provisioners",
 			filePath: nonEmptyTfFilePath,
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString3),
+			wantErr:  fmt.Errorf("%s", testErrorString3),
 		},
 	}
 
