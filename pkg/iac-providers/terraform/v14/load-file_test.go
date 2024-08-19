@@ -55,7 +55,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv14:    TfV14{},
-			wantErr:  fmt.Errorf("%s", testErrorString1),
+			wantErr:  fmt.Errorf(testErrorString1), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:     "empty config",
@@ -66,7 +66,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid config",
 			filePath: filepath.Join(testDataDir, "empty.tf"),
 			tfv14:    TfV14{},
-			wantErr:  fmt.Errorf("%s", testErrorString2),
+			wantErr:  fmt.Errorf(testErrorString2), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:     "depends_on",

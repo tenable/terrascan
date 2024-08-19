@@ -113,7 +113,7 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf("%s", errStringInvalidModuleConfigs), fmt.Errorf("%s", errStringInvalidModuleConfigs)),
+			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:    "load invalid config dir",
@@ -122,29 +122,29 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf("%s", testErrorMessage)),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv14:   TfV14{},
-			wantErr: multierror.Append(fmt.Errorf("%s", testErrorMessage),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf("%s", errStringDependsOnDir),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf("%s", errStringModuleSourceInvalid),
-				fmt.Errorf("%s", errStringInvalidModuleConfigs),
-				fmt.Errorf("%s", errStringInvalidModuleConfigs),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
+				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
+				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
 		},
 		{
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv14:   TfV14{},
-			wantErr: multierror.Append(fmt.Errorf("%s", errStringModuleSourceInvalid)),
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 	}
 

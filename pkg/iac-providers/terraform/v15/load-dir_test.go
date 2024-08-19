@@ -119,14 +119,14 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf("%s", "failed to build terraform allResourcesConfig")),
+			wantErr: multierror.Append(fmt.Errorf("failed to build terraform allResourcesConfig")),
 		},
 		{
 			name:    "incorrect module structure recursive",
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv15:   TfV15{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf("%s", errStringInvalidModuleConfigs), fmt.Errorf("%s", errStringInvalidModuleConfigs)),
+			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:    "load invalid config dir",
@@ -135,33 +135,33 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf("%s", testErrorMessage)),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv15:   TfV15{},
-			wantErr: multierror.Append(fmt.Errorf("%s", testErrorMessage),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf("%s", errStringDependsOnDir),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf("%s", errStringModuleSourceInvalid),
-				fmt.Errorf("%s", errStringInvalidModuleConfigs),
-				fmt.Errorf("%s", errStringInvalidModuleConfigs),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
-				fmt.Errorf("%s", errStringUnifiedInvalidattrib),                                                                        // 10 good
-				fmt.Errorf("%s,%s", invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
-				fmt.Errorf("%s", errDiagnostincMessageAttrib),                                                                          // 12
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                          // 13 good
-			),
+				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
+				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
+				fmt.Errorf(errStringUnifiedInvalidattrib),                                                                     //lint:ignore SA1006 placeholder %s are specified in string constants                                                               // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
+				fmt.Errorf(errDiagnostincMessageAttrib),                                                                       //lint:ignore SA1006 placeholder %s are specified in string constants                                                             // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                 // 13 good
+			), // nolint:staticcheck
 		},
 		{
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv15:   TfV15{},
-			wantErr: multierror.Append(fmt.Errorf("%s", errStringModuleSourceInvalid)),
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:    "provider block with only alias",

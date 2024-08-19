@@ -74,21 +74,21 @@ func TestLoadIacFile(t *testing.T) {
 		options  map[string]interface{}
 	}{
 		{
-			wantErr:  fmt.Errorf("%s", testErrString1),
+			wantErr:  fmt.Errorf(testErrString1), //lint:ignore SA1006 placeholder %s are specified in string constants
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid extension",
 			filePath: testFile,
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("%s", testErrString2),
+			wantErr:  fmt.Errorf(testErrString2), //lint:ignore SA1006 placeholder %s are specified in string constants
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "nonexistent file",
 			filePath: "nonexistent.txt",
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf("%s", testErrString3)),
+			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf(testErrString3)), //lint:ignore SA1006 placeholder %s are specified in string constants
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid file",
