@@ -30,12 +30,9 @@ import (
 	"github.com/tenable/terrascan/pkg/utils"
 )
 
-const DEEP_MODULES = "deep-modules"
-const UNEXPECTED_ERROR = "unexpected error; gotErr: '%v', wantErr: '%v'"
-
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
-
+	
 	testErrorMessage := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
@@ -63,9 +60,7 @@ func TestLoadIacDir(t *testing.T) {
 	if utils.IsWindowsPlatform() {
 		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
 	}
-
-	err1 := fmt.Errorf(errStringInvalidModuleConfigs) //lint:ignore SA1006 placeholder %s are specified in string constants 71
-	multierrors := multierror.Append(fmt.Errorf(testErrorMessage)
+	
 	table := []struct {
 		name    string
 		dirPath string
@@ -118,7 +113,7 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(err1, err1),
+			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)),
 		},
 		{
 			name:    "load invalid config dir",
@@ -127,18 +122,18 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierrors), //lint:ignore SA1006 placeholder %s are specified in string constants 21
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)),
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv14:   TfV14{},
-			wantErr: multierrors, //lint:ignore SA1006 placeholder %s are specified in string constants 31
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, DEEP_MODULES, "modules")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, DEEP_MODULES, "modules", "m4", "modules")),
-				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants 41
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
+				fmt.Errorf(errStringDependsOnDir),//lint:ignore SA1006 placeholder %s are specified in string constants
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants 51
+				fmt.Errorf(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants
 				err1,
 				err1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
@@ -149,7 +144,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv14:   TfV14{},
-			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants 81
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 	}
 
@@ -162,17 +157,17 @@ func TestLoadIacDir(t *testing.T) {
 			}
 			if tt.wantErr == nilMultiErr {
 				if err := me.ErrorOrNil(); err != nil {
-					t.Errorf(UNEXPECTED_ERROR, gotErr, tt.wantErr)
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 				}
 			} else if me.Error() != tt.wantErr.Error() {
-				t.Errorf(UNEXPECTED_ERROR, gotErr, tt.wantErr)
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 		})
 	}
 
 	tfJSONDir := filepath.Join(testDataDir, "tfjson")
-	nestedModuleErr1 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, DEEP_MODULES, "modules"))
-	nestedModuleErr2 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, DEEP_MODULES, "modules", "m4", "modules"))
+	nestedModuleErr1 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules"))
+	nestedModuleErr2 := fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules"))
 
 	table2 := []struct {
 		name        string
@@ -220,7 +215,7 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:        "nested module directory",
-			tfConfigDir: filepath.Join(testDataDir, DEEP_MODULES),
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules.json"),
 			tfv14:       TfV14{},
 			options: map[string]interface{}{
@@ -230,7 +225,7 @@ func TestLoadIacDir(t *testing.T) {
 		},
 		{
 			name:        "nested module directory recursive",
-			tfConfigDir: filepath.Join(testDataDir, DEEP_MODULES),
+			tfConfigDir: filepath.Join(testDataDir, "deep-modules"),
 			tfJSONFile:  filepath.Join(tfJSONDir, "deep-modules-recursive.json"),
 			tfv14:       TfV14{},
 			wantErr:     multierror.Append(nestedModuleErr1, nestedModuleErr2),
@@ -286,10 +281,10 @@ func TestLoadIacDir(t *testing.T) {
 			}
 			if tt.wantErr == nilMultiErr {
 				if err := me.ErrorOrNil(); err != nil {
-					t.Errorf(UNEXPECTED_ERROR, gotErr, tt.wantErr)
+					t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 				}
 			} else if me.Error() != tt.wantErr.Error() {
-				t.Errorf(UNEXPECTED_ERROR, gotErr, tt.wantErr)
+				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
 			}
 
 			var want output.AllResourceConfigs
