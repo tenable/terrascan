@@ -122,20 +122,20 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants 2
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants 21
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv14:   TfV14{},
-			wantErr: multierror.Append(fmt.Errorf(testErrorMessage), //lint:ignore SA1006 placeholder %s are specified in string constants 3
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage), //lint:ignore SA1006 placeholder %s are specified in string constants 31
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants 4
+				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants 41
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants 5
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 6
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 7
+				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants 51
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 61
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 71
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
@@ -144,7 +144,7 @@ func TestLoadIacDir(t *testing.T) {
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv14:   TfV14{},
-			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants 8
+			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants 81
 		},
 	}
 
