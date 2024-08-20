@@ -61,6 +61,7 @@ func TestLoadIacDir(t *testing.T) {
 		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
 	}
 
+	err1 := fmt.Errorf(errStringInvalidModuleConfigs) //lint:ignore SA1006 placeholder %s are specified in string constants 71
 	table := []struct {
 		name    string
 		dirPath string
@@ -113,7 +114,7 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants 1
+			wantErr: multierror.Append(err1, err1),
 		},
 		{
 			name:    "load invalid config dir",
@@ -133,9 +134,9 @@ func TestLoadIacDir(t *testing.T) {
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
 				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants 41
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants 51
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 61
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants 71
+				fmt.Errorf(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants 51
+				err1,
+				err1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
