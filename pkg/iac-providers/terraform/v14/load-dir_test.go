@@ -32,7 +32,7 @@ import (
 
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
-	
+
 	testErrorMessage := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
@@ -60,7 +60,7 @@ func TestLoadIacDir(t *testing.T) {
 	if utils.IsWindowsPlatform() {
 		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
 	}
-	
+
 	table := []struct {
 		name    string
 		dirPath string
@@ -131,7 +131,7 @@ func TestLoadIacDir(t *testing.T) {
 			wantErr: multierror.Append(fmt.Errorf(testErrorMessage),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf(errStringDependsOnDir),//lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
 				fmt.Errorf(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants
 				err1,
