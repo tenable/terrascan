@@ -136,7 +136,7 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)),
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants 4
 		},
 		{
 			name:    "load invalid config dir recursive",

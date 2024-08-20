@@ -113,7 +113,7 @@ func TestLoadIacDir(t *testing.T) {
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv14:   TfV14{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants 1
 		},
 		{
 			name:    "load invalid config dir",
@@ -122,7 +122,7 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(fmt.Errorf(testErrorMessage)), //lint:ignore SA1006 placeholder %s are specified in string constants 1
 		},
 		{
 			name:    "load invalid config dir recursive",
