@@ -133,9 +133,9 @@ func TestLoadIacDir(t *testing.T) {
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
 				fmt.Errorf(errStringDependsOnDir), //lint:ignore SA1006 placeholder %s are specified in string constants
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants
-				err1,
-				err1,
+				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
+				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
