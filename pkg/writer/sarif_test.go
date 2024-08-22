@@ -62,6 +62,7 @@ const violationTemplate = `{
                       },
                       "logicalLocations": [
                         {
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "name": "bucket",
                           "kind": "aws_s3_bucket"
                         }

@@ -58,6 +58,7 @@ const violationTemplateForGH = `{
                       "logicalLocations": [
                         {
                           "name": "bucket",
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "kind": "aws_s3_bucket"
                         }
                       ]
