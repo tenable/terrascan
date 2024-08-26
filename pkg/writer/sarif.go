@@ -93,8 +93,12 @@ func writeSarif(data interface{}, writers []io.Writer, forGitHub bool) error {
 			WithArtifactLocation(artifactLocation).WithRegion(sarif.NewRegion().WithStartLine(violation.LineNumber)))
 
 		if len(violation.ResourceType) > 0 && len(violation.ResourceName) > 0 {
-			location.LogicalLocations = append(location.LogicalLocations, sarif.NewLogicalLocation().
-				WithKind(violation.ResourceType).WithName(violation.ResourceName))
+			ll := sarif.NewLogicalLocation().
+				WithKind(violation.ResourceType).WithName(violation.ResourceName)
+			if len(violation.ResourceID) > 0 {
+				ll.WithDecoratedName(violation.ResourceID)
+			}
+			location.LogicalLocations = append(location.LogicalLocations, ll)
 		}
 
 		run.AddResult(sarif.NewRuleResult(rule.ID).

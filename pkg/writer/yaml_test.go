@@ -53,6 +53,7 @@ var (
 					RuleID:       "AWS.S3Bucket.DS.High.1043",
 					Severity:     "HIGH",
 					Category:     "S3",
+					ResourceID:   "aws_s3_bucket.bucket",
 					ResourceName: "bucket",
 					ResourceType: "aws_s3_bucket",
 					File:         "modules/m1/main.tf",
@@ -67,6 +68,7 @@ var (
 					Severity:     "HIGH",
 					Category:     "S3",
 					Comment:      "",
+					ResourceID:   "aws_s3_bucket.bucket",
 					ResourceName: "bucket",
 					ResourceType: "aws_s3_bucket",
 					File:         "modules/m1/main.tf",
@@ -114,6 +116,7 @@ const (
           rule_id: AWS.S3Bucket.DS.High.1043
           severity: HIGH
           category: S3
+          resource_id: aws_s3_bucket.bucket
           resource_name: bucket
           resource_type: aws_s3_bucket
           file: modules/m1/main.tf
@@ -124,6 +127,7 @@ const (
           rule_id: AWS.S3Bucket.DS.High.1043
           severity: HIGH
           category: S3
+          resource_id: aws_s3_bucket.bucket
           resource_name: bucket
           resource_type: aws_s3_bucket
           file: modules/m1/main.tf

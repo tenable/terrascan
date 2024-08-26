@@ -31,6 +31,7 @@ type Violation struct {
 	RuleFile     string      `json:"-" yaml:"-" xml:"-"`
 	RuleData     interface{} `json:"-" yaml:"-" xml:"-"`
 	Comment      string      `json:"skip_comment,omitempty" yaml:"skip_comment,omitempty" xml:"skip_comment,omitempty"`
+	ResourceID   string      `json:"resource_id" yaml:"resource_id" xml:"resource_id,attr"`
 	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`

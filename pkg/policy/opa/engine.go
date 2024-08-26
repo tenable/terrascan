@@ -298,6 +298,7 @@ func (e *Engine) reportViolation(regoData *policy.RegoData, resource *output.Res
 		Category:     regoData.Metadata.Category,
 		RuleFile:     regoData.Metadata.File,
 		RuleData:     regoData.RawRego,
+		ResourceID:   resource.ID,
 		ResourceName: resource.Name,
 		ResourceType: resource.Type,
 		ResourceData: resource.Config,
