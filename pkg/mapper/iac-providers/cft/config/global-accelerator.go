@@ -30,11 +30,12 @@ type GlobalAcceleratorConfig struct {
 }
 
 // GetGlobalAcceleratorConfig returns config for aws_globalaccelerator_accelerator resource
+// aws_globalaccelerator_accelerator
 func GetGlobalAcceleratorConfig(g *globalaccelerator.Accelerator) []AWSResourceConfig {
 	cf := GlobalAcceleratorConfig{
 		Config: Config{
 			Name: g.Name,
-			Tags: g.Tags,
+			Tags: functions.PatchAWSTags(g.Tags),
 		},
 		Name:          g.Name,
 		Enabled:       functions.GetVal(g.Enabled),

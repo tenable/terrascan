@@ -39,6 +39,7 @@ type EksClusterConfig struct {
 }
 
 // GetEksClusterConfig returns config for EksCluster
+// aws_eks_cluster
 func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 	var vpcConfig []EKSVPCConfigBlock
 	if c.ResourcesVpcConfig != nil {
@@ -59,13 +60,17 @@ func GetEksClusterConfig(c *eks.Cluster) []AWSResourceConfig {
 		VPCConfig: vpcConfig,
 	}
 
-	enabledTypes := c.Logging.ClusterLogging.EnabledTypes
-	if c.Logging != nil && c.Logging.ClusterLogging != nil && len(enabledTypes) > 0 {
-		enabledClusterLogTypes := make([]string, len(enabledTypes))
-		for i, enabledType := range enabledTypes {
-			enabledClusterLogTypes[i] = functions.GetVal(enabledType.Type)
+	if c.Logging != nil {
+		if c.Logging.ClusterLogging != nil {
+			enabledTypes := c.Logging.ClusterLogging.EnabledTypes
+			if len(enabledTypes) > 0 {
+				enabledClusterLogTypes := make([]string, len(enabledTypes))
+				for i, enabledType := range enabledTypes {
+					enabledClusterLogTypes[i] = functions.GetVal(enabledType.Type)
+				}
+				cf.EnabledClusterLogTypes = enabledClusterLogTypes
+			}
 		}
-		cf.EnabledClusterLogTypes = enabledClusterLogTypes
 	}
 
 	return []AWSResourceConfig{{

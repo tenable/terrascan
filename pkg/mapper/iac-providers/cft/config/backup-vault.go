@@ -29,6 +29,7 @@ type BackupVaultConfig struct {
 }
 
 // GetBackupVaultConfig returns config for BackupVault
+// aws_backup_vault
 func GetBackupVaultConfig(b *backup.BackupVault) []AWSResourceConfig {
 	cf := BackupVaultConfig{
 		Config: Config{

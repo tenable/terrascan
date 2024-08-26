@@ -28,13 +28,14 @@ type ElasticLoadBalancingV2TargetGroupConfig struct {
 }
 
 // GetElasticLoadBalancingV2TargetGroupConfig returns config for aws_lb_target_group
+// aws_lb_target_group
 func GetElasticLoadBalancingV2TargetGroupConfig(l *elasticloadbalancingv2.TargetGroup) []AWSResourceConfig {
 	// create a listener subresource per DefaultAction defined in cft
 	// as only one default action per listener is possible in terraform
 	cf := ElasticLoadBalancingV2TargetGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(l.Name),
-			Tags: l.Tags,
+			Tags: functions.PatchAWSTags(l.Tags),
 		},
 		Protocol: functions.GetVal(l.Protocol),
 	}

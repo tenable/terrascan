@@ -36,9 +36,11 @@ type DynamoDBTableConfig struct {
 	Config
 	ServerSideEncryption []SSE  `json:"server_side_encryption"`
 	PointInTimeRecovery  []PITR `json:"point_in_time_recovery"`
+	BillingMode          string `json:"billing_mode"`
 }
 
 // GetDynamoDBTableConfig returns config for aws_dynamodb_table
+// aws_dynamodb_table
 func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 	cf := DynamoDBTableConfig{
 		Config: Config{
@@ -47,6 +49,9 @@ func GetDynamoDBTableConfig(t *dynamodb.Table) []AWSResourceConfig {
 		},
 	}
 
+	if t.BillingMode != nil {
+		cf.BillingMode = *t.BillingMode
+	}
 	if t.SSESpecification != nil {
 		cf.ServerSideEncryption = make([]SSE, 1)
 

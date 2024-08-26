@@ -35,6 +35,7 @@ type SecretsManagerSecretRotationConfig struct {
 }
 
 // GetSecretsManagerSecretRotationConfig returns config for SecretsManagerSecretRotation
+// aws_secretsmanager_secret_rotation no policy
 func GetSecretsManagerSecretRotationConfig(r *secretsmanager.RotationSchedule) []AWSResourceConfig {
 	var rotationRules []SecretRotationRulesBlock
 	if r.RotationRules != nil {

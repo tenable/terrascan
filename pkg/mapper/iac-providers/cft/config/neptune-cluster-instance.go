@@ -34,10 +34,11 @@ type NeptuneClusterInstanceConfig struct {
 }
 
 // GetNeptuneClusterInstanceConfig returns config for aws_neptune_cluster_instance resource
+// aws_neptune_cluster_instance
 func GetNeptuneClusterInstanceConfig(n *neptune.DBInstance) []AWSResourceConfig {
 	cf := NeptuneClusterInstanceConfig{
 		Config: Config{
-			Tags: n.Tags,
+			Tags: functions.PatchAWSTags(n.Tags),
 		},
 		AutoMinorVersionUpgrade:    functions.GetVal(n.AutoMinorVersionUpgrade),
 		AvailabilityZone:           functions.GetVal(n.AvailabilityZone),

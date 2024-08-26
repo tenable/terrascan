@@ -20,6 +20,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -33,7 +34,7 @@ func ManagementLockConfig(r types.Resource, vars, params map[string]interface{})
 	return map[string]interface{}{
 		tfLocation:  fn.LookUpString(nil, params, r.Location),
 		tfName:      fn.LookUpString(nil, params, r.Name),
-		tfTags:      r.Tags,
+		tfTags:      functions.PatchAWSTags(r.Tags),
 		tfScope:     fn.LookUpString(vars, params, r.Scope),
 		tfLockLevel: convert.ToString(r.Properties, armLevel),
 		tfNotes:     convert.ToString(r.Properties, tfNotes),

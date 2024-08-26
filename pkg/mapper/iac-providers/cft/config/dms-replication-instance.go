@@ -39,10 +39,11 @@ type DmsReplicationInstanceConfig struct {
 }
 
 // GetDmsReplicationInstanceConfig returns config for DmsReplicationInstance
+// aws_dms_replication_instance
 func GetDmsReplicationInstanceConfig(r *dms.ReplicationInstance) []AWSResourceConfig {
 	cf := DmsReplicationInstanceConfig{
 		Config: Config{
-			Tags: r.Tags,
+			Tags: functions.PatchAWSTags(r.Tags),
 		},
 
 		AllocatedStorage:           functions.GetVal(r.AllocatedStorage),

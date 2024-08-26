@@ -263,7 +263,7 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 	case *ecs.TaskDefinition:
 		return config.GetEcsTaskDefinitionConfig(resource)
 	case *s3.Bucket:
-		return config.GetS3BucketConfig(resource)
+		return config.GetS3BucketConfig(resource, resourceName)
 	case *s3.BucketPolicy:
 		return config.GetS3BucketPolicyConfig(resource)
 	case *sqs.Queue:
@@ -314,6 +314,8 @@ func (m cftMapper) mapConfigForResource(r cloudformation.Resource, resourceName 
 		return config.GetSecretsManagerSecretRotationConfig(resource)
 	case *ssm.Parameter:
 		return config.GetSSMParameterConfig(resource)
+	case *elasticloadbalancingv2.LoadBalancer:
+		return config.GetElasticLoadBalancingV2LoadBalancerConfig(resource, resourceName)
 	default:
 	}
 	return []config.AWSResourceConfig{}

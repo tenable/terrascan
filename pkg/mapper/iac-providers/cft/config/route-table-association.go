@@ -28,6 +28,7 @@ type RouteTableAssociationConfig struct {
 }
 
 // GetRouteTableAssociationConfig returns config for aws_route_table_association
+// aws_route_table_association
 func GetRouteTableAssociationConfig(e *ec2.SubnetRouteTableAssociation) []AWSResourceConfig {
 	cf := RouteTableAssociationConfig{
 		RouteTableID: e.RouteTableId,

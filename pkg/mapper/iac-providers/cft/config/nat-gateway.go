@@ -30,10 +30,11 @@ type NatGatewayConfig struct {
 }
 
 // GetNatGatewayConfig returns config for aws_nat_gateway
+// aws_nat_gateway
 func GetNatGatewayConfig(e *ec2.NatGateway) []AWSResourceConfig {
 	cf := NatGatewayConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 		AllocationID:     functions.GetVal(e.AllocationId),
 		ConnectivityType: functions.GetVal(e.ConnectivityType),

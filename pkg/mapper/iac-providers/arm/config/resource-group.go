@@ -19,6 +19,7 @@ package config
 import (
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ResourceGroupConfig returns config for azurerm_resource_group
@@ -26,6 +27,6 @@ func ResourceGroupConfig(r types.Resource, params map[string]interface{}) map[st
 	return map[string]interface{}{
 		tfLocation: fn.LookUpString(nil, params, r.Location),
 		tfName:     fn.LookUpString(nil, params, r.Name),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 	}
 }

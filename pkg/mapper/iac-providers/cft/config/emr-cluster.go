@@ -38,6 +38,7 @@ type EmrClusterConfig struct {
 }
 
 // GetEmrClusterConfig returns config for EmrCluster
+// aws_emr_cluster
 func GetEmrClusterConfig(c *emr.Cluster) []AWSResourceConfig {
 	var kerberosAttributes []KerberosAttributesBlock
 	if c.KerberosAttributes != nil {

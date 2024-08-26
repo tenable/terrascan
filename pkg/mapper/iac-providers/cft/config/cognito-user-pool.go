@@ -39,6 +39,7 @@ type CognitoUserPoolConfig struct {
 }
 
 // GetCognitoUserPoolConfig returns config for CognitoUserPool
+// aws_cognito_user_pool no policy
 func GetCognitoUserPoolConfig(u *cognito.UserPool) []AWSResourceConfig {
 	var passwordPolicy []PasswordPolicyBlock
 	if u.Policies != nil && u.Policies.PasswordPolicy != nil {

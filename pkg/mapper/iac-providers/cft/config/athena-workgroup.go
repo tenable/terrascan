@@ -56,6 +56,7 @@ type AthenaWorkGroupConfig struct {
 }
 
 // GetAthenaWorkGroupConfig returns config for aws_athena_workgroup resource
+// aws_athena_workgroup
 func GetAthenaWorkGroupConfig(w *athena.WorkGroup) []AWSResourceConfig {
 	var workGroupConfig []WorkgroupConfigurationBlock
 

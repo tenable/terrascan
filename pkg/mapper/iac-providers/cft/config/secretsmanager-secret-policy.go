@@ -29,6 +29,7 @@ type SecretsManagerSecretPolicyConfig struct {
 }
 
 // GetSecretsManagerSecretPolicyConfig returns config for aws_secretsmanager_secret_policy
+// aws_secretsmanager_secret_policy
 func GetSecretsManagerSecretPolicyConfig(s *secretsmanager.ResourcePolicy) []AWSResourceConfig {
 	cf := SecretsManagerSecretPolicyConfig{}
 	policy, err := json.Marshal(s.ResourcePolicy)

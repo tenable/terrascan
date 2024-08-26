@@ -63,6 +63,7 @@ type CodebuildProjectConfig struct {
 }
 
 // GetCodebuildProjectConfig returns CodebuildProject
+// aws_codebuild_project
 func GetCodebuildProjectConfig(p *codebuild.Project) []AWSResourceConfig {
 
 	var artifactBlock []ArtifactBlock

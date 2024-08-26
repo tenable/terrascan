@@ -34,10 +34,11 @@ type KmsKeyConfig struct {
 }
 
 // GetKmsKeyConfig returns config for aws_kms_key
+// aws_kms_key
 func GetKmsKeyConfig(k *kms.Key) []AWSResourceConfig {
 	cf := KmsKeyConfig{
 		Config: Config{
-			Tags: k.Tags,
+			Tags: functions.PatchAWSTags(k.Tags),
 		},
 		Enabled:             functions.GetVal(k.Enabled),
 		EnableKeyRotation:   functions.GetVal(k.EnableKeyRotation),

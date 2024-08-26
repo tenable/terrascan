@@ -52,6 +52,7 @@ type EnvironmentConfig struct {
 }
 
 // GetEcsTaskDefinitionConfig returns config for aws_ecs_service and aws_ecs_task_definition
+// aws_ecs_task_definition
 func GetEcsTaskDefinitionConfig(t *ecs.TaskDefinition) []AWSResourceConfig {
 	cf := EcsTaskDefinitionConfig{
 		Config: Config{

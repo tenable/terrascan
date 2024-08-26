@@ -35,11 +35,12 @@ type KinesisFirehoseDeliveryStreamSseConfig struct {
 }
 
 // GetKinesisFirehoseDeliveryStreamConfig returns aws_kinesis_firehose_delivery_stream
+// aws_kinesis_firehose_delivery_stream
 func GetKinesisFirehoseDeliveryStreamConfig(k *kinesisfirehose.DeliveryStream) []AWSResourceConfig {
 	cf := KinesisFirehoseDeliveryStreamConfig{
 		Config: Config{
 			Name: functions.GetVal(k.DeliveryStreamName),
-			Tags: k.Tags,
+			Tags: functions.PatchAWSTags(k.Tags),
 		},
 	}
 	sseConfig := KinesisFirehoseDeliveryStreamSseConfig{}

@@ -32,6 +32,7 @@ type DBEventSubscriptionConfig struct {
 }
 
 // GetDBEventSubscriptionConfig returns config for aws_db_event_subscription resource
+// aws_db_event_subscription
 func GetDBEventSubscriptionConfig(d *rds.EventSubscription) []AWSResourceConfig {
 	cf := DBEventSubscriptionConfig{
 		Config:          Config{},

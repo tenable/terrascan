@@ -29,10 +29,11 @@ type NeptuneClusterConfig struct {
 }
 
 // GetNeptuneClusterConfig returns config for aws_neptune_cluster
+// aws_neptune_cluster
 func GetNeptuneClusterConfig(d *neptune.DBCluster) []AWSResourceConfig {
 	cf := NeptuneClusterConfig{
 		Config: Config{
-			Tags: d.Tags,
+			Tags: functions.PatchAWSTags(d.Tags),
 		},
 		StorageEncrypted:            functions.GetVal(d.StorageEncrypted),
 		EnableCloudwatchLogsExports: d.EnableCloudwatchLogsExports,

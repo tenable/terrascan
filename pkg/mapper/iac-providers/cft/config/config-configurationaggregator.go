@@ -29,10 +29,11 @@ type ConfigurationAggregatorConfig struct {
 }
 
 // GetConfigConfigurationAggregatorConfig returns config for aws_config_configuration_aggregator
+// aws_config_configuration_aggregator
 func GetConfigConfigurationAggregatorConfig(c *config.ConfigurationAggregator) []AWSResourceConfig {
 	cf := ConfigurationAggregatorConfig{
 		Config: Config{
-			Tags: c.Tags,
+			Tags: functions.PatchAWSTags(c.Tags),
 			Name: functions.GetVal(c.ConfigurationAggregatorName),
 		},
 	}

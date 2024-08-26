@@ -45,8 +45,10 @@ type ElasticLoadBalancingLoadBalancerPoliciesConfig struct {
 
 // ElasticLoadBalancingLoadBalancerConfig holds config for aws_elb
 type ElasticLoadBalancingLoadBalancerConfig struct {
-	Listeners           interface{} `json:"listener"`
-	AccessLoggingPolicy interface{} `json:"access_logs,omitempty"`
+	Listeners              interface{} `json:"listener"`
+	AccessLoggingPolicy    interface{} `json:"access_logs,omitempty"`
+	CrossZoneLoadBalancing bool        `json:"cross_zone_load_balancing,omitempty"`
+
 	Config
 }
 
@@ -62,6 +64,7 @@ type ELBListenerConfig struct {
 }
 
 // GetElasticLoadBalancingLoadBalancerConfig returns config for aws_elb
+// aws_lb
 func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalancer, elbname string) []AWSResourceConfig {
 	elbpolicies := make([]ElasticLoadBalancingLoadBalancerPoliciesConfig, len(e.Policies))
 	awsconfig := make([]AWSResourceConfig, len(e.Policies))
@@ -102,10 +105,16 @@ func GetElasticLoadBalancingLoadBalancerConfig(e *elasticloadbalancing.LoadBalan
 
 	cf := ElasticLoadBalancingLoadBalancerConfig{
 		Config: Config{
-			Tags: e.Tags,
+			Tags: functions.PatchAWSTags(e.Tags),
 		},
 	}
 
+	if e.CrossZone != nil {
+		cf.CrossZoneLoadBalancing = *e.CrossZone
+	} else {
+		cf.CrossZoneLoadBalancing = false
+
+	}
 	if e.AccessLoggingPolicy != nil {
 		cf.AccessLoggingPolicy = ELBAccessLoggingPolicyConfig{
 			Enabled: e.AccessLoggingPolicy.Enabled,

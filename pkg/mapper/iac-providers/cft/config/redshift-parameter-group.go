@@ -18,6 +18,7 @@ package config
 
 import (
 	"github.com/awslabs/goformation/v7/cloudformation/redshift"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 // ParameterBlock holds config for Parameter
@@ -36,6 +37,7 @@ type RedshiftParameterGroupConfig struct {
 }
 
 // GetRedshiftParameterGroupConfig returns config for RedshiftParameterGroup
+// aws_redshift_parameter_group
 func GetRedshiftParameterGroupConfig(p *redshift.ClusterParameterGroup, paramGroupName string) []AWSResourceConfig {
 	var parameterBlock []ParameterBlock
 	if p.Parameters != nil {
@@ -49,7 +51,7 @@ func GetRedshiftParameterGroupConfig(p *redshift.ClusterParameterGroup, paramGro
 	cf := RedshiftParameterGroupConfig{
 		Config: Config{
 			Name: paramGroupName,
-			Tags: p.Tags,
+			Tags: functions.PatchAWSTags(p.Tags),
 		},
 		Name:        paramGroupName,
 		Description: p.Description,

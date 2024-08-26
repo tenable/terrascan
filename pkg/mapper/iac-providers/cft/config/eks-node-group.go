@@ -40,6 +40,7 @@ type EksNodeGroupConfig struct {
 }
 
 // GetEksNodeGroupConfig returns config for EksNodeGroup
+// aws_eks_node_group
 func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	var scalingConfig []EksNodeGroupScalingConfigBlock
 	if g.ScalingConfig != nil {
@@ -52,7 +53,7 @@ func GetEksNodeGroupConfig(g *eks.Nodegroup) []AWSResourceConfig {
 	cf := EksNodeGroupConfig{
 		Config: Config{
 			Name: functions.GetVal(g.NodegroupName),
-			Tags: g.Tags,
+			Tags: functions.PatchAWSTags(g.Tags),
 		},
 		ClusterName:   g.ClusterName,
 		NodeGroupName: functions.GetVal(g.NodegroupName),

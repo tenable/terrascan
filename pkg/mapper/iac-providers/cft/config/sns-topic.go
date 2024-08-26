@@ -29,6 +29,7 @@ type SnsTopicConfig struct {
 }
 
 // GetSnsTopicConfig returns config for SnsTopic
+// aws_sns_topic
 func GetSnsTopicConfig(t *sns.Topic) []AWSResourceConfig {
 	cf := SnsTopicConfig{
 		Config: Config{

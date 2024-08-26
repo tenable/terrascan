@@ -30,12 +30,13 @@ type QldbLedgerConfig struct {
 }
 
 // GetQldbLedgerConfig returns config for aws_qldb_ledger resource
+// aws_qldb_ledger
 func GetQldbLedgerConfig(q *qldb.Ledger) []AWSResourceConfig {
 
 	cf := QldbLedgerConfig{
 		Config: Config{
 			Name: functions.GetVal(q.Name),
-			Tags: q.Tags,
+			Tags: functions.PatchAWSTags(q.Tags),
 		},
 		Name:               functions.GetVal(q.Name),
 		PermissionsMode:    q.PermissionsMode,

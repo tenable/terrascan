@@ -20,6 +20,7 @@ import (
 	"github.com/tenable/terrascan/pkg/mapper/convert"
 	fn "github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/functions"
 	"github.com/tenable/terrascan/pkg/mapper/iac-providers/arm/types"
+	"github.com/tenable/terrascan/pkg/mapper/iac-providers/cft/functions"
 )
 
 const (
@@ -33,7 +34,7 @@ const tfValue = "value"
 func PostgreSQLConfigurationConfig(r types.Resource, params map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
 		tfLocation: fn.LookUpString(nil, params, r.Location),
-		tfTags:     r.Tags,
+		tfTags:     functions.PatchAWSTags(r.Tags),
 		tfName:     convert.ToString(r.Properties, armSource),
 		tfValue:    convert.ToString(r.Properties, armValue),
 	}

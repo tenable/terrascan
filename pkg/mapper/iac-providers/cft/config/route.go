@@ -40,6 +40,7 @@ type RouteConfig struct {
 }
 
 // GetRouteConfig returns config for aws_route
+// aws_route no pilicy
 func GetRouteConfig(e *ec2.Route) []AWSResourceConfig {
 	cf := RouteConfig{
 		CarrierGatewayID:            functions.GetVal(e.CarrierGatewayId),
