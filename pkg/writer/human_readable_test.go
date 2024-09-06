@@ -27,11 +27,12 @@ var (
 		ViolationStore: &results.ViolationStore{
 			PassedRules: []*results.PassedRule{
 				{
-					RuleName:    "s3EnforceUserACL",
-					Description: "S3 bucket Access is allowed to all AWS Account Users.",
-					RuleID:      "AWS.S3Bucket.DS.High.1043",
-					Severity:    "HIGH",
-					Category:    "S3",
+					RuleName:     "s3EnforceUserACL",
+					Description:  "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:       "AWS.S3Bucket.DS.High.1043",
+					Severity:     "HIGH",
+					Category:     "S3",
+					ResourceType: "aws_s3_bucket",
 				},
 			},
 			Summary: summaryWithNoViolations,
@@ -53,11 +54,12 @@ var (
 			},
 			PassedRules: []*results.PassedRule{
 				{
-					RuleName:    "s3EnforceUserACL",
-					Description: "S3 bucket Access is allowed to all AWS Account Users.",
-					RuleID:      "AWS.S3Bucket.DS.High.1043",
-					Severity:    "HIGH",
-					Category:    "S3",
+					RuleName:     "s3EnforceUserACL",
+					Description:  "S3 bucket Access is allowed to all AWS Account Users.",
+					RuleID:       "AWS.S3Bucket.DS.High.1043",
+					Severity:     "HIGH",
+					Category:     "S3",
+					ResourceType: "aws_s3_bucket",
 				},
 			},
 			Summary: summaryWithNoViolations,

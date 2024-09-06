@@ -29,6 +29,7 @@ const violationTemplateForGH = `{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
