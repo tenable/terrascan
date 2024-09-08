@@ -18,7 +18,7 @@ RUN CGO_ENABLED=${CGO_ENABLED_VAL} go build -v -ldflags "-w -s" -o /go/bin/terra
 
 
 # -------- prod stage -------- #
-FROM alpine:3.16
+FROM alpine:3.19.4
 
 # create non root user
 RUN addgroup --gid 101 terrascan && \
