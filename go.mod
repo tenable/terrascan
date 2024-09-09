@@ -11,9 +11,7 @@ replace (
 	github.com/moby/buildkit => github.com/moby/buildkit v0.12.5
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.82+incompatible => github.com/tencentcloud/tencentcloud-sdk-go v1.0.191
 	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
-	// github.com/googleapis/gnostic  => github.com/google/gnostic-models v0.6.8
 
-	// google.golang.org/protobuf => google.golang.org/protobuf v1.26.1-0.20210525005349-febffdd88e85
 	helm.sh/helm/v3 => helm.sh/helm/v3 v3.14.2
 	k8s.io/api => k8s.io/api v0.19.0
 	k8s.io/apimachinery => k8s.io/apimachinery v0.19.0
