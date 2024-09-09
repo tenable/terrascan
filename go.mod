@@ -5,12 +5,16 @@ go 1.22.1
 toolchain go1.22.6
 
 replace (
-	github.com/hashicorp/go-getter => github.com/hashicorp/go-getter v1.7.0
+	github.com/docker/cli => github.com/docker/cli v25.0.6+incompatible
+	github.com/docker/docker => github.com/docker/docker v25.0.6+incompatible
+	github.com/hashicorp/go-getter => github.com/hashicorp/go-getter v1.7.5
+	github.com/moby/buildkit => github.com/moby/buildkit v0.12.5
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.82+incompatible => github.com/tencentcloud/tencentcloud-sdk-go v1.0.191
 	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20220314234659-1baeb1ce4c0b
 	k8s.io/api => k8s.io/api v0.19.0
 	k8s.io/apimachinery => k8s.io/apimachinery v0.19.0
 	k8s.io/client-go => k8s.io/client-go v0.19.0
+// github.com/gogo/protobuf => github.com/golang/protobuf v1.5.3
 )
 
 require (
@@ -33,9 +37,9 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
-	github.com/hashicorp/go-getter v1.6.2
+	github.com/hashicorp/go-getter v1.7.5
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/hashicorp/go-retryablehttp v0.6.6
+	github.com/hashicorp/go-retryablehttp v0.7.2
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hashicorp/hcl v1.0.0
 	github.com/hashicorp/hcl/v2 v2.10.1
@@ -45,12 +49,12 @@ require (
 	github.com/itchyny/gojq v0.12.1
 	github.com/mattn/go-isatty v0.0.20
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/moby/buildkit v0.8.3
+	github.com/moby/buildkit v0.12.5
 	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.22.1
 	github.com/open-policy-agent/opa v0.46.1
 	github.com/owenrumney/go-sarif/v2 v2.1.2
-	github.com/pelletier/go-toml v1.9.3
+	github.com/pelletier/go-toml v1.9.5
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0
 	github.com/spf13/cobra v1.8.0
@@ -98,7 +102,7 @@ require (
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
-	github.com/agext/levenshtein v1.2.2 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.25.1 // indirect
@@ -118,14 +122,14 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.28.0 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
-	github.com/containerd/typeurl v1.0.2 // indirect
-	github.com/cyphar/filepath-securejoin v0.2.3 // indirect
+	github.com/containerd/typeurl/v2 v2.1.1 // indirect
+	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgraph-io/badger/v3 v3.2103.4 // indirect
 	github.com/dimchansky/utfbom v1.1.1 // indirect
-	github.com/docker/cli v20.10.21+incompatible // indirect
-	github.com/docker/distribution v2.8.2-beta.1+incompatible // indirect
-	github.com/docker/docker v20.10.24+incompatible // indirect
+	github.com/docker/cli v24.0.4+incompatible // indirect
+	github.com/docker/distribution v2.8.2+incompatible // indirect
+	github.com/docker/docker v24.0.0-rc.2.0.20230718135204-8e51b8b59cb8+incompatible // indirect
 	github.com/docker/docker-credential-helpers v0.7.0 // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
@@ -141,7 +145,7 @@ require (
 	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/flatbuffers v22.11.23+incompatible // indirect
@@ -166,10 +170,9 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
-	github.com/klauspost/compress v1.15.13 // indirect
+	github.com/klauspost/compress v1.17.2 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mitchellh/copystructure v1.1.1 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
@@ -181,10 +184,8 @@ require (
 	github.com/nathan-fiscaletti/consolesize-go v0.0.0-20220204101620-317176b6684d // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
-	github.com/opencontainers/image-spec v1.1.0-rc2 // indirect
+	github.com/opencontainers/image-spec v1.1.0-rc3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.14.0 // indirect
-	github.com/prometheus/common v0.38.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/sanathkr/go-yaml v0.0.0-20170819195128-ed9d249f429b // indirect

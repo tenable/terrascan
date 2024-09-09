@@ -1,7 +1,7 @@
 package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[dockerRun.name] {
-    dockerRun := input.docker_run[_]
+    dockerRun := input.docker_RUN[_]
     is_string(dockerRun.config)
     config := dockerRun.config
     configArray := split(config, "&&")
