@@ -1,5 +1,5 @@
 GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null)
-BUILD_FLAGS := -v -ldflags "-w -s"
+BUILD_FLAGS := -v -ldflags "-w -s -X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=warn"
 
 BUILD_DIR = ./bin
 BINARY_NAME = terrascan
@@ -86,7 +86,7 @@ staticcheck:
 
 # run unit tests
 unit-tests:
-	./scripts/generate-coverage.sh
+	GOLANG_PROTOBUF_REGISTRATION_CONFLICT=warn ./scripts/generate-coverage.sh
 
 # run e2e tests
 e2e-tests: build
