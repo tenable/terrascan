@@ -9,7 +9,7 @@ Violation Details -
 	Rule Name      :	docFilePlatformFlag
 	Rule ID        :	AC_DOCKER_0001
 	Resource Name  :	Dockerfile
-	Resource Type  :	docker_from
+	Resource Type  :	docker_FROM
 	Category       :	Infrastructure Security
 	
 	-----------------------------------------------------------------------
