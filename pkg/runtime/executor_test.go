@@ -23,11 +23,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/hashicorp/go-multierror"
-	tfv15 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v15"
-	"github.com/tenable/terrascan/pkg/results"
-	"github.com/tenable/terrascan/pkg/vulnerability"
+	"github.com/stretchr/testify/assert"
 
+	"github.com/tenable/terrascan/pkg/config"
 	iacProvider "github.com/tenable/terrascan/pkg/iac-providers"
 	armv1 "github.com/tenable/terrascan/pkg/iac-providers/arm/v1"
 	cftv1 "github.com/tenable/terrascan/pkg/iac-providers/cft/v1"
@@ -35,15 +33,16 @@ import (
 	helmv3 "github.com/tenable/terrascan/pkg/iac-providers/helm/v3"
 	k8sv1 "github.com/tenable/terrascan/pkg/iac-providers/kubernetes/v1"
 	kustomizev4 "github.com/tenable/terrascan/pkg/iac-providers/kustomize/v4"
+	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	tfv12 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v12"
 	tfv14 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v14"
-	"github.com/tenable/terrascan/pkg/notifications/webhook"
-
-	"github.com/tenable/terrascan/pkg/config"
-	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	tfv15 "github.com/tenable/terrascan/pkg/iac-providers/terraform/v15"
 	"github.com/tenable/terrascan/pkg/notifications"
+	"github.com/tenable/terrascan/pkg/notifications/webhook"
 	"github.com/tenable/terrascan/pkg/policy"
+	"github.com/tenable/terrascan/pkg/results"
 	"github.com/tenable/terrascan/pkg/utils"
+	"github.com/tenable/terrascan/pkg/vulnerability"
 )
 
 var (
@@ -77,6 +76,7 @@ func (m MockIacProvider) Name() string {
 // mock policy engine
 type MockPolicyEngine struct {
 	err error
+	out policy.EngineOutput
 }
 type MockVulnerabilityEngine struct {
 	out vulnerability.EngineOutput
@@ -97,7 +97,7 @@ func (m MockPolicyEngine) Configure() error {
 }
 
 func (m MockPolicyEngine) Evaluate(input policy.EngineInput, filter policy.PreScanFilter) (out policy.EngineOutput, err error) {
-	return out, m.err
+	return m.out, m.err
 }
 
 func (m MockVulnerabilityEngine) ReportVulnerability(input vulnerability.EngineInput, options map[string]interface{}) (out vulnerability.EngineOutput) {
@@ -125,6 +125,7 @@ func TestExecute(t *testing.T) {
 		configWithError bool
 		executor        Executor
 		wantErr         error
+		wantResults     *Output
 	}{
 		{
 			name: "test LoadIacDir error",
@@ -132,7 +133,7 @@ func TestExecute(t *testing.T) {
 				dirPath:      testDir,
 				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: errMockLoadIacDir}},
 			},
-			wantErr: multierror.Append(errMockLoadIacDir),
+			wantErr: errMockLoadIacDir,
 		},
 		{
 			name: "test LoadIacDir no error",
@@ -155,11 +156,32 @@ func TestExecute(t *testing.T) {
 		{
 			name: "test LoadIacFile no error",
 			executor: Executor{
-				filePath:      filepath.Join(testDataDir, "testfile"),
-				iacProviders:  []iacProvider.IacProvider{MockIacProvider{err: nil}},
-				policyEngines: []policy.Engine{MockPolicyEngine{err: nil}},
+				filePath:     filepath.Join(testDataDir, "testfile"),
+				iacProviders: []iacProvider.IacProvider{MockIacProvider{err: nil}},
+				policyEngines: []policy.Engine{MockPolicyEngine{err: nil, out: policy.EngineOutput{
+					ViolationStore: &results.ViolationStore{
+						Violations: []*results.Violation{{
+							ResourceID:   "id",
+							ResourceName: "name",
+						}},
+					},
+				}}},
 			},
 			wantErr: nil,
+			wantResults: &Output{
+				ResourceConfig: output.AllResourceConfigs(nil),
+				Violations: policy.EngineOutput{
+					ViolationStore: &results.ViolationStore{
+						Summary: results.ScanSummary{
+							ResourcePath: "testdata/testfile",
+						},
+						Violations: []*results.Violation{{
+							ResourceID:   "id",
+							ResourceName: "name",
+						}},
+					},
+				},
+			},
 		},
 		{
 			name: "test SendNotifications no error",
@@ -227,9 +249,12 @@ func TestExecute(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.name, func(t *testing.T) {
-			_, gotErr := tt.executor.Execute(tt.configOnly, tt.configWithError)
-			if !reflect.DeepEqual(gotErr, tt.wantErr) {
-				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
+			gotResults, gotErr := tt.executor.Execute(tt.configOnly, tt.configWithError)
+			assert.ErrorIs(t, gotErr, tt.wantErr)
+			if tt.wantResults != nil {
+				// Check output (only specific fields as testify no support for ignoring fields)
+				assert.Equal(t, tt.wantResults.Violations.Summary.ResourcePath, gotResults.Violations.Summary.ResourcePath)
+				assert.Equal(t, tt.wantResults.Violations.Violations, gotResults.Violations.Violations)
 			}
 		})
 	}

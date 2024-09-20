@@ -29,6 +29,7 @@ const violationTemplateForGH = `{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
@@ -58,6 +59,7 @@ const violationTemplateForGH = `{
                       "logicalLocations": [
                         {
                           "name": "bucket",
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "kind": "aws_s3_bucket"
                         }
                       ]

@@ -35,7 +35,8 @@ const violationTemplate = `{
                       },
                       "properties": {
                         "category": "S3",
-                        "severity": "HIGH"
+                        "severity": "HIGH",
+                        "resource_type": "aws_s3_bucket"
                       }
                     }
                   ],
@@ -62,6 +63,7 @@ const violationTemplate = `{
                       },
                       "logicalLocations": [
                         {
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "name": "bucket",
                           "kind": "aws_s3_bucket"
                         }
@@ -112,6 +114,7 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
@@ -142,6 +145,7 @@ var expectedSarifOutput4 = fmt.Sprintf(`{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
