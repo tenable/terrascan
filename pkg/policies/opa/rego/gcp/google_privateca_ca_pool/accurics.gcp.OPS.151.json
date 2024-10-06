@@ -1,0 +1,13 @@
+{
+    "name": "caPoolMaxPathLenZero",
+    "file": "caPoolMaxPathLenZero.rego",
+    "policy_type": "gcp",
+    "resource_type": "google_privateca_ca_pool",
+    "template_args": null,
+    "severity": "MEDIUM",
+    "description": "max_issuer_path_length set to 0 but zero_max_issuer_path_length undefined",
+    "reference_id": "accurics.gcp.OPS.151",
+    "category": "Infrastructure Security",
+    "version": 2,
+    "id": "AC_GCP_0297"
+}

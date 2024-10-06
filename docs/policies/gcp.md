@@ -322,6 +322,10 @@
 | Security Best Practices | gcp | MEDIUM | Ensure Encryption keys are rotated within a period of 90 days. | accurics.gcp.EKM.139 | AC_GCP_0011 |
 | Security Best Practices | gcp | HIGH | Ensure Encryption keys are rotated within a period of 365 days. | accurics.gcp.EKM.007 | AC_GCP_0012 |
 
+### google_privateca_ca_pool
+| Category | Resource | Severity | Description | Reference ID | ID |
+| -------- | -------- | -------- | ----------- | ------------ | -- |
+| Infrastructure Security | gcp | MEDIUM | Certificate pathlen attribute defined as 0, but zero_max_issuer_path_length is undefined. Indicate, by setting zero_max_issuer_path_length to either true or false, if you want the pathlen attribute to be 0 or unset. | accurics.gcp.OPS.151 | AC_GCP_0297 |
 
 ### google_project_iam_binding
 | Category | Resource | Severity | Description | Reference ID | ID |
