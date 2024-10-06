@@ -36,7 +36,7 @@ jobs:
       - name: Checkout Terrascan
         uses: actions/checkout@v3
 
-      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-qemu-action@v3
 
       - name: Login to Artifactory
         run: docker login --username svc_terrascan --password ${{ secrets.ARTIFACTORY_API_TOKEN }}  https://docker-terrascan-local.artifactory.eng.tenable.com
