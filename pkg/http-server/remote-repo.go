@@ -165,7 +165,7 @@ func (s *scanRemoteRepoReq) ScanRemoteRepo(iacType, iacVersion string, cloudType
 		output = results.Violations
 	}
 
-	// succesful
+	// successful 
 	return output, isAdmissionDenied, nil
 }
 
