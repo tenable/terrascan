@@ -13,7 +13,7 @@ import (
 
 const violationTemplateForGH = `{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
