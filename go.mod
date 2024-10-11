@@ -54,7 +54,7 @@ require (
 	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.22.1
 	github.com/open-policy-agent/opa v0.46.1
-	github.com/owenrumney/go-sarif/v2 v2.1.2
+	github.com/owenrumney/go-sarif/v2 v2.3.3
 	github.com/pelletier/go-toml v1.9.5
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/afero v1.6.0

@@ -298,6 +298,7 @@ func (e *Engine) reportViolation(regoData *policy.RegoData, resource *output.Res
 		Category:     regoData.Metadata.Category,
 		RuleFile:     regoData.Metadata.File,
 		RuleData:     regoData.RawRego,
+		ResourceID:   resource.ID,
 		ResourceName: resource.Name,
 		ResourceType: resource.Type,
 		ResourceData: resource.Config,
@@ -340,11 +341,12 @@ func (e *Engine) reportViolation(regoData *policy.RegoData, resource *output.Res
 // reportPassed Adds a passed rule which wasn't violated by all the resources
 func (e *Engine) reportPassed(regoData *policy.RegoData) {
 	passedRule := results.PassedRule{
-		RuleName:    regoData.Metadata.Name,
-		Description: regoData.Metadata.Description,
-		RuleID:      regoData.Metadata.ID,
-		Severity:    regoData.Metadata.Severity,
-		Category:    regoData.Metadata.Category,
+		RuleName:     regoData.Metadata.Name,
+		Description:  regoData.Metadata.Description,
+		RuleID:       regoData.Metadata.ID,
+		Severity:     regoData.Metadata.Severity,
+		Category:     regoData.Metadata.Category,
+		ResourceType: regoData.Metadata.ResourceType,
 	}
 
 	e.results.ViolationStore.AddPassedRule(&passedRule)

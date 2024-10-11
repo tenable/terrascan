@@ -19,7 +19,7 @@ var testpathForGH = violationsInput.Violations[0].File
 
 const violationTemplate = `{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
@@ -35,7 +35,8 @@ const violationTemplate = `{
                       },
                       "properties": {
                         "category": "S3",
-                        "severity": "HIGH"
+                        "severity": "HIGH",
+                        "resource_type": "aws_s3_bucket"
                       }
                     }
                   ],
@@ -62,6 +63,7 @@ const violationTemplate = `{
                       },
                       "logicalLocations": [
                         {
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "name": "bucket",
                           "kind": "aws_s3_bucket"
                         }
@@ -78,7 +80,7 @@ var expectedSarifOutput1 = fmt.Sprintf(violationTemplate, version.GetNumeric(), 
 
 var expectedSarifOutput2 = fmt.Sprintf(`{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
@@ -96,7 +98,7 @@ var expectedSarifOutput2 = fmt.Sprintf(`{
 
 var expectedSarifOutput3 = fmt.Sprintf(`{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
@@ -112,6 +114,7 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
@@ -126,7 +129,7 @@ var expectedSarifOutput3 = fmt.Sprintf(`{
 
 var expectedSarifOutput4 = fmt.Sprintf(`{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
@@ -142,6 +145,7 @@ var expectedSarifOutput4 = fmt.Sprintf(`{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
