@@ -44,7 +44,7 @@
               "logicalLocations": [
                 {
                   "name": "Dockerfile",
-                  "kind": "docker_from"
+                  "kind": "docker_FROM"
                 }
               ]
             }

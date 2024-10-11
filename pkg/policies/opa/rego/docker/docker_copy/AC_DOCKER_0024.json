@@ -2,7 +2,7 @@
     "name": "chownFlagExists",
     "file": "chownFlagExists.rego",
     "policy_type": "docker",
-    "resource_type": "docker_copy",
+    "resource_type": "docker_COPY",
     "template_args": {
         "prefix": "",
         "suffix": "",

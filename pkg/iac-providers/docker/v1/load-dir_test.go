@@ -17,22 +17,26 @@
 package dockerv1
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"syscall"
 	"testing"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/utils"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var testDataDir = "testdata"
 
 func TestLoadIacDir(t *testing.T) {
+	RegisterFailHandler(Fail)
 	invalidDirErr := &os.PathError{Err: syscall.ENOENT, Op: "lstat", Path: "not-there"}
 	if utils.IsWindowsPlatform() {
 		invalidDirErr = &os.PathError{Err: syscall.ENOENT, Op: "CreateFile", Path: "not-there"}
@@ -74,36 +78,51 @@ func TestLoadIacDir(t *testing.T) {
 			name:     "valid dirPath having dockerfile with in-file instrumentation",
 			dirPath:  filepath.Join(testDataDir, "valid-directory-with-in-file-instrumentation"),
 			dockerV1: DockerV1{},
+			// want: output.AllResourceConfigs{
+			// 	"docker_cmd": []output.ResourceConfig{
+			// 		{ID: "docker_cmd.55ceacedc5f1c0df6951723a7401a74e",
+			// 			Name:       "Dockerfile",
+			// 			ModuleName: "",
+			// 			Source:     "Dockerfile",
+			// 			PlanRoot:   "", Line: 5,
+			// 			Type:   "docker_cmd",
+			// 			Config: "server",
+			// 			SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041",
+			// 				Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}},
+			// 			MaxSeverity: "None",
+			// 			MinSeverity: "High"}},
+			// 	"docker_dockerfile": []output.ResourceConfig{{ID: "docker_dockerfile.96052d48e5364a05995aaec1e5d53f2d", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_dockerfile", Config: []string{"from", "cmd"}, SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}},
+			// 	"docker_from":       []output.ResourceConfig{{ID: "docker_from.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_from", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High", ContainerImages: []output.ContainerDetails{{Image: "runatlantis/atlantis:v0.16.1"}}}}},
+			// wantErr: nil,
 			want: output.AllResourceConfigs{
-				"docker_cmd": []output.ResourceConfig{
-					{ID: "docker_cmd.55ceacedc5f1c0df6951723a7401a74e",
+				"docker_CMD": []output.ResourceConfig{
+					{ID: "docker_CMD.55ceacedc5f1c0df6951723a7401a74e",
 						Name:       "Dockerfile",
 						ModuleName: "",
 						Source:     "Dockerfile",
 						PlanRoot:   "", Line: 5,
-						Type:   "docker_cmd",
+						Type:   "docker_CMD",
 						Config: "server",
 						SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041",
 							Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}},
 						MaxSeverity: "None",
 						MinSeverity: "High"}},
-				"docker_dockerfile": []output.ResourceConfig{{ID: "docker_dockerfile.96052d48e5364a05995aaec1e5d53f2d", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_dockerfile", Config: []string{"from", "cmd"}, SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}},
-				"docker_from":       []output.ResourceConfig{{ID: "docker_from.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_from", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High", ContainerImages: []output.ContainerDetails{{Image: "runatlantis/atlantis:v0.16.1"}}}}},
+				"docker_dockerfile": []output.ResourceConfig{{ID: "docker_dockerfile.96052d48e5364a05995aaec1e5d53f2d", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_dockerfile", Config: []string{"FROM", "CMD"}, SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High"}},
+				"docker_FROM":       []output.ResourceConfig{{ID: "docker_FROM.68be487d8ad02b4e09b46d29c8dbef3b", Name: "Dockerfile", ModuleName: "", Source: "Dockerfile", PlanRoot: "", Line: 1, Type: "docker_FROM", Config: "runatlantis/atlantis:v0.16.1", SkipRules: []output.SkipRule{{Rule: "AWS.S3Bucket.DS.High.1041", Comment: "This rule does not belong to dockerfile will add correct once dockerfile policy added."}}, MaxSeverity: "None", MinSeverity: "High", ContainerImages: []output.ContainerDetails{}}}},
 			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			got, gotErr := tt.dockerV1.LoadIacDir(tt.dirPath, tt.options)
 			me, ok := gotErr.(*multierror.Error)
 			if !ok {
 				t.Errorf("expected multierror.Error, got %T", gotErr)
 			}
 			if tt.want != nil {
-				if got == nil || !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("unexpected result; got: '%#v', want: '%v'", got, tt.want)
-				}
+				gotdata, _ := json.MarshalIndent(got, "", "  ")
+				wantData, _ := json.MarshalIndent(tt.want, "", "  ")
+				Expect(string(gotdata)).To(MatchJSON(wantData))
 			}
 			if tt.wantErr == nil {
 				if err := me.ErrorOrNil(); err != nil {

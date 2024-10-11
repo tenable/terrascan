@@ -2,7 +2,7 @@
     "name": "yumInstallAllowInput",
     "file": "yumInstallAllowInput.rego",
     "policy_type": "docker",
-    "resource_type": "docker_run",
+    "resource_type": "docker_RUN",
     "template_args": {
         "prefix": "",
         "suffix": "",

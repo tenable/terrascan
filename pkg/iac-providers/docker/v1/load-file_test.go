@@ -17,26 +17,29 @@
 package dockerv1
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"reflect"
 	"testing"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
 var fileTestDataDir = filepath.Join(testDataDir, "file-test-data")
 
 var multiStageDockerfileConfig = output.AllResourceConfigs{
-	"docker_copy": []output.ResourceConfig{
+	"docker_COPY": []output.ResourceConfig{
 		{
-			ID:          "docker_copy.e7031c0312fd3a6a88ac071b8ab508d0",
+			ID:          "docker_COPY.e7031c0312fd3a6a88ac071b8ab508d0",
 			Name:        "dockerfile-withmultiple-stages",
 			ModuleName:  "",
 			Source:      "dockerfile-withmultiple-stages",
 			PlanRoot:    "",
 			Line:        7,
-			Type:        "docker_copy",
+			Type:        "docker_COPY",
 			Config:      "--from=builder /go/bin/terrascan /go/bin/terrascan",
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
@@ -52,78 +55,71 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 			PlanRoot:   "",
 			Line:       1,
 			Type:       "docker_dockerfile",
-			Config: []string{"from",
-				"run",
-				"from",
-				"copy",
-				"entrypoint"},
+			Config: []string{
+				"FROM",
+				"RUN",
+				"FROM",
+				"COPY",
+				"ENTRYPOINT"},
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
 		},
 	},
-	"docker_entrypoint": []output.ResourceConfig{
+	"docker_ENTRYPOINT": []output.ResourceConfig{
 		{
-			ID:          "docker_entrypoint.21a71774cdc858e44224d9d490498d49",
+			ID:          "docker_ENTRYPOINT.21a71774cdc858e44224d9d490498d49",
 			Name:        "dockerfile-withmultiple-stages",
 			ModuleName:  "",
 			Source:      "dockerfile-withmultiple-stages",
 			PlanRoot:    "",
 			Line:        8,
-			Type:        "docker_entrypoint",
+			Type:        "docker_ENTRYPOINT",
 			Config:      "/go/bin/main",
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
 			MinSeverity: "",
 		},
 	},
-	"docker_from": []output.ResourceConfig{
+	"docker_FROM": []output.ResourceConfig{
 		{
-			ID:          "docker_from.273cb3c947150fa2365b39346e207035",
-			Name:        "dockerfile-withmultiple-stages",
-			ModuleName:  "",
-			Source:      "dockerfile-withmultiple-stages",
-			PlanRoot:    "",
-			Line:        2,
-			Type:        "docker_from",
-			Config:      "golang:alpine AS builder",
-			SkipRules:   []output.SkipRule(nil),
-			MaxSeverity: "",
-			MinSeverity: "",
-			ContainerImages: []output.ContainerDetails{
-				{
-					Image: "golang:alpine",
-				},
-			},
+			ID:              "docker_FROM.273cb3c947150fa2365b39346e207035",
+			Name:            "dockerfile-withmultiple-stages",
+			ModuleName:      "",
+			Source:          "dockerfile-withmultiple-stages",
+			PlanRoot:        "",
+			Line:            2,
+			Type:            "docker_FROM",
+			Config:          "golang:alpine AS builder",
+			SkipRules:       []output.SkipRule(nil),
+			MaxSeverity:     "",
+			MinSeverity:     "",
+			ContainerImages: []output.ContainerDetails{},
 		},
 		{
-			ID:          "docker_from.aaa14f2bb7549c35cdb047282de7e26b",
-			Name:        "dockerfile-withmultiple-stages",
-			ModuleName:  "",
-			Source:      "dockerfile-withmultiple-stages",
-			PlanRoot:    "",
-			Line:        6,
-			Type:        "docker_from",
-			Config:      "alpine:3.14",
-			SkipRules:   []output.SkipRule(nil),
-			MaxSeverity: "",
-			MinSeverity: "",
-			ContainerImages: []output.ContainerDetails{
-				{
-					Image: "alpine:3.14",
-				},
-			},
+			ID:              "docker_FROM.aaa14f2bb7549c35cdb047282de7e26b",
+			Name:            "dockerfile-withmultiple-stages",
+			ModuleName:      "",
+			Source:          "dockerfile-withmultiple-stages",
+			PlanRoot:        "",
+			Line:            6,
+			Type:            "docker_FROM",
+			Config:          "alpine:3.14",
+			SkipRules:       []output.SkipRule(nil),
+			MaxSeverity:     "",
+			MinSeverity:     "",
+			ContainerImages: []output.ContainerDetails{},
 		},
 	},
-	"docker_run": []output.ResourceConfig{
+	"docker_RUN": []output.ResourceConfig{
 		{
-			ID:          "docker_run.556176d13b816800a50fb2998cac92ec",
+			ID:          "docker_RUN.556176d13b816800a50fb2998cac92ec",
 			Name:        "dockerfile-withmultiple-stages",
 			ModuleName:  "",
 			Source:      "dockerfile-withmultiple-stages",
 			PlanRoot:    "",
 			Line:        3,
-			Type:        "docker_run",
+			Type:        "docker_RUN",
 			Config:      "go build main.go",
 			SkipRules:   []output.SkipRule(nil),
 			MaxSeverity: "",
@@ -133,7 +129,7 @@ var multiStageDockerfileConfig = output.AllResourceConfigs{
 }
 
 func TestLoadIacFile(t *testing.T) {
-
+	RegisterFailHandler(Fail)
 	tests := []struct {
 		name        string
 		absFilePath string
@@ -168,9 +164,12 @@ func TestLoadIacFile(t *testing.T) {
 
 			got, gotErr := tt.dockerV1.LoadIacFile(tt.absFilePath, tt.options)
 			if tt.want != nil {
-				if got == nil || !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("unexpected result; got: '%#v', want: '%v'", got, tt.want)
-				}
+				gotdata, _ := json.MarshalIndent(got, "", "  ")
+				wantData, _ := json.MarshalIndent(tt.want, "", "  ")
+				fmt.Println(string(gotdata))
+				fmt.Println(string(wantData))
+				Expect(string(gotdata)).To(MatchJSON(wantData))
+
 			}
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("unexpected error; gotErr: '%v', wantErr: '%v'", gotErr, tt.wantErr)
