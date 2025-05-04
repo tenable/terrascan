@@ -2,7 +2,7 @@
     "name": "healthcheck",
     "file": "healthcheck.rego",
     "policy_type": "docker",
-    "resource_type": "docker_from",
+    "resource_type": "docker_FROM",
     "template_args": {
         "prefix": "",
         "suffix": "",
