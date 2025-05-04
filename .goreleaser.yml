@@ -14,6 +14,8 @@ builds:
       - windows
       - darwin
     main: ./cmd/terrascan/main.go
+    ldflags:
+      - -s -w -X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=ignore
     ignore:
       - goos: windows
         goarch: arm64

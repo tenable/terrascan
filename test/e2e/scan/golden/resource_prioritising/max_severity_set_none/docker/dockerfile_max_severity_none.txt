@@ -9,7 +9,7 @@
         "severity": "MEDIUM",
         "category": "Infrastructure Security",
         "resource_name": "Dockerfile",
-        "resource_type": "docker_from",
+        "resource_type": "docker_FROM",
         "file": "Dockerfile",
         "line": 1
       }

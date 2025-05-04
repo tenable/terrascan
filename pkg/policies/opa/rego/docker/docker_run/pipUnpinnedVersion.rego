@@ -2,7 +2,7 @@ package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]
 {
-    run := input.docker_run[_]
+    run := input.docker_RUN[_]
     config := run.config
     
     contains(config, ["pip install", "pip3 install"][_])
@@ -15,7 +15,7 @@ package accurics
 
 {{.prefix}}{{.name}}{{.suffix}}[run.id]
 {
-    run := input.docker_run[_]
+    run := input.docker_RUN[_]
     config := run.config  
     contains(config, ["pip install", "pip3 install"][_])
     not contains(config, "--")

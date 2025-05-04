@@ -14,7 +14,7 @@ RUN apk update && apk add --no-cache --update build-base git
 COPY . .
 
 # build binary
-RUN CGO_ENABLED=${CGO_ENABLED_VAL} go build -v -ldflags "-w -s" -o /go/bin/terrascan ./cmd/terrascan
+RUN CGO_ENABLED=${CGO_ENABLED_VAL} go build -v -ldflags "-w -s -X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=ignore" -o /go/bin/terrascan ./cmd/terrascan
 
 
 # -------- prod stage -------- #

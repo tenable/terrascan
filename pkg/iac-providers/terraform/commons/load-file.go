@@ -39,13 +39,13 @@ func LoadIacFile(absFilePath, terraformVersion string) (allResourcesConfig outpu
 	if hclFile == nil {
 		errMessage := fmt.Sprintf("error occurred while loading config file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
-		return allResourcesConfig, fmt.Errorf(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage) //lint:ignore SA1006 placeholder %s are specified in string constants
 	}
 
 	if diags.HasErrors() {
 		errMessage := fmt.Sprintf("failed to load iac file '%s'. error:\n%v\n", absFilePath, getErrorMessagesFromDiagnostics(diags))
 		zap.S().Debug(errMessage)
-		return allResourcesConfig, fmt.Errorf(errMessage)
+		return allResourcesConfig, fmt.Errorf(errMessage) //lint:ignore SA1006 placeholder %s are specified in string constants
 	}
 
 	// initialize normalized output
