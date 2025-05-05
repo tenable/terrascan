@@ -31,6 +31,7 @@ type Violation struct {
 	RuleFile     string      `json:"-" yaml:"-" xml:"-"`
 	RuleData     interface{} `json:"-" yaml:"-" xml:"-"`
 	Comment      string      `json:"skip_comment,omitempty" yaml:"skip_comment,omitempty" xml:"skip_comment,omitempty"`
+	ResourceID   string      `json:"resource_id" yaml:"resource_id" xml:"resource_id,attr"`
 	ResourceName string      `json:"resource_name" yaml:"resource_name" xml:"resource_name,attr"`
 	ResourceType string      `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 	ResourceData interface{} `json:"-" yaml:"-" xml:"-"`
@@ -42,11 +43,12 @@ type Violation struct {
 
 // PassedRule contains information of a passed rule
 type PassedRule struct {
-	RuleName    string `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
-	Description string `json:"description" yaml:"description" xml:"description,attr"`
-	RuleID      string `json:"rule_id" yaml:"rule_id" xml:"rule_id,attr"`
-	Severity    string `json:"severity" yaml:"severity" xml:"severity,attr"`
-	Category    string `json:"category" yaml:"category" xml:"category,attr"`
+	RuleName     string `json:"rule_name" yaml:"rule_name" xml:"rule_name,attr"`
+	Description  string `json:"description" yaml:"description" xml:"description,attr"`
+	RuleID       string `json:"rule_id" yaml:"rule_id" xml:"rule_id,attr"`
+	Severity     string `json:"severity" yaml:"severity" xml:"severity,attr"`
+	Category     string `json:"category" yaml:"category" xml:"category,attr"`
+	ResourceType string `json:"resource_type" yaml:"resource_type" xml:"resource_type,attr"`
 }
 
 // ViolationStore Storage area for violation data

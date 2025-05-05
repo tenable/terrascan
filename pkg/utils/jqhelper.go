@@ -44,7 +44,7 @@ func JQFilterWithQuery(jqQuery string, jsonInput []byte) ([]byte, error) {
 	}
 
 	// run jq query on input
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	iter := query.RunWithContext(ctx, input)
 	for {
@@ -53,13 +53,13 @@ func JQFilterWithQuery(jqQuery string, jsonInput []byte) ([]byte, error) {
 			break
 		}
 		if err, ok := v.(error); ok {
-			zap.S().Warn("error in processing jq query; error: '%v'", err)
+			zap.S().Warnf("error in processing jq query; error: '%v'", err)
 			continue
 		}
 
 		jqout, err := json.Marshal(v)
 		if err != nil {
-			zap.S().Warn("failed to encode jq output into JSON. error: '%v'", err)
+			zap.S().Warnf("failed to encode jq output into JSON. error: '%v'", err)
 			continue
 		}
 		processed = append(processed, jqout...)

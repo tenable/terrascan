@@ -13,7 +13,7 @@ import (
 
 const violationTemplateForGH = `{
           "version": "2.1.0",
-          "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
           "runs": [
             {
               "tool": {
@@ -29,6 +29,7 @@ const violationTemplateForGH = `{
                       },
                       "properties": {
                         "category": "S3",
+                        "resource_type": "aws_s3_bucket",
                         "severity": "HIGH"
                       }
                     }
@@ -58,6 +59,7 @@ const violationTemplateForGH = `{
                       "logicalLocations": [
                         {
                           "name": "bucket",
+                          "decoratedName": "aws_s3_bucket.bucket",
                           "kind": "aws_s3_bucket"
                         }
                       ]
