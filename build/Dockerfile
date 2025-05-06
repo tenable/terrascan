@@ -20,6 +20,7 @@ RUN CGO_ENABLED=${CGO_ENABLED_VAL} go build -v -ldflags "-w -s -X google.golang.
 # -------- prod stage -------- #
 FROM alpine:3.21.0
 
+RUN apk update && apk upgrade --no-cache musl
 # create non root user
 RUN addgroup --gid 101 terrascan && \
     adduser -S --uid 101 --ingroup terrascan terrascan && \

@@ -1,16 +1,18 @@
 module github.com/tenable/terrascan
 
-go 1.22.1
+go 1.23.0
 
-toolchain go1.22.6
+toolchain go1.23.4
 
 replace (
 	github.com/docker/cli => github.com/docker/cli v25.0.6+incompatible
 	github.com/docker/docker => github.com/docker/docker v25.0.6+incompatible
+	github.com/golang-jwt/jwt/v4 => github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/hashicorp/go-getter => github.com/hashicorp/go-getter v1.7.5
 	github.com/moby/buildkit => github.com/moby/buildkit v0.12.5
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.82+incompatible => github.com/tencentcloud/tencentcloud-sdk-go v1.0.191
 	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
+	golang.org/x/oauth2 v0.10.0 => golang.org/x/oauth2 v0.27.0
 
 	helm.sh/helm/v3 => helm.sh/helm/v3 v3.14.2
 	k8s.io/api => k8s.io/api v0.19.0
@@ -20,7 +22,7 @@ replace (
 
 require (
 	cloud.google.com/go v0.110.6 // indirect
-	github.com/Azure/azure-sdk-for-go v56.3.0+incompatible
+	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.24
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c // indirect
@@ -85,8 +87,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute v1.23.0 // indirect
-	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/grafeas v0.3.0 // indirect
 	cloud.google.com/go/iam v1.1.1 // indirect
 	cloud.google.com/go/storage v1.30.1 // indirect
