@@ -3,7 +3,7 @@ package policy
 import (
 	"encoding/xml"
 
-	"github.com/open-policy-agent/opa/rego"
+	"github.com/open-policy-agent/opa/rego" //lint:ignore SA1019 placeholder for ignore deprecation error
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 	"github.com/tenable/terrascan/pkg/results"
 )
