@@ -1,8 +1,8 @@
 module github.com/tenable/terrascan
 
-go 1.22.1
+go 1.23.0
 
-toolchain go1.22.6
+toolchain go1.23.8
 
 replace (
 	github.com/docker/cli => github.com/docker/cli v25.0.6+incompatible
