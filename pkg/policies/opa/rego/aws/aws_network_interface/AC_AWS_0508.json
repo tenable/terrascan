@@ -1,0 +1,16 @@
+{
+    "name": "checkNetworkInterfaces",
+    "file": "unusedNetInterfaces.rego",
+    "policy_type": "aws",
+    "resource_type": "aws_network_interface",
+    "template_args": {
+        "prefix": "",
+        "suffix": "",
+        "name" : "checkNetworkInterfaces"
+    },
+    "severity": "MEDIUM",
+    "description": "Ensure unused AWS network interfaces are removed",
+    "category": "Infrastructure Security",
+    "version": 1,
+    "id": "AC_AWS_0508"
+}
