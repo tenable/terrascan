@@ -7,7 +7,7 @@
         "name": "passwordReuseNotAllowed",
         "parameter": "password_reuse_prevention",
         "prefix": "",
-        "value": 0
+        "value": 1
     },
     "severity": "LOW",
     "description": "It is recommended that the password policy prevent the reuse of passwords.Preventing password reuse increases account resiliency against brute force login attempts",
