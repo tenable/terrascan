@@ -14,7 +14,7 @@ replace (
 	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 	golang.org/x/oauth2 v0.10.0 => golang.org/x/oauth2 v0.27.0
 
-	helm.sh/helm/v3 => helm.sh/helm/v3 v3.14.2
+	helm.sh/helm/v3 => helm.sh/helm/v3 v3.18.4
 	k8s.io/api => k8s.io/api v0.19.0
 	k8s.io/apimachinery => k8s.io/apimachinery v0.19.0
 	k8s.io/client-go => k8s.io/client-go v0.19.0
@@ -70,7 +70,7 @@ require (
 	google.golang.org/genproto v0.0.0-20230803162519-f966b187b2e5
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v3 v3.0.1
-	helm.sh/helm/v3 v3.6.1
+	helm.sh/helm/v3 v3.18.4
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0
 	k8s.io/client-go v10.0.0+incompatible
