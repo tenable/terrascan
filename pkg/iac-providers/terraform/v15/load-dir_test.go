@@ -19,13 +19,14 @@ package tfv15
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/go-multierror"
 	"os"
 	"path/filepath"
 	"syscall"
 	"testing"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/tenable/terrascan/pkg/utils"
 )
@@ -36,24 +37,10 @@ var unsupportedArgument = `Unsupported argument; An argument named "replace_trig
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 
-	testErrorMessage := fmt.Errorf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`, testDataDir, emptyTfFilePath, emptyTfFilePath)
-
-	errStringInvalidModuleConfigs := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
-
-	errStringDependsOnDir := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "depends_on", "live", "log"), filepath.Join(testDataDir, "depends_on", "live", "security"))
-
-	errStringModuleSourceInvalid := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
-`, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
+	testErrorMessage := commons.GenerateTerraformLoadError(testDataDir, emptyTfFilePath, emptyTfFilePath)
+	errStringInvalidModuleConfigs := commons.GenerateInvalidModuleConfigError(testDataDir)
+	errStringDependsOnDir := commons.GenerateErrStringDependsOn(testDataDir)
+	errStringModuleSourceInvalid := commons.GenerateErrStringModuleSourceInvalid(testDataDir)
 
 	errStringUnifiedInvalidattrib := fmt.Errorf(`failed to build unified config. errors:
 %s/firewall-module.tf:7,5-25: %s.
@@ -151,11 +138,11 @@ func TestLoadIacDir(t *testing.T) {
 				err1,
 				err1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")), // 9 good
-				errStringUnifiedInvalidattrib, //lint:ignore SA1006 placeholder %s are specified in string constants 8                                                            // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
+				errStringUnifiedInvalidattrib,                                                                                 //lint:ignore SA1006 placeholder %s are specified in string constants 8                                                            // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
-				errDiagnostincMessageAttrib, //lint:ignore SA1006 placeholder %s are specified in string constants 9                                                            // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")), // 13 good
+				errDiagnostincMessageAttrib,                                                                                   //lint:ignore SA1006 placeholder %s are specified in string constants 9                                                            // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                 // 13 good
 			), // nolint:staticcheck
 		},
 		{

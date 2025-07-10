@@ -19,6 +19,7 @@ package tfv14
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -33,24 +34,10 @@ import (
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 
-	testErrorMessage := fmt.Errorf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`, testDataDir, emptyTfFilePath, emptyTfFilePath)
-
-	errStringInvalidModuleConfigs := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
-
-	errStringDependsOnDir := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "depends_on", "live", "log"), filepath.Join(testDataDir, "depends_on", "live", "security"))
-
-	errStringModuleSourceInvalid := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
-<nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
-`, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
+	testErrorMessage := commons.GenerateTerraformLoadError(testDataDir, emptyTfFilePath, emptyTfFilePath)
+	errStringInvalidModuleConfigs := commons.GenerateInvalidModuleConfigError(testDataDir)
+	errStringDependsOnDir := commons.GenerateErrStringDependsOn(testDataDir)
+	errStringModuleSourceInvalid := commons.GenerateErrStringModuleSourceInvalid(testDataDir)
 
 	testDirPath1 := "not-there"
 	testDirPath2 := filepath.Join(testDataDir, "testfile")

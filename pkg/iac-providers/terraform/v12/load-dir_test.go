@@ -26,6 +26,7 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/tenable/terrascan/pkg/utils"
 )
@@ -36,10 +37,7 @@ func TestLoadIacDir(t *testing.T) {
 	destroyProvisionersDir := filepath.Join(testDataDir, "destroy-provisioners")
 	destroyProvisionersMainFile := filepath.Join(destroyProvisionersDir, "main.tf")
 
-	testErrorString1 := fmt.Errorf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`, testDataDir, emptyTfFilePath, emptyTfFilePath)
+	testErrorString1 := commons.GenerateTerraformLoadError(testDataDir, emptyTfFilePath, emptyTfFilePath)
 
 	multipleProvidersDir := filepath.Join(testDataDir, "multiple-required-providers")
 
@@ -47,9 +45,7 @@ func TestLoadIacDir(t *testing.T) {
 %s:2,3-21: Duplicate required providers configuration; A module may have only one required providers configuration. The required providers were previously configured at %s:2,3-21.
 `, multipleProvidersDir, filepath.Join(multipleProvidersDir, "b.tf"), filepath.Join(multipleProvidersDir, "a.tf"))
 
-	errStringInvalidModuleConfigs := fmt.Errorf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
+	errStringInvalidModuleConfigs := commons.GenerateInvalidModuleConfigError(testDataDir)
 
 	errStringDestroyProvisioners := fmt.Errorf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
