@@ -70,21 +70,21 @@ func TestLoadIacFile(t *testing.T) {
 		options  map[string]interface{}
 	}{
 		{
-			wantErr:  fmt.Errorf("unsupported extension for file %s", testFile), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("unsupported extension for file %s", testFile),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid extension",
 			filePath: testFile,
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("unable to read file nonexistent.txt"), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("unable to read file nonexistent.txt"),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "nonexistent file",
 			filePath: "nonexistent.txt",
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf("yaml: line 28: did not find expected alphabetic or numeric character")), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf("yaml: line 28: did not find expected alphabetic or numeric character")),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid file",

@@ -34,23 +34,26 @@ import (
 var testInvalidAttribdir = "terraform-with-attrib-errors/module/firewall-test"
 var unsupportedArgument = `Unsupported argument; An argument named "replace_triggered_by" is not expected here`
 
+const errStrFailedBuildingUnifiedConf = `failed to build unified config. errors:
+%s/firewall-module.tf:7,5-25: %s.
+%s/firewall-module.tf:25,5-25: %s.
+`
+
+const errStrFiledLoadingTFConfigDir = `diagnostic errors while loading terraform config dir '%s'. error from terraform:
+%s/firewall-module.tf:7,5-25: %s.
+%s/firewall-module.tf:25,5-25: %s.
+`
+
 func TestLoadIacDir(t *testing.T) {
 	var nilMultiErr *multierror.Error = nil
 
 	testErrorMessage := commons.GenerateTerraformLoadError(testDataDir, emptyTfFilePath, emptyTfFilePath)
 	errStringInvalidModuleConfigs := commons.GenerateInvalidModuleConfigError(testDataDir)
-	errStringDependsOnDir := commons.GenerateErrStringDependsOn(testDataDir)
+	errStringDependsOnDir := commons.GenerateErrBuildingUnifiedConfig(testDataDir)
 	errStringModuleSourceInvalid := commons.GenerateErrStringModuleSourceInvalid(testDataDir)
 
-	errStringUnifiedInvalidattrib := fmt.Errorf(`failed to build unified config. errors:
-%s/firewall-module.tf:7,5-25: %s.
-%s/firewall-module.tf:25,5-25: %s.
-`, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
-
-	errDiagnostincMessageAttrib := fmt.Errorf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s/firewall-module.tf:7,5-25: %s.
-%s/firewall-module.tf:25,5-25: %s.
-`, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
+	errStringUnifiedInvalidattrib := fmt.Errorf(errStrFailedBuildingUnifiedConf, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
+	errDiagnostincMessageAttrib := fmt.Errorf(errStrFiledLoadingTFConfigDir, filepath.Join(testDataDir, testInvalidAttribdir), filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument, filepath.Join(testDataDir, testInvalidAttribdir), unsupportedArgument)
 
 	testDirPath1 := "not-there"
 	testDirPath2 := filepath.Join(testDataDir, "testfile")
@@ -60,7 +63,7 @@ func TestLoadIacDir(t *testing.T) {
 	if utils.IsWindowsPlatform() {
 		pathErr = &os.PathError{Op: "CreateFile", Path: "not-there", Err: syscall.ENOENT}
 	}
-	err1 := errStringInvalidModuleConfigs //lint:ignore SA1006 placeholder %s are specified in string constants 71
+	err1 := errStringInvalidModuleConfigs
 
 	table := []struct {
 		name    string
@@ -123,33 +126,33 @@ func TestLoadIacDir(t *testing.T) {
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(testErrorMessage), //lint:ignore SA1006 placeholder %s are specified in string constants 4
+			wantErr: multierror.Append(testErrorMessage),
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv15:   TfV15{},
-			wantErr: multierror.Append(testErrorMessage, //lint:ignore SA1006 placeholder %s are specified in string constants 3
+			wantErr: multierror.Append(testErrorMessage,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				errStringDependsOnDir, //lint:ignore SA1006 placeholder %s are specified in string constants 4
+				errStringDependsOnDir,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				errStringModuleSourceInvalid, //lint:ignore SA1006 placeholder %s are specified in string constants 5
+				errStringModuleSourceInvalid,
 				err1,
 				err1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
-				errStringUnifiedInvalidattrib,                                                                                 //lint:ignore SA1006 placeholder %s are specified in string constants 8                                                            // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
-				errDiagnostincMessageAttrib,                                                                                   //lint:ignore SA1006 placeholder %s are specified in string constants 9                                                            // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                 // 13 good
-			), // nolint:staticcheck
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),
+				errStringUnifiedInvalidattrib,
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")),
+				errDiagnostincMessageAttrib,
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
+			),
 		},
 		{
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv15:   TfV15{},
-			wantErr: multierror.Append(errStringModuleSourceInvalid), //lint:ignore SA1006 placeholder %s are specified in string constants 10
+			wantErr: multierror.Append(errStringModuleSourceInvalid),
 		},
 		{
 			name:    "provider block with only alias",

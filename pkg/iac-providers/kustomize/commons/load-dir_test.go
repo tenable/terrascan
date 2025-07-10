@@ -29,8 +29,6 @@ import (
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
 )
 
-const kustomizeErrPrefix = "error from kustomization."
-
 var testDataDir = "testdata"
 var multibasesDir = filepath.Join(testDataDir, "multibases")
 
@@ -212,7 +210,7 @@ func TestLoadKustomize(t *testing.T) {
 			name:            "erroneous-pod",
 			basepath:        filepath.Join(testDataDir, "erroneous-pod"),
 			filename:        kustomizeYaml,
-			wantErr:         fmt.Errorf(kustomizeErrPrefix), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:         fmt.Errorf("error from kustomization"),
 			checkPrefix:     true,
 			kustomizeBinary: false,
 			exe:             "",
@@ -221,7 +219,7 @@ func TestLoadKustomize(t *testing.T) {
 			name:            "erroneous-deployment",
 			basepath:        filepath.Join(testDataDir, "erroneous-deployment/"),
 			filename:        kustomizeYaml,
-			wantErr:         fmt.Errorf(kustomizeErrPrefix), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:         fmt.Errorf("error from kustomization"),
 			checkPrefix:     true,
 			kustomizeBinary: false,
 			exe:             "",
