@@ -34,11 +34,11 @@ var emptyTfFilePath = filepath.Join(testDataDir, "empty.tf")
 
 func TestLoadIacFile(t *testing.T) {
 
-	testErrorString1 := `error occurred while loading config file 'not-there'. error:
+	testErrorString1 := fmt.Errorf(`error occurred while loading config file 'not-there'. error:
 <nil>: Failed to read file; The file "not-there" could not be read.
-`
+`)
 
-	testErrorString2 := fmt.Sprintf(`failed to load iac file '%s'. error:
+	testErrorString2 := fmt.Errorf(`failed to load iac file '%s'. error:
 %s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
 %s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
 `, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
@@ -55,7 +55,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv15:    TfV15{},
-			wantErr:  fmt.Errorf(testErrorString1), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  testErrorString1, //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:     "empty config",
@@ -66,7 +66,7 @@ func TestLoadIacFile(t *testing.T) {
 			name:     "invalid config",
 			filePath: filepath.Join(testDataDir, "empty.tf"),
 			tfv15:    TfV15{},
-			wantErr:  fmt.Errorf(testErrorString2), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  testErrorString2, //lint:ignore SA1006 placeholder %s are specified in string constants
 		},
 		{
 			name:     "depends_on",
