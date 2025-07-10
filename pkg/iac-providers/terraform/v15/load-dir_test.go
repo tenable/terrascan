@@ -151,11 +151,11 @@ func TestLoadIacDir(t *testing.T) {
 				err1,
 				err1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")),           // 9 good
-				errStringUnifiedInvalidattrib,                                                                                 //lint:ignore SA1006 placeholder %s are specified in string constants 8                                                            // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors")), // 9 good
+				errStringUnifiedInvalidattrib, //lint:ignore SA1006 placeholder %s are specified in string constants 8                                                            // nolint:staticcheck                                                                  // nolint:staticcheck                                                                   //nolint:SA1006                                                                   // 10 good
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "terraform-with-attrib-errors", "module")), // 11 good
-				errDiagnostincMessageAttrib,                                                                                   //lint:ignore SA1006 placeholder %s are specified in string constants 9                                                            // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
-				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),                                 // 13 good
+				errDiagnostincMessageAttrib, //lint:ignore SA1006 placeholder %s are specified in string constants 9                                                            // nolint:staticcheck                                                                     //nolint:SA1006                                                                     // 12
+				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")), // 13 good
 			), // nolint:staticcheck
 		},
 		{
