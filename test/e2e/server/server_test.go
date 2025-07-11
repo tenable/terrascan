@@ -104,16 +104,17 @@ var _ = Describe("Server", func() {
 				session = helper.RunCommand(terrascanBinaryPath, outWriter, errWriter, serverUtils.ServerCommand)
 			})
 			Context("by default server is running at port 9010", func() {
-				It("server should be accepting requests", func() {
-					// logs are written in StdErr
-					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /health"))
-					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /v1/providers"))
-					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/local/file/scan"))
-					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/remote/dir/scan"))
-					Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("http server listening at port 9010"))
-				})
-
 				Context("request with no body on all handlers", func() {
+
+					It("server should be accepting requests", func() {
+						// logs are written in StdErr
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /health"))
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route GET - /v1/providers"))
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/local/file/scan"))
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("Route POST - /v1/{iac}/{iacVersion}/{cloud}/remote/dir/scan"))
+						Eventually(session.Err, serverUtils.ServerCommandTimeout).Should(gbytes.Say("http server listening at port 9010"))
+					})
+
 					healthCheckURL := fmt.Sprintf("%s:%d/health", host, defaultPort)
 					providersURL := fmt.Sprintf("%s:%d/v1/providers", host, defaultPort)
 					terraformV12LocalScanURL := fmt.Sprintf("%s:%d/v1/terraform/v12/all/local/file/scan", host, defaultPort)
@@ -180,22 +181,22 @@ var _ = Describe("Server", func() {
 					})
 
 					When("POST request on health check", func() {
-						It("should receive method not allowed response", func() {
+						It("should receive not found response", func() {
 							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, healthCheckURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())
-							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusMethodNotAllowed))
+							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusNotFound))
 						})
 					})
 
 					When("POST request on providers", func() {
-						It("should receive method not allowed response", func() {
+						It("should receive not found response", func() {
 							r, err := serverUtils.MakeHTTPRequest(http.MethodPost, providersURL)
 							Expect(err).NotTo(HaveOccurred())
 							defer r.Body.Close()
 							Expect(r).NotTo(BeNil())
-							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusMethodNotAllowed))
+							Expect(r.StatusCode).To(BeIdenticalTo(http.StatusNotFound))
 						})
 					})
 
