@@ -125,6 +125,11 @@ func GetProviderVersion(f *hclConfigs.File, addr addrs.Provider, terraformVersio
 		}
 	}
 
+	// If the provider is a built-in provider, set the version to the terraform version
+	if addr.IsBuiltIn() {
+		version = terraformVersion
+	}
+
 	// fetch latest version
 	if len(version) == 0 {
 		version = latestProviderVersion(addr, terraformVersion)
@@ -150,6 +155,11 @@ func GetModuleProviderVersion(module *hclConfigs.Module, addr addrs.Provider, te
 		if pc, exist := module.ProviderConfigs[addr.Type]; exist {
 			version = trimVersionConstraints(pc.Version.Required.String())
 		}
+	}
+
+	// If the provider is a built-in provider, set the version to the terraform version
+	if addr.IsBuiltIn() {
+		version = terraformVersion
 	}
 
 	// fetch latest version
