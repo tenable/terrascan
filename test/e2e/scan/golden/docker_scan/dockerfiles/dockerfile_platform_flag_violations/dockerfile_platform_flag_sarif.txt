@@ -16,6 +16,7 @@
               },
               "properties": {
                 "category": "Infrastructure Security",
+                "resource_type": "docker_FROM",
                 "severity": "MEDIUM"
               }
             }
@@ -44,6 +45,7 @@
               "logicalLocations": [
                 {
                   "name": "Dockerfile",
+                  "decoratedName": "docker_FROM.25ff4116bcfff6383ab1ba21ed26e1b7",
                   "kind": "docker_FROM"
                 }
               ]

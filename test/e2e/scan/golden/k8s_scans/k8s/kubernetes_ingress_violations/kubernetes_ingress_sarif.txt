@@ -16,6 +16,7 @@
               },
               "properties": {
                 "category": "Network Security",
+                "resource_type": "kubernetes_ingress",
                 "severity": "HIGH"
               }
             }
@@ -44,6 +45,7 @@
               "logicalLocations": [
                 {
                   "name": "ingress-demo-disallowed",
+                  "decoratedName": "kubernetes_ingress.ingress-demo-disallowed-default",
                   "kind": "kubernetes_ingress"
                 }
               ]

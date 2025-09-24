@@ -5,6 +5,7 @@ results:
           rule_id: AC_DOCKER_0001
           severity: MEDIUM
           category: Infrastructure Security
+          resource_id: docker_FROM.25ff4116bcfff6383ab1ba21ed26e1b7
           resource_name: Dockerfile
           resource_type: docker_FROM
           file: Dockerfile

@@ -7,6 +7,7 @@
         "rule_id": "AC_DOCKER_0001",
         "severity": "HIGH",
         "category": "Infrastructure Security",
+        "resource_id": "docker_FROM.6fd8242df2ff5691431354a533cd1cd0",
         "resource_name": "Dockerfile",
         "resource_type": "docker_FROM",
         "file": "Dockerfile",

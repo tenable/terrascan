@@ -366,8 +366,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 5. compare passed rules, violations, skipped violations and summary in actual and golden
 	gomega.Expect(reflect.DeepEqual(sessionOutputSummary, fileDataSummary)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualPassedRules, expectedPassedRules)).To(gomega.BeTrue())
-	gomega.Expect(reflect.DeepEqual(actualViolations, expectedViolations)).To(gomega.BeTrue())
-	gomega.Expect(reflect.DeepEqual(actualSkippedViolations, expectedSkippedViolations)).To(gomega.BeTrue())
+	gomega.Expect(actualViolations).Should(gomega.BeComparableTo(expectedViolations))
+	gomega.Expect(actualSkippedViolations).Should(gomega.BeComparableTo(expectedSkippedViolations))
 }
 
 // removeTimestampAndResourcePath is helper func to make timestamp and resource path blank
