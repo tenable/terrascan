@@ -26,32 +26,16 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/tenable/terrascan/pkg/iac-providers/output"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	commons_test "github.com/tenable/terrascan/pkg/iac-providers/terraform/commons/test"
 	"github.com/tenable/terrascan/pkg/utils"
 )
 
-func TestLoadIacDir(t *testing.T) {
-	var nilMultiErr *multierror.Error = nil
-
-	destroyProvisionersDir := filepath.Join(testDataDir, "destroy-provisioners")
-	destroyProvisionersMainFile := filepath.Join(destroyProvisionersDir, "main.tf")
-
-	testErrorString1 := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
-%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`, testDataDir, emptyTfFilePath, emptyTfFilePath)
-
-	multipleProvidersDir := filepath.Join(testDataDir, "multiple-required-providers")
-
-	testErrorString2 := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
+const errStrLoadingConfigDir = `diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:2,3-21: Duplicate required providers configuration; A module may have only one required providers configuration. The required providers were previously configured at %s:2,3-21.
-`, multipleProvidersDir, filepath.Join(multipleProvidersDir, "b.tf"), filepath.Join(multipleProvidersDir, "a.tf"))
+`
 
-	errStringInvalidModuleConfigs := fmt.Sprintf(`failed to build unified config. errors:
-<nil>: Failed to read module directory; Module directory %s does not exist or cannot be read.
-`, filepath.Join(testDataDir, "invalid-moduleconfigs", "cloudfront", "sub-cloudfront"))
-
-	errStringDestroyProvisioners := fmt.Sprintf(`diagnostic errors while loading terraform config dir '%s'. error from terraform:
+const errStrLoadingConfigDir1 = `diagnostic errors while loading terraform config dir '%s'. error from terraform:
 %s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
@@ -62,12 +46,30 @@ References to other resources during the destroy phase can cause dependency cycl
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
 %s:34,1-29: Duplicate resource "null_resource" configuration; A null_resource resource named "b" was already declared at testdata/destroy-provisioners/main.tf:23,1-29. Resource names must be unique per type in each module.
-`, destroyProvisionersDir, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile)
+`
 
-	errStringModuleSourceInvalid := fmt.Sprintf(`failed to build unified config. errors:
+const errStrFiledBuildingUnifiedConfig = `failed to build unified config. errors:
 <nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module cloudfront
 <nil>: Invalid module config directory; Module directory '%s' has no terraform config files for module m1
-`, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
+`
+
+func TestLoadIacDir(t *testing.T) {
+	var nilMultiErr *multierror.Error = nil
+
+	destroyProvisionersDir := filepath.Join(testDataDir, "destroy-provisioners")
+	destroyProvisionersMainFile := filepath.Join(destroyProvisionersDir, "main.tf")
+
+	testErrorString1 := commons.GenerateTerraformLoadError(testDataDir, emptyTfFilePath, emptyTfFilePath)
+
+	multipleProvidersDir := filepath.Join(testDataDir, "multiple-required-providers")
+
+	testErrorString2 := fmt.Errorf(errStrLoadingConfigDir, multipleProvidersDir, filepath.Join(multipleProvidersDir, "b.tf"), filepath.Join(multipleProvidersDir, "a.tf"))
+
+	errStringInvalidModuleConfigs := commons.GenerateInvalidModuleConfigError(testDataDir)
+
+	errStringDestroyProvisioners := fmt.Errorf(errStrLoadingConfigDir1, destroyProvisionersDir, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile, destroyProvisionersMainFile)
+
+	errStringModuleSourceInvalid := fmt.Errorf(errStrFiledBuildingUnifiedConfig, filepath.Join(testDataDir, "invalid-module-source"), filepath.Join(testDataDir, "invalid-module-source"))
 
 	testDirPath1 := "not-there"
 
@@ -132,7 +134,7 @@ References to other resources during the destroy phase can cause dependency cycl
 			dirPath: filepath.Join(testDataDir, "invalid-moduleconfigs"),
 			tfv12:   TfV12{},
 			// same error is loaded two times because, both root module and a child module will generated same error
-			wantErr: multierror.Append(fmt.Errorf(errStringInvalidModuleConfigs), fmt.Errorf(errStringInvalidModuleConfigs)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(errStringInvalidModuleConfigs, errStringInvalidModuleConfigs),
 		},
 		{
 			name:    "load invalid config dir",
@@ -141,21 +143,21 @@ References to other resources during the destroy phase can cause dependency cycl
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString1)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(testErrorString1),
 		},
 		{
 			name:    "load invalid config dir recursive",
 			dirPath: testDataDir,
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString1), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(testErrorString1,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "deep-modules", "modules", "m4", "modules")),
-				fmt.Errorf(errStringDestroyProvisioners), //lint:ignore SA1006 placeholder %s are specified in string constants
+				errStringDestroyProvisioners,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "invalid-module-source")),
-				fmt.Errorf(errStringModuleSourceInvalid),  //lint:ignore SA1006 placeholder %s are specified in string constants
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
-				fmt.Errorf(errStringInvalidModuleConfigs), //lint:ignore SA1006 placeholder %s are specified in string constants
-				fmt.Errorf(testErrorString2),              //lint:ignore SA1006 placeholder %s are specified in string constants
+				errStringModuleSourceInvalid,
+				errStringInvalidModuleConfigs,
+				errStringInvalidModuleConfigs,
+				testErrorString2,
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "relative-moduleconfigs")),
 				fmt.Errorf(invalidDirErrStringTemplate, filepath.Join(testDataDir, "tfjson")),
 			),
@@ -167,19 +169,19 @@ References to other resources during the destroy phase can cause dependency cycl
 			options: map[string]interface{}{
 				"nonRecursive": true,
 			},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString2)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(testErrorString2),
 		},
 		{
 			name:    "load multiple provider config dir recursive",
 			dirPath: multipleProvidersDir,
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(testErrorString2)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(testErrorString2),
 		},
 		{
 			name:    "invalid module source directory",
 			dirPath: filepath.Join(testDataDir, "invalid-module-source", "invalid_source"),
 			tfv12:   TfV12{},
-			wantErr: multierror.Append(fmt.Errorf(errStringModuleSourceInvalid)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr: multierror.Append(errStringModuleSourceInvalid),
 		},
 	}
 

@@ -34,10 +34,6 @@ func TestLoadIacFile(t *testing.T) {
 	nestedFile, _ := filepath.Abs(path.Join(testDataDir, "templates", "s3", "nested.template"))
 	partialWrongFile, _ := filepath.Abs(path.Join(testDataDir, "someResourcesIncorrectCftTemplate.yml"))
 
-	testErrString1 := fmt.Sprintf("unsupported extension for file %s", testFile)
-	testErrString2 := "unable to read file nonexistent.txt"
-	testErrString3 := "yaml: line 28: did not find expected alphabetic or numeric character"
-
 	validFileConfig := make(map[string][]output.ResourceConfig, 2)
 	validFileConfig["aws_s3_bucket_policy"] = []output.ResourceConfig{{
 		ID: "aws_s3_bucket_policy.BucketPolicy",
@@ -74,21 +70,21 @@ func TestLoadIacFile(t *testing.T) {
 		options  map[string]interface{}
 	}{
 		{
-			wantErr:  fmt.Errorf(testErrString1), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("unsupported extension for file %s", testFile),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid extension",
 			filePath: testFile,
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf(testErrString2), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("unable to read file nonexistent.txt"),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "nonexistent file",
 			filePath: "nonexistent.txt",
 			typeOnly: false,
 		}, {
-			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf(testErrString3)), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  fmt.Errorf("error while unmarshalling yaml, error %w", fmt.Errorf("yaml: line 28: did not find expected alphabetic or numeric character")),
 			want:     output.AllResourceConfigs{},
 			cftv1:    CFTV1{},
 			name:     "invalid file",

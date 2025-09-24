@@ -48,7 +48,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to read tfplan JSON file. error: '%v'", err)
 		zap.S().Debug(errMsg)
-		return allResourcesConfig, fmt.Errorf(errMsg) //lint:ignore SA1006 placeholder %s are specified in string constants
+		return allResourcesConfig, fmt.Errorf("failed to read tfplan JSON file. error: '%v'", err)
 	}
 
 	// validate if provide file is a valid tfplan file
@@ -61,7 +61,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	if err != nil {
 		errMsg := fmt.Sprintf("failed to process tfplan JSON. error: '%v'", err)
 		zap.S().Debug(errMsg)
-		return allResourcesConfig, fmt.Errorf(errMsg) //lint:ignore SA1006 placeholder %s are specified in string constants
+		return allResourcesConfig, fmt.Errorf("failed to process tfplan JSON. error: '%v'", err)
 	}
 
 	// decode processed out into output.ResourceConfig
@@ -69,7 +69,7 @@ func (t *TFPlan) LoadIacFile(absFilePath string, options map[string]interface{})
 	if err := json.Unmarshal(processed, &resourceConfigs); err != nil {
 		errMsg := fmt.Sprintf("failed to decode processed jq output. error: '%v'", err)
 		zap.S().Debug(errMsg)
-		return allResourcesConfig, fmt.Errorf(errMsg) //lint:ignore SA1006 placeholder %s are specified in string constants
+		return allResourcesConfig, fmt.Errorf("failed to decode processed jq output. error: '%v'", err)
 	}
 
 	// create AllResourceConfigs from resourceConfigs
