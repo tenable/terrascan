@@ -9,6 +9,7 @@
         "severity": "HIGH",
         "category": "Network Security",
         "skip_comment": "reason to skip the rule",
+        "resource_id": "kubernetes_service.allowed-external-ip-default",
         "resource_name": "allowed-external-ip",
         "resource_type": "kubernetes_service",
         "file": "config.yaml",

@@ -27,37 +27,3 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # push image to Docker Hub
-  push:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Terrascan
-        uses: actions/checkout@v3
-
-      - uses: docker/setup-qemu-action@v2
-
-      - name: Login to Artifactory
-        run: docker login --username svc_terrascan --password ${{ secrets.ARTIFACTORY_API_TOKEN }}  https://docker-terrascan-local.artifactory.eng.tenable.com
-
-      - name: Build Terrascan latest tag docker image
-        run: make docker-build-push-latest-tag
-        env:
-          MULTIPLATFORM: true
-
-      - name: Pull latest Image
-        run:  docker pull docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest
-
-      - name: Run scan on terrascan image
-        run: |
-          image_tag=$(<dockerhub-image-label.txt)
-          docker run -e JKN_USERNAME=${{ secrets.JKN_USERNAME }} -e JKN_PASSWORD=${{ secrets.JKN_PASSWORD }} -t docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest jobs execute-job  --credential-mode env -n teams-deleng-terraform -p deleng-terraform/dockerhub-publish -d "{\"APPID\":\"2054\", \"IMAGE\":\"docker-terrascan-local.artifactory.eng.tenable.com/terrascan:${image_tag}\", \"TARGETS\": \"tenable/terrascan:${image_tag},tenable/terrascan:latest\", \"MULTIARCH\":\"true\"}" --cloudflare-access-secret ${{ secrets.CF_ACCESS_TOKEN }}:${{ secrets.CF_SECRET }}
-
-      - name: Build terrascan_atlantis docker image
-        run: make atlantis-docker-build
-
-      - name: Run scan on terrascan_atlantis image 
-        run: |
-          image_tag=$(<dockerhub-image-label.txt)
-          docker run -e JKN_USERNAME=${{ secrets.JKN_USERNAME }} -e JKN_PASSWORD=${{ secrets.JKN_PASSWORD }} -t docker-terrascan-local.artifactory.eng.tenable.com/tenb-cb:latest jobs execute-job  --credential-mode env -n teams-deleng-terraform -p deleng-terraform/dockerhub-publish -d "{\"APPID\":\"test\", \"IMAGE\":\"docker-terrascan-local.artifactory.eng.tenable.com/terrascan_atlantis:${image_tag}\", \"TARGETS\": \"tenable/terrascan_atlantis:${image_tag}\", \"MULTIARCH\":\"true\"}" --cloudflare-access-secret ${{ secrets.CF_ACCESS_TOKEN }}:${{ secrets.CF_SECRET }}

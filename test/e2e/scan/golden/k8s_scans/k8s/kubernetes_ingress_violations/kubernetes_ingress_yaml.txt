@@ -5,6 +5,7 @@ results:
           rule_id: AC_K8S_0001
           severity: HIGH
           category: Network Security
+          resource_id: kubernetes_ingress.ingress-demo-disallowed-default
           resource_name: ingress-demo-disallowed
           resource_type: kubernetes_ingress
           file: config.yaml

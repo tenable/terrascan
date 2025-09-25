@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/tenable/terrascan/pkg/iac-providers/terraform/commons"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -34,18 +35,7 @@ var emptyTfFilePath = filepath.Join(testDataDir, "empty.tf")
 var nonEmptyTfFilePath = filepath.Join(testDataDir, "destroy-provisioners", "main.tf")
 var tfJSONDir = filepath.Join(testDataDir, "tfjson")
 
-func TestLoadIacFile(t *testing.T) {
-
-	testErrorString1 := `error occurred while loading config file 'not-there'. error:
-<nil>: Failed to read file; The file "not-there" could not be read.
-`
-	testErrorString2 := fmt.Sprintf(`failed to load iac file '%s'. error:
-%s:1,21-2,1: Invalid block definition; A block definition must have block content delimited by "{" and "}", starting on the same line as the block header.
-%s:1,1-5: Unsupported block type; Blocks of type "some" are not expected here.
-`, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
-
-	testErrorString3 := fmt.Sprintf(`failed to load iac file '%s'. error:
-%s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
+const errMsgFailedLoadingIACFile2 = `failed to load iac file '%s'. error: %s:8,12-22: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
 %s:42,15-35: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
@@ -53,8 +43,13 @@ References to other resources during the destroy phase can cause dependency cycl
 References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
 %s:39,14-24: Invalid reference from destroy provisioner; Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
 
-References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.
-`, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath)
+References to other resources during the destroy phase can cause dependency cycles and interact poorly with create_before_destroy.`
+
+func TestLoadIacFile(t *testing.T) {
+
+	testErrorString1 := fmt.Errorf(commons.ErrMsgFailedLoadingConfigFile)
+	testErrorString2 := fmt.Errorf(commons.ErrMsgFailedLoadingIACFile, emptyTfFilePath, emptyTfFilePath, emptyTfFilePath)
+	testErrorString3 := fmt.Errorf(errMsgFailedLoadingIACFile2, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath, nonEmptyTfFilePath)
 
 	table := []struct {
 		name     string
@@ -68,7 +63,7 @@ References to other resources during the destroy phase can cause dependency cycl
 			name:     "invalid filepath",
 			filePath: "not-there",
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString1), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  testErrorString1,
 		},
 		{
 			name:     "empty config",
@@ -79,13 +74,13 @@ References to other resources during the destroy phase can cause dependency cycl
 			name:     "invalid config",
 			filePath: emptyTfFilePath,
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString2), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  testErrorString2,
 		},
 		{
 			name:     "destroy-provisioners",
 			filePath: nonEmptyTfFilePath,
 			tfv12:    TfV12{},
-			wantErr:  fmt.Errorf(testErrorString3), //lint:ignore SA1006 placeholder %s are specified in string constants
+			wantErr:  testErrorString3,
 		},
 	}
 

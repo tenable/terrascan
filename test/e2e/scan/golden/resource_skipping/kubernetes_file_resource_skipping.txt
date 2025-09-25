@@ -9,6 +9,7 @@
         "severity": "HIGH",
         "category": "Network Security",
         "skip_comment": "reason to skip the rule",
+        "resource_id": "kubernetes_ingress.ingress-demo-disallowed-default",
         "resource_name": "ingress-demo-disallowed",
         "resource_type": "kubernetes_ingress",
         "file": "config.yaml",

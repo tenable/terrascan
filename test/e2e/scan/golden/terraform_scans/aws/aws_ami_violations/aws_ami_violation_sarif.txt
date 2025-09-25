@@ -16,6 +16,7 @@
               },
               "properties": {
                 "category": "Encryption \u0026 KeyManagement",
+                "resource_type": "aws_ami",
                 "severity": "MEDIUM"
               }
             }
@@ -44,6 +45,7 @@
               "logicalLocations": [
                 {
                   "name": "awsAmiEncrypted",
+                  "decoratedName": "aws_ami.awsAmiEncrypted",
                   "kind": "aws_ami"
                 }
               ]

@@ -31,6 +31,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/onsi/ginkgo"
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
@@ -65,6 +66,12 @@ var (
 
 	// filePattern is regex for 'file' attribute in violations output
 	filePattern = regexp.MustCompile(`["]*[fF]ile["]*[ \t]*[:=][ \t]*["]*(.+)[\\\/](.+)["]*`)
+
+	// resourceIDPattern is regex for 'resource_id' attribute in violations output
+	resourceIDPattern = regexp.MustCompile(`["]*[rR]esource[ _]*[iI]d["]*[ \t]*[:=][ \t]*["]*(.+)["]*`)
+
+	// decoratedNamePattern is regex for 'decorated_name' attribute in violations output
+	decoratedNamePattern = regexp.MustCompile(`["]*[dD]ecorated[ _]*[nN]ame["]*[ \t]*[:=][ \t]*["]*(.+)["]*`)
 
 	// sarifVersionPattern is regex for 'version' attribute in sarif violations output
 	sarifVersionPattern = regexp.MustCompile(`["]*[vV]ersion["][:=][ \t]*["]([0-9])+[\.]([0-9])+[\.]([0-9])+["],`)
@@ -157,6 +164,10 @@ func CompareActualWithGoldenSummaryRegex(session *gexec.Session, goldenFileAbsPa
 	// replace file from the output, it will cause issues for absolute paths
 	sessionOutput = filePattern.ReplaceAllString(sessionOutput, "")
 	fileContents = filePattern.ReplaceAllString(fileContents, "")
+
+	// replace resource_id from the output, it will cause issues for generated ids
+	sessionOutput = resourceIDPattern.ReplaceAllString(sessionOutput, "")
+	fileContents = resourceIDPattern.ReplaceAllString(fileContents, "")
 
 	if isJunitXML {
 		sessionOutput = packagePattern.ReplaceAllString(sessionOutput, "")
@@ -366,8 +377,8 @@ func CompareSummaryAndViolations(sessionEngineOutput, fileDataEngineOutput polic
 	// 5. compare passed rules, violations, skipped violations and summary in actual and golden
 	gomega.Expect(reflect.DeepEqual(sessionOutputSummary, fileDataSummary)).To(gomega.BeTrue())
 	gomega.Expect(reflect.DeepEqual(actualPassedRules, expectedPassedRules)).To(gomega.BeTrue())
-	gomega.Expect(reflect.DeepEqual(actualViolations, expectedViolations)).To(gomega.BeTrue())
-	gomega.Expect(reflect.DeepEqual(actualSkippedViolations, expectedSkippedViolations)).To(gomega.BeTrue())
+	gomega.Expect(actualViolations).Should(gomega.BeComparableTo(expectedViolations, cmpopts.IgnoreFields(results.Violation{}, "ResourceID")))
+	gomega.Expect(actualSkippedViolations).Should(gomega.BeComparableTo(expectedSkippedViolations, cmpopts.IgnoreFields(results.Violation{}, "ResourceID")))
 }
 
 // removeTimestampAndResourcePath is helper func to make timestamp and resource path blank
@@ -428,6 +439,10 @@ func CompareActualSarifOutputWithGoldenSummaryRegex(session *gexec.Session, gold
 
 	sessionOutput = versionRegexPattern.ReplaceAllString(sessionOutput, "")
 	fileContents = versionRegexPattern.ReplaceAllString(fileContents, "")
+
+	// replace decoratedName from the output, it will cause issues for generated ids
+	sessionOutput = decoratedNamePattern.ReplaceAllString(sessionOutput, "")
+	fileContents = decoratedNamePattern.ReplaceAllString(fileContents, "")
 
 	gomega.Expect(sessionOutput).Should(gomega.BeIdenticalTo(fileContents))
 }

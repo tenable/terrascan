@@ -7,6 +7,7 @@
         "rule_id": "AC_AWS_0005",
         "severity": "HIGH",
         "category": "Data Security",
+        "resource_id": "aws_db_instance.PtShGgAdi3",
         "resource_name": "PtShGgAdi3",
         "resource_type": "aws_db_instance",
         "module_name": "root",
