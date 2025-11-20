@@ -1,3 +1,7 @@
+## ⚠️ Archived
+> - This project is no longer maintained. The repository is archived and no further updates, issues, or pull requests will be accepted.
+> - Feel free to fork it if you'd like to continue development.
+
 # Contributing
 
 Contributions are welcome, and they are greatly appreciated!

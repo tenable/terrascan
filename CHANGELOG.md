@@ -1,3 +1,7 @@
+## ⚠️ Archived
+> - This project is no longer maintained. The repository is archived and no further updates, issues, or pull requests will be accepted.
+> - Feel free to fork it if you'd like to continue development.
+
 # Changelog
 
 ## [v1.18.3](https://github.com/tenable/terrascan/tree/v1.18.3) (2023-08-03)
