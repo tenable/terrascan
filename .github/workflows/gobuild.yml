@@ -19,7 +19,7 @@ jobs:
       GOOGLE_APPLICATION_CREDENTIALS_TEST_SECRET: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_TEST_KEY }}
     steps:
       - name: Checkout Terrascan
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup Go
         uses: actions/setup-go@v4
